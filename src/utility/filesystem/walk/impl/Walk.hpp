@@ -7,7 +7,7 @@
 
 #if defined(WIN32)
 #include <windows.h>
-#elif defined(__linux)
+#elif defined(__linux) || defined(__APPLE__)
 #include <sys/stat.h>   /*NOLINT(llvm-include-order) */
 #include <unistd.h>
 #include <climits>
@@ -30,7 +30,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                     LinkedList < Tuple < String, Size > > rootQueue;    /* NOLINT(cppcoreguidelines-init-variables) */
                     rootQueue.emplace ( osPath, 0ULL );
 
-#if defined(__linux)
+#if defined(__linux) || defined(__APPLE__)
 
                     while ( ! rootQueue.empty() ) {
 

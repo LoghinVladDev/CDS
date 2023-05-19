@@ -2,7 +2,7 @@
  * Created by loghin on 23/10/22.
  */
 
-#if defined(__linux)
+#if defined(__linux) || defined(__APPLE__) || defined(__APPLE__)
 #ifndef __CDS_MUTEX_LINUX_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_MUTEX_LINUX_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 

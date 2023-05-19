@@ -3,6 +3,7 @@
 #include <CDS/Array>
 #include <tuple>
 
+#include <CDS/Function>
 
 int main () {
 
@@ -19,4 +20,6 @@ int main () {
 
     auto t2 = makeTuple (a, b, c);
     t2.get<0>() = 1;
+
+    cds::Function <bool(int)> f = [](int x){return x == 2;};
 }

@@ -14,7 +14,7 @@
 #include <CDS/memory/UniquePointer>
 #include <CDS/memory/Allocation>
 
-#if defined(__linux)
+#if defined(__linux) || defined(__APPLE__)
 #include <sys/stat.h>
 #include <ctime>
 #endif
@@ -24,7 +24,7 @@ namespace cds {
     class File : public Object {
     public:
 
-    #if defined(__linux)
+    #if defined(__linux) || defined(__APPLE__)
 
     // region Linux Type Declarations + Definitions
 
@@ -229,7 +229,7 @@ namespace cds {
 
         // region linux variables
 
-    #if defined(__linux)
+    #if defined(__linux) || defined(__APPLE__)
 
         struct stat64 _linuxFileData;
 
@@ -255,7 +255,7 @@ namespace cds {
 
         virtual auto reload () noexcept -> File & {
 
-    #if defined(__linux)
+    #if defined(__linux) || defined(__APPLE__)
             stat64(this->_path.toString().cStr(), & this->_linuxFileData);
     #endif
 
@@ -308,7 +308,7 @@ namespace cds {
 
         // region linux stat64 utility
 
-    #if defined(__linux)
+    #if defined(__linux) || defined(__APPLE__)
 
         __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxFileInformation () const noexcept -> struct stat64 const & { return this->_linuxFileData; }
         __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxDeviceID () const noexcept -> __dev_t { return this->_linuxFileData.st_dev; }
@@ -378,7 +378,7 @@ namespace cds {
 
         // region linux File Subclasses
 
-    #if defined(__linux)
+    #if defined(__linux) || defined(__APPLE__)
 
         class LinuxRegular;
         class LinuxDirectory;
@@ -435,7 +435,7 @@ namespace cds {
 
 }
 
-#if defined(__linux)
+#if defined(__linux) || defined(__APPLE__)
 
 // region Linux Platform Flags Impl.
 
@@ -682,7 +682,7 @@ namespace cds {
 
 // region linux File Subclasses
 
-#if defined(__linux)
+#if defined(__linux) || defined(__APPLE__)
 
 namespace cds {
 
@@ -956,7 +956,7 @@ namespace cds {
 
     __CDS_NoDiscard inline auto File::at (Path const & p) noexcept -> UniquePointer < File > {
 
-    #if defined(__linux)
+    #if defined(__linux) || defined(__APPLE__)
 
         auto flags = File::platformFileType(p);
 
