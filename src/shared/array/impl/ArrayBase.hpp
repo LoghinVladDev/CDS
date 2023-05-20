@@ -1650,8 +1650,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
                     /* update memory & allocation parameters */
                     this->_pData->_backNextCapacity = this->_pData->_backCapacity * 2ULL;
-                    this->_pData->_pFront           = pNewBuffer + this->_pData->_pFront - this->_pData->_pBuffer;
-                    this->_pData->_pBack            = pNewBuffer + this->_pData->_pBack - this->_pData->_pBuffer;
+                    this->_pData->_pFront           = pNewBuffer + (this->_pData->_pFront - this->_pData->_pBuffer);
+                    this->_pData->_pBack            = pNewBuffer + (this->_pData->_pBack - this->_pData->_pBuffer);
                     this->_pData->_pBuffer          = pNewBuffer;
                 }
 
