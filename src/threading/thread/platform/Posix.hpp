@@ -39,7 +39,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             inline auto __threadPlatformCurrentId () noexcept -> cds::uint64 {   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #if defined(__APPLE__)
-                cds::uint64_t id;
+                cds::uint64 id;
                 pthread_threadid_np(pthread_self(), &id);
                 return id;
 #else
