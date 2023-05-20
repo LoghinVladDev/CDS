@@ -2,9 +2,9 @@
  * Created by loghin on 23/10/22.
  */
 
-#if defined(__linux) || defined(__APPLE__) || defined(__APPLE__)
-#ifndef __CDS_MUTEX_LINUX_HPP__ /* NOLINT(llvm-header-guard) */
-#define __CDS_MUTEX_LINUX_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+#if defined(__linux) || defined(__APPLE__)
+#ifndef __CDS_MUTEX_POSIX_HPP__ /* NOLINT(llvm-header-guard) */
+#define __CDS_MUTEX_POSIX_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <pthread.h>
 
@@ -57,5 +57,5 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
     } /* namespace __hidden */
 } /* namespace cds */
 
-#endif /* __CDS_MUTEX_LINUX_HPP__ */
+#endif /* __CDS_MUTEX_POSIX_HPP__ */
 #endif
