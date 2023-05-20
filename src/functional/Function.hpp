@@ -15,8 +15,7 @@ namespace cds {
     template < typename __Signature >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class Function : public Object {};
 
-
-    namespace details {
+    namespace meta {
         template <typename Functor, typename = void>
         struct Callable : meta::FalseType {};
 
@@ -54,7 +53,7 @@ namespace cds {
         ) noexcept;
 
     public:                                                                                                                 /* NOLINT(readability-redundant-access-specifiers) */
-        template < typename __Functor, typename = cds :: meta :: EnableIf < details::Callable < __Functor > :: value > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        template < typename __Functor, typename = cds :: meta :: EnableIf < meta::Callable < __Functor > :: value > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         __CDS_Implicit __CDS_cpplang_ConstexprConstructorNonEmptyBody Function (                                            /* NOLINT(google-explicit-constructor, *-explicit-conversions) */
                 __Functor const & functor
         ) noexcept;
@@ -115,13 +114,13 @@ namespace cds {
         ) const noexcept -> bool;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        template < typename __Functor, typename = cds :: meta :: EnableIf < details::Callable < __Functor > :: value > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        template < typename __Functor, typename = cds :: meta :: EnableIf < meta::Callable < __Functor > :: value > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         __CDS_NoDiscard constexpr auto operator == (
                 __Functor const & functor
         ) const noexcept -> bool;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        template < typename __Functor, typename = cds :: meta :: EnableIf < details::Callable < __Functor > :: value > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        template < typename __Functor, typename = cds :: meta :: EnableIf < meta::Callable < __Functor > :: value > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         __CDS_NoDiscard constexpr auto operator != (
                 __Functor const & functor
         ) const noexcept -> bool;
