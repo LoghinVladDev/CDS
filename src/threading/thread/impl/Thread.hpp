@@ -110,7 +110,13 @@ namespace cds {
 
     inline auto Thread :: hash () const noexcept -> Size {
 
+#if defined(__APPLE__)
+        cds::uint64 id;
+        pthread_threadid_np(this->currentThreadID(), &id);
+        return id;
+#else
         return cds :: hash ( static_cast < Size > ( this->currentThreadID() ) );
+#endif
     }
 
 
