@@ -14,7 +14,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             using __ThreadPlatformHandleType            = pthread_t;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __ThreadPlatformIdType                = pthread_t;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            using __ThreadPlatformIdType                = cds::uint64; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             using __ThreadPlatformFunctionReturnType    = void *;      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             constexpr __ThreadPlatformFunctionReturnType const __threadPlatformFunctionReturn = nullptr;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
@@ -36,9 +36,15 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
 
-            inline auto __threadPlatformCurrentId () noexcept -> __ThreadPlatformIdType {   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            inline auto __threadPlatformCurrentId () noexcept -> cds::uint64 {   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-                return pthread_self();
+#if defined(__APPLE__)
+                cds::uint64_t id;
+                pthread_threadid_np(pthread_self(), &id);
+                return id;
+#else
+                return static_cast<cds::uint64>(pthread_self());
+#endif
             }
 
 
