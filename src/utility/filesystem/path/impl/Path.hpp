@@ -7,7 +7,7 @@
 
 #if defined(WIN32)
 #include <windows.h>
-#elif defined(__linux)
+#elif defined(__linux) || defined(__APPLE__)
 #include <climits>
 #include <dirent.h>
 #include <sys/stat.h>
@@ -26,7 +26,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 #if defined(WIN32)
                     return '\\';
-#elif defined(__linux)
+#elif defined(__linux) || defined(__APPLE__)
                     return '/';
 #endif
                 }
@@ -279,7 +279,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         inline auto Path :: isAbsolute () const noexcept -> bool {
 
             return
-#if (__linux)
+#if defined(__linux) || defined(__APPLE__)
                     this->_osPath.length() >= 1 &&
                     __hidden :: __impl :: __directorySeparator() == this->_osPath.cStr()[0];
 #elif defined(WIN32)
@@ -333,6 +333,13 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             }
 
             free (resolvedPath);
+
+#elif defined(__APPLE__)
+
+            struct stat fileStatistics {};
+            if ( stat ( this->_osPath.cStr(), & fileStatistics ) != 0 ) {
+                return false;
+            }
 
 #endif
 
@@ -414,7 +421,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                 throw IllegalArgumentException ("Cannot Resolve Absolute path of '" + this->_osPath + "'");
             }
 
-#if defined(__linux)
+#if defined(__linux) || defined(__APPLE__)
 
             char resolvedPath [PATH_MAX];
             (void) realpath (this->_osPath.cStr(), resolvedPath);

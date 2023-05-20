@@ -5,7 +5,7 @@
 #ifndef __CDS_MUTEX_CONFIG_HPP__ /* NOLINT(llvm-header-guard) */
 #define __CDS_MUTEX_CONFIG_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#include "platform/Linux.hpp"
-#include "platform/Win32.hpp"
+#include "platform/Posix.hpp"
+#include "platform/WinAPI.hpp"
 
 #endif /* __CDS_MUTEX_CONFIG_HPP__ */

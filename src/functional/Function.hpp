@@ -15,19 +15,17 @@ namespace cds {
     template < typename __Signature >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class Function : public Object {};
 
+    namespace meta {
+        template <typename Functor, typename = void>
+        struct Callable : meta::FalseType {};
+
+        template <typename Functor>
+        struct Callable <Functor, meta::Void<decltype(&Functor::operator())>> : meta::TrueType {};
+    }
+
 
     template < typename __ReturnType, typename ... __ArgumentTypes >    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     class Function < __ReturnType ( __ArgumentTypes ... ) > : public Object {
-
-    private:
-        template <
-                typename __WrapperFunctionType,
-                typename __CallableObject = std :: __invoke_result < __WrapperFunctionType &, __ArgumentTypes ... >
-        > struct __Callable : std :: __is_invocable_impl < __CallableObject, __ReturnType > :: type {};
-
-    private:
-        template < typename __Functor >
-        struct __Callable < Function, __Functor > : std :: false_type {};
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
         cds :: __hidden :: __impl :: __FunctionAdapterGroup < __ReturnType, __ArgumentTypes ... > const * _adapterGroup     { nullptr };
@@ -55,7 +53,7 @@ namespace cds {
         ) noexcept;
 
     public:                                                                                                                 /* NOLINT(readability-redundant-access-specifiers) */
-        template < typename __Functor, typename = cds :: meta :: EnableIf < __Callable < __Functor > :: value > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        template < typename __Functor, typename = cds :: meta :: EnableIf < meta::Callable < __Functor > :: value > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         __CDS_Implicit __CDS_cpplang_ConstexprConstructorNonEmptyBody Function (                                            /* NOLINT(google-explicit-constructor, *-explicit-conversions) */
                 __Functor const & functor
         ) noexcept;
@@ -116,13 +114,13 @@ namespace cds {
         ) const noexcept -> bool;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        template < typename __Functor, typename = cds :: meta :: EnableIf < __Callable < __Functor > :: value > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        template < typename __Functor, typename = cds :: meta :: EnableIf < meta::Callable < __Functor > :: value > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         __CDS_NoDiscard constexpr auto operator == (
                 __Functor const & functor
         ) const noexcept -> bool;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        template < typename __Functor, typename = cds :: meta :: EnableIf < __Callable < __Functor > :: value > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        template < typename __Functor, typename = cds :: meta :: EnableIf < meta::Callable < __Functor > :: value > >   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         __CDS_NoDiscard constexpr auto operator != (
                 __Functor const & functor
         ) const noexcept -> bool;

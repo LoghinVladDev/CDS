@@ -38,4 +38,13 @@
 
 #endif
 
+#if defined(__APPLE__)
+
+#define __CDS_Platform_MacOS "MacOS" /* NOLINT(bugprone-reserved-identifier) */
+
+#undef __CDS_Platform
+#define __CDS_Platform __CDS_Platform_MacOS /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+
 #endif //CDS_PLATFORM_HPP

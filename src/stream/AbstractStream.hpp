@@ -7,7 +7,7 @@
 
 #include <CDS/Object>
 
-#if defined(__linux)
+#if defined(__linux) || defined(__APPLE__)
 
 #include <unistd.h>
 
@@ -71,7 +71,7 @@ namespace cds {
 
         Flags flags;
 
-    #if defined(__linux)
+    #if defined(__linux) || defined(__APPLE__)
 
         using Handle = int;
 
