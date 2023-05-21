@@ -63,18 +63,18 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             /**
              * @brief Bool Constant implementation container structure
              */
-            template < bool __value >                                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            using __BoolConstant = __IntegralConstant < bool, __value >;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template < bool __value >                                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __BoolConstant : __IntegralConstant < bool, __value > {};  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @brief True Bool Constant implementation container structure
              */
-            using __TrueType  = __BoolConstant < true >; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __TrueType : __BoolConstant < true > {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @brief False Bool Constant implementation container structure
              */
-            using __FalseType = __BoolConstant < false >; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __FalseType : __BoolConstant < false > {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             /**
              * @brief Meta-type implementation used to enable function declaration using sfiane based on a given condition
@@ -520,7 +520,226 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
              * @tparam __T type to add a rvalue reference to
              */
             template < typename __T > struct __AddRValueReference : __addReferenceImpl :: __AddRValueReference < __T > {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            namespace __andImpl {                                                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                template <typename __FirstIntegralType, typename ... __RemainingIntegralTypes>  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __AndImpl : __BoolConstant <                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __FirstIntegralType::value && __AndImpl <__RemainingIntegralTypes...>::value
+                > {};
+
+                template <typename __IntegralType>                                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __AndImpl <__IntegralType> : __BoolConstant <__IntegralType::value> {};  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            } /* namespace __andImpl */
+
+            namespace __orImpl {                                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                template <typename __FirstIntegralType, typename ... __RemainingIntegralTypes>  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __OrImpl : __BoolConstant <                                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    __FirstIntegralType::value || __OrImpl <__RemainingIntegralTypes...>::value
+                > {};
+
+                template <typename __IntegralType>                                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __OrImpl <__IntegralType> : __BoolConstant <__IntegralType::value> {};   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            } /* namespace __orImpl */
+
+            template <typename ... __IntegralTypes>                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __And : __andImpl::__AndImpl <__IntegralTypes...> {};  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            template <typename ... __IntegralTypes>                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __Or : __orImpl::__OrImpl <__IntegralTypes...> {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            template <typename __IntegralType>                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __Not : __BoolConstant <__IntegralType::value> {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+            namespace __bindImpl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                template <template <typename...> class __BoundFormula, typename ... __BoundTParams> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __BindLeftImpl {                                                             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    template <typename ... __TParams>                                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using Type = __BoundFormula <__BoundTParams..., __TParams...>;                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                };
+
+                template <template <typename...> class __BoundFormula, typename ... __BoundTParams> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __BindRightImpl {                                                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    template <typename ... __TParams>                                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using Type = __BoundFormula <__TParams..., __BoundTParams...>;                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                };
+
+                template <int __index = 0> struct __Ph {};                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                template <typename __T> struct __IsPh : __FalseType {};                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                template <int __index> struct __IsPh <__Ph <__index>> : __TrueType {};  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                template <typename __T>                                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __GetPhIndex {                                                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    static constexpr int const index = 0u;
+                };
+
+                template <int __index>                                                  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __GetPhIndex <__Ph <__index>> {
+                    static constexpr int const index = __index;
+                };
+
+                template <typename...>
+                struct __Pack {};       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                template <typename...>
+                struct __PackPop {};    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                template <typename __FirstType, typename ... __RemainingTypes>    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __PackPop <__Pack <__FirstType, __RemainingTypes...>> {    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using Type    = __Pack <__RemainingTypes...>;
+                    using Result  = __FirstType;
+                };
+
+                template <> struct __PackPop <__Pack <>> {                      /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using Type    = __Pack <>;
+                    using Result  = void;
+                };
+
+                template <int __index, typename ... __Pack> struct __IndexedPackPeek {};  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                template <int __index, typename __FirstType, typename ... __RemainingTypes>     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __IndexedPackPeek <__index, __Pack <__FirstType, __RemainingTypes...>> { /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using Type    = __Pack <__FirstType, __RemainingTypes...>;
+                    using Result  = typename __Conditional <
+                            __index == 1,
+                            __FirstType,
+                            typename __IndexedPackPeek <
+                                    __index - 1,
+                                    __Pack <__RemainingTypes...>
+                            >::Result
+                    >::Type;
+                };
+
+                template <int __index> struct __IndexedPackPeek <__index, __Pack <>> {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using Type    = __Pack <>;
+                    using Result  = void;
+                };
+
+                template <typename __PhType, typename __T> struct __BoundPackPop {};                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                template <typename __PhType, typename __FirstType, typename ... __RemainingTypes>               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __BoundPackPop <__PhType, __Pack <__FirstType, __RemainingTypes...>> : __Conditional <   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __GetPhIndex <__PhType>::index == 0,
+                        __PackPop <__Pack <__FirstType, __RemainingTypes...>>,
+                        __IndexedPackPeek <__GetPhIndex <__PhType>::index, __Pack <__FirstType, __RemainingTypes...>>
+                >::Type {};
+
+                template <template <typename...> class __BoundFormula, typename __BoundPack, typename __ParamPack>  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __BindApplyInPlace {                                                                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                private:
+                    using __NextBoundPack                     = typename __PackPop <__BoundPack>::Type;             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using __CurrentBinding                    = typename __PackPop <__BoundPack>::Result;           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    constexpr static bool const __placeholder = __IsPh <__CurrentBinding>::value;                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using __NextBoundParam                    = typename __Conditional <                            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                            __placeholder,
+                            typename __BoundPackPop <__CurrentBinding, __ParamPack>::Result,
+                            __CurrentBinding
+                    >::Type;
+
+                public:
+                    template <typename ... __UnboundTParams>  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using Type = typename __Conditional <
+                            __placeholder,
+                            __BindApplyInPlace <
+                                    __BoundFormula,
+                                    __NextBoundPack,
+                                    typename __BoundPackPop <__CurrentBinding, __ParamPack>::Type
+                            >,
+                            __BindApplyInPlace <
+                                    __BoundFormula,
+                                    __NextBoundPack,
+                                    __ParamPack
+                            >
+                    >::Type::template Type <__UnboundTParams..., __NextBoundParam>;
+                };
+
+                template <template <typename...> class __BoundFormula>              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __BindApplyInPlace <__BoundFormula, __Pack <>, __Pack <>> {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    template <typename ... __UnboundTParams>                          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using Type = __BoundFormula <__UnboundTParams...>;
+                };
+
+                template <template <typename...> class __BoundFormula, typename __UnusedParamPack>  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __BindApplyInPlace <__BoundFormula, __Pack <>, __UnusedParamPack> {          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    template <typename ... __UnboundTParams>                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using Type = __BoundFormula <__UnboundTParams...>;
+                };
+
+                template <template <typename...> class __BoundFormula, typename __UnusedBoundPack>  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __BindApplyInPlace <__BoundFormula, __UnusedBoundPack, __Pack <>> {          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    template <typename...> using Type = void;
+                };
+
+                template <template <typename...> class __BoundFormula, typename ... __BoundTParams> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __BindImpl {                                                                 /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    template <typename ... __UnboundTParams>                                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                    using Type = typename __BindApplyInPlace <
+                            __BoundFormula,
+                            __Pack <__BoundTParams...>,
+                            __Pack <__UnboundTParams...>
+                    >::template Type <>;
+                };
+            } /* namespace __bindImpl */
+
+            namespace __allAnyNoneImpl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                template <template <typename...> class __PredicateFormula, typename ... __Types>  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __AllImpl {};                                                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                template <template <typename...> class __PredicateFormula, typename ... __Types>  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __AnyImpl {};                                                              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                template <template <typename...> class __PredicateFormula, typename ... __Types>  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __NoneImpl : __Not <__AllImpl <__PredicateFormula, __Types...>> {};        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                template <template <typename...> class __PredicateFormula, typename __FirstType, typename ... __RemainingTypes> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __AllImpl <__PredicateFormula, __FirstType, __RemainingTypes...> : __And <                               /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __PredicateFormula <__FirstType>,
+                        __AllImpl <__PredicateFormula, __RemainingTypes...>
+                > {};
+
+                template <template <typename...> class __PredicateFormula, typename __FirstType, typename ... __RemainingTypes> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __AnyImpl <__PredicateFormula, __FirstType, __RemainingTypes...> : __Or <                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                        __PredicateFormula <__FirstType>,
+                        __AnyImpl <__PredicateFormula, __RemainingTypes...>
+                > {};
+
+                template <template <typename...> class __PredicateFormula, typename __FirstType>          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __AllImpl <__PredicateFormula, __FirstType> : __PredicateFormula <__FirstType> {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+                template <template <typename...> class __PredicateFormula, typename __FirstType>          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                struct __AnyImpl <__PredicateFormula, __FirstType> : __PredicateFormula <__FirstType> {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            } /* namespace __allAnyNoneImpl */
         } /* namespace __impl */
+
+        template <typename ... __IntegralTypes>             /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct And : __impl::__And <__IntegralTypes...> {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+        template <typename ... __IntegralTypes>           /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct Or : __impl::__Or <__IntegralTypes...> {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+        template <typename __IntegralType>              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct Not : __impl::__Not <__IntegralType> {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+
+        template <template <typename...> class __BoundFormula, typename ... __BoundTParams> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct Bind : __impl::__bindImpl::__BindImpl <__BoundFormula, __BoundTParams...> {};
+
+        template <template <typename...> class __BoundFormula, typename ... __BoundTParams> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct BindLeft : __impl::__bindImpl::__BindLeftImpl <__BoundFormula, __BoundTParams...> {};
+
+        template <template <typename...> class __BoundFormula, typename ... __BoundTParams> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct BindRight : __impl::__bindImpl::__BindLeftImpl <__BoundFormula, __BoundTParams...> {};
+
+        template <template <typename...> class __PredicateFormula, typename ... __TestedTypes>  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct All : __impl::__allAnyNoneImpl::__AllImpl <__PredicateFormula, __TestedTypes...> {};
+
+        template <template <typename...> class __PredicateFormula, typename ... __TestedTypes>  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct Any : __impl::__allAnyNoneImpl::__AnyImpl <__PredicateFormula, __TestedTypes...> {};
+
+        template <template <typename...> class __PredicateFormula, typename ... __TestedTypes>  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct None : __impl::__allAnyNoneImpl::__NoneImpl <__PredicateFormula, __TestedTypes...> {};
+
+        template <int __index = 0>  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        using Ph = __impl::__bindImpl::__Ph <__index>;
 
         /**
          * @brief Meta-type used to enable function declaration using sfiane based on a given condition
@@ -538,17 +757,17 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         using Conditional = typename __impl :: __Conditional < __condition, __TypeIfTrue, __TypeIfFalse > :: Type;
 
         template < bool __condition > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        using BoolConstant = __impl :: __BoolConstant < __condition >;
+        struct BoolConstant : __impl :: __BoolConstant < __condition > {};
 
         /**
          * @brief True Bool Constant container structure
          */
-        using FalseType = __impl :: __FalseType;
+        struct FalseType : __impl :: __FalseType {};
 
         /**
          * @brief False Bool Constant container structure
          */
-        using TrueType  = __impl :: __TrueType;
+        struct TrueType : __impl :: __TrueType {};
 
         /**
          * @brief Meta-type used to acquire the non-const type corresponding the current type
@@ -638,6 +857,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsVoid < __T > :: value;
         }
 
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsVoid : __impl::__IsVoid <__T> {};
+
         /**
          * @brief Meta-function used to check if a given type is referenceable
          * @tparam __T type to check if is referenceable
@@ -646,6 +868,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isReferenceable () noexcept -> bool {
             return __impl :: __IsReferenceable < __T > :: value;
         }
+
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsReferenceable : __impl::__IsReferenceable <__T> {};
 
         /**
          * @brief Meta-function used to check if a given type is an enum type
@@ -656,6 +881,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsEnum < __Type > :: value;
         }
 
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsEnum : __impl::__IsEnum <__T> {};
+
         /**
          * @brief Meta-function used to check if a given type is an union type
          * @tparam __Type is the type checked
@@ -664,6 +892,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isUnion () noexcept -> bool {
             return __impl :: __IsUnion < __Type > :: value;
         }
+
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsUnion : __impl::__IsUnion <__T> {};
 
         /**
          * @brief Meta-function used to check if a given type is a class or struct type
@@ -674,6 +905,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsClass < __Type > :: value;
         }
 
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsClass : __impl::__IsClass <__T> {};
+
         /**
          * @brief Meta-function used to check if a given type is a function type
          * @tparam __Type is the type checked
@@ -682,6 +916,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isFunction () noexcept -> bool {
             return __impl :: __IsFunction < __Type > :: value;
         }
+
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsFunction : __impl::__IsFunction <__T> {};
 
         /**
          * @brief Meta-function used to check if a given type is a fundamental type ( bool, int types, float types )
@@ -692,6 +929,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsFundamental < __Type > :: value;
         }
 
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsFundamental : __impl::__IsFundamental <__T> {};
+
         /**
          * @brief Meta-function used to check if a given type is an integral type ( bool, int types )
          * @tparam __Type is the type checked
@@ -700,6 +940,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isIntegral () noexcept -> bool {
             return __impl :: __IsIntegral < __Type > :: value;
         }
+
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsIntegral : __impl::__IsIntegral <__T> {};
 
         /**
          * @brief Meta-function used to check if a given type is a floating point type ( float types )
@@ -710,6 +953,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsFloatingPoint < __Type > :: value;
         }
 
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsFloatingPoint : __impl::__IsFloatingPoint <__T> {};
+
         /**
          * @brief Meta-function used to check if a given type is an arithmetic type ( int, float types )
          * @tparam __Type is the type checked
@@ -719,10 +965,16 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsArithmetic < __Type > :: value;
         }
 
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsArithmetic : __impl::__IsArithmetic <__T> {};
+
         template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         constexpr auto isSigned () noexcept -> bool {
             return __impl :: __IsSigned < __Type > :: value;
         }
+
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsSigned : __impl::__IsSigned <__T> {};
 
         template < typename __Type > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         constexpr auto isUnsigned () noexcept -> bool {
@@ -730,6 +982,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     isArithmetic < __Type > () &&
                     ! isSigned < __Type > ();
         }
+
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsUnsigned : And <IsArithmetic <__T>, Not <IsSigned <__T>>> {};
 
         /**
          * @brief Meta-function used to check if a given type is convertible to another given type
@@ -741,6 +996,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsConvertible < __From, __To > :: value;
         }
 
+        template <typename __From, typename __To> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsConvertible : __impl::__IsConvertible <__From, __To> {};
+
         /**
          * @brief Meta-function used to check if two given types are the same
          * @tparam __LeftType is the first type
@@ -751,6 +1009,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsSame < __LeftType, __RightType > :: value;
         }
 
+        template <typename __LeftType, typename __RightType> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsSame : __impl::__IsSame <__LeftType, __RightType> {};
+
         /**
          * @brief Meta-function used to check if a given type can be constructed without arguments ( has default constructor )
          * @tparam __Type is the type checked
@@ -759,6 +1020,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isDefaultConstructible () noexcept -> bool {
             return __impl :: __IsDefaultConstructible < __Type > :: value;
         }
+
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsDefaultConstructible : __impl::__IsDefaultConstructible <__Type> {};
 
         /**
          * @brief Meta-function used to check if a given type can be copied trivially ( public fields, no copy operator specialization )
@@ -769,6 +1033,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsTriviallyCopyable < __Type > :: value;
         }
 
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsTriviallyCopyable : __impl::__IsTriviallyCopyable <__Type> {};
+
         /**
          * @brief Meta-function used to check if a given type can be constructed by copy ( has copy constructor )
          * @tparam __Type is the type checked
@@ -777,6 +1044,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isCopyConstructible () noexcept -> bool {
             return __impl :: __IsCopyConstructible < __Type > :: value;
         }
+
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsCopyConstructible : __impl::__IsCopyConstructible <__Type> {};
 
         /**
          * @brief Meta-function used to check if a given type can be constructed by move ( has move constructor )
@@ -787,6 +1057,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsMoveConstructible < __Type > :: value;
         }
 
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsMoveConstructible : __impl::__IsMoveConstructible <__Type> {};
+
         /**
          * @brief Meta-function used to check if a given type can be assigned a value by copy ( has copy assignment operator )
          * @tparam __Type is the type checked
@@ -795,6 +1068,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isCopyAssignable () noexcept -> bool {
             return __impl :: __IsCopyAssignable < __Type > :: value;
         }
+
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsCopyAssignable : __impl::__IsCopyAssignable <__Type> {};
 
         /**
          * @brief Meta-function used to check if a given type can be assigned a value by move ( has move assignment operator )
@@ -805,6 +1081,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsMoveAssignable < __Type > :: value;
         }
 
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsMoveAssignable : __impl::__IsMoveAssignable <__Type> {};
+
         /**
          * @brief Meta-function used to check if a given type is a callable type ( function / object with operator () )
          * @tparam __Type is the type checked
@@ -813,6 +1092,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isCallable () noexcept -> bool {
             return __impl :: __IsFunction < __Type > :: value || __impl :: __IsObjectFunction < __Type > :: value;
         }
+
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsCallable : Or <__impl::__IsFunction <__Type>, __impl::__IsObjectFunction <__Type>> {};
 
         /**
          * @brief Meta-function used to check if a given type is a static-function type ( non-object callable )
@@ -823,6 +1105,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsStaticFunction < __Type > :: value;
         }
 
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsStaticFunction : __impl::__IsStaticFunction <__Type> {};
+
         /**
          * @brief Meta-function used to check if a given type is a callable object ( non-static function )
          * @tparam __Type is the type checked
@@ -831,6 +1116,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isObjectFunction () noexcept -> bool {
             return __impl :: __IsObjectFunction < __Type > :: value;
         }
+
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsObjectFunction : __impl::__IsObjectFunction <__Type> {};
 
         /**
          * @brief Meta-function used to check if a given type is an array type
@@ -841,6 +1129,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsArray < __Type > :: value;
         }
 
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsArray : __impl::__IsArray <__Type> {};
+
         /**
          * @brief Meta-function used to check if a given type is a bounded array type
          * @tparam __Type is the type checked
@@ -849,6 +1140,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isBoundedArray () noexcept -> bool {
             return __impl :: __IsBoundedArray < __Type > :: value;
         }
+
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsBoundedArray : __impl::__IsBoundedArray <__Type> {};
 
         /**
          * @brief Meta-function used to check if a given type is an unbounded array type
@@ -859,6 +1153,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsUnboundedArray < __Type > :: value;
         }
 
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsUnboundedArray : __impl::__IsUnboundedArray <__Type> {};
+
         /**
          * @brief Meta-function used to check if a given type is a basic-pointer type = non-smart pointer type
          * @tparam __Type is the type checked
@@ -867,6 +1164,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isBasicPointer () noexcept -> bool {
             return __impl :: __IsPointer < __Type > :: value;
         }
+
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsBasicPointer : __impl::__IsPointer <__Type> {};
 
         /**
          * @brief Meta-function used to check if a given type is a lvalue reference (&) type
@@ -877,6 +1177,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsLValueReference < __Type > :: value;
         }
 
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsLValueReference : __impl::__IsLValueReference <__Type> {};
+
         /**
          * @brief Meta-function used to check if a given type is a rvalue reference (&&) type
          * @tparam __Type is the type checked
@@ -885,6 +1188,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isRValueReference () noexcept -> bool {
             return __impl :: __IsRValueReference < __Type > :: value;
         }
+
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsRValueReference : __impl::__IsRValueReference <__Type> {};
 
         /**
          * @brief Meta-function used to check if a given type is a lvalue reference (&) type
@@ -895,6 +1201,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsLValueReference < __Type > :: value;
         }
 
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsReference : IsLValueReference <__Type> {};
+
         /**
          * @brief Meta-function used to check if a given type is a rvalue reference (&&) type
          * @tparam __Type is the type checked
@@ -903,6 +1212,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isMoveReference () noexcept -> bool {
             return __impl :: __IsRValueReference < __Type > :: value;
         }
+
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsMoveReference : IsRValueReference <__Type> {};
 
         /**
          * @brief Meta-function used to check if a given type is a volatile type
@@ -913,6 +1225,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsVolatile < __T > :: value;
         }
 
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsVolatile : __impl::__IsVolatile <__Type> {};
+
         /**
          * @brief Meta-function used to check if a given type is a const type
          * @tparam __T is the type checked
@@ -921,6 +1236,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isConst () noexcept -> bool {
             return __impl :: __IsConst < __T > :: value;
         }
+
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsConst : __impl::__IsConst <__Type> {};
 
     } /* namespace meta */
 } /* namespace cds */

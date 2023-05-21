@@ -376,6 +376,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __LessThanPossible < __LeftType, __RightType > :: value;
         }
 
+        template <typename __LeftType, typename __RightType = __LeftType> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct LessThanPossible : __impl::__LessThanPossible <__LeftType, __RightType> {};
+
         /**
          * @brief Meta-function used to check if two given types can be compared by greater than operator (\>)
          * @tparam __LeftType is the first type
@@ -385,6 +388,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto greaterThanPossible () noexcept -> bool {
             return __impl :: __GreaterThanPossible < __LeftType, __RightType > :: value;
         }
+
+        template <typename __LeftType, typename __RightType = __LeftType> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct GreaterThanPossible : __impl::__GreaterThanPossible <__LeftType, __RightType> {};
 
         /**
          * @brief Meta-function used to check if two given types can be compared by less than or equal to operator (\<=)
@@ -396,6 +402,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __LessThanOrEqualToPossible < __LeftType, __RightType > :: value;
         }
 
+        template <typename __LeftType, typename __RightType = __LeftType> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct LessThanOrEqualToPossible : __impl::__LessThanOrEqualToPossible <__LeftType, __RightType> {};
+
         /**
          * @brief Meta-function used to check if two given types can be compared by greater than or equal to operator (\>=)
          * @tparam __LeftType is the first type
@@ -405,6 +414,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto greaterThanOrEqualToPossible () noexcept -> bool {
             return __impl :: __GreaterThanOrEqualToPossible < __LeftType, __RightType > :: value;
         }
+
+        template <typename __LeftType, typename __RightType = __LeftType> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct GreaterThanOrEqualToPossible : __impl::__GreaterThanOrEqualToPossible <__LeftType, __RightType> {};
 
         /**
          * @brief Meta-function used to check if two given types can be compared by equal to operator (==)
@@ -416,6 +428,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __EqualToPossible < __LeftType, __RightType > :: value;
         }
 
+        template <typename __LeftType, typename __RightType = __LeftType> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct EqualToPossible : __impl::__EqualToPossible <__LeftType, __RightType> {};
+
         /**
          * @brief Meta-function used to check if two given types can be compared by not equal to operator (!=)
          * @tparam __LeftType is the first type
@@ -426,6 +441,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __NotEqualToPossible < __LeftType, __RightType > :: value;
         }
 
+        template <typename __LeftType, typename __RightType = __LeftType> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct NotEqualToPossible : __impl::__NotEqualToPossible <__LeftType, __RightType> {};
+
         /**
          * @brief Meta-function used to check if a given type is printable ( std :: ostream << type )
          * @tparam __Type is the type for which printability is checked
@@ -434,6 +452,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isPrintable () noexcept -> bool {
             return __impl :: __IsPrintable < __Type > :: value;
         }
+
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsPrintable : __impl::__IsPrintable <__Type> {};
 
         /**
          * @brief Meta-function used to check if a given type is a base class of another given type
@@ -445,6 +466,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsBaseOf < __BaseType, __DerivedType > :: value;
         }
 
+        template <typename __BaseType, typename __DerviedType> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsBaseFor : __impl::__IsBaseOf <__BaseType, __DerviedType> {};
+
         /**
          * @brief Meta-function used to check if a given type is derived from another given type
          * @tparam __DerivedType is the type given as a derived class
@@ -455,6 +479,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsBaseOf < __BaseType, __DerivedType > :: value;
         }
 
+        template <typename __DerivedType, typename __BaseType> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsDerivedFrom : __impl::__IsBaseOf <__BaseType, __DerivedType> {};
+
         /**
          * @brief Meta-function used to check if a given type is derived from the Object base type
          * @tparam __Type is the type checked
@@ -463,6 +490,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isObjectDerived () noexcept -> bool {
             return isDerivedFrom < __Type, Object > ();
         }
+
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsObjectDerived : IsDerivedFrom <__Type, Object> {};
 
         /**
          * @brief Meta-function used to check if a given type is a smart-pointer type = derived from SmartPointer type
@@ -473,6 +503,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsSmartPointer < __Type > :: value;
         }
 
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsSmartPointer : __impl::__IsSmartPointer <__Type> {};
+
         /**
          * @brief Meta-function used to check if a given type is a basic or smart pointer type
          * @tparam __Type is the type checked
@@ -481,6 +514,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isPointer () noexcept -> bool {
             return isBasicPointer < __Type > () || isSmartPointer < __Type > ();
         }
+
+        template <typename __Type> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsPointer : Or <__impl::__IsSmartPointer <__Type>, IsBasicPointer <__Type>> {};
 
         /**
          * @brief Meta-function used to check if a given type is a Pair type
@@ -491,6 +527,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsPair < __T > :: value;
         }
 
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsPair : __impl::__IsPair <__T> {};
+
         /**
          * @brief Meta-function used to check if a given type is a member of an object
          * @tparam __T is the type checked
@@ -500,6 +539,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsMemberObjectPointer < __T > :: value;
         }
 
+        template <typename __T, typename __C = void> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsMemberObjectPointer : __impl::__IsMemberObjectPointer <__T, __C> {};
+
         /**
          * @brief Meta-function used to check if a given type is a member function of an object
          * @tparam __T is the type checked
@@ -508,6 +550,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isMemberFunctionPointer () noexcept -> bool {
             return __impl :: __IsMemberFunctionPointer < __T > :: value;
         }
+
+        template <typename __T, typename __C = void> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsMemberFunctionPointer : __impl::__IsMemberFunctionPointer <__T, __C> {};
 
         /**
          * @brief Meta-function used to check if a given type is a member of a given object
@@ -519,6 +564,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             return __impl :: __IsMemberObjectPointer < __T, __C > :: value;
         }
 
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsMemberObjectPointer <__T> : __impl::__IsMemberObjectPointer <__T> {};
+
         /**
          * @brief Meta-function used to check if a given type is a member function of a given object
          * @tparam __T is the type checked
@@ -528,6 +576,9 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
         constexpr auto isMemberFunctionPointer () noexcept -> bool {
             return __impl :: __IsMemberFunctionPointer < __T, __C > :: value;
         }
+
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsMemberFunctionPointer <__T> : __impl::__IsMemberFunctionPointer <__T> {};
 
         template < typename __T > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
         constexpr static auto name () noexcept -> StringLiteral {
@@ -551,6 +602,19 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
                     prefixIncrementPossible < __T > () &&
                     notEqualToPossible < __T, __T > ();
         }
+
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IndirectionPossible : __impl::__IndirectionPossible <__T> {};
+
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct PrefixIncrementPossible : __impl::__PrefixIncrementPossible <__T> {};
+
+        template <typename __T> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+        struct IsIterator : And <
+                IndirectionPossible <__T>,
+                PrefixIncrementPossible <__T>,
+                NotEqualToPossible <__T>
+        > {};
 
         /**
          * @brief Meta-function used to invoke the most appropriate comparison function between two values
