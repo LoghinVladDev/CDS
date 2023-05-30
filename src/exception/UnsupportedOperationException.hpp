@@ -1,42 +1,30 @@
-/*
- * Created by loghin on 30/11/22.
- */
+//
+// Created by loghin on 30/11/22.
+//
 
-#ifndef __CDS_UNSUPPORTED_OPERATION_EXCEPTION_HPP__ /* NOLINT(llvm-header-guard) */
-#define __CDS_UNSUPPORTED_OPERATION_EXCEPTION_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+#ifndef __CDS_UNSUPPORTED_OPERATION_EXCEPTION_HPP__ // NOLINT(llvm-header-guard)
+#define __CDS_UNSUPPORTED_OPERATION_EXCEPTION_HPP__ // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+#pragma once
 
-#include <CDS/exception/Exception>
+#include <CDS/exception/RuntimeException>
 
 namespace cds {
+class UnsupportedOperationException : public RuntimeException {
+public:
+  using RuntimeException::RuntimeException;
+  UnsupportedOperationException() noexcept : RuntimeException("Unsupported Operation") {}
+};
+} // namespace cds
 
-    class UnsupportedOperationException : public Exception {
+namespace cds {
+namespace meta {
+namespace __impl {
+template<>
+struct __TypeParseTraits<UnsupportedOperationException> {
+  constexpr static StringLiteral name = "UnsupportedOperationException";
+};
+} // namespace __impl
+} // namespace meta
+} // namespace cds
 
-    public:
-        UnsupportedOperationException () noexcept;
-
-    public:
-        UnsupportedOperationException (
-                UnsupportedOperationException const & exception
-        ) noexcept;
-
-    public:
-        UnsupportedOperationException (
-                UnsupportedOperationException && exception
-        ) noexcept;
-
-    public:
-        explicit UnsupportedOperationException (
-                StringView message
-        ) noexcept;
-
-    public:
-        ~UnsupportedOperationException() noexcept override = default;
-    };
-
-} /* namespace cds */
-
-#include "exception/impl/UnsupportedOperationException.hpp"
-
-__CDS_Meta_RegisterParseType(UnsupportedOperationException)
-
-#endif /* __CDS_UNSUPPORTED_OPERATION_EXCEPTION_HPP__ */
+#endif // __CDS_UNSUPPORTED_OPERATION_EXCEPTION_HPP__

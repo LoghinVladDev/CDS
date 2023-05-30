@@ -84,9 +84,7 @@ namespace cds {
         (void) pIsNew;
         (void) pObject;
 
-        throw cds :: UnsupportedOperationException (
-                cds :: String ( "Cannot insert a value into a Map Key Set" )
-        );
+        throw cds :: UnsupportedOperationException ("Cannot insert a value into a Map Key Set");
     }
 
 } /* namespace cds */

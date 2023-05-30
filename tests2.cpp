@@ -5,7 +5,20 @@
 
 #include <CDS/Function>
 
+template <typename...Outputs>
+typename cds::meta::All <cds::meta::Bind <cds::meta::IsConvertible, cds::meta::Ph<>, std::ostream&>::Type, Outputs...>::value v;
+
+template <typename T>
+using ConvertibleToStdOstreamRef =
+    cds::meta::Bind <cds::meta::IsConvertible, cds::meta::Ph<1>, std::ostream&>::Type<T>;
+
+
 int main () {
+
+  std::stringstream oss;
+  std::cout << ConvertibleToStdOstreamRef<decltype(oss)>::value << '\n';
+  return 0;
+//            cds::meta::All <cds::meta::Bind <cds::meta::IsConvertible, cds::meta::Ph<>, int>, float, int>::value;
 
     using cds::Tuple;
     using cds::Array;

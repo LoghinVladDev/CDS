@@ -1,42 +1,32 @@
-/*
- * Created by loghin on 30/11/22.
- */
+//
+// Created by loghin on 30/11/22.
+//
 
-#ifndef __CDS_NULL_POINTER_EXCEPTION_HPP__ /* NOLINT(llvm-header-guard) */
-#define __CDS_NULL_POINTER_EXCEPTION_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+#ifndef __CDS_NULL_POINTER_EXCEPTION_HPP__ // NOLINT(llvm-header-guard)
+#define __CDS_NULL_POINTER_EXCEPTION_HPP__ // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+#pragma once
 
-#include <CDS/exception/RuntimeException>
+#include <CDS/exception/Exception>
 
 namespace cds {
+class NullPointerException : public Exception {
+  using Exception::Exception;
+  __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto message() const noexcept -> StringView override {
+    return "Tried de-referencing a null pointer";
+  }
+};
 
-    class NullPointerException : public RuntimeException {
+} // namespace cds
 
-    public:
-        NullPointerException () noexcept;
+namespace cds {
+namespace meta {
+namespace __impl {
+template<>
+struct __TypeParseTraits<NullPointerException> {
+  constexpr static StringLiteral name = "NullPointerException";
+};
+} // namespace __impl
+} // namespace meta
+} // namespace cds
 
-    public:
-        NullPointerException (
-                NullPointerException const & exception
-        ) noexcept;
-
-    public:
-        NullPointerException (
-                NullPointerException && exception
-        ) noexcept;
-
-    public:
-        explicit NullPointerException (
-                StringView message
-        ) noexcept;
-
-    public:
-        ~NullPointerException() noexcept override = default;
-    };
-
-} /* namespace cds */
-
-#include "exception/impl/NullPointerException.hpp"
-
-__CDS_Meta_RegisterParseType(NullPointerException)
-
-#endif /* __CDS_NULL_POINTER_EXCEPTION_HPP__ */
+#endif // __CDS_NULL_POINTER_EXCEPTION_HPP__

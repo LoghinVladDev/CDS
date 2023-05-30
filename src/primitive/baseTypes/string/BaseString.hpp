@@ -9,7 +9,6 @@
 
 #include "../../../shared/impl/generalPredicates.hpp"   /* NOLINT(llvm-include-order) */
 #include "../../../shared/impl/arithmetic.hpp"
-#include "../../../shared/memory/PrimitiveAllocation.hpp"
 #include "../../../shared/sequence/Predeclaration.hpp"
 
 #include <CDS/Limits>                                   /* NOLINT(llvm-include-order) */
@@ -2016,6 +2015,7 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 
 #include "impl/BaseStringNonException.hpp"
 
+#include "../../../shared/memory/PrimitiveAllocation.hpp"
 #include <CDS/exception/OutOfBoundsException>
 
 #include "impl/StringUtils.hpp" /* NOLINT(llvm-include-order) */
