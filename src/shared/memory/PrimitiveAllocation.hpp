@@ -7,6 +7,7 @@
 #pragma once
 
 #include <CDS/exception/OutOfMemoryException>
+#include <cassert>
 
 namespace cds {           // NOLINT(modernize-concat-nested-namespaces)
 namespace __hidden {      // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
