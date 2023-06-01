@@ -146,8 +146,9 @@ template <typename __Type, Size __align, Size __size> // NOLINT(bugprone-reserve
 struct __BasePrimitiveRealloc <__Type, __align, __size, true, false, false> {
   static auto __realloc(Size oldElementCount, __Type* pOldBuffer, Size newElementCount) noexcept(false) -> __Type* {  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     (void) oldElementCount;
-    auto pNewBuffer = static_cast <__Type*> (reallocf(pOldBuffer, __size * newElementCount));
+    auto pNewBuffer = static_cast <__Type*> (realloc(pOldBuffer, __size * newElementCount));
     if (pNewBuffer == nullptr) {
+      free(pOldBuffer);
       throw OutOfMemoryException();
     }
 
@@ -160,8 +161,9 @@ template <typename __Type, Size __align, Size __size> // NOLINT(bugprone-reserve
 struct __BasePrimitiveRealloc <__Type, __align, __size, false, true, false> {
   static auto __realloc(Size oldElementCount, __Type* pOldBuffer, Size newElementCount) noexcept(false) -> __Type* {  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     auto const size = __size * newElementCount;
-    auto pNewBuffer = reallocf(pOldBuffer, size);
+    auto pNewBuffer = realloc(pOldBuffer, size);
     if (pNewBuffer == nullptr) {
+      free(pOldBuffer);
       throw OutOfMemoryException();
     }
   
