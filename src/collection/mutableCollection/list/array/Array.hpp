@@ -1040,7 +1040,7 @@ namespace cds {
 
 #include "array/impl/Array.hpp"
 
-#include "../../../../shared/array/impl/ArrayBase.hpp"
+#include "../../../../shared/array/impl/ArrayBaseImpl.hpp"
 
 #include "../../../../shared/iterator/impl/IteratorSort.hpp"                                            /* NOLINT(llvm-include-order) */
 #include "../../../../shared/iterator/impl/AddressIterator.hpp"
@@ -1051,7 +1051,7 @@ namespace cds {
 #include "../../../../shared/iterableInternalCommunication/server/impl/ListServer.hpp"
 #include "../../../../shared/iterableInternalCommunication/server/impl/ListServerDispatcher.hpp"
 
-#include "../../../../shared/array/impl/Sequence.hpp"
+#include "../../../../shared/array/impl/ArraySequence.hpp"
 
 #include "../../../../shared/collection/FunctionalConstructors.hpp"
 #include "../../../../shared/collection/impl/FunctionalConstructors.hpp"

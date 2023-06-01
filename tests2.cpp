@@ -15,30 +15,53 @@ using ConvertibleToStdOstreamRef =
 
 int main () {
 
-  std::stringstream oss;
-  std::cout << ConvertibleToStdOstreamRef<decltype(oss)>::value << '\n';
+  cds::Array <int> a;
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
   return 0;
-//            cds::meta::All <cds::meta::Bind <cds::meta::IsConvertible, cds::meta::Ph<>, int>, float, int>::value;
-
-    using cds::Tuple;
-    using cds::Array;
-
-
-    using cds::Size;
-    using cds::makeTuple;
-
-    auto t1 = makeTuple <Size, Size, Size> (3, 4, 5);
-
-    Size a = 3, b = 4, c = 5;
-
-    auto t2 = makeTuple (a, b, c);
-    t2.get<0>() = 1;
-
-    cds::Function <bool(int)> f = [](int x){return x == 2;};
-
-    int x = 5;
-    Size s = 3;
-    Array a213 (s, x);
+//
+//  std::stringstream oss;
+//  std::cout << ConvertibleToStdOstreamRef<decltype(oss)>::value << '\n';
+//  return 0;
+////            cds::meta::All <cds::meta::Bind <cds::meta::IsConvertible, cds::meta::Ph<>, int>, float, int>::value;
+//
+//    using cds::Tuple;
+//    using cds::Array;
+//
+//
+//    using cds::Size;
+//    using cds::makeTuple;
+//
+//    auto t1 = makeTuple <Size, Size, Size> (3, 4, 5);
+//
+//    Size a = 3, b = 4, c = 5;
+//
+//    auto t2 = makeTuple (a, b, c);
+//    t2.get<0>() = 1;
+//
+//    cds::Function <bool(int)> f = [](int x){return x == 2;};
+//
+//    int x = 5;
+//    Size s = 3;
+//    Array a213 (s, x);
 
 //    std::cout << cds::meta::All <int, float, int> :: test < cds::meta::IsSame, int > ();
 //  std::cout << IsIntImpl<int>::Type<> ::value << '\n';

@@ -764,7 +764,7 @@ namespace cds {
 #include "../shared/iterableInternalCommunication/server/impl/IterableServer.hpp"
 #include "../shared/iterableInternalCommunication/server/impl/IterableServerDispatcher.hpp"
 
-#include "../shared/array/impl/StaticArrayBase.hpp"
+#include "../shared/array/impl/StaticArrayBaseImpl.hpp"
 
 #include "staticArray/impl/StaticArray.hpp"
 
