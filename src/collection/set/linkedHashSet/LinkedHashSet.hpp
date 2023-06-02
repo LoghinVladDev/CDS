@@ -566,7 +566,7 @@ namespace cds {
 
 } /* namespace cds */
 
-#include "../../../shared/hashTable/impl/HashTable.hpp"
+#include "../../../shared/hashTable/impl/HashTableImpl.hpp"
 #include "../../../shared/linkedList/impl/SingleLinkedList.hpp"
 
 #include "../../../shared/iterator/impl/HashTableIterator.hpp"

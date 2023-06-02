@@ -2,7 +2,7 @@
 // Created by loghin on 7/5/22.
 //
 
-#ifndef __CDS_SHARED_ARRAY_BASE_HPP__ // NOLINT(llvm-header-guard) 
+#ifndef __CDS_SHARED_ARRAY_BASE_HPP__ // NOLINT(llvm-header-guard)
 #define __CDS_SHARED_ARRAY_BASE_HPP__ // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 #pragma once
 
@@ -20,7 +20,7 @@ namespace __impl {    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert
 /// \test Suite: CTS-00001, Group: All, Test Cases: All
 /// \test Suite: MCTS-00001, Group: All, Test Cases: All
 ///
-/// \namespace cds :: __hidden :: __impl
+/// \namespace cds::__hidden::__impl
 /// \internal library-private
 
 template <
@@ -89,7 +89,7 @@ protected:
 
   /// \brief Copy Constructor
   /// \param [in] array : __ArrayBase cref = Constant Reference to an Array to copy the data from
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \test Suite: CTS-00001, Group: All, Test Cases: All
   /// \test Suite: MCTS-00001, Group: All, Test Cases: All
   /// \protected
@@ -145,7 +145,7 @@ protected:
   /// \brief Function used to remove multiple elements at a given number of iterators
   /// \param [in] ppIterators : AbstractAddressIterator cptr cptr  = Immutable Address to an array of Immutable Addresses to iterators
   /// \param [in] iteratorArrayCount : Size = number of iterators in the given array
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \return Size = number of removed elements
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
@@ -157,7 +157,7 @@ protected:
   /// \brief Function used to remove multiple elements at a given number of const iterators
   /// \param [in] ppIterators : AbstractAddressIterator cptr cptr  = Immutable Address to an array of Immutable Addresses to const iterators
   /// \param [in] iteratorArrayCount : Size = number of iterators in the given array
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \return Size = number of removed elements
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
@@ -187,14 +187,14 @@ protected:
   ) const noexcept -> ElementType const*;
 
   /// \brief Function used to allocate and return the address of the newly created element space in the front of the array
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \return ElementType ptr = Address to the new memory space
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
   __CDS_NoDiscard auto __ab_newFront () noexcept(false) -> ElementType*; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   /// \brief Function used to allocate and return the address of the newly created element space in the back of the array
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \return ElementType ptr = Address to the new memory space
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
@@ -204,7 +204,7 @@ protected:
   /// individual memory space in a given array
   /// \param [in] count : Size = number of elements space is required for
   /// \param [out] ppElements : __Type ptr ptr = Address to the array of addresses to populate with the newly created space
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
   auto __ab_newFrontArray ( // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
@@ -216,7 +216,7 @@ protected:
   /// individual memory space in a given array
   /// \param [in] count : Size = number of elements space is required for
   /// \param [out] ppElements : __Type ptr ptr = Address to the array of addresses to populate with the newly created space
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
   auto __ab_newBackArray ( // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
@@ -227,7 +227,7 @@ protected:
   /// \brief Function used to allocate space for an element, regardless of the location, and return the memory address
   /// \param [in] pReferenceElement : __Type cptr = Address to an Immutable Reference comparison element. Unused in array since no restriction for added values exists
   /// \param [out] pNewElementCreated : bool ptr = Address of a boolean value to be set to true if newly created value was created. In array, it is always set true
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \return __Type ptr = Address to the newly created space for the element
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
@@ -238,7 +238,7 @@ protected:
 
   /// \brief Function used to allocate space for an element at a given index. Will move elements, starting with the given index, to the right
   /// \param index : Index = index to create the element at
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \return __Type ptr = Address to the newly created space for the element
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
@@ -250,7 +250,7 @@ protected:
   /// \param [in] index : Index = index to create the element spaces at
   /// \param [in] count : Size = number of elements to be inserted at given index
   /// \param [out] ppElements : __Type ptr ptr = Address to the array of addresses to populate with the addresses of the newly created memory spaces
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
   auto __ab_newArrayAt ( // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
@@ -261,7 +261,7 @@ protected:
 
   /// \brief Function used to allocate space for an element before a given iterator. Will move elements, starting with the given iterator element, to the right
   /// \param [in] iterator : AbstractAddressIterator cref = Constant Reference to the iterator to allocate an element space before
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \return __Type ptr = Address to the newly created space for the element
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
@@ -269,7 +269,7 @@ protected:
 
   /// \brief Function used to allocate space for an element before a given const iterator. Will move elements, starting with the given iterator element, to the right
   /// \param [in] iterator : AbstractAddressIterator cref = Constant Reference to the const iterator to allocate an element space before
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \return __Type ptr = Address to the newly created space for the element
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
@@ -277,7 +277,7 @@ protected:
 
   /// \brief Function used to allocate space for an element after a given iterator. Will move elements, starting after the given iterator element, to the right
   /// \param [in] iterator : AbstractAddressIterator cref = Constant Reference to the iterator to allocate an element space after
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \return __Type ptr = Address to the newly created space for the element
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
@@ -285,7 +285,7 @@ protected:
 
   /// \brief Function used to allocate space for an element after a given const iterator. Will move elements, starting after the given iterator element, to the right
   /// \param [in] iterator : AbstractAddressIterator cref = Constant Reference to the const iterator to allocate an element space after
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \return __Type ptr = Address to the newly created space for the element
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
@@ -295,7 +295,7 @@ protected:
   /// \param [in] iterator : AbstractAddressIterator cref = Constant Reference to the iterator to allocate the element spaces before
   /// \param [in] count : Size = number of elements to be inserted at given index
   /// \param [out] ppElements : __Type ptr ptr = Address to the array of addresses to populate with the addresses of the newly created memory spaces
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \return bool = true if allocation was successful, false otherwise
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
@@ -309,7 +309,7 @@ protected:
   /// \param [in] iterator : AbstractAddressIterator cref = Constant Reference to the const iterator to allocate the element spaces before
   /// \param [in] count : Size = number of elements to be inserted at given index
   /// \param [out] ppElements : __Type ptr ptr = Address to the array of addresses to populate with the addresses of the newly created memory spaces
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \return bool = true if allocation was successful, false otherwise
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
@@ -323,7 +323,7 @@ protected:
   /// \param [in] iterator : AbstractAddressIterator cref = Constant Reference to the iterator to allocate the element spaces after
   /// \param [in] count : Size = number of elements to be inserted at given index
   /// \param [out] ppElements : __Type ptr ptr = Address to the array of addresses to populate with the addresses of the newly created memory spaces
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \return bool = true if allocation was successful, false otherwise
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
@@ -337,7 +337,7 @@ protected:
   /// \param [in] iterator : AbstractAddressIterator cref = Constant Reference to the const iterator to allocate the element spaces after
   /// \param [in] count : Size = number of elements to be inserted at given index
   /// \param [out] ppElements : __Type ptr ptr = Address to the array of addresses to populate with the addresses of the newly created memory spaces
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \return bool = true if allocation was successful, false otherwise
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
@@ -420,7 +420,7 @@ protected:
   /// \brief Function used to resize the element space to a given size. It will initialize the empty space with a default constructor
   /// \tparam __TElementType is an alias for __Type used to invoke substitution, enabling the function only if __Type is default constructible
   /// \param [in] size : Size = new size of the array
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
   template <
@@ -432,7 +432,7 @@ protected:
   /// \tparam __TElementType is an alias for __Type used to invoke substitution, enabling the function only if __Type is copy constructible
   /// \param [in] size : Size = new size of the array
   /// \param [in] defaultValue : __Type cref = Constant Reference to the element to be used initializing the newly created elements
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
   template <
@@ -442,14 +442,14 @@ protected:
 
   /// \brief Function used to shrink the array to the given size. Will not do anything if given a size greater than actual
   /// \param [in] size : Size = new size of the array
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
   auto __ab_shrink (Size size) noexcept -> void; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   /// \brief Function used to enlarge, but not initialize the elements, the array to the given size. New space will NOT be initialized
   /// \param [in] size : Size = new size of the array
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
   auto __ab_reserve (Size size) noexcept(false) -> void; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
@@ -457,7 +457,7 @@ protected:
   /// \brief Function used to clear the current contents and copy the data from a received array.
   /// \tparam __TElementType is an alias for __Type used to invoke substitution, enabling the function only if __Type is copy constructible
   /// \param [in] array : __ArrayBase cref = Constant Reference to an array to copy the data from
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
   template <
@@ -516,7 +516,7 @@ private:
   __ArrayImplDataContainer * _pData { nullptr };
 
   /// \brief Function used to initialize the array data at first use
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \test Suite: CTS-00001, Group: All, Test Cases: All
   /// \test Suite: MCTS-00001, Group: All, Test Cases: All
   /// \private
@@ -525,7 +525,7 @@ private:
   /// \brief Function used to copy the data from a received array. It will NOT clear the array prior to copying
   /// \tparam __TElementType is an alias for __Type used to invoke substitution, enabling the function only if __Type is copy constructible
   /// \param [in] array : __ArrayBase cref = Constant Reference to an array to copy the data from
-  /// \exceptsafe
+  /// \throws cds::OutOfMemoryException if required heap allocation fails
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \private
   template <
@@ -547,40 +547,22 @@ template <
     functional::PredicateFunction <__Type const&, __Type const&>  __equals              // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > template <typename __ServerType> class __ArrayBase <__Type, __equals>::__Dispatcher : // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __ListServerDispatcher <
-        __ServerType,
-        __ArrayBase <__Type, __equals>,
-        __Type,
-        AbstractAddressIterator <__Type>,
-        AbstractAddressIterator <__Type const>,
-        ForwardAddressIterator <__Type>,
-        ForwardAddressIterator <__Type const>,
-        BackwardAddressIterator <__Type>,
-        BackwardAddressIterator <__Type const>,
-        &__ArrayBase <__Type, __equals>::__ab_begin,
-        &__ArrayBase <__Type, __equals>::__ab_end,
-        &__ArrayBase <__Type, __equals>::__ab_cbegin,
-        &__ArrayBase <__Type, __equals>::__ab_cend,
-        &__ArrayBase <__Type, __equals>::__ab_rbegin,
-        &__ArrayBase <__Type, __equals>::__ab_rend,
-        &__ArrayBase <__Type, __equals>::__ab_crbegin,
-        &__ArrayBase <__Type, __equals>::__ab_crend,
-        &__ArrayBase <__Type, __equals>::__ab_newAddress,
-        &__ArrayBase <__Type, __equals>::__ab_newFront,
-        &__ArrayBase <__Type, __equals>::__ab_newBack,
-        &__ArrayBase <__Type, __equals>::__ab_newFrontArray,
-        &__ArrayBase <__Type, __equals>::__ab_newBackArray,
-        &__ArrayBase <__Type, __equals>::__ab_newBefore,
-        &__ArrayBase <__Type, __equals>::__ab_newBeforeConst,
-        &__ArrayBase <__Type, __equals>::__ab_newAfter,
-        &__ArrayBase <__Type, __equals>::__ab_newAfterConst,
-        &__ArrayBase <__Type, __equals>::__ab_newBeforeArray,
-        &__ArrayBase <__Type, __equals>::__ab_newBeforeArrayConst,
-        &__ArrayBase <__Type, __equals>::__ab_newAfterArray,
-        &__ArrayBase <__Type, __equals>::__ab_newAfterArrayConst,
-        &__ArrayBase <__Type, __equals>::__ab_removeIterator,
-        &__ArrayBase <__Type, __equals>::__ab_removeConstIterator,
-        &__ArrayBase <__Type, __equals>::__ab_removeIteratorArray,
-        &__ArrayBase <__Type, __equals>::__ab_removeConstIteratorArray
+        __ServerType, __ArrayBase, __Type,
+        AbstractAddressIterator <__Type>, AbstractAddressIterator <__Type const>,
+        ForwardAddressIterator <__Type>, ForwardAddressIterator <__Type const>,
+        BackwardAddressIterator <__Type>, BackwardAddressIterator <__Type const>,
+        &__ArrayBase::__ab_begin, &__ArrayBase::__ab_end,
+        &__ArrayBase::__ab_cbegin, &__ArrayBase::__ab_cend,
+        &__ArrayBase::__ab_rbegin, &__ArrayBase::__ab_rend,
+        &__ArrayBase::__ab_crbegin, &__ArrayBase::__ab_crend,
+        &__ArrayBase::__ab_newAddress, &__ArrayBase::__ab_newFront, &__ArrayBase::__ab_newBack,
+        &__ArrayBase::__ab_newFrontArray, &__ArrayBase::__ab_newBackArray,
+        &__ArrayBase::__ab_newBefore, &__ArrayBase::__ab_newBeforeConst,
+        &__ArrayBase::__ab_newAfter, &__ArrayBase::__ab_newAfterConst,
+        &__ArrayBase::__ab_newBeforeArray, &__ArrayBase::__ab_newBeforeArrayConst,
+        &__ArrayBase::__ab_newAfterArray, &__ArrayBase::__ab_newAfterArrayConst,
+        &__ArrayBase::__ab_removeIterator, &__ArrayBase::__ab_removeConstIterator,
+        &__ArrayBase::__ab_removeIteratorArray, &__ArrayBase::__ab_removeConstIteratorArray
     > {};
 
 } // namespace __impl 

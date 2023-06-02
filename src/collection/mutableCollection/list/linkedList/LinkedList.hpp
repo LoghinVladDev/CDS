@@ -985,7 +985,7 @@ namespace cds {
 
 #include "../../../../shared/iterator/impl/NodeIterator.hpp"
 
-#include "../../../../shared/linkedList/impl/DoubleLinkedList.hpp"
+#include "../../../../shared/linkedList/impl/DoubleLinkedListImpl.hpp"
 
 #include "../../../../shared/iterableInternalCommunication/server/impl/ListServer.hpp"
 #include "../../../../shared/iterableInternalCommunication/server/impl/ListServerDispatcher.hpp"

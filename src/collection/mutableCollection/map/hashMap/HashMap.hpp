@@ -751,7 +751,7 @@ namespace cds {
 #include "../../../../shared/delegateIterator/impl/AbstractDelegateIterator.hpp"
 #include "../../../../shared/delegateIterator/impl/DelegateIterator.hpp"
 
-#include "../../../../shared/hashTable/impl/HashTable.hpp"
+#include "../../../../shared/hashTable/impl/HashTableImpl.hpp"
 
 #include "../../../../shared/iterableInternalCommunication/server/impl/SetServer.hpp"             /* NOLINT(llvm-include-order) */
 #include "../../../../shared/iterableInternalCommunication/server/impl/MapServer.hpp"
