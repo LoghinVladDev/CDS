@@ -220,13 +220,6 @@ template <
 };
 
 
-template < typename __Type, Size __primitiveSize = sizeof ( __Type) > // NOLINT(bugprone-reserved-identifier)
-__CDS_DeprecatedHint("Use __PrimitiveAlloc::__alloc, as __allocPrimitiveObject does not support aligned allocation")
-inline auto __allocPrimitiveObject () noexcept -> __Type * { // NOLINT(bugprone-reserved-identifier)
-  return static_cast <__Type *> (malloc (__primitiveSize));
-}
-
-
 template < typename __Type, Size __primitiveSize = sizeof ( __Type ) > // NOLINT(bugprone-reserved-identifier)
 __CDS_DeprecatedHint("Use __PrimitiveAlloc::__alloc, as __allocPrimitiveArray does not support aligned allocation")
 inline auto __allocPrimitiveArray ( // NOLINT(bugprone-reserved-identifier)
@@ -245,15 +238,6 @@ inline auto __reallocPrimitiveArray ( // NOLINT(bugprone-reserved-identifier)
   return reinterpret_cast < __Type * > (
       realloc ( pBuffer, newCapacity * __primitiveSize )
   );
-}
-
-
-template < typename __Type > // NOLINT(bugprone-reserved-identifier)
-__CDS_DeprecatedHint("Use __PrimitiveAlloc::__free, as __freePrimitiveObject does not support aligned allocation")
-inline auto __freePrimitiveObject ( // NOLINT(bugprone-reserved-identifier)
-    __Type * pObject
-) noexcept -> void {
-  free ( pObject );
 }
 
 

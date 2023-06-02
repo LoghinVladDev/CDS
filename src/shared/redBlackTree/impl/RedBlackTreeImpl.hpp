@@ -286,8 +286,9 @@ template <
     }
   }
 
-  if (pPivot != nullptr)
+  if (pPivot != nullptr) {
     pPivot->_colour = __rbt_NodeColourType::__rbtnc_Black;
+  }
 }
 
 template <
@@ -307,23 +308,24 @@ template <
     __ElementType, __KeyType, __Comparator,
     __keyExtractor, __keyEqualsComparator, __nodeDestructor
 >::__rbt_identifyAndApplyRotationOnInsert (__rbt_NodeType*& pPivot) noexcept -> void {
-  auto pAux = __locateAuxiliary (pPivot->_pParent->_pParent);
 
+  auto pAux = __locateAuxiliary (pPivot->_pParent->_pParent);
   if (__rbt_isNodeRed (pAux)) {
     pPivot->_pParent->_colour           = __rbt_NodeColourType::__rbtnc_Black;
     pAux->_colour                       = __rbt_NodeColourType::__rbtnc_Black;
     pPivot->_pParent->_pParent->_colour = __rbt_NodeColourType::__rbtnc_Red;
     pPivot                              = pPivot->_pParent->_pParent;
-  } else {
-    if (__scenarioConditional (pPivot, pPivot->_pParent)) {
-      pPivot = pPivot->_pParent;
-      (this->*__ifTrue) (pPivot);
-    }
-
-    pPivot->_pParent->_colour           = __rbt_NodeColourType::__rbtnc_Black;
-    pPivot->_pParent->_pParent->_colour = __rbt_NodeColourType::__rbtnc_Red;
-    (this->*__ifFalse) (pPivot->_pParent->_pParent);
+    return;
   }
+
+  if (__scenarioConditional (pPivot, pPivot->_pParent)) {
+    pPivot = pPivot->_pParent;
+    (this->*__ifTrue) (pPivot);
+  }
+
+  pPivot->_pParent->_colour           = __rbt_NodeColourType::__rbtnc_Black;
+  pPivot->_pParent->_pParent->_colour = __rbt_NodeColourType::__rbtnc_Red;
+  (this->*__ifFalse) (pPivot->_pParent->_pParent);
 }
 
 
@@ -360,24 +362,23 @@ template <
   if (__rbt_isNodeBlack (pAux->_pLeft) && __rbt_isNodeBlack (pAux->_pRight)) {
     pAux->_colour   = __rbt_NodeColourType::__rbtnc_Red;
     pPivot          = pPivotParent;
-  } else {
-
-    if (__rbt_isNodeBlack (__locateAuxiliary (pAux))) {
-      __locateReverseAuxiliary (pAux)->_colour  = __rbt_NodeColourType::__rbtnc_Black;
-      pAux->_colour                             = __rbt_NodeColourType::__rbtnc_Red;
-      (this->*__ifFalse) (pAux);
-      pAux                                      = __locateAuxiliary (pPivotParent);
-    }
-
-    pAux->_colour                     = pPivotParent->_colour;
-    pPivotParent->_colour             = __rbt_NodeColourType::__rbtnc_Black;
-    __locateAuxiliary (pAux)->_colour = __rbt_NodeColourType::__rbtnc_Black;
-    (this->*__ifTrue) (pPivotParent);
-    pPivot                            = _pRoot;
+    return;
   }
 
-  pPivotParent = pPivot->_pParent;
+  if (__rbt_isNodeBlack (__locateAuxiliary (pAux))) {
+    __locateReverseAuxiliary (pAux)->_colour  = __rbt_NodeColourType::__rbtnc_Black;
+    pAux->_colour                             = __rbt_NodeColourType::__rbtnc_Red;
+    (this->*__ifFalse) (pAux);
+    pAux                                      = __locateAuxiliary (pPivotParent);
+  }
+
+  pAux->_colour                     = pPivotParent->_colour;
+  pPivotParent->_colour             = __rbt_NodeColourType::__rbtnc_Black;
+  __locateAuxiliary (pAux)->_colour = __rbt_NodeColourType::__rbtnc_Black;
+  (this->*__ifTrue) (pPivotParent);
+  pPivot                            = _pRoot;
 }
+
 
 
 template <
@@ -425,8 +426,7 @@ template <
     __ElementType, __KeyType, __Comparator,
     __keyExtractor, __keyEqualsComparator, __nodeDestructor
 >::__rbt_empty () const -> bool {
-
-  return _size == 0;
+  return _pRoot == nullptr;
 }
 
 
@@ -740,6 +740,7 @@ template <
   }
 
   _size = 0u;
+  _pRoot = nullptr;
 }
 
 
