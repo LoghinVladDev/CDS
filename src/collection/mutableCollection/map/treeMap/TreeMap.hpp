@@ -439,7 +439,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
 #include "treeMap/EntryMutableCollectionProxy.hpp"
 
 
-#include "../../../../shared/redBlackTree/impl/RedBlackTree.hpp"
+#include "../../../../shared/redBlackTree/impl/RedBlackTreeImpl.hpp"
 
 #include "../../../../shared/iterableInternalCommunication/server/impl/MapServer.hpp"
 #include "../../../../shared/iterableInternalCommunication/server/impl/SetServer.hpp"

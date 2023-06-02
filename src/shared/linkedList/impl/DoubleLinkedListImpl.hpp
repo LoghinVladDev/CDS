@@ -886,8 +886,8 @@ template <
     typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__ElementType const&, __ElementType const&>  __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > template <
-        typename __TElementType,                                    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-        cds::meta::EnableIf <cds::meta::IsCopyConstructible <__TElementType>::value>
+    typename __TElementType,                                    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+    cds::meta::EnableIf <cds::meta::IsCopyConstructible <__TElementType>::value>
 > __CDS_MaybeUnused __CDS_OptimalInline auto __DoubleLinkedList <__ElementType, __equals>::__dll_copy (
     __DoubleLinkedList const& list
 ) noexcept(false) -> void {
@@ -911,8 +911,8 @@ template <
     typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__ElementType const&, __ElementType const&>  __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > template <
-        typename __TElementType,                                    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-        cds::meta::EnableIf <cds::meta::IsCopyConstructible <__TElementType>::value>
+    typename __TElementType,                                    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+    cds::meta::EnableIf <cds::meta::IsCopyConstructible <__TElementType>::value>
 > auto __DoubleLinkedList <__ElementType, __equals>::__dll_copyCleared (
     __DoubleLinkedList const &list
 ) noexcept(false) -> void {
@@ -954,7 +954,7 @@ template <
     typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__ElementType const&, __ElementType const&>  __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __DoubleLinkedList <__ElementType, __equals>::__dll_equals (
-        __DoubleLinkedList const& list
+    __DoubleLinkedList const& list
 ) const noexcept -> bool {
   if (_pFront == list._pFront) {
     return true;
@@ -1064,8 +1064,8 @@ template <
     typename __ElementType,           // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     typename __Comparator             // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > auto __bidirectionalNodeMergeSort ( // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-        __BidirectionalNode <__ElementType>*  pHead,
-        __Comparator const&                   comparator
+    __BidirectionalNode <__ElementType>*  pHead,
+    __Comparator const&                   comparator
 ) noexcept -> __BidirectionalNode <__ElementType>* {
   if (pHead == nullptr || pHead->_pNext == nullptr) {
     return pHead;

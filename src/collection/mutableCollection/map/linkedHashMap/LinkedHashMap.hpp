@@ -846,7 +846,7 @@ namespace cds {
 #include "linkedHashMap/EntryMutableCollectionProxy.hpp"
 
 #include "../../../../shared/hashTable/impl/HashTableImpl.hpp"
-#include "../../../../shared/linkedList/impl/SingleLinkedList.hpp"
+#include "../../../../shared/linkedList/impl/SingleLinkedListImpl.hpp"
 
 #include "../../../../shared/iterator/impl/HashTableIterator.hpp"
 #include "../../../../shared/iterator/impl/NodeIterator.hpp"                                        /* NOLINT(llvm-include-order) */

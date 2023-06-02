@@ -268,7 +268,7 @@ namespace cds {                             /* NOLINT(modernize-concat-nested-na
     };
 }
 
-#include "../../../shared/redBlackTree/impl/RedBlackTree.hpp"
+#include "../../../shared/redBlackTree/impl/RedBlackTreeImpl.hpp"
 
 #include "../../../shared/delegateIterator/impl/DelegateIterator.hpp"
 
