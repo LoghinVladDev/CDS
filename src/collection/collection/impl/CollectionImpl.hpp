@@ -83,7 +83,7 @@ template <typename __ElementType> // NOLINT(bugprone-reserved-identifier, cert-d
 __CDS_OptimalInline auto Collection <__ElementType>::toString () const noexcept -> String {
   // Default toString implementation, store 'Collection at 0x....'. Use a stringstream for simplicity
   std::stringstream oss;
-  oss << "Collection at " << std::hex << reinterpret_cast < AddressValueType const > ( this ); // NOLINT(clion-misra-cpp2008-5-2-8,*-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9)
+  oss << "Collection at " << this; // NOLINT(clion-misra-cpp2008-5-2-8,*-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9)
   // converted to std::string, and to cds::String afterwards
   return oss.str();
 }

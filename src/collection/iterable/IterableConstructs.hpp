@@ -15,7 +15,6 @@ class Iterable;
 
 namespace __hidden {  // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 namespace __impl {    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-
 /// \brief Function passed to client to check if a given iterable element contains a received value element
 /// \tparam __ElementType the type of the value given and of the values enclosed in the iterable
 /// \param [in] iterable : Iterable cref = Constant Reference to an iterable containing elements of required type
@@ -91,10 +90,7 @@ template <
 /// \internal library-private
 template <typename __ElementType>                         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __CDS_InheritsEBOs __IterableCommunicationChannel : // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    public __IterableInternalCommunicationChannel <
-        cds::Iterable <__ElementType>,
-        __ElementType
-    > {};
+    public __IterableInternalCommunicationChannel <cds::Iterable <__ElementType>, __ElementType> {};
 
 
 /// \class Alias used by Iterable to implement the Delegate Forward Const Iterable Client
@@ -104,9 +100,7 @@ class __CDS_InheritsEBOs __IterableCommunicationChannel : // NOLINT(bugprone-res
 template <typename __ElementType>                                       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __CDS_InheritsEBOs __IterableDelegateForwardConstIterableClient : // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __DelegateForwardConstIterablePrimitiveClient <
-        cds::Iterable <__ElementType>,
-        __ElementType,
-        false
+        cds::Iterable <__ElementType>, __ElementType, false
     > {};
 
 
@@ -117,10 +111,8 @@ class __CDS_InheritsEBOs __IterableDelegateForwardConstIterableClient : // NOLIN
 template <typename __ElementType>                             // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __CDS_InheritsEBOs __IterableContainsOfIterableClient : // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __ContainsOfCompositeClient <
-        cds::Iterable <__ElementType>,
-        __ElementType,
-        cds::Iterable <__ElementType>,
-        &__iterableContains <__ElementType>
+        cds::Iterable <__ElementType>, __ElementType,
+        cds::Iterable <__ElementType>, &__iterableContains <__ElementType>
     > {};
 
 
@@ -131,8 +123,7 @@ class __CDS_InheritsEBOs __IterableContainsOfIterableClient : // NOLINT(bugprone
 template <typename __ElementType>                                     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __CDS_InheritsEBOs __IterableContainsOfInitializerListClient :  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __ContainsOfCompositeClient <
-        cds::Iterable <__ElementType>,
-        __ElementType,
+        cds::Iterable <__ElementType>, __ElementType,
         std::initializer_list <__ElementType>,
         &__initializerListContains < __ElementType, &cds::meta::equals <__ElementType> >
     > {};
@@ -145,12 +136,10 @@ class __CDS_InheritsEBOs __IterableContainsOfInitializerListClient :  // NOLINT(
 template <typename __ElementType>                         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __CDS_InheritsEBOs __IterableFindOfIterableClient : // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __FindOfImmutableCompositeClient <
-        cds::Iterable <__ElementType>,
-        __ElementType,
+        cds::Iterable <__ElementType>, __ElementType,
         typename __IterableDelegateForwardConstIterableClient <__ElementType>::ConstIterator,
         cds::Iterable <__ElementType>,
-        &__iterableContains <__ElementType>,
-        &__iterableNotContains <__ElementType>
+        &__iterableContains <__ElementType>, &__iterableNotContains <__ElementType>
     > {};
 
 
@@ -161,8 +150,7 @@ class __CDS_InheritsEBOs __IterableFindOfIterableClient : // NOLINT(bugprone-res
 template <typename __ElementType>                                 // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __CDS_InheritsEBOs __IterableFindOfInitializerListClient :  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __FindOfImmutableCompositeClient <
-        cds::Iterable <__ElementType>,
-        __ElementType,
+        cds::Iterable <__ElementType>, __ElementType,
         typename __IterableDelegateForwardConstIterableClient <__ElementType>::ConstIterator,
         std::initializer_list <__ElementType>,
         &__initializerListContains <__ElementType, &cds::meta::equals <__ElementType>>,
@@ -177,23 +165,18 @@ class __CDS_InheritsEBOs __IterableFindOfInitializerListClient :  // NOLINT(bugp
 template <typename __ElementType>                 // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __CDS_InheritsEBOs __IterableFindByClient : // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __FindByImmutableCompositeClient <
-        cds::Iterable <__ElementType>,
-        __ElementType,
+        cds::Iterable <__ElementType>, __ElementType,
         typename __IterableDelegateForwardConstIterableClient <__ElementType>::ConstIterator
     > {};
 
 
-/// \typedef Alias used by Iterable to implement the Generic Immutable Statements Client
+/// \class Alias used by Iterable to implement the Generic Immutable Statements Client
 /// \tparam __ElementType the type of the elements enclosed in the extending Iterable
 /// \namespace cds::__hidden::__impl
 /// \internal library-private
 template <typename __ElementType>                             // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __CDS_InheritsEBOs __IterableGenericStatementsClient :  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    public __GenericImmutableStatementsCompositeClient <
-        cds::Iterable <__ElementType>,
-        __ElementType
-    > {};
-
+    public __GenericImmutableStatementsCompositeClient <cds::Iterable <__ElementType>, __ElementType> {};
 } // namespace __impl
 } // namespace __hidden
 } // namespace cds

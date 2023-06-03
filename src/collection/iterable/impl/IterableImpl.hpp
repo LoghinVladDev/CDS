@@ -27,7 +27,7 @@ template < typename __ElementType > // NOLINT(bugprone-reserved-identifier, cert
 __CDS_OptimalInline auto Iterable < __ElementType >::toString () const noexcept -> String {
   // Default toString implementation, store 'Iterable at 0x....'. Use a stringstream for simplicity 
   std::stringstream oss;
-  oss << "Iterable at 0x" << std::hex << reinterpret_cast < AddressValueType const > ( this );
+  oss << "Iterable at " << this;
 
   // converted to std::string, and to cds::String afterward 
   return oss.str();
