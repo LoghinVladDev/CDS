@@ -29,7 +29,7 @@ constexpr TreeSet <__ElementType, __Comparator>::TreeSet () noexcept = default;
 
 template <typename __ElementType, typename __Comparator>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline TreeSet <__ElementType, __Comparator>::TreeSet (TreeSet const& set) noexcept(false) {
-   this->template __rbt_copyCleared <&__hidden::__impl::__treeSetCopyConstructor <__ElementType>> (set);
+  __rbt_copyCleared <&__hidden::__impl::__treeSetCopyConstructor <__ElementType>> (set);
 }
 
 

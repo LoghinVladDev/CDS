@@ -237,7 +237,7 @@ template <typename __ElementType, typename __Hasher>  // NOLINT(bugprone-reserve
 __CDS_cpplang_ConstexprConditioned auto HashSet <__ElementType, __Hasher>::operator != (
     HashSet const& set
 ) const noexcept -> bool {
-  if ( this == & set ) {
+  if (this == &set) {
     return false;
   }
 
