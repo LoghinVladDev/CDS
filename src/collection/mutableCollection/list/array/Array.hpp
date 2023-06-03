@@ -439,8 +439,6 @@ private:
   friend __hidden::__impl::__LocalDelegateBackwardIterablePrimitiveClient <Array, typename Implementation::__ab_ReverseIterator>;
   friend __hidden::__impl::__LocalDelegateBackwardConstIterablePrimitiveClient <Array, typename Implementation::__ab_ConstReverseIterator>;
 
-  friend IndexedOperationsClient;
-
   using Server::__ls_handlers;        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using Server::__ls_constHandlers;   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
