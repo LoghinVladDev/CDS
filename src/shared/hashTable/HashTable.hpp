@@ -525,7 +525,7 @@ private:
   /// \return bool = true if a node was removed, false otherwise
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \protected
-  auto __ht_remove (                                             // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto __ht_removeNode (                    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
       __NodeType const* pPreviousNode,
       __NodeType const* pCurrentNode,
       Size              bucketIndex

@@ -732,7 +732,7 @@ template <
 > __CDS_MaybeUnused auto __HashTable <
     __ElementType, __KeyType, __KeyHasher, __RehashPolicy,
     __keyExtractor, __keyComparator, __nodeDestructor
->::__ht_remove (
+>::__ht_removeNode (
     __NodeType const* pPreviousNode,
     __NodeType const* pCurrentNode,
     Size              bucketIndex
@@ -789,7 +789,7 @@ template <
     return false;
   }
   // otherwise, use node removal function
-  return __ht_remove (iterator._pPreviousNode, iterator._pCurrentNode, iterator._bucketIndex);
+  return __ht_removeNode (iterator._pPreviousNode, iterator._pCurrentNode, iterator._bucketIndex);
 }
 
 
@@ -814,7 +814,7 @@ template <
     return false;
   }
   // otherwise, use node removal function
-  return __ht_remove (iterator._pPreviousNode, iterator._pCurrentNode, iterator._bucketIndex);
+  return __ht_removeNode (iterator._pPreviousNode, iterator._pCurrentNode, iterator._bucketIndex);
 }
 
 

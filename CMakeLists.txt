@@ -53,7 +53,7 @@ add_executable(
         CDS-dummy
         main.cpp
         ${CDS_HEADERS}
-)
+        src/collection/set/treeSet/treeSet/impl/TreeSetCTAD.hpp)
 
 target_link_libraries(
         CDS-dummy
