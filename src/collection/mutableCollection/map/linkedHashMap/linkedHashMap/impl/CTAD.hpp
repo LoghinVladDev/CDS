@@ -14,7 +14,7 @@ namespace cds {
             typename __ValueType,                                                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             typename __Hasher = cds :: WrapperHasher < __KeyType, Hash < __KeyType > >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > LinkedHashMap (
-            std :: initializer_list < cds :: __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > >
+            std :: initializer_list < MapEntry < __KeyType, __ValueType > >
     ) -> LinkedHashMap < __KeyType, __ValueType, __Hasher >;
 
     template <
@@ -23,7 +23,7 @@ namespace cds {
             typename __Hasher = cds :: WrapperHasher < __KeyType, Hash < __KeyType > >  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
     > LinkedHashMap (
             __Hasher,
-            std :: initializer_list < cds :: __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > >
+            std :: initializer_list < MapEntry < __KeyType, __ValueType > >
     ) -> LinkedHashMap < __KeyType, __ValueType, __Hasher >;
 
 } /* namespace cds */

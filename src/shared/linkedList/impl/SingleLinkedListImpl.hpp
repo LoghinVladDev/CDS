@@ -162,7 +162,7 @@ template <
 template <
     typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__ElementType const &, __ElementType const&> __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-> __CDS_MaybeUnused __CDS_OptimalInline auto __SingleLinkedList <__ElementType, __equals>::__sll_backNode() noexcept -> __UnidirectionalNode <ElementType>* {
+> __CDS_MaybeUnused __CDS_cpplang_NonConstConstexprMemberFunction auto __SingleLinkedList <__ElementType, __equals>::__sll_backNode() noexcept -> __UnidirectionalNode <ElementType>* {
   return _pBack;
 }
 

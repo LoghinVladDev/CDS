@@ -168,18 +168,17 @@ __CDS_OptimalInline auto TreeMap <__KeyType, __ValueType, __Comparator>::EntryMu
   >;
 
   auto ppWrappedIteratorArray = __Alloc::__alloc (iteratorCount);
+  uint32 wrappedIteratorArraySize = 0u;
   for (auto iteratorIndex = 0u; iteratorIndex < iteratorCount; ++iteratorIndex) {
     if (ppIterators [iteratorIndex] != nullptr) {
-      ppWrappedIteratorArray [iteratorIndex] = ppIterators [iteratorIndex];
-    } else {
-      ppWrappedIteratorArray [iteratorIndex] = nullptr;
+      ppWrappedIteratorArray [wrappedIteratorArraySize++] = ppIterators [iteratorIndex];
     }
   }
 
   auto const removedIteratorCount = TreeMapBase::__removeArray (
       pObject->template map <TreeMapBase> (),
       ppWrappedIteratorArray,
-      iteratorCount
+      wrappedIteratorArraySize
   );
 
   __Alloc::__free (ppWrappedIteratorArray);
@@ -198,19 +197,17 @@ __CDS_OptimalInline auto TreeMap <__KeyType, __ValueType, __Comparator>::EntryMu
   >;
 
   auto ppWrappedIteratorArray = __Alloc::__alloc (iteratorCount);
-
+  uint32 wrappedIteratorArraySize = 0u;
   for (auto iteratorIndex = 0u; iteratorIndex < iteratorCount; ++iteratorIndex) {
     if (ppIterators [iteratorIndex] != nullptr) {
-      ppWrappedIteratorArray [iteratorIndex] = ppIterators [iteratorIndex];
-    } else {
-      ppWrappedIteratorArray [iteratorIndex] = nullptr;
+      ppWrappedIteratorArray [wrappedIteratorArraySize++] = ppIterators [iteratorIndex];
     }
   }
 
   auto const removedIteratorCount = TreeMapBase::__removeConstArray (
       pObject->template map <TreeMapBase> (),
       ppWrappedIteratorArray,
-      iteratorCount
+      wrappedIteratorArraySize
   );
 
   __Alloc::__free (ppWrappedIteratorArray);

@@ -111,18 +111,17 @@ __CDS_OptimalInline auto TreeMap <__KeyType, __ValueType, __Comparator>::KeySetP
   >;
 
   auto ppWrappedIteratorArray = __Alloc::__alloc (iteratorCount);
+  uint32 wrappedIteratorArraySize = 0u;
   for (auto iteratorIndex = 0u; iteratorIndex < iteratorCount; ++iteratorIndex) {
     if ( ppIterators [iteratorIndex] != nullptr) {
-      ppWrappedIteratorArray [iteratorIndex] = &ppIterators [iteratorIndex]->iterator();
-    } else {
-      ppWrappedIteratorArray [iteratorIndex] = nullptr;
+      ppWrappedIteratorArray [wrappedIteratorArraySize++] = &ppIterators [iteratorIndex]->iterator();
     }
   }
 
   auto const removedIteratorCount = TreeMapBase::__removeConstArray (
       pObject->template map <TreeMapBase> (),
       ppWrappedIteratorArray,
-      iteratorCount
+      wrappedIteratorArraySize
   );
 
   __Alloc::__free (ppWrappedIteratorArray);
