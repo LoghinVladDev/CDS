@@ -15,8 +15,8 @@ template <
     functional::PredicateFunction <__ElementType const&, __ElementType const&>  __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > class __SingleLinkedList {                                                                    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 public:
-  using __sll_Iterator                = UnidirectionalNodeIterator < __ElementType >;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-  using __sll_ConstIterator           = UnidirectionalNodeConstIterator < __ElementType >;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using __sll_Iterator                = UnidirectionalNodeIterator <__ElementType>;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using __sll_ConstIterator           = UnidirectionalNodeIterator <__ElementType const>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   ~__SingleLinkedList () noexcept = default;
   auto operator = (__SingleLinkedList const&) noexcept -> __SingleLinkedList& = delete;
@@ -88,17 +88,8 @@ private:
   __CDS_NoDiscard static auto __sll_allocateNode() noexcept(false) -> __NodeType*; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   static auto __sll_freeNode (__NodeType* pNode) noexcept -> void;          // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-  auto __sll_removeNode (__NodeType* pPrevious, __NodeType* pCurrent) noexcept -> void; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-
-  auto __sll_removeIteratorRange (   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      __sll_Iterator const* pStart,
-      __sll_Iterator const* pEnd
-  ) noexcept -> Size;
-
-  auto __sll_removeConstIteratorRange (   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      __sll_ConstIterator const* pStart,
-      __sll_ConstIterator const* pEnd
-  ) noexcept -> Size;
+  auto __sll_removeNode (__NodeType* pCurrent, __NodeType* pPrevious) noexcept -> void; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto __sll_removeNode (__NodeType* pCurrent) noexcept -> void; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 };
 
 } // namespace __impl

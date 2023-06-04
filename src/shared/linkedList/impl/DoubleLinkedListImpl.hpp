@@ -199,7 +199,7 @@ template <
     typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__ElementType const&, __ElementType const&>  __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > auto __DoubleLinkedList <__ElementType, __equals>::__dll_removeConstIterator (
-    AbstractBidirectionalNodeConstIterator < __ElementType > const& iterator
+    AbstractBidirectionalNodeIterator <__ElementType const> const& iterator
 ) noexcept -> bool {
 
   if (iterator._pCurrentNode == nullptr) {
@@ -246,7 +246,7 @@ template <
     typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__ElementType const&, __ElementType const&>  __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > auto __DoubleLinkedList <__ElementType, __equals>::__dll_removeConstIteratorArray (
-        AbstractBidirectionalNodeConstIterator <__ElementType> const* const*  ppIterators,
+        AbstractBidirectionalNodeIterator <__ElementType const> const* const*  ppIterators,
         Size                                                                  iteratorCount
 ) noexcept -> Size {
   Size removedCount = 0u;
@@ -574,7 +574,7 @@ template <
     typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__ElementType const&, __ElementType const&>  __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > auto __DoubleLinkedList <__ElementType, __equals>::__dll_newBeforeConst (
-    AbstractBidirectionalNodeConstIterator <__ElementType> const& iterator
+    AbstractBidirectionalNodeIterator <__ElementType const> const& iterator
 ) noexcept(false) -> __ElementType* {
   auto const reversed =
       (_pFront == iterator._pPreviousNode && iterator._pCurrentNode == nullptr) ||
@@ -641,7 +641,7 @@ template <
     typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__ElementType const&, __ElementType const&>  __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > auto __DoubleLinkedList <__ElementType, __equals>::__dll_newAfterConst (
-    AbstractBidirectionalNodeConstIterator <__ElementType> const& iterator
+    AbstractBidirectionalNodeIterator <__ElementType const> const& iterator
 ) noexcept(false) -> __ElementType* {
   auto const reversed =
       (_pFront == iterator._pPreviousNode && iterator._pCurrentNode == nullptr) ||
@@ -710,7 +710,7 @@ template <
     typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__ElementType const&, __ElementType const&>  __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > auto __DoubleLinkedList <__ElementType, __equals>::__dll_newBeforeArrayConst (
-    AbstractBidirectionalNodeConstIterator <__ElementType> const& iterator,
+    AbstractBidirectionalNodeIterator <__ElementType const> const& iterator,
     Size                                                          count,
     __ElementType**                                               ppElements
 ) noexcept(false) -> bool {
@@ -784,7 +784,7 @@ template <
     typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__ElementType const&, __ElementType const&>  __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > auto __DoubleLinkedList <__ElementType, __equals>::__dll_newAfterArrayConst (
-    AbstractBidirectionalNodeConstIterator <__ElementType> const& iterator,
+    AbstractBidirectionalNodeIterator <__ElementType const> const& iterator,
     Size                                                          count,
     __ElementType**                                               ppElements
 ) noexcept(false) -> bool {

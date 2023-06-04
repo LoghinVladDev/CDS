@@ -407,9 +407,9 @@ private:
   friend __hidden::__impl::__LocalBoundaryInsertionPrimitiveClient<LinkedList, __ElementType, __ElementType>;
   friend __hidden::__impl::__LocalRandomInsertionPrimitiveClient<LinkedList, __ElementType, __ElementType>;
   friend __hidden::__impl::__LocalIteratorRemovePrimitiveClient<LinkedList, __ElementType, AbstractBidirectionalNodeIterator<__ElementType>>;
-  friend __hidden::__impl::__LocalConstIteratorRemovePrimitiveClient<LinkedList, __ElementType, AbstractBidirectionalNodeConstIterator<__ElementType>>;
+  friend __hidden::__impl::__LocalConstIteratorRemovePrimitiveClient<LinkedList, __ElementType, AbstractBidirectionalNodeIterator<__ElementType const>>;
   friend __hidden::__impl::__LocalIteratorRelativeInsertionPrimitiveClient<LinkedList, __ElementType, AbstractBidirectionalNodeIterator<__ElementType>>;
-  friend __hidden::__impl::__LocalConstIteratorRelativeInsertionPrimitiveClient<LinkedList, __ElementType, AbstractBidirectionalNodeConstIterator<__ElementType>>;
+  friend __hidden::__impl::__LocalConstIteratorRelativeInsertionPrimitiveClient<LinkedList, __ElementType, AbstractBidirectionalNodeIterator<__ElementType const>>;
   friend __hidden::__impl::__LocalIndexedOperationsPrimitiveClient<LinkedList, __ElementType>;
   friend __hidden::__impl::__LocalDelegateForwardIterablePrimitiveClient <LinkedList, typename Implementation::__dll_Iterator>;
   friend __hidden::__impl::__LocalDelegateForwardConstIterablePrimitiveClient <LinkedList, typename Implementation::__dll_ConstIterator>;

@@ -16,7 +16,7 @@ namespace __hidden {  // NOLINT(modernize-concat-nested-namespaces, bugprone-res
 namespace __impl {    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
 template <typename __ElementType>                                                                             // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-constexpr auto __linkedHashSetKeyExtractor (__ElementType const &element) noexcept -> __ElementType const&{  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+constexpr auto __linkedHashSetKeyExtractor (__ElementType const& element) noexcept -> __ElementType const&{  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   return element;
 }
 
@@ -32,7 +32,7 @@ __CDS_MaybeUnused __CDS_cpplang_ConstexprNonLiteralReturn auto __linkedHashSetCo
 
 template <typename __ElementType>                                           // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_cpplang_ConstexprNonLiteralReturn auto __linkedHashSetDestructor (    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    __ElementType&element
+    __ElementType& element
 ) noexcept -> void {
   element.~__ElementType();
 }
@@ -40,7 +40,7 @@ __CDS_cpplang_ConstexprNonLiteralReturn auto __linkedHashSetDestructor (    // N
 
 template <typename __DecoratedIteratorType, typename __ValueAtType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 constexpr auto __linkedHashSetIteratorDecoratorValueAt (            // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    __DecoratedIteratorType const&iterator
+    __DecoratedIteratorType const& iterator
 ) noexcept -> __ValueAtType&{
   return *(*iterator);
 }
@@ -61,15 +61,15 @@ class __CDS_InheritsEBOs __LinkedHashSetLinkedListImplementation :   // NOLINT(b
 
 
 template <typename __ElementType, typename __Hasher>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-class __CDS_InheritsEBOs __LinkedHashSetIterator :   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    public ForwardIteratorGenericDecorator <
+using  __LinkedHashSetIterator =                      // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+    ForwardIteratorGenericDecorator <
         typename __LinkedHashSetLinkedListImplementation <__ElementType, __Hasher>::__sll_ConstIterator,
         __ElementType const,
         &__linkedHashSetIteratorDecoratorValueAt <
             typename __LinkedHashSetLinkedListImplementation <__ElementType, __Hasher>::__sll_ConstIterator,
             __ElementType const
         >
-    > {};
+    >;
 
 
 template <typename __ElementType, typename __Hasher>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)

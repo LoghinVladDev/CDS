@@ -243,8 +243,8 @@ private:
 
   friend __hidden::__impl::__SetServer <LinkedHashSet, __ElementType>;
   friend __hidden::__impl::__LocalRandomInsertionPrimitiveClient <LinkedHashSet, __ElementType, __ElementType const>;
-  friend __hidden::__impl::__LocalConstIteratorRemovePrimitiveClient <LinkedHashSet, __ElementType, typename LinkedListImplementation::__sll_ConstIterator>;
-  friend __hidden::__impl::__LocalDelegateForwardConstIterablePrimitiveClient <LinkedHashSet, typename LinkedListImplementation::__sll_ConstIterator>;
+  friend __hidden::__impl::__LocalConstIteratorRemovePrimitiveClient <LinkedHashSet, __ElementType, ConstIterator>;
+  friend __hidden::__impl::__LocalDelegateForwardConstIterablePrimitiveClient <LinkedHashSet, ConstIterator>;
 
   using IteratorRemoveClient::removeAll;
 
@@ -256,9 +256,11 @@ private:
   using HashTableImplementation::__ht_removeGetPtr; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using HashTableImplementation::__ht_getConst;     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using HashTableImplementation::__ht_equals;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using HashTableImplementation::__ht_move;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   using LinkedListImplementation::__sll_clear;      // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using LinkedListImplementation::__sll_remove;     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using LinkedListImplementation::__sll_move;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   __CDS_NoDiscard static auto __cbegin (  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
       LinkedHashSet const* pObject

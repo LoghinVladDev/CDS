@@ -163,7 +163,7 @@ template <
     typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__ElementType const &, __ElementType const&> __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > constexpr auto __SingleLinkedList <__ElementType, __equals>::__sll_cbegin () const noexcept -> __sll_ConstIterator {
-  return __sll_ConstIterator (nullptr, _pFront);
+  return __sll_ConstIterator (_pFront);
 }
 
 
@@ -171,7 +171,7 @@ template <
     typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__ElementType const &, __ElementType const&> __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > constexpr auto __SingleLinkedList <__ElementType, __equals>::__sll_cend () const noexcept -> __sll_ConstIterator {
-  return __sll_ConstIterator (_pBack, nullptr);
+  return __sll_ConstIterator (nullptr);
 }
 
 
@@ -179,7 +179,7 @@ template <
     typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__ElementType const &, __ElementType const&> __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > __CDS_cpplang_NonConstConstexprMemberFunction auto __SingleLinkedList <__ElementType, __equals>::__sll_begin () noexcept -> __sll_Iterator {
-  return __sll_Iterator (nullptr, _pFront);
+  return __sll_Iterator (_pFront);
 }
 
 
@@ -187,7 +187,7 @@ template <
     typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__ElementType const &, __ElementType const&> __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > __CDS_cpplang_NonConstConstexprMemberFunction auto __SingleLinkedList <__ElementType, __equals>::__sll_end () noexcept -> __sll_Iterator {
-  return __sll_Iterator (_pBack, nullptr);
+  return __sll_Iterator (nullptr);
 }
 
 
@@ -204,6 +204,32 @@ template <
 
   if (pNext == nullptr) {
     _pBack = pPrevious;
+  }
+}
+
+
+template <
+    typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+    functional::PredicateFunction <__ElementType const &, __ElementType const&> __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+> __CDS_OptimalInline auto __SingleLinkedList <__ElementType, __equals>::__sll_removeNode (
+    __NodeType* pCurrent
+) noexcept -> void {
+  if (__sll_empty()) {
+    return;
+  }
+
+  if (_pFront == pCurrent) {
+    __sll_removeFront();
+    return;
+  }
+
+  auto pPrevious = _pFront;
+  while (pPrevious->_pNext != nullptr) {
+    if (pPrevious->_pNext == pCurrent) {
+      __sll_removeNode (pPrevious, pPrevious->_pNext);
+      return;
+    }
+    pPrevious = pPrevious->_pNext;
   }
 }
 
@@ -248,7 +274,7 @@ template <
 
   (__sll_begin() == iterator)
       ? __sll_removeFront()
-      : __sll_removeNode (iterator._pPreviousNode, iterator._pCurrentNode);
+      : __sll_removeNode (iterator._pCurrentNode);
   return true;
 }
 
@@ -265,44 +291,8 @@ template <
 
   (__sll_cbegin() == iterator)
       ? __sll_removeFront()
-      : __sll_removeNode(
-          const_cast <__NodeType*> (iterator._pPreviousNode),
-          const_cast <__NodeType*> (iterator._pCurrentNode)
-      );
+      : __sll_removeNode(const_cast <__NodeType*> (iterator._pCurrentNode));
   return true;
-}
-
-
-template <
-    typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    functional::PredicateFunction <__ElementType const &, __ElementType const&> __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-> auto __SingleLinkedList <__ElementType, __equals>::__sll_removeConstIteratorRange (
-    __sll_ConstIterator const* pStart,
-    __sll_ConstIterator const* pEnd
-) noexcept -> Size {
-  Size removedCount = 0u;
-  auto pKeepStartNode = const_cast <__NodeType*> (pStart->_pPreviousNode);
-  auto pKeepEndNode   = const_cast <__NodeType*> (pEnd->_pCurrentNode->_pNext);
-
-  auto pSeek          = const_cast <__NodeType*> (pStart->_pCurrentNode);
-  while (pSeek != pKeepEndNode) {
-    auto pRemoveCopy  = pSeek;
-    pSeek             = pSeek->_pNext;
-    __sll_freeNode (pRemoveCopy);
-    ++removedCount;
-  }
-
-  if (pKeepStartNode != nullptr) {
-    pKeepStartNode->_pNext  = pKeepEndNode;
-  } else {
-    _pFront                 = pKeepEndNode;
-  }
-
-  if (pKeepEndNode == nullptr) {
-    _pBack                  = pKeepStartNode == nullptr ? _pFront : pKeepStartNode;
-  }
-
-  return removedCount;
 }
 
 
@@ -313,80 +303,28 @@ template <
     __sll_ConstIterator const* const* ppIterators,
     Size                              iteratorCount
 ) noexcept -> Size {
-  Size removedCount = 0u;
-  while (iteratorCount > 0u && &(*(*ppIterators [0u])) == &_pFront->_data) {
+  Size itIdx = 0u;
+  while (itIdx < iteratorCount && &(*(*ppIterators [itIdx])) == &_pFront->_data) {
     __sll_removeFront();
-    ++ppIterators;
-    ++removedCount;
-    --iteratorCount;
+    ++ itIdx;
   }
 
-  if (iteratorCount == 0u) {
-    return removedCount;
-  }
-
-  __sll_ConstIterator const* pStartRange  = ppIterators [0u];
-  __sll_ConstIterator const* pEndRange    = ppIterators [0u];
-  for (Size index = 1u; index < iteratorCount; ++index) {
-
-    if (pEndRange->_pCurrentNode == ppIterators [index]->_pPreviousNode) {
-      pEndRange = ppIterators [index];
-    } else {
-      if (pStartRange == pEndRange) {
-        if (__sll_removeConstIterator(*pStartRange)) {
-          ++removedCount;
-        }
-      } else {
-        removedCount += __sll_removeConstIteratorRange (pStartRange, pEndRange);
+  auto pPrevious = _pFront;
+  while (pPrevious != nullptr && pPrevious->_pNext != nullptr && itIdx < iteratorCount) {
+    if (itIdx < iteratorCount && &pPrevious->_pNext->_data == &(*(*ppIterators [itIdx]))) {
+      auto copy = pPrevious->_pNext;
+      pPrevious->_pNext = pPrevious->_pNext->_pNext;
+      __sll_freeNode(copy);
+      ++ itIdx;
+      if (_pBack == copy) {
+        _pBack = pPrevious;
       }
-
-      pStartRange = ppIterators [index];
-      pEndRange   = ppIterators [index];
+    } else {
+      pPrevious = pPrevious->_pNext;
     }
   }
 
-  if (pStartRange == pEndRange) {
-    if (__sll_removeConstIterator (*pStartRange)) {
-      ++removedCount;
-    }
-  } else {
-    removedCount += __sll_removeConstIteratorRange (pStartRange, pEndRange);
-  }
-
-  return removedCount;
-}
-
-
-template <
-    typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    functional::PredicateFunction <__ElementType const &, __ElementType const&> __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-> auto __SingleLinkedList <__ElementType, __equals>::__sll_removeIteratorRange (
-    __sll_Iterator const* pStart,
-    __sll_Iterator const* pEnd
-) noexcept -> Size {
-  Size removedCount   = 0u;
-  auto pKeepStartNode = const_cast <__NodeType*> (pStart->_pPreviousNode);
-  auto pKeepEndNode   = const_cast <__NodeType*> (pEnd->_pCurrentNode->_pNext);
-
-  auto pSeek          = const_cast <__NodeType*> (pStart->_pCurrentNode);
-  while (pSeek != pKeepEndNode) {
-    auto pRemoveCopy  = pSeek;
-    pSeek             = pSeek->_pNext;
-    __sll_freeNode (pRemoveCopy);
-    ++removedCount;
-  }
-
-  if (pKeepStartNode != nullptr) {
-    pKeepStartNode->_pNext  = pKeepEndNode;
-  } else {
-    _pFront                 = pKeepEndNode;
-  }
-
-  if (pKeepEndNode == nullptr) {
-    _pBack                  = pKeepStartNode == nullptr ? _pFront : pKeepStartNode;
-  }
-
-  return removedCount;
+  return itIdx;
 }
 
 
@@ -397,47 +335,28 @@ template <
     __sll_Iterator const* const*  ppIterators,
     Size                          iteratorCount
 ) noexcept -> Size {
-  Size removedCount = 0u;
-  while (iteratorCount > 0u && &(*(*ppIterators [0u])) == &_pFront->_data) {
+  Size itIdx = 0u;
+  while (itIdx < iteratorCount && &(*(*ppIterators [itIdx])) == &_pFront->_data) {
     __sll_removeFront();
-    ++ppIterators;
-    ++removedCount;
-    --iteratorCount;
+    ++ itIdx;
   }
 
-  if (iteratorCount == 0u) {
-    return removedCount;
-  }
-
-  __sll_Iterator const* pStartRange = ppIterators [0u];
-  __sll_Iterator const* pEndRange   = ppIterators [0u];
-  for (Size index = 1u; index < iteratorCount; ++index) {
-
-    if (pEndRange->_pCurrentNode == ppIterators [index]->_pPreviousNode) {
-      pEndRange = ppIterators [index];
-    } else {
-      if (pStartRange == pEndRange) {
-        if (__sll_removeIterator (*pStartRange)) {
-          ++removedCount;
-        }
-      } else {
-        removedCount += __sll_removeIteratorRange (pStartRange, pEndRange);
+  auto pPrevious = _pFront;
+  while (pPrevious->_pNext != nullptr && itIdx < iteratorCount) {
+    if (itIdx < iteratorCount && &pPrevious->_pNext->_data == &(*(*ppIterators [itIdx]))) {
+      auto copy = pPrevious->_pNext;
+      pPrevious->_pNext = pPrevious->_pNext->_pNext;
+      __sll_freeNode(copy);
+      ++ itIdx;
+      if (_pBack == copy) {
+        _pBack = pPrevious;
       }
-
-      pStartRange = ppIterators [index];
-      pEndRange   = ppIterators [index];
+    } else {
+      pPrevious = pPrevious->_pNext;
     }
   }
 
-  if (pStartRange == pEndRange) {
-    if (__sll_removeIterator (*pStartRange)) {
-      ++removedCount;
-    }
-  } else {
-    removedCount += __sll_removeIteratorRange (pStartRange, pEndRange);
-  }
-
-  return removedCount;
+  return itIdx;
 }
 
 

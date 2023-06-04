@@ -12,9 +12,14 @@ template <typename T>
 using ConvertibleToStdOstreamRef =
     cds::meta::Bind <cds::meta::IsConvertible, cds::meta::Ph<1>, std::ostream&>::Type<T>;
 
+#include <CDS/LinkedHashSet>
 
 int main () {
 
+  cds::LinkedHashSet<int> lhs;
+  lhs.begin();
+//  cds::Array <char const> a2;
+//  *a2.begin() = 2;
   cds::Array <int> a;
   a.pushBack(1);
   a.pushBack(1);

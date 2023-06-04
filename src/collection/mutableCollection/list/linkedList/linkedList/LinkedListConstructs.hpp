@@ -49,7 +49,7 @@ class __CDS_InheritsEBOs __LinkedListIteratorRelativeInsertionClient :  // NOLIN
 template <typename __ElementType>                                           // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __CDS_InheritsEBOs __LinkedListConstIteratorRelativeInsertionClient : // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __LocalConstIteratorRelativeInsertionPrimitiveClient <
-        cds::LinkedList <__ElementType>, __ElementType, AbstractBidirectionalNodeConstIterator <__ElementType>
+        cds::LinkedList <__ElementType>, __ElementType, AbstractBidirectionalNodeIterator <__ElementType const>
     > {};
 
 
@@ -75,7 +75,7 @@ class __CDS_InheritsEBOs __LinkedListFindOfInitializerListClient :  // NOLINT(bu
 template <typename __ElementType>                                 // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __CDS_InheritsEBOs __LinkedListFindConstOfIterableClient :  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __LocalFindOfImmutableCompositeClient <
-        cds::LinkedList <__ElementType>, __ElementType, ForwardBidirectionalNodeConstIterator <__ElementType>,
+        cds::LinkedList <__ElementType>, __ElementType, ForwardBidirectionalNodeIterator <__ElementType const>,
         cds::Iterable <__ElementType>, &__iterableContains <__ElementType>, &__iterableNotContains <__ElementType>
     > {};
 
@@ -84,7 +84,7 @@ template <typename __ElementType>                                       // NOLIN
 class __CDS_InheritsEBOs __LinkedListFindConstOfInitializerListClient : // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __LocalFindOfImmutableCompositeClient <
         cds::LinkedList <__ElementType>, __ElementType,
-        ForwardBidirectionalNodeConstIterator <__ElementType>,
+        ForwardBidirectionalNodeIterator <__ElementType const>,
         std::initializer_list <__ElementType>,
         &__initializerListContains <__ElementType, &cds::meta::equals <__ElementType>>,
         &__initializerListNotContains <__ElementType, &cds::meta::equals <__ElementType>>
@@ -101,7 +101,7 @@ class __CDS_InheritsEBOs __LinkedListFindByClient : // NOLINT(bugprone-reserved-
 template <typename __ElementType>                         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __CDS_InheritsEBOs __LinkedListFindConstByClient :  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __LocalFindByImmutableCompositeClient <
-        cds::LinkedList <__ElementType>, __ElementType, ForwardBidirectionalNodeConstIterator <__ElementType>
+        cds::LinkedList <__ElementType>, __ElementType, ForwardBidirectionalNodeIterator <__ElementType const>
     > {};
 
 
@@ -115,7 +115,7 @@ class __CDS_InheritsEBOs __LinkedListIteratorRemoveClient : // NOLINT(bugprone-r
 template <typename __ElementType>                                 // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __CDS_InheritsEBOs __LinkedListConstIteratorRemoveClient :  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __LocalConstIteratorRemovePrimitiveClient <
-        cds::LinkedList <__ElementType>, __ElementType, AbstractBidirectionalNodeConstIterator <__ElementType>
+        cds::LinkedList <__ElementType>, __ElementType, AbstractBidirectionalNodeIterator <__ElementType const>
     > {};
 
 

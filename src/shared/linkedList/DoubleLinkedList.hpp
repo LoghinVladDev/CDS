@@ -16,9 +16,9 @@ template <
 > class __DoubleLinkedList {                                                                    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 public:
   using __dll_Iterator              = ForwardBidirectionalNodeIterator <__ElementType>;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-  using __dll_ConstIterator         = ForwardBidirectionalNodeConstIterator <__ElementType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using __dll_ConstIterator         = ForwardBidirectionalNodeIterator <__ElementType const>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using __dll_ReverseIterator       = BackwardBidirectionalNodeIterator <__ElementType>;      // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-  using __dll_ConstReverseIterator  = BackwardBidirectionalNodeConstIterator <__ElementType>; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using __dll_ConstReverseIterator  = BackwardBidirectionalNodeIterator <__ElementType const>; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   template <typename __ServerType>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   class __Dispatcher;               // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
@@ -52,7 +52,7 @@ protected:
   ) noexcept -> bool;
 
   auto __dll_removeConstIterator (    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      AbstractBidirectionalNodeConstIterator <__ElementType> const& iterator
+      AbstractBidirectionalNodeIterator <__ElementType const> const& iterator
   ) noexcept -> bool;
 
   auto __dll_removeIteratorArray (     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
@@ -61,7 +61,7 @@ protected:
   ) noexcept -> Size;
 
   auto __dll_removeConstIteratorArray (    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      AbstractBidirectionalNodeConstIterator <__ElementType> const* const*  ppIterators,
+      AbstractBidirectionalNodeIterator <__ElementType const> const* const*  ppIterators,
       Size                                                                  iteratorCount
   ) noexcept -> Size;
 
@@ -84,7 +84,7 @@ protected:
   ) noexcept(false) -> __ElementType*;
 
   __CDS_NoDiscard auto __dll_newBeforeConst ( // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      AbstractBidirectionalNodeConstIterator <__ElementType> const& iterator
+      AbstractBidirectionalNodeIterator <__ElementType const> const& iterator
   ) noexcept(false) -> __ElementType*;
 
   __CDS_NoDiscard auto __dll_newAfter (       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
@@ -92,7 +92,7 @@ protected:
   ) noexcept(false) -> __ElementType*;
 
   __CDS_NoDiscard auto __dll_newAfterConst (  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      AbstractBidirectionalNodeConstIterator <__ElementType> const& iterator
+      AbstractBidirectionalNodeIterator <__ElementType const> const& iterator
   ) noexcept(false) -> __ElementType*;
 
   auto __dll_newBeforeArray ( // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
@@ -102,7 +102,7 @@ protected:
   ) noexcept(false) -> bool;
 
   auto __dll_newBeforeArrayConst ( // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      AbstractBidirectionalNodeConstIterator <__ElementType> const& iterator,
+      AbstractBidirectionalNodeIterator <__ElementType const> const& iterator,
       Size                                                          count,
       __ElementType**                                               ppElements
   ) noexcept(false) -> bool;
@@ -114,7 +114,7 @@ protected:
   ) noexcept(false) -> bool;
 
   auto __dll_newAfterArrayConst ( // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      AbstractBidirectionalNodeConstIterator <__ElementType> const& iterator,
+      AbstractBidirectionalNodeIterator <__ElementType const> const& iterator,
       Size                                                          count,
       __ElementType**                                               ppElements
   ) noexcept(false) -> bool;
@@ -184,9 +184,9 @@ template <
 > class __DoubleLinkedList <__ElementType, __equals>::__Dispatcher :
     public __ListServerDispatcher <
         __ServerType, __DoubleLinkedList, __ElementType,
-        AbstractBidirectionalNodeIterator <__ElementType>, AbstractBidirectionalNodeConstIterator <__ElementType>,
-        ForwardBidirectionalNodeIterator <__ElementType>, ForwardBidirectionalNodeConstIterator <__ElementType>,
-        BackwardBidirectionalNodeIterator <__ElementType>, BackwardBidirectionalNodeConstIterator <__ElementType>,
+        AbstractBidirectionalNodeIterator <__ElementType>, AbstractBidirectionalNodeIterator <__ElementType const>,
+        ForwardBidirectionalNodeIterator <__ElementType>, ForwardBidirectionalNodeIterator <__ElementType const>,
+        BackwardBidirectionalNodeIterator <__ElementType>, BackwardBidirectionalNodeIterator <__ElementType const>,
         &__DoubleLinkedList::__dll_begin, &__DoubleLinkedList::__dll_end,
         &__DoubleLinkedList::__dll_cbegin, &__DoubleLinkedList::__dll_cend,
         &__DoubleLinkedList::__dll_rbegin, &__DoubleLinkedList::__dll_rend,
