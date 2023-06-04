@@ -33,6 +33,7 @@ protected:
   __CDS_NoDiscard constexpr auto __sll_empty() const noexcept -> bool;   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   __CDS_NoDiscard __CDS_MaybeUnused constexpr auto __sll_front() const noexcept -> __ElementType const*;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes)
   __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_front() noexcept -> __ElementType*;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_backNode() noexcept -> __UnidirectionalNode <__ElementType>*;
 
   auto __sll_removeFront() noexcept -> void; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto __sll_newFront() noexcept(false) -> __ElementType*; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)

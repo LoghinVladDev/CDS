@@ -29,7 +29,7 @@ __CDS_OptimalInline auto LinkedHashSet <__ElementType, __Hasher>::__cbegin (
     LinkedHashSet const* pObject
 ) noexcept -> __hidden::__impl ::__AbstractDelegateIterator <__ElementType const>* {
   return Memory::instance().create <__hidden::__impl::__DelegateIterator <__ElementType const, ConstIterator>> (
-      ConstIterator (pObject->__sll_cbegin())
+      pObject->__sll_cbegin()
   );
 }
 
@@ -39,7 +39,7 @@ __CDS_OptimalInline auto LinkedHashSet <__ElementType, __Hasher>::__cend (
     LinkedHashSet const *pObject
 ) noexcept -> __hidden::__impl ::__AbstractDelegateIterator <__ElementType const>* {
   return Memory::instance().create <__hidden::__impl::__DelegateIterator <__ElementType const, ConstIterator>> (
-      ConstIterator (pObject->__sll_cend())
+      pObject->__sll_cend()
   );
 }
 
@@ -48,7 +48,7 @@ template <typename __ElementType, typename __Hasher> // NOLINT(bugprone-reserved
 constexpr auto LinkedHashSet <__ElementType, __Hasher>::__cbeginLocal (
     LinkedHashSet const* pObject
 ) noexcept -> ConstIterator {
-  return ConstIterator (pObject->__sll_cbegin());
+  return pObject->__sll_cbegin();
 }
 
 
@@ -56,7 +56,7 @@ template <typename __ElementType, typename __Hasher> // NOLINT(bugprone-reserved
 constexpr auto LinkedHashSet <__ElementType, __Hasher>::__cendLocal (
     LinkedHashSet const *pObject
 ) noexcept -> ConstIterator {
-  return ConstIterator (pObject->__sll_cend());
+  return pObject->__sll_cend();
 }
 
 
@@ -66,12 +66,14 @@ __CDS_OptimalInline auto LinkedHashSet <__ElementType, __Hasher>::__newAddress (
     __ElementType const*  pReferenceElement,
     bool*                 pNewElementCreated
 ) noexcept -> __ElementType* {
-  auto pNewElement = pObject->__ht_new (pReferenceElement, pNewElementCreated);
+  auto ppNewNode = pObject->__ht_get (*pReferenceElement, pNewElementCreated);
   if (* pNewElementCreated) {
-    (void) new (pObject->__sll_newBack()) __ElementType* (pNewElement);
+    auto pNewElement = pObject->__sll_newBack();
+    * ppNewNode = pObject->__sll_backNode();
+    return pNewElement;
   }
 
-  return pNewElement;
+  return nullptr;
 }
 
 
@@ -80,19 +82,11 @@ __CDS_OptimalInline auto LinkedHashSet <__ElementType, __Hasher>::__removeConst 
     LinkedHashSet*        pObject,
     ConstIterator const*  pIterator
 ) noexcept -> bool {
-  if (
-      pIterator == nullptr || !static_cast <bool> (*pIterator) ||
-      (*pIterator).iterator() == pObject->__sll_cend()
-  ) {
+  if (pIterator == nullptr || *pIterator == pObject->__sll_cend()) {
     return false;
   }
 
-  auto const pElement = *(*pIterator).iterator();
-  if (pObject->__sll_removeConstIterator ((*pIterator).iterator())) {
-    return pObject->__ht_remove (*pElement);
-  }
-
-  return false;
+  return pObject->__ht_remove(**pIterator) && pObject->__sll_removeConstIterator(*pIterator);
 }
 
 
@@ -102,23 +96,10 @@ __CDS_OptimalInline auto LinkedHashSet <__ElementType, __Hasher>::__removeConstA
     ConstIterator const* const* ppIterators,
     Size                        iteratorArraySize
 ) noexcept -> Size {
-  using __EAlloc = __hidden::__impl::__allocation::__PrimitiveAlloc <__ElementType const*>;                                               // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-  using __SLLItAlloc = __hidden::__impl::__allocation::__PrimitiveAlloc <typename LinkedListImplementation::__sll_ConstIterator const*>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-
-  auto pRemovedElementArray   = __EAlloc::__alloc (iteratorArraySize);
-  auto pSllIteratorPtrArray   = __SLLItAlloc::__alloc (iteratorArraySize);
-  for (Size index = 0u; index < iteratorArraySize; ++index) {
-    pSllIteratorPtrArray [index] = &(*ppIterators [index]).iterator(); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-    pRemovedElementArray [index] = *(*pSllIteratorPtrArray [index]);
-  }
-
-  auto removedCount = pObject->__sll_removeConstIteratorArray (&pSllIteratorPtrArray [0u], iteratorArraySize);
   for (Size index = 0u; index < iteratorArraySize; ++ index ) {
-    pObject->__ht_remove (*pRemovedElementArray [index]);
+    pObject->__ht_remove (**ppIterators[index]);
   }
-
-  __EAlloc::__free (pRemovedElementArray);
-  __SLLItAlloc::__free (pSllIteratorPtrArray);
+  auto removedCount = pObject->__sll_removeConstIteratorArray (&ppIterators [0u], iteratorArraySize);
   return removedCount;
 }
 
@@ -129,17 +110,8 @@ __CDS_OptimalInline auto LinkedHashSet <__ElementType, __Hasher>::__findConst (
     __ElementType const& element
 ) noexcept -> __hidden::__impl::__AbstractDelegateIterator <__ElementType const>* {
   using Delegate = __hidden::__impl::__DelegateIterator <__ElementType const, ConstIterator>;
-  if (pObject->__ht_getConst (element) == nullptr) {
-    return Memory::instance().create <Delegate> (pObject->cend());
-  }
-
-  for (auto iterator = pObject->cbegin(), end = pObject->cend(); iterator != end; ++iterator) { // NOLINT(clion-misra-cpp2008-8-0-1)
-    if (cds::meta::equals (*iterator, element)) {
-      return Memory::instance().create <Delegate> (iterator);
-    }
-  }
-
-  return Memory::instance().create <Delegate> (pObject->cend());
+  auto ppNode = pObject->__ht_getConst(element);
+  return Memory::instance().create <Delegate> (ConstIterator(ppNode == nullptr ? nullptr : *ppNode));
 }
 
 
@@ -148,17 +120,8 @@ __CDS_cpplang_NonConstConstexprMemberFunction auto LinkedHashSet <__ElementType,
     LinkedHashSet const* pObject,
     __ElementType const& element
 ) noexcept -> ConstIterator {
-  if (pObject->__ht_getConst (element) == nullptr) {
-    return cend();
-  }
-
-  for (auto iterator = pObject->cbegin(), end = pObject->cend(); iterator != end; ++iterator) {  // NOLINT(clion-misra-cpp2008-8-0-1)
-    if (cds::meta::equals (*iterator, element)) {
-      return iterator;
-    }
-  }
-
-  return pObject->cend();
+  auto ppNode = pObject->__ht_getConst(element);
+  return ConstIterator(ppNode == nullptr ? nullptr : *ppNode);
 }
 
 
@@ -287,8 +250,8 @@ __CDS_OptimalInline auto LinkedHashSet <__ElementType, __Hasher>::operator = (
     return *this;
   }
 
-  __sll_clear ();
   __ht_clear ();
+  __sll_clear ();
   // Copy of each not possible, linked list references hash table elements from other set
   for (auto iterator = set.cbegin(), end = set.cend(); iterator != end; ++iterator) {  // NOLINT(clion-misra-cpp2008-8-0-1)
     insert (*iterator);
@@ -361,8 +324,7 @@ template <typename __ElementType, typename __Hasher> // NOLINT(bugprone-reserved
 __CDS_OptimalInline auto LinkedHashSet <__ElementType, __Hasher>::remove (
     __ElementType const& element
 ) noexcept -> bool {
-  auto const pElement = __ht_removeGetPtr (element);
-  return pElement != nullptr && __sll_remove (pElement);
+  return __ht_remove (element) && __sll_remove(element);
 }
 
 
@@ -382,7 +344,7 @@ __CDS_cpplang_ConstexprConditioned auto LinkedHashSet <__ElementType, __Hasher>:
     return true;
   }
 
-  return __ht_equals (set);
+  return __sll_equals (set);
 }
 
 
@@ -394,7 +356,7 @@ __CDS_cpplang_ConstexprConditioned auto LinkedHashSet <__ElementType, __Hasher>:
     return false;
   }
 
-  return !__ht_equals (set); // NOLINT(clion-misra-cpp2008-5-3-1)
+  return !__sll_equals (set); // NOLINT(clion-misra-cpp2008-5-3-1)
 }
 
 } // namespace cds

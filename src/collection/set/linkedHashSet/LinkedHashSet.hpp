@@ -253,13 +253,13 @@ private:
 
   using HashTableImplementation::__ht_clear;        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using HashTableImplementation::__ht_size;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-  using HashTableImplementation::__ht_removeGetPtr; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using HashTableImplementation::__ht_remove;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using HashTableImplementation::__ht_getConst;     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-  using HashTableImplementation::__ht_equals;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using HashTableImplementation::__ht_move;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   using LinkedListImplementation::__sll_clear;      // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using LinkedListImplementation::__sll_remove;     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using LinkedListImplementation::__sll_equals;     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using LinkedListImplementation::__sll_move;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   __CDS_NoDiscard static auto __cbegin (  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
