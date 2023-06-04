@@ -1,75 +1,56 @@
-/* NOLINT(llvm-header-guard)
- * Created by loghin on 14/08/22.
- */
+// NOLINT(llvm-header-guard)
+// Created by loghin on 14/08/22.
+//
 
-#ifndef __CDS_MAP_ABSTRACT_ENTRY_MUTABLE_COLLECTION_PROXY_HPP__ /* NOLINT(llvm-header-guard) */
-#define __CDS_MAP_ABSTRACT_ENTRY_MUTABLE_COLLECTION_PROXY_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+#ifndef __CDS_MAP_ABSTRACT_ENTRY_MUTABLE_COLLECTION_PROXY_HPP__ // NOLINT(llvm-header-guard)
+#define __CDS_MAP_ABSTRACT_ENTRY_MUTABLE_COLLECTION_PROXY_HPP__ // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+#pragma once
 
 namespace cds {
+template <typename __KeyType, typename __ValueType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+class __CDS_InheritsEBOs Map <__KeyType, __ValueType>::AbstractEntryMutableCollectionProxy :
+    public cds::MutableCollection <EntryType>,
+    protected Map <__KeyType, __ValueType>::AbstractMapProxy {
+protected:
+  using ProxyBase             = Map <__KeyType, __ValueType>::AbstractMapProxy;
+  using MutableCollectionBase = MutableCollection <EntryType>;
 
-    template <
-            typename __KeyType,     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            typename __ValueType    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-    > class __CDS_InheritsEBOs Map <
-            __KeyType,
-            __ValueType
-    > :: AbstractEntryMutableCollectionProxy :
-            public cds :: MutableCollection < EntryType >,
-            protected Map < __KeyType, __ValueType > :: AbstractMapProxy {
+public:
+  AbstractEntryMutableCollectionProxy (
+      AbstractEntryMutableCollectionProxy const&
+  ) noexcept = delete;
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        using ProxyBase             = Map < __KeyType, __ValueType > :: AbstractMapProxy;
+  AbstractEntryMutableCollectionProxy (
+      AbstractEntryMutableCollectionProxy&&
+  ) noexcept = delete;
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        using MutableCollectionBase = MutableCollection < EntryType >;
+  __CDS_cpplang_ConstexprDestructor ~AbstractEntryMutableCollectionProxy () noexcept override;
 
+  auto operator = (
+      AbstractEntryMutableCollectionProxy const&
+  ) noexcept -> AbstractEntryMutableCollectionProxy& = delete;
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        using typename MutableCollectionBase :: __GenericHandler;         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+  auto operator = (
+      AbstractEntryMutableCollectionProxy&&
+  ) noexcept -> AbstractEntryMutableCollectionProxy& = delete;
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        using typename MutableCollectionBase :: __GenericConstHandler;    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+  auto clear () noexcept -> void override;
 
+  __CDS_NoDiscard auto toString () const noexcept -> String override;
 
-    protected:  /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_MaybeUnused __CDS_Explicit constexpr AbstractEntryMutableCollectionProxy ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
-                Map < __KeyType, __ValueType > * pMap
-        ) noexcept;
+  __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto size () const noexcept -> Size override; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes)
 
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        AbstractEntryMutableCollectionProxy (
-                AbstractEntryMutableCollectionProxy const &
-        ) noexcept = delete;
+protected:
+  using typename MutableCollectionBase::__GenericHandler;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using typename MutableCollectionBase::__GenericConstHandler;    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        AbstractEntryMutableCollectionProxy (
-                AbstractEntryMutableCollectionProxy &&
-        ) noexcept = delete;
+  using AbstractMapProxy::map;
 
+  __CDS_MaybeUnused __CDS_Explicit constexpr AbstractEntryMutableCollectionProxy ( // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes)
+      Map <__KeyType, __ValueType>* pMap
+  ) noexcept;
+};
 
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_cpplang_ConstexprDestructor ~AbstractEntryMutableCollectionProxy () noexcept override;
+} // namespace cds
 
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        auto operator = (
-                AbstractEntryMutableCollectionProxy const &
-        ) noexcept -> AbstractEntryMutableCollectionProxy & = delete;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        auto operator = (
-                AbstractEntryMutableCollectionProxy &&
-        ) noexcept -> AbstractEntryMutableCollectionProxy & = delete;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        auto clear () noexcept -> void override;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard auto toString () const noexcept -> String override;
-
-    public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto size () const noexcept -> Size override; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
-    };
-
-} /* namespace cds */
-
-#endif /* __CDS_MAP_ABSTRACT_ENTRY_MUTABLE_COLLECTION_PROXY_HPP__ */
+#endif // __CDS_MAP_ABSTRACT_ENTRY_MUTABLE_COLLECTION_PROXY_HPP__
