@@ -69,7 +69,7 @@ __CDS_OptimalInline auto LinkedHashSet <__ElementType, __Hasher>::__newAddress (
   auto ppNewNode = pObject->__ht_get (*pReferenceElement, pNewElementCreated);
   if (* pNewElementCreated) {
     auto pNewElement = pObject->__sll_newBack();
-    * ppNewNode = pObject->__sll_backNode();
+    *ppNewNode = pObject->__sll_backNode();
     return pNewElement;
   }
 
@@ -99,6 +99,7 @@ __CDS_OptimalInline auto LinkedHashSet <__ElementType, __Hasher>::__removeConstA
   for (Size index = 0u; index < iteratorArraySize; ++ index ) {
     pObject->__ht_remove (**ppIterators[index]);
   }
+
   auto removedCount = pObject->__sll_removeConstIteratorArray (&ppIterators [0u], iteratorArraySize);
   return removedCount;
 }

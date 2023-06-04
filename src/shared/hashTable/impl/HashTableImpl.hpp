@@ -401,7 +401,7 @@ template <
     __keyExtractor, __keyComparator, __nodeDestructor
 >::__ht_at (__KeyType const& key) noexcept -> __ElementType* {
   // 'reuse' code from __get, dirty const casts. Theoretically legal
-  return const_cast <__ElementType*> (static_cast <__HashTable const*> (this)->__ht_get (key));
+  return const_cast <__ElementType*> (static_cast <__HashTable const*> (this)->__ht_getConst (key));
 }
 
 

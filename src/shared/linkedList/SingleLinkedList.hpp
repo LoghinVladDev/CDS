@@ -53,6 +53,9 @@ protected:
   auto __sll_removeIterator (__sll_Iterator const& iterator) noexcept -> bool;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto __sll_removeConstIterator (__sll_ConstIterator const& iterator) noexcept -> bool;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
+  template <typename __Compared, typename __Comparator>
+  auto __sll_removeIf (__Compared const& element, __Comparator const& comparator) noexcept -> bool;
+
   __CDS_MaybeUnused auto __sll_removeIteratorArray (    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
       __sll_Iterator const* const*  ppIterators,
       Size                          iteratorCount

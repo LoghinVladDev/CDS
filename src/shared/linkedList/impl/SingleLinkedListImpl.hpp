@@ -269,6 +269,33 @@ template <
   return false;
 }
 
+template <
+    typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+    functional::PredicateFunction <__ElementType const &, __ElementType const&> __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+> template <typename __Compared, typename __Comparator>                                         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+auto __SingleLinkedList <__ElementType, __equals>::__sll_removeIf (
+    __Compared const& element, __Comparator const& comparator
+) noexcept -> bool {
+  if (__sll_empty()) {
+    return false;
+  }
+
+  if (comparator (element, _pFront->_data)) {
+    __sll_removeFront();
+    return true;
+  }
+
+  auto pPrevious = _pFront;
+  while (pPrevious->_pNext != nullptr) {
+    if (comparator (element, pPrevious->_pNext->_data)) {
+      __sll_removeNode (pPrevious, pPrevious->_pNext);
+      return true;
+    }
+    pPrevious = pPrevious->_pNext;
+  }
+
+  return false;
+}
 
 template <
     typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)

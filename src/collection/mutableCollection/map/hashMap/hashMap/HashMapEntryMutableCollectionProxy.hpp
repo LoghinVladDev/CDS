@@ -4,6 +4,7 @@
 
 #ifndef __CDS_HASH_MAP_ENTRY_MUTABLE_COLLECTION_PROXY_HPP__ // NOLINT(llvm-header-guard)
 #define __CDS_HASH_MAP_ENTRY_MUTABLE_COLLECTION_PROXY_HPP__ // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+#pragma once
 
 namespace cds {
 namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
