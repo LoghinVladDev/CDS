@@ -115,10 +115,10 @@ protected:
 
 } // namespace cds
 
-#include "map/AbstractMapProxy.hpp"                                                                                         // NOLINT(llvm-include-order)
-#include "map/AbstractKeySetProxy.hpp"
-#include "map/AbstractValueMutableCollectionProxy.hpp"
-#include "map/AbstractEntryMutableCollectionProxy.hpp"
+#include "map/MapAbstractMapProxy.hpp"                                                                                         // NOLINT(llvm-include-order)
+#include "map/MapAbstractKeySetProxy.hpp"
+#include "map/MapAbstractValueMutableCollectionProxy.hpp"
+#include "map/MapAbstractEntryMutableCollectionProxy.hpp"
 
 #include "../../../shared/iterableInternalCommunication/client/primitive/impl/FindUniqueMutablePrimitiveClient.hpp"       // NOLINT(llvm-include-order)
 #include "../../../shared/iterableInternalCommunication/client/primitive/impl/FindUniqueImmutablePrimitiveClient.hpp"
@@ -127,9 +127,9 @@ protected:
 #include "map/entry/impl/MapEntryImpl.hpp"
 
 #include "map/impl/MapImpl.hpp"                                                                                                 // NOLINT(llvm-include-order)
-#include "map/impl/AbstractMapProxyImpl.hpp"
-#include "map/impl/AbstractKeySetProxyImpl.hpp"
-#include "map/impl/AbstractValueMutableCollectionProxyImpl.hpp"
-#include "map/impl/AbstractEntryMutableCollectionProxyImpl.hpp"
+#include "map/impl/MapAbstractMapProxyImpl.hpp"
+#include "map/impl/MapAbstractKeySetProxyImpl.hpp"
+#include "map/impl/MapAbstractValueMutableCollectionProxyImpl.hpp"
+#include "map/impl/MapAbstractEntryMutableCollectionProxyImpl.hpp"
 
 #endif // __CDS_MAP_HPP__
