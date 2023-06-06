@@ -787,6 +787,18 @@ public:
 private:
   ElementType const*  _pData  {nullptr};
   Size                _length {0ULL};
+
+  template <typename __FCharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  friend auto operator << (
+      std::wostream&                        out,
+      __BaseStringView <__FCharType> const& obj
+  ) noexcept -> std::wostream &;
+
+  template <typename __FCharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  friend auto operator << (
+      std::ostream&                         out,
+      __BaseStringView <__FCharType> const& obj
+  ) noexcept -> std::ostream &;
 };
 
 

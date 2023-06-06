@@ -1967,7 +1967,7 @@ auto __BaseStringView <__CharType>::forEach (
 
 
 template <typename __CharType>    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
-template < typename __Predicate >   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
+template <typename __Predicate>   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 auto __BaseStringView <__CharType>::some (
     Size               count,
     __Predicate const& predicate
@@ -1988,7 +1988,7 @@ auto __BaseStringView <__CharType>::some (
 
 
 template <typename __CharType>    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
-template < typename __Predicate >   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
+template <typename __Predicate>   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 auto __BaseStringView <__CharType>::atLeast (
     Size                count,
     __Predicate const&  predicate
@@ -2009,7 +2009,7 @@ auto __BaseStringView <__CharType>::atLeast (
 
 
 template <typename __CharType>    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
-template < typename __Predicate >   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
+template <typename __Predicate>   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 auto __BaseStringView <__CharType>::atMost (
     Size                count,
     __Predicate const&  predicate
@@ -2030,7 +2030,7 @@ auto __BaseStringView <__CharType>::atMost (
 
 
 template <typename __CharType>    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
-template < typename __Predicate >   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
+template <typename __Predicate>   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 __CDS_OptimalInline auto __BaseStringView <__CharType>::moreThan (
     Size                count,
     __Predicate const&  predicate
@@ -2040,7 +2040,7 @@ __CDS_OptimalInline auto __BaseStringView <__CharType>::moreThan (
 
 
 template <typename __CharType>    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
-template < typename __Predicate >   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
+template <typename __Predicate>   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 __CDS_OptimalInline auto __BaseStringView <__CharType>::fewerThan (
     Size                count,
     __Predicate const&  predicate
@@ -2050,7 +2050,7 @@ __CDS_OptimalInline auto __BaseStringView <__CharType>::fewerThan (
 
 
 template <typename __CharType>    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
-template < typename __Predicate >   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
+template <typename __Predicate>   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 auto __BaseStringView <__CharType>::count (
     __Predicate const& predicate
 ) const noexcept (noexcept(predicate(meta::valueOf<ElementType>()))) -> Size {
@@ -2066,7 +2066,7 @@ auto __BaseStringView <__CharType>::count (
 
 
 template <typename __CharType>    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
-template < typename __Predicate >   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
+template <typename __Predicate>   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 auto __BaseStringView <__CharType>::any (
     __Predicate const& predicate
 ) const noexcept (noexcept(predicate(meta::valueOf<ElementType>()))) -> bool {
@@ -2081,7 +2081,7 @@ auto __BaseStringView <__CharType>::any (
 
 
 template <typename __CharType>    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
-template < typename __Predicate >   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
+template <typename __Predicate>   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 auto __BaseStringView <__CharType>::all (
     __Predicate const& predicate
 ) const noexcept (noexcept(predicate(meta::valueOf<ElementType>()))) -> bool {
@@ -2096,7 +2096,7 @@ auto __BaseStringView <__CharType>::all (
 
 
 template <typename __CharType>    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
-template < typename __Predicate >   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
+template <typename __Predicate>   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 auto __BaseStringView <__CharType>::none (
     __Predicate const& predicate
 ) const noexcept (noexcept(predicate(meta::valueOf<ElementType>()))) -> bool {
@@ -2112,7 +2112,7 @@ auto __BaseStringView <__CharType>::none (
 
 template <typename __FCharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 auto operator << (
-    std::ostream                         & out,
+    std::ostream&                         out,
     __BaseStringView <__FCharType> const& obj
 ) noexcept -> std::ostream & {
   out.write(obj._pData, obj._length);
@@ -2121,7 +2121,7 @@ auto operator << (
 
 template <typename __FCharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 auto operator << (
-    std::wostream                        & out,
+    std::wostream&                        out,
     __BaseStringView <__FCharType> const& obj
 ) noexcept -> std::wostream & {
   out.write(obj._pData, obj._length);

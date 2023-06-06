@@ -125,7 +125,7 @@ __CDS_MaybeUnused constexpr auto StringUtils <__CharType>::isAlpha (ElementType 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 constexpr auto StringUtils <__CharType>::isVowel (ElementType character) noexcept -> bool {
-  return ((character & 0x60u) != 0u) // is above 96 ('a' = 97)
+  return ((character & 0x60u) == 0x60u) // is above 96 ('a' = 97)
       ? (
           character == static_cast <ElementType> ('a') ||
           character == static_cast <ElementType> ('e') ||

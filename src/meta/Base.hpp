@@ -547,8 +547,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
             template <typename ... __IntegralTypes>                   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             struct __Or : __orImpl::__OrImpl <__IntegralTypes...> {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-            template <typename __IntegralType>                        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            struct __Not : __BoolConstant <__IntegralType::value> {}; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            template <typename __IntegralType>                          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+            struct __Not : __BoolConstant <!__IntegralType::value> {};  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
             namespace __bindImpl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                 template <template <typename...> class __BoundFormula, typename ... __BoundTParams> /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
