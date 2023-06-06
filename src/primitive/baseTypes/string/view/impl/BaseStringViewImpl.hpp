@@ -4,6 +4,7 @@
 
 #ifndef __CDS_BASE_STRING_VIEW_IMPL_HPP__   // NOLINT(llvm-header-guard) 
 #define __CDS_BASE_STRING_VIEW_IMPL_HPP__   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
+#pragma once
 
 
 namespace cds {       // NOLINT(modernize-concat-nested-namespaces) 

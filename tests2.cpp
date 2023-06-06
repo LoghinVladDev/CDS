@@ -15,6 +15,9 @@ using ConvertibleToStdOstreamRef =
 #include <CDS/LinkedHashSet>
 
 int main () {
+std::cout << cds::String("test") << '\n';
+std::cout << cds::String("test") << '\n';
+std::cout << cds::String("test") << '\n';
 
   cds::LinkedHashSet<int> lhs;
   lhs.begin();
