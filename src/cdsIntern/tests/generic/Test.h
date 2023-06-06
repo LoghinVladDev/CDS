@@ -123,6 +123,8 @@ namespace glob {
 
     private:
         cds :: Size logDepth = 0;
+      bool _disableLog {false};
+      bool _disableLogActual {false};
 
     protected:
         [[nodiscard]] auto inline getDepthString() const noexcept -> cds :: String {
@@ -130,6 +132,11 @@ namespace glob {
         }
 
     public:
+      auto disableLog(bool toggle) noexcept -> Test& {
+        _disableLog = toggle;
+        return * this;
+      }
+
         virtual auto execute () noexcept -> bool = 0;
         auto start (cds :: String const & testName) noexcept -> bool {
             auto const start = std::chrono::high_resolution_clock::now();
@@ -142,7 +149,9 @@ namespace glob {
                 __CDS_cpplang_core_version_name
             );
 
+            if (_disableLog) {_disableLogActual = true;}
             bool const ok = this->execute();
+            _disableLogActual = false;
 
             ok ?
                 this->logOK("'%s' test OK, on platform : '%s', compiler : '%s', version : '%s', cpp standard : '%s'",

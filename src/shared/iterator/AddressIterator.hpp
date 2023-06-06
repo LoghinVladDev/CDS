@@ -4,6 +4,7 @@
 
 #ifndef __CDS_SHARED_ADDRESS_ITERATOR_HPP__ // NOLINT(llvm-header-guard)
 #define __CDS_SHARED_ADDRESS_ITERATOR_HPP__ // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+#pragma once
 
 #include "IteratorModel.hpp"
 

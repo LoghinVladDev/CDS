@@ -2018,10 +2018,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
 #include "../../../shared/memory/PrimitiveAllocation.hpp"
 #include <CDS/exception/OutOfBoundsException>
 
-#include "impl/StringUtils.hpp" /* NOLINT(llvm-include-order) */
+#include "impl/StringUtilsImpl.hpp" /* NOLINT(llvm-include-order) */
 #include "impl/BaseString.hpp"
 
-#include "view/impl/BaseStringView.hpp"
+#include "view/impl/BaseStringViewImpl.hpp"
 
 #include "view/Literal.hpp"
 

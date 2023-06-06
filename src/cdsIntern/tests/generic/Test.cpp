@@ -57,12 +57,14 @@ HashMap < Test::TerminalColor::Modifier, int > Test::TerminalColor::colorMap = {
 };
 
 auto Test::log(const String & text) const noexcept -> void {
+    if(_disableLogActual) {return;}
     printLock.lock();
     std::cout << Test::TerminalColor::clear << this->getDepthString() << text << '\n';
     printLock.unlock();
 }
 
 auto Test::log(const char * format, ...) const noexcept -> void {
+  if(_disableLogActual) {return;}
     printLock.lock();
     va_list args;
     va_start(args, format);
@@ -77,12 +79,14 @@ auto Test::log(const char * format, ...) const noexcept -> void {
 }
 
 auto Test::logBold(const String & text) const noexcept -> void {
+  if(_disableLogActual) {return;}
     printLock.lock();
     std::cout << this->getDepthString() << bold << text << TerminalColor::clear << '\n';
     printLock.unlock();
 }
 
 auto Test::logBold(const char * format, ...) const noexcept -> void {
+  if(_disableLogActual) {return;}
     printLock.lock();
     va_list args;
     va_start(args, format);
@@ -100,12 +104,14 @@ auto Test::logBold(const char * format, ...) const noexcept -> void {
 }
 
 auto Test::logOK(const String & text) const noexcept -> void {
+  if(_disableLogActual) {return;}
     printLock.lock();
     std::cout << this->getDepthString() << testOK << text << TerminalColor::clear << '\n';
     printLock.unlock();
 }
 
 auto Test::logOK(const char * format, ...) const noexcept -> void {
+  if(_disableLogActual) {return;}
     printLock.lock();
     va_list args;
     va_start(args, format);
@@ -124,12 +130,14 @@ auto Test::logOK(const char * format, ...) const noexcept -> void {
 
 
 auto Test::logWarning(const String & text) const noexcept -> void {
+  if(_disableLogActual) {return;}
     printLock.lock();
     std::cout << this->getDepthString() << testWarn << text << TerminalColor::clear << '\n';
     printLock.unlock();
 }
 
 auto Test::logWarning(const char * format, ...) const noexcept -> void {
+  if(_disableLogActual) {return;}
     printLock.lock();
     va_list args;
     va_start(args, format);
@@ -149,12 +157,14 @@ auto Test::logWarning(const char * format, ...) const noexcept -> void {
 
 
 auto Test::logError(const String & text) const noexcept -> void {
+  if(_disableLogActual) {return;}
     printLock.lock();
     std::cout << this->getDepthString() << testNOK << text << TerminalColor::clear << '\n';
     printLock.unlock();
 }
 
 auto Test::logError(const char * format, ...) const noexcept -> void {
+  if(_disableLogActual) {return;}
     printLock.lock();
     va_list args;
     va_start(args, format);
