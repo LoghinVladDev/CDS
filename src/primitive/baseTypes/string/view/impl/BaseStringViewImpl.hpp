@@ -2116,7 +2116,7 @@ auto operator << (
     std::ostream&                         out,
     __BaseStringView <__FCharType> const& obj
 ) noexcept -> std::ostream & {
-  out.write(obj._pData, obj._length);
+  return out.write(obj._pData, obj._length);
 }
 
 
@@ -2125,7 +2125,7 @@ auto operator << (
     std::wostream&                        out,
     __BaseStringView <__FCharType> const& obj
 ) noexcept -> std::wostream & {
-  out.write(obj._pData, obj._length);
+  return out.write(obj._pData, obj._length);
 }
 
 } // namespace __impl 
