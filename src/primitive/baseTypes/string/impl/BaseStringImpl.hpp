@@ -2360,7 +2360,7 @@ auto __BaseString <__CharType>::rtrim (ElementType character) noexcept -> __Base
     return *this;
   }
 
-  _length = offset + 0;
+  _length = offset + 1u;
   _pBuffer [length()] = meta::__impl::__StringData <ElementType>::nullCharacter;
   return *this;
 }
