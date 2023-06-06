@@ -32,7 +32,7 @@ __CDS_cpplang_VirtualConstexpr auto Map <__KeyType, __ValueType>::AbstractValueM
 
 
 template <typename __KeyType, typename __ValueType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-auto Map <__KeyType, __ValueType>::AbstractValueMutableCollectionProxy::toString () const noexcept -> String {
+auto Map <__KeyType, __ValueType>::AbstractValueMutableCollectionProxy::toString () const noexcept(false) -> String {
   // Reused from CDS/List 
   // Value Mutable Collection acts as a partial list represented by values enclosed in square brackets. If Empty, return bracket set 
   if (empty()) {

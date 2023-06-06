@@ -8,7 +8,7 @@
 
 namespace cds {
 
-    inline auto Object :: toString () const noexcept -> String {
+    inline auto Object :: toString () const noexcept(false) -> String {
 
         std :: stringstream oss;
         oss << "Object at " << std :: hex << reinterpret_cast < AddressValueType const > ( this );
@@ -16,7 +16,7 @@ namespace cds {
     }
 
 
-    inline Object :: operator __hidden :: __impl :: __BaseString < char > () const noexcept {
+    inline Object :: operator __hidden :: __impl :: __BaseString < char > () const noexcept(false) {
 
         return this->toString();
     }
@@ -25,7 +25,7 @@ namespace cds {
     inline auto operator << (
             std :: ostream        & out,
             Object          const & object
-    ) noexcept -> std::ostream & {
+    ) noexcept(false) -> std::ostream & {
 
         return (out << object.toString());
     }

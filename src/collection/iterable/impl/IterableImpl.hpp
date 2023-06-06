@@ -24,7 +24,7 @@ __CDS_cpplang_ConstexprDestructor Iterable < __ElementType >::~Iterable () noexc
 
 
 template < typename __ElementType > // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline auto Iterable < __ElementType >::toString () const noexcept -> String {
+__CDS_OptimalInline auto Iterable < __ElementType >::toString () const noexcept(false) -> String {
   // Default toString implementation, store 'Iterable at 0x....'. Use a stringstream for simplicity 
   std::stringstream oss;
   oss << "Iterable at " << this;

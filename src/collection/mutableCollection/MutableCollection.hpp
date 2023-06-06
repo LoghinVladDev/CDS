@@ -4,7 +4,7 @@
 
 #ifndef __CDS_MUTABLE_COLLECTION_HPP__ // NOLINT(llvm-header-guard)
 #define __CDS_MUTABLE_COLLECTION_HPP__ // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-#pragma
+#pragma once
 
 #include <CDS/Collection>
 
@@ -720,7 +720,7 @@ public:
   /// \return String = string representation
   /// \test Suite: MCTS-00001, Group: MCTG-00002-MF, Test Cases: { MCTC-00003-MF-toString, MCTC-00004-MF-clear }
   /// \public
-  __CDS_NoDiscard auto toString () const noexcept -> String override;
+  __CDS_NoDiscard auto toString () const noexcept(false) -> String override;
 
   /// \brief Function used to clear the collection, removing all elements from it
   /// \exceptsafe
@@ -752,7 +752,7 @@ protected:
 
 } // namespace cds
 
-#include "mutableCollection/impl/MutableCollection.hpp"
+#include "mutableCollection/impl/MutableCollectionImpl.hpp"
 
 #include "../../shared/iterableInternalCommunication/client/primitive/impl/DelegateForwardIterablePrimitiveClient.hpp"
 #include "../../shared/iterableInternalCommunication/client/primitive/impl/IteratorRemovePrimitiveClient.hpp"

@@ -80,7 +80,7 @@ __CDS_cpplang_VirtualConstexpr Collection <__ElementType>::operator bool () cons
 
 
 template <typename __ElementType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline auto Collection <__ElementType>::toString () const noexcept -> String {
+__CDS_OptimalInline auto Collection <__ElementType>::toString () const noexcept(false) -> String {
   // Default toString implementation, store 'Collection at 0x....'. Use a stringstream for simplicity
   std::stringstream oss;
   oss << "Collection at " << this; // NOLINT(clion-misra-cpp2008-5-2-8,*-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9)

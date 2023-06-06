@@ -89,7 +89,7 @@ public:
   /// \return String = string representation
   /// \test Suite: STS-00001, Group: STG-00101-MF, Test Cases: { STC-00101-MF-toString, STS-00102-MF-clear }
   /// \public
-  __CDS_NoDiscard auto toString () const noexcept -> String override;
+  __CDS_NoDiscard auto toString () const noexcept(false) -> String override;
 
   /// \brief Function used to clear the set, removing all elements from it
   /// \exceptsafe

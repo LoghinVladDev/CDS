@@ -30,7 +30,7 @@ __CDS_cpplang_ConstexprDestructor Map <__KeyType, __ValueType>::~Map () noexcept
 
 
 template <typename __KeyType, typename __ValueType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-auto Map <__KeyType, __ValueType>::toString () const noexcept -> String {
+auto Map <__KeyType, __ValueType>::toString () const noexcept(false) -> String {
   if (empty()) {
     return "{}";
   }

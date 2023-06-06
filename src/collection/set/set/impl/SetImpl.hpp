@@ -41,7 +41,7 @@ template <
 template <
     typename                                                                  __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     cds::meta::EnableIf <cds::meta::IsValidSetElement <__ElementType>::value> __enabler       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-> auto Set <__ElementType, __enabler>::toString () const noexcept -> String {
+> auto Set <__ElementType, __enabler>::toString () const noexcept(false) -> String {
   // Set toString representation is curly-brackets enclosed list 
   // if empty, return empty list 
   if (empty()) {

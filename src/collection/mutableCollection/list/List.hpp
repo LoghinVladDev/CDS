@@ -879,7 +879,7 @@ public:
   /// @return String = string representation
   /// @test Suite: LTS-00001, Group: LTG-00100-MF, Test Cases: { LTC-00101-MF-toString }
   /// @public
-  __CDS_NoDiscard auto toString () const noexcept -> String override;
+  __CDS_NoDiscard auto toString () const noexcept(false) -> String override;
 
   /// @brief Function used to clear the list, removing all elements from it
   /// @exceptsafe

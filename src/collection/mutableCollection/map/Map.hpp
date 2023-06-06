@@ -60,7 +60,7 @@ public:
   using FindUniqueImmutableClient::find;
   using FindUniqueMutableClient::find;
 
-  __CDS_NoDiscard auto toString () const noexcept -> String override;
+  __CDS_NoDiscard auto toString () const noexcept(false) -> String override;
 
   auto clear () noexcept -> void override = 0;
 

@@ -739,7 +739,7 @@ namespace cds {
         ) noexcept (false) -> ElementType &;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard auto toString () const noexcept -> String override;
+        __CDS_NoDiscard auto toString () const noexcept(false) -> String override;
 
     private:  /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto circularAdjustedIndex (

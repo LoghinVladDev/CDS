@@ -28,7 +28,7 @@ __CDS_cpplang_ConstexprDestructor List <__ElementType>::~List () noexcept = defa
 
 
 template <typename __ElementType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-auto List <__ElementType>::toString () const noexcept -> String {
+auto List <__ElementType>::toString () const noexcept(false) -> String {
   // List represented by values enclosed in square brackets. If Empty, return bracket set 
   if (empty()) {
     return {"[]"};

@@ -38,7 +38,7 @@ public:
 
   __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto size () const noexcept -> Size override; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes)
 
-  __CDS_NoDiscard auto toString () const noexcept -> String override;
+  __CDS_NoDiscard auto toString () const noexcept(false) -> String override;
 
   using MutableCollectionBase::empty;
   using MutableCollectionBase::cbegin;

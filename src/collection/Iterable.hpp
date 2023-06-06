@@ -604,7 +604,7 @@ public:
   /// \return String = string representation
   /// \test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00003-MF-toString, CTC-00010-MF-clear }
   /// \public
-  __CDS_NoDiscard auto toString () const noexcept -> String override;
+  __CDS_NoDiscard auto toString () const noexcept(false) -> String override;
 
   /// \brief Function used to check if the iterable contains the requested element.
   /// \param [in] element : ElementType cref = Constant Reference to the element to be found in the iterable

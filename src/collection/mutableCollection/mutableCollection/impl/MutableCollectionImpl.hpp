@@ -4,6 +4,7 @@
 
 #ifndef __CDS_MUTABLE_COLLECTION_IMPL_HPP__ // NOLINT(llvm-header-guard)
 #define __CDS_MUTABLE_COLLECTION_IMPL_HPP__ // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+#pragma once
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
@@ -24,7 +25,7 @@ __CDS_cpplang_ConstexprDestructor MutableCollection <__ElementType>::~MutableCol
 
 
 template <typename __ElementType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline auto MutableCollection <__ElementType>::toString () const noexcept -> String {
+__CDS_OptimalInline auto MutableCollection <__ElementType>::toString () const noexcept(false) -> String {
   // Default toString implementation, store 'MutableCollection at 0x....'. Use a stringstream for simplicity
   std::stringstream oss;
   oss << "MutableCollection at " << this; // NOLINT(clion-misra-cpp2008-5-2-8, *-reinterpret-cast, clion-misra-cpp2008-5-2-5, clion-misra-cpp2008-5-2-9)

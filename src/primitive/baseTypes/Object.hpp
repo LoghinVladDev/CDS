@@ -60,7 +60,7 @@ namespace cds {
          * @exceptsafe
          * @return String = string representation
          */
-        __CDS_NoDiscard virtual auto toString () const noexcept -> __hidden :: __impl :: __BaseString < char >;
+        __CDS_NoDiscard virtual auto toString () const noexcept(false) -> __hidden :: __impl :: __BaseString < char >;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
@@ -84,7 +84,7 @@ namespace cds {
         friend auto operator << (
                 std :: ostream        & out,
                 Object          const & object
-        ) noexcept -> std::ostream &;
+        ) noexcept(false) -> std::ostream &;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         /**
@@ -92,7 +92,7 @@ namespace cds {
          * @exceptsafe
          * @return String = string representation
          */
-        __CDS_Explicit operator __hidden :: __impl :: __BaseString < char > () const noexcept;
+        __CDS_Explicit operator __hidden :: __impl :: __BaseString < char > () const noexcept(false);
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
         /**

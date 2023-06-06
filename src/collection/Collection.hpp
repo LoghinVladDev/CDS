@@ -417,7 +417,7 @@ public:
   /// \return String = string representation
   /// \test Suite: CTS-00001, Group: CTG-00002-MF, Test Cases: { CTC-00003-MF-toString, CTC-00010-MF-clear }
   /// \public
-  __CDS_NoDiscard auto toString () const noexcept -> String override;
+  __CDS_NoDiscard auto toString () const noexcept(false) -> String override;
 
   /// \brief Hash function, used to obtain the hash value of the Collection
   /// \exceptsafe

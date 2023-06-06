@@ -37,7 +37,7 @@ constexpr auto MapEntry <__KeyType, __ValueType>::hash () const noexcept -> Size
 
 
 template <typename __KeyType, typename __ValueType>   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline auto MapEntry <__KeyType, __ValueType>::toString () const noexcept -> String {
+__CDS_OptimalInline auto MapEntry <__KeyType, __ValueType>::toString () const noexcept(false) -> String {
   std::stringstream oss;
   cds::meta::print (cds::meta::print (oss << "( ", this->_key) << ", ", this->_value) << " )";
   return oss.str();
@@ -45,7 +45,7 @@ __CDS_OptimalInline auto MapEntry <__KeyType, __ValueType>::toString () const no
 
 
 template <typename __KeyType, typename __ValueType>   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline MapEntry <__KeyType, __ValueType>::operator String () const noexcept {
+__CDS_OptimalInline MapEntry <__KeyType, __ValueType>::operator String () const noexcept(false) {
   return this->toString();
 }
 

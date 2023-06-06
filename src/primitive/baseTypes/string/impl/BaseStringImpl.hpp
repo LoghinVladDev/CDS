@@ -36,7 +36,7 @@ __BaseStringView <__CharType> const __BaseString <__CharType>::consonants = __Ba
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline __BaseString <__CharType>::__BaseString (__BaseString const& string) noexcept :
+__CDS_OptimalInline __BaseString <__CharType>::__BaseString (__BaseString const& string) noexcept(false) :
     __BaseString (__BaseStringView <__CharType> (string)) {
 
 }
@@ -44,7 +44,7 @@ __CDS_OptimalInline __BaseString <__CharType>::__BaseString (__BaseString const&
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 template <typename __OtherCharType, meta::EnableIf <meta::IsStringCharType <__OtherCharType>::value && !meta::IsSame <__OtherCharType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline __BaseString <__CharType>::__BaseString (__BaseString <__OtherCharType> const& string) noexcept :
+__CDS_OptimalInline __BaseString <__CharType>::__BaseString (__BaseString <__OtherCharType> const& string) noexcept(false) :
     __BaseString ( __BaseStringView <__OtherCharType> (string) ) {
 
 }
@@ -60,7 +60,7 @@ constexpr __BaseString <__CharType>::__BaseString (__BaseString&& string) noexce
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__BaseString <__CharType>::__BaseString (__BaseStringView <__CharType> const& string) noexcept {
+__BaseString <__CharType>::__BaseString (__BaseStringView <__CharType> const& string) noexcept(false) {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   if (string.empty()) {
@@ -75,7 +75,7 @@ __BaseString <__CharType>::__BaseString (__BaseStringView <__CharType> const& st
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 template <typename __OtherCharType, meta::EnableIf <meta::IsStringCharType <__OtherCharType>::value && !meta::IsSame <__OtherCharType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__BaseString <__CharType>::__BaseString (__BaseStringView <__OtherCharType> const& string) noexcept {
+__BaseString <__CharType>::__BaseString (__BaseStringView <__OtherCharType> const& string) noexcept(false) {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   if (string.empty()) {
@@ -89,14 +89,14 @@ __BaseString <__CharType>::__BaseString (__BaseStringView <__OtherCharType> cons
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline __BaseString <__CharType>::__BaseString (ElementType const* pString, Size length) noexcept :
+__CDS_OptimalInline __BaseString <__CharType>::__BaseString (ElementType const* pString, Size length) noexcept(false) :
     __BaseString (__BaseStringView <__CharType> (pString, length)) {
 
 }
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline __BaseString <__CharType>::__BaseString (ElementType const* pString) noexcept :
+__CDS_OptimalInline __BaseString <__CharType>::__BaseString (ElementType const* pString) noexcept(false) :
     __BaseString (__BaseStringView <__CharType> (pString)) {
 
 }
@@ -104,7 +104,7 @@ __CDS_OptimalInline __BaseString <__CharType>::__BaseString (ElementType const* 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 template <typename __OtherCharType, meta::EnableIf <meta::IsStringCharType <__OtherCharType>::value && !meta::IsSame <__OtherCharType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline __BaseString <__CharType>::__BaseString (__OtherCharType const* pString, Size length) noexcept :
+__CDS_OptimalInline __BaseString <__CharType>::__BaseString (__OtherCharType const* pString, Size length) noexcept(false) :
     __BaseString (__BaseStringView <__OtherCharType> (pString, length)) {
 
 }
@@ -112,28 +112,28 @@ __CDS_OptimalInline __BaseString <__CharType>::__BaseString (__OtherCharType con
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 template <typename __OtherCharType, meta::EnableIf <meta::IsStringCharType <__OtherCharType>::value && !meta::IsSame <__OtherCharType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline __BaseString <__CharType>::__BaseString (__OtherCharType const* pString) noexcept :
+__CDS_OptimalInline __BaseString <__CharType>::__BaseString (__OtherCharType const* pString) noexcept(false) :
     __BaseString (__BaseStringView <__OtherCharType> (pString)) {
 
 }
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline __BaseString <__CharType>::__BaseString (std::basic_string <__CharType> const& string) noexcept :
+__CDS_OptimalInline __BaseString <__CharType>::__BaseString (std::basic_string <__CharType> const& string) noexcept(false) :
     __BaseString (__BaseStringView <__CharType> (string)) {
 
 }
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline __BaseString <__CharType>::__BaseString (Object const& object) noexcept :
+__CDS_OptimalInline __BaseString <__CharType>::__BaseString (Object const& object) noexcept(false) :
     __BaseString (__BaseStringView <__CharType> (object.toString())) {
 
 }
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__BaseString <__CharType>::__BaseString (Size length, ElementType fillCharacter) noexcept {
+__BaseString <__CharType>::__BaseString (Size length, ElementType fillCharacter) noexcept(false) {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   if (length == 0u) {
@@ -154,7 +154,7 @@ __BaseString <__CharType>::__BaseString (Size length, ElementType fillCharacter)
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 template <typename __OtherCharType, meta::EnableIf <meta::IsStringCharType <__OtherCharType>::value && !meta::IsSame <__OtherCharType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline __BaseString <__CharType>::__BaseString (Size length,__OtherCharType fillCharacter) noexcept :
+__CDS_OptimalInline __BaseString <__CharType>::__BaseString (Size length,__OtherCharType fillCharacter) noexcept(false) :
     __BaseString (length, static_cast <ElementType> (fillCharacter)) {
 
 }
@@ -162,7 +162,7 @@ __CDS_OptimalInline __BaseString <__CharType>::__BaseString (Size length,__Other
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 template <typename __IteratorType, meta::EnableIf <meta::IsIterator <__IteratorType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__BaseString <__CharType>::__BaseString (__IteratorType const& begin, __IteratorType const& end) noexcept {
+__BaseString <__CharType>::__BaseString (__IteratorType const& begin, __IteratorType const& end) noexcept(false) {
   for (auto iterator = begin; iterator != end; ++iterator) {
     append (static_cast <ElementType> (*iterator));
   }
@@ -170,7 +170,7 @@ __BaseString <__CharType>::__BaseString (__IteratorType const& begin, __Iterator
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__BaseString <__CharType>::__BaseString (std::initializer_list <ElementType> const& initializerList) noexcept :
+__BaseString <__CharType>::__BaseString (std::initializer_list <ElementType> const& initializerList) noexcept(false) :
     _capacity (maxOf (initializerList.size() + 1u, __BaseString::minCapacity)) {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   
@@ -187,7 +187,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __OtherCharType, meta::EnableIf <meta::IsStringCharType <__OtherCharType>::value&& !meta::IsSame <__OtherCharType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __BaseString <__CharType>::__BaseString (
     std::initializer_list <__OtherCharType> const& initializerList
-) noexcept :
+) noexcept(false) :
     _capacity (maxOf (initializerList.size() + 1u, __BaseString::minCapacity)) {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
@@ -202,7 +202,7 @@ __BaseString <__CharType>::__BaseString (
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 template <typename __TCharType, meta::EnableIf <meta::IsStringCharType <__TCharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline __BaseString <__CharType>::__BaseString (ElementType value) noexcept :
+__CDS_OptimalInline __BaseString <__CharType>::__BaseString (ElementType value) noexcept(false) :
     _length (1u),
     _capacity (__BaseString::minCapacity),
     _pBuffer (__allocation::__StringPrimitiveAlloc <__CharType>::__alloc (__BaseString::minCapacity)) {
@@ -214,7 +214,7 @@ __CDS_OptimalInline __BaseString <__CharType>::__BaseString (ElementType value) 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 template <typename __NumericType, meta::EnableIf <meta::IsIntegralToString <__CharType, __NumericType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__BaseString <__CharType>::__BaseString (__NumericType value) noexcept :
+__BaseString <__CharType>::__BaseString (__NumericType value) noexcept(false) :
     _capacity (__BaseString::minCapacity),
     _pBuffer (__allocation::__StringPrimitiveAlloc <__CharType>::__alloc (__BaseString::minCapacity)) {
       
@@ -224,7 +224,7 @@ __BaseString <__CharType>::__BaseString (__NumericType value) noexcept :
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__BaseString <__CharType>::__BaseString (bool value) noexcept :
+__BaseString <__CharType>::__BaseString (bool value) noexcept(false) :
     _capacity (__BaseString::minCapacity),
     _length (value ? 4ULL : 5ULL),
     _pBuffer (__allocation::__StringPrimitiveAlloc <__CharType>::__alloc (__BaseString::minCapacity)) {
@@ -235,16 +235,16 @@ __BaseString <__CharType>::__BaseString (bool value) noexcept :
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 template <typename __FloatingPointType, meta::EnableIf <meta::IsFloatingPoint <__FloatingPointType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline __BaseString <__CharType>::__BaseString (__FloatingPointType value) noexcept :
+__CDS_OptimalInline __BaseString <__CharType>::__BaseString (__FloatingPointType value) noexcept(false) :
     __BaseString (std::to_string (value)) {
 
 }
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 template <typename __AddressType, meta::EnableIf <!meta::IsStringCharType <__AddressType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline __BaseString <__CharType>::__BaseString (__AddressType const* address) noexcept {
+__CDS_OptimalInline __BaseString <__CharType>::__BaseString (__AddressType const* address) noexcept(false) {
   std::stringstream oss;
-  oss << "0x" << std::hex << reinterpret_cast <std::size_t> (address);
+  oss << address;
   *this = oss.str();
 }
 
@@ -347,7 +347,7 @@ constexpr auto __BaseString <__CharType>::capacity () const noexcept -> Size {
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-auto __BaseString <__CharType>::resize (Size size) noexcept -> void {
+auto __BaseString <__CharType>::resize (Size size) noexcept(false) -> void {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   size++;
@@ -366,7 +366,7 @@ auto __BaseString <__CharType>::resize (Size size) noexcept -> void {
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline auto __BaseString <__CharType>::reserve (Size size) noexcept -> void {
+__CDS_OptimalInline auto __BaseString <__CharType>::reserve (Size size) noexcept(false) -> void {
   if (size < _capacity) {
     return;
   }
@@ -378,7 +378,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::reserve (Size size) noexcept
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::shrink (
     Size size
-) noexcept -> void {
+) noexcept(false) -> void {
   if (size == limits::U64_MAX) {
     size = _length;
   }
@@ -525,7 +525,7 @@ __CDS_cpplang_ConstexprConditioned auto __BaseString <__CharType>::back () const
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline auto __BaseString <__CharType>::toStdString () const noexcept -> std::basic_string <__CharType> {
+__CDS_OptimalInline auto __BaseString <__CharType>::toStdString () const noexcept(false) -> std::basic_string <__CharType> {
   return std::basic_string <__CharType> (_pBuffer);
 }
 
@@ -543,7 +543,7 @@ __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString <__CharType>::da
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline __BaseString <__CharType>::operator std::basic_string <__CharType> () const noexcept {
+__CDS_OptimalInline __BaseString <__CharType>::operator std::basic_string <__CharType> () const noexcept(false) {
   return toStdString();
 }
 
@@ -564,7 +564,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 __CDS_OptimalInline auto __BaseString <__CharType>::substr (
     Index from,
     Index until
-) const noexcept -> __BaseString <__CharType> {
+) const noexcept(false) -> __BaseString <__CharType> {
   if (until == -1 || until > static_cast <Index> (size())) {
     until = static_cast <Index> (size());
   }
@@ -585,7 +585,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 __CDS_OptimalInline auto __BaseString <__CharType>::operator () (
     Index from,
     Index until
-) const noexcept -> __BaseString <__CharType> {
+) const noexcept(false) -> __BaseString <__CharType> {
   return substr (from, until);
 }
 
@@ -594,7 +594,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __ConvertibleType, meta::EnableIf <meta::IsConvertibleToBaseStringView <__ConvertibleType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator = ( // NOLINT(bugprone-unhandled-self-assignment) 
     __ConvertibleType&& string
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   return operator = (__BaseStringView <__CharType> (std::forward <__ConvertibleType> (string))); // NOLINT(misc-unconventional-assign-operator)
 }
 
@@ -602,7 +602,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::operator = ( // NOLINT(bugpr
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator = ( // NOLINT(bugprone-unhandled-self-assignment)
     __BaseString <__CharType> const& string
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   return operator = (__BaseStringView <__CharType> (string));
 }
 
@@ -628,7 +628,7 @@ __CDS_OptionalInline auto __BaseString <__CharType>::operator = (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::operator = (
     __BaseStringView <__CharType> const& string
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   if (_pBuffer == string.cStr()) {
@@ -657,7 +657,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __TCharType, meta::EnableIf <meta::IsStringCharType <__TCharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator = (
     ElementType character
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   _pBuffer = __Alloc::__enlarge (_pBuffer, _capacity, 2u, &_capacity);
@@ -672,7 +672,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __NumericType, meta::EnableIf <meta::IsIntegralToString <__CharType, __NumericType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::operator = (
     __NumericType value
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   auto valueLength = StringUtils <__CharType>::integerLength (value);
@@ -684,7 +684,7 @@ auto __BaseString <__CharType>::operator = (
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-auto __BaseString <__CharType>::operator = (bool value) noexcept -> __BaseString& {
+auto __BaseString <__CharType>::operator = (bool value) noexcept(false) -> __BaseString& {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   auto valueLength = value ? 4u : 5u;
@@ -698,7 +698,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __FloatingPointType, meta::EnableIf <meta::IsFloatingPoint <__FloatingPointType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator = (
     __FloatingPointType value
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   return operator = (std::to_string (value)); // NOLINT(misc-unconventional-assign-operator) 
 }
 
@@ -1074,7 +1074,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __ConvertibleType, meta::EnableIf <meta::IsConvertibleToBaseStringView <__ConvertibleType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator += (
     __ConvertibleType&& string
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   return append (__BaseStringView <__CharType> (std::forward <__ConvertibleType> (string)));
 }
 
@@ -1082,7 +1082,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::operator += (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator += (
     __BaseString&& string
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   return append (std::move (string));
 }
 
@@ -1090,7 +1090,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::operator += (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator += (
     __BaseStringView <__CharType> const& string
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   return append (string);
 }
 
@@ -1099,7 +1099,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __TCharType, meta::EnableIf <meta::IsStringCharType <__TCharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator += (
     ElementType character
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   return append (character);
 }
 
@@ -1108,7 +1108,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __NumericType, meta::EnableIf <meta::IsIntegralToString <__CharType, __NumericType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator += (
     __NumericType value
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   return append (value);
 }
 
@@ -1116,7 +1116,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::operator += (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator += (
     bool value
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   return append (value);
 }
 
@@ -1125,7 +1125,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __FloatingPointType, meta::EnableIf <meta::IsFloatingPoint <__FloatingPointType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator += (
     __FloatingPointType value
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   return append (value);
 }
 
@@ -1134,7 +1134,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __ConvertibleType, meta::EnableIf <meta::IsConvertibleToBaseStringView <__ConvertibleType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
     __ConvertibleType&& string
-) const& noexcept -> __BaseString {
+) const& noexcept(false) -> __BaseString {
   return __BaseStringView <__CharType> (*this) + __BaseStringView <__CharType> (std::forward <__ConvertibleType> (string));
 }
 
@@ -1142,7 +1142,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
     __BaseString&& string
-) const& noexcept -> __BaseString {
+) const& noexcept(false) -> __BaseString {
   __BaseString result;
   result.reserve (length() + string.length() + 1u);
   return result.append (*this).append (std::move (string));
@@ -1152,7 +1152,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
     __BaseStringView <__CharType> const& string
-) const& noexcept -> __BaseString {
+) const& noexcept(false) -> __BaseString {
   return __BaseStringView <__CharType> (*this) + string;
 }
 
@@ -1161,7 +1161,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __TCharType, meta::EnableIf <meta::IsStringCharType <__TCharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
     ElementType character
-) const& noexcept -> __BaseString {
+) const& noexcept(false) -> __BaseString {
   return __BaseStringView <__CharType> (*this) + character;
 }
 
@@ -1170,7 +1170,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __NumericType, meta::EnableIf <meta::IsIntegralToString <__CharType, __NumericType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
     __NumericType value
-) const& noexcept -> __BaseString {
+) const& noexcept(false) -> __BaseString {
   return __BaseStringView <__CharType> (*this) + value;
 }
 
@@ -1178,7 +1178,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
     bool value
-) const& noexcept -> __BaseString {
+) const& noexcept(false) -> __BaseString {
   return __BaseStringView <__CharType> (*this) + value;
 }
 
@@ -1187,7 +1187,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __FloatingPointType, meta::EnableIf <meta::IsFloatingPoint <__FloatingPointType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
     __FloatingPointType value
-) const& noexcept -> __BaseString {
+) const& noexcept(false) -> __BaseString {
   return __BaseStringView <__CharType> (*this) + value;
 }
 
@@ -1196,7 +1196,7 @@ template <typename __FCharType> // NOLINT(bugprone-reserved-identifier, cert-dcl
 __CDS_OptimalInline auto operator + (
     __BaseStringView <__FCharType> const& leftString,
     __BaseString <__FCharType> const&     rightString
-) noexcept -> __BaseString <__FCharType> {
+) noexcept(false) -> __BaseString <__FCharType> {
   return leftString + __BaseStringView <__FCharType> (rightString);
 }
 
@@ -1205,7 +1205,7 @@ template <typename __FCharType, typename __ConvertibleType, meta::EnableIf <meta
 __CDS_OptimalInline auto operator + (
     __ConvertibleType&&               leftString,
     __BaseString <__FCharType> const& rightString
-) noexcept -> __BaseString <__FCharType> {
+) noexcept(false) -> __BaseString <__FCharType> {
   return __BaseStringView <__FCharType> (std::forward <__ConvertibleType> (leftString)) + __BaseStringView <__FCharType> (rightString);
 }
 
@@ -1214,7 +1214,7 @@ template <typename __FCharType, meta::EnableIf <meta::IsStringCharType <__FCharT
 __CDS_OptimalInline auto operator + (
     __FCharType                       character,
     __BaseString <__FCharType> const& string
-) noexcept -> __BaseString <__FCharType> {
+) noexcept(false) -> __BaseString <__FCharType> {
   return character + __BaseStringView <__FCharType> (string);
 }
 
@@ -1223,7 +1223,7 @@ template <typename __FCharType, typename __NumericType, meta::EnableIf <meta::Is
 __CDS_OptimalInline auto operator + (
     __NumericType                     value,
     __BaseString <__FCharType> const& string
-) noexcept -> __BaseString <__FCharType> {
+) noexcept(false) -> __BaseString <__FCharType> {
   return value + __BaseStringView <__FCharType> (string);
 }
 
@@ -1232,7 +1232,7 @@ template <typename __FCharType> // NOLINT(bugprone-reserved-identifier, cert-dcl
 __CDS_OptimalInline auto operator + (
     bool                              value,
     __BaseString <__FCharType> const& string
-) noexcept -> __BaseString <__FCharType> {
+) noexcept(false) -> __BaseString <__FCharType> {
   return value + __BaseStringView <__FCharType> (string);
 }
 
@@ -1241,7 +1241,7 @@ template <typename __FCharType, typename __FloatingPointType, meta::EnableIf <me
 __CDS_OptimalInline auto operator + (
     __FloatingPointType               value,
     __BaseString <__FCharType> const& string
-) noexcept -> __BaseString <__FCharType> {
+) noexcept(false) -> __BaseString <__FCharType> {
   return value + __BaseStringView <__FCharType> (string);
 }
 
@@ -1250,7 +1250,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __ConvertibleType, meta::EnableIf <meta::IsConvertibleToBaseStringView <__ConvertibleType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
     __ConvertibleType&& string
-)&& noexcept -> __BaseString {
+)&& noexcept(false) -> __BaseString {
   return std::move (append ( __BaseStringView <__CharType> (std::forward <__ConvertibleType> (string))));
 }
 
@@ -1258,7 +1258,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
     __BaseString&& string
-)&& noexcept -> __BaseString {
+)&& noexcept(false) -> __BaseString {
   return std::move (append (std::move (string)));
 }
 
@@ -1266,7 +1266,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
     __BaseStringView <__CharType> const& string
-)&& noexcept -> __BaseString {
+)&& noexcept(false) -> __BaseString {
   return std::move (append (string));
 }
 
@@ -1275,7 +1275,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __TCharType, meta::EnableIf <meta::IsStringCharType <__TCharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
     ElementType character
-)&& noexcept -> __BaseString {
+)&& noexcept(false) -> __BaseString {
   return std::move (append (character));
 }
 
@@ -1284,7 +1284,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __NumericType, meta::EnableIf <meta::IsIntegralToString <__CharType, __NumericType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
     __NumericType value
-)&& noexcept -> __BaseString {
+)&& noexcept(false) -> __BaseString {
   return std::move (append (value));
 }
 
@@ -1292,7 +1292,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
     bool value
-)&& noexcept -> __BaseString {
+)&& noexcept(false) -> __BaseString {
   return std::move (append (value));
 }
 
@@ -1301,7 +1301,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __FloatingPointType, meta::EnableIf <meta::IsFloatingPoint <__FloatingPointType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::operator + (
     __FloatingPointType value
-)&& noexcept -> __BaseString {
+)&& noexcept(false) -> __BaseString {
   return std::move (append (value));
 }
 
@@ -1310,7 +1310,7 @@ template <typename __FCharType> // NOLINT(bugprone-reserved-identifier, cert-dcl
 __CDS_OptimalInline auto operator + (
     __BaseStringView <__FCharType> const& leftString,
     __BaseString <__FCharType>&&          rightString
-) noexcept -> __BaseString <__FCharType> {
+) noexcept(false) -> __BaseString <__FCharType> {
   return std::move (rightString.prepend (leftString));
 }
 
@@ -1319,7 +1319,7 @@ template <typename __FCharType, typename __ConvertibleType, meta::EnableIf <meta
 __CDS_OptimalInline auto operator + (
     __ConvertibleType&&           leftString,
     __BaseString <__FCharType>&&  rightString
-) noexcept -> __BaseString <__FCharType> {
+) noexcept(false) -> __BaseString <__FCharType> {
   return std::move (rightString.prepend (__BaseStringView <__FCharType> (std::forward <__ConvertibleType> (leftString))));
 }
 
@@ -1328,7 +1328,7 @@ template <typename __FCharType, meta::EnableIf <meta::IsStringCharType <__FCharT
 __CDS_OptimalInline auto operator + (
     __FCharType                   character,
     __BaseString <__FCharType>&&  string
-) noexcept -> __BaseString <__FCharType> {
+) noexcept(false) -> __BaseString <__FCharType> {
   return std::move (string.prepend (character));
 }
 
@@ -1337,7 +1337,7 @@ template <typename __FCharType, typename __NumericType, meta::EnableIf <meta::Is
 __CDS_OptimalInline auto operator + (
     __NumericType                 value,
     __BaseString <__FCharType>&&  string
-) noexcept -> __BaseString <__FCharType> {
+) noexcept(false) -> __BaseString <__FCharType> {
   return std::move (string.prepend (value));
 }
 
@@ -1346,7 +1346,7 @@ template <typename __FCharType> // NOLINT(bugprone-reserved-identifier, cert-dcl
 __CDS_OptimalInline auto operator + (
     bool                          value,
     __BaseString <__FCharType>&&  string
-) noexcept -> __BaseString <__FCharType> {
+) noexcept(false) -> __BaseString <__FCharType> {
   return std::move (string.prepend (value));
 }
 
@@ -1355,19 +1355,19 @@ template <typename __FCharType, typename __FloatingPointType, meta::EnableIf <me
 __CDS_OptimalInline auto operator + (
     __FloatingPointType           value,
     __BaseString <__FCharType>&&  string
-) noexcept -> __BaseString <__FCharType> {
+) noexcept(false) -> __BaseString <__FCharType> {
   return std::move (string.prepend (value));
 }
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline auto __BaseString <__CharType>::operator * (int count) const& noexcept -> __BaseString {
+__CDS_OptimalInline auto __BaseString <__CharType>::operator * (int count) const& noexcept(false) -> __BaseString {
   return __BaseStringView <__CharType> (*this) * count;
 }
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptionalInline auto __BaseString <__CharType>::operator * (int count)&& noexcept -> __BaseString {
+__CDS_OptionalInline auto __BaseString <__CharType>::operator * (int count)&& noexcept(false) -> __BaseString {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   if (empty() || count == 0) {
@@ -1395,7 +1395,7 @@ template <typename __FCharType> // NOLINT(bugprone-reserved-identifier, cert-dcl
 __CDS_OptimalInline auto operator * (
     int                               count,
     __BaseString <__FCharType> const& string
-) noexcept -> __BaseString <__FCharType> {
+) noexcept(false) -> __BaseString <__FCharType> {
   return count * __BaseStringView <__FCharType> (string);
 }
 
@@ -1404,7 +1404,7 @@ template <typename __FCharType> // NOLINT(bugprone-reserved-identifier, cert-dcl
 __CDS_OptionalInline auto operator * (
     int                           count,
     __BaseString <__FCharType>&&  string
-) noexcept -> __BaseString <__FCharType> {
+) noexcept(false) -> __BaseString <__FCharType> {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__FCharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   if (string.empty() || count == 0) {
@@ -1432,7 +1432,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __ConvertibleType, meta::EnableIf <meta::IsConvertibleToBaseStringView <__ConvertibleType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::append (
     __ConvertibleType&& string
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   return append (__BaseStringView <__CharType> (std::forward <__ConvertibleType> (string)));
 }
 
@@ -1440,7 +1440,7 @@ auto __BaseString <__CharType>::append (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::append (
     __BaseString&& string
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   if (empty() && string.empty()) {
@@ -1484,7 +1484,7 @@ auto __BaseString <__CharType>::append (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::append (
     __BaseStringView <__CharType> const& string
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   if (empty() && string.empty()) {
@@ -1501,7 +1501,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __TCharType, meta::EnableIf <meta::IsStringCharType <__TCharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::append (
     ElementType character
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   _pBuffer = __Alloc::__enlarge (_pBuffer, _capacity, _length + 2u, &_capacity);
@@ -1515,7 +1515,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __NumericType, meta::EnableIf <meta::IsIntegralToString <__CharType, __NumericType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::append (
     __NumericType value
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   auto numberLength = StringUtils <__CharType>::integerLength (value);
@@ -1529,7 +1529,7 @@ auto __BaseString <__CharType>::append (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::append (
     bool value
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   uint8 valueLength = (value ? 4u : 5u);
@@ -1543,7 +1543,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __FloatingPointType, meta::EnableIf <meta::IsFloatingPoint <__FloatingPointType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::append (
     __FloatingPointType value
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   return append (std::to_string (value));
 }
 
@@ -1552,7 +1552,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __ConvertibleType, meta::EnableIf <meta::IsConvertibleToBaseStringView <__ConvertibleType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::prepend (
     __ConvertibleType&& string
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   return prepend (__BaseStringView <__CharType> (std::forward <__ConvertibleType> (string)));
 }
 
@@ -1560,7 +1560,7 @@ auto __BaseString <__CharType>::prepend (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::prepend (
     __BaseString&& string
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   if (string.empty()) {
@@ -1582,7 +1582,7 @@ auto __BaseString <__CharType>::prepend (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::prepend (
     __BaseStringView <__CharType> const& string
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   if (string.empty()) {
@@ -1624,7 +1624,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __TCharType, meta::EnableIf <meta::IsStringCharType <__TCharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::prepend (
     ElementType character
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   _pBuffer = __Alloc::__enlarge (_pBuffer, _capacity, _length + 2u, &_capacity);
@@ -1645,7 +1645,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __NumericType, meta::EnableIf <meta::IsIntegralToString <__CharType, __NumericType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::prepend (
     __NumericType value
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   auto numberLength = StringUtils <__CharType>::integerLength (value);
@@ -1666,7 +1666,7 @@ auto __BaseString <__CharType>::prepend (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::prepend (
     bool value
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   auto valueLength = value ? 4u : 5u;
@@ -1688,7 +1688,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __FloatingPointType, meta::EnableIf <meta::IsFloatingPoint <__FloatingPointType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::prepend (
     __FloatingPointType value
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   return prepend (std::to_string (value));
 }
 
@@ -1705,7 +1705,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __ConvertibleType, meta::EnableIf <meta::IsConvertibleToBaseStringView <__ConvertibleType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_cpplang_ConstexprDynamicAllocation auto __BaseString <__CharType>::contains (
     __ConvertibleType&& string
-) const noexcept -> bool {
+) const noexcept(false) -> bool {
   return __BaseStringView <__CharType> (*this).contains (__BaseStringView <__CharType> (std::forward <__ConvertibleType> (string)));
 }
 
@@ -1713,7 +1713,7 @@ __CDS_cpplang_ConstexprDynamicAllocation auto __BaseString <__CharType>::contain
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_cpplang_ConstexprDynamicAllocation auto __BaseString <__CharType>::contains (
     __BaseStringView <__CharType> const& string
-) const noexcept -> bool {
+) const noexcept(false) -> bool {
   return __BaseStringView <__CharType> (*this).contains (string);
 }
 
@@ -1836,7 +1836,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::find (
     Size                      maxCount,
     ElementType               character,
     __CollectionType <Index>& storeIn
-) const noexcept -> __CollectionType <Index>& {
+) const noexcept(false) -> __CollectionType <Index>& {
   return __BaseStringView <__CharType> (*this).find (maxCount, character, storeIn);
 }
 
@@ -1846,7 +1846,7 @@ template < template < typename ... > class __CollectionType > // NOLINT(bugprone
 __CDS_OptimalInline auto __BaseString <__CharType>::find (
     Size                        maxCount,
     ElementType character
-) const noexcept -> __CollectionType <Index> {
+) const noexcept(false) -> __CollectionType <Index> {
   __CollectionType <Index> indices;
   return __BaseStringView <__CharType> (*this).find (maxCount, character, indices);
 }
@@ -1873,7 +1873,7 @@ template < template < typename ... > class __CollectionType > // NOLINT(bugprone
 __CDS_OptimalInline auto __BaseString <__CharType>::findAll (
     ElementType               character,
     __CollectionType <Index>& storeIn
-) const noexcept -> __CollectionType <Index>& {
+) const noexcept(false) -> __CollectionType <Index>& {
   return __BaseStringView <__CharType> (*this).findAll (character, storeIn);
 }
 
@@ -1882,7 +1882,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::findAll (
     ElementType character
-) const noexcept -> __CollectionType <Index> {
+) const noexcept(false) -> __CollectionType <Index> {
   __CollectionType <Index> indices;
   return __BaseStringView <__CharType> (*this).findAll (character, indices);
 }
@@ -1894,7 +1894,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::find (
     Size                      maxCount,
     __ConvertibleType&&       string,
     __CollectionType <Index>& storeIn
-) const noexcept -> __CollectionType <Index>& {
+) const noexcept(false) -> __CollectionType <Index>& {
   return __BaseStringView <__CharType> (*this).find (
       maxCount,
       __BaseStringView <__CharType> (std::forward <__ConvertibleType> (string)),
@@ -1908,7 +1908,7 @@ template <template <typename...> class __CollectionType, typename __ConvertibleT
 __CDS_OptimalInline auto __BaseString <__CharType>::find (
     Size                maxCount,
     __ConvertibleType&& string
-) const noexcept -> __CollectionType <Index> {
+) const noexcept(false) -> __CollectionType <Index> {
   __CollectionType <Index> indices;
   return __BaseStringView <__CharType> (*this).find (
       maxCount,
@@ -1922,7 +1922,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __ConvertibleType, meta::EnableIf <meta::IsConvertibleToBaseStringView <__ConvertibleType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_cpplang_ConstexprDynamicAllocation auto __BaseString <__CharType>::findFirst (
     __ConvertibleType&& string
-) const noexcept -> Index {
+) const noexcept(false) -> Index {
   return __BaseStringView <__CharType> (*this).findFirst (
       __BaseStringView <__CharType> (std::forward <__ConvertibleType> (string))
   );
@@ -1933,7 +1933,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __ConvertibleType, meta::EnableIf <meta::IsConvertibleToBaseStringView <__ConvertibleType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_cpplang_ConstexprDynamicAllocation auto __BaseString <__CharType>::findLast (
     __ConvertibleType&& string
-) const noexcept -> Index {
+) const noexcept(false) -> Index {
   return __BaseStringView <__CharType> (*this).findLast (
       __BaseStringView <__CharType> (std::forward <__ConvertibleType> (string))
   );
@@ -1945,7 +1945,7 @@ template <template <typename...> class __CollectionType, typename __ConvertibleT
 __CDS_OptimalInline auto __BaseString <__CharType>::findAll (
     __ConvertibleType&&       string,
     __CollectionType <Index>& storeIn
-) const noexcept -> __CollectionType <Index>& {
+) const noexcept(false) -> __CollectionType <Index>& {
   return __BaseStringView <__CharType> (*this).findAll (
       __BaseStringView <__CharType> (std::forward <__ConvertibleType> (string)),
       storeIn
@@ -1957,7 +1957,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <template <typename...> class __CollectionType, typename __ConvertibleType, meta::EnableIf <meta::IsConvertibleToBaseStringView <__ConvertibleType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::findAll (
     __ConvertibleType&& string
-) const noexcept -> __CollectionType <Index> {
+) const noexcept(false) -> __CollectionType <Index> {
   __CollectionType <Index> indices;
   return __BaseStringView <__CharType> (*this).findAll (
       __BaseStringView <__CharType> (std::forward <__ConvertibleType> (string)),
@@ -1972,7 +1972,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::findOf (
     Size                      maxCount,
     __ConvertibleType&&       string,
     __CollectionType <Index>& storeIn
-) const noexcept -> __CollectionType <Index>& {
+) const noexcept(false) -> __CollectionType <Index>& {
   return __BaseStringView <__CharType> (*this).findOf (
       maxCount,
       __BaseStringView <__CharType> (std::forward <__ConvertibleType> (string)),
@@ -1986,7 +1986,7 @@ template <template <typename...> class __CollectionType, typename __ConvertibleT
 __CDS_OptimalInline auto __BaseString <__CharType>::findOf (
     Size                maxCount,
     __ConvertibleType&& string
-) const noexcept -> __CollectionType <Index> {
+) const noexcept(false) -> __CollectionType <Index> {
   __CollectionType <Index> indices;
   return __BaseStringView <__CharType> (*this).findOf (
       maxCount,
@@ -2023,7 +2023,7 @@ template <template <typename...> class __CollectionType, typename __ConvertibleT
 __CDS_OptimalInline auto __BaseString <__CharType>::findAllOf (
     __ConvertibleType&&       string,
     __CollectionType <Index>& storeIn
-) const noexcept -> __CollectionType <Index>& {
+) const noexcept(false) -> __CollectionType <Index>& {
   return __BaseStringView <__CharType> (*this).findAllOf (
       __BaseStringView <__CharType> (std::forward <__ConvertibleType> (string)),
       storeIn
@@ -2035,7 +2035,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <template <typename...> class __CollectionType, typename __ConvertibleType, meta::EnableIf <meta::IsConvertibleToBaseStringView <__ConvertibleType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::findAllOf (
     __ConvertibleType&& string
-) const noexcept -> __CollectionType <Index> {
+) const noexcept(false) -> __CollectionType <Index> {
   __CollectionType <Index> indices;
   return __BaseStringView <__CharType> (*this).findAllOf (
       __BaseStringView <__CharType> (std::forward <__ConvertibleType> (string)),
@@ -2050,7 +2050,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::findNotOf (
     Size                      maxCount,
     __ConvertibleType&&       string,
     __CollectionType <Index>& storeIn
-) const noexcept -> __CollectionType <Index>& {
+) const noexcept(false) -> __CollectionType <Index>& {
   return __BaseStringView <__CharType> (*this).findNotOf (
       maxCount,
       __BaseStringView <__CharType> (std::forward <__ConvertibleType> (string)),
@@ -2064,7 +2064,7 @@ template <template <typename...> class __CollectionType, typename __ConvertibleT
 __CDS_OptimalInline auto __BaseString <__CharType>::findNotOf (
     Size                maxCount,
     __ConvertibleType&& string
-) const noexcept -> __CollectionType <Index> {
+) const noexcept(false) -> __CollectionType <Index> {
   __CollectionType <Index> indices;
   return __BaseStringView <__CharType> (*this).findNotOf (
       maxCount,
@@ -2101,7 +2101,7 @@ template <template <typename...> class __CollectionType, typename __ConvertibleT
 __CDS_OptimalInline auto __BaseString <__CharType>::findAllNotOf (
     __ConvertibleType&&       string,
     __CollectionType <Index>& storeIn
-) const noexcept -> __CollectionType <Index>& {
+) const noexcept(false) -> __CollectionType <Index>& {
   return __BaseStringView <__CharType> (*this).findAllNotOf (
       __BaseStringView <__CharType> (std::forward <__ConvertibleType> (string)),
       storeIn
@@ -2113,7 +2113,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <template <typename...> class __CollectionType, typename __ConvertibleType, meta::EnableIf <meta::IsConvertibleToBaseStringView <__ConvertibleType, __CharType>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::findAllNotOf (
     __ConvertibleType&& string
-) const noexcept -> __CollectionType <Index> {
+) const noexcept(false) -> __CollectionType <Index> {
   __CollectionType <Index> indices;
   return __BaseStringView <__CharType> (*this).findAllNotOf (
       __BaseStringView <__CharType> (std::forward <__ConvertibleType> (string)),
@@ -2128,7 +2128,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::find (
     Size                                  maxCount,
     __BaseStringView <__CharType> const&  string,
     __CollectionType <Index>&             storeIn
-) const noexcept -> __CollectionType <Index>& {
+) const noexcept(false) -> __CollectionType <Index>& {
   return __BaseStringView <__CharType> (*this).find (maxCount, string, storeIn);
 }
 
@@ -2138,7 +2138,7 @@ template < template < typename ... > class __CollectionType > // NOLINT(bugprone
 __CDS_OptimalInline auto __BaseString <__CharType>::find (
     Size                                  maxCount,
     __BaseStringView <__CharType> const&  string
-) const noexcept -> __CollectionType <Index> {
+) const noexcept(false) -> __CollectionType <Index> {
   __CollectionType <Index> indices;
   return __BaseStringView <__CharType> (*this).find (maxCount, string, indices);
 }
@@ -2147,7 +2147,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::find (
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_cpplang_ConstexprDynamicAllocation auto __BaseString <__CharType>::findFirst (
     __BaseStringView <__CharType> const& string
-) const noexcept -> Index {
+) const noexcept(false) -> Index {
   return __BaseStringView <__CharType> (*this).findFirst (string);
 }
 
@@ -2155,7 +2155,7 @@ __CDS_cpplang_ConstexprDynamicAllocation auto __BaseString <__CharType>::findFir
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_cpplang_ConstexprDynamicAllocation auto __BaseString <__CharType>::findLast (
     __BaseStringView <__CharType> const& string
-) const noexcept -> Index {
+) const noexcept(false) -> Index {
   return __BaseStringView <__CharType> (*this).findLast (string);
 }
 
@@ -2165,7 +2165,7 @@ template < template < typename ... > class __CollectionType > // NOLINT(bugprone
 __CDS_OptimalInline auto __BaseString <__CharType>::findAll (
     __BaseStringView <__CharType> const&  string,
     __CollectionType <Index>&             storeIn
-) const noexcept -> __CollectionType <Index>& {
+) const noexcept(false) -> __CollectionType <Index>& {
   return __BaseStringView <__CharType> (*this).findAll (string, storeIn);
 }
 
@@ -2174,7 +2174,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::findAll (
     __BaseStringView <__CharType> const& string
-) const noexcept -> __CollectionType <Index> {
+) const noexcept(false) -> __CollectionType <Index> {
   __CollectionType <Index> indices;
   return __BaseStringView <__CharType> (*this).findAll (string, indices);
 }
@@ -2186,7 +2186,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::findOf (
     Size                                  maxCount,
     __BaseStringView <__CharType> const&  string,
     __CollectionType <Index>&             storeIn
-) const noexcept -> __CollectionType <Index>& {
+) const noexcept(false) -> __CollectionType <Index>& {
   return __BaseStringView <__CharType> (*this).findOf (maxCount, string, storeIn);
 }
 
@@ -2196,7 +2196,7 @@ template < template < typename ... > class __CollectionType > // NOLINT(bugprone
 __CDS_OptimalInline auto __BaseString <__CharType>::findOf (
     Size                                  maxCount,
     __BaseStringView <__CharType> const&  string
-) const noexcept -> __CollectionType <Index> {
+) const noexcept(false) -> __CollectionType <Index> {
   __CollectionType <Index> indices;
   return __BaseStringView <__CharType> (*this).findOf (maxCount, string, indices);
 }
@@ -2223,7 +2223,7 @@ template < template < typename ... > class __CollectionType > // NOLINT(bugprone
 __CDS_OptimalInline auto __BaseString <__CharType>::findAllOf (
     __BaseStringView <__CharType> const&  string,
     __CollectionType <Index>&             storeIn
-) const noexcept -> __CollectionType <Index>& {
+) const noexcept(false) -> __CollectionType <Index>& {
   return __BaseStringView <__CharType> (*this).findAllOf (string, storeIn);
 }
 
@@ -2232,7 +2232,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::findAllOf (
     __BaseStringView <__CharType> const& string
-) const noexcept -> __CollectionType <Index> {
+) const noexcept(false) -> __CollectionType <Index> {
   __CollectionType <Index> indices;
   return __BaseStringView <__CharType> (*this).findAllOf (string, indices);
 }
@@ -2244,7 +2244,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::findNotOf (
     Size                                  maxCount,
     __BaseStringView <__CharType> const&  string,
     __CollectionType <Index>&             storeIn
-) const noexcept -> __CollectionType <Index>& {
+) const noexcept(false) -> __CollectionType <Index>& {
   return __BaseStringView <__CharType> (*this).findNotOf (maxCount, string, storeIn);
 }
 
@@ -2254,7 +2254,7 @@ template < template < typename ... > class __CollectionType > // NOLINT(bugprone
 __CDS_OptimalInline auto __BaseString <__CharType>::findNotOf (
     Size                                  maxCount,
     __BaseStringView <__CharType> const&  string
-) const noexcept -> __CollectionType <Index> {
+) const noexcept(false) -> __CollectionType <Index> {
   __CollectionType <Index> indices;
   return __BaseStringView <__CharType> (*this).findNotOf (maxCount, string, indices);
 }
@@ -2281,7 +2281,7 @@ template < template < typename ... > class __CollectionType > // NOLINT(bugprone
 __CDS_OptimalInline auto __BaseString <__CharType>::findAllNotOf (
     __BaseStringView <__CharType> const&  string,
     __CollectionType <Index>&             storeIn
-) const noexcept -> __CollectionType <Index>& {
+) const noexcept(false) -> __CollectionType <Index>& {
   return __BaseStringView <__CharType> (*this).findAllNotOf (string, storeIn);
 }
 
@@ -2290,7 +2290,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __BaseString <__CharType>::findAllNotOf (
     __BaseStringView <__CharType> const& string
-) const noexcept -> __CollectionType <Index> {
+) const noexcept(false) -> __CollectionType <Index> {
   __CollectionType <Index> indices;
   return __BaseStringView <__CharType> (*this).findAllNotOf (string, indices);
 }
@@ -2478,7 +2478,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::split (
     ElementType       separator,
     __CollectionType& storeIn,
     Size              maxCount
-) const noexcept -> __CollectionType& {
+) const noexcept(false) -> __CollectionType& {
   return __BaseStringView <__CharType> (*this).split (separator, storeIn, maxCount);
 }
 
@@ -2488,7 +2488,7 @@ template < template < typename ... > class __CollectionType > // NOLINT(bugprone
 __CDS_OptimalInline auto __BaseString <__CharType>::split (
     ElementType separator,
     Size        maxCount
-) const noexcept -> __CollectionType <__BaseString> {
+) const noexcept(false) -> __CollectionType <__BaseString> {
   __CollectionType <__BaseString> tokens;
   return __BaseStringView <__CharType> (*this).split (separator, tokens, maxCount);
 }
@@ -2500,7 +2500,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::split (
     __ConvertibleType&& separators,
     __CollectionType&   storeIn,
     Size                maxCount
-) const noexcept -> __CollectionType& {
+) const noexcept(false) -> __CollectionType& {
   return __BaseStringView <__CharType> (*this).split (
       __BaseStringView <__CharType> (std::forward <__ConvertibleType> (separators)),
       storeIn, maxCount
@@ -2513,7 +2513,7 @@ template <template <typename...> class __CollectionType, typename __ConvertibleT
 __CDS_OptimalInline auto __BaseString <__CharType>::split (
     __ConvertibleType&& separators,
     Size                maxCount
-) const noexcept -> __CollectionType <__BaseString> {
+) const noexcept(false) -> __CollectionType <__BaseString> {
   __CollectionType <__BaseString> tokens;
   return __BaseStringView <__CharType> (*this).split (
       __BaseStringView <__CharType> (std::forward <__ConvertibleType> (separators)),
@@ -2528,7 +2528,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::split (
     __BaseStringView <__CharType> const&  separators,
     __CollectionType&                     storeIn,
     Size                                  maxCount
-) const noexcept -> __CollectionType& {
+) const noexcept(false) -> __CollectionType& {
   return __BaseStringView <__CharType> (*this).split (separators, storeIn, maxCount);
 }
 
@@ -2538,7 +2538,7 @@ template < template < typename ... > class __CollectionType > // NOLINT(bugprone
 __CDS_OptimalInline auto __BaseString <__CharType>::split (
     __BaseStringView <__CharType> const&  separators,
     Size                                  maxCount
-) const noexcept -> __CollectionType <__BaseString> {
+) const noexcept(false) -> __CollectionType <__BaseString> {
   __CollectionType <__BaseString> tokens;
   return __BaseStringView <__CharType> (*this).split (__BaseStringView <__CharType> (separators), tokens, maxCount);
 }
@@ -2550,7 +2550,7 @@ __CDS_MaybeUnused __CDS_OptimalInline auto __BaseString <__CharType>::splitByStr
     __ConvertibleType&& separator,
     __CollectionType&   storeIn,
     Size                maxCount
-) const noexcept -> __CollectionType& {
+) const noexcept(false) -> __CollectionType& {
   return __BaseStringView <__CharType> (*this).splitByString (
       __BaseStringView <__CharType> (std::forward <__ConvertibleType> (separator)),
       storeIn, maxCount
@@ -2563,7 +2563,7 @@ template <template <typename...> class __CollectionType, typename __ConvertibleT
 __CDS_MaybeUnused __CDS_OptimalInline auto __BaseString <__CharType>::splitByString (
     __ConvertibleType&& separator,
     Size                maxCount
-) const noexcept -> __CollectionType <__BaseString> {
+) const noexcept(false) -> __CollectionType <__BaseString> {
   __CollectionType <__BaseString> tokens;
   return __BaseStringView <__CharType> (*this).splitByString (
       __BaseStringView <__CharType> (std::forward <__ConvertibleType> (separator)),
@@ -2578,7 +2578,7 @@ __CDS_MaybeUnused __CDS_OptimalInline auto __BaseString <__CharType>::splitByStr
     __BaseStringView <__CharType> const&  separator,
     __CollectionType&                     storeIn,
     Size                                  maxCount
-) const noexcept -> __CollectionType& {
+) const noexcept(false) -> __CollectionType& {
   return __BaseStringView <__CharType> (*this).splitByString (separator, storeIn, maxCount);
 }
 
@@ -2588,7 +2588,7 @@ template < template < typename ... > class __CollectionType > // NOLINT(bugprone
 __CDS_MaybeUnused __CDS_OptimalInline auto __BaseString <__CharType>::splitByString (
     __BaseStringView <__CharType> const&  separator,
     Size                                  maxCount
-) const noexcept -> __CollectionType <__BaseString> {
+) const noexcept(false) -> __CollectionType <__BaseString> {
   __CollectionType <__BaseString> tokens;
   return __BaseStringView <__CharType> (*this).splitByString (separator, tokens, maxCount);
 }
@@ -2601,7 +2601,7 @@ __CDS_cpplang_ConstexprOverride auto __BaseString <__CharType>::hash () const no
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline auto __BaseString <__CharType>::toString () const noexcept -> cds::String {
+__CDS_OptimalInline auto __BaseString <__CharType>::toString () const noexcept(false) -> cds::String {
   return cds::String (cStr());
 }
 
@@ -2745,7 +2745,7 @@ template <template <typename...> class __CollectionType, typename __ConvertibleT
 __CDS_OptimalInline auto __BaseString <__CharType>::join (
     __CollectionType <__BaseString> const&  tokens,
     __ConvertibleType&&                     delimiter
-) noexcept -> __BaseString {
+) noexcept(false) -> __BaseString {
   return __BaseString::join (tokens, __BaseStringView <__CharType> (std::forward <__ConvertibleType> (delimiter)));
 }
 
@@ -2755,7 +2755,7 @@ template < template < typename ... > class __CollectionType > // NOLINT(bugprone
 __CDS_OptimalInline auto __BaseString <__CharType>::join (
     __CollectionType <__BaseString> const&  tokens,
     __BaseStringView <__CharType> const&    delimiter
-) noexcept -> __BaseString {
+) noexcept(false) -> __BaseString {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   __BaseString <__CharType> result;
@@ -2792,7 +2792,7 @@ template < template < typename ... > class __CollectionType > // NOLINT(bugprone
 __CDS_OptimalInline auto __BaseString <__CharType>::join (
     __CollectionType <__BaseString> const&  tokens,
     ElementType                             delimiter
-) noexcept -> __BaseString {
+) noexcept(false) -> __BaseString {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   __BaseString <__CharType> result;
@@ -2829,7 +2829,7 @@ __CDS_OptionalInline auto __BaseString <__CharType>::replace (
     Index               from,
     Index               until,
     __ConvertibleType&& inPlace
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   return replace (from, until, __BaseStringView <__CharType> (std::forward <__ConvertibleType> (inPlace )));
 }
 
@@ -2839,7 +2839,7 @@ __CDS_OptionalInline auto __BaseString <__CharType>::replace (
     Index                                from,
     Index                                until,
     __BaseStringView <__CharType> const& inPlace
-) noexcept -> __BaseString& {
+) noexcept(false) -> __BaseString& {
   using __Alloc = __allocation::__StringPrimitiveAlloc <__CharType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   if (from < 0) {

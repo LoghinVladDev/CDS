@@ -32,7 +32,7 @@ __CDS_cpplang_VirtualConstexpr auto Map <__KeyType, __ValueType>::AbstractEntryM
 
 
 template <typename __KeyType, typename __ValueType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__CDS_OptimalInline auto Map <__KeyType, __ValueType>::AbstractEntryMutableCollectionProxy::toString () const noexcept -> String {
+__CDS_OptimalInline auto Map <__KeyType, __ValueType>::AbstractEntryMutableCollectionProxy::toString () const noexcept(false) -> String {
   return map()->toString();
 }
 

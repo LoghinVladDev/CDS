@@ -89,8 +89,8 @@ public:
   __CDS_DeprecatedHint("'MapEntry::getSecond' is deprecated. Use 'MapEntry::value' instead")
   __CDS_Deprecated __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto getSecond () noexcept -> ValueType&;
 
-  __CDS_NoDiscard auto toString () const noexcept -> String;
-  __CDS_NoDiscard __CDS_Implicit operator String () const noexcept;   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes, *-explicit-*)
+  __CDS_NoDiscard auto toString () const noexcept(false) -> String;
+  __CDS_NoDiscard __CDS_Implicit operator String () const noexcept(false);   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes, *-explicit-*)
 
   template <typename __TKeyType, typename __TValueType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   friend auto operator << (

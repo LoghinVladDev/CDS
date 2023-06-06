@@ -294,7 +294,7 @@ namespace cds {
     __CDS_OptimalInline auto StaticArray <
             __ElementType,
             __size
-    > :: toString () const noexcept -> String {
+    > :: toString () const noexcept(false) -> String {
         /* List represented by values enclosed in square brackets. If Empty, return bracket set */
         if ( __size == 0ULL ) {
             return {"[]"};

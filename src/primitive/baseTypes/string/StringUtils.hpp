@@ -215,21 +215,21 @@ public:
       Size                      toBeFoundLength,
       Size                      maxCount,
       __CollectionType <Index>& storeIn
-  ) noexcept -> __CollectionType <Index>&;
+  ) noexcept(false) -> __CollectionType <Index>&;
 
   __CDS_cpplang_ConstexprDynamicAllocation static auto findFirst (
       ElementType const*  pSource,
       Size                sourceLength,
       ElementType const*  toBeFound,
       Size                toBeFoundLength
-  ) noexcept -> Index;
+  ) noexcept(false) -> Index;
 
   __CDS_cpplang_ConstexprDynamicAllocation static auto findLast (
       ElementType const*  pSource,
       Size                sourceLength,
       ElementType const*  toBeFound,
       Size                toBeFoundLength
-  ) noexcept -> Index;
+  ) noexcept(false) -> Index;
 
   template <template <typename...> class __CollectionType>   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   static auto findAll (
@@ -238,7 +238,7 @@ public:
       ElementType const*        toBeFound,
       Size                      toBeFoundLength,
       __CollectionType <Index>& storeIn
-  ) noexcept -> __CollectionType <Index>&;
+  ) noexcept(false) -> __CollectionType <Index>&;
 
   static auto findAll (
       ElementType const*  pSource,
@@ -247,7 +247,7 @@ public:
       Size                toBeFoundLength,
       Index*              pIndices,
       Size                maxIndexCount
-  ) noexcept -> Size;
+  ) noexcept(false) -> Size;
 
   __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto contains (   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, misc-non-private-member-variables-in-classes)
       ElementType const*  pBuffer,

@@ -22,7 +22,7 @@ struct __StringPrimitiveAlloc : __PrimitiveAlloc <__CharType> { // NOLINT(bugpro
       Size        previousCapacity,     // NOLINT(bugprone-easily-swappable-parameters)
       Size        nextCapacity,
       Size*       pStoreNewCapacity
-  ) noexcept -> __CharType* {
+  ) noexcept(false) -> __CharType* {
     if (previousCapacity >= nextCapacity) {
       return pBuffer;
     }
@@ -419,7 +419,7 @@ inline auto StringUtils <__CharType>::find (
     Size                      toBeFoundLength,
     Size                      maxCount,
     __CollectionType <Index>& storeIn
-) noexcept -> __CollectionType <Index>& {
+) noexcept(false) -> __CollectionType <Index>& {
   using __Alloc = __hidden::__impl::__allocation::__PrimitiveAlloc <Index>; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   auto pLPSArray = __Alloc::__alloc (toBeFoundLength);
@@ -465,7 +465,7 @@ __CDS_cpplang_ConstexprDynamicAllocation auto StringUtils <__CharType>::findFirs
     Size                sourceLength,
     ElementType const*  pToBeFound,
     Size                toBeFoundLength
-) noexcept -> Index {
+) noexcept(false) -> Index {
   using __Alloc = __hidden::__impl::__allocation::__PrimitiveAlloc <Index>; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   auto pLPSArray = __Alloc::__alloc(toBeFoundLength);
@@ -506,7 +506,7 @@ __CDS_cpplang_ConstexprDynamicAllocation auto StringUtils <__CharType>::findLast
     Size                sourceLength,
     ElementType const*  pToBeFound,
     Size                toBeFoundLength
-) noexcept -> Index {
+) noexcept(false) -> Index {
   using __Alloc = __hidden::__impl::__allocation::__PrimitiveAlloc <Index>; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   auto pLPSArray = __Alloc::__alloc (toBeFoundLength);
@@ -549,7 +549,7 @@ inline auto StringUtils <__CharType>::findAll (
     ElementType const*        pToBeFound,
     Size                      toBeFoundLength,
     __CollectionType <Index>& storeIn
-) noexcept -> __CollectionType <Index>& {
+) noexcept(false) -> __CollectionType <Index>& {
   using __Alloc = __hidden::__impl::__allocation::__PrimitiveAlloc <Index>; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   auto pLPSArray = __Alloc::__alloc (toBeFoundLength);
@@ -591,7 +591,7 @@ inline auto StringUtils <__CharType>::findAll (
     Size                toBeFoundLength,
     Index*              pIndices,
     Size                maxIndexCount
-) noexcept -> Size {
+) noexcept(false) -> Size {
   using __Alloc = __hidden::__impl::__allocation::__PrimitiveAlloc <Index>; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   auto pLPSArray = __Alloc::__alloc (toBeFoundLength);
