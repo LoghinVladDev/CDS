@@ -12,6 +12,10 @@
 #include <CDS/Limits>
 #include <CDS/meta/TypeTraits>
 
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
+#include <bit>
+#endif
+
 namespace cds {
 template <typename __Type, typename __SmartPointer> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto copy (__Type const& object) noexcept(false) -> __SmartPointer {
