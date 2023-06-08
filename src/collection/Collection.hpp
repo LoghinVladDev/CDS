@@ -466,8 +466,8 @@ protected:
 
 } // namespace cds
 
-#include "../shared/iterableInternalCommunication/client/primitive/impl/ConstIteratorRemovePrimitiveClient.hpp"
-#include "../shared/iterableInternalCommunication/client/primitive/impl/RandomInsertionPrimitiveClient.hpp"
+#include "../shared/iterableInternalCommunication/client/primitive/impl/ConstIteratorRemovePrimitiveClientImpl.hpp"
+#include "../shared/iterableInternalCommunication/client/primitive/impl/RandomInsertionPrimitiveClientImpl.hpp"
 
 #include "../shared/iterableInternalCommunication/client/composite/impl/RemoveOfCompositeClient.hpp"            // NOLINT(llvm-include-order)
 #include "../shared/iterableInternalCommunication/client/composite/impl/RemoveByCompositeClient.hpp"

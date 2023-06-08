@@ -120,9 +120,9 @@ protected:
 #include "map/MapAbstractValueMutableCollectionProxy.hpp"
 #include "map/MapAbstractEntryMutableCollectionProxy.hpp"
 
-#include "../../../shared/iterableInternalCommunication/client/primitive/impl/FindUniqueMutablePrimitiveClient.hpp"       // NOLINT(llvm-include-order)
-#include "../../../shared/iterableInternalCommunication/client/primitive/impl/FindUniqueImmutablePrimitiveClient.hpp"
-#include "../../../shared/iterableInternalCommunication/server/impl/MutableCollectionServer.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/FindUniqueMutablePrimitiveClientImpl.hpp"       // NOLINT(llvm-include-order)
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/FindUniqueImmutablePrimitiveClientImpl.hpp"
+#include "../../../shared/iterableInternalCommunication/server/impl/MutableCollectionServerImpl.hpp"
 
 #include "map/entry/impl/MapEntryImpl.hpp"
 

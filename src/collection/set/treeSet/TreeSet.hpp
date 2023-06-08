@@ -228,11 +228,11 @@ private:
   using Implementation::__rbt_equals;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler (         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      cds::__hidden::__impl::__IterableInternalRequestType requestType
+      cds::__hidden::__impl::__IterableInternalRequest requestType
   ) noexcept -> __GenericHandler override;
   
   __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler (        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      cds::__hidden::__impl::__IterableInternalRequestType requestType
+      cds::__hidden::__impl::__IterableInternalRequest requestType
   ) const noexcept -> __GenericConstHandler override;
 };
 }
@@ -243,10 +243,10 @@ private:
 
 #include "../../../shared/iterator/impl/RedBlackTreeIterator.hpp"
 
-#include "../../../shared/iterableInternalCommunication/server/impl/SetServer.hpp"
-#include "../../../shared/iterableInternalCommunication/server/impl/TreeSetServerDispatcher.hpp"
+#include "../../../shared/iterableInternalCommunication/server/impl/SetServerImpl.hpp"
+#include "../../../shared/iterableInternalCommunication/server/impl/TreeSetServerDispatcherImpl.hpp"
 
-#include "../../../shared/iterableInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClientImpl.hpp"
 
 #include "treeSet/impl/TreeSetImpl.hpp"
 #include "treeSet/impl/TreeSetCTAD.hpp"

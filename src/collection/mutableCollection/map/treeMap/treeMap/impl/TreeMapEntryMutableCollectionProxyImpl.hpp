@@ -8,7 +8,7 @@
 namespace cds {
 template <typename __KeyType, typename __ValueType, typename __Comparator>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_cpplang_ConstexprOverride auto TreeMap <__KeyType, __ValueType, __Comparator>::EntryMutableCollectionProxy::__iicch_obtainGenericHandler (         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    cds::__hidden::__impl::__IterableInternalRequestType requestType
+    cds::__hidden::__impl::__IterableInternalRequest requestType
 ) noexcept -> __GenericHandler {
   return __mcs_handlers() [ static_cast <uint32> (requestType)];
 }
@@ -16,7 +16,7 @@ __CDS_cpplang_ConstexprOverride auto TreeMap <__KeyType, __ValueType, __Comparat
 
 template <typename __KeyType, typename __ValueType, typename __Comparator>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_cpplang_ConstexprOverride auto TreeMap <__KeyType, __ValueType, __Comparator>::EntryMutableCollectionProxy::__iicch_obtainGenericConstHandler (         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    cds::__hidden::__impl::__IterableInternalRequestType requestType
+    cds::__hidden::__impl::__IterableInternalRequest requestType
 ) const noexcept -> __GenericConstHandler {
   return __mcs_constHandlers() [static_cast <uint32> (requestType)];
 }

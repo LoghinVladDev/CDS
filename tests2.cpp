@@ -13,8 +13,20 @@ using ConvertibleToStdOstreamRef =
     cds::meta::Bind <cds::meta::IsConvertible, cds::meta::Ph<1>, std::ostream&>::Type<T>;
 
 #include <CDS/LinkedHashSet>
+#include <unordered_map>
 
 int main () {
+  std::unordered_map<int, int> res {{1, 1}, {2, 2}, {3, 3}};
+  auto i = res.begin();
+  while (i != res.end()) {
+    if (i->first %2 == 1) {
+      res.erase(i);
+    } else {
+      ++ i;
+    }
+  }
+
+  std::erase_if(res, [](auto p){return p.first % 2 == 1;});
 std::cout << cds::String("test") << '\n';
 std::cout << cds::String("test") << '\n';
 std::cout << cds::String("test") << '\n';

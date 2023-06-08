@@ -345,11 +345,11 @@ private:
   EntryMutableCollectionProxy _entryMutableCollectionProxy;
 
   __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler ( // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      __hidden::__impl::__IterableInternalRequestType requestType
+      __hidden::__impl::__IterableInternalRequest requestType
   ) noexcept -> __GenericHandler override;
 
   __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler (    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      __hidden::__impl::__IterableInternalRequestType requestType
+      __hidden::__impl::__IterableInternalRequest requestType
   ) const noexcept -> __GenericConstHandler override;
 
   auto entryAt (
@@ -376,9 +376,9 @@ private:
 
 #include "../../../../shared/hashTable/impl/HashTableImpl.hpp"
 
-#include "../../../../shared/iterableInternalCommunication/server/impl/SetServer.hpp"             // NOLINT(llvm-include-order)
-#include "../../../../shared/iterableInternalCommunication/server/impl/MapServer.hpp"
-#include "../../../../shared/iterableInternalCommunication/server/impl/MapServerDispatcher.hpp"
+#include "../../../../shared/iterableInternalCommunication/server/impl/SetServerImpl.hpp"             // NOLINT(llvm-include-order)
+#include "../../../../shared/iterableInternalCommunication/server/impl/MapServerImpl.hpp"
+#include "../../../../shared/iterableInternalCommunication/server/impl/MapServerDispatcherImpl.hpp"
 
 #include "hashMap/impl/HashMapImpl.hpp"                                                                 // NOLINT(llvm-include-order)
 #include "hashMap/impl/HashMapCTAD.hpp"

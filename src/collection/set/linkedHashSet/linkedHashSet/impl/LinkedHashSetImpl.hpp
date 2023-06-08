@@ -10,7 +10,7 @@ namespace cds {
 
 template <typename __ElementType, typename __Hasher> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_cpplang_ConstexprOverride auto LinkedHashSet <__ElementType, __Hasher>::__iicch_obtainGenericHandler (
-    __hidden::__impl::__IterableInternalRequestType requestType
+    __hidden::__impl::__IterableInternalRequest requestType
 ) noexcept -> __GenericHandler {
   return __ss_handlers() [static_cast <uint32> (requestType)];
 }
@@ -18,7 +18,7 @@ __CDS_cpplang_ConstexprOverride auto LinkedHashSet <__ElementType, __Hasher>::__
 
 template <typename __ElementType, typename __Hasher> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_cpplang_ConstexprOverride auto LinkedHashSet <__ElementType, __Hasher>::__iicch_obtainGenericConstHandler (
-    __hidden::__impl::__IterableInternalRequestType requestType
+    __hidden::__impl::__IterableInternalRequest requestType
 ) const noexcept -> __GenericConstHandler {
   return __ss_constHandlers() [static_cast <uint32> (requestType)];
 }

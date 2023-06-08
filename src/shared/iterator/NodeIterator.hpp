@@ -203,7 +203,7 @@ public:
   ///
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \public
-  __CDS_NoDiscard __CDS_Explicit constexpr operator bool() const noexcept; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp,///-non-private-member-variables-in-classes)
+  __CDS_NoDiscard __CDS_Explicit constexpr operator bool() const noexcept; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp,*-non-private-member-variables-in-classes)
 
 private:
   /// \brief Partial Pre-Declaration of __SingleLinkedList, as it requires private values
@@ -295,7 +295,7 @@ public:
   ///
   /// \test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
   /// \public
-  __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp,///-non-private-member-variables-in-classes)
+  __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp,*-non-private-member-variables-in-classes)
 
 protected:
   /// \brief Default Constructor, constexpr

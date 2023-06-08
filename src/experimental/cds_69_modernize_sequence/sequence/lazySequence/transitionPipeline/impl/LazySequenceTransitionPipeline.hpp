@@ -18,7 +18,7 @@ namespace cds {
                     __Mapper,
                     __MapperResult
             > :: __iicch_obtainGenericHandler (
-                    __IterableInternalRequestType requestType
+                    __IterableInternalRequest requestType
             ) noexcept -> __GenericHandler {
 
                 return this->__is_handlers () [static_cast < uint32 > (requestType)];
@@ -34,7 +34,7 @@ namespace cds {
                     __Mapper,
                     __MapperResult
             > :: __iicch_obtainGenericConstHandler (
-                    __IterableInternalRequestType requestType
+                    __IterableInternalRequest requestType
             ) const noexcept -> __GenericConstHandler {
 
                 return this->__is_constHandlers () [static_cast < uint32 > (requestType)];

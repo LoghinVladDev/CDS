@@ -1034,12 +1034,12 @@ protected:
 
 #include "../../../shared/delegateIterator/impl/BidirectionalDelegateWrapperIterator.hpp"
 
-#include "../../../shared/iterableInternalCommunication/client/primitive/impl/DelegateBackwardIterablePrimitiveClient.hpp"            // NOLINT(llvm-include-order)
-#include "../../../shared/iterableInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
-#include "../../../shared/iterableInternalCommunication/client/primitive/impl/IteratorRelativeInsertionPrimitiveClient.hpp"
-#include "../../../shared/iterableInternalCommunication/client/primitive/impl/ConstIteratorRelativeInsertionPrimitiveClient.hpp"
-#include "../../../shared/iterableInternalCommunication/client/primitive/impl/BoundaryInsertionPrimitiveClient.hpp"
-#include "../../../shared/iterableInternalCommunication/client/primitive/impl/IndexedOperationsPrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/DelegateBackwardIterablePrimitiveClientImpl.hpp"            // NOLINT(llvm-include-order)
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClientImpl.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/IteratorRelativeInsertionPrimitiveClientImpl.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/ConstIteratorRelativeInsertionPrimitiveClientImpl.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/BoundaryInsertionPrimitiveClientImpl.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/IndexedOperationsPrimitiveClientImpl.hpp"
 
 #include "../../../shared/iterableInternalCommunication/client/composite/impl/ReplaceCompositeClient.hpp"                             // NOLINT(llvm-include-order)
 #include "../../../shared/iterableInternalCommunication/client/composite/impl/ReplaceOfCompositeClient.hpp"

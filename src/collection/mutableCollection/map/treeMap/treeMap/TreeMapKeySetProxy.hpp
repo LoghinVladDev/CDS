@@ -324,11 +324,11 @@ private:
   using AbstractMapProxy::map;
 
   __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler (         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      __hidden::__impl::__IterableInternalRequestType requestType
+      __hidden::__impl::__IterableInternalRequest requestType
   ) noexcept -> __GenericHandler override;
 
   __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler (        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      __hidden::__impl::__IterableInternalRequestType requestType
+      __hidden::__impl::__IterableInternalRequest requestType
   ) const noexcept -> __GenericConstHandler override;
 
   __CDS_NoDiscard constexpr static auto __cbegin (  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)

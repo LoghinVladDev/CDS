@@ -754,8 +754,8 @@ protected:
 
 #include "mutableCollection/impl/MutableCollectionImpl.hpp"
 
-#include "../../shared/iterableInternalCommunication/client/primitive/impl/DelegateForwardIterablePrimitiveClient.hpp"
-#include "../../shared/iterableInternalCommunication/client/primitive/impl/IteratorRemovePrimitiveClient.hpp"
+#include "../../shared/iterableInternalCommunication/client/primitive/impl/DelegateForwardIterablePrimitiveClientImpl.hpp"
+#include "../../shared/iterableInternalCommunication/client/primitive/impl/IteratorRemovePrimitiveClientImpl.hpp"
 
 #include "../../shared/iterableInternalCommunication/client/composite/impl/GenericMutableStatementsCompositeClient.hpp" // NOLINT(llvm-include-order)
 #include "../../shared/iterableInternalCommunication/client/composite/impl/FindOfMutableCompositeClient.hpp"

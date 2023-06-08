@@ -37,7 +37,7 @@ namespace cds {
 
 } /* namespace cds */
 
-#include "../../shared/iterableInternalCommunication/server/impl/IterableServer.hpp"
+#include "../../shared/iterableInternalCommunication/server/impl/IterableServerImpl.hpp"
 
 #include "sequence/lazySequence/transitionPipeline/impl/ConstIterator.hpp"
 #include "sequence/lazySequence/transitionPipeline/impl/LazySequenceTransitionPipeline.hpp"

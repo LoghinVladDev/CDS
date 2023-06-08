@@ -8,6 +8,7 @@
 
 #include <CDS/Object>                                                                                                   // NOLINT(llvm-header-guard)
 #include <CDS/FunctionalInterface>
+#include <CDS/Utility>
 
 #include "../shared/memory/PrimitiveAllocation.hpp"
 
@@ -649,9 +650,9 @@ protected:
 
 #include "../shared/delegateIterator/impl/ForwardDelegateWrapperIterator.hpp"                                               // NOLINT(llvm-header-guard)
 
-#include "../shared/iterableInternalCommunication/channel/impl/IterableInternalCommunicationChannel.hpp"
+#include "../shared/iterableInternalCommunication/channel/impl/IterableInternalCommunicationChannelImpl.hpp"
 
-#include "../shared/iterableInternalCommunication/client/primitive/impl/DelegateForwardConstIterablePrimitiveClient.hpp"    // NOLINT(llvm-header-guard)
+#include "../shared/iterableInternalCommunication/client/primitive/impl/DelegateForwardConstIterablePrimitiveClientImpl.hpp"    // NOLINT(llvm-header-guard)
 
 #include "../shared/iterableInternalCommunication/client/composite/impl/ContainsOfCompositeClient.hpp"
 #include "../shared/iterableInternalCommunication/client/composite/impl/FindOfImmutableCompositeClient.hpp"                 // NOLINT(llvm-header-guard)

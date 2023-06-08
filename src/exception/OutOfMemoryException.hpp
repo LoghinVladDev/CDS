@@ -12,9 +12,18 @@ namespace cds {
 class OutOfMemoryException : public Exception {
 public:
   using Exception::Exception;
+  __CDS_Explicit OutOfMemoryException(std::bad_alloc const& stdExcept) noexcept : _pStdExcept(&stdExcept) {}
+
   __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto message() const noexcept -> StringView override {
+    if (_pStdExcept != nullptr) {
+      return _pStdExcept->what();
+    }
+
     return "Out of Heap Memory";
   }
+
+private:
+  std::bad_alloc const* _pStdExcept {nullptr};
 };
 } // namespace cds
 

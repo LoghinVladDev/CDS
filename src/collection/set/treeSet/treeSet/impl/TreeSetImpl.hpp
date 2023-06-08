@@ -9,7 +9,7 @@
 namespace cds {
 template <typename __ElementType, typename __Comparator>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_cpplang_ConstexprOverride auto TreeSet <__ElementType, __Comparator>::__iicch_obtainGenericHandler (
-    cds::__hidden::__impl::__IterableInternalRequestType requestType
+    cds::__hidden::__impl::__IterableInternalRequest requestType
 ) noexcept -> __GenericHandler {
   return __ss_handlers() [static_cast <uint32> (requestType)];
 }
@@ -17,7 +17,7 @@ __CDS_cpplang_ConstexprOverride auto TreeSet <__ElementType, __Comparator>::__ii
 
 template <typename __ElementType, typename __Comparator>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_cpplang_ConstexprOverride auto TreeSet <__ElementType, __Comparator>::__iicch_obtainGenericConstHandler (   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    cds::__hidden::__impl::__IterableInternalRequestType requestType
+    cds::__hidden::__impl::__IterableInternalRequest requestType
 ) const noexcept -> __GenericConstHandler {
   return __ss_constHandlers() [static_cast <uint32> (requestType)];
 }

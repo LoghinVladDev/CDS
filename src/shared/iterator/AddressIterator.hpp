@@ -121,7 +121,7 @@ public:
   /// \test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
   /// \test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
   /// \public
-  __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp,///-non-private-member-variables-in-classes)
+  __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp,*-non-private-member-variables-in-classes)
 
   /// \brief Default Constructor, constexpr
   /// \exceptsafe
@@ -173,7 +173,7 @@ protected:
   /// \return Address = Address to absolute memory
   /// \test Suite: LTS-00001, Group: LTG-00400-RI, Test Cases: All
   /// \private
-  __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto absoluteBefore () const noexcept -> Address = 0;    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp,///-non-private-member-variables-in-classes)
+  __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto absoluteBefore () const noexcept -> Address = 0;    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp,*-non-private-member-variables-in-classes)
 
   /// \brief Function used to return the address after from an absolute point of view, as if forward iterator.
   /// Used in insertion after/before functions

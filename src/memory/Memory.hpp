@@ -154,10 +154,14 @@ namespace cds {
         }
 
         template < typename T, typename ... ArgumentTypes >
-        inline auto create ( ArgumentTypes && ... arguments ) noexcept ( noexcept ( T ( std :: forward < ArgumentTypes > ( arguments ) ... ) ) ) -> T * {
+        inline auto create ( ArgumentTypes && ... arguments ) noexcept (false) -> T * {
 
     #if defined(__CDS_Memory_ForceDisable)
-            return new T ( std :: forward < ArgumentTypes > ( arguments ) ... );
+          try {
+            return new T(std::forward<ArgumentTypes>(arguments) ...);
+          } catch (std::bad_alloc const& exception) {
+            throw OutOfMemoryException(exception);
+          }
     #else
             if ( this->pAllocator == nullptr ) {
                 return new T ( std :: forward < ArgumentTypes && > ( arguments ) ... );
@@ -169,10 +173,14 @@ namespace cds {
         }
 
         template < typename T >
-        inline auto createArray ( Size size ) noexcept ( noexcept ( T () ) ) -> T * {
+        inline auto createArray ( Size size ) noexcept(false) -> T * {
 
     #if defined(__CDS_Memory_ForceDisable)
+          try {
             return new T[size];
+          } catch (std::bad_alloc const& exception) {
+            throw OutOfMemoryException(exception);
+          }
     #else
             if ( this->pAllocator == nullptr ) {
                 return new T [size];

@@ -456,11 +456,11 @@ private:
   using Implementation::__ab_copy;    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler ( // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      __hidden::__impl::__IterableInternalRequestType requestType
+      __hidden::__impl::__IterableInternalRequest requestType
   ) noexcept -> __GenericHandler override;
 
   __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler ( // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      __hidden::__impl::__IterableInternalRequestType requestType
+      __hidden::__impl::__IterableInternalRequest requestType
   ) const noexcept -> __GenericConstHandler override;
 };
 
@@ -476,8 +476,8 @@ private:
 #include "../../../../shared/delegateIterator/impl/AbstractDelegateIterator.hpp"
 #include "../../../../shared/delegateIterator/impl/DelegateIterator.hpp"
 
-#include "../../../../shared/iterableInternalCommunication/server/impl/ListServer.hpp"
-#include "../../../../shared/iterableInternalCommunication/server/impl/ListServerDispatcher.hpp"
+#include "../../../../shared/iterableInternalCommunication/server/impl/ListServerImpl.hpp"
+#include "../../../../shared/iterableInternalCommunication/server/impl/ListServerDispatcherImpl.hpp"
 
 #include "../../../../shared/array/impl/ArraySequence.hpp"
 

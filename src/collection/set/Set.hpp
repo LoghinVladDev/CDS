@@ -152,7 +152,7 @@ protected:
 
 } // namespace cds
 
-#include "../../shared/iterableInternalCommunication/client/primitive/impl/FindUniqueImmutablePrimitiveClient.hpp"
+#include "../../shared/iterableInternalCommunication/client/primitive/impl/FindUniqueImmutablePrimitiveClientImpl.hpp"
 
 #include "set/impl/SetImpl.hpp"
 

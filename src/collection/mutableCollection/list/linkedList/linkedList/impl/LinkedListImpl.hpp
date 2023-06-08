@@ -9,7 +9,7 @@
 namespace cds {
 template <typename __ElementType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_cpplang_ConstexprOverride auto LinkedList <__ElementType>::__iicch_obtainGenericHandler (
-    __hidden::__impl::__IterableInternalRequestType requestType
+    __hidden::__impl::__IterableInternalRequest requestType
 ) noexcept -> __GenericHandler {
   return __ls_handlers() [static_cast <uint32> (requestType)];
 }
@@ -17,7 +17,7 @@ __CDS_cpplang_ConstexprOverride auto LinkedList <__ElementType>::__iicch_obtainG
 
 template <typename __ElementType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_cpplang_ConstexprOverride auto LinkedList <__ElementType>::__iicch_obtainGenericConstHandler (
-    __hidden::__impl::__IterableInternalRequestType requestType
+    __hidden::__impl::__IterableInternalRequest requestType
 ) const noexcept -> __GenericConstHandler {
   return __ls_constHandlers() [static_cast <uint32> (requestType)];
 }

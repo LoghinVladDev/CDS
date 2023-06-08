@@ -12,7 +12,7 @@ namespace cds {
             __ElementType,
             __size
     > :: __iicch_obtainGenericHandler (
-            __hidden :: __impl :: __IterableInternalRequestType requestType
+            __hidden :: __impl :: __IterableInternalRequest requestType
     ) noexcept -> __GenericHandler {
 
         return this->__is_handlers () [static_cast <uint32> (requestType)];
@@ -24,7 +24,7 @@ namespace cds {
             __ElementType,
             __size
     > :: __iicch_obtainGenericConstHandler (
-            __hidden :: __impl :: __IterableInternalRequestType requestType
+            __hidden :: __impl :: __IterableInternalRequest requestType
     ) const noexcept -> __GenericConstHandler {
 
         return this->__is_constHandlers () [static_cast <uint32> (requestType)];

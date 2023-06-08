@@ -38,7 +38,7 @@ namespace __impl { // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dc
 /// \brief Integral Constant implementation container structure
 /// \tparam __IntegralType is the type of the Integral Constant
 /// \tparam __value is the value of the Integral Constant
-template <typename __IntegralType, __IntegralType __value, typename = void> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+template <typename __IntegralType, __IntegralType __value> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 struct __IntegralConstant {                                                 // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   /// value of the integral constant
   constexpr static __IntegralType const value = __value;
@@ -59,6 +59,54 @@ struct __TrueType : __BoolConstant <true> {}; // NOLINT(bugprone-reserved-identi
 
 /// \brief False Bool Constant implementation container structure
 struct __FalseType : __BoolConstant <false> {}; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+/// \brief Meta-type implementation used to choose between two types based on a given condition
+/// \tparam __TIfTrue is the type to save if condition is true
+/// \tparam __TIfFalse is the type to save if condition is false
+template <bool, typename __TIfTrue, typename>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __Conditional {                              // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  /// by default, save the type intended for the true case
+  using Type = __TIfTrue;
+};
+
+template <typename __TIfTrue, typename __TIfFalse> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __Conditional <false, __TIfTrue, __TIfFalse> {
+  /// if given condition is false, save the type intended for the false case
+  using Type = __TIfFalse;
+};
+
+namespace __integralHelpers { // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+template <typename __T, typename = void>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsCdsIntegral : __FalseType {};    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T, typename = void>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsStdIntegral : __FalseType {};    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsCdsIntegral <__T, Void <typename __T::ValueType>> : __TrueType {};
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsStdIntegral <__T, Void <typename __T::value_type>> : __TrueType {};
+
+template <typename __T, bool = __IsCdsIntegral <__T>::value, bool = __IsStdIntegral <__T>::value> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __ConvertedIntegral {  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using ValueType = void;
+  using Type = void;
+};
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __ConvertedIntegral <__T, true, false> : __T {};
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __ConvertedIntegral <__T, false, true> {
+  using ValueType = typename __T::value_type;
+  constexpr static ValueType const value = __T::value;
+  using Type = __IntegralConstant <ValueType, value>;
+};
+} // namespace __integralHelpers
+
+template <typename __WrappedIntegral> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __Integral : __integralHelpers::__ConvertedIntegral <__WrappedIntegral> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
 namespace __andImpl {                                                               // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 template <typename __FirstIntegralType, typename ... __RemainingIntegralTypes>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
@@ -98,21 +146,6 @@ template <typename __ReplacedType>    // NOLINT(bugprone-reserved-identifier, ce
 struct __EnableIf <true, __ReplacedType> {
   /// on true, save type. If false, no type is saved
   using Type = __ReplacedType;
-};
-
-/// \brief Meta-type implementation used to choose between two types based on a given condition
-/// \tparam __TIfTrue is the type to save if condition is true
-/// \tparam __TIfFalse is the type to save if condition is false
-template <bool, typename __TIfTrue, typename>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-struct __Conditional {                              // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-  /// by default, save the type intended for the true case
-  using Type = __TIfTrue;
-};
-
-template <typename __TIfTrue, typename __TIfFalse> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-struct __Conditional <false, __TIfTrue, __TIfFalse> {
-  /// if given condition is false, save the type intended for the false case
-  using Type = __TIfFalse;
 };
 
 /// \brief Meta-type implementation used to acquire the non-const type corresponding the current type
@@ -268,6 +301,30 @@ struct __IsCopyConstructible : __BoolConstant <std::is_copy_constructible <__T>:
 /// \tparam __T is the type checked
 template <typename __T>                                                                           // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 struct __IsTriviallyCopyable : __BoolConstant <std::is_trivially_copyable <__T>::value> {}; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T, typename...__Args>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsTriviallyConstructible : __Integral <std::is_trivially_constructible<__T, __Args...>> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T, typename __Param> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsTriviallyAssignable : __Integral <std::is_trivially_assignable<__T, __Param>> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsTriviallyDestructible : __Integral <std::is_trivially_destructible<__T>> {}; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsTriviallyDefaultConstructible : __Integral <std::is_trivially_default_constructible<__T>> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsTriviallyCopyConstructible : __Integral <std::is_trivially_copy_constructible<__T>> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsTriviallyMoveConstructible : __Integral <std::is_trivially_move_constructible<__T>> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsTriviallyCopyAssignable : __Integral <std::is_trivially_copy_assignable<__T>> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsTriviallyMoveAssignable : __Integral <std::is_trivially_move_assignable<__T>> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
 /// \brief Meta-type implementation used to check if a given type can be constructed by move ( has move constructor )
 /// \tparam __T is the type checked
@@ -864,7 +921,34 @@ constexpr auto isTriviallyCopyable () noexcept -> bool {
 }
 
 template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct Integral : __impl::__Integral <__T> {};
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 struct IsTriviallyCopyable : __impl::__IsTriviallyCopyable <__T> {};
+
+template <typename __T, typename...__Args> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct IsTriviallyConstructible : __impl::__IsTriviallyConstructible <__T, __Args...> {};
+
+template <typename __T, typename __Arg> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct IsTriviallyAssignable : __impl::__IsTriviallyAssignable <__T, __Arg> {};
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct IsTriviallyDestructible : __impl::__IsTriviallyDestructible <__T> {};
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct IsTriviallyDefaultConstructible : __impl::__IsTriviallyDefaultConstructible <__T> {};
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct IsTriviallyCopyConstructible : __impl::__IsTriviallyCopyConstructible <__T> {};
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct IsTriviallyMoveConstructible : __impl::__IsTriviallyMoveConstructible <__T> {};
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct IsTriviallyCopyAssignable : __impl::__IsTriviallyCopyAssignable <__T> {};
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct IsTriviallyMoveAssignable : __impl::__IsTriviallyMoveAssignable <__T> {};
 
 /// \brief Meta-function used to check if a given type can be constructed by copy ( has copy constructor )
 /// \tparam __T is the type checked
