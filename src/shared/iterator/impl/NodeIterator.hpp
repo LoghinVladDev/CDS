@@ -179,10 +179,10 @@ constexpr auto AbstractBidirectionalNodeIterator <__ElementType>::operator == (
 ) const noexcept -> bool {
   // Iterators are equal if both have current nodes valid and equal OR null current nodes and equal previous nodes ( end of list or null ) 
   return
-      _pCurrentNode     == iterator._pCurrentNode &&
-      _pCurrentNode     != nullptr ||
-      _pCurrentNode     == iterator._pCurrentNode &&
-      _pPreviousNode    == iterator._pPreviousNode;
+      (_pCurrentNode     == iterator._pCurrentNode &&
+      _pCurrentNode     != nullptr) ||
+      (_pCurrentNode     == iterator._pCurrentNode &&
+      _pPreviousNode    == iterator._pPreviousNode);
 }
 
 

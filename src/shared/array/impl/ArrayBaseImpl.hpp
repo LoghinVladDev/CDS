@@ -416,7 +416,7 @@ template <
       _pData == nullptr           ||
       pElement < _pData->_pFront  ||
       pElement >= _pData->_pBack  ||
-      isReverse && iterator.current() == _pData->_pBack
+      (isReverse && iterator.current() == _pData->_pBack)
   ) {
     return nullptr;
   }
@@ -452,7 +452,7 @@ template <
       _pData == nullptr           ||
       pElement < _pData->_pFront  ||
       pElement >= _pData->_pBack  ||
-      isReverse && iterator.current() == _pData->_pBack
+      (isReverse && iterator.current() == _pData->_pBack)
   ) {
     return nullptr;
   }
@@ -553,7 +553,7 @@ template <
       _pData == nullptr           ||
       pElement < _pData->_pFront  ||
       pElement >= _pData->_pBack  ||
-      isReverse && iterator.current() == _pData->_pBack
+      (isReverse && iterator.current() == _pData->_pBack)
   ) {
     return false;
   }
@@ -595,7 +595,7 @@ template <
       _pData == nullptr           ||
       pElement < _pData->_pFront  ||
       pElement >= _pData->_pBack  ||
-      isReverse && iterator.current() == _pData->_pBack
+      (isReverse && iterator.current() == _pData->_pBack)
   ) {
     return false;
   }

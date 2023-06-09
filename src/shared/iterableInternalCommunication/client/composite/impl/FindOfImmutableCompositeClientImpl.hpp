@@ -70,7 +70,7 @@ template <
 >::findFirstOf (__FromIterable const& from) const noexcept(itNoexcept) -> ConstIterator {
   auto const* pIterable = static_cast <__Iterable const*>(this);
   // Call base, global implementation. Abstracts the 'is object const' requirement
-  return __findFirstOf <__Element, ConstIterator, __FromIterable, __containsFunction> (
+  return __findFirstOf <itNoexcept, __Element, ConstIterator, __FromIterable, __containsFunction> (
       pIterable->cbegin(), pIterable->cend(), from
   );
 }
@@ -90,7 +90,7 @@ template <
 >::findLastOf (__FromIterable const& from) const noexcept(itNoexcept) -> ConstIterator {
   auto const* pIterable = static_cast <__Iterable const*>(this);
   // Call base, global implementation. Abstracts the 'is object const' requirement
-  return __findLastOf <__Element, ConstIterator, __FromIterable, __containsFunction> (
+  return __findLastOf <itNoexcept, __Element, ConstIterator, __FromIterable, __containsFunction> (
       pIterable->cbegin(), pIterable->cend(), from
   );
 }
@@ -202,7 +202,7 @@ template <
 >::findFirstNotOf (__FromIterable const& from) const noexcept(itNoexcept) -> ConstIterator {
   auto const* pIterable = static_cast <__Iterable const*>(this);
   // Call base, global implementation. Abstracts the 'is object const' requirement
-  return __findFirstOf <__Element, ConstIterator, __FromIterable, __notContainsFunction> (
+  return __findFirstOf <itNoexcept, __Element, ConstIterator, __FromIterable, __notContainsFunction> (
       pIterable->cbegin(), pIterable->cend(), from
   );
 }
@@ -222,7 +222,7 @@ template <
 >::findLastNotOf (__FromIterable const& from) const noexcept(itNoexcept) -> ConstIterator {
   auto const* pIterable = static_cast <__Iterable const*>(this);
   // Call base, global implementation. Abstracts the 'is object const' requirement
-  return __findLastOf <__Element, ConstIterator, __FromIterable, __notContainsFunction> (
+  return __findLastOf <itNoexcept, __Element, ConstIterator, __FromIterable, __notContainsFunction> (
       pIterable->cbegin(), pIterable->cend(), from
   );
 }

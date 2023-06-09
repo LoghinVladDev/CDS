@@ -271,7 +271,7 @@ private:
 
 #include "../../../shared/hashTable/impl/HashTableImpl.hpp"
 
-#include "../../../shared/iterator/impl/HashTableIterator.hpp"
+#include "../../../shared/iterator/impl/HashTableIteratorImpl.hpp"
 
 #include "../../../shared/iterableInternalCommunication/server/impl/SetServerImpl.hpp"
 #include "../../../shared/iterableInternalCommunication/server/impl/SetServerDispatcherImpl.hpp"

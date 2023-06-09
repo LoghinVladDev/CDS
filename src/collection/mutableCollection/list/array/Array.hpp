@@ -471,7 +471,7 @@ private:
 #include "../../../../shared/array/impl/ArrayBaseImpl.hpp"
 
 #include "../../../../shared/iterator/impl/IteratorSort.hpp"                                            // NOLINT(llvm-include-order)
-#include "../../../../shared/iterator/impl/AddressIterator.hpp"
+#include "../../../../shared/iterator/impl/AddressIteratorImpl.hpp"
 
 #include "../../../../shared/delegateIterator/impl/AbstractDelegateIterator.hpp"
 #include "../../../../shared/delegateIterator/impl/DelegateIterator.hpp"

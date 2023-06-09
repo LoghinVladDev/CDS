@@ -783,7 +783,7 @@ template <
   if (
       iterator._bucketIndex >= iterator._bucketCount ||
       iterator._pListArray == nullptr ||
-      iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr
+      (iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr)
   ) {
     // if index out of bounds, or iterator list does not exist, or node values are null, cannot remove due to invalid iterator
     return false;
@@ -808,7 +808,7 @@ template <
   if (
       iterator._bucketIndex >= iterator._bucketCount ||
       iterator._pListArray == nullptr ||
-      iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr
+      (iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr)
   ) {
     // if index out of bounds, or iterator list does not exist, or node values are null, cannot remove due to invalid iterator
     return false;
@@ -1077,8 +1077,8 @@ template <
   }
 
   // store the previous and current values used in initialization
-  __NodeType const* pPrevious  = nullptr;
-  __NodeType const* pCurrent   = _pBucketArray [bucketIndex];
+  __NodeType* pPrevious  = nullptr;
+  __NodeType* pCurrent   = _pBucketArray [bucketIndex];
 
   // while bucket has elements
   while (pCurrent != nullptr) {

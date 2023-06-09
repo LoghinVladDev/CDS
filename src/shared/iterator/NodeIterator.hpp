@@ -6,6 +6,7 @@
 #define __CDS_SHARED_NODE_ITERATOR_HPP__ // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
 #include "IteratorModel.hpp"
+#include "NodeIteratorTraits.hpp"
 
 namespace cds {       // NOLINT(modernize-concat-nested-namespaces)
 namespace __hidden {  // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
@@ -31,28 +32,6 @@ template <
     typename __ElementType, // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__ElementType const&, __ElementType const&>
 > class __DoubleLinkedList; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-
-template <
-    template <typename...> class  __NodeType,     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    typename                      __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    bool = cds::meta::IsConst <__ElementType>::value
-> struct __NodeIteratorTraits {};                 // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-
-template <
-    template <typename...> class __NodeType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    typename __ElementType                    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-> struct __NodeIteratorTraits <__NodeType, __ElementType, true> {
-  using Node = __NodeType <cds::meta::RemoveConst<__ElementType>>;
-  using RVal = __ElementType;
-};
-
-template <
-    template <typename...> class __NodeType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    typename __ElementType                    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-> struct __NodeIteratorTraits <__NodeType, __ElementType, false> {
-  using Node = __NodeType <__ElementType>;
-  using RVal = __ElementType;
-};
 } // namespace __impl
 } // namespace __hidden
 

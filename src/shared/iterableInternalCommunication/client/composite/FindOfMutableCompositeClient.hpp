@@ -322,6 +322,6 @@ template <
 } // namespace __hidden
 } // namespace cds
 
-#include "../../../iterator/impl/IteratorFind.hpp"
+#include "../../../iterator/impl/IteratorFindImpl.hpp"
 
 #endif // __CDS_SHARED_FIND_OF_MUTABLE_COMPOSITE_CLIENT_HPP__

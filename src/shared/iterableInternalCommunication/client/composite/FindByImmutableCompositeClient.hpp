@@ -217,7 +217,7 @@ class __CDS_InheritsEBOs __LocalFindByImmutableCompositeClient :        // NOLIN
 } // namespace __hidden
 } // namespace cds
 
-#include "../../../iterator/impl/IteratorFindStatements.hpp"        // NOLINT(llvm-include-order)
-#include "../../../iterator/impl/IteratorFindMemberStatements.hpp"
+#include "../../../iterator/impl/IteratorFindStatementsImpl.hpp"        // NOLINT(llvm-include-order)
+#include "../../../iterator/impl/IteratorFindMemberStatementsImpl.hpp"
 
 #endif // __CDS_SHARED_FIND_BY_IMMUTABLE_COMPOSITE_CLIENT_HPP__

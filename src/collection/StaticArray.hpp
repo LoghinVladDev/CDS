@@ -749,7 +749,7 @@ namespace cds {
 
 } /* namespace cds */
 
-#include "../shared/iterator/impl/AddressIterator.hpp"
+#include "../shared/iterator/impl/AddressIteratorImpl.hpp"
 
 #include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceCompositeClientImpl.hpp" /* NOLINT(llvm-include-order) */
 #include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceOfCompositeClientImpl.hpp"

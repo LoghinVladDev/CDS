@@ -31,6 +31,6 @@ using WideStringView    __CDS_MaybeUnused   = __hidden::__impl::__BaseStringView
 } // namespace cds
 
 #include "string/BaseString.hpp"    // NOLINT(llvm-include-order) 
-#include "../../shared/iterator/impl/AddressIterator.hpp"
+#include "../../shared/iterator/impl/AddressIteratorImpl.hpp"
 
 #endif // __CDS_STRING_HPP__ 

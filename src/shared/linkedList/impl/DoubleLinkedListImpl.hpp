@@ -546,20 +546,20 @@ template <
       (_pFront == iterator._pPreviousNode && iterator._pCurrentNode == nullptr) ||
       (iterator._pCurrentNode != nullptr && iterator._pCurrentNode->_pNext == iterator._pPreviousNode);
 
-  if (__dll_empty() || iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr) {
+  if (__dll_empty() || (iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr)) {
     return nullptr;
   }
 
   if (
-      !reversed && iterator._pCurrentNode == _pFront && iterator._pPreviousNode == nullptr ||
-      reversed && iterator._pPreviousNode == _pFront && iterator._pCurrentNode == nullptr
+      (!reversed && iterator._pCurrentNode == _pFront && iterator._pPreviousNode == nullptr) ||
+      (reversed && iterator._pPreviousNode == _pFront && iterator._pCurrentNode == nullptr)
   ) {
     return __dll_newFront ();
   }
 
   if (
-      !reversed && iterator._pCurrentNode == nullptr && iterator._pPreviousNode == _pBack ||
-      reversed && iterator._pPreviousNode == nullptr && iterator._pCurrentNode == _pBack
+      (!reversed && iterator._pCurrentNode == nullptr && iterator._pPreviousNode == _pBack) ||
+      (reversed && iterator._pPreviousNode == nullptr && iterator._pCurrentNode == _pBack)
   ) {
     return __dll_newBack ();
   }
@@ -580,20 +580,20 @@ template <
       (_pFront == iterator._pPreviousNode && iterator._pCurrentNode == nullptr) ||
       (iterator._pCurrentNode != nullptr && iterator._pCurrentNode->_pNext == iterator._pPreviousNode);
 
-  if (__dll_empty() || iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr) {
+  if (__dll_empty() || (iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr)) {
     return nullptr;
   }
 
   if (
-      !reversed && iterator._pCurrentNode == _pFront && iterator._pPreviousNode == nullptr ||
-      reversed && iterator._pPreviousNode == _pFront && iterator._pCurrentNode == nullptr
+      (!reversed && iterator._pCurrentNode == _pFront && iterator._pPreviousNode == nullptr) ||
+      (reversed && iterator._pPreviousNode == _pFront && iterator._pCurrentNode == nullptr)
   ) {
     return __dll_newFront ();
   }
 
   if (
-      !reversed && iterator._pCurrentNode == nullptr && iterator._pPreviousNode == _pBack ||
-      reversed && iterator._pPreviousNode == nullptr && iterator._pCurrentNode == _pBack
+      (!reversed && iterator._pCurrentNode == nullptr && iterator._pPreviousNode == _pBack) ||
+      (reversed && iterator._pPreviousNode == nullptr && iterator._pCurrentNode == _pBack)
   ) {
     return __dll_newBack ();
   }
@@ -616,9 +616,9 @@ template <
 
   if (
       __dll_empty() ||
-      iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr ||
-      !reversed && iterator._pCurrentNode == nullptr ||
-      reversed && iterator._pCurrentNode == nullptr
+      (iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr) ||
+      (!reversed && iterator._pCurrentNode == nullptr) ||
+      (reversed && iterator._pCurrentNode == nullptr)
   ) {
     return nullptr;
   }
@@ -649,9 +649,9 @@ template <
 
   if (
       __dll_empty() ||
-      iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr ||
-      !reversed && iterator._pCurrentNode == nullptr ||
-      reversed && iterator._pCurrentNode == nullptr
+      (iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr) ||
+      (!reversed && iterator._pCurrentNode == nullptr) ||
+      (reversed && iterator._pCurrentNode == nullptr)
   ) {
     return nullptr;
   }
@@ -682,18 +682,18 @@ template <
       (_pFront == iterator._pPreviousNode && iterator._pCurrentNode == nullptr) ||
       (iterator._pCurrentNode != nullptr && iterator._pCurrentNode->_pNext == iterator._pPreviousNode);
 
-  if (__dll_empty() || iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr) {
+  if (__dll_empty() || (iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr)) {
     return false;
   }
 
   if (
-      !reversed && iterator._pCurrentNode == _pFront && iterator._pPreviousNode == nullptr ||
-      reversed && iterator._pPreviousNode == _pFront && iterator._pCurrentNode == nullptr
+      (!reversed && iterator._pCurrentNode == _pFront && iterator._pPreviousNode == nullptr) ||
+      (reversed && iterator._pPreviousNode == _pFront && iterator._pCurrentNode == nullptr)
   ) {
     __dll_newFrontArray (count, ppElements);
   } else if (
-      !reversed && iterator._pCurrentNode == nullptr && iterator._pPreviousNode == _pBack ||
-      reversed && iterator._pPreviousNode == nullptr && iterator._pCurrentNode == _pBack
+      (!reversed && iterator._pCurrentNode == nullptr && iterator._pPreviousNode == _pBack) ||
+      (reversed && iterator._pPreviousNode == nullptr && iterator._pCurrentNode == _pBack)
   ) {
     __dll_newBackArray (count, ppElements);
   } else {
@@ -718,18 +718,18 @@ template <
       (_pFront == iterator._pPreviousNode && iterator._pCurrentNode == nullptr) ||
       (iterator._pCurrentNode != nullptr && iterator._pCurrentNode->_pNext == iterator._pPreviousNode);
 
-  if (__dll_empty() || iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr) {
+  if (__dll_empty() || (iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr)) {
     return false;
   }
 
   if (
-      !reversed && iterator._pCurrentNode == _pFront && iterator._pPreviousNode == nullptr ||
-      reversed && iterator._pPreviousNode == _pFront && iterator._pCurrentNode == nullptr
+      (!reversed && iterator._pCurrentNode == _pFront && iterator._pPreviousNode == nullptr) ||
+      (reversed && iterator._pPreviousNode == _pFront && iterator._pCurrentNode == nullptr)
   ) {
     __dll_newFrontArray (count, ppElements);
   } else if (
-      !reversed && iterator._pCurrentNode == nullptr && iterator._pPreviousNode == _pBack ||
-      reversed && iterator._pPreviousNode == nullptr && iterator._pCurrentNode == _pBack
+      (!reversed && iterator._pCurrentNode == nullptr && iterator._pPreviousNode == _pBack) ||
+      (reversed && iterator._pPreviousNode == nullptr && iterator._pCurrentNode == _pBack)
   ) {
     __dll_newBackArray (count, ppElements);
   } else {
@@ -756,9 +756,9 @@ template <
 
   if (
       __dll_empty() ||
-      iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr ||
-      !reversed && iterator._pCurrentNode == nullptr ||
-      reversed && iterator._pCurrentNode == nullptr
+      (iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr) ||
+      (!reversed && iterator._pCurrentNode == nullptr) ||
+      (reversed && iterator._pCurrentNode == nullptr)
   ) {
     return false;
   }
@@ -794,9 +794,9 @@ template <
 
   if (
       __dll_empty() ||
-      iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr ||
-      !reversed && iterator._pCurrentNode == nullptr ||
-      reversed && iterator._pCurrentNode == nullptr
+      (iterator._pCurrentNode == nullptr && iterator._pPreviousNode == nullptr) ||
+      (!reversed && iterator._pCurrentNode == nullptr) ||
+      (reversed && iterator._pCurrentNode == nullptr)
   ) {
     return false;
   }

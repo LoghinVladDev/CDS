@@ -104,7 +104,7 @@ template <typename __KeyType, typename __ValueType, typename __Hasher>  // NOLIN
 class __CDS_InheritsEBOs __HashMapConstIteratorRemoveClient :    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __LocalConstIteratorRemovePrimitiveClient <
         HashMap <__KeyType, __ValueType, __Hasher>, typename Map <__KeyType, __ValueType>::EntryType,
-        HashTableConstIterator <typename Map <__KeyType, __ValueType>::EntryType>
+        HashTableIterator <typename Map <__KeyType, __ValueType>::EntryType const>
     > {};
 
 
@@ -142,7 +142,7 @@ template <typename __KeyType, typename __ValueType, typename __Hasher>  // NOLIN
 class __CDS_InheritsEBOs __HashMapFindOfConstIterableClient :    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __LocalFindOfImmutableCompositeClient <
         HashMap <__KeyType, __ValueType, __Hasher>, typename Map <__KeyType, __ValueType>::EntryType,
-        HashTableConstIterator <typename Map <__KeyType, __ValueType>::EntryType>,
+        HashTableIterator <typename Map <__KeyType, __ValueType>::EntryType const>,
         cds::Iterable <typename Map <__KeyType, __ValueType>::EntryType>,
         &__iterableContains <typename Map <__KeyType, __ValueType>::EntryType>,
         &__iterableNotContains <typename Map <__KeyType, __ValueType>::EntryType>
@@ -153,7 +153,7 @@ template <typename __KeyType, typename __ValueType, typename __Hasher>  // NOLIN
 class __CDS_InheritsEBOs __HashMapFindOfConstInitializerListClient : // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __LocalFindOfImmutableCompositeClient <
         HashMap <__KeyType, __ValueType, __Hasher>, typename Map <__KeyType, __ValueType>::EntryType,
-        HashTableConstIterator <typename Map <__KeyType, __ValueType>::EntryType>,
+        HashTableIterator <typename Map <__KeyType, __ValueType>::EntryType const>,
         std::initializer_list <typename Map <__KeyType, __ValueType>::EntryType>,
         &__initializerListContains <typename Map <__KeyType, __ValueType>::EntryType, &__hashMapEquals <__KeyType, __ValueType>>,
         &__initializerListNotContains <typename Map <__KeyType, __ValueType>::EntryType, &__hashMapEquals <__KeyType, __ValueType>>
@@ -164,7 +164,7 @@ template <typename __KeyType, typename __ValueType, typename __Hasher>  // NOLIN
 class __CDS_InheritsEBOs __HashMapFindByConstClient :    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __LocalFindByImmutableCompositeClient <
         HashMap <__KeyType, __ValueType, __Hasher>, typename Map <__KeyType, __ValueType>::EntryType,
-        HashTableConstIterator <typename Map <__KeyType, __ValueType>::EntryType>
+        HashTableIterator <typename Map <__KeyType, __ValueType>::EntryType const>
     > {};
 
 
@@ -180,7 +180,7 @@ template <typename __KeyType, typename __ValueType, typename __Hasher>  // NOLIN
 class __CDS_InheritsEBOs __HashMapFindUniqueConstClient :    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __LocalFindUniqueImmutablePrimitiveClient <
         HashMap <__KeyType, __ValueType, __Hasher>, __KeyType,
-        HashTableConstIterator <typename Map <__KeyType, __ValueType>::EntryType>
+        HashTableIterator <typename Map <__KeyType, __ValueType>::EntryType const>
     > {};
 
 

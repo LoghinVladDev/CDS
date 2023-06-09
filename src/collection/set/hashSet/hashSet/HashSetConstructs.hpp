@@ -66,7 +66,7 @@ class __CDS_InheritsEBOs __HashSetRandomInsertionClient :      // NOLINT(bugpron
 template <typename __ElementType, typename __Hasher>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 class __CDS_InheritsEBOs __HashSetIteratorRemoveClient : // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __LocalConstIteratorRemovePrimitiveClient <
-        cds::HashSet <__ElementType, __Hasher>, __ElementType, HashTableConstIterator <__ElementType>
+        cds::HashSet <__ElementType, __Hasher>, __ElementType, HashTableIterator <__ElementType const>
     > {};
 
 
@@ -74,7 +74,7 @@ template <typename __ElementType, typename __Hasher>  // NOLINT(bugprone-reserve
 class __CDS_InheritsEBOs __HashSetFindOfIterableClient : // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __LocalFindOfImmutableCompositeClient <
         cds::HashSet <__ElementType, __Hasher>, __ElementType,
-        HashTableConstIterator <__ElementType>, cds::Iterable <__ElementType>,
+        HashTableIterator <__ElementType const>, cds::Iterable <__ElementType>,
         &__iterableContains <__ElementType>, &__iterableNotContains <__ElementType>
     > {};
 
@@ -83,7 +83,7 @@ template <typename __ElementType, typename __Hasher>  // NOLINT(bugprone-reserve
 class __CDS_InheritsEBOs __HashSetFindOfInitializerListClient : // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __LocalFindOfImmutableCompositeClient <
         cds::HashSet <__ElementType, __Hasher>,
-        __ElementType, HashTableConstIterator <__ElementType>,
+        __ElementType, HashTableIterator <__ElementType const>,
         std::initializer_list <__ElementType>,
         &__initializerListContains <__ElementType, &cds::meta::equals <__ElementType>>,
         &__initializerListNotContains <__ElementType, &cds::meta::equals <__ElementType>>
@@ -93,7 +93,7 @@ class __CDS_InheritsEBOs __HashSetFindOfInitializerListClient : // NOLINT(bugpro
 template <typename __ElementType, typename __Hasher>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 class __CDS_InheritsEBOs __HashSetFindByClient :    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __LocalFindByImmutableCompositeClient <
-        cds::HashSet <__ElementType, __Hasher>, __ElementType, HashTableConstIterator <__ElementType>
+        cds::HashSet <__ElementType, __Hasher>, __ElementType, HashTableIterator <__ElementType const>
     > {};
 
 
@@ -129,7 +129,7 @@ class __CDS_InheritsEBOs __HashSetGenericStatementsClient :  // NOLINT(bugprone-
 template <typename __ElementType, typename __Hasher>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 class __CDS_InheritsEBOs __HashSetFindUniqueClient : // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     public __LocalFindUniqueImmutablePrimitiveClient <
-        cds::HashSet <__ElementType, __Hasher>, __ElementType, HashTableConstIterator <__ElementType>
+        cds::HashSet <__ElementType, __Hasher>, __ElementType, HashTableIterator <__ElementType const>
     > {};
 
 

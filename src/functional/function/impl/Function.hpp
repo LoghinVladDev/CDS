@@ -381,8 +381,8 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
 
         return
                 this == & function ||
-                this->_adapterGroup == function._adapterGroup &&
-                this->_adapterGroup->_compare ( this->_functionObject, function._functionObject );
+                (this->_adapterGroup == function._adapterGroup &&
+                this->_adapterGroup->_compare ( this->_functionObject, function._functionObject ));
     }
 
 

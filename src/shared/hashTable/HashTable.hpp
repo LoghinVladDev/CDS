@@ -50,7 +50,7 @@ public:
 
   /// \typedef Alias for forward immutable iterator
   /// \public
-  using __ht_ConstIterator    = HashTableConstIterator <__ElementType>; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using __ht_ConstIterator    = HashTableIterator <__ElementType const>; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   /// \class Dispatcher to this class' set-type implementation
   /// \implements __SetServerDispatcher
@@ -568,7 +568,7 @@ template <
 >::__SetDispatcher :
     public __SetServerDispatcher <
         __ServerType, __HashTable, __ElementType,
-        HashTableConstIterator <__ElementType>, HashTableConstIterator <__ElementType>,
+        HashTableIterator <__ElementType const>, HashTableIterator <__ElementType const>,
         &__HashTable::__ht_cbegin, &__HashTable::__ht_cend,
         &__HashTable::__ht_new,
         &__HashTable::__ht_removeIteratorConst, &__HashTable::__ht_removeConstIteratorArray,
@@ -602,8 +602,8 @@ template <
 >::__MapDispatcher :
     public __MapServerDispatcher <
         __ServerType, __HashTable, __ElementType, __KeyType,
-        HashTableIterator <__ElementType>, HashTableConstIterator <__ElementType>,
-        HashTableIterator <__ElementType>, HashTableConstIterator <__ElementType>,
+        HashTableIterator <__ElementType>, HashTableIterator <__ElementType const>,
+        HashTableIterator <__ElementType>, HashTableIterator <__ElementType const>,
         &__HashTable::__ht_begin, &__HashTable::__ht_end,
         &__HashTable::__ht_cbegin, &__HashTable::__ht_cend,
         &__HashTable::__ht_new,

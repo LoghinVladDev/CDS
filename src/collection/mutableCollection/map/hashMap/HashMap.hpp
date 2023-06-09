@@ -368,7 +368,7 @@ private:
 #include "hashMap/HashMapValueMutableCollectionProxy.hpp"
 #include "hashMap/HashMapEntryMutableCollectionProxy.hpp"
 
-#include "../../../../shared/iterator/impl/HashTableIterator.hpp"
+#include "../../../../shared/iterator/impl/HashTableIteratorImpl.hpp"
 #include "../../../../shared/iterator/impl/IteratorGenericDecorator.hpp"
 
 #include "../../../../shared/delegateIterator/impl/AbstractDelegateIterator.hpp"

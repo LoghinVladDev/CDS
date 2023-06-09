@@ -70,7 +70,7 @@ template <
 >::findFirstOf (__FromIterable const& from) noexcept(itNoexcept) -> Iterator {
   // Call base, global implementation. Abstracts the 'is object const' requirement
   auto* pIterable = static_cast <__Iterable*> (this);
-  return __findFirstOf <__Element, Iterator, __FromIterable, __containsFunction> (
+  return __findFirstOf <itNoexcept, __Element, Iterator, __FromIterable, __containsFunction> (
       pIterable->begin(), pIterable->end(), from
   );
 }
@@ -90,7 +90,7 @@ template <
 >::findLastOf (__FromIterable const& from) noexcept(itNoexcept) -> Iterator {
   // Call base, global implementation. Abstracts the 'is object const' requirement
   auto* pIterable = static_cast <__Iterable*> (this);
-  return __findLastOf <__Element, Iterator, __FromIterable, __containsFunction> (
+  return __findLastOf <itNoexcept, __Element, Iterator, __FromIterable, __containsFunction> (
       pIterable->begin(), pIterable->end(), from
   );
 }
@@ -199,7 +199,7 @@ template <
 >::findFirstNotOf (__FromIterable const& from) noexcept(itNoexcept) -> Iterator {
   // Call base, global implementation. Abstracts the 'is object const' requirement
   auto* pIterable = static_cast <__Iterable*> (this);
-  return __findFirstOf <__Element, Iterator, __FromIterable, __notContainsFunction> (
+  return __findFirstOf <itNoexcept, __Element, Iterator, __FromIterable, __notContainsFunction> (
       pIterable->begin(), pIterable->end(), from
   );
 }
@@ -219,7 +219,7 @@ template <
 >::findLastNotOf (__FromIterable const& from) noexcept(itNoexcept) -> Iterator {
   // Call base, global implementation. Abstracts the 'is object const' requirement
   auto* pIterable = static_cast <__Iterable*> (this);
-  return __findLastOf <__Element, Iterator, __FromIterable, __notContainsFunction> (
+  return __findLastOf <itNoexcept, __Element, Iterator, __FromIterable, __notContainsFunction> (
       pIterable->begin(), pIterable->end(), from
   );
 }

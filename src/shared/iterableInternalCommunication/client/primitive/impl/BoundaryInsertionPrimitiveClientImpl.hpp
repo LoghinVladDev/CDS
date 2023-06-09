@@ -274,7 +274,7 @@ template <
     typename __TElementType,            // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     cds::meta::EnableIf <cds::meta::IsCopyConstructible <__TElementType>::value>
 > __CDS_OptimalInline auto __BoundaryInsertionPrimitiveClient <__Receiver, __Element, __Return>::pushBackAllOf (
-    std::initializer_list < __Element > const& list
+    std::initializer_list <__Element> const& list
 ) noexcept(false) -> void {
   // initializer_list has RandomAccessIterator - 'operator -'. Call pushBackAllOf with size 
   pushBackAllOf (list.begin(), list.end(), list.size());
@@ -286,7 +286,7 @@ template <typename __IteratorType>             // NOLINT(bugprone-reserved-ident
 auto __BoundaryInsertionPrimitiveClient <__Receiver, __Element, __Return>::pushFrontAllOf (
     __IteratorType const& begin,
     __IteratorType const& end,
-    Size                   count
+    Size                  count
 ) noexcept(false) -> void {
   using __Alloc                               = __hidden::__impl::__allocation::__PrimitiveAlloc <__Element*>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   // Handle type of the new front address function 

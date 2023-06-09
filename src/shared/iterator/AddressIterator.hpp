@@ -13,14 +13,14 @@ namespace __hidden {  // NOLINT(bugprone-reserved-identifier, modernize-concat-n
 namespace __impl {    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
 template <
-    typename __ElementType, // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    functional::PredicateFunction <__ElementType const&, __ElementType const&>
+    typename __Element, // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+    functional::PredicateFunction <__Element const&, __Element const&>
 > class __ArrayBase;            // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
 template <
-    typename __ElementType, // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+    typename __Element, // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     Size,
-    functional::PredicateFunction <__ElementType const&, __ElementType const&>,
+    functional::PredicateFunction <__Element const&, __Element const&>,
     typename
 > class __StaticArrayBase;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
@@ -28,18 +28,18 @@ template <
 } // namespace __hidden
 
 /// \brief Abstract Address Iterator, iterating over continuous address ranges.
-/// \tparam __ElementType is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
+/// \tparam __Element is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
 /// \implements RandomAccessIterator
 ///
 /// \test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
 /// \test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
 /// \namespace cds::experimental
-template <typename __ElementType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+template <typename __Element> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class AbstractAddressIterator : public meta::RandomAccessIterator {
 public:
-  /// \typedef Alias for the __ElementType template parameter
+  /// \typedef Alias for the __Element template parameter
   /// \public
-  using ElementType = __ElementType;
+  using ElementType = __Element;
 
   /// \typedef Alias for the Address indicating at currently
   /// \public
@@ -51,20 +51,20 @@ public:
 
   /// \brief Function used to acquire the current value the iterator is indicating to
   /// \exceptsafe
-  /// \return __ElementType ref = Reference to the element the address is indicating to
+  /// \return __Element ref = Reference to the element the address is indicating to
   ///
   /// \test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
   /// \test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
   /// \public
-  __CDS_NoDiscard constexpr auto operator* () const noexcept -> __ElementType&;
+  __CDS_NoDiscard constexpr auto operator* () const noexcept -> __Element&;
 
   /// \brief Function used to acquire the address of the value the iterator is indicating to
   /// \exceptsafe
-  /// \return __ElementType ptr = Pointer to the element the address is indicating to
+  /// \return __Element ptr = Pointer to the element the address is indicating to
   ///
   /// \test Suite: TBA, Group: TBA, Test Cases: TBA
   /// \public
-  __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType*;
+  __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __Element*;
 
   /// \brief Equality Comparison Operator
   /// \param [in] iterator : AbstractAddressIterator cref = Constant Reference to another iterator to compare this one to
@@ -75,7 +75,7 @@ public:
   /// \test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
   /// \public
   __CDS_NoDiscard constexpr auto operator == (
-      AbstractAddressIterator <__ElementType> const& iterator
+      AbstractAddressIterator <__Element> const& iterator
   ) const noexcept -> bool;
 
   /// \brief Inequality Comparison Operator
@@ -87,7 +87,7 @@ public:
   /// \test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
   /// \public
   __CDS_NoDiscard constexpr auto operator != (
-      AbstractAddressIterator <__ElementType> const& iterator
+      AbstractAddressIterator <__Element> const& iterator
   ) const noexcept -> bool;
 
   /// \brief Difference Operator. Acquires the number of elements between two iterators
@@ -201,25 +201,25 @@ private:
 
 /// \brief Forward Address Iterator, iterating over continuous address ranges from low to high value.
 /// Used by __Array, __BaseString, __BaseStringView - begin / end / cbegin / cend
-/// \tparam __ElementType is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
+/// \tparam __Element is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
 /// \extends AbstractAddressIterator
 ///
 /// \test Suite: CTS-00001, Group: CTG-00050-IT, Test Cases: All
 /// \test Suite: MCTS-00001, Group: MCTG-00050-IT, Test Cases: All
 /// \namespace cds::experimental
-template <typename __ElementType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-class ForwardAddressIterator : public AbstractAddressIterator <__ElementType> {
+template <typename __Element> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+class ForwardAddressIterator : public AbstractAddressIterator <__Element> {
 public:
-  /// \typedef Alias for the __ElementType template parameter
+  /// \typedef Alias for the __Element template parameter
   /// \public
-  using ElementType = __ElementType;
+  using ElementType = __Element;
 
   /// \typedef Alias for the Address indicating at currently
   /// \public
   using Address = ElementType*;
 
-  using AbstractAddressIterator <__ElementType>::AbstractAddressIterator;
-  using AbstractAddressIterator <__ElementType>::operator=;
+  using AbstractAddressIterator <__Element>::AbstractAddressIterator;
+  using AbstractAddressIterator <__Element>::operator=;
   ~ForwardAddressIterator() noexcept = default;
 
   /// \brief Equality Comparison Operator
@@ -392,7 +392,7 @@ private:
   /// \private
   __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto absoluteAfter () const noexcept -> Address override;    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-  using AbstractAddressIterator <__ElementType>::address;
+  using AbstractAddressIterator <__Element>::address;
 };
 
 /// \brief Arithmetic Sum Operator, will return the iterator offset from a number of positions specified in the given value from the given iterator
@@ -414,7 +414,7 @@ constexpr auto operator + (
 
 /// \brief Backward Address Iterator, iterating over continuous address ranges from high to low value.
 /// Used by __Array, __BaseString, __BaseStringView - rbegin / rend / crbegin / crend
-/// \tparam __ElementType is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
+/// \tparam __Element is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
 /// \extends AbstractAddressIterator
 ///
 /// \test Suite: LTS-00001, Group: LTG-00200-IT, Test Cases: {
@@ -425,18 +425,18 @@ constexpr auto operator + (
 ///      LTC-00211-IT-itMutabilityStdRev
 /// }
 /// \namespace cds::experimental
-template <typename __ElementType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-class BackwardAddressIterator : public AbstractAddressIterator <__ElementType> {
+template <typename __Element> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+class BackwardAddressIterator : public AbstractAddressIterator <__Element> {
 public:
-  /// \typedef Alias for the __ElementType template parameter
+  /// \typedef Alias for the __Element template parameter
   /// \public
-  using ElementType = __ElementType;
+  using ElementType = __Element;
 
   /// \typedef Alias for the Address indicating at currently
   /// \public
   using Address = ElementType*;
-  using AbstractAddressIterator <__ElementType>::AbstractAddressIterator;
-  using AbstractAddressIterator <__ElementType>::operator=;
+  using AbstractAddressIterator <__Element>::AbstractAddressIterator;
+  using AbstractAddressIterator <__Element>::operator=;
   ~BackwardAddressIterator () noexcept = default;
 
   /// \brief Equality Comparison Operator
@@ -634,7 +634,7 @@ private:
   /// \private
   __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto absoluteAfter () const noexcept -> Address override;    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-  using AbstractAddressIterator <__ElementType>::address;
+  using AbstractAddressIterator <__Element>::address;
 };
 
 
@@ -656,17 +656,17 @@ constexpr auto operator + (
 
 
 /// \brief Generic Address Iterator, iterating over continuous address ranges from from low to high or high to low value, based on reverse value.
-/// \tparam __ElementType is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
+/// \tparam __Element is the type of the enclosed element. Must not be decayed, as it can represent a const iterator
 /// \tparam __reverse is whether the iterator should go backward or forward. If false, it will go forward, being a ForwardAddressIterator. Otherwise, backward, and will be a BackwardAddressIterator
 /// \extends AbstractAddressIterator
 ///
 /// \test Suite: TBA, Group: TBA, Test Cases: TBA
 /// \namespace cds::experimental
-template <typename __ElementType, bool __reverse = false> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+template <typename __Element, bool __reverse = false> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 using AddressIterator = cds::meta::Conditional <
     __reverse,
-    BackwardAddressIterator <__ElementType>,
-    ForwardAddressIterator <__ElementType>
+    BackwardAddressIterator <__Element>,
+    ForwardAddressIterator <__Element>
 >;
 } // namespace cds
 
