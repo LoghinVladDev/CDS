@@ -87,7 +87,7 @@ auto __LocalConstIteratorRemovePrimitiveClient <__Receiver, __Element, __Iterato
 
   auto pReceiver = static_cast <__Receiver*> (this);
   if (iteratorCount >= 2u) {
-    auto pIteratorBuffer    = cds::__hidden::__impl::__allocation::__allocPrimitiveArray < ConstIterator const * > ( iteratorCount );
+    auto pIteratorBuffer    = __Alloc::__alloc (iteratorCount);
     try {
       for (Size index = 0u; index < iteratorCount; ++index) {
         pIteratorBuffer[index] = &pIterators [index];

@@ -219,37 +219,6 @@ template <
   }
 };
 
-
-template < typename __Type, Size __primitiveSize = sizeof ( __Type ) > // NOLINT(bugprone-reserved-identifier)
-__CDS_DeprecatedHint("Use __PrimitiveAlloc::__alloc, as __allocPrimitiveArray does not support aligned allocation")
-inline auto __allocPrimitiveArray ( // NOLINT(bugprone-reserved-identifier)
-        Size capacity
-) noexcept -> __Type * {
-  return reinterpret_cast < __Type * > ( malloc ( capacity * __primitiveSize ) );
-}
-
-
-template < typename __Type, Size __primitiveSize = sizeof ( __Type ) > // NOLINT(bugprone-reserved-identifier)
-__CDS_DeprecatedHint("Use __PrimitiveAlloc::__realloc, as __reallocPrimitiveArray does not support aligned allocation")
-inline auto __reallocPrimitiveArray ( // NOLINT(bugprone-reserved-identifier)
-    __Type  * pBuffer,
-    Size      newCapacity
-) noexcept -> __Type * {
-  return reinterpret_cast < __Type * > (
-      realloc ( pBuffer, newCapacity * __primitiveSize )
-  );
-}
-
-
-template < typename __Type > // NOLINT(bugprone-reserved-identifier)
-__CDS_DeprecatedHint("Use __PrimitiveAlloc::__free, as __freePrimitiveArray does not support aligned allocation")
-inline auto __freePrimitiveArray ( // NOLINT(bugprone-reserved-identifier)
-    __Type * pBuffer
-) noexcept -> void {
-  free ( pBuffer );
-}
-
-
 template <
     typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
     typename __LastType             // NOLINT(bugprone-reserved-identifier)

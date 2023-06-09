@@ -350,9 +350,6 @@ struct __IsNoexceptCopyAssignable : __Integral <std::is_nothrow_copy_assignable 
 
 template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 struct __IsNoexceptMoveAssignable : __Integral <std::is_nothrow_move_assignable <__T>> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-
-template <typename __F, typename...__Args>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-struct __IsNothrowInvocable : __Integral <std::is_nothrow_invocable <__F, __Args...>> {}; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 } /* namespace __impl */
 
 /**
