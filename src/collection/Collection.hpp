@@ -469,8 +469,8 @@ protected:
 #include "../shared/iterableInternalCommunication/client/primitive/impl/ConstIteratorRemovePrimitiveClientImpl.hpp"
 #include "../shared/iterableInternalCommunication/client/primitive/impl/RandomInsertionPrimitiveClientImpl.hpp"
 
-#include "../shared/iterableInternalCommunication/client/composite/impl/RemoveOfCompositeClient.hpp"            // NOLINT(llvm-include-order)
-#include "../shared/iterableInternalCommunication/client/composite/impl/RemoveByCompositeClient.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/impl/RemoveOfCompositeClientImpl.hpp"            // NOLINT(llvm-include-order)
+#include "../shared/iterableInternalCommunication/client/composite/impl/RemoveByCompositeClientImpl.hpp"
 
 #include "collection/impl/CollectionImpl.hpp"
 

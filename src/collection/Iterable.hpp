@@ -654,10 +654,10 @@ protected:
 
 #include "../shared/iterableInternalCommunication/client/primitive/impl/DelegateForwardConstIterablePrimitiveClientImpl.hpp"    // NOLINT(llvm-header-guard)
 
-#include "../shared/iterableInternalCommunication/client/composite/impl/ContainsOfCompositeClient.hpp"
-#include "../shared/iterableInternalCommunication/client/composite/impl/FindOfImmutableCompositeClient.hpp"                 // NOLINT(llvm-header-guard)
-#include "../shared/iterableInternalCommunication/client/composite/impl/FindByImmutableCompositeClient.hpp"
-#include "../shared/iterableInternalCommunication/client/composite/impl/GenericImmutableStatementsCompositeClient.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/impl/ContainsOfCompositeClientImpl.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/impl/FindOfImmutableCompositeClientImpl.hpp"                 // NOLINT(llvm-header-guard)
+#include "../shared/iterableInternalCommunication/client/composite/impl/FindByImmutableCompositeClientImpl.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/impl/GenericImmutableStatementsCompositeClientImpl.hpp"
 
 #include "iterable/impl/IterableImpl.hpp"
 

@@ -18,7 +18,7 @@ __CDS_OptimalInline auto __AbstractIteratorRelativeInsertionPrimitiveClient <__R
     ElementType const&      element
 ) noexcept(false) -> bool {
   // Invoke the copy constructor via front emplacement 
-  return this->emplaceBefore (iterator, element);
+  return emplaceBefore (iterator, element);
 }
 
 
@@ -29,7 +29,7 @@ __CDS_OptimalInline auto __AbstractIteratorRelativeInsertionPrimitiveClient <__R
     ElementType&&           element
 ) noexcept(false) -> bool {
   // Invoke the move constructor via front emplacement 
-  return this->emplaceBefore (iterator, std::move (element));
+  return emplaceBefore (iterator, std::move (element));
 }
 
 
@@ -40,7 +40,7 @@ __CDS_OptimalInline auto __AbstractIteratorRelativeInsertionPrimitiveClient <__R
     ElementType const&      element
 ) noexcept(false) -> bool {
   // Invoke the copy constructor via back emplacement 
-  return this->emplaceAfter (iterator, element);
+  return emplaceAfter (iterator, element);
 }
 
 
@@ -51,7 +51,7 @@ __CDS_OptimalInline auto __AbstractIteratorRelativeInsertionPrimitiveClient <__R
     ElementType&&           element
 ) noexcept(false) -> bool {
   // Invoke the move constructor via back emplacement 
-  return this->emplaceAfter (iterator, std::move (element)); 
+  return emplaceAfter (iterator, std::move (element)); 
 }
 
 
@@ -216,7 +216,7 @@ __CDS_OptimalInline auto __AbstractIteratorRelativeInsertionPrimitiveClient <__R
     __Iterable const&       iterable
 ) noexcept(false) -> bool {
   // Variant with RandomAccessIterator - 'operator -'. Call insertAllOfBefore with size 
-  return this->insertAllOfBefore (iterator, iterable.begin(), iterable.end(), iterable.size());
+  return insertAllOfBefore (iterator, iterable.begin(), iterable.end(), iterable.size());
 }
 
 
@@ -228,7 +228,7 @@ __CDS_OptimalInline auto __AbstractIteratorRelativeInsertionPrimitiveClient <__R
 ) noexcept(false) -> bool {
   // Variant without RandomAccessIterator - 'operator -'. Call insertAllOfBefore without size, letting
   // the function compute the distance between start and end
-  return this->insertAllOfBefore (iterator, iterable.begin(), iterable.end());
+  return insertAllOfBefore (iterator, iterable.begin(), iterable.end());
 }
 
 
@@ -239,7 +239,7 @@ __CDS_OptimalInline auto __AbstractIteratorRelativeInsertionPrimitiveClient <__R
     std::initializer_list <__Element> const&  list
 ) noexcept(false) -> bool {
   // initializer_list has RandomAccessIterator - 'operator -'. Call insertAllOfBefore with size 
-  return this->insertAllOfBefore (iterator, list.begin(), list.end(), list.size());
+  return insertAllOfBefore (iterator, list.begin(), list.end(), list.size());
 }
 
 
@@ -250,7 +250,7 @@ __CDS_OptimalInline auto __AbstractIteratorRelativeInsertionPrimitiveClient <__R
     __Iterable const&       iterable
 ) noexcept(false) -> bool {
   // Variant with RandomAccessIterator - 'operator -'. Call insertAllOfAfter with size 
-  return this->insertAllOfAfter (iterator, iterable.begin(), iterable.end(), iterable.size());
+  return insertAllOfAfter (iterator, iterable.begin(), iterable.end(), iterable.size());
 }
 
 
@@ -262,7 +262,7 @@ __CDS_OptimalInline auto __AbstractIteratorRelativeInsertionPrimitiveClient <__R
 ) noexcept(false) -> bool {
   // Variant without RandomAccessIterator - 'operator -'. Call insertAllOfAfter without size, letting
   // the function compute the distance between start and end
-  return this->insertAllOfAfter (iterator, iterable.begin(), iterable.end());
+  return insertAllOfAfter (iterator, iterable.begin(), iterable.end());
 }
 
 
@@ -273,7 +273,7 @@ __CDS_OptimalInline auto __AbstractIteratorRelativeInsertionPrimitiveClient <__R
     std::initializer_list <__Element> const&  list
 ) noexcept(false) -> bool {
   // initializer_list has RandomAccessIterator - 'operator -'. Call insertAllOfAfter with size 
-  return this->insertAllOfAfter (iterator, list.begin(), list.end(), list.size());
+  return insertAllOfAfter (iterator, list.begin(), list.end(), list.size());
 }
 
 
@@ -382,7 +382,7 @@ __CDS_OptimalInline auto __LocalIteratorRelativeInsertionPrimitiveClient <__Rece
     ElementType const&  element
 ) noexcept(false) -> bool {
   // Invoke the copy constructor via front emplacement 
-  return this->emplaceBefore (iterator, element);
+  return emplaceBefore (iterator, element);
 }
 
 
@@ -393,7 +393,7 @@ __CDS_OptimalInline auto __LocalIteratorRelativeInsertionPrimitiveClient <__Rece
     ElementType&&   element
 ) noexcept(false) -> bool {
   // Invoke the move constructor via front emplacement 
-  return this->emplaceBefore (iterator, std::move (element));
+  return emplaceBefore (iterator, std::move (element));
 }
 
 
@@ -404,7 +404,7 @@ __CDS_OptimalInline auto __LocalIteratorRelativeInsertionPrimitiveClient <__Rece
     ElementType const&  element
 ) noexcept(false) -> bool {
   // Invoke the copy constructor via back emplacement 
-  return this->emplaceAfter (iterator, element);
+  return emplaceAfter (iterator, element);
 }
 
 
@@ -415,7 +415,7 @@ __CDS_OptimalInline auto __LocalIteratorRelativeInsertionPrimitiveClient <__Rece
     ElementType&&   element
 ) noexcept(false) -> bool {
   // Invoke the move constructor via back emplacement 
-  return this->emplaceAfter (iterator, std::move (element));
+  return emplaceAfter (iterator, std::move (element));
 }
 
 
@@ -554,7 +554,7 @@ __CDS_OptimalInline auto __LocalIteratorRelativeInsertionPrimitiveClient <__Rece
     __Iterable const& iterable
 ) noexcept(false) -> bool {
   // Variant with RandomAccessIterator - 'operator -'. Call insertAllOfBefore with size 
-  return this->insertAllOfBefore (iterator, iterable.begin(), iterable.end(), iterable.size());
+  return insertAllOfBefore (iterator, iterable.begin(), iterable.end(), iterable.size());
 }
 
 
@@ -566,7 +566,7 @@ __CDS_OptimalInline auto __LocalIteratorRelativeInsertionPrimitiveClient <__Rece
 ) noexcept(false) -> bool {
   // Variant without RandomAccessIterator - 'operator -'. Call insertAllOfBefore without size, letting
   // the function compute the distance between start and end
-  return this->insertAllOfBefore (iterator, iterable.begin(), iterable.end());
+  return insertAllOfBefore (iterator, iterable.begin(), iterable.end());
 }
 
 
@@ -577,7 +577,7 @@ __CDS_OptimalInline auto __LocalIteratorRelativeInsertionPrimitiveClient <__Rece
     std::initializer_list <__Element> const&  list
 ) noexcept(false) -> bool {
   // initializer_list has RandomAccessIterator - 'operator -'. Call insertAllOfBefore with size 
-  return this->insertAllOfBefore (iterator, list.begin(), list.end(), list.size());
+  return insertAllOfBefore (iterator, list.begin(), list.end(), list.size());
 }
 
 
@@ -588,7 +588,7 @@ __CDS_OptimalInline auto __LocalIteratorRelativeInsertionPrimitiveClient <__Rece
     __Iterable const& iterable
 ) noexcept(false) -> bool {
   // Variant with RandomAccessIterator - 'operator -'. Call insertAllOfAfter with size 
-  return this->insertAllOfAfter (iterator, iterable.begin(), iterable.end(), iterable.size());
+  return insertAllOfAfter (iterator, iterable.begin(), iterable.end(), iterable.size());
 }
 
 
@@ -600,7 +600,7 @@ __CDS_OptimalInline auto __LocalIteratorRelativeInsertionPrimitiveClient <__Rece
 ) noexcept(false) -> bool {
   // Variant without RandomAccessIterator - 'operator -'. Call insertAllOfAfter without size, letting
   // the function compute the distance between start and end
-  return this->insertAllOfAfter (iterator, iterable.begin(), iterable.end());
+  return insertAllOfAfter (iterator, iterable.begin(), iterable.end());
 }
 
 
@@ -611,7 +611,7 @@ __CDS_OptimalInline auto __LocalIteratorRelativeInsertionPrimitiveClient <__Rece
     std::initializer_list <__Element> const&  list
 ) noexcept(false) -> bool {
   // initializer_list has RandomAccessIterator - 'operator -'. Call insertAllOfAfter with size 
-  return this->insertAllOfAfter (iterator, list.begin(), list.end(), list.size());
+  return insertAllOfAfter (iterator, list.begin(), list.end(), list.size());
 }
 
 

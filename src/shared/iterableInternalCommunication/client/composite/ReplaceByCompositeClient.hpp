@@ -1,146 +1,117 @@
-/*
- * Created by loghin on 6/30/2022.
- */
+//
+// Created by loghin on 6/30/2022.
+//
 
-#ifndef __CDS_SHARED_REPLACE_BY_COMPOSITE_CLIENT_HPP__ /* NOLINT(llvm-header-guard) */
-#define __CDS_SHARED_REPLACE_BY_COMPOSITE_CLIENT_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+#ifndef __CDS_SHARED_REPLACE_BY_COMPOSITE_CLIENT_HPP__ // NOLINT(llvm-header-guard)
+#define __CDS_SHARED_REPLACE_BY_COMPOSITE_CLIENT_HPP__ // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+#pragma once
 
-namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+#include <CDS/meta/FunctionTraits>
 
-            template <
-                    typename __ReceiverType,        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename __ElementType          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > class __ReplaceByCompositeClient {    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+namespace cds {       // NOLINT(modernize-concat-nested-namespaces)
+namespace __hidden {  // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+namespace __impl {    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+template <typename __Receiver, typename __Element, bool __exceptCond = false> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+class __ReplaceByCompositeClient {                                            // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+public:
+  using ElementType = __Element;
 
-            private:    /* NOLINT(readability-redundant-access-specifiers) */
-                using ElementType = __ElementType;
+protected:
+  constexpr static bool const itNoexcept = __exceptCond;
+  constexpr static bool const copyAsNoexcept = cds::meta::IsNoexceptCopyAssignable <__Element>::value && itNoexcept;
+  constexpr static bool const moveAsNoexcept = cds::meta::IsNoexceptMoveAssignable <__Element>::value && itNoexcept;
+  
+  template <typename __Supplier>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  struct IsNoexceptSuppliable : cds::meta::And <
+      cds::meta::IsNoexceptAssignable <__Element, cds::meta::ReturnOf <__Supplier>>,
+      cds::meta::BoolConstant <itNoexcept>
+  > {};
 
-            public: /* NOLINT(readability-redundant-access-specifiers) */
-                template <
-                        typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        cds :: meta :: EnableIf <
-                                cds :: meta :: isCopyAssignable < __TElementType > ()
-                        > = 0
-                > auto replaceThat (
-                        Size                count,
-                        __Predicate const & predicate,
-                        ElementType const & with
-                ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size;
+  template <typename __Predicate, typename __TElement = __Element, cds::meta::EnableIf <cds::meta::IsCopyAssignable <__TElement>::value> = 0> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto replaceThat (
+      Size                count,
+      __Predicate const&  predicate,
+      ElementType const&  with
+  ) noexcept (noexcept (predicate (cds::meta::referenceOf <ElementType>())) && copyAsNoexcept) -> Size;
 
-            public: /* NOLINT(readability-redundant-access-specifiers) */
-                template <
-                        typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        cds :: meta :: EnableIf <
-                                cds :: meta :: isCopyAssignable < __TElementType > ()
-                        > = 0
-                > auto replaceFirstThat (
-                        __Predicate const & predicate,
-                        ElementType const & with
-                ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
+  template <typename __Predicate, typename __TElement = __Element, cds::meta::EnableIf <cds::meta::IsCopyAssignable <__TElement>::value> = 0> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto replaceFirstThat (
+      __Predicate const& predicate,
+      ElementType const& with
+  ) noexcept (noexcept (predicate (cds::meta::referenceOf <ElementType>())) && copyAsNoexcept) -> bool;
 
-            public: /* NOLINT(readability-redundant-access-specifiers) */
-                template <
-                        typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        cds :: meta :: EnableIf <
-                                cds :: meta :: isMoveAssignable < __TElementType > ()
-                        > = 0
-                > auto replaceFirstThat (
-                        __Predicate const & predicate,
-                        ElementType      && with
-                ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
+  template <typename __Predicate, typename __TElement = __Element, cds::meta::EnableIf <cds::meta::IsMoveAssignable <__TElement>::value> = 0> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto replaceFirstThat (
+      __Predicate const&  predicate,
+      ElementType&&       with
+  ) noexcept (noexcept (predicate (cds::meta::referenceOf <ElementType>())) && moveAsNoexcept) -> bool;
 
-            public: /* NOLINT(readability-redundant-access-specifiers) */
-                template <
-                        typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        cds :: meta :: EnableIf <
-                                cds :: meta :: isCopyAssignable < __TElementType > ()
-                        > = 0
-                > auto replaceLastThat (
-                        __Predicate const & predicate,
-                        ElementType const & with
-                ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
+  template <typename __Predicate, typename __TElement = __Element, cds::meta::EnableIf <cds::meta::IsCopyAssignable <__TElement>::value> = 0> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto replaceLastThat (
+      __Predicate const& predicate,
+      ElementType const& with
+  ) noexcept (noexcept (predicate (cds::meta::referenceOf <ElementType>())) && copyAsNoexcept) -> bool;
 
-            public: /* NOLINT(readability-redundant-access-specifiers) */
-                template <
-                        typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        cds :: meta :: EnableIf <
-                                cds :: meta :: isMoveAssignable < __TElementType > ()
-                        > = 0
-                > auto replaceLastThat (
-                        __Predicate const & predicate,
-                        ElementType      && with
-                ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
+  template <typename __Predicate, typename __TElement = __Element, cds::meta::EnableIf <cds::meta::IsMoveAssignable <__TElement>::value> = 0> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto replaceLastThat (
+      __Predicate const&  predicate,
+      ElementType&&       with
+  ) noexcept (noexcept (predicate (cds::meta::referenceOf <ElementType>())) && moveAsNoexcept) -> bool;
 
-            public: /* NOLINT(readability-redundant-access-specifiers) */
-                template <
-                        typename __Predicate,                       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        cds :: meta :: EnableIf <
-                                cds :: meta :: isCopyAssignable < __TElementType > ()
-                        > = 0
-                > auto replaceAllThat (
-                        __Predicate const & predicate,
-                        ElementType const & with
-                ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size;
+  template <typename __Predicate, typename __TElement = __Element, cds::meta::EnableIf <cds::meta::IsCopyAssignable <__TElement>::value> = 0> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto replaceAllThat (
+      __Predicate const& predicate,
+      ElementType const& with
+  ) noexcept (noexcept (predicate (cds::meta::referenceOf <ElementType>())) && copyAsNoexcept) -> Size;
 
-            public: /* NOLINT(readability-redundant-access-specifiers) */
-                template <
-                        typename __Predicate,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        typename __Supplier     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                > auto replaceThatBy (
-                        Size                count,
-                        __Predicate const & predicate,
-                        __Supplier  const & supplier
-                ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size;
+  template <typename __Predicate, typename __Supplier>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto replaceThatBy (
+      Size                count,
+      __Predicate const&  predicate,
+      __Supplier const&   supplier
+  ) noexcept (
+      noexcept (predicate (cds::meta::referenceOf <ElementType>())) && 
+      noexcept (supplier (cds::meta::referenceOf <ElementType>())) &&
+      IsNoexceptSuppliable <__Supplier>::value
+  ) -> Size;
 
-            public: /* NOLINT(readability-redundant-access-specifiers) */
-                template <
-                        typename __Predicate,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        typename __Supplier     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                > auto replaceFirstThatBy (
-                        __Predicate const & predicate,
-                        __Supplier  const & supplier
-                ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
+  template <typename __Predicate, typename __Supplier>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto replaceFirstThatBy (
+      __Predicate const&  predicate,
+      __Supplier const&   supplier
+  ) noexcept (
+      noexcept (predicate (cds::meta::referenceOf <ElementType>())) && 
+      noexcept (supplier (cds::meta::referenceOf <ElementType>())) &&
+      IsNoexceptSuppliable <__Supplier>::value
+  ) -> bool;
 
-            public: /* NOLINT(readability-redundant-access-specifiers) */
-                template <
-                        typename __Predicate,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        typename __Supplier     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                > auto replaceLastThatBy (
-                        __Predicate const & predicate,
-                        __Supplier  const & supplier
-                ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool;
+  template <typename __Predicate, typename __Supplier>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto replaceLastThatBy (
+      __Predicate const&  predicate,
+      __Supplier const&   supplier
+  ) noexcept (
+      noexcept (predicate (cds::meta::referenceOf <ElementType>())) && 
+      noexcept (supplier (cds::meta::referenceOf <ElementType>())) &&
+      IsNoexceptSuppliable <__Supplier>::value
+  ) -> bool;
 
-            public: /* NOLINT(readability-redundant-access-specifiers) */
-                template <
-                        typename __Predicate,   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        typename __Supplier     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                > auto replaceAllThatBy (
-                        __Predicate const & predicate,
-                        __Supplier  const & supplier
-                ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size;
-
-            };
+  template <typename __Predicate, typename __Supplier>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto replaceAllThatBy (
+      __Predicate const&  predicate,
+      __Supplier const&   supplier
+  ) noexcept (
+      noexcept (predicate (cds::meta::referenceOf <ElementType>())) && 
+      noexcept (supplier (cds::meta::referenceOf <ElementType>())) &&
+      IsNoexceptSuppliable <__Supplier>::value
+  ) -> Size;
+};
 
 
-            template <
-                    typename __ReceiverType,            /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    typename __ElementType              /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > using __LocalReplaceByCompositeClient =   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    __ReplaceByCompositeClient <
-                            __ReceiverType,
-                            __ElementType
-                    >;
+template <typename __Receiver, typename __Element>          // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+class __CDS_InheritsEBOs __LocalReplaceByCompositeClient :  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+    public __ReplaceByCompositeClient <__Receiver, __Element, true> {};
+} // namespace __impl
+} // namespace __hidden
+} // namespace cds
 
-        } /* namespace __impl */
-    } /* namespace __hidden */
-} /* namespace cds */
-
-#endif /* __CDS_SHARED_REPLACE_BY_COMPOSITE_CLIENT_HPP__ */
+#endif // __CDS_SHARED_REPLACE_BY_COMPOSITE_CLIENT_HPP__

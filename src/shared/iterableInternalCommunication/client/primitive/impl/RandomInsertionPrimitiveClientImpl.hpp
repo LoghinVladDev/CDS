@@ -83,7 +83,7 @@ template <typename __Receiver, typename __Element, typename __Return> // NOLINT(
 template <typename __TElement, cds::meta::EnableIf <cds::meta::IsCopyConstructible <__TElement>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __RandomInsertionPrimitiveClient <__Receiver, __Element, __Return>::add (ElementType const& element) noexcept(false) -> ElementReference {
   // call insert due to deprecation
-  return this->insert (element);
+  return insert (element);
 }
 
 
@@ -91,7 +91,7 @@ template <typename __Receiver, typename __Element, typename __Return> // NOLINT(
 template <typename __TElement, cds::meta::EnableIf <cds::meta::IsMoveConstructible <__TElement>::value>> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __RandomInsertionPrimitiveClient <__Receiver, __Element, __Return>::add (ElementType&& element) noexcept(false) -> ElementReference {
   // call insert due to deprecation
-  return this->insert (std::move (element));
+  return insert (std::move (element));
 }
 
 
@@ -162,7 +162,7 @@ template <typename __Receiver, typename __Element, typename __Return> // NOLINT(
 template <typename __Iterable> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto __RandomInsertionPrimitiveClient <__Receiver, __Element, __Return>::insertAllOf (__Iterable const& iterable) noexcept (false) -> void {
   // call insert all of with extracted iterators
-  this->insertAllOf (iterable.begin(), iterable.end());
+  insertAllOf (iterable.begin(), iterable.end());
 }
 
 
@@ -172,7 +172,7 @@ __CDS_OptimalInline auto __RandomInsertionPrimitiveClient <__Receiver, __Element
     std::initializer_list <__Element> const& list
 ) noexcept(false) -> void {
   // call insert all of with extracted iterators
-  this->insertAllOf (list.begin(), list.end());
+  insertAllOf (list.begin(), list.end());
 }
 
 
@@ -182,7 +182,7 @@ __CDS_OptimalInline auto __RandomInsertionPrimitiveClient <__Receiver, __Element
     __Iterable const& iterable
 ) noexcept(false) -> void {
   // call insert all of with extracted iterators
-  this->insertAllOf (iterable.begin(), iterable.end());
+  insertAllOf (iterable.begin(), iterable.end());
 }
 
 
@@ -192,7 +192,7 @@ __CDS_OptimalInline auto __RandomInsertionPrimitiveClient <__Receiver, __Element
     std::initializer_list <__Element> const& list
 ) noexcept(false) -> void {
   // call insert all of with extracted iterators
-  this->insertAllOf (list.begin(), list.end());
+  insertAllOf (list.begin(), list.end());
 }
 
 
@@ -204,7 +204,7 @@ auto __RandomInsertionPrimitiveClient <__Receiver, __Element, __Return>::insertA
 ) noexcept(false) -> void {
   // call insert with extracted iterator values
   for (auto iterator = begin; iterator != end; ++iterator) {
-    (void) this->insert (*iterator);
+    (void) insert (*iterator);
   }
 }
 
@@ -216,7 +216,7 @@ __CDS_OptimalInline auto __RandomInsertionPrimitiveClient <__Receiver, __Element
     __Iterator const& end
 ) noexcept(false) -> void {
   // call insertAllOf with received parameters
-  return this->insertAllOf (begin, end);
+  return insertAllOf (begin, end);
 }
 
 
@@ -266,7 +266,7 @@ __CDS_OptimalInline auto __LocalRandomInsertionPrimitiveClient <__Receiver, __El
     ElementType const& element
 ) noexcept(false) -> ElementReference {
   // call insert due to deprecation
-  return this->insert (element);
+  return insert (element);
 }
 
 
@@ -276,7 +276,7 @@ __CDS_OptimalInline auto __LocalRandomInsertionPrimitiveClient <__Receiver, __El
     ElementType&& element
 ) noexcept(false) -> ElementReference {
   // call insert due to deprecation
-  return this->insert (std::move (element));
+  return insert (std::move (element));
 }
 
 
@@ -345,7 +345,7 @@ __CDS_OptimalInline auto __LocalRandomInsertionPrimitiveClient <__Receiver, __El
     __Iterable const& iterable
 ) noexcept(false) -> void {
   // call insert all of with extracted iterators
-  this->insertAllOf (iterable.begin(), iterable.end());
+  insertAllOf (iterable.begin(), iterable.end());
 }
 
 
@@ -355,7 +355,7 @@ __CDS_OptimalInline auto __LocalRandomInsertionPrimitiveClient <__Receiver, __El
     std::initializer_list <__Element> const& list
 ) noexcept(false) -> void {
   // call insert all of with extracted iterators
-  this->insertAllOf (list.begin(), list.end());
+  insertAllOf (list.begin(), list.end());
 }
 
 
@@ -365,7 +365,7 @@ __CDS_OptimalInline auto __LocalRandomInsertionPrimitiveClient <__Receiver, __El
     __Iterable const& iterable
 ) noexcept(false) -> void {
   // call insert all of with extracted iterators
-  this->insertAllOf (iterable.begin(), iterable.end());
+  insertAllOf (iterable.begin(), iterable.end());
 }
 
 
@@ -375,7 +375,7 @@ __CDS_OptimalInline auto __LocalRandomInsertionPrimitiveClient <__Receiver, __El
     std::initializer_list <__Element> const& list
 ) noexcept(false) -> void {
   // call insert all of with extracted iterators
-  this->insertAllOf (list.begin(), list.end());
+  insertAllOf (list.begin(), list.end());
 }
 
 
@@ -387,7 +387,7 @@ auto __LocalRandomInsertionPrimitiveClient <__Receiver, __Element, __Return>::in
 ) noexcept (false) -> void {
   // call insert with extracted iterator values
   for (auto iterator = begin; iterator != end; ++iterator) {
-    (void) this->insert (*iterator);
+    (void) insert (*iterator);
   }
 }
 
@@ -399,7 +399,7 @@ __CDS_OptimalInline auto __LocalRandomInsertionPrimitiveClient <__Receiver, __El
     __Iterator const& end
 ) noexcept(false) -> void {
   // call insertAllOf with received parameters
-  return this->insertAllOf (begin, end);
+  return insertAllOf (begin, end);
 }
 } // namespace __impl
 } // namespace __hidden

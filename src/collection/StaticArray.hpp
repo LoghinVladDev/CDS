@@ -751,15 +751,15 @@ namespace cds {
 
 #include "../shared/iterator/impl/AddressIterator.hpp"
 
-#include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceCompositeClient.hpp" /* NOLINT(llvm-include-order) */
-#include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceOfCompositeClient.hpp"
-#include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceByCompositeClient.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceCompositeClientImpl.hpp" /* NOLINT(llvm-include-order) */
+#include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceOfCompositeClientImpl.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceByCompositeClientImpl.hpp"
 
 #include "../shared/iterableInternalCommunication/client/primitive/impl/IndexedOperationsPrimitiveClientImpl.hpp"
 
-#include "../shared/iterableInternalCommunication/client/composite/impl/IndicesCompositeClient.hpp"  /* NOLINT(llvm-include-order) */
-#include "../shared/iterableInternalCommunication/client/composite/impl/IndicesOfCompositeClient.hpp"
-#include "../shared/iterableInternalCommunication/client/composite/impl/IndicesByCompositeClient.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/impl/IndicesCompositeClientImpl.hpp"  /* NOLINT(llvm-include-order) */
+#include "../shared/iterableInternalCommunication/client/composite/impl/IndicesOfCompositeClientImpl.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/impl/IndicesByCompositeClientImpl.hpp"
 
 #include "../shared/iterableInternalCommunication/server/impl/IterableServerImpl.hpp"
 #include "../shared/iterableInternalCommunication/server/impl/IterableServerDispatcherImpl.hpp"

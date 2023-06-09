@@ -757,8 +757,8 @@ protected:
 #include "../../shared/iterableInternalCommunication/client/primitive/impl/DelegateForwardIterablePrimitiveClientImpl.hpp"
 #include "../../shared/iterableInternalCommunication/client/primitive/impl/IteratorRemovePrimitiveClientImpl.hpp"
 
-#include "../../shared/iterableInternalCommunication/client/composite/impl/GenericMutableStatementsCompositeClient.hpp" // NOLINT(llvm-include-order)
-#include "../../shared/iterableInternalCommunication/client/composite/impl/FindOfMutableCompositeClient.hpp"
-#include "../../shared/iterableInternalCommunication/client/composite/impl/FindByMutableCompositeClient.hpp"
+#include "../../shared/iterableInternalCommunication/client/composite/impl/GenericMutableStatementsCompositeClientImpl.hpp" // NOLINT(llvm-include-order)
+#include "../../shared/iterableInternalCommunication/client/composite/impl/FindOfMutableCompositeClientImpl.hpp"
+#include "../../shared/iterableInternalCommunication/client/composite/impl/FindByMutableCompositeClientImpl.hpp"
 
 #endif // __CDS_MUTABLE_COLLECTION_HPP__

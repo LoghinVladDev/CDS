@@ -329,6 +329,30 @@ template <typename __T>   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, 
 struct __MakeUnsigned {     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using Type = typename std::make_unsigned <__T>::type;
 };
+
+template <typename __T, typename...__Args>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsNoexceptConstructible : __Integral <std::is_nothrow_constructible <__T, __Args...>> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsNoexceptDefaultConstructible : __Integral <std::is_nothrow_default_constructible <__T>> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsNoexceptCopyConstructible : __Integral <std::is_nothrow_copy_constructible <__T>> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsNoexceptMoveConstructible : __Integral <std::is_nothrow_move_constructible <__T>> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T, typename __Arg> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsNoexceptAssignable : __Integral <std::is_nothrow_assignable <__T, __Arg>> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsNoexceptCopyAssignable : __Integral <std::is_nothrow_copy_assignable <__T>> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsNoexceptMoveAssignable : __Integral <std::is_nothrow_move_assignable <__T>> {};  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+template <typename __F, typename...__Args>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsNothrowInvocable : __Integral <std::is_nothrow_invocable <__F, __Args...>> {}; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 } /* namespace __impl */
 
 /**
@@ -612,6 +636,27 @@ struct IsIterator : And <
     PrefixIncrementPossible <__T>,
     NotEqualToPossible <__T>
 > {};
+
+template <typename __T, typename...__Args>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct IsNoexceptConstructible : __impl::__IsNoexceptConstructible <__T, __Args...> {};
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct IsNoexceptDefaultConstructible : __impl::__IsNoexceptDefaultConstructible <__T> {};
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct IsNoexceptCopyConstructible : __impl::__IsNoexceptCopyConstructible <__T> {};
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct IsNoexceptMoveConstructible : __impl::__IsNoexceptMoveConstructible <__T> {};
+
+template <typename __T, typename __Arg> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct IsNoexceptAssignable : __impl::__IsNoexceptAssignable <__T, __Arg> {};
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct IsNoexceptCopyAssignable : __impl::__IsNoexceptCopyAssignable <__T> {};
+
+template <typename __T> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct IsNoexceptMoveAssignable : __impl::__IsNoexceptMoveAssignable <__T> {};
 
 /**
  * @brief Meta-function used to invoke the most appropriate comparison function between two values
