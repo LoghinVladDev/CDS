@@ -1,193 +1,103 @@
-/*
- * Created by loghin on 17/07/22.
- */
+//
+// Created by loghin on 17/07/22.
+//
 
-#ifndef __CDS_SHARED_SINGLE_LINKED_LIST_HPP__ /* NOLINT(llvm-header-guard) */
-#define __CDS_SHARED_SINGLE_LINKED_LIST_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+#ifndef __CDS_SHARED_SINGLE_LINKED_LIST_HPP__ // NOLINT(llvm-header-guard)
+#define __CDS_SHARED_SINGLE_LINKED_LIST_HPP__ // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+#pragma once
 
-namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
-    namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+namespace cds {       // NOLINT(modernize-concat-nested-namespaces)
+namespace __hidden {  // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+namespace __impl {    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-            template <
-                    typename                                                                            __ElementType,  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                    functional :: PredicateFunction < __ElementType const &, __ElementType const & >    __equals        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-            > class __SingleLinkedList {                                                                                /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+template <
+    typename                                                                    __ElementType,  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+    functional::PredicateFunction <__ElementType const&, __ElementType const&>  __equals        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+> class __SingleLinkedList {                                                                    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+public:
+  using __sll_Iterator                = UnidirectionalNodeIterator <__ElementType>;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using __sll_ConstIterator           = UnidirectionalNodeIterator <__ElementType const>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                using ElementType = __ElementType;
+  ~__SingleLinkedList () noexcept = default;
+  auto operator = (__SingleLinkedList const&) noexcept -> __SingleLinkedList& = delete;
+  auto operator = (__SingleLinkedList&&) noexcept -> __SingleLinkedList& = delete;
 
-            public:     /* NOLINT(readability-redundant-access-specifiers) */
-                using __sll_Iterator                = UnidirectionalNodeIterator < __ElementType >;       /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+protected:
+  using ElementType = __ElementType;
 
-            public:     /* NOLINT(readability-redundant-access-specifiers) */
-                using __sll_ConstIterator           = UnidirectionalNodeConstIterator < __ElementType >;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+  constexpr __SingleLinkedList () noexcept; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  __SingleLinkedList (__SingleLinkedList const& list) noexcept(false);       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  constexpr __SingleLinkedList (__SingleLinkedList&& list) noexcept;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-            private:    /* NOLINT(readability-redundant-access-specifiers) */
-                using __NodeType = cds :: __hidden :: __impl :: __UnidirectionalNode < __ElementType >;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+  auto __sll_clear() noexcept -> void;   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  __CDS_NoDiscard constexpr auto __sll_empty() const noexcept -> bool;   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  __CDS_NoDiscard __CDS_MaybeUnused constexpr auto __sll_front() const noexcept -> __ElementType const*;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes)
+  __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_front() noexcept -> __ElementType*;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_backNode() noexcept -> __UnidirectionalNode <__ElementType>*;
 
-            private:    /* NOLINT(readability-redundant-access-specifiers) */
-                __NodeType * _pFront    { nullptr };
+  auto __sll_removeFront() noexcept -> void; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto __sll_newFront() noexcept(false) -> __ElementType*; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto __sll_newBack() noexcept(false) -> __ElementType*;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-            private:    /* NOLINT(readability-redundant-access-specifiers) */
-                __NodeType * _pBack     { nullptr };
+  __CDS_MaybeUnused auto __sll_new (                                    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+      __ElementType const*  pReferenceElement,
+      bool*                 pNewElementCreated
+  ) noexcept(false) -> __ElementType*;
 
-            private:    /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_NoDiscard static auto __sll_allocateNode () noexcept -> __NodeType *;     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+  __CDS_NoDiscard constexpr auto __sll_cbegin() const noexcept -> __sll_ConstIterator;   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  __CDS_NoDiscard constexpr auto __sll_cend() const noexcept -> __sll_ConstIterator;     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_begin() noexcept -> __sll_Iterator;   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes)
+  __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_end() noexcept -> __sll_Iterator;     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-            private:    /* NOLINT(readability-redundant-access-specifiers) */
-                static auto __sll_freeNode (                                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __NodeType * pNode
-                ) noexcept -> void;
+  auto __sll_remove (__ElementType const& value) noexcept -> bool;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto __sll_removeIterator (__sll_Iterator const& iterator) noexcept -> bool;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto __sll_removeConstIterator (__sll_ConstIterator const& iterator) noexcept -> bool;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                constexpr __SingleLinkedList () noexcept; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+  template <typename __Compared, typename __Comparator>
+  auto __sll_removeIf (__Compared const& element, __Comparator const& comparator) noexcept -> bool;
 
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                __SingleLinkedList (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __SingleLinkedList const & list
-                ) noexcept;
+  __CDS_MaybeUnused auto __sll_removeIteratorArray (    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+      __sll_Iterator const* const*  ppIterators,
+      Size                          iteratorCount
+  ) noexcept -> Size;
 
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                constexpr __SingleLinkedList (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __SingleLinkedList && list
-                ) noexcept;
+  auto __sll_removeConstIteratorArray (   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+      __sll_ConstIterator const* const* ppIterators,
+      Size                              iteratorCount
+  ) noexcept -> Size;
 
-            public: /* NOLINT(readability-redundant-access-specifiers) */
-                ~__SingleLinkedList () noexcept = default;
+  template <
+      typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+      cds::meta::EnableIf <cds::meta::IsCopyConstructible <__TElementType>::value> = 0
+  > __CDS_MaybeUnused auto __sll_copy (__SingleLinkedList const& list) noexcept(false) -> void; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-            public: /* NOLINT(readability-redundant-access-specifiers) */
-                auto operator = (
-                        __SingleLinkedList const & /* list */
-                ) noexcept -> __SingleLinkedList & = delete;
+  template <
+      typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+      cds::meta::EnableIf <cds::meta::IsCopyConstructible <__TElementType>::value> = 0
+  > auto __sll_copyCleared (__SingleLinkedList const& list) noexcept(false) -> void;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-            public: /* NOLINT(readability-redundant-access-specifiers) */
-                auto operator = (
-                        __SingleLinkedList && /* list */
-                ) noexcept -> __SingleLinkedList & = delete;
+  auto __sll_move (__SingleLinkedList&& list) noexcept -> void;   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_moveCleared (__SingleLinkedList&& list) noexcept -> void;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                auto __sll_clear () noexcept -> void;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+  __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __sll_equals (  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+      __SingleLinkedList const& list
+  ) const noexcept -> bool;
 
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_NoDiscard constexpr auto __sll_empty () const noexcept -> bool;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+private:
+  using __NodeType = __UnidirectionalNode <__ElementType>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_NoDiscard __CDS_MaybeUnused constexpr auto __sll_front () const noexcept -> __ElementType const *;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
+  __NodeType * _pFront    {nullptr};
+  __NodeType * _pBack     {nullptr};
 
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_front () noexcept -> __ElementType *;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+  __CDS_NoDiscard static auto __sll_allocateNode() noexcept(false) -> __NodeType*; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  static auto __sll_freeNode (__NodeType* pNode) noexcept -> void;          // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                auto __sll_removeFront () noexcept -> void; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+  auto __sll_removeNode (__NodeType* pCurrent, __NodeType* pPrevious) noexcept -> void; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  auto __sll_removeNode (__NodeType* pCurrent) noexcept -> void; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+};
 
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                auto __sll_newFront () noexcept -> __ElementType *; /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+} // namespace __impl
+} // namespace __hidden
+} // namespace cds
 
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                auto __sll_newBack () noexcept -> __ElementType *;  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_MaybeUnused auto __sll_new (                                    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __ElementType const * pReferenceElement,
-                        bool                * pNewElementCreated
-                ) noexcept -> __ElementType *;
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_NoDiscard constexpr auto __sll_cbegin () const noexcept -> __sll_ConstIterator;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_NoDiscard constexpr auto __sll_cend () const noexcept -> __sll_ConstIterator;     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_begin () noexcept -> __sll_Iterator;   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp, *-non-private-member-variables-in-classes) */
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_end () noexcept -> __sll_Iterator;     /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                auto __sll_removeNode ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __NodeType * pPrevious,
-                        __NodeType * pCurrent
-                ) noexcept -> void;
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                auto __sll_remove ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __ElementType const & value
-                ) noexcept -> bool;
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                auto __sll_removeIterator ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __sll_Iterator const & iterator
-                ) noexcept -> bool;
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                auto __sll_removeConstIterator (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __sll_ConstIterator const & iterator
-                ) noexcept -> bool;
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_MaybeUnused auto __sll_removeIteratorArray (    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __sll_Iterator  const * const * ppIterators,
-                        Size                            iteratorCount
-                ) noexcept -> Size;
-
-            private:    /* NOLINT(readability-redundant-access-specifiers) */
-                auto __sll_removeIteratorRange (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __sll_Iterator const * pStart,
-                        __sll_Iterator const * pEnd
-                ) noexcept -> Size;
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                auto __sll_removeConstIteratorArray (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __sll_ConstIterator const * const * ppIterators,
-                        Size                                iteratorCount
-                ) noexcept -> Size;
-
-            private:    /* NOLINT(readability-redundant-access-specifiers) */
-                auto __sll_removeConstIteratorRange (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __sll_ConstIterator const * pStart,
-                        __sll_ConstIterator const * pEnd
-                ) noexcept -> Size;
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                template <
-                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        cds :: meta :: EnableIf <
-                                cds :: meta :: isCopyConstructible < __TElementType > ()
-                        > = 0
-                > __CDS_MaybeUnused auto __sll_copy (
-                        __SingleLinkedList const & list
-                ) noexcept -> void;
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                template <
-                        typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        cds :: meta :: EnableIf <
-                                cds :: meta :: isCopyConstructible < __TElementType > ()
-                        > = 0
-                > auto __sll_copyCleared (                          /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __SingleLinkedList const & list
-                ) noexcept -> void;
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                auto __sll_move (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __SingleLinkedList && list
-                ) noexcept -> void;
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_cpplang_NonConstConstexprMemberFunction auto __sll_moveCleared (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __SingleLinkedList && list
-                ) noexcept -> void;
-
-            protected:  /* NOLINT(readability-redundant-access-specifiers) */
-                __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto __sll_equals (  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                        __SingleLinkedList const & list
-                ) const noexcept -> bool;
-            };
-
-        } /* namespace __impl */
-    } /* namespace __hidden */
-} /* namespace cds */
-
-#endif /* __CDS_SHARED_SINGLE_LINKED_LIST_HPP__ */
+#endif // __CDS_SHARED_SINGLE_LINKED_LIST_HPP__

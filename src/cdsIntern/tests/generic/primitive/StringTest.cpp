@@ -1191,11 +1191,17 @@ auto StringTest::execute() noexcept -> bool {
         }
 
         this->log("'%c' is vowel : '%s'", 'E', StringUtils < char > :: isVowel('E') ? "true" : "false");
+        this->log("'%c' is vowel : '%s'", 'E', StringUtils < char > :: isVowel('e') ? "true" : "false");
         this->log("'%c' is vowel : '%s'", 'b', StringUtils < char > :: isVowel('b') ? "true" : "false");
         this->log("'%c' is vowel : '%s'", '0', StringUtils < char > :: isVowel('0') ? "true" : "false");
         this->log("'%c' is vowel : '%s'", '-', StringUtils < char > :: isVowel('-') ? "true" : "false");
 
         if (!StringUtils < char > :: isVowel('E')) {
+            this->logWarning("isVowel Error");
+            allOk = false;
+        }
+
+        if (!StringUtils < char > :: isVowel('e')) {
             this->logWarning("isVowel Error");
             allOk = false;
         }

@@ -5,27 +5,83 @@
 
 #include <CDS/Function>
 
+template <typename...Outputs>
+typename cds::meta::All <cds::meta::Bind <cds::meta::IsConvertible, cds::meta::Ph<>, std::ostream&>::Type, Outputs...>::value v;
+
+template <typename T>
+using ConvertibleToStdOstreamRef =
+    cds::meta::Bind <cds::meta::IsConvertible, cds::meta::Ph<1>, std::ostream&>::Type<T>;
+
+#include <CDS/LinkedHashSet>
+#include <unordered_map>
+
 int main () {
+  std::unordered_map<int, int> res {{1, 1}, {2, 2}, {3, 3}};
+  auto i = res.begin();
+  while (i != res.end()) {
+    if (i->first %2 == 1) {
+      res.erase(i);
+    } else {
+      ++ i;
+    }
+  }
 
-    using cds::Tuple;
-    using cds::Array;
+  std::erase_if(res, [](auto p){return p.first % 2 == 1;});
+std::cout << cds::String("test") << '\n';
+std::cout << cds::String("test") << '\n';
+std::cout << cds::String("test") << '\n';
 
-
-    using cds::Size;
-    using cds::makeTuple;
-
-    auto t1 = makeTuple <Size, Size, Size> (3, 4, 5);
-
-    Size a = 3, b = 4, c = 5;
-
-    auto t2 = makeTuple (a, b, c);
-    t2.get<0>() = 1;
-
-    cds::Function <bool(int)> f = [](int x){return x == 2;};
-
-    int x = 5;
-    Size s = 3;
-    Array a213 (s, x);
+  cds::LinkedHashSet<int> lhs;
+  lhs.begin();
+//  cds::Array <char const> a2;
+//  *a2.begin() = 2;
+  cds::Array <int> a;
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushBack(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  a.pushFront(1);
+  return 0;
+//
+//  std::stringstream oss;
+//  std::cout << ConvertibleToStdOstreamRef<decltype(oss)>::value << '\n';
+//  return 0;
+////            cds::meta::All <cds::meta::Bind <cds::meta::IsConvertible, cds::meta::Ph<>, int>, float, int>::value;
+//
+//    using cds::Tuple;
+//    using cds::Array;
+//
+//
+//    using cds::Size;
+//    using cds::makeTuple;
+//
+//    auto t1 = makeTuple <Size, Size, Size> (3, 4, 5);
+//
+//    Size a = 3, b = 4, c = 5;
+//
+//    auto t2 = makeTuple (a, b, c);
+//    t2.get<0>() = 1;
+//
+//    cds::Function <bool(int)> f = [](int x){return x == 2;};
+//
+//    int x = 5;
+//    Size s = 3;
+//    Array a213 (s, x);
 
 //    std::cout << cds::meta::All <int, float, int> :: test < cds::meta::IsSame, int > ();
 //  std::cout << IsIntImpl<int>::Type<> ::value << '\n';

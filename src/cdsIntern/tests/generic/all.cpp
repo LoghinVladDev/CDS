@@ -40,13 +40,21 @@ namespace {
 }
 
 
-auto main () -> int {
+auto main (int argc, char** argv) -> int {
 
+  bool silent = false;
+    if (argc > 1) {
+      for (auto const& arg : cds::Array<cds::String> (argv + 1, argv + argc)) {
+        if (arg == "-silent") {
+          silent = true;
+        }
+      }
+    }
 
     auto const start = std::chrono::high_resolution_clock::now();
 
-    auto test = [] ( Test & lTest, String const & name ) {
-        return lTest.start(name);
+    auto test = [silent] ( Test & lTest, String const & name ) {
+        return lTest.disableLog(silent).start(name);
     };
 
     auto tests = cds :: arrayOf (

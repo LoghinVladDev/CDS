@@ -12,16 +12,9 @@
 
 namespace cds {
 
-    namespace __hidden {
-        namespace __impl {
 
-            template <
-                    typename __KeyType,
-                    typename __ValueType
-            > class __MapEntry;
-
-        }
-    }
+    template <typename __KeyType, typename __ValueType>
+    class MapEntry;
 
     template <class K, class V>
     class Pair : public Object { // NOLINT(clion-misra-cpp2008-14-5-2)
@@ -30,10 +23,8 @@ namespace cds {
         using Value                 = V;
 
     private:
-        template <
-                typename __TKeyType,
-                typename __TValueType
-        > friend class cds :: __hidden :: __impl :: __MapEntry;
+        template <typename __TKeyType, typename __TValueType>
+        friend class cds::MapEntry;
 
     private:
         K _first;

@@ -15,7 +15,7 @@ namespace cds {
 
             template < typename __ElementType >
             __CDS_cpplang_ConstexprOverride auto __LazySequence < __ElementType > :: __iicch_obtainGenericHandler (
-                    __IterableInternalRequestType requestType
+                    __IterableInternalRequest requestType
             ) noexcept -> __GenericHandler {
 
                 return this->__is_handlers () [ static_cast < uint32 > ( requestType ) ];
@@ -24,7 +24,7 @@ namespace cds {
 
             template < typename __ElementType >
             __CDS_cpplang_ConstexprOverride auto __LazySequence < __ElementType > :: __iicch_obtainGenericConstHandler (
-                    __IterableInternalRequestType requestType
+                    __IterableInternalRequest requestType
             ) const noexcept -> __GenericConstHandler {
 
                 return this->__is_constHandlers () [ static_cast < uint32 > ( requestType ) ];

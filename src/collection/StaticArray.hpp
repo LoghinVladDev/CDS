@@ -612,12 +612,12 @@ namespace cds {
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                __hidden :: __impl :: __IterableInternalRequestType requestType
+                __hidden :: __impl :: __IterableInternalRequest requestType
         ) noexcept -> __GenericHandler override;
 
     private:    /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler ( /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-                __hidden :: __impl :: __IterableInternalRequestType requestType
+                __hidden :: __impl :: __IterableInternalRequest requestType
         ) const noexcept -> __GenericConstHandler override;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
@@ -739,7 +739,7 @@ namespace cds {
         ) noexcept (false) -> ElementType &;
 
     public: /* NOLINT(readability-redundant-access-specifiers) */
-        __CDS_NoDiscard auto toString () const noexcept -> String override;
+        __CDS_NoDiscard auto toString () const noexcept(false) -> String override;
 
     private:  /* NOLINT(readability-redundant-access-specifiers) */
         __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto circularAdjustedIndex (
@@ -749,22 +749,22 @@ namespace cds {
 
 } /* namespace cds */
 
-#include "../shared/iterator/impl/AddressIterator.hpp"
+#include "../shared/iterator/impl/AddressIteratorImpl.hpp"
 
-#include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceCompositeClient.hpp" /* NOLINT(llvm-include-order) */
-#include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceOfCompositeClient.hpp"
-#include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceByCompositeClient.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceCompositeClientImpl.hpp" /* NOLINT(llvm-include-order) */
+#include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceOfCompositeClientImpl.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/impl/ReplaceByCompositeClientImpl.hpp"
 
-#include "../shared/iterableInternalCommunication/client/primitive/impl/IndexedOperationsPrimitiveClient.hpp"
+#include "../shared/iterableInternalCommunication/client/primitive/impl/IndexedOperationsPrimitiveClientImpl.hpp"
 
-#include "../shared/iterableInternalCommunication/client/composite/impl/IndicesCompositeClient.hpp"  /* NOLINT(llvm-include-order) */
-#include "../shared/iterableInternalCommunication/client/composite/impl/IndicesOfCompositeClient.hpp"
-#include "../shared/iterableInternalCommunication/client/composite/impl/IndicesByCompositeClient.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/impl/IndicesCompositeClientImpl.hpp"  /* NOLINT(llvm-include-order) */
+#include "../shared/iterableInternalCommunication/client/composite/impl/IndicesOfCompositeClientImpl.hpp"
+#include "../shared/iterableInternalCommunication/client/composite/impl/IndicesByCompositeClientImpl.hpp"
 
-#include "../shared/iterableInternalCommunication/server/impl/IterableServer.hpp"
-#include "../shared/iterableInternalCommunication/server/impl/IterableServerDispatcher.hpp"
+#include "../shared/iterableInternalCommunication/server/impl/IterableServerImpl.hpp"
+#include "../shared/iterableInternalCommunication/server/impl/IterableServerDispatcherImpl.hpp"
 
-#include "../shared/array/impl/StaticArrayBase.hpp"
+#include "../shared/array/impl/StaticArrayBaseImpl.hpp"
 
 #include "staticArray/impl/StaticArray.hpp"
 

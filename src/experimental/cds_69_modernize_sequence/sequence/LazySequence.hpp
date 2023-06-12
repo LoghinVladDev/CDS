@@ -112,12 +112,12 @@ namespace cds {
 
             private:
                 __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler (
-                        __IterableInternalRequestType requestType
+                        __IterableInternalRequest requestType
                 ) noexcept -> __GenericHandler override;
 
             private:
                 __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler (
-                        __IterableInternalRequestType requestType
+                        __IterableInternalRequest requestType
                 ) const noexcept -> __GenericConstHandler override;
 
             private:

@@ -1,50 +1,44 @@
-/*
- * Created by loghin on 30/11/22.
- */
+//
+// Created by loghin on 30/11/22.
+//
 
-#ifndef __CDS_TYPE_EXCEPTION_HPP__ /* NOLINT(llvm-header-guard) */
-#define __CDS_TYPE_EXCEPTION_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+#ifndef __CDS_TYPE_EXCEPTION_HPP__ // NOLINT(llvm-header-guard)
+#define __CDS_TYPE_EXCEPTION_HPP__ // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+#pragma once
 
 #include <CDS/exception/RuntimeException>
 
 namespace cds {
+class TypeException : public RuntimeException {
+public:
+  using RuntimeException::RuntimeException;
+  TypeException() noexcept : RuntimeException("Type Cast Exception") {}
 
-    class TypeException : public RuntimeException {
+  template < typename __FromType, typename __ToType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+  TypeException () noexcept : RuntimeException(String(128u, '\0') +
+      "Type Cast Exception: Cannot convert '" +
+      cds::meta::Type<__FromType>::name() + "' to '" +
+      cds::meta::Type<__ToType>::name() + "'"
+  ) {}
 
-    public:
-        TypeException () noexcept;
+  template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+  TypeException () noexcept : RuntimeException(String(64u, '\0') +
+      "Type Cast Exception: Conversion to '" +
+      cds::meta::Type<__ElementType>::name() +
+      "' not possible"
+  ) {}
+};
+} // namespace cds
 
-    public:
-        TypeException (
-                TypeException const & exception
-        ) noexcept;
+namespace cds {
+namespace meta {
+namespace __impl {
+template<>
+struct __TypeParseTraits<TypeException> {
+  constexpr static StringLiteral name = "TypeException";
+};
+} // namespace __impl
+} // namespace meta
+} // namespace cds
 
-    public:
-        TypeException (
-                TypeException && exception
-        ) noexcept;
-
-    public:
-        explicit TypeException (
-                StringView message
-        ) noexcept;
-
-    public:
-        template < typename __FromType, typename __ToType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        TypeException () noexcept;
-
-    public:
-        template < typename __ElementType > /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
-        TypeException () noexcept;
-
-    public:
-        ~TypeException() noexcept override = default;
-    };
-
-} /* namespace cds */
-
-#include "exception/impl/TypeException.hpp"
-
-__CDS_Meta_RegisterParseType(TypeException)
-
-#endif /* __CDS_TYPE_EXCEPTION_HPP__ */
+#endif // __CDS_TYPE_EXCEPTION_HPP__

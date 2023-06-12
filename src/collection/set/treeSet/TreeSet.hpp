@@ -1,9 +1,10 @@
-/*
- * Created by stefan on 28.08.2022.
- */
+//
+// Created by stefan on 28.08.2022.
+//
 
 #ifndef __CDS_TREE_SET_HPP__
-#define __CDS_TREE_SET_HPP__ /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_TREE_SET_HPP__ // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+#pragma once
 
 #include <CDS/Set>
 
@@ -22,264 +23,233 @@
 
 #include "../../../shared/iterableInternalCommunication/server/SetServer.hpp"
 
-#include "treeSet/Constructs.hpp"
+#include "treeSet/TreeSetConstructs.hpp"
 
-namespace cds {                             /* NOLINT(modernize-concat-nested-namespaces) */
+namespace cds {
 
-    template <
-            typename __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-            typename __Comparator       /* NOLINT(bugprone-reserved-identifier) */
-    > class __CDS_InheritsEBOs TreeSet :
-            public Set < __ElementType >,
-            protected __hidden :: __impl :: __TreeSetServer < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetImplementation < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetDispatcher < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetDelegateForwardConstIterableClient < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetDelegateBackwardConstIterableClient < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetConstIteratorRemoveClient < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetRandomInsertionClient < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetFindUniqueClient < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetContainsOfCollectionClient < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetContainsOfInitializerListClient < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetFindOfCollectionClient < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetFindOfInitializerListClient < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetFindByClient < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetRemoveOfCollectionClient < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetRemoveOfInitializerListClient < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetRemoveByClient < __ElementType, __Comparator >,
-            public __hidden :: __impl :: __TreeSetGenericStatementsClient < __ElementType, __Comparator > {
+template <typename __ElementType, typename __Comparator> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+class __CDS_InheritsEBOs TreeSet :
+    public Set <__ElementType>,
+    protected __hidden::__impl::__TreeSetServer <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetImplementation <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetDispatcher <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetDelegateForwardConstIterableClient <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetDelegateBackwardConstIterableClient <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetConstIteratorRemoveClient <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetRandomInsertionClient <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetFindUniqueClient <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetContainsOfCollectionClient <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetContainsOfInitializerListClient <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetFindOfCollectionClient <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetFindOfInitializerListClient <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetFindByClient <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetRemoveOfCollectionClient <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetRemoveOfInitializerListClient <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetRemoveByClient <__ElementType, __Comparator>,
+    public __hidden::__impl::__TreeSetGenericStatementsClient <__ElementType, __Comparator> {
+protected:
+  using SetBase                                = Set <__ElementType>;
+  using Server                                 = __hidden::__impl::__TreeSetServer <__ElementType, __Comparator>;
+  using Implementation                         = __hidden::__impl::__TreeSetImplementation <__ElementType, __Comparator>;
+  using Dispatcher                             = __hidden::__impl::__TreeSetDispatcher <__ElementType, __Comparator>;
+  using DelegateForwardConstIterableClient     = __hidden::__impl::__TreeSetDelegateForwardConstIterableClient <__ElementType, __Comparator>;
+  using DelegateBackwardConstIterableClient    = __hidden::__impl::__TreeSetDelegateBackwardConstIterableClient <__ElementType, __Comparator>;
+  using ConstIteratorRemoveClient              = __hidden::__impl::__TreeSetConstIteratorRemoveClient <__ElementType, __Comparator>;
+  using RandomInsertionClient                  = __hidden::__impl::__TreeSetRandomInsertionClient <__ElementType, __Comparator>;
+  using FindUniqueClient                       = __hidden::__impl::__TreeSetFindUniqueClient <__ElementType, __Comparator>;
+  using ContainsOfCollectionClient             = __hidden::__impl::__TreeSetContainsOfCollectionClient <__ElementType, __Comparator>;
+  using ContainsOfInitializerListClient        = __hidden::__impl::__TreeSetContainsOfInitializerListClient <__ElementType, __Comparator>;
+  using FindOfCollectionClient                 = __hidden::__impl::__TreeSetFindOfCollectionClient <__ElementType, __Comparator>;
+  using FindOfInitializerListClient            = __hidden::__impl::__TreeSetFindOfInitializerListClient <__ElementType, __Comparator>;
+  using FindByClient                           = __hidden::__impl::__TreeSetFindByClient<__ElementType, __Comparator>;
+  using RemoveOfCollectionClient               = __hidden::__impl::__TreeSetRemoveOfCollectionClient<__ElementType, __Comparator>;
+  using RemoveOfInitializerListClient          = __hidden::__impl::__TreeSetRemoveOfInitializerListClient<__ElementType, __Comparator>;
+  using RemoveByClient                         = __hidden::__impl::__TreeSetRemoveByClient<__ElementType, __Comparator>;
+  using GenericStatementsClient                = __hidden::__impl::__TreeSetGenericStatementsClient<__ElementType, __Comparator>;
 
-    protected:  using SetBase                                = Set < __ElementType >;
-    protected:  using Server                                 = __hidden :: __impl :: __TreeSetServer < __ElementType, __Comparator >;
-    protected:  using Implementation                         = __hidden :: __impl :: __TreeSetImplementation < __ElementType, __Comparator >;
-    protected:  using Dispatcher                             = __hidden :: __impl :: __TreeSetDispatcher < __ElementType, __Comparator >;
-    protected:  using DelegateForwardConstIterableClient     = __hidden :: __impl :: __TreeSetDelegateForwardConstIterableClient < __ElementType, __Comparator >;
-    protected:  using DelegateBackwardConstIterableClient    = __hidden :: __impl :: __TreeSetDelegateBackwardConstIterableClient < __ElementType, __Comparator >;
-    protected:  using ConstIteratorRemoveClient              = __hidden :: __impl :: __TreeSetConstIteratorRemoveClient < __ElementType, __Comparator >;
-    protected:  using RandomInsertionClient                  = __hidden :: __impl :: __TreeSetRandomInsertionClient < __ElementType, __Comparator >;
-    protected:  using FindUniqueClient                       = __hidden :: __impl :: __TreeSetFindUniqueClient < __ElementType, __Comparator >;
-    protected:  using ContainsOfCollectionClient             = __hidden :: __impl :: __TreeSetContainsOfCollectionClient < __ElementType, __Comparator >;
-    protected:  using ContainsOfInitializerListClient        = __hidden :: __impl :: __TreeSetContainsOfInitializerListClient < __ElementType, __Comparator >;
-    protected:  using FindOfCollectionClient                 = __hidden :: __impl :: __TreeSetFindOfCollectionClient < __ElementType, __Comparator >;
-    protected:  using FindOfInitializerListClient            = __hidden :: __impl :: __TreeSetFindOfInitializerListClient < __ElementType, __Comparator >;
-    protected:  using FindByClient                           = __hidden :: __impl :: __TreeSetFindByClient< __ElementType, __Comparator >;
-    protected:  using RemoveOfCollectionClient               = __hidden :: __impl :: __TreeSetRemoveOfCollectionClient< __ElementType, __Comparator >;
-    protected:  using RemoveOfInitializerListClient          = __hidden :: __impl :: __TreeSetRemoveOfInitializerListClient< __ElementType, __Comparator >;
-    protected:  using RemoveByClient                         = __hidden :: __impl :: __TreeSetRemoveByClient< __ElementType, __Comparator >;
-    protected:  using GenericStatementsClient                = __hidden :: __impl :: __TreeSetGenericStatementsClient< __ElementType, __Comparator >;
+public:
+  using typename ConstIteratorRemoveClient::ConstIterator;
 
-    protected:  friend Server;
+  using DelegateForwardConstIterableClient::begin;
+  using DelegateForwardConstIterableClient::end;
+  using DelegateForwardConstIterableClient::cbegin;
+  using DelegateForwardConstIterableClient::cend;
 
-    private:    friend RandomInsertionClient;
-    private:    friend ConstIteratorRemoveClient;
-    private:    friend DelegateForwardConstIterableClient;
-    private:    friend DelegateBackwardConstIterableClient;
-    private:    friend RemoveOfCollectionClient;
-    private:    friend RemoveOfInitializerListClient;
-    private:    friend RemoveByClient;
+  using DelegateBackwardConstIterableClient::rbegin;
+  using DelegateBackwardConstIterableClient::rend;
+  using DelegateBackwardConstIterableClient::crbegin;
+  using DelegateBackwardConstIterableClient::crend;
 
-    protected:  using typename SetBase :: __GenericHandler;              /* NOLINT(bugprone-reserved-identifier) */
-    protected:  using typename SetBase :: __GenericConstHandler;         /* NOLINT(bugprone-reserved-identifier) */
+  using ConstIteratorRemoveClient::remove;
 
-    protected: using typename ConstIteratorRemoveClient :: ConstIterator;
+  using RandomInsertionClient::insert;
+  using RandomInsertionClient::add;
+  using RandomInsertionClient::emplace;
+  using RandomInsertionClient::insertAll;
+  using RandomInsertionClient::insertAllOf;
+  using RandomInsertionClient::addAllOf;
 
-    private:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler (         /* NOLINT(bugprone-reserved-identifier) */
-                cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
-        ) noexcept -> __GenericHandler override;
+  using FindUniqueClient::find;
 
-    private:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler (        /* NOLINT(bugprone-reserved-identifier) */
-                cds :: __hidden :: __impl :: __IterableInternalRequestType requestType
-        ) const noexcept -> __GenericConstHandler override;
+  using ContainsOfCollectionClient::containsAnyOf;
+  using ContainsOfCollectionClient::containsAnyNotOf;
+  using ContainsOfCollectionClient::containsAllOf;
+  using ContainsOfCollectionClient::containsNoneOf;
 
+  using ContainsOfInitializerListClient::containsAnyOf;
+  using ContainsOfInitializerListClient::containsAnyNotOf;
+  using ContainsOfInitializerListClient::containsAllOf;
+  using ContainsOfInitializerListClient::containsNoneOf;
 
+  using FindOfCollectionClient::findOf;
+  using FindOfCollectionClient::findFirstOf;
+  using FindOfCollectionClient::findLastOf;
+  using FindOfCollectionClient::findAllOf;
+  using FindOfCollectionClient::findNotOf;
+  using FindOfCollectionClient::findFirstNotOf;
+  using FindOfCollectionClient::findLastNotOf;
+  using FindOfCollectionClient::findAllNotOf;
 
-    public:     using DelegateForwardConstIterableClient :: begin;
-    public:     using DelegateForwardConstIterableClient :: end;
-    public:     using DelegateForwardConstIterableClient :: cbegin;
-    public:     using DelegateForwardConstIterableClient :: cend;
+  using FindOfInitializerListClient::findOf;
+  using FindOfInitializerListClient::findFirstOf;
+  using FindOfInitializerListClient::findLastOf;
+  using FindOfInitializerListClient::findAllOf;
+  using FindOfInitializerListClient::findNotOf;
+  using FindOfInitializerListClient::findFirstNotOf;
+  using FindOfInitializerListClient::findLastNotOf;
+  using FindOfInitializerListClient::findAllNotOf;
 
-    public:     using DelegateBackwardConstIterableClient :: rbegin;
-    public:     using DelegateBackwardConstIterableClient :: rend;
-    public:     using DelegateBackwardConstIterableClient :: crbegin;
-    public:     using DelegateBackwardConstIterableClient :: crend;
+  using FindByClient::findThat;
+  using FindByClient::findFirstThat;
+  using FindByClient::findLastThat;
+  using FindByClient::findAllThat;
 
-    public:     using ConstIteratorRemoveClient :: remove;
-    private:    using ConstIteratorRemoveClient :: removeAll;
+  using RemoveOfCollectionClient::removeOf;
+  using RemoveOfCollectionClient::removeFirstOf;
+  using RemoveOfCollectionClient::removeLastOf;
+  using RemoveOfCollectionClient::removeAllOf;
+  using RemoveOfCollectionClient::removeNotOf;
+  using RemoveOfCollectionClient::removeFirstNotOf;
+  using RemoveOfCollectionClient::removeLastNotOf;
+  using RemoveOfCollectionClient::removeAllNotOf;
 
-    public:     using RandomInsertionClient :: insert;
-    public:     using RandomInsertionClient :: add;
-    public:     using RandomInsertionClient :: emplace;
-    public:     using RandomInsertionClient :: insertAll;
-    public:     using RandomInsertionClient :: insertAllOf;
-    public:     using RandomInsertionClient :: addAllOf;
+  using RemoveOfInitializerListClient::removeOf;
+  using RemoveOfInitializerListClient::removeFirstOf;
+  using RemoveOfInitializerListClient::removeLastOf;
+  using RemoveOfInitializerListClient::removeAllOf;
+  using RemoveOfInitializerListClient::removeNotOf;
+  using RemoveOfInitializerListClient::removeFirstNotOf;
+  using RemoveOfInitializerListClient::removeLastNotOf;
+  using RemoveOfInitializerListClient::removeAllNotOf;
 
-    public:     using FindUniqueClient :: find;
+  using RemoveByClient::removeThat;
+  using RemoveByClient::removeFirstThat;
+  using RemoveByClient::removeLastThat;
+  using RemoveByClient::removeAllThat;
 
-    public:     using ContainsOfCollectionClient :: containsAnyOf;
-    public:     using ContainsOfCollectionClient :: containsAnyNotOf;
-    public:     using ContainsOfCollectionClient :: containsAllOf;
-    public:     using ContainsOfCollectionClient :: containsNoneOf;
+  using GenericStatementsClient::forEach;
+  using GenericStatementsClient::some;
+  using GenericStatementsClient::atLeast;
+  using GenericStatementsClient::atMost;
+  using GenericStatementsClient::moreThan;
+  using GenericStatementsClient::fewerThan;
+  using GenericStatementsClient::count;
+  using GenericStatementsClient::any;
+  using GenericStatementsClient::all;
+  using GenericStatementsClient::none;
 
-    public:     using ContainsOfInitializerListClient :: containsAnyOf;
-    public:     using ContainsOfInitializerListClient :: containsAnyNotOf;
-    public:     using ContainsOfInitializerListClient :: containsAllOf;
-    public:     using ContainsOfInitializerListClient :: containsNoneOf;
+  constexpr TreeSet () noexcept;
+  TreeSet (TreeSet const& set) noexcept(false);
+  constexpr TreeSet (TreeSet&& set) noexcept;
 
-    public:     using FindOfCollectionClient :: findOf;
-    public:     using FindOfCollectionClient :: findFirstOf;
-    public:     using FindOfCollectionClient :: findLastOf;
-    public:     using FindOfCollectionClient :: findAllOf;
-    public:     using FindOfCollectionClient :: findNotOf;
-    public:     using FindOfCollectionClient :: findFirstNotOf;
-    public:     using FindOfCollectionClient :: findLastNotOf;
-    public:     using FindOfCollectionClient :: findAllNotOf;
+  template <
+      typename __IteratorType,                    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+      typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+      cds::meta::EnableIf <cds::meta::IsCopyConstructible <__TElementType>::value> = 0
+  > TreeSet (
+      __IteratorType const& begin,
+      __IteratorType const& end,
+      Size                  count = 0u
+  ) noexcept(false);
 
-    public:     using FindOfInitializerListClient :: findOf;
-    public:     using FindOfInitializerListClient :: findFirstOf;
-    public:     using FindOfInitializerListClient :: findLastOf;
-    public:     using FindOfInitializerListClient :: findAllOf;
-    public:     using FindOfInitializerListClient :: findNotOf;
-    public:     using FindOfInitializerListClient :: findFirstNotOf;
-    public:     using FindOfInitializerListClient :: findLastNotOf;
-    public:     using FindOfInitializerListClient :: findAllNotOf;
+  template <
+      typename __TElementType = __ElementType,     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+      cds::meta::EnableIf <cds::meta::IsCopyConstructible <__TElementType>::value> = 0
+  > TreeSet (std::initializer_list <__ElementType> const& initializerList) noexcept(false);
 
-    public:     using FindByClient :: findThat;
-    public:     using FindByClient :: findFirstThat;
-    public:     using FindByClient :: findLastThat;
-    public:     using FindByClient :: findAllThat;
+  template <typename __IterableType>                // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  __CDS_Explicit TreeSet (__IterableType const& iterable) noexcept(false);
 
-    public:     using RemoveOfCollectionClient :: removeOf;
-    public:     using RemoveOfCollectionClient :: removeFirstOf;
-    public:     using RemoveOfCollectionClient :: removeLastOf;
-    public:     using RemoveOfCollectionClient :: removeAllOf;
-    public:     using RemoveOfCollectionClient :: removeNotOf;
-    public:     using RemoveOfCollectionClient :: removeFirstNotOf;
-    public:     using RemoveOfCollectionClient :: removeLastNotOf;
-    public:     using RemoveOfCollectionClient :: removeAllNotOf;
+  __CDS_cpplang_ConstexprDestructor ~TreeSet () noexcept override;
 
-    public:     using RemoveOfInitializerListClient :: removeOf;
-    public:     using RemoveOfInitializerListClient :: removeFirstOf;
-    public:     using RemoveOfInitializerListClient :: removeLastOf;
-    public:     using RemoveOfInitializerListClient :: removeAllOf;
-    public:     using RemoveOfInitializerListClient :: removeNotOf;
-    public:     using RemoveOfInitializerListClient :: removeFirstNotOf;
-    public:     using RemoveOfInitializerListClient :: removeLastNotOf;
-    public:     using RemoveOfInitializerListClient :: removeAllNotOf;
+  auto operator = (TreeSet const& set) noexcept(false) -> TreeSet&;
+  auto operator = (TreeSet&& set) noexcept -> TreeSet&;
+  auto operator = (std::initializer_list <__ElementType> const& initializerList) noexcept(false) -> TreeSet&;
 
-    public:     using RemoveByClient :: removeThat;
-    public:     using RemoveByClient :: removeFirstThat;
-    public:     using RemoveByClient :: removeLastThat;
-    public:     using RemoveByClient :: removeAllThat;
+  template <typename __IterableType>
+  auto operator = (__IterableType const& iterable) noexcept(false) -> TreeSet&;
 
-    public:     using GenericStatementsClient :: forEach;
-    public:     using GenericStatementsClient :: some;
-    public:     using GenericStatementsClient :: atLeast;
-    public:     using GenericStatementsClient :: atMost;
-    public:     using GenericStatementsClient :: moreThan;
-    public:     using GenericStatementsClient :: fewerThan;
-    public:     using GenericStatementsClient :: count;
-    public:     using GenericStatementsClient :: any;
-    public:     using GenericStatementsClient :: all;
-    public:     using GenericStatementsClient :: none;
+  __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
+      TreeSet const & set
+  ) const noexcept -> bool;
 
-    public:
-        constexpr TreeSet () noexcept;
+  __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
+      TreeSet const & set
+  ) const noexcept -> bool;
 
-    public:
-        TreeSet (
-                TreeSet const & set
-        ) noexcept;
+  __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto contains (
+      __ElementType const& element
+  ) const noexcept -> bool override;
 
-    public:
-        constexpr TreeSet (
-                TreeSet && set
-        ) noexcept;
+  __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto size () const noexcept -> Size override;
+  auto clear () noexcept -> void override;
+  auto remove (__ElementType const& element) noexcept -> bool override;
+  
+private:
+  friend __hidden::__impl::__SetServer <TreeSet, __ElementType>;
+  friend __hidden::__impl::__LocalRandomInsertionPrimitiveClient <TreeSet, __ElementType, __ElementType const>;
+  friend __hidden::__impl::__LocalConstIteratorRemovePrimitiveClient <TreeSet, __ElementType, typename Implementation::__rbt_AbstractConstIterator>;
+  friend __hidden::__impl::__LocalDelegateForwardConstIterablePrimitiveClient <TreeSet, typename Implementation::__rbt_ConstIterator>;
+  friend __hidden::__impl::__LocalDelegateBackwardConstIterablePrimitiveClient <TreeSet, typename Implementation::__rbt_ReverseConstIterator>;
 
-    public:
-        template <
-                typename __IteratorType,                    /* NOLINT(bugprone-reserved-identifier) */
-                typename __TElementType = __ElementType,    /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <
-                        cds :: meta :: isCopyConstructible < __TElementType > ()
-                > = 0
-        > TreeSet (
-                __IteratorType const & begin,
-                __IteratorType const & end,
-                Size                   count = 0ULL
-        ) noexcept;
+  using typename SetBase::__GenericHandler;              // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using typename SetBase::__GenericConstHandler;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-    public:
-        template <
-                typename __TElementType = __ElementType,     /* NOLINT(bugprone-reserved-identifier) */
-                cds :: meta :: EnableIf <                    /* NOLINT(bugprone-reserved-identifier) */
-                        cds :: meta :: isCopyConstructible < __TElementType > ()
-            > = 0
-        > TreeSet (
-                std :: initializer_list < __ElementType > const & initializerList
-        ) noexcept;
+  using Server::__ss_handlers;      // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using Server::__ss_constHandlers; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-    public:
-        template < typename __IterableType >                /* NOLINT(bugprone-reserved-identifier) */
-        __CDS_Explicit TreeSet (                            /* NOLINT(bugprone-reserved-identifier) */
-                __IterableType const & iterable
-        ) noexcept;
+  using Implementation::__rbt_copyCleared;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using Implementation::__rbt_copy;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using Implementation::__rbt_move;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using Implementation::__rbt_clear;        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using Implementation::__rbt_get;          // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using Implementation::__rbt_size;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using Implementation::__rbt_remove;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using Implementation::__rbt_equals;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
-    public:
-        __CDS_cpplang_ConstexprDestructor ~TreeSet () noexcept override;
-
-    public:
-        auto operator = (
-                TreeSet const & set
-        ) noexcept -> TreeSet &;
-
-
-    public:
-        auto operator = (
-                TreeSet && set
-        ) noexcept -> TreeSet &;
-
-    protected:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto contains (
-                __ElementType const & element
-        ) const noexcept -> bool override;
-
-    public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto size () const noexcept -> Size override;
-
-    public:
-       auto clear () noexcept -> void override;
-
-    public:
-      auto remove (
-                __ElementType const & element
-        ) noexcept -> bool override;
-
-    public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
-                TreeSet const & set
-        ) const noexcept -> bool;
-
-    public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
-                TreeSet const & set
-        ) const noexcept -> bool;
-    };
+  __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler (         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+      cds::__hidden::__impl::__IterableInternalRequest requestType
+  ) noexcept -> __GenericHandler override;
+  
+  __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericConstHandler (        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+      cds::__hidden::__impl::__IterableInternalRequest requestType
+  ) const noexcept -> __GenericConstHandler override;
+};
 }
 
-#include "../../../shared/redBlackTree/impl/RedBlackTree.hpp"
+#include "../../../shared/redBlackTree/impl/RedBlackTreeImpl.hpp"
 
 #include "../../../shared/delegateIterator/impl/DelegateIterator.hpp"
 
 #include "../../../shared/iterator/impl/RedBlackTreeIterator.hpp"
 
-#include "../../../shared/iterableInternalCommunication/server/impl/SetServer.hpp"
-#include "../../../shared/iterableInternalCommunication/server/impl/TreeSetServerDispatcher.hpp"
+#include "../../../shared/iterableInternalCommunication/server/impl/SetServerImpl.hpp"
+#include "../../../shared/iterableInternalCommunication/server/impl/TreeSetServerDispatcherImpl.hpp"
 
-#include "../../../shared/iterableInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClient.hpp"
+#include "../../../shared/iterableInternalCommunication/client/primitive/impl/DelegateBackwardConstIterablePrimitiveClientImpl.hpp"
 
-#include "treeSet/impl/TreeSet.hpp"
+#include "treeSet/impl/TreeSetImpl.hpp"
+#include "treeSet/impl/TreeSetCTAD.hpp"
 
 
-#endif /* __CDS_TREE_SET_HPP__ */
+#endif // __CDS_TREE_SET_HPP__
