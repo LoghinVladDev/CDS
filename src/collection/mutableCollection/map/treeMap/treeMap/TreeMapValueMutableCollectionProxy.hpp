@@ -253,7 +253,7 @@ template <
 
 template <typename __KeyType, typename __ValueType, typename __Comparator>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __CDS_InheritsEBOs TreeMap <__KeyType, __ValueType, __Comparator>::ValueMutableCollectionProxy :
-    public AbstractValueMutableCollectionProxy,
+    public TreeMap <__KeyType, __ValueType>::AbstractValueMutableCollectionProxy,
     private __hidden::__impl::__TreeMapValueProxyServer <ValueMutableCollectionProxy, __KeyType, __ValueType>,
     public __hidden::__impl::__TreeMapValueProxyConstIteratorRemoveClient <ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator>,
     public __hidden::__impl::__TreeMapValueProxyIteratorRemoveClient <ValueMutableCollectionProxy, __KeyType, __ValueType, __Comparator>,
