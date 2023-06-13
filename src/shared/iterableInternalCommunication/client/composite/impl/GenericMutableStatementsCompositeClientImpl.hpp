@@ -8,7 +8,7 @@
 
 #ifdef _MSC_VER
 #include "../GenericImmutableStatementsCompositeClient.hpp"
-#include "GenericImmutableStatementsCompositeClient.hpp"
+#include "GenericImmutableStatementsCompositeClientImpl.hpp"
 #endif
 
 namespace cds {       // NOLINT(modernize-concat-nested-namespaces)

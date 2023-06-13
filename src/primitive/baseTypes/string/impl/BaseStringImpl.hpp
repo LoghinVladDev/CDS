@@ -17,22 +17,22 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 Index const __BaseString <__CharType>::invalidIndex = StringUtils <__CharType>::invalidIndex;
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__BaseStringView <__CharType> const __BaseString <__CharType>::whitespace = __BaseStringView <__CharType> (meta::__impl::__StringData <__CharType>::whitespace);
+__BaseStringView <__CharType> const __BaseString <__CharType>::whitespace = __BaseStringView <__CharType> (cds::meta::__impl::__StringData <__CharType>::whitespace);
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__BaseStringView <__CharType> const __BaseString <__CharType>::digits = __BaseStringView <__CharType> (meta::__impl::__StringData <__CharType>::digits);
+__BaseStringView <__CharType> const __BaseString <__CharType>::digits = __BaseStringView <__CharType> (cds::meta::__impl::__StringData <__CharType>::digits);
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__BaseStringView <__CharType> const __BaseString <__CharType>::lowercaseAlphabet = __BaseStringView <__CharType> (meta::__impl::__StringData <__CharType>::lowercaseAlphabet);
+__BaseStringView <__CharType> const __BaseString <__CharType>::lowercaseAlphabet = __BaseStringView <__CharType> (cds::meta::__impl::__StringData <__CharType>::lowercaseAlphabet);
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__BaseStringView <__CharType> const __BaseString <__CharType>::uppercaseAlphabet = __BaseStringView <__CharType> (meta::__impl::__StringData <__CharType>::uppercaseAlphabet);
+__BaseStringView <__CharType> const __BaseString <__CharType>::uppercaseAlphabet = __BaseStringView <__CharType> (cds::meta::__impl::__StringData <__CharType>::uppercaseAlphabet);
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__BaseStringView <__CharType> const __BaseString <__CharType>::vowels = __BaseStringView <__CharType> (meta::__impl::__StringData <__CharType>::vowels);
+__BaseStringView <__CharType> const __BaseString <__CharType>::vowels = __BaseStringView <__CharType> (cds::meta::__impl::__StringData <__CharType>::vowels);
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-__BaseStringView <__CharType> const __BaseString <__CharType>::consonants = __BaseStringView <__CharType> (meta::__impl::__StringData <__CharType>::consonants);
+__BaseStringView <__CharType> const __BaseString <__CharType>::consonants = __BaseStringView <__CharType> (cds::meta::__impl::__StringData <__CharType>::consonants);
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
@@ -148,7 +148,7 @@ __BaseString <__CharType>::__BaseString (Size length, ElementType fillCharacter)
     _pBuffer [index] = fillCharacter;
   }
 
-  _pBuffer [_length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [_length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
 }
 
 
@@ -179,7 +179,7 @@ __BaseString <__CharType>::__BaseString (std::initializer_list <ElementType> con
     _pBuffer [_length++] = character;
   }
 
-  _pBuffer [_length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [_length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
 }
 
 
@@ -196,7 +196,7 @@ __BaseString <__CharType>::__BaseString (
     _pBuffer [_length++] = static_cast <ElementType> (character);
   }
 
-  _pBuffer [_length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [_length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
 }
 
 
@@ -208,7 +208,7 @@ __CDS_OptimalInline __BaseString <__CharType>::__BaseString (ElementType value) 
     _pBuffer (__allocation::__StringPrimitiveAlloc <__CharType>::__alloc (__BaseString::minCapacity)) {
 
   _pBuffer [0] = value;
-  _pBuffer [1] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [1] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
 }
 
 
@@ -219,7 +219,7 @@ __BaseString <__CharType>::__BaseString (__NumericType value) noexcept(false) :
     _pBuffer (__allocation::__StringPrimitiveAlloc <__CharType>::__alloc (__BaseString::minCapacity)) {
       
   *StringUtils <ElementType>::writeInteger (_pBuffer, 0u, value, StringUtils <ElementType>::integerLength (value), &_length) = 
-      meta::__impl::__StringData <ElementType>::nullCharacter;
+      cds::meta::__impl::__StringData <ElementType>::nullCharacter;
 }
 
 
@@ -361,7 +361,7 @@ auto __BaseString <__CharType>::resize (Size size) noexcept(false) -> void {
     _length = _capacity - 1u;
   }
 
-  _pBuffer [_length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [_length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
 }
 
 
@@ -403,7 +403,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::clear () noexcept -> void {
     return;
   }
 
-  _pBuffer [0]  = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [0]  = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   _length       = 0u;
 }
 
@@ -532,7 +532,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::toStdString () const noexcep
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 constexpr auto __BaseString <__CharType>::cStr () const noexcept -> ElementType const* {
-  return _pBuffer == nullptr ? meta::__impl::__StringData <__CharType>::emptyString : _pBuffer;
+  return _pBuffer == nullptr ? cds::meta::__impl::__StringData <__CharType>::emptyString : _pBuffer;
 }
 
 
@@ -663,7 +663,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::operator = (
   _pBuffer = __Alloc::__enlarge (_pBuffer, _capacity, 2u, &_capacity);
   _length = 1u;
   _pBuffer [0] = character;
-  _pBuffer [1] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [1] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return *this;
 }
 
@@ -678,7 +678,7 @@ auto __BaseString <__CharType>::operator = (
   auto valueLength = StringUtils <__CharType>::integerLength (value);
   _pBuffer = __Alloc::__enlarge (_pBuffer, _capacity, valueLength + 1u, &_capacity);
   *StringUtils <__CharType>::writeInteger (_pBuffer, 0u, value, valueLength, &_length) =
-      meta::__impl::__StringData <ElementType>::nullCharacter;
+      cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return *this;
 }
 
@@ -1386,7 +1386,7 @@ __CDS_OptionalInline auto __BaseString <__CharType>::operator * (int count)&& no
   }
 
   _length = newLength;
-  _pBuffer [_length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [_length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return std::move (*this);
 }
 
@@ -1462,7 +1462,7 @@ auto __BaseString <__CharType>::append (
         length() * sizeof (__CharType)
     );
 
-    string._pBuffer [newLength] = meta::__impl::__StringData <ElementType>::nullCharacter;
+    string._pBuffer [newLength] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
     __Alloc::__free (cds::exchange (_pBuffer, cds::exchange (string._pBuffer, nullptr)));
     _length   = newLength;
     _capacity = cds::exchange (string._capacity, 0u);
@@ -1521,7 +1521,7 @@ auto __BaseString <__CharType>::append (
   auto numberLength = StringUtils <__CharType>::integerLength (value);
   _pBuffer = __Alloc::__enlarge (_pBuffer, _capacity, _length + numberLength + 1u, &_capacity);
   *StringUtils <__CharType>::writeInteger (_pBuffer, _length, value, numberLength, &_length) =
-      meta::__impl::__StringData <ElementType>::nullCharacter;
+      cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return* this;
 }
 
@@ -1597,7 +1597,7 @@ auto __BaseString <__CharType>::prepend (
         _length * sizeof (ElementType)
     );
 
-    _pBuffer [newLength] = meta::__impl::__StringData <ElementType>::nullCharacter;
+    _pBuffer [newLength] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
     _length                = newLength;
 
     (void) std::memcpy (
@@ -1635,7 +1635,7 @@ auto __BaseString <__CharType>::prepend (
   );
 
   _pBuffer [0] = character;
-  _pBuffer [++_length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [++_length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
 
   return * this;
 }
@@ -1658,7 +1658,7 @@ auto __BaseString <__CharType>::prepend (
 
   (void) StringUtils <__CharType>::writeInteger (_pBuffer, 0u, value, numberLength, nullptr);
   _length += numberLength;
-  _pBuffer [_length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [_length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return *this;
 }
 
@@ -1679,7 +1679,7 @@ auto __BaseString <__CharType>::prepend (
 
   StringUtils <__CharType>::copy (_pBuffer, 0u, (value ? "true" : "false"), 0u, valueLength, false);
   _length += valueLength;
-  _pBuffer [_length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [_length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return *this;
 }
 
@@ -2321,7 +2321,7 @@ auto __BaseString <__CharType>::ltrim (__BaseStringView <__CharType> const& char
       length() * sizeof (ElementType)
   );
 
-  _pBuffer [length()] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [length()] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return *this;
 }
 
@@ -2344,7 +2344,7 @@ auto __BaseString <__CharType>::ltrim (ElementType character) noexcept -> __Base
       length() * sizeof (ElementType)
   );
 
-  _pBuffer [length()] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [length()] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return *this;
 }
 
@@ -2361,7 +2361,7 @@ auto __BaseString <__CharType>::rtrim (ElementType character) noexcept -> __Base
   }
 
   _length = offset + 1u;
-  _pBuffer [length()] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [length()] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return *this;
 }
 
@@ -2385,7 +2385,7 @@ auto __BaseString <__CharType>::rtrim (__BaseStringView <__CharType> const& char
   }
 
   _length = static_cast <Size> (offset) + 1u;
-  _pBuffer [length()] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [length()] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return *this;
 }
 
@@ -2446,7 +2446,7 @@ __CDS_MaybeUnused auto __BaseString <__CharType>::rjust (Size size, ElementType 
     _pBuffer [index] = element;
   }
 
-  _pBuffer [size] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [size] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   _length = size;
   return *this;
 }
@@ -2671,7 +2671,7 @@ __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString <__CharType>::re
       _pBuffer + 1,
       _length
   );
-  _pBuffer [_length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [_length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return *this;
 }
 
@@ -2699,7 +2699,7 @@ __CDS_MaybeUnused __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStrin
       _pBuffer + string.length(),
       length() - string.length()
   );
-  _pBuffer [_length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [_length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return *this;
 }
 
@@ -2712,7 +2712,7 @@ __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString <__CharType>::re
     return *this;
   }
 
-  _pBuffer [--_length - 1u] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [--_length - 1u] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return *this;
 }
 
@@ -2735,7 +2735,7 @@ __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString <__CharType>::re
   }
 
   _length = _length - string.length();
-  _pBuffer [_length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  _pBuffer [_length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return *this;
 }
 
@@ -2782,7 +2782,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::join (
     result._length += (*iterator)._length;
   }
 
-  result._pBuffer [result._length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  result._pBuffer [result._length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return result;
 }
 
@@ -2818,7 +2818,7 @@ __CDS_OptimalInline auto __BaseString <__CharType>::join (
     result._length += (*iterator)._length;
   }
 
-  result._pBuffer [result._length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  result._pBuffer [result._length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return result;
 }
 
@@ -2872,7 +2872,7 @@ __CDS_OptionalInline auto __BaseString <__CharType>::replace (
         inPlace.length() * sizeof (ElementType)
     );
 
-    _pBuffer [_length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+    _pBuffer [_length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
     return * this;
   }
 
@@ -2896,7 +2896,7 @@ __CDS_OptionalInline auto __BaseString <__CharType>::replace (
       inPlace.length() * sizeof (ElementType)
   );
 
-  newBuffer [_length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  newBuffer [_length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   _capacity = newCapacity;
   __Alloc::__free (cds::exchange (_pBuffer, newBuffer));
   return *this;
@@ -2924,7 +2924,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template < typename __Action > // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::forEach (
     __Action const& action
-) noexcept (noexcept(action(meta::referenceOf<ElementType>()))) -> void {
+) noexcept (noexcept(action(cds::meta::referenceOf<ElementType>()))) -> void {
   for (Size index = 0u; index < _length; ++index) {
     action (_pBuffer [index]);
   }
@@ -2935,7 +2935,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template < typename __Action > // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::forEach (
     __Action const& action
-) const noexcept (noexcept(action(meta::valueOf <ElementType>()))) -> void {
+) const noexcept (noexcept(action(cds::meta::valueOf <ElementType>()))) -> void {
   for (Size index = 0u; index < _length; ++index) {
     action (_pBuffer [index]);
   }
@@ -2947,7 +2947,7 @@ template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl
 auto __BaseString <__CharType>::some (
     Size                count,
     __Predicate const&  predicate
-) noexcept (noexcept(predicate(meta::referenceOf <ElementType>()))) -> bool {
+) noexcept (noexcept(predicate(cds::meta::referenceOf <ElementType>()))) -> bool {
   Size trueCount = 0u;
   for (Size index = 0u; index < _length; ++index) {
     if (predicate (_pBuffer [index])) {
@@ -2968,7 +2968,7 @@ template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl
 auto __BaseString <__CharType>::some (
     Size                count,
     __Predicate const&  predicate
-) const noexcept(noexcept(predicate(meta::valueOf <ElementType>()))) -> bool {
+) const noexcept(noexcept(predicate(cds::meta::valueOf <ElementType>()))) -> bool {
   Size trueCount = 0u;
   for (Size index = 0u; index < _length; ++index) {
     if (predicate (_pBuffer [index])) {
@@ -2989,7 +2989,7 @@ template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl
 auto __BaseString <__CharType>::atLeast (
     Size                count,
     __Predicate const&  predicate
-) noexcept (noexcept(predicate(meta::referenceOf <ElementType>()))) -> bool {
+) noexcept (noexcept(predicate(cds::meta::referenceOf <ElementType>()))) -> bool {
   Size trueCount = 0u;
   for (Size index = 0u; index < _length; ++index) {
     if (predicate (_pBuffer [index])) {
@@ -3010,7 +3010,7 @@ template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl
 auto __BaseString <__CharType>::atLeast (
     Size                count,
     __Predicate const&  predicate
-) const noexcept(noexcept(predicate(meta::valueOf <ElementType>()))) -> bool {
+) const noexcept(noexcept(predicate(cds::meta::valueOf <ElementType>()))) -> bool {
   Size trueCount = 0u;
   for (Size index = 0u; index < _length; ++index) {
     if (predicate (_pBuffer [index])) {
@@ -3031,7 +3031,7 @@ template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl
 auto __BaseString <__CharType>::atMost (
     Size                count,
     __Predicate const&  predicate
-) noexcept (noexcept(predicate(meta::referenceOf <ElementType>()))) -> bool {
+) noexcept (noexcept(predicate(cds::meta::referenceOf <ElementType>()))) -> bool {
   Size trueCount = 0u;
   for (Size index = 0u; index < _length; ++index) {
     if (predicate (_pBuffer [index])) {
@@ -3052,7 +3052,7 @@ template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl
 auto __BaseString <__CharType>::atMost (
     Size                count,
     __Predicate const&  predicate
-) const noexcept(noexcept(predicate(meta::valueOf <ElementType>()))) -> bool {
+) const noexcept(noexcept(predicate(cds::meta::valueOf <ElementType>()))) -> bool {
   Size trueCount = 0u;
   for (Size index = 0u; index < _length; ++index) {
     if (predicate (_pBuffer [index])) {
@@ -3073,7 +3073,7 @@ template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl
 __CDS_OptimalInline auto __BaseString <__CharType>::moreThan (
     Size                count,
     __Predicate const&  predicate
-) noexcept (noexcept(predicate(meta::referenceOf <ElementType>()))) -> bool {
+) noexcept (noexcept(predicate(cds::meta::referenceOf <ElementType>()))) -> bool {
   return atLeast (count + 1, predicate);
 }
 
@@ -3083,7 +3083,7 @@ template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl
 __CDS_OptimalInline auto __BaseString <__CharType>::moreThan (
     Size                  count,
     __Predicate const&  predicate
-) const noexcept(noexcept(predicate(meta::valueOf <ElementType>()))) -> bool {
+) const noexcept(noexcept(predicate(cds::meta::valueOf <ElementType>()))) -> bool {
   return atLeast (count + 1, predicate);
 }
 
@@ -3093,7 +3093,7 @@ template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl
 __CDS_OptimalInline auto __BaseString <__CharType>::fewerThan (
     Size                count,
     __Predicate const&  predicate
-) noexcept (noexcept(predicate(meta::referenceOf <ElementType>()))) -> bool {
+) noexcept (noexcept(predicate(cds::meta::referenceOf <ElementType>()))) -> bool {
   return atMost (count - 1, predicate);
 }
 
@@ -3103,7 +3103,7 @@ template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl
 __CDS_OptimalInline auto __BaseString <__CharType>::fewerThan (
     Size                count,
     __Predicate const&  predicate
-) const noexcept(noexcept(predicate(meta::valueOf <ElementType>()))) -> bool {
+) const noexcept(noexcept(predicate(cds::meta::valueOf <ElementType>()))) -> bool {
   return atMost (count - 1, predicate);
 }
 
@@ -3112,7 +3112,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::count (
     __Predicate const& predicate
-) noexcept (noexcept(predicate(meta::referenceOf <ElementType>()))) -> Size {
+) noexcept (noexcept(predicate(cds::meta::referenceOf <ElementType>()))) -> Size {
   Size trueCount = 0u;
   for (Size index = 0u; index < _length; ++index) {
     if (predicate (_pBuffer [index])) {
@@ -3128,7 +3128,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::count (
     __Predicate const& predicate
-) const noexcept(noexcept(predicate(meta::valueOf <ElementType>()))) -> Size {
+) const noexcept(noexcept(predicate(cds::meta::valueOf <ElementType>()))) -> Size {
   Size trueCount = 0u;
   for (Size index = 0u; index < _length; ++index) {
     if (predicate (_pBuffer [index])) {
@@ -3144,7 +3144,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::any (
     __Predicate const& predicate
-) noexcept (noexcept(predicate(meta::referenceOf <ElementType>()))) -> bool {
+) noexcept (noexcept(predicate(cds::meta::referenceOf <ElementType>()))) -> bool {
   for (Size index = 0u; index < _length; ++index) {
     if (predicate (_pBuffer [index])) {
       return true;
@@ -3159,7 +3159,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::any (
     __Predicate const& predicate
-) const noexcept(noexcept(predicate(meta::valueOf <ElementType>()))) -> bool {
+) const noexcept(noexcept(predicate(cds::meta::valueOf <ElementType>()))) -> bool {
   for (Size index = 0u; index < _length; ++index) {
     if (predicate (_pBuffer [index])) {
       return true;
@@ -3174,7 +3174,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::all (
     __Predicate const& predicate
-) noexcept (noexcept(predicate(meta::referenceOf <ElementType>()))) -> bool {
+) noexcept (noexcept(predicate(cds::meta::referenceOf <ElementType>()))) -> bool {
   for (Size index = 0u; index < _length; ++index) {
     if (!predicate (_pBuffer [index])) {
       return false;
@@ -3189,7 +3189,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::all (
     __Predicate const& predicate
-) const noexcept(noexcept(predicate(meta::valueOf <ElementType>()))) -> bool {
+) const noexcept(noexcept(predicate(cds::meta::valueOf <ElementType>()))) -> bool {
   for (Size index = 0u; index < _length; ++index) {
     if (!predicate (_pBuffer [index])) {
       return false;
@@ -3204,7 +3204,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::none (
     __Predicate const& predicate
-) noexcept (noexcept(predicate(meta::referenceOf <ElementType>()))) -> bool {
+) noexcept (noexcept(predicate(cds::meta::referenceOf <ElementType>()))) -> bool {
   for (Size index = 0u; index < _length; ++index) {
     if (predicate (_pBuffer [index])) {
       return false;
@@ -3219,7 +3219,7 @@ template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl3
 template <typename __Predicate> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 auto __BaseString <__CharType>::none (
     __Predicate const& predicate
-) const noexcept(noexcept(predicate(meta::valueOf <ElementType>()))) -> bool {
+) const noexcept(noexcept(predicate(cds::meta::valueOf  <ElementType>()))) -> bool {
   for (Size index = 0u; index < _length; ++index) {
     if (predicate (_pBuffer [index])) {
       return false;

@@ -184,13 +184,13 @@ __CDS_MaybeUnused __CDS_OptimalInline auto __BaseStringView <__CharType>::toStdS
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 constexpr auto __BaseStringView <__CharType>::cStr () const noexcept -> ElementType const* {
-  return _pData == nullptr ? meta::__impl::__StringData <__CharType>::emptyString : _pData;
+  return _pData == nullptr ? cds::meta::__impl::__StringData <__CharType>::emptyString : _pData;
 }
 
 
 template <typename __CharType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) 
 constexpr auto __BaseStringView <__CharType>::data () const noexcept -> ElementType const* {
-  return _pData == nullptr ? meta::__impl::__StringData <__CharType>::emptyString : _pData;
+  return _pData == nullptr ? cds::meta::__impl::__StringData <__CharType>::emptyString : _pData;
 }
 
 
@@ -751,7 +751,7 @@ auto __BaseStringView <__CharType>::operator + (
 
   StringUtils <__CharType>::copy (result.data(), 0u, cStr(), 0u, length(), false);
   result._pBuffer [result._length - 1u] = character;
-  result._pBuffer [result._length]      = meta::__impl::__StringData <ElementType>::nullCharacter;
+  result._pBuffer [result._length]      = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return result;
 }
 
@@ -771,7 +771,7 @@ auto __BaseStringView <__CharType>::operator + (
 
   StringUtils <__CharType>::copy (result.data(), 0u, _pData, 0u, length(), false);
   *StringUtils <__CharType>::writeInteger (result.data(), length(), value, valueLength, nullptr) = 
-      meta::__impl::__StringData <ElementType>::nullCharacter;
+      cds::meta::__impl::__StringData <ElementType>::nullCharacter;
 
   return result;
 }
@@ -911,7 +911,7 @@ auto __BaseStringView <__CharType>::operator * (
     result._length += length();
   }
 
-  result._pBuffer [result._length] = meta::__impl::__StringData <ElementType>::nullCharacter;
+  result._pBuffer [result._length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return result;
 }
 

@@ -981,112 +981,112 @@ public:
   template <typename __Action>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto forEach (
       __Action const& action
-  ) const noexcept (noexcept(action(meta::valueOf <ElementType>()))) -> void;
+  ) const noexcept (noexcept(action(cds::meta::valueOf <ElementType>()))) -> void;
  
   template <typename __Action>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto forEach (
       __Action const& action
-  ) noexcept (noexcept(action(meta::referenceOf <ElementType>()))) -> void;
- 
+  ) noexcept (noexcept(action(cds::meta::referenceOf <ElementType>()))) -> void;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto some (
       Size               count,
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) const noexcept (noexcept (predicate (meta::valueOf <ElementType>()))) -> bool;
- 
+  ) const noexcept (noexcept (predicate (cds::meta::valueOf <ElementType>()))) -> bool;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto some (
       Size               count,
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) noexcept (noexcept (predicate (meta::referenceOf <ElementType>()))) -> bool;
- 
+  ) noexcept (noexcept (predicate (cds::meta::referenceOf <ElementType>()))) -> bool;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto atLeast (
       Size               count,
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) const noexcept (noexcept (predicate (meta::valueOf <ElementType>()))) -> bool;
- 
+  ) const noexcept (noexcept (predicate (cds::meta::valueOf <ElementType>()))) -> bool;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto atLeast (
       Size               count,
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) noexcept (noexcept (predicate (meta::referenceOf <ElementType>()))) -> bool;
- 
+  ) noexcept (noexcept (predicate (cds::meta::referenceOf <ElementType>()))) -> bool;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto atMost (
       Size               count,
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) const noexcept (noexcept (predicate (meta::valueOf <ElementType>()))) -> bool;
- 
+  ) const noexcept (noexcept (predicate (cds::meta::valueOf <ElementType>()))) -> bool;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto atMost (
       Size               count,
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) noexcept (noexcept (predicate (meta::referenceOf <ElementType>()))) -> bool;
- 
+  ) noexcept (noexcept (predicate (cds::meta::referenceOf <ElementType>()))) -> bool;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto moreThan (
       Size               count,
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) const noexcept (noexcept (predicate (meta::valueOf <ElementType>()))) -> bool;
- 
+  ) const noexcept (noexcept (predicate (cds::meta::valueOf <ElementType>()))) -> bool;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto moreThan (
       Size               count,
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) noexcept (noexcept (predicate (meta::referenceOf <ElementType>()))) -> bool;
- 
+  ) noexcept (noexcept (predicate (cds::meta::referenceOf <ElementType>()))) -> bool;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto fewerThan (
       Size               count,
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) const noexcept (noexcept (predicate (meta::valueOf <ElementType>()))) -> bool;
- 
+  ) const noexcept (noexcept (predicate (cds::meta::valueOf <ElementType>()))) -> bool;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto fewerThan (
       Size               count,
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) noexcept (noexcept (predicate (meta::referenceOf <ElementType>()))) -> bool;
- 
+  ) noexcept (noexcept (predicate (cds::meta::referenceOf <ElementType>()))) -> bool;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto count (
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) const noexcept (noexcept (predicate (meta::valueOf <ElementType>()))) -> Size;
- 
+  ) const noexcept (noexcept (predicate (cds::meta::valueOf <ElementType>()))) -> Size;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto count (
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) noexcept (noexcept (predicate (meta::referenceOf <ElementType>()))) -> Size;
- 
+  ) noexcept (noexcept (predicate (cds::meta::referenceOf <ElementType>()))) -> Size;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto any (
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) const noexcept (noexcept (predicate (meta::valueOf <ElementType>()))) -> bool;
- 
+  ) const noexcept (noexcept (predicate (cds::meta::valueOf <ElementType>()))) -> bool;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto any (
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) noexcept (noexcept (predicate (meta::referenceOf <ElementType>()))) -> bool;
- 
+  ) noexcept (noexcept (predicate (cds::meta::referenceOf <ElementType>()))) -> bool;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto all (
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) const noexcept (noexcept (predicate (meta::valueOf <ElementType>()))) -> bool;
- 
+  ) const noexcept (noexcept (predicate (cds::meta::valueOf <ElementType>()))) -> bool;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto all (
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) noexcept (noexcept (predicate (meta::referenceOf <ElementType>()))) -> bool;
- 
+  ) noexcept (noexcept (predicate (cds::meta::referenceOf <ElementType>()))) -> bool;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto none (
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) const noexcept (noexcept (predicate (meta::valueOf <ElementType>()))) -> bool;
- 
+  ) const noexcept (noexcept (predicate (cds::meta::valueOf <ElementType>()))) -> bool;
+
   template <typename __Predicate = decltype (&predicates::alwaysTrue<ElementType>)> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto none (
       __Predicate const& predicate = &predicates::alwaysTrue <ElementType>
-  ) noexcept (noexcept (predicate (meta::referenceOf <ElementType>()))) -> bool;
+  ) noexcept (noexcept (predicate (cds::meta::referenceOf <ElementType>()))) -> bool;
  
   template <typename...__ArgumentTypes>   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   __CDS_NoDiscard static auto format (
@@ -1413,6 +1413,7 @@ auto operator << (
 
 #include "../../../shared/memory/PrimitiveAllocation.hpp"
 #include <CDS/exception/OutOfBoundsException>
+#include <CDS/exception/OutOfMemoryException>
 
 #include "impl/StringUtilsImpl.hpp" // NOLINT(llvm-include-order)
 #include "impl/BaseStringImpl.hpp"

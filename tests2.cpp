@@ -16,20 +16,14 @@ using ConvertibleToStdOstreamRef =
 #include <unordered_map>
 
 int main () {
-  std::unordered_map<int, int> res {{1, 1}, {2, 2}, {3, 3}};
-  auto i = res.begin();
-  while (i != res.end()) {
-    if (i->first %2 == 1) {
-      res.erase(i);
-    } else {
-      ++ i;
-    }
-  }
+std::cout << cds::String("test") << '\n';
+std::cout << cds::String("test") << '\n';
+std::cout << cds::String("test") << '\n';
 
-  std::erase_if(res, [](auto p){return p.first % 2 == 1;});
-std::cout << cds::String("test") << '\n';
-std::cout << cds::String("test") << '\n';
-std::cout << cds::String("test") << '\n';
+cds::Array aOfInt = cds::arrayOf (1, 2, 3, 4);
+cds::Array aOfIntToIns = cds::arrayOf (5, 6, 7, 8);
+auto const& aRef = aOfIntToIns;
+aOfInt.insertAllOfBefore (aOfInt.begin(), aRef);
 
   cds::LinkedHashSet<int> lhs;
   lhs.begin();

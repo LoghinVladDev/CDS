@@ -276,7 +276,6 @@ public:
   /// \public
   __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept; // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp,*-non-private-member-variables-in-classes)
 
-protected:
   /// \brief Default Constructor, constexpr
   /// \exceptsafe
   ///
@@ -325,6 +324,7 @@ protected:
   /// \protected
   auto operator = (AbstractBidirectionalNodeIterator&&) noexcept -> AbstractBidirectionalNodeIterator& = default;
 
+protected:
   __CDS_cpplang_NonConstConstexprMemberFunction auto advanceFwd() noexcept -> void;
   __CDS_cpplang_NonConstConstexprMemberFunction auto reverseFwd() noexcept -> void;
   __CDS_cpplang_NonConstConstexprMemberFunction auto advanceBwd() noexcept -> void;

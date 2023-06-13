@@ -10,10 +10,21 @@
 #include <CDS/exception/UnsupportedOperationException>
 #include <cassert>
 
+#ifdef __CDS_compiler_MSVC
+#include <malloc.h>
+#endif
+
 namespace cds {           // NOLINT(modernize-concat-nested-namespaces)
 namespace __hidden {      // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
 namespace __impl {        // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
 namespace __allocation {  // NOLINT(bugprone-reserved-identifier)
+
+#ifdef __CDS_compiler_MSVC
+inline auto aligned_alloc(std::size_t align, std::size_t size) -> void* {
+    (void) align;
+    return malloc(size);
+}
+#endif
 
 template < typename __Type, Size __size = sizeof ( __Type ) > // NOLINT(bugprone-reserved-identifier)
 struct __RawContainer { // NOLINT(bugprone-reserved-identifier)

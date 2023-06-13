@@ -11,7 +11,7 @@
 namespace cds {
 class OutOfMemoryException : public Exception {
 public:
-  using Exception::Exception;
+    OutOfMemoryException() noexcept = default;
   __CDS_Explicit OutOfMemoryException(std::bad_alloc const& stdExcept) noexcept : _pStdExcept(&stdExcept) {}
 
   __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto message() const noexcept -> StringView override {

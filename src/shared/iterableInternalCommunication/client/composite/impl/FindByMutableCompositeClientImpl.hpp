@@ -8,7 +8,7 @@
 
 #ifdef _MSC_VER
 #include "../FindByImmutableCompositeClient.hpp"
-#include "FindByImmutableCompositeClient.hpp"
+#include "FindByImmutableCompositeClientImpl.hpp"
 #endif
 
 namespace cds {       // NOLINT(modernize-concat-nested-namespaces)

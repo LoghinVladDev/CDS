@@ -27,7 +27,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
             template < typename __ElementType >                         /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             class __CDS_InheritsEBOs __ForwardDelegateWrapperIterator : /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                     public __AbstractDelegateWrapperIterator < __ElementType >,
-                    public meta :: ForwardIterator {
+                    public cds::meta::ForwardIterator {
 
             protected:  /* NOLINT(readability-redundant-access-specifiers) */
                 /**
