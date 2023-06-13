@@ -314,7 +314,7 @@ template <
   }
 
   // if back + count is after end of buffer => no space 
-  if (_pData->_pBack + count > _pData->_pBuffer + _pData->_frontCapacity + _pData->_backCapacity) {
+  if (_pData->_pBuffer == nullptr || _pData->_pBack + count > _pData->_pBuffer + _pData->_frontCapacity + _pData->_backCapacity) {
 
     // compute next capacity 
     _pData->_backNextCapacity = cds::maxOf (_pData->_backNextCapacity, _pData->_backCapacity + count);

@@ -26,6 +26,19 @@ elseif (linux)
     add_compile_options("$<$<CONFIG:Release>:${GCC_COMPILE_RELEASE_OPTIONS}>")
 endif()
 
+#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
+#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=undefined")
+
+#set(
+#        CDS_SANITIZE_FLAGS
+#        "-fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address -fsanitize-address-use-after-return=always -fsanitize-address-use-after-scope -fsanitize=memory -fsanitize-memory-track-origins=2 ASAN_OPTIONS=detect_stack_use_after_return=1:detect_stack_use_after_return=1:detect_leaks=1:check_initialization_order=1"
+#)
+#
+#
+#set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${CDS_SANITIZE_FLAGS}")
+#
+#set (CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} ${CDS_SANITIZE_FLAGS}")
+
 set (
         CDS_INCLUDE_DIRECTORIES
         include

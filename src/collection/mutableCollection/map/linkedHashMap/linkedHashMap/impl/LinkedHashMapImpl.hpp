@@ -108,7 +108,7 @@ __CDS_OptimalInline auto LinkedHashMap <__KeyType, __ValueType, __Hasher>::__new
     return pNewElement;
   }
 
-  return nullptr;
+  return &(*ppNewNode)->_data;
 }
 
 

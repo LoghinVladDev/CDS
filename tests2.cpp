@@ -14,8 +14,21 @@ using ConvertibleToStdOstreamRef =
 
 #include <CDS/LinkedHashSet>
 #include <unordered_map>
+#include <CDS/LinkedHashSet>
 
 int main () {
+
+  using cds::LinkedHashSet;
+  using cds::String;
+
+  cds::uint64 sh = 1u << 33u;
+  cds :: LinkedHashSet < String > intSetUnderTest;
+  cds :: Set < String > & underTest = intSetUnderTest;
+  intSetUnderTest = { 1, 1 };
+  std::cout << intSetUnderTest << '\n';
+
+
+  return 0;
 std::cout << cds::String("test") << '\n';
 std::cout << cds::String("test") << '\n';
 std::cout << cds::String("test") << '\n';

@@ -73,7 +73,7 @@ __CDS_OptimalInline auto LinkedHashSet <__ElementType, __Hasher>::__newAddress (
     return pNewElement;
   }
 
-  return nullptr;
+  return &(*ppNewNode)->_data;
 }
 
 

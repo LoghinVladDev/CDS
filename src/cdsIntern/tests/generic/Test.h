@@ -15,7 +15,7 @@
 namespace glob {
     template <typename F>
     constexpr static auto flag (F shiftSize) noexcept -> cds::uint64 {
-        return 1U << static_cast <cds::uint64> (shiftSize);
+        return 1ULL << static_cast <cds::uint64> (shiftSize);
     }
 
     template <typename Functor>
