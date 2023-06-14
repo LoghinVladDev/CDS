@@ -121,10 +121,7 @@ public:
   using DelegateBackwardConstIterableClient::crend;
 
   using IteratorRemoveClient::remove;
-  using IteratorRemoveClient::removeAll;
-
   using ConstIteratorRemoveClient::remove;
-  using ConstIteratorRemoveClient::removeAll;
 
   using RandomInsertionClient::insert;
   using RandomInsertionClient::add;
@@ -307,6 +304,18 @@ private:
   friend __hidden::__impl::__LocalFindUniqueMutablePrimitiveClient <TreeMap, __KeyType, Iterator>;
   friend __hidden::__impl::__LocalFindUniqueImmutablePrimitiveClient <TreeMap, __KeyType, ConstIterator>;
 
+  friend __hidden::__impl::__RemoveOfCompositeClient <
+      TreeMap, EntryType, Iterable <EntryType>,
+      &__hidden::__impl::__iterableContains <EntryType>
+  >;
+
+  friend __hidden::__impl::__RemoveOfCompositeClient <
+      TreeMap, EntryType, std::initializer_list <EntryType>,
+      &__hidden::__impl::__initializerListContains <EntryType, &cds::meta::equals <EntryType>>
+  >;
+
+  friend __hidden::__impl::__RemoveByCompositeClient <TreeMap, EntryType>;
+
   using typename MapBase::__GenericHandler;              // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using typename MapBase::__GenericConstHandler;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
@@ -323,6 +332,9 @@ private:
   using Implementation::__rbt_cbegin;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using Implementation::__rbt_cend;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using Implementation::__rbt_equals;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+  using IteratorRemoveClient::removeAll;
+  using ConstIteratorRemoveClient::removeAll;
 
   KeySetProxy                 _keySetProxy;
   ValueMutableCollectionProxy _valueMutableCollectionProxy;

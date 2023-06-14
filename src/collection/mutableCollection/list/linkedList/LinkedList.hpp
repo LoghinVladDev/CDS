@@ -416,6 +416,18 @@ private:
   friend __hidden::__impl::__LocalDelegateBackwardIterablePrimitiveClient <LinkedList, typename Implementation::__dll_ReverseIterator>;
   friend __hidden::__impl::__LocalDelegateBackwardConstIterablePrimitiveClient <LinkedList, typename Implementation::__dll_ConstReverseIterator>;
 
+  friend __hidden::__impl::__RemoveOfCompositeClient <
+      LinkedList, __ElementType, Iterable <__ElementType>,
+      &__hidden::__impl::__iterableContains <__ElementType>
+  >;
+
+  friend __hidden::__impl::__RemoveOfCompositeClient <
+      LinkedList, __ElementType, std::initializer_list <__ElementType>,
+      &__hidden::__impl::__initializerListContains <__ElementType, &cds::meta::equals <__ElementType>>
+  >;
+
+  friend __hidden::__impl::__RemoveByCompositeClient <LinkedList, __ElementType>;
+
   using Server::__ls_handlers;              // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using Server::__ls_constHandlers;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
@@ -431,6 +443,9 @@ private:
   using Implementation::__dll_removeAt;     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using Implementation::__dll_equals;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using Implementation::__dll_sort;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+  using IteratorRemoveClient::removeAll;
+  using ConstIteratorRemoveClient::removeAll;
 
   __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler ( // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
       __hidden::__impl::__IterableInternalRequest requestType

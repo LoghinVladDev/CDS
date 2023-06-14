@@ -322,6 +322,18 @@ private:
   friend __hidden::__impl::__LocalFindUniqueMutablePrimitiveClient <HashMap, __KeyType, Iterator>;
   friend __hidden::__impl::__LocalFindUniqueImmutablePrimitiveClient <HashMap, __KeyType, ConstIterator>;
 
+  friend __hidden::__impl::__RemoveOfCompositeClient <
+      HashMap, EntryType, Iterable <EntryType>,
+      &__hidden::__impl::__iterableContains <EntryType>
+  >;
+
+  friend __hidden::__impl::__RemoveOfCompositeClient <
+      HashMap, EntryType, std::initializer_list <EntryType>,
+      &__hidden::__impl::__initializerListContains <EntryType, &__hidden::__impl::__hashMapEquals <__KeyType, __ValueType>>
+  >;
+
+  friend __hidden::__impl::__RemoveByCompositeClient <HashMap, EntryType>;
+
   using typename MapBase::__GenericHandler;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using typename MapBase::__GenericConstHandler;    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
@@ -339,6 +351,9 @@ private:
   using Implementation::__ht_equals;      // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using Implementation::__ht_cbegin;      // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using Implementation::__ht_cend;        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+  using IteratorRemoveClient::removeAll;
+  using ConstIteratorRemoveClient::removeAll;
 
   KeySetProxy                 _keySetProxy;
   ValueMutableCollectionProxy _valueMutableCollectionProxy;

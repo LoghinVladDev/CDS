@@ -212,6 +212,19 @@ private:
   friend __hidden::__impl::__LocalDelegateForwardConstIterablePrimitiveClient <TreeSet, typename Implementation::__rbt_ConstIterator>;
   friend __hidden::__impl::__LocalDelegateBackwardConstIterablePrimitiveClient <TreeSet, typename Implementation::__rbt_ReverseConstIterator>;
 
+  friend __hidden::__impl::__RemoveOfCompositeClient <
+      TreeSet, __ElementType, Iterable <__ElementType>,
+      &__hidden::__impl::__iterableContains <__ElementType>
+  >;
+
+  friend __hidden::__impl::__RemoveOfCompositeClient <
+      TreeSet, __ElementType, std::initializer_list <__ElementType>,
+      &__hidden::__impl::__initializerListContains <__ElementType, &cds::meta::equals <__ElementType>>
+  >;
+
+  friend __hidden::__impl::__RemoveByCompositeClient <TreeSet, __ElementType>;
+
+
   using typename SetBase::__GenericHandler;              // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using typename SetBase::__GenericConstHandler;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
@@ -226,6 +239,8 @@ private:
   using Implementation::__rbt_size;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using Implementation::__rbt_remove;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using Implementation::__rbt_equals;       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+
+  using ConstIteratorRemoveClient::removeAll;
 
   __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __iicch_obtainGenericHandler (         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
       cds::__hidden::__impl::__IterableInternalRequest requestType

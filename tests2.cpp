@@ -13,10 +13,51 @@ using ConvertibleToStdOstreamRef =
     cds::meta::Bind <cds::meta::IsConvertible, cds::meta::Ph<1>, std::ostream&>::Type<T>;
 
 #include <CDS/LinkedHashSet>
+#include <CDS/LinkedList>
 #include <unordered_map>
 #include <CDS/LinkedHashSet>
+#include <CDS/HashSet>
+#include <CDS/TreeSet>
+#include <CDS/HashMap>
+#include <CDS/TreeMap>
+#include <CDS/LinkedHashMap>
 
 int main () {
+
+  cds::Array <int> a24124;
+  a24124.removeAllThat ([](auto e) {return e == 2;});
+  a24124.removeAllOf ({1, 2, 3});
+  a24124.removeAllOf (cds::arrayOf(1, 2, 3));
+  cds::LinkedList <int> ll24124;
+  ll24124.removeAllThat ([](auto e) {return e == 2;});
+  ll24124.removeAllOf ({1, 2, 3});
+  ll24124.removeAllOf (cds::arrayOf(1, 2, 3));
+
+  cds::HashSet <int> hs;
+  hs.removeAllThat ([](auto e) {return e == 2;});
+  hs.removeAllOf ({1, 2, 3});
+  hs.removeAllOf (cds::arrayOf(1, 2, 3));
+  cds::LinkedHashSet <int> lh1s;
+  lh1s.removeAllThat ([](auto e) {return e == 2;});
+  lh1s.removeAllOf ({1, 2, 3});
+  lh1s.removeAllOf (cds::arrayOf(1, 2, 3));
+  cds::TreeSet <int> ts;
+  ts.removeAllThat ([](auto e) {return e == 2;});
+  ts.removeAllOf ({1, 2, 3});
+  ts.removeAllOf (cds::arrayOf(1, 2, 3));
+
+  cds::HashMap <int, int> hm;
+  hm.removeAllThat ([](auto e) {return e.key() == 2;});
+  hm.removeAllOf ({{1, 1}});
+  hm.removeAllOf (cds::arrayOf(cds::MapEntry{1, 1}));
+  cds::LinkedHashMap <int, int> lhm;
+  lhm.removeAllThat ([](auto e) {return e.key() == 2;});
+  lhm.removeAllOf ({{1, 1}});
+  lhm.removeAllOf (cds::arrayOf(cds::MapEntry{1, 1}));
+  cds::TreeMap <int, int> tm;
+  tm.removeAllThat ([](auto e) {return e.key() == 2;});
+  tm.removeAllOf ({{1, 1}});
+  tm.removeAllOf (cds::arrayOf(cds::MapEntry{1, 1}));
 
   using cds::LinkedHashSet;
   using cds::String;

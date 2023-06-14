@@ -245,6 +245,18 @@ private:
   friend __hidden::__impl::__LocalConstIteratorRemovePrimitiveClient <HashSet, __ElementType, typename Implementation::__ht_ConstIterator>;
   friend __hidden::__impl::__LocalDelegateForwardConstIterablePrimitiveClient <HashSet, typename Implementation::__ht_ConstIterator>;
 
+  friend __hidden::__impl::__RemoveOfCompositeClient <
+      HashSet, __ElementType, Iterable <__ElementType>,
+      &__hidden::__impl::__iterableContains <__ElementType>
+  >;
+
+  friend __hidden::__impl::__RemoveOfCompositeClient <
+      HashSet, __ElementType, std::initializer_list <__ElementType>,
+      &__hidden::__impl::__initializerListContains <__ElementType, &cds::meta::equals <__ElementType>>
+  >;
+
+  friend __hidden::__impl::__RemoveByCompositeClient <HashSet, __ElementType>;
+
   using IteratorRemoveClient::removeAll;
 
   using Server::__ss_handlers;      // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)

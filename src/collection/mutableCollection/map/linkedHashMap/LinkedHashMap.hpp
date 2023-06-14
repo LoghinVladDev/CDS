@@ -333,10 +333,24 @@ private:
   friend __hidden::__impl::__LocalFindUniqueMutablePrimitiveClient <LinkedHashMap, __KeyType, Iterator>;
   friend __hidden::__impl::__LocalFindUniqueImmutablePrimitiveClient <LinkedHashMap, __KeyType, ConstIterator>;
 
+  friend __hidden::__impl::__RemoveOfCompositeClient <
+      LinkedHashMap, EntryType, Iterable <EntryType>,
+      &__hidden::__impl::__iterableContains <EntryType>
+  >;
+
+  friend __hidden::__impl::__RemoveOfCompositeClient <
+      LinkedHashMap, EntryType, std::initializer_list <EntryType>,
+      &__hidden::__impl::__initializerListContains <EntryType, &cds::meta::equals <EntryType>>
+  >;
+
+  friend __hidden::__impl::__RemoveByCompositeClient <LinkedHashMap, EntryType>;
+
+
   using typename MapBase::__GenericHandler;         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using typename MapBase::__GenericConstHandler;    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   using IteratorRemoveClient::removeAll;
+  using ConstIteratorRemoveClient::removeAll;
 
   using Server::__ms_handlers;        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   using Server::__ms_constHandlers;   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)

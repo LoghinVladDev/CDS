@@ -83,7 +83,7 @@ auto __LocalConstIteratorRemovePrimitiveClient <__Receiver, __Element, __Iterato
     ConstIterator const*  pIterators,
     Size                  iteratorCount
 ) noexcept(false) -> Size {
-  using __Alloc = __hidden::__impl::__allocation::__PrimitiveAlloc <cds::meta::Iterator const*>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  using __Alloc = __hidden::__impl::__allocation::__PrimitiveAlloc <__Iterator const*>;  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
   auto pReceiver = static_cast <__Receiver*> (this);
   if (iteratorCount >= 2u) {
