@@ -30,7 +30,7 @@ class __AbstractDelegateWrapperIterator;    // NOLINT(bugprone-reserved-identifi
 /// \internal library-private
 template <typename __Receiver, typename __Element>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __AbstractIteratorRemovePrimitiveClient {     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-protected:
+public:
   /// \typedef internal alias representing the __Element parameter
   /// \protected
   using ElementType       = __Element;
@@ -55,6 +55,7 @@ protected:
   /// \public
   auto remove (AbstractIterator const& iterator) noexcept(false) -> bool;
 
+protected:
   /// \brief Function used to create a request to remove several elements indicated to by the given iterators in the array. Given Iterators in the iterator buffer MUST be ordered per forward iteration
   /// \param [in] pIterators : AbstractIterator cptr = Address to an array of constant Abstract Iterator values
   /// \param [in] iteratorCount : Size = number of values enclosed in the array given at pIterators
@@ -83,7 +84,7 @@ protected:
 /// \internal library-private
 template <typename __Receiver, typename __Element, typename __Iterator> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __LocalIteratorRemovePrimitiveClient {                            // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-protected:
+public:
   /// \typedef internal alias representing the __Element const parameter
   /// \protected
   using ElementType   = __Element;
@@ -102,6 +103,7 @@ protected:
   /// \public
   auto remove (Iterator const& iterator) noexcept(false) -> bool;
 
+protected:
   /// \brief Function used to create a request to remove several elements indicated to by the given iterators in the array. Given Iterators in the iterator buffer MUST be ordered per forward iteration
   /// \param [in] pIterators : Iterator cptr = Address to an array of constant Const Iterator values
   /// \param [in] iteratorCount : Size = number of values enclosed in the array given at pIterators

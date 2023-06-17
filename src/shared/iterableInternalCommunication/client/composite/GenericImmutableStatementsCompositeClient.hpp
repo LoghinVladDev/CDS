@@ -34,6 +34,7 @@ public:
 protected:
   constexpr static bool const itNoexcept = __exceptCond;
 
+public:
   /// \brief Function used to apply an action over each element of the iterable
   /// \tparam __Consumer the type of the consumer given as a parameter, the type must be callable and compatible with the 'Any ( Decay < ElementType > )' function signature, where Any is any type or a member function compatible with the signature 'Any () const'
   /// \param [in] consumer : __Consumer cref = Constant Reference to callable object / member function, to be called with each element of the iterable as a parameter, if callable, or as an object caller, if member function

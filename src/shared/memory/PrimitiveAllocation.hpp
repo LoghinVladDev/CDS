@@ -19,7 +19,7 @@ namespace __hidden {      // NOLINT(modernize-concat-nested-namespaces, bugprone
 namespace __impl {        // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
 namespace __allocation {  // NOLINT(bugprone-reserved-identifier)
 
-#ifdef __CDS_compiler_MSVC
+#if defined(__CDS_compiler_MSVC) || defined(__CDS_compiler_MinGW)
 inline auto aligned_alloc(std::size_t align, std::size_t size) -> void* {
     (void) align;
     return malloc(size);

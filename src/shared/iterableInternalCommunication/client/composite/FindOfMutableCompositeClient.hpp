@@ -42,6 +42,7 @@ public:
 protected:
   constexpr static bool const itNoexcept = __exceptCond;
 
+public:
   /// \brief Function used to find the elements that are also found in the given parameter iterable, until it has found a certain number of elements, specified in the 'count' parameter. Returns elements locations via iterators in a given collection.
   /// \tparam __Collection is the type of collection to return the found iterators in
   /// \param [in] count : Size = Maximum number of elements to find

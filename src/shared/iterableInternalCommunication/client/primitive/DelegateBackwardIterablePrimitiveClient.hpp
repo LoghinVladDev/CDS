@@ -59,7 +59,6 @@ public:
           __ForwardDelegateWrapperIterator <ElementType>
       >;
 
-protected:
   /// \brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_rbegin request
   /// \exceptsafe
   /// \return ConstReverseIterator = Wrapper for the received backward, mutable, begin iterator
@@ -113,7 +112,6 @@ public:
   /// \public
   using ReverseIterator = __ReverseIterator;
 
-protected:
   /// \brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using the __rbeginLocal function
   /// \exceptsafe
   /// \return ReverseIterator = begin iterator

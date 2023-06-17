@@ -16,7 +16,8 @@ public:
 
 protected:
   constexpr static bool const itNoexcept = __exceptCond;
-  
+
+public:
   template <typename __Collection, typename __Predicate>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto indicesOfThat (
       Size                count,

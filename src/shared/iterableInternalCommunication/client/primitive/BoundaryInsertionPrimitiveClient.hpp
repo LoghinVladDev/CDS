@@ -29,7 +29,7 @@ namespace __impl {    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert
 /// \internal library-private
 template <typename __Receiver, typename __Element, typename __Return> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __BoundaryInsertionPrimitiveClient {                            // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-protected:
+public:
   /// \typedef alias for __Element template parameter
   /// \private
   using ElementType       = __Element;
@@ -401,7 +401,7 @@ protected:
 /// \internal library-private
 template <typename __Receiver, typename __Element, typename __Return> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __LocalBoundaryInsertionPrimitiveClient {                       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-protected:
+public:
   /// \typedef alias for __Element template parameter
   /// \private
   using ElementType       = __Element;

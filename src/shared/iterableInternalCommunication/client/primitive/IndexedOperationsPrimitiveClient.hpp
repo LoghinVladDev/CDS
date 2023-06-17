@@ -11,7 +11,7 @@ namespace __hidden {  // NOLINT(modernize-concat-nested-namespaces, bugprone-res
 namespace __impl {    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 template <typename __Receiver, typename __Element>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __IndexedOperationsPrimitiveClient {          // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-protected:
+public:
   using ElementType = __Element;
 
   template <
@@ -42,7 +42,7 @@ protected:
 
 template <typename __Receiver, typename __Element>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __LocalIndexedOperationsPrimitiveClient {     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-protected:
+public:
   using ElementType = __Element;
 
   template <

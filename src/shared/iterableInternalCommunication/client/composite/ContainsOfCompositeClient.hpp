@@ -31,6 +31,7 @@ template <
 protected:
   constexpr static bool const allNoexcept = __exceptCond;
 
+public:
   /// \brief Function used to check if the caller iterable contains any element that matches any element from the given parameter iterable
   /// \param [in] from : __FromIterable cref = Constant Reference to an iterable to check inclusion for
   /// \exceptsafe

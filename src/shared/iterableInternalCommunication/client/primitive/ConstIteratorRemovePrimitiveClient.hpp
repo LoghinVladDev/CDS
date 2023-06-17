@@ -30,7 +30,7 @@ class __AbstractDelegateWrapperIterator;    // NOLINT(bugprone-reserved-identifi
 /// \internal library-private
 template <typename __Receiver, typename __Element>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __AbstractConstIteratorRemovePrimitiveClient {        // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-protected:
+public:
   /// \typedef internal alias representing the __Element const parameter
   /// \protected
   using ElementType       = __Element const;
@@ -55,6 +55,7 @@ protected:
   /// \public
   auto remove (AbstractConstIterator const& iterator) noexcept(false) -> bool;
 
+protected:
   /// \brief Function used to create a request to remove several elements indicated to by the given iterators in the array. Given Iterators in the iterator buffer MUST be ordered per forward iteration
   /// \param [in] pIterators : AbstractConstIterator cptr = Address to an array of constant Abstract Const Iterator values
   /// \param [in] iteratorCount : Size = number of values enclosed in the array given at pIterators
@@ -98,7 +99,7 @@ private:
 /// \internal library-private
 template <typename __Receiver, typename __Element, typename __Iterator> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __LocalConstIteratorRemovePrimitiveClient {                       // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-protected:
+public:
   /// \typedef internal alias representing the __Element const parameter
   /// \protected
   using ElementType       = __Element const;
@@ -117,6 +118,7 @@ protected:
   /// \public
   auto remove (ConstIterator const& iterator) noexcept(false) -> bool;
 
+protected:
   /// \brief Function used to create a request to remove several elements indicated to by the given iterators in the array. Given Iterators in the iterator buffer MUST be ordered per forward iteration
   /// \param [in] pIterators : ConstIterator cptr = Address to an array of constant Const Iterator values
   /// \param [in] iteratorCount : Size = number of values enclosed in the array given at pIterators

@@ -20,7 +20,8 @@ protected:
   constexpr static bool const itNoexcept = __exceptCond;
   constexpr static bool const copyAsNoexcept = cds::meta::IsNoexceptCopyAssignable <__Element>::value && itNoexcept;
   constexpr static bool const moveAsNoexcept = cds::meta::IsNoexceptMoveAssignable <__Element>::value && itNoexcept;
-  
+
+public:
   template <typename __Supplier>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   struct IsNoexceptSuppliable : cds::meta::And <
       cds::meta::IsNoexceptAssignable <__Element, cds::meta::ReturnOf <__Supplier>>,

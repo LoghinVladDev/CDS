@@ -37,6 +37,7 @@ public:
 protected:
   constexpr static bool const itNoexcept = __exceptCond;
 
+public:
   /// \brief Function used to find the elements that are validated by a given predicate and return the iterators of the elements in a given collection, until a given limit has been reached, at which point the iteration will stop.
   /// \tparam __CollectionType is the type of template iterable to store the iterators in
   /// \tparam __Predicate is the type of the predicate given as a parameter, the type must be callable and compatible with the 'bool ( Decay < ElementType > )' function signature, or with the 'bool ()' member function signature.

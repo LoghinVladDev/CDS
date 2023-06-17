@@ -415,12 +415,12 @@ private:
 
   template <typename __From1, typename __To1, typename = decltype (__metaTest <__To1> (valueOf <__From1> ()))>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   static auto __test (int) -> __TrueType {                                                                      // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    // empty on purpose
+    return {};
   };
 
   template <typename, typename>
   static auto __test (...) -> __FalseType { // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-    // empty on purpose
+    return {};
   };
 
 public:

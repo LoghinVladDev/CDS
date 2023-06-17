@@ -33,7 +33,6 @@ public:
   /// \protected
   using ElementType = __Element const;
 
-protected:
   /// \brief Function used to remove from the caller the elements that yield true to the given predicate, until a removal limit has been reached
   /// \tparam __Predicate is the type of the predicate callable, compatible with the signature bool ( Decay < ElementType > )
   /// \param [in] count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped

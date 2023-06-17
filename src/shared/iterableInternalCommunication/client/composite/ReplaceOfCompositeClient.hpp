@@ -25,6 +25,7 @@ protected:
   constexpr static bool const copyAsNoexcept = cds::meta::IsNoexceptCopyAssignable <__Element>::value && itNoexcept;
   constexpr static bool const moveAsNoexcept = cds::meta::IsNoexceptMoveAssignable <__Element>::value && itNoexcept;
 
+public:
   template <typename __TElement = __Element, cds::meta::EnableIf <cds::meta::IsCopyAssignable <__TElement>::value> = 0> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   auto replaceOf (
       Size                  count,

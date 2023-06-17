@@ -128,7 +128,7 @@ auto __expansiveInsert (__Accumulator* pAccumulator, __First&& firstValue, __Rem
 /// \internal library-private
 template <typename __Receiver, typename __Element, typename __Return> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __RandomInsertionPrimitiveClient {                              // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-protected:
+public:
   /// \typedef alias for __Element template parameter
   /// \private
   using ElementType       = __Element;
@@ -423,7 +423,7 @@ private:
 /// \internal library-private
 template <typename __Receiver, typename __Element, typename __Return> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __LocalRandomInsertionPrimitiveClient {                         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-protected:    
+public:
   /// \typedef alias for __Element template parameter
   /// \private
   using ElementType       = __Element;

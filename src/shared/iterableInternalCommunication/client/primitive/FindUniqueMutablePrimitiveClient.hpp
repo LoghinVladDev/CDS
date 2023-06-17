@@ -26,7 +26,7 @@ namespace __impl {    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert
 /// \internal library-private
 template <typename __Receiver, typename __Element, typename __Key, bool __bidirectional>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __FindUniqueMutablePrimitiveClient {                                                // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-protected:
+public:
   /// \typedef alias for chosen Wrapper Iterator, to be used in implementor class to represent the Iterator type.
   /// \public
   using Iterator =
@@ -63,7 +63,7 @@ template <
     typename __Key,                         // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     typename __IteratorType                     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > class __LocalFindUniqueMutablePrimitiveClient {   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-protected:
+public:
   /// \typedef alias for the __IteratorType template parameter
   /// \public
   using Iterator = __IteratorType;

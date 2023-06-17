@@ -29,7 +29,7 @@ namespace __impl {    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert
 /// \internal library-private
 template <typename __Receiver, typename __Element>              // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __AbstractConstIteratorRelativeInsertionPrimitiveClient { // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-protected:
+public:
   /// \typedef alias for __Element template parameter
   /// \private
   using ElementType       = __Element;
@@ -677,7 +677,7 @@ protected:
 /// \internal library-private
 template <typename __Receiver, typename __Element, typename __Iterator> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 class __LocalConstIteratorRelativeInsertionPrimitiveClient {                // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-protected:
+public:
   /// \typedef alias for __Element template parameter
   /// \private
   using ElementType       = __Element;

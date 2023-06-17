@@ -51,7 +51,6 @@ public:
           __ForwardDelegateWrapperIterator <ElementType>
       >;
 
-protected:
   /// \brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using a __cirt_begin request
   /// \exceptsafe
   /// \return ConstIterator = Wrapper for the received forward, immutable, begin iterator
@@ -103,7 +102,6 @@ public:
   /// \public
   using ConstIterator = __ConstIterator;
 
-protected:
   /// \brief Function used to obtain the iterator at the beginning of the sequence of elements in iterable container. Will acquire iterator using the __cbeginLocal function
   /// \exceptsafe
   /// \return ConstIterator = begin const iterator

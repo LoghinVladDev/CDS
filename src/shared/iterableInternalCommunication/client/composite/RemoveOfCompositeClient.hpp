@@ -34,7 +34,7 @@ template <
     typename                                                                __FromIterable,     // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
     functional::PredicateFunction <__FromIterable const&, __Element const&> __containsFunction  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 > class __RemoveOfCompositeClient {                                                             // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-protected:
+public:
   /// \brief Function used to remove the elements in the caller that are found in the given iterable parameter, until a removal limit has been reached, at which point the function will stop
   /// \param [in] count : Size = the removal limit. Once this number of elements have been removed, the iteration is stopped
   /// \param [in] from : __FromIterable cref = Constant Reference to the iterable to remove the elements found in.
