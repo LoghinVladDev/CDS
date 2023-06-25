@@ -21,8 +21,13 @@ using ConvertibleToStdOstreamRef =
 #include <CDS/HashMap>
 #include <CDS/TreeMap>
 #include <CDS/LinkedHashMap>
+#include <CDS/util/JSON>
 
 int main () {
+
+  cds::json::JsonObject const o;
+  o.getJson("abc");
+  o.get("abc");
 
   cds::Array <int> a24124;
   a24124.removeAllThat ([](auto e) {return e == 2;});
