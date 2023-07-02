@@ -234,7 +234,7 @@ template <>           struct __IsVoid <void>  : __TrueType {};
 /// \brief Meta-type implementation used to check if a given type is void
 /// \tparam __T type to check if is void
 template <typename __T>                                                                   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-struct __IsVoid : __isVoidImpl::__IsVoid <__RemoveConstVolatile <__T>>::Type {};    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+struct __IsVoid : __isVoidImpl::__IsVoid <typename __RemoveConstVolatile <__T>::Type>::Type {};    // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
 /// \brief Meta-type implementation used to check if a given type is an enum type
 /// \tparam __T is the type checked
