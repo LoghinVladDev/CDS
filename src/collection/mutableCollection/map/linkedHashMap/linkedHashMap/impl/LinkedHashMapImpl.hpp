@@ -531,7 +531,8 @@ template <typename __KeyType, typename __ValueType, typename __Hasher>       // 
 __CDS_cpplang_ConstexprOverride auto LinkedHashMap <__KeyType, __ValueType, __Hasher>::entryAt (
     __KeyType const& key
 ) const noexcept -> EntryType const* {
-  return &(*__ht_getConst (key))->_data;
+  auto const* entry = __ht_getConst(key);
+  return entry == nullptr ? nullptr : &(*entry)->_data;
 }
 
 } // namespace cds 
