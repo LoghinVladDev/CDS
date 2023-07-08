@@ -21,7 +21,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
         namespace __hidden {    /* NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
             namespace __impl {  /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-                auto __walk (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
+                inline auto __walk (   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
                         StringView                                  osPath, /* NOLINT(bugprone-easily-swappable-parameters) */
                         Size                                        depth,
                         Array < cds :: filesystem :: WalkEntry >  & entries
@@ -51,7 +51,11 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                         Array < String > directories;   /* NOLINT(cppcoreguidelines-init-variables) */
                         Array < String > files;         /* NOLINT(cppcoreguidelines-init-variables) */
 
+#if defined(__linux)
                         for ( auto entry = readdir64 (dir); entry != nullptr; entry = readdir64(dir) ) {
+#elif defined(__APPLE__)
+                        for ( auto entry = readdir(dir); entry != nullptr; entry = readdir(dir) ) {
+#endif
 
                             if (
                                     entry->d_type == DT_LNK ||
@@ -65,7 +69,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
                             if ( entry->d_type == DT_DIR ) {
 
                                 (void) directories.emplaceBack ( entry->d_name );
-                                (void) rootQueue.emplaceBack ( root + Path :: directorySeparator + directories.back(), rootDepth + 1ULL );
+                                (void) rootQueue.emplaceBack ( root + __hidden::__impl::__directorySeparator() + directories.back(), rootDepth + 1ULL );
                                 continue;
                             }
 
@@ -143,7 +147,7 @@ namespace cds {                 /* NOLINT(modernize-concat-nested-namespaces) */
             } /* namespace __impl */
         } /* namespace __hidden */
 
-        auto walk (
+        inline auto walk (
                 Path    const & path,   /* NOLINT(bugprone-easily-swappable-parameters) */
                 Size            depth
         ) noexcept -> Array < WalkEntry > {

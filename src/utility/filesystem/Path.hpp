@@ -6,6 +6,8 @@
 #define __CDS_PATH_HPP__ /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
 #include <CDS/Array>
+#include <CDS/LinkedList>
+#include <CDS/Tuple>
 #include <CDS/exception/IllegalArgumentException>
 
 namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
@@ -171,8 +173,8 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     } /* namespace filesystem */
 } /* namespace cds */
 
-#include "Walk.hpp"
 #include "path/impl/Path.hpp"
+#include "Walk.hpp"
 #include "walk/impl/Walk.hpp"
 #include "../../shared/util/JsonLoad.hpp"
 #include "../../shared/util/PathWalk.hpp"
