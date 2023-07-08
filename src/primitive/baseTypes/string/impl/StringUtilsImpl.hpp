@@ -175,7 +175,10 @@ __CDS_cpplang_ConstexprConditioned auto StringUtils <__CharType>::compare (
     ElementType const*  pRightString,
     Size                rightLength
 ) noexcept -> sint8 {
-  if (pLeftString == nullptr && pRightString == nullptr) {
+  if (
+      leftLength == 0u && rightLength == 0u ||
+      pLeftString == nullptr && pRightString == nullptr
+  ) {
     return StringUtils::equal;
   }
 

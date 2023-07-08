@@ -100,7 +100,7 @@ inline auto __parseJsonObject( // NOLINT(bugprone-reserved-identifier, cert-dcl3
 
         // expecting json input -> "label" : object, "label" : object .... 
         if (string[index] == '}') {
-          return index - 1;
+          return index;
         }
 
         if (string[index] != '"') {
@@ -256,6 +256,7 @@ inline auto __parseJsonObject( // NOLINT(bugprone-reserved-identifier, cert-dcl3
             && string[index + 2] == 'u'
             && string[index + 3] == 'e'
         ) {
+          index += 3u;
           into.emplace(std::move(label), true);
           state = State::ExpectingPSeparator;
           break;
@@ -272,6 +273,7 @@ inline auto __parseJsonObject( // NOLINT(bugprone-reserved-identifier, cert-dcl3
             && string[index + 3] == 's'
             && string[index + 4] == 'e'
         ) {
+          index += 4u;
           into.emplace(std::move(label), false);
           state = State::ExpectingPSeparator;
           break;
@@ -412,7 +414,7 @@ inline auto __parseJsonArray( // NOLINT(bugprone-reserved-identifier, cert-dcl37
         }
 
         if (string[index] == ']') {
-          return index - 1;
+          return index;
         }
 
         if (string[index] == '{') {
@@ -506,6 +508,7 @@ inline auto __parseJsonArray( // NOLINT(bugprone-reserved-identifier, cert-dcl37
             && string[index + 2] == 'u'
             && string[index + 3] == 'e'
         ) {
+          index += 3u;
           into.pushBack(true);
           state = State::ExpectingPSeparator;
           break;
@@ -522,6 +525,7 @@ inline auto __parseJsonArray( // NOLINT(bugprone-reserved-identifier, cert-dcl37
             && string[index + 3] == 's'
             && string[index + 4] == 'e'
         ) {
+          index += 4u;
           into.pushBack(false);
           state = State::ExpectingPSeparator;
           break;
