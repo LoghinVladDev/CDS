@@ -171,8 +171,10 @@ namespace cds { /* NOLINT(modernize-concat-nested-namespaces) */
     } /* namespace filesystem */
 } /* namespace cds */
 
+#include "Walk.hpp"
+#include "path/impl/Path.hpp"
+#include "walk/impl/Walk.hpp"
 #include "../../shared/util/JsonLoad.hpp"
 #include "../../shared/util/PathWalk.hpp"
-#include "path/impl/Path.hpp"
 
 #endif /* __CDS_PATH_HPP__ */
