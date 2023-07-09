@@ -290,6 +290,7 @@ inline auto __parseJsonObject( // NOLINT(bugprone-reserved-identifier, cert-dcl3
         }
         into.emplace(std::move(label), std::strtoll(stringData.cStr(), nullptr, 2));
         stringData.clear();
+        --index;
         state = State::ExpectingPSeparator;
         break;
       }
@@ -300,6 +301,7 @@ inline auto __parseJsonObject( // NOLINT(bugprone-reserved-identifier, cert-dcl3
         }
         into.emplace(std::move(label), std::strtoll(stringData.cStr(), nullptr, 8));
         stringData.clear();
+        --index;
         state = State::ExpectingPSeparator;
         break;
       }
@@ -315,6 +317,7 @@ inline auto __parseJsonObject( // NOLINT(bugprone-reserved-identifier, cert-dcl3
 
         into.emplace(std::move(label), std::strtoll(stringData.cStr(), nullptr, 16));
         stringData.clear();
+        --index;
         state = State::ExpectingPSeparator;
         break;
       }
@@ -493,7 +496,8 @@ inline auto __parseJsonArray( // NOLINT(bugprone-reserved-identifier, cert-dcl37
             state = State::ReadingBase10;
           }
         } else {
-          // only 0 case 
+          // only 0 case
+          --index;
           state = State::ReadingBase10;
         }
 
@@ -542,6 +546,7 @@ inline auto __parseJsonArray( // NOLINT(bugprone-reserved-identifier, cert-dcl37
         }
         into.pushBack(std::strtoll(stringData.cStr(), nullptr, 2));
         stringData.clear();
+        --index;
         state = State::ExpectingPSeparator;
         break;
       }
@@ -552,6 +557,7 @@ inline auto __parseJsonArray( // NOLINT(bugprone-reserved-identifier, cert-dcl37
         }
         into.pushBack(std::strtoll(stringData.cStr(), nullptr, 8));
         stringData.clear();
+        --index;
         state = State::ExpectingPSeparator;
         break;
       }
@@ -567,6 +573,7 @@ inline auto __parseJsonArray( // NOLINT(bugprone-reserved-identifier, cert-dcl37
 
         into.pushBack(std::strtoll(stringData.cStr(), nullptr, 16));
         stringData.clear();
+        --index;
         state = State::ExpectingPSeparator;
         break;
       }
@@ -587,6 +594,7 @@ inline auto __parseJsonArray( // NOLINT(bugprone-reserved-identifier, cert-dcl37
         }
 
         stringData.clear();
+        --index;
         state = State::ExpectingPSeparator;
         break;
       }
