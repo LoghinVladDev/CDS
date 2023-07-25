@@ -18,10 +18,19 @@ jobs:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - name: Install sonar-scanner and build-wrapper
         uses: SonarSource/sonarcloud-github-c-cpp@v1
-      - name: Install Clang and LLVM (including llvm-cov)
-        uses: KyleMayes/install-llvm-action@v1.6.1
+      - name: Cache LLVM and Clang
+        id: cache-llvm
+        uses: actions/cache@v3
         with:
-          version: "15.0.6"
+          path: |
+            ~/.llvm
+            ./llvm
+          key: llvm-16
+      - name: Install Clang and LLVM (including llvm-cov)
+        uses: KyleMayes/install-llvm-action@v1.8.1
+        with:
+          version: "16"
+          cached: ${{ steps.cache-llvm.outputs.cache-hit }}
       - name: Run build-wrapper
         run: |
           mkdir build
