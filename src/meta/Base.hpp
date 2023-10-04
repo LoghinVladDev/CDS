@@ -695,6 +695,9 @@ using Ph = __impl::__bindImpl::__Ph <__index>;
 template < bool __enableCondition, typename __ReplacedType = int > // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 using EnableIf = typename __impl::__EnableIf < __enableCondition, __ReplacedType >::Type;
 
+template <typename __Constraint, typename __ReplacedType = int> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+using EnableIfC = EnableIf<__Constraint::value, __ReplacedType>;
+
 /// \brief Meta-type used to choose between two types based on a given condition
 /// \tparam __TIfTrue is the type to save if condition is true
 /// \tparam __TIfFalse is the type to save if condition is false

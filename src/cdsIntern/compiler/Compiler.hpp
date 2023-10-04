@@ -21,6 +21,7 @@
 #define __CDS_cpplang_core_version_14 201402L // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 #define __CDS_cpplang_core_version_17 201703L // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 #define __CDS_cpplang_core_version_20 202002L // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+#define __CDS_cpplang_core_version_23 202202L // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
 #define __CDS_cpplang_core_version __cplusplus // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 

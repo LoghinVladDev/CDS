@@ -1078,6 +1078,26 @@ inline auto JsonElement::getArray() noexcept(false) -> JsonArray& {
   return *static_cast<JsonArray*>(this->_data.data().pObject);
 }
 
+constexpr auto JsonElement::operator==(JsonElement const& obj) const noexcept -> bool {
+  if (this == &obj) {
+    return true;
+  }
+
+  if (_type != obj._type) {
+    return false;
+  }
+
+  switch (_type) {
+    case __hidden::__impl::__JsonElementType::__jet_Object: return getJson() == obj.getJson();
+    case __hidden::__impl::__JsonElementType::__jet_Array:  return getArray() == obj.getArray();
+    case __hidden::__impl::__JsonElementType::__jet_String: return getString() == obj.getString();
+    case __hidden::__impl::__JsonElementType::__jet_Bool:   return getBoolean() == obj.getBoolean();
+    case __hidden::__impl::__JsonElementType::__jet_Long:   return getLong() == obj.getLong();
+    case __hidden::__impl::__JsonElementType::__jet_Double: return getDouble() == obj.getDouble();
+    default:                                                return false;
+  }
+}
+
 constexpr JsonObject::JsonObject() noexcept = default;
 
 inline JsonObject::JsonObject(JsonObject const& object) noexcept(false) : __Base(static_cast<__Base const&>(object)) {}
