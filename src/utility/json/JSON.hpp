@@ -261,6 +261,8 @@ public:
     return this->is <__hidden::__impl::__JsonElementType::__jet_Array>(); 
   }
 
+  [[nodiscard]] constexpr auto operator==(JsonElement const& obj) const noexcept -> bool;
+
 private:
   friend class JsonArray;
   friend class JsonObject;
@@ -322,6 +324,10 @@ public:
   __CDS_NoDiscard auto getJson(StringView label) noexcept(false) -> JsonObject&;
   
   __CDS_NoDiscard auto toString() const noexcept -> String override;
+
+  [[nodiscard]] constexpr auto operator==(JsonObject const& obj) const noexcept -> bool {
+    return *static_cast<__Base const*>(this) == *static_cast<__Base const*>(&obj);
+  }
 };
 
 
@@ -358,6 +364,10 @@ public:
   __CDS_NoDiscard auto getString(Index index) noexcept(false) -> String&;
   __CDS_NoDiscard auto getArray(Index index) noexcept(false) -> JsonArray&;
   __CDS_NoDiscard auto getJson(Index index) noexcept(false) -> JsonObject&;
+
+  [[nodiscard]] constexpr auto operator==(JsonArray const& obj) const noexcept -> bool {
+    return *static_cast<__Base const*>(this) == *static_cast<__Base const*>(&obj);
+  }
 };
 
 __CDS_NoDiscard auto parseJson(StringView asString) noexcept(false) -> JsonObject;

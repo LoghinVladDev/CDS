@@ -14,11 +14,10 @@
 #define __CDS_atomic_flag_implementation __CDS_atomic_flag_stl_atomic_implementation        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 #endif
 
-
 #define __CDS_atomic_ref_stl_atomic_ref_implementation      0U /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 #define __CDS_atomic_ref_unavailable                        1U /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_23
 #define __CDS_atomic_ref_implementation __CDS_atomic_ref_stl_atomic_ref_implementation   /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */
 #else
 #define __CDS_atomic_ref_implementation __CDS_atomic_ref_unavailable        /* NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp) */

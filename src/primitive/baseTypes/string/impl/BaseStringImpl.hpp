@@ -2693,12 +2693,13 @@ __CDS_MaybeUnused __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStrin
     return *this;
   }
 
-  _length = _length - string.length();
   (void) std::memmove (
       _pBuffer,
       _pBuffer + string.length(),
       length() - string.length()
   );
+
+  _length = _length - string.length();
   _pBuffer [_length] = cds::meta::__impl::__StringData <ElementType>::nullCharacter;
   return *this;
 }
