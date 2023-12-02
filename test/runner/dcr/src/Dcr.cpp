@@ -5,6 +5,7 @@
 #include "Dcr.hpp"
 
 #include <atomic>
+#include <cassert>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -29,6 +30,7 @@ namespace dcr {
 namespace {
 struct DcrParams {
   bool verbose;
+  bool coverage;
   int threadCount;
 };
 
@@ -172,13 +174,45 @@ auto locateTests(std::string const& fileOrPath) -> std::vector<std::string> {
 
 enum class TestStepType {Compile, Run};
 enum class TestStepResult {Success, Failure};
-enum class TestStepPlatform {Linux, Win32, Apple};
-enum class TestStepCompiler {Clang, Gcc, Msvc};
+enum class TestStepPlatform {Linux};
+enum class TestStepCompiler {Clang, Gcc};
 enum class Standard {Cpp11, Cpp14, Cpp17, Cpp20, Cpp23, Cpp2c, Highest=Cpp23, End};
 
+auto toString(Standard std) {
+  switch(std) {
+    case Standard::Cpp11: return "11";
+    case Standard::Cpp14: return "14";
+    case Standard::Cpp17: return "17";
+    case Standard::Cpp20: return "20";
+    case Standard::Cpp23: return "2b";
+    case Standard::Cpp2c: return "2c";
+    default:
+      return "";
+  }
+}
+
+auto toString(TestStepPlatform plat) {
+  switch(plat) {
+    case TestStepPlatform::Linux: return "linux";
+    default:
+      assert(false && "Undefined platform type");
+      return "";
+  }
+}
+
+auto toString(TestStepCompiler const comp) {
+  switch(comp) {
+    case TestStepCompiler::Clang: return "clang++";
+    case TestStepCompiler::Gcc: return "g++";
+    default:
+      assert(false && "Undefined compiler type");
+      return "";
+  }
+}
+
 struct TestStepEnv {
-  TestStepPlatform platform;
-  TestStepCompiler compiler;
+  std::optional<TestStepPlatform> platform;
+  std::optional<TestStepCompiler> compiler;
 };
 
 struct TestStep {
@@ -226,6 +260,15 @@ std::unordered_map<std::string_view, TestStepResult> const expectationMap = {
     {"failure", TestStepResult::Failure}
 };
 
+std::unordered_map<std::string_view, TestStepCompiler> const compilerMap = {
+    {"clang", TestStepCompiler::Clang},
+    {"gcc", TestStepCompiler::Gcc},
+};
+
+std::unordered_map<std::string_view, TestStepPlatform> const platformMap = {
+    {"linux", TestStepPlatform::Linux},
+};
+
 auto trim(std::string_view const str) -> std::string_view {
   const auto whIdx = str.find_first_of(" \t\n\r");
   auto const trimmedFront = str.substr(whIdx == std::string_view::npos ? 0 : whIdx);
@@ -247,9 +290,47 @@ auto expected(std::string_view const resultString) -> std::optional<TestStepResu
   return std::nullopt;
 }
 
-auto parseStepCompilerAndPlatforms(std::string_view stepTypeString) -> std::optional<std::tuple<TestStepType, std::vector<TestStepEnv>>> {
-  auto const rbraceIdx = stepTypeString.find('(');
-  if (rbraceIdx == std::string_view::npos) {
+auto platform(std::string_view const pString) -> std::optional<TestStepPlatform> {
+  if (auto const pIt = platformMap.find(pString); pIt != platformMap.end()) {
+    return pIt->second;
+  }
+  return std::nullopt;
+}
+
+auto compiler(std::string_view const cString) -> std::optional<TestStepCompiler> {
+  if (auto const cIt = compilerMap.find(cString); cIt != compilerMap.end()) {
+    return cIt->second;
+  }
+  return std::nullopt;
+}
+
+auto parseCompilerAndPlatform(std::string_view const compilerAndPlatform) -> std::optional<TestStepEnv> {
+  auto const colonIdx = compilerAndPlatform.find(':');
+  if (colonIdx == std::string_view::npos) {
+    return std::nullopt;
+  }
+
+  return {{platform(compilerAndPlatform.substr(0, colonIdx)), compiler(compilerAndPlatform.substr(colonIdx + 1))}};
+}
+
+auto parseCompilerAndPlatforms(std::string_view compilerAndPlatforms) -> std::optional<std::vector<TestStepEnv>> {
+  std::vector<TestStepEnv> envs;
+  compilerAndPlatforms = trim(compilerAndPlatforms);
+  while (!compilerAndPlatforms.empty()) {
+    auto const idxOfSemiC = compilerAndPlatforms.find(';');
+    auto const current = compilerAndPlatforms.substr(0, idxOfSemiC);
+    compilerAndPlatforms = idxOfSemiC == std::string_view::npos ? "" : compilerAndPlatforms.substr(idxOfSemiC + 1);
+    if (auto const step = parseCompilerAndPlatform(current)) {
+      envs.push_back(*step);
+    }
+  }
+
+  return envs;
+}
+
+auto parseStepCompilerAndPlatforms(std::string_view const stepTypeString) -> std::optional<std::tuple<TestStepType, std::vector<TestStepEnv>>> {
+  auto const lbraceIdx = stepTypeString.find('(');
+  if (lbraceIdx == std::string_view::npos) {
     if (auto const stepIt = stepTypeMap.find(stepTypeString); stepIt == stepTypeMap.end()) {
       return std::nullopt;
     } else {
@@ -257,8 +338,8 @@ auto parseStepCompilerAndPlatforms(std::string_view stepTypeString) -> std::opti
     }
   }
 
-  auto const typeString = stepTypeString.substr(0, rbraceIdx);
-  auto const remaining = stepTypeString.substr(rbraceIdx + 1);
+  auto const typeString = stepTypeString.substr(0, lbraceIdx);
+  auto const remaining = stepTypeString.substr(lbraceIdx + 1);
   std::optional<TestStepType> step;
   if (auto const stepIt = stepTypeMap.find(typeString); stepIt == stepTypeMap.end()) {
     step = std::nullopt;
@@ -266,7 +347,18 @@ auto parseStepCompilerAndPlatforms(std::string_view stepTypeString) -> std::opti
     step = stepIt->second;
   }
 
-  return std::tuple{*step, std::vector<TestStepEnv>()};
+  auto const rbraceIdx = remaining.rfind(')');
+  if (rbraceIdx == std::string_view::npos) {
+    return std::nullopt;
+  }
+
+  auto const compilerAndPlatformsString = remaining.substr(0, rbraceIdx);
+  auto const envs = parseCompilerAndPlatforms(compilerAndPlatformsString);
+  if (!envs) {
+    return std::nullopt;
+  }
+
+  return std::tuple{*step, *envs};
 }
 
 
@@ -421,39 +513,33 @@ auto stdRange(StandardRange range) {
   return std::vector(std::ranges::find(allStandardsArray, range.begin), std::ranges::find(allStandardsArray, range.end) + 1);
 }
 
-auto toString(Standard std) {
-  switch(std) {
-    case Standard::Cpp11: return "11";
-    case Standard::Cpp14: return "14";
-    case Standard::Cpp17: return "17";
-    case Standard::Cpp20: return "20";
-    case Standard::Cpp23: return "2b";
-    case Standard::Cpp2c: return "2c";
-    default:
-      return "";
-  }
-}
-
-auto executablePath(std::string const& src, Standard standard) {
+auto executablePath(std::string const& src, Standard standard, TestStepEnv const& env) {
+  assert(env.compiler && "Env must have compiler value");
+  assert(env.platform && "Env must have platform value");
   auto const lastSlIdx = src.rfind('/');
   auto relative = src;
   if (lastSlIdx != std::string::npos) {
     relative = src.substr(lastSlIdx + 1);
   }
 
+  auto const& [plat, comp] = env;
   auto const extensionIdx = relative.rfind('.');
-  auto const binary = relative.substr(0, extensionIdx) + "_" + toString(standard) + ".bin";
+  auto const binary = relative.substr(0, extensionIdx) + "_" + toString(standard) + "_" + toString(*plat) + "_" + toString(*comp) + ".bin";
   return "./test_binaries/" + binary;
 }
 
-auto profPath(std::string const& src, Standard standard) {
-  auto execPath = executablePath(src, standard);
+auto profPath(std::string const& src, Standard standard, TestStepEnv const& env) {
+  auto execPath = executablePath(src, standard, env);
   auto extLoc = execPath.rfind('.');
   auto withoutExt = execPath.substr(0, extLoc);
   return withoutExt + ".profraw";
 }
 
-auto awaitProcess(std::string executable, std::vector<std::string>& args, std::vector<std::string>& env) -> std::tuple<bool, std::string, std::string> {
+auto awaitProcess(std::optional<std::string> executable, std::vector<std::string>& args, std::vector<std::string>& env) -> std::tuple<bool, std::string, std::string, bool> {
+  if (!executable) {
+    return {true, "", "", true};
+  }
+
   int outRedir[2];
   int errRedir[2];
   pipe(outRedir);
@@ -466,7 +552,7 @@ auto awaitProcess(std::string executable, std::vector<std::string>& args, std::v
   };
 
   std::vector<char*> cArgs;
-  toCArr(cArgs, args, executable.data());
+  toCArr(cArgs, args, executable->data());
 
   std::vector<char*> cEnv;
   auto fillOtherEnv = [](auto& env){
@@ -490,7 +576,7 @@ auto awaitProcess(std::string executable, std::vector<std::string>& args, std::v
     close(errRedir[0]);
     close(errRedir[1]);
 
-    execvpe(executable.c_str(), cArgs.data(), cEnv.data());
+    execvpe(executable->c_str(), cArgs.data(), cEnv.data());
 
     exit(1);
   }
@@ -501,7 +587,7 @@ auto awaitProcess(std::string executable, std::vector<std::string>& args, std::v
     close(outRedir[0]);
     close(errRedir[0]);
     std::cerr << "Unknown error\n";
-    return {false, "", ""};
+    return {false, "", "", false};
   }
 
   int stat;
@@ -521,40 +607,57 @@ auto awaitProcess(std::string executable, std::vector<std::string>& args, std::v
   close(outRedir[0]);
   close(errRedir[0]);
   if (WIFEXITED(stat)) {
-    return {WEXITSTATUS(stat) == 0, outContents, errContents};
+    return {WEXITSTATUS(stat) == 0, outContents, errContents, false};
   }
 
-  return {false, outContents, errContents};
-}
-
-auto executeCompile(std::string const& path, Standard standard, std::vector<std::string> const& extraArgs) {
-  std::vector<std::string> fullArgs = extraArgs;
-  std::vector<std::string> env;
-  fullArgs.push_back(path);
-  fullArgs.emplace_back("-o");
-  fullArgs.push_back(executablePath(path, standard));
-
-  return awaitProcess("clang++", fullArgs, env);
-}
-
-auto executeRun(std::string const& path, Standard standard) -> std::tuple<bool, std::string, std::string> {
-  using namespace std::string_literals;
-  auto const& execPath = executablePath(path, standard);
-  auto const& profrawPath = profPath(path, standard);
-  std::vector<std::string> args;
-  std::vector env = {"LLVM_PROFILE_FILE="s + profrawPath};
-  return awaitProcess(execPath, args, env);
+  return {false, outContents, errContents, false};
 }
 
 struct CompileData {
   std::string const& path;
   Standard standard;
+  TestStepEnv testEnv;
 };
 
 struct RunData {
   std::string const& path;
   Standard standard;
+  TestStepEnv testEnv;
 };
+
+std::unordered_map<TestStepCompiler, std::string> mappedCompilers;
+auto getCompilerName(TestStepEnv const& env) -> std::optional<std::string> {
+  if (!env.compiler) {
+    return std::nullopt;
+  }
+
+  if (auto const idIt = mappedCompilers.find(*env.compiler); idIt != mappedCompilers.end()) {
+    return idIt->second;
+  }
+
+  return std::nullopt;
+}
+
+auto executeCompile(CompileData const& data, std::vector<std::string> const& extraArgs) {
+  auto const& [path, standard, testEnv] = data;
+  std::vector<std::string> fullArgs = extraArgs;
+  std::vector<std::string> env;
+  fullArgs.push_back(path);
+  fullArgs.emplace_back("-o");
+  fullArgs.push_back(executablePath(path, standard, testEnv));
+
+  return awaitProcess(getCompilerName(data.testEnv), fullArgs, env);
+}
+
+auto executeRun(RunData const& data) {
+  using namespace std::string_literals;
+  auto const& [path, standard, testEnv] = data;
+  auto const& execPath = executablePath(path, standard, testEnv);
+  auto const& profrawPath = profPath(path, standard, testEnv);
+  std::vector<std::string> args;
+  std::vector env = {"LLVM_PROFILE_FILE="s + profrawPath};
+  return awaitProcess(execPath, args, env);
+}
 
 struct Job {
   TestStepType type;
@@ -563,90 +666,122 @@ struct Job {
   std::unique_ptr<Job> creates;
 };
 
-auto acquireJobsFromTest(int& total, std::vector<std::unique_ptr<Job>>& placeInto, TestData const& test) {
+auto acquireJobsFromTest(int& total, std::vector<std::unique_ptr<Job>>& placeInto, TestData const& test) -> int {
+  int skipped = 0;
   for (auto const& [path, steps, standards] = test; auto const& standard: stdRange(standards)) {
-    std::unique_ptr<Job> job = nullptr;
+    std::vector<std::unique_ptr<Job>> jobs;
     if (auto const it = std::ranges::find(steps, TestStepType::Compile, stepType); it != steps.end()) {
-      job = std::make_unique<Job>(
-        TestStepType::Compile,
-        it->result,
-        CompileData {
-          .path = path,
-          .standard = standard
-        },
-        nullptr
-      );
-      ++total;
+      for (auto const& env: it->enviroments) {
+        if (!env.compiler || !env.platform) {
+          ++skipped;
+          continue;
+        }
+
+        jobs.push_back(
+          std::make_unique<Job>(
+            TestStepType::Compile,
+            it->result,
+            CompileData {
+              .path = path,
+              .standard = standard,
+              .testEnv = env
+            },
+            nullptr
+          )
+        );
+        ++total;
+      }
     }
 
-    if (auto const it = std::ranges::find(steps, TestStepType::Run, stepType); job && it != steps.end()) {
-      job->creates = std::make_unique<Job>(
-        TestStepType::Run,
-        it->result,
-        RunData {
-          .path = path,
-          .standard = standard
-        },
-        nullptr
-      );
-      ++total;
+    if (auto const it = std::ranges::find(steps, TestStepType::Run, stepType); it != steps.end()) {
+      for (auto const& env: it->enviroments) {
+        if (auto compileJobIt = std::ranges::find_if(jobs, [&env](std::unique_ptr<Job> const& j) {
+          return j->type == TestStepType::Compile
+              && env.compiler == std::get<CompileData>(j->data).testEnv.compiler
+              && env.platform == std::get<CompileData>(j->data).testEnv.platform;
+        }); compileJobIt != jobs.end()) {
+          (*compileJobIt)->creates = std::make_unique<Job>(
+            TestStepType::Run,
+            it->result,
+            RunData {
+              .path = path,
+              .standard = standard,
+              .testEnv = env
+            },
+            nullptr
+          );
+          ++total;
+        } else {
+          ++skipped;
+        }
+      }
     }
 
-    if (job) {
-      placeInto.push_back(std::move(job));
-    }
+    std::ranges::for_each(jobs, [&placeInto](auto& j){ placeInto.push_back(std::move(j)); });
+  }
+  return skipped;
+}
+
+auto addCoverageFlags(std::vector<std::string>& args, TestStepEnv const& env) {
+  if (env.compiler && *env.compiler == TestStepCompiler::Clang) {
+    args.emplace_back("-fcoverage-mapping");
+    args.emplace_back("-fprofile-instr-generate");
+    args.emplace_back("-O0");
+    args.emplace_back("-g");
   }
 }
 
 #ifdef CDS_DCR_BLOCK_MULTIACCESS_TO_PROFRAW
 std::mutex profrawBlock;
 #endif
-auto executeJob(std::unique_ptr<Job> const& job, std::vector<std::string> const& passToCompiler) -> std::tuple<bool, std::string, std::string> {
+auto executeJob(std::unique_ptr<Job> const& job, std::vector<std::string> const& passToCompiler, DcrParams const& params) -> std::tuple<bool, std::string, std::string, bool> {
   using namespace std::string_literals;
   if (job->type == TestStepType::Compile) {
-    auto const& [path, standard] = std::get<CompileData>(job->data);
     std::vector withStd = passToCompiler;
-    withStd.push_back("-std=c++"s + toString(standard));
-    return executeCompile(path, standard, withStd);
+    auto const& data = std::get<CompileData>(job->data);
+    withStd.push_back("-std=c++"s + toString(data.standard));
+    if (params.coverage) {
+      addCoverageFlags(withStd, data.testEnv);
+    }
+
+    return executeCompile(data, withStd);
   }
 
   if (job->type == TestStepType::Run) {
 #ifdef CDS_DCR_BLOCK_MULTIACCESS_TO_PROFRAW
     std::lock_guard prowrawGuard(profrawBlock);
 #endif
-    auto const& [path, standard] = std::get<RunData>(job->data);
-    return executeRun(path, standard);
+    auto const& data = std::get<RunData>(job->data);
+    return executeRun(data);
   }
 
-  return {false, "", "Unknown Job Type"};
+  return {false, "", "Unknown Job Type", false};
 }
 
-auto toString(TestStepType const type) {
-  switch (type) {
-    using enum TestStepType;
-    case Compile: return "compile";
-    case Run: return "run";
+template <typename T>
+auto toString(std::optional<T> const& obj) {
+  if (!obj) {
+    return "unknown";
   }
-
-  return "unknown test type";
+  return toString(*obj);
 }
 
-std::string const unknownData = "unknown test data";
-auto toString(std::variant<CompileData, RunData> const& data) -> std::string const& {
-  if (std::holds_alternative<CompileData>(data)) {
-    return std::get<CompileData>(data).path;
-  }
-
-  if (std::holds_alternative<RunData>(data)) {
-    return std::get<RunData>(data).path;
-  }
-
-  return unknownData;
+auto rpad(int const size, std::string const& str) {
+  auto const padLen = std::max(0, size - static_cast<int>(str.length()));
+  return str + std::string(padLen, ' ');
 }
 
 auto toString(std::unique_ptr<Job> const& job) {
   std::stringstream oss;
-  oss << toString(job->type) << " " << toString(job->data);
+
+  if (job->type == TestStepType::Compile) {
+    auto const& data = std::get<CompileData>(job->data);
+    oss << "compile [" << rpad(5, toString(data.testEnv.platform)) << "," << rpad(7, toString(data.testEnv.compiler)) << ",cpp" << toString(data.standard) << "] " << data.path;
+  } else if (job->type == TestStepType::Run) {
+    auto const& data = std::get<RunData>(job->data);
+    oss << "run     [" << rpad(5, toString(data.testEnv.platform)) << "," << rpad(7, toString(data.testEnv.compiler)) << ",cpp" << toString(data.standard) << "] " << data.path;
+  }
+
   return oss.str();
 }
 
@@ -656,7 +791,8 @@ auto execute(std::vector<TestData> const& tests, std::vector<std::string> const&
   std::atomic successful = 0;
   std::atomic skipped = 0;
   for (auto const& test: tests) {
-    acquireJobsFromTest(total, jobs, test);
+    skipped = acquireJobsFromTest(total, jobs, test);
+    total += skipped;
   }
 
   using namespace std::string_literals;
@@ -686,7 +822,11 @@ auto execute(std::vector<TestData> const& tests, std::vector<std::string> const&
     while (!shouldTerminate) {
       if (auto job = getJob()) {
         std::stringstream out;
-        auto const [status, outputText, errorText] = executeJob(job, passToCompiler);
+        auto const [status, outputText, errorText, wasSkipped] = executeJob(job, passToCompiler, dcrParams);
+        if (wasSkipped) {
+          continue;
+        }
+
         auto const asStr = toString(job);
         auto const wasSuccessful = job->expected == TestStepResult::Success ? status : !status;
         if (wasSuccessful) {
@@ -739,7 +879,19 @@ auto execute(std::vector<TestData> const& tests, std::vector<std::string> const&
     std::cout << "  " << testPath << '\n';
   }
 
+  assert((total == skipped + successful + failedTestPaths.size()) && "Invalid sum of tests");
   return total != skipped + successful;
+}
+
+auto mapCompilers(std::vector<TestStepCompiler> const& compilersToMap) {
+  for (auto c : compilersToMap) {
+    std::string const cname = toString(c);
+    std::vector<std::string> args = {"--version"};
+    std::vector<std::string> env;
+    if (std::get<0>(awaitProcess(cname, args, env))) {
+      mappedCompilers.emplace(c, cname);
+    }
+  }
 }
 } // namespace
 
@@ -748,7 +900,8 @@ auto run(int const argc, char const* const* argv) -> int {
     std::cerr << "No path/file provided to DCR test runner\n";
     return 1;
   }
-
+//  -fcoverage-mapping -fprofile-instr-generate -O0 -g
+  mapCompilers({TestStepCompiler::Clang, TestStepCompiler::Gcc});
   std::string inputFileOrDir;
   std::vector<std::string> passedToCompiler;
   std::filesystem::create_directory("test_binaries");
@@ -767,6 +920,10 @@ auto run(int const argc, char const* const* argv) -> int {
       makeParser(
           [&inputFileOrDir](auto const& args) { inputFileOrDir = args[0]; },
           [](auto const&) { return true; }
+      ),
+      makeParser(
+          [&dcrParams](auto const&) { dcrParams.coverage = true; },
+          [](auto const& arg) { return arg == "-c"; }
       ),
       makeParserWithSink(
           [&passedToCompiler](auto const& args) { passedToCompiler = {&args[1], &args[args.size()]}; },
