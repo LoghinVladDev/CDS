@@ -4,7 +4,7 @@ list(TRANSFORM CDS_UNIT_TEST_SOURCES
 if(DEFINED CDS_DCR_INCLUDE_TEST_SOURCES_FOR_COV)
   set(DCR_COVERAGE_TEST_SOURCES ${CDS_UNIT_TEST_SOURCES})
 else()
-  set(DCR_COVERAGE_TEST_SOURCES, "")
+  set(DCR_COVERAGE_TEST_SOURCES "")
 endif()
 
 set(DCR_SOURCES
@@ -20,6 +20,7 @@ target_compile_definitions(
     lib.dcr
     PRIVATE
     DCR_OMIT_MAIN
+    ${CDS_DCR_BLOCK_MULTIACCESS_TO_PROFRAW}
 )
 
 add_executable(cds_unit_tests_dcr

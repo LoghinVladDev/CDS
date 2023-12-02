@@ -20,6 +20,7 @@
 #include <bits/ranges_algo.h>
 #include <sys/wait.h>
 
+extern char** environ;
 namespace std {
 class thread;
 }
@@ -112,7 +113,7 @@ auto argParse(std::vector<std::string> const& args, std::vector<std::unique_ptr<
         ++lookaheadArgIdx;
       }
 
-      if (filterIdx == parser->filterCount() || parser->isSink()) {
+      if (filterIdx == parser->filterCount() || (parser->isSink() && filterIdx > 0)) {
         parser->accept({&args[argIdx], &args[lookaheadArgIdx]});
         advance = filterIdx;
         acceptedParsers.push_back(parser.get());
@@ -417,30 +418,31 @@ auto profPath(std::string const& src, Standard standard) {
 }
 
 auto awaitProcess(std::string executable, std::vector<std::string>& args, std::vector<std::string>& env) -> std::tuple<bool, std::string, std::string> {
-  std::stringstream oss;
-  oss
-      << "[DEBUG] - " << executable;
-  oss << " [ARGS] -";
-  std::ranges::for_each(args, [&oss](auto const& s) { oss << " " << s; });
-  oss << " [ENV] -";
-  std::ranges::for_each(env, [&oss](auto const& s) { oss << " " << s; });
-  std::cout << oss.str() << std::endl;
-
   int outRedir[2];
   int errRedir[2];
   pipe(outRedir);
   pipe(errRedir);
 
-  auto toCArr = [](std::vector<std::string>& arr, std::optional<char*> first = std::nullopt) {
-    std::vector<char*> cArr;
-    if (first) { cArr.emplace_back(*first); }
-    std::ranges::for_each(arr, [&cArr](auto& s){ cArr.emplace_back(s.data()); });
-    cArr.emplace_back(nullptr);
-    return cArr;
+  auto toCArr = [](std::vector<char*>& dst, std::vector<std::string>& arr, std::optional<char*> first = std::nullopt) {
+    if (first) { dst.emplace_back(*first); }
+    std::ranges::for_each(arr, [&dst](auto& s){ dst.emplace_back(s.data()); });
+    dst.emplace_back(nullptr);
   };
 
-  auto const cArgs = toCArr(args, executable.data());
-  auto const cEnv = toCArr(env);
+  std::vector<char*> cArgs;
+  toCArr(cArgs, args, executable.data());
+
+  std::vector<char*> cEnv;
+  auto fillOtherEnv = [](auto& env){
+    for (auto s = environ; *s; ++s) {
+      std::string asStr = *s;
+      env.push_back(*s);
+    }
+  };
+
+  fillOtherEnv(cEnv);
+  toCArr(cEnv, env);
+
   pid_t const childId = fork();
   if (childId == 0) {
     close(STDOUT_FILENO);
@@ -501,14 +503,14 @@ auto executeCompile(std::string const& path, Standard standard, std::vector<std:
 
 auto stepType(TestStep const& t) {
   return t.type;
-};
+}
 
 auto executeRun(std::string const& path, Standard standard) -> std::tuple<bool, std::string, std::string> {
   using namespace std::string_literals;
   auto const& execPath = executablePath(path, standard);
   auto const& profrawPath = profPath(path, standard);
   std::vector<std::string> args;
-  std::vector<std::string> env;
+  std::vector env = {"LLVM_PROFILE_FILE="s + profrawPath};
   return awaitProcess(execPath, args, env);
 }
 
@@ -640,6 +642,9 @@ auto acquireJobsFromTest(int& total, std::vector<std::unique_ptr<Job>>& placeInt
   }
 }
 
+#ifdef CDS_DCR_BLOCK_MULTIACCESS_TO_PROFRAW
+std::mutex profrawBlock;
+#endif
 auto executeJob(std::unique_ptr<Job> const& job, std::vector<std::string> const& passToCompiler) -> std::tuple<bool, std::string, std::string> {
   using namespace std::string_literals;
   if (job->type == TestStepType::Compile) {
@@ -650,6 +655,9 @@ auto executeJob(std::unique_ptr<Job> const& job, std::vector<std::string> const&
   }
 
   if (job->type == TestStepType::Run) {
+#ifdef CDS_DCR_BLOCK_MULTIACCESS_TO_PROFRAW
+    std::lock_guard prowrawGuard(profrawBlock);
+#endif
     auto const& [path, standard] = std::get<RunData>(job->data);
     return executeRun(path, standard);
   }

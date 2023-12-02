@@ -1,6 +1,6 @@
 // DCR-TEST
 // STEPS: compile,run
-// STD: 11
+// STD: 11+
 // EXPECTED[compile]: success
 // EXPECTED[run]: success
 
