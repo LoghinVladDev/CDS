@@ -24,7 +24,7 @@ target_compile_definitions(
 )
 
 add_executable(cds_unit_tests_dcr
-    ${CDS_UNIT_TEST_SOURCES}
+    ${DCR_COVERAGE_TEST_SOURCES}
     UnitTest.cpp)
 
 target_include_directories(lib.dcr

@@ -514,85 +514,6 @@ auto executeRun(std::string const& path, Standard standard) -> std::tuple<bool, 
   return awaitProcess(execPath, args, env);
 }
 
-auto executeSequentially(std::vector<TestData> const& tests, std::vector<std::string> const& passToCompiler, DcrParams const& dcrParams) -> int {
-  int skipped = 0;
-  int successful = 0;
-  int total = 0;
-
-  std::vector<TestData> withoutInvalid;
-  for (auto const& tData: tests) {
-    if (!(!std::ranges::contains(tData.steps, TestStepType::Compile, stepType)
-        && std::ranges::contains(tData.steps, TestStepType::Run, stepType))) {
-      withoutInvalid.push_back(tData);
-    }
-  }
-
-  for (const auto& [_, steps, standard]: withoutInvalid) {
-    total += static_cast<int>(steps.size() * stdRange(standard).size());
-  }
-
-  std::vector<std::string> failedTestPaths;
-  using namespace std::string_literals;
-  auto const dcrPath = "../test/runner/dcr"s; // TODO: change this later
-  std::vector<std::string> compilerArgs = passToCompiler;
-  compilerArgs.emplace_back(dcrPath + "/src/DcrMain.cpp");
-  compilerArgs.emplace_back(dcrPath + "/src/Test.cpp");
-
-  for (auto const& [path, steps, standard]: withoutInvalid) {
-    for (auto const& std: stdRange(standard)) {
-      std::vector<std::string> withStd = compilerArgs;
-      withStd.push_back("-std=c++"s + toString(std));
-      std::tuple<bool, std::string, std::string> execResult;
-      if (std::ranges::contains(steps, TestStepType::Compile, stepType)) {
-        execResult = executeCompile(path, std, withStd);
-      }
-
-      if (std::get<0>(execResult)) {
-        ++successful;
-        std::cout << "compile " << path << " successful\n";
-      } else {
-        std::cout << "compile " << path << " failed\n";
-        if (dcrParams.verbose) {
-          std::cout << "  Output: " << std::get<1>(execResult) + " " + std::get<2>(execResult) << '\n';
-        }
-        failedTestPaths.emplace_back("compile " + path);
-      }
-
-      if (std::ranges::contains(steps, TestStepType::Run, stepType)) {
-        if (!std::get<0>(execResult)) {
-          ++ skipped;
-        } else {
-          execResult = executeRun(path, std);
-
-          if (std::get<0>(execResult)) {
-            std::cout << "run     " << path << " successful\n";
-            ++successful;
-          } else {
-            std::cout << "run     " << path << " failed\n";
-            if (dcrParams.verbose) {
-              std::cout << "  Output: " << std::get<1>(execResult) + " " + std::get<2>(execResult) << '\n';
-            }
-            failedTestPaths.emplace_back("run " + path);
-          }
-        }
-      }
-    }
-  }
-
-  std::cout << total << " tests ran, out of which " << successful << " were successful, " << skipped << " were skipped";
-  if (!failedTestPaths.empty()) {
-    std::cout << " and the following " << (total - successful - skipped) << " failed:\n";
-  } else {
-    std::cout << '\n';
-  }
-
-  for (auto const& testPath: failedTestPaths) {
-    std::cout << "  " << testPath << '\n';
-  }
-
-  return total != skipped + successful;
-}
-
 struct CompileData {
   std::string const& path;
   Standard standard;
@@ -694,7 +615,7 @@ auto toString(std::unique_ptr<Job> const& job) {
   return oss.str();
 }
 
-auto executeParallel(std::vector<TestData> const& tests, std::vector<std::string> const& extraArgs, DcrParams const& dcrParams) -> int {
+auto execute(std::vector<TestData> const& tests, std::vector<std::string> const& extraArgs, DcrParams const& dcrParams) -> int {
   std::vector<std::unique_ptr<Job>> jobs;
   int total = 0;
   std::atomic successful = 0;
@@ -784,12 +705,6 @@ auto executeParallel(std::vector<TestData> const& tests, std::vector<std::string
 
   return total != skipped + successful;
 }
-
-auto execute(ExecutionPolicy policy, std::vector<TestData> const& tests, std::vector<std::string> const& passToCompiler, DcrParams const& dcrParams) -> int {
-  return policy == ExecutionPolicy::Sequential
-      ? executeSequentially(tests, passToCompiler, dcrParams)
-      : executeParallel(tests, passToCompiler, dcrParams);
-}
 } // namespace
 
 auto run(int const argc, char const* const* argv) -> int {
@@ -831,6 +746,6 @@ auto run(int const argc, char const* const* argv) -> int {
   }
 
   auto const tests = processTests(testPaths);
-  return execute(ExecutionPolicy::Parallel, tests, passedToCompiler, dcrParams);
+  return execute(tests, passedToCompiler, dcrParams);
 }
 } // namespace dcr
