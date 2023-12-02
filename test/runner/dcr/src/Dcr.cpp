@@ -247,13 +247,13 @@ auto expected(std::string_view const resultString) -> std::optional<TestStepResu
   return std::nullopt;
 }
 
-auto parseCompilerAndPlatforms(std::string_view stepTypeString) -> std::optional<TestStepType> {
+auto parseStepCompilerAndPlatforms(std::string_view stepTypeString) -> std::optional<std::tuple<TestStepType, std::vector<TestStepEnv>>> {
   auto const rbraceIdx = stepTypeString.find('(');
   if (rbraceIdx == std::string_view::npos) {
     if (auto const stepIt = stepTypeMap.find(stepTypeString); stepIt == stepTypeMap.end()) {
       return std::nullopt;
     } else {
-      return stepIt->second;
+      return std::tuple{stepIt->second, std::vector<TestStepEnv>()};
     }
   }
 
@@ -266,22 +266,27 @@ auto parseCompilerAndPlatforms(std::string_view stepTypeString) -> std::optional
     step = stepIt->second;
   }
 
-  return step;
+  return std::tuple{*step, std::vector<TestStepEnv>()};
 }
 
-auto parseStepTypes(std::string_view stepTypes) -> std::optional<std::vector<TestStepType>> {
-  std::vector<TestStepType> steps;
+
+auto stepType(TestStep const& t) {
+  return t.type;
+}
+
+auto parseStepTypes(std::string_view stepTypes) -> std::optional<std::vector<std::tuple<TestStepType, std::vector<TestStepEnv>>>> {
+  std::vector<std::tuple<TestStepType, std::vector<TestStepEnv>>> stepsAndEnvs;
   stepTypes = trim(stepTypes);
   while (!stepTypes.empty()) {
     auto const idxOfComma = stepTypes.find(',');
     auto const current = stepTypes.substr(0, idxOfComma);
     stepTypes = idxOfComma == std::string_view::npos ? "" : stepTypes.substr(idxOfComma + 1);
-    if (auto const step = parseCompilerAndPlatforms(current)) {
-      steps.push_back(*step);
+    if (auto const step = parseStepCompilerAndPlatforms(current)) {
+      stepsAndEnvs.push_back(*step);
     }
   }
 
-  return {steps};
+  return {stepsAndEnvs};
 }
 
 auto parseStandard(std::string_view const standardString) -> std::optional<StandardRange> {
@@ -339,7 +344,7 @@ auto parseAndAdjustSteps(std::vector<TestStep>& steps, std::string_view stepsAnd
   }
 
   for (auto& [type, environments, stepResult]: steps) {
-    if (std::ranges::find(*stepTypes, type) != stepTypes->end()) {
+    if (std::ranges::find(*stepTypes, type, [](auto const& t) { return std::get<0>(t); }) != stepTypes->end()) {
       stepResult = *result;
     }
   }
@@ -369,10 +374,13 @@ auto processTestHeader(std::string const& path) -> std::optional<TestData> {
       }
     } else if (headerItem.starts_with(headerPrefixSteps)) {
       auto const stepString = headerItem.substr(headerPrefixSteps.length());
-      if (auto const stepTypes = parseStepTypes(stepString); !stepTypes) {
+      if (auto const stepTypesAndEnvs = parseStepTypes(stepString); !stepTypesAndEnvs) {
         std::cout << "Warning in '" << path << "': Invalid Step Types '" << stepString << "'\n";
       } else {
-        std::ranges::for_each(*stepTypes, [&steps](auto const type) { steps.emplace_back(type, std::vector<TestStepEnv>(), TestStepResult::Success); });
+        std::ranges::for_each(*stepTypesAndEnvs, [&steps](auto const typeAndEnv) {
+          auto const& [type, envs] = typeAndEnv;
+          steps.emplace_back(type, envs, TestStepResult::Success);
+        });
       }
     } else if (headerItem.starts_with(headerPrefixExpected)) {
       parseAndAdjustSteps(steps, headerItem.substr(headerPrefixExpected.length()));
@@ -527,10 +535,6 @@ auto executeCompile(std::string const& path, Standard standard, std::vector<std:
   fullArgs.push_back(executablePath(path, standard));
 
   return awaitProcess("clang++", fullArgs, env);
-}
-
-auto stepType(TestStep const& t) {
-  return t.type;
 }
 
 auto executeRun(std::string const& path, Standard standard) -> std::tuple<bool, std::string, std::string> {
