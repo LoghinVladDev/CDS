@@ -9,7 +9,9 @@
 
 namespace dcr {
 namespace internals {
+namespace {
 std::vector<std::unique_ptr<Test const>> allTests;
+}
 
 auto tests() -> std::vector<std::unique_ptr<Test const>>& {
   return allTests;
@@ -17,6 +19,7 @@ auto tests() -> std::vector<std::unique_ptr<Test const>>& {
 }
 }
 
+#ifndef DCR_OMIT_MAIN
 int main(int argc, char** argv) {
   // connect to runner
 
@@ -37,3 +40,4 @@ int main(int argc, char** argv) {
 
   return 0;
 }
+#endif

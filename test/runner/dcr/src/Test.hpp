@@ -40,7 +40,7 @@ private:
 };
 
 namespace internals {
-  auto tests() -> std::vector<std::unique_ptr<Test const>>&;
+auto tests() -> std::vector<std::unique_ptr<Test const>>&;
 } // namespace
 
 template <typename TestType>

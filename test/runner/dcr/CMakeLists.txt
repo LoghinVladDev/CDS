@@ -1,15 +1,29 @@
 list(TRANSFORM CDS_UNIT_TEST_SOURCES
     PREPEND "../../")
 
+if(DEFINED CDS_DCR_INCLUDE_TEST_SOURCES_FOR_COV)
+  set(DCR_COVERAGE_TEST_SOURCES ${CDS_UNIT_TEST_SOURCES})
+else()
+  set(DCR_COVERAGE_TEST_SOURCES, "")
+endif()
+
 set(DCR_SOURCES
     src/Dcr.cpp
-    src/Test.cpp)
+    src/Test.cpp
+    src/DcrMain.cpp)
 
 add_library(lib.dcr
     STATIC
     ${DCR_SOURCES})
 
+target_compile_definitions(
+    lib.dcr
+    PRIVATE
+    DCR_OMIT_MAIN
+)
+
 add_executable(cds_unit_tests_dcr
+    ${CDS_UNIT_TEST_SOURCES}
     UnitTest.cpp)
 
 target_include_directories(lib.dcr

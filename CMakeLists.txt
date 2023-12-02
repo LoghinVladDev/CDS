@@ -16,6 +16,21 @@ if(NOT DEFINED CDS_SANITIZERS)
 endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CDS_SANITIZERS}")
 
+if(NOT DEFINED CDS_COVERAGE)
+  message("--   CDS_COVERAGE not explicitly provided, no coverage provided")
+else()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcoverage-mapping -fprofile-instr-generate -O0 -g")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fcoverage-mapping -fprofile-instr-generate -O0 -g")
+  if(${CDS_COVERAGE} STREQUAL "IDE")
+    set(CDS_DCR_INCLUDE_TEST_SOURCES_FOR_COV "")
+  elseif(${CDS_COVERAGE} STREQUAL "CI")
+  else()
+    message("--    CDS_COVERAGE invalid value '${CDS_COVERAGE}'")
+  endif()
+endif()
+
+
+
 
 set (CDS_INCLUDE_DIRECTORIES include)
 include_directories(${CDS_INCLUDE_DIRECTORIES})

@@ -501,7 +501,7 @@ auto executeSequentially(std::vector<TestData> const& tests, std::vector<std::st
   using namespace std::string_literals;
   auto const dcrPath = "../test/runner/dcr"s; // TODO: change this later
   std::vector<std::string> compilerArgs = passToCompiler;
-  compilerArgs.emplace_back(dcrPath + "/src/DCRMain.cpp");
+  compilerArgs.emplace_back(dcrPath + "/src/DcrMain.cpp");
   compilerArgs.emplace_back(dcrPath + "/src/Test.cpp");
 
   for (auto const& [path, steps, standard]: withoutInvalid) {
@@ -545,12 +545,18 @@ auto executeSequentially(std::vector<TestData> const& tests, std::vector<std::st
     }
   }
 
-  std::cout << total << " tests ran, out of which " << successful << " were successful, " << skipped << " were skipped, and the following " << (total - successful - skipped) << " failed:\n";
+  std::cout << total << " tests ran, out of which " << successful << " were successful, " << skipped << " were skipped";
+  if (!failedTestPaths.empty()) {
+    std::cout << " and the following " << (total - successful - skipped) << " failed:\n";
+  } else {
+    std::cout << '\n';
+  }
+
   for (auto const& testPath: failedTestPaths) {
     std::cout << "  " << testPath << '\n';
   }
 
-  return total == skipped + successful;
+  return total != skipped + successful;
 }
 
 auto execute(ExecutionPolicy, std::vector<TestData> const& tests, std::vector<std::string> const& passToCompiler, DcrParams const& dcrParams) -> int {

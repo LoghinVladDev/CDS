@@ -8,5 +8,5 @@
 #include "../../src/meta/Compiler.hpp"
 
 TEST(Test, Test) {
-  ASSERT_EQ(f(), 4);
+  ASSERT_EQ(f(), 5);
 }
