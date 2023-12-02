@@ -1,2 +1,0 @@
-#warning Deprecated, use CDS/threading/Atomic
-#include "../../src/threading/Atomic.hpp"

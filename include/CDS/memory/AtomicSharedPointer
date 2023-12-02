@@ -1,3 +1,0 @@
-#warning Deprecated. Use Atomic <SharedPointer> to achieve an equivalent object
-#include <CDS/threading/Atomic>
-#include <CDS/memory/SharedPointer>

@@ -1,2 +1,0 @@
-#warning Deprecated. Use CDS/memory/Reference instead
-#include <CDS/memory/Reference>

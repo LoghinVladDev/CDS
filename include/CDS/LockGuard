@@ -1,2 +1,0 @@
-#warning Deprecated, use CDS/threading/Lock
-#include "../../src/threading/Lock.hpp"

@@ -1,2 +1,0 @@
-#warning Deprecated, use CDS/threading/Thread
-#include "../../src/threading/Thread.hpp"
