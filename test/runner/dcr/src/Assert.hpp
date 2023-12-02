@@ -9,7 +9,7 @@
 #include <sstream>
 
 #define ASSERT_EQ(lhs, rhs)                                                         \
-  ::dcr::compare<::dcr::CompareType::Eq>(__FILE__, __LINE__, #lhs, #rhs, lhs, rhs);
+  ::dcr::compare<::dcr::CompareType::Eq>(__FILE__, __LINE__, #lhs, #rhs, lhs, rhs)
 
 namespace dcr {
 enum class CompareType { Eq };

@@ -3,6 +3,7 @@
 //
 
 #include <sstream>
+#include <iostream>
 
 #include "Test.hpp"
 
@@ -29,6 +30,10 @@ int main(int argc, char** argv) {
     }
   }
 
-  // write back stats
+  if (totalCount != successfulCount) {
+    std::cout << execBuffer.str() << '\n';
+    return 1;
+  }
+
   return 0;
 }

@@ -18,6 +18,10 @@
 
 namespace dcr {
 namespace {
+struct DcrParams {
+  bool verbose;
+};
+
 std::function alwaysAccept = [](std::string const&) { return true; };
 std::function alwaysReject = [](std::string const&) { return false; };
 
@@ -384,36 +388,80 @@ auto toString(Standard std) {
 }
 
 auto executablePath(std::string const& src, Standard standard) {
-  auto const extensionIdx = src.rfind('.');
-  return src.substr(0, extensionIdx) + "_" + toString(standard) + ".bin";
+  auto const lastSlIdx = src.rfind('/');
+  auto relative = src;
+  if (lastSlIdx != std::string::npos) {
+    relative = src.substr(lastSlIdx + 1);
+  }
+
+  auto const extensionIdx = relative.rfind('.');
+  auto const binary = relative.substr(0, extensionIdx) + "_" + toString(standard) + ".bin";
+  return "./test_binaries/" + binary;
 }
 
-auto awaitProcess(std::string executable, std::vector<std::string>& args) {
-  std::stringstream oss;
-  oss
-      << "[DEBUG] - " << executable;
-  std::ranges::for_each(args, [&oss](auto const& s) { oss << " " << s; });
-  std::cout << oss.str() << "\n";
+auto awaitProcess(std::string executable, std::vector<std::string>& args) -> std::tuple<bool, std::string, std::string> {
+  // std::stringstream oss;
+  // oss
+  //     << "[DEBUG] - " << executable;
+  // std::ranges::for_each(args, [&oss](auto const& s) { oss << " " << s; });
+  // std::cout << oss.str() << "\n";
+
+  int outRedir[2];
+  int errRedir[2];
+  pipe(outRedir);
+  pipe(errRedir);
 
   std::vector<char*> cArgs;
   cArgs.emplace_back(executable.data());
   std::ranges::for_each(args, [&cArgs](std::string& s) { cArgs.emplace_back(s.data()); });
   cArgs.emplace_back(nullptr);
 
-  if (pid_t const childId = fork(); childId == 0) {
-    if (-1 == execvp(executable.c_str(), cArgs.data())) {
-      exit(2);
-    }
-    [[unlikely]]
-    exit(3);
-  } else if (childId < 0) {
-    std::cerr << "Unknown error\n";
-    return false;
-  } else {
-    int stat;
-    waitpid(childId, &stat, 0);
-    return WEXITSTATUS(stat) == 0;
+  pid_t const childId = fork();
+  if (childId == 0) {
+    close(STDOUT_FILENO);
+    close(STDERR_FILENO);
+    dup2(outRedir[1], STDOUT_FILENO);
+    dup2(errRedir[1], STDERR_FILENO);
+    close(outRedir[0]);
+    close(outRedir[1]);
+    close(errRedir[0]);
+    close(errRedir[1]);
+
+    execvp(executable.c_str(), cArgs.data());
+
+    exit(1);
   }
+
+  close(outRedir[1]);
+  close(errRedir[1]);
+  if (childId < 0) {
+    close(outRedir[0]);
+    close(errRedir[0]);
+    std::cerr << "Unknown error\n";
+    return {false, "", ""};
+  }
+
+  int stat;
+  waitpid(childId, &stat, 0);
+
+  int readCount;
+  char buf[1024];
+  std::string outContents;
+  while (0 != (readCount = read(outRedir[0], buf, 1024))) {
+    outContents += std::string_view(buf, readCount);
+  }
+  std::string errContents;
+  while (0 != (readCount = read(errRedir[0], buf, 1024))) {
+    errContents += std::string_view(buf, readCount);
+  }
+
+  close(outRedir[0]);
+  close(errRedir[0]);
+  if (WIFEXITED(stat)) {
+    return {WEXITSTATUS(stat) == 0, outContents, errContents};
+  }
+
+  return {false, outContents, errContents};
 }
 
 auto executeCompile(std::string const& path, Standard standard, std::vector<std::string> const& extraArgs) {
@@ -422,17 +470,16 @@ auto executeCompile(std::string const& path, Standard standard, std::vector<std:
   fullArgs.emplace_back("-o");
   fullArgs.push_back(executablePath(path, standard));
 
-  awaitProcess("clang++", fullArgs);
-
-  return true;
+  return awaitProcess("clang++", fullArgs);
 }
 
-auto executeRun(std::string const& path, Standard standard) {
+auto executeRun(std::string const& path, Standard standard) -> std::tuple<bool, std::string, std::string> {
   auto const& execPath = executablePath(path, standard);
-  return true;
+  std::vector<std::string> args;
+  return awaitProcess(execPath, args);
 }
 
-auto executeSequentially(std::vector<TestData> const& tests, std::vector<std::string> const& passToCompiler) -> int {
+auto executeSequentially(std::vector<TestData> const& tests, std::vector<std::string> const& passToCompiler, DcrParams const& dcrParams) -> int {
   int skipped = 0;
   int successful = 0;
   int total = 0;
@@ -461,26 +508,36 @@ auto executeSequentially(std::vector<TestData> const& tests, std::vector<std::st
     for (auto const& std: stdRange(standard)) {
       std::vector<std::string> withStd = compilerArgs;
       withStd.push_back("-std=c++"s + toString(std));
-      bool result = false;
+      std::tuple<bool, std::string, std::string> execResult;
       if (std::ranges::contains(steps, TestStepType::Compile, stepType)) {
-        result = executeCompile(path, std, withStd);
+        execResult = executeCompile(path, std, withStd);
       }
 
-      if (result) {
+      if (std::get<0>(execResult)) {
         ++successful;
+        std::cout << "compile " << path << " successful\n";
       } else {
+        std::cout << "compile " << path << " failed\n";
+        if (dcrParams.verbose) {
+          std::cout << "  Output: " << std::get<1>(execResult) + " " + std::get<2>(execResult) << '\n';
+        }
         failedTestPaths.emplace_back("compile " + path);
       }
 
       if (std::ranges::contains(steps, TestStepType::Run, stepType)) {
-        if (!result) {
+        if (!std::get<0>(execResult)) {
           ++ skipped;
         } else {
-          result = executeRun(path, std);
+          execResult = executeRun(path, std);
 
-          if (result) {
+          if (std::get<0>(execResult)) {
+            std::cout << "run     " << path << " successful\n";
             ++successful;
           } else {
+            std::cout << "run     " << path << " failed\n";
+            if (dcrParams.verbose) {
+              std::cout << "  Output: " << std::get<1>(execResult) + " " + std::get<2>(execResult) << '\n';
+            }
             failedTestPaths.emplace_back("run " + path);
           }
         }
@@ -496,8 +553,8 @@ auto executeSequentially(std::vector<TestData> const& tests, std::vector<std::st
   return total == skipped + successful;
 }
 
-auto execute(ExecutionPolicy, std::vector<TestData> const& tests, std::vector<std::string> const& passToCompiler) -> int {
-  return executeSequentially(tests, passToCompiler);
+auto execute(ExecutionPolicy, std::vector<TestData> const& tests, std::vector<std::string> const& passToCompiler, DcrParams const& dcrParams) -> int {
+  return executeSequentially(tests, passToCompiler, dcrParams);
 }
 } // namespace
 
@@ -509,8 +566,14 @@ auto run(int const argc, char const* const* argv) -> int {
 
   std::string inputFileOrDir;
   std::vector<std::string> passedToCompiler;
+  std::filesystem::create_directory("test_binaries");
+  DcrParams dcrParams {.verbose = false};
   argParse(
       {&argv[1], &argv[argc]},
+      makeParser(
+          [&dcrParams](auto const&) { dcrParams.verbose = true; },
+          [](auto const& arg) { return arg == "-v"; }
+      ),
       makeParser(
           [&inputFileOrDir](auto const& args) { inputFileOrDir = args[0]; },
           [](auto const&) { return true; }
@@ -529,6 +592,6 @@ auto run(int const argc, char const* const* argv) -> int {
   }
 
   auto const tests = processTests(testPaths);
-  return execute(ExecutionPolicy::Sequential, tests, passedToCompiler);
+  return execute(ExecutionPolicy::Sequential, tests, passedToCompiler, dcrParams);
 }
 } // namespace dcr
