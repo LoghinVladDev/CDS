@@ -298,13 +298,13 @@ auto parseAndAdjustSteps(std::vector<TestStep>& steps, std::string_view stepsAnd
     return;
   }
 
-  auto const stepsString = stepsAndExpectedString.substr(brIdx);
+  auto const stepsString = stepsAndExpectedString.substr(0, brIdx);
+  auto const expectedString = stepsAndExpectedString.substr(brIdx + "]: "sv.length());
   auto const stepTypes = parseStepTypes(stepsString);
   if (!stepTypes) {
     std::cout << "Warning: Invalid step types '" << stepsString << "'\n";
   }
 
-  auto const expectedString = stepsAndExpectedString.substr(brIdx + "]: "sv.length());
   auto const result = expected(expectedString);
   if (!result) {
     std::cout << "Warning: Invalid expectation '" << expectedString << "'\n";
@@ -526,6 +526,7 @@ struct RunData {
 
 struct Job {
   TestStepType type;
+  TestStepResult expected;
   std::variant<CompileData, RunData> data;
   std::unique_ptr<Job> creates;
 };
@@ -533,9 +534,10 @@ struct Job {
 auto acquireJobsFromTest(int& total, std::vector<std::unique_ptr<Job>>& placeInto, TestData const& test) {
   for (auto const& [path, steps, standards] = test; auto const& standard: stdRange(standards)) {
     std::unique_ptr<Job> job = nullptr;
-    if (std::ranges::contains(steps, TestStepType::Compile, stepType)) {
+    if (auto const it = std::ranges::find(steps, TestStepType::Compile, stepType); it != steps.end()) {
       job = std::make_unique<Job>(
         TestStepType::Compile,
+        it->result,
         CompileData {
           .path = path,
           .standard = standard
@@ -545,9 +547,10 @@ auto acquireJobsFromTest(int& total, std::vector<std::unique_ptr<Job>>& placeInt
       ++total;
     }
 
-    if (job && std::ranges::contains(steps, TestStepType::Run, stepType)) {
+    if (auto const it = std::ranges::find(steps, TestStepType::Run, stepType); job && it != steps.end()) {
       job->creates = std::make_unique<Job>(
         TestStepType::Run,
+        it->result,
         RunData {
           .path = path,
           .standard = standard
@@ -651,8 +654,9 @@ auto execute(std::vector<TestData> const& tests, std::vector<std::string> const&
     while (!shouldTerminate) {
       if (auto job = getJob()) {
         std::stringstream out;
-        auto const [wasSuccessful, outputText, errorText] = executeJob(job, passToCompiler);
+        auto const [status, outputText, errorText] = executeJob(job, passToCompiler);
         auto const asStr = toString(job);
+        auto const wasSuccessful = job->expected == TestStepResult::Success ? status : !status;
         if (wasSuccessful) {
           ++successful;
           out << asStr + " successful\n";
