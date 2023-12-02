@@ -4,6 +4,7 @@
 
 #include "Dcr.hpp"
 
+#include <atomic>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -11,15 +12,23 @@
 #include <functional>
 #include <memory>
 #include <optional>
+#include <thread>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
+#include <variant>
 #include <bits/ranges_algo.h>
 #include <sys/wait.h>
+
+namespace std {
+class thread;
+}
 
 namespace dcr {
 namespace {
 struct DcrParams {
   bool verbose;
+  int threadCount;
 };
 
 std::function alwaysAccept = [](std::string const&) { return true; };
@@ -361,7 +370,8 @@ auto processTests(std::vector<std::string> const& paths) {
 }
 
 enum class ExecutionPolicy {
-  Sequential
+  Sequential,
+  Parallel
 };
 
 std::vector const allStandardsArray =
@@ -399,23 +409,38 @@ auto executablePath(std::string const& src, Standard standard) {
   return "./test_binaries/" + binary;
 }
 
-auto awaitProcess(std::string executable, std::vector<std::string>& args) -> std::tuple<bool, std::string, std::string> {
-  // std::stringstream oss;
-  // oss
-  //     << "[DEBUG] - " << executable;
-  // std::ranges::for_each(args, [&oss](auto const& s) { oss << " " << s; });
-  // std::cout << oss.str() << "\n";
+auto profPath(std::string const& src, Standard standard) {
+  auto execPath = executablePath(src, standard);
+  auto extLoc = execPath.rfind('.');
+  auto withoutExt = execPath.substr(0, extLoc);
+  return withoutExt + ".profraw";
+}
+
+auto awaitProcess(std::string executable, std::vector<std::string>& args, std::vector<std::string>& env) -> std::tuple<bool, std::string, std::string> {
+  std::stringstream oss;
+  oss
+      << "[DEBUG] - " << executable;
+  oss << " [ARGS] -";
+  std::ranges::for_each(args, [&oss](auto const& s) { oss << " " << s; });
+  oss << " [ENV] -";
+  std::ranges::for_each(env, [&oss](auto const& s) { oss << " " << s; });
+  std::cout << oss.str() << std::endl;
 
   int outRedir[2];
   int errRedir[2];
   pipe(outRedir);
   pipe(errRedir);
 
-  std::vector<char*> cArgs;
-  cArgs.emplace_back(executable.data());
-  std::ranges::for_each(args, [&cArgs](std::string& s) { cArgs.emplace_back(s.data()); });
-  cArgs.emplace_back(nullptr);
+  auto toCArr = [](std::vector<std::string>& arr, std::optional<char*> first = std::nullopt) {
+    std::vector<char*> cArr;
+    if (first) { cArr.emplace_back(*first); }
+    std::ranges::for_each(arr, [&cArr](auto& s){ cArr.emplace_back(s.data()); });
+    cArr.emplace_back(nullptr);
+    return cArr;
+  };
 
+  auto const cArgs = toCArr(args, executable.data());
+  auto const cEnv = toCArr(env);
   pid_t const childId = fork();
   if (childId == 0) {
     close(STDOUT_FILENO);
@@ -427,7 +452,7 @@ auto awaitProcess(std::string executable, std::vector<std::string>& args) -> std
     close(errRedir[0]);
     close(errRedir[1]);
 
-    execvp(executable.c_str(), cArgs.data());
+    execvpe(executable.c_str(), cArgs.data(), cEnv.data());
 
     exit(1);
   }
@@ -466,17 +491,25 @@ auto awaitProcess(std::string executable, std::vector<std::string>& args) -> std
 
 auto executeCompile(std::string const& path, Standard standard, std::vector<std::string> const& extraArgs) {
   std::vector<std::string> fullArgs = extraArgs;
+  std::vector<std::string> env;
   fullArgs.push_back(path);
   fullArgs.emplace_back("-o");
   fullArgs.push_back(executablePath(path, standard));
 
-  return awaitProcess("clang++", fullArgs);
+  return awaitProcess("clang++", fullArgs, env);
 }
 
+auto stepType(TestStep const& t) {
+  return t.type;
+};
+
 auto executeRun(std::string const& path, Standard standard) -> std::tuple<bool, std::string, std::string> {
+  using namespace std::string_literals;
   auto const& execPath = executablePath(path, standard);
+  auto const& profrawPath = profPath(path, standard);
   std::vector<std::string> args;
-  return awaitProcess(execPath, args);
+  std::vector<std::string> env;
+  return awaitProcess(execPath, args, env);
 }
 
 auto executeSequentially(std::vector<TestData> const& tests, std::vector<std::string> const& passToCompiler, DcrParams const& dcrParams) -> int {
@@ -484,7 +517,6 @@ auto executeSequentially(std::vector<TestData> const& tests, std::vector<std::st
   int successful = 0;
   int total = 0;
 
-  auto const stepType = [](TestStep const& t) { return t.type; };
   std::vector<TestData> withoutInvalid;
   for (auto const& tData: tests) {
     if (!(!std::ranges::contains(tData.steps, TestStepType::Compile, stepType)
@@ -559,8 +591,196 @@ auto executeSequentially(std::vector<TestData> const& tests, std::vector<std::st
   return total != skipped + successful;
 }
 
-auto execute(ExecutionPolicy, std::vector<TestData> const& tests, std::vector<std::string> const& passToCompiler, DcrParams const& dcrParams) -> int {
-  return executeSequentially(tests, passToCompiler, dcrParams);
+struct CompileData {
+  std::string const& path;
+  Standard standard;
+};
+
+struct RunData {
+  std::string const& path;
+  Standard standard;
+};
+
+struct Job {
+  TestStepType type;
+  std::variant<CompileData, RunData> data;
+  std::unique_ptr<Job> creates;
+};
+
+auto acquireJobsFromTest(int& total, std::vector<std::unique_ptr<Job>>& placeInto, TestData const& test) {
+  for (auto const& [path, steps, standards] = test; auto const& standard: stdRange(standards)) {
+    std::unique_ptr<Job> job = nullptr;
+    if (std::ranges::contains(steps, TestStepType::Compile, stepType)) {
+      job = std::make_unique<Job>(
+        TestStepType::Compile,
+        CompileData {
+          .path = path,
+          .standard = standard
+        },
+        nullptr
+      );
+      ++total;
+    }
+
+    if (job && std::ranges::contains(steps, TestStepType::Run, stepType)) {
+      job->creates = std::make_unique<Job>(
+        TestStepType::Run,
+        RunData {
+          .path = path,
+          .standard = standard
+        },
+        nullptr
+      );
+      ++total;
+    }
+
+    if (job) {
+      placeInto.push_back(std::move(job));
+    }
+  }
+}
+
+auto executeJob(std::unique_ptr<Job> const& job, std::vector<std::string> const& passToCompiler) -> std::tuple<bool, std::string, std::string> {
+  using namespace std::string_literals;
+  if (job->type == TestStepType::Compile) {
+    auto const& [path, standard] = std::get<CompileData>(job->data);
+    std::vector withStd = passToCompiler;
+    withStd.push_back("-std=c++"s + toString(standard));
+    return executeCompile(path, standard, withStd);
+  }
+
+  if (job->type == TestStepType::Run) {
+    auto const& [path, standard] = std::get<RunData>(job->data);
+    return executeRun(path, standard);
+  }
+
+  return {false, "", "Unknown Job Type"};
+}
+
+auto toString(TestStepType const type) {
+  switch (type) {
+    using enum TestStepType;
+    case Compile: return "compile";
+    case Run: return "run";
+  }
+
+  return "unknown test type";
+}
+
+std::string const unknownData = "unknown test data";
+auto toString(std::variant<CompileData, RunData> const& data) -> std::string const& {
+  if (std::holds_alternative<CompileData>(data)) {
+    return std::get<CompileData>(data).path;
+  }
+
+  if (std::holds_alternative<RunData>(data)) {
+    return std::get<RunData>(data).path;
+  }
+
+  return unknownData;
+}
+
+auto toString(std::unique_ptr<Job> const& job) {
+  std::stringstream oss;
+  oss << toString(job->type) << " " << toString(job->data);
+  return oss.str();
+}
+
+auto executeParallel(std::vector<TestData> const& tests, std::vector<std::string> const& extraArgs, DcrParams const& dcrParams) -> int {
+  std::vector<std::unique_ptr<Job>> jobs;
+  int total = 0;
+  std::atomic successful = 0;
+  std::atomic skipped = 0;
+  for (auto const& test: tests) {
+    acquireJobsFromTest(total, jobs, test);
+  }
+
+  using namespace std::string_literals;
+  auto const dcrPath = "../test/runner/dcr"s; // TODO: change this later
+  std::vector<std::string> passToCompiler = extraArgs;
+  passToCompiler.emplace_back(dcrPath + "/src/DcrMain.cpp");
+  passToCompiler.emplace_back(dcrPath + "/src/Test.cpp");
+
+  std::mutex jobsLock;
+  auto getJob = [&jobs, &jobsLock] {
+    std::lock_guard g(jobsLock);
+    if (jobs.empty()) { return std::unique_ptr<Job>(); }
+    auto job = std::move(jobs.back());
+    jobs.pop_back();
+    return job;
+  };
+
+  auto pushJob = [&jobs, &jobsLock]<typename T>(T&& job) {
+    std::lock_guard g(jobsLock);
+    jobs.push_back(std::forward<T>(job));
+  };
+
+  std::mutex otherUpdatersLock;
+  std::vector<std::string> failedTestPaths;
+  auto threadRunnerFn = [&getJob, &pushJob, &successful, &skipped, &passToCompiler, &dcrParams, &otherUpdatersLock, &failedTestPaths] {
+    bool shouldTerminate = false;
+    while (!shouldTerminate) {
+      if (auto job = getJob()) {
+        std::stringstream out;
+        auto const [wasSuccessful, outputText, errorText] = executeJob(job, passToCompiler);
+        auto const asStr = toString(job);
+        if (wasSuccessful) {
+          ++successful;
+          out << asStr + " successful\n";
+
+          std::lock_guard g(otherUpdatersLock);
+          std::cout << out.str();
+        } else {
+          out << asStr + " failed\n";
+          if (dcrParams.verbose) {
+            out << "  Output: " << outputText << " " << errorText << "\n";
+          }
+
+          std::lock_guard g(otherUpdatersLock);
+          failedTestPaths.emplace_back(asStr);
+          std::cout << out.str();
+        }
+
+        if (job->creates) {
+          if (wasSuccessful) {
+            pushJob(std::move(job->creates));
+          } else {
+            ++skipped;
+          }
+        }
+      } else {
+        shouldTerminate = true;
+      }
+    }
+  };
+
+  std::vector<std::thread> runners;
+  for (int thIdx = 0; thIdx < std::min(dcrParams.threadCount, static_cast<int>(jobs.size())); ++ thIdx) {
+    runners.emplace_back(threadRunnerFn);
+  }
+
+  for (auto& runner: runners) {
+    runner.join();
+  }
+
+  std::cout << total << " tests ran, out of which " << successful << " were successful, " << skipped << " were skipped";
+  if (!failedTestPaths.empty()) {
+    std::cout << " and the following " << (total - successful - skipped) << " failed:\n";
+  } else {
+    std::cout << '\n';
+  }
+
+  for (auto const& testPath: failedTestPaths) {
+    std::cout << "  " << testPath << '\n';
+  }
+
+  return total != skipped + successful;
+}
+
+auto execute(ExecutionPolicy policy, std::vector<TestData> const& tests, std::vector<std::string> const& passToCompiler, DcrParams const& dcrParams) -> int {
+  return policy == ExecutionPolicy::Sequential
+      ? executeSequentially(tests, passToCompiler, dcrParams)
+      : executeParallel(tests, passToCompiler, dcrParams);
 }
 } // namespace
 
@@ -573,12 +793,17 @@ auto run(int const argc, char const* const* argv) -> int {
   std::string inputFileOrDir;
   std::vector<std::string> passedToCompiler;
   std::filesystem::create_directory("test_binaries");
-  DcrParams dcrParams {.verbose = false};
+  DcrParams dcrParams {.verbose = false, .threadCount = 1};
   argParse(
       {&argv[1], &argv[argc]},
       makeParser(
           [&dcrParams](auto const&) { dcrParams.verbose = true; },
           [](auto const& arg) { return arg == "-v"; }
+      ),
+      makeParser(
+          [&dcrParams](auto const& params) { dcrParams.threadCount = std::strtol(params[1].c_str(), nullptr, 10); },
+          [](auto const& arg) { return arg == "-j"; },
+          [](auto const& arg) { return std::ranges::all_of(arg, [](char const c){ return c >= '0' && c <= '9'; }); }
       ),
       makeParser(
           [&inputFileOrDir](auto const& args) { inputFileOrDir = args[0]; },
@@ -598,6 +823,6 @@ auto run(int const argc, char const* const* argv) -> int {
   }
 
   auto const tests = processTests(testPaths);
-  return execute(ExecutionPolicy::Sequential, tests, passedToCompiler, dcrParams);
+  return execute(ExecutionPolicy::Parallel, tests, passedToCompiler, dcrParams);
 }
 } // namespace dcr
