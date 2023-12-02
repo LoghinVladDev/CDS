@@ -172,10 +172,18 @@ auto locateTests(std::string const& fileOrPath) -> std::vector<std::string> {
 
 enum class TestStepType {Compile, Run};
 enum class TestStepResult {Success, Failure};
+enum class TestStepPlatform {Linux, Win32, Apple};
+enum class TestStepCompiler {Clang, Gcc, Msvc};
 enum class Standard {Cpp11, Cpp14, Cpp17, Cpp20, Cpp23, Cpp2c, Highest=Cpp23, End};
+
+struct TestStepEnv {
+  TestStepPlatform platform;
+  TestStepCompiler compiler;
+};
 
 struct TestStep {
   TestStepType type;
+  std::vector<TestStepEnv> enviroments;
   TestStepResult result;
 };
 
@@ -239,6 +247,28 @@ auto expected(std::string_view const resultString) -> std::optional<TestStepResu
   return std::nullopt;
 }
 
+auto parseCompilerAndPlatforms(std::string_view stepTypeString) -> std::optional<TestStepType> {
+  auto const rbraceIdx = stepTypeString.find('(');
+  if (rbraceIdx == std::string_view::npos) {
+    if (auto const stepIt = stepTypeMap.find(stepTypeString); stepIt == stepTypeMap.end()) {
+      return std::nullopt;
+    } else {
+      return stepIt->second;
+    }
+  }
+
+  auto const typeString = stepTypeString.substr(0, rbraceIdx);
+  auto const remaining = stepTypeString.substr(rbraceIdx + 1);
+  std::optional<TestStepType> step;
+  if (auto const stepIt = stepTypeMap.find(typeString); stepIt == stepTypeMap.end()) {
+    step = std::nullopt;
+  } else {
+    step = stepIt->second;
+  }
+
+  return step;
+}
+
 auto parseStepTypes(std::string_view stepTypes) -> std::optional<std::vector<TestStepType>> {
   std::vector<TestStepType> steps;
   stepTypes = trim(stepTypes);
@@ -246,10 +276,8 @@ auto parseStepTypes(std::string_view stepTypes) -> std::optional<std::vector<Tes
     auto const idxOfComma = stepTypes.find(',');
     auto const current = stepTypes.substr(0, idxOfComma);
     stepTypes = idxOfComma == std::string_view::npos ? "" : stepTypes.substr(idxOfComma + 1);
-    if (auto const stepIt = stepTypeMap.find(current); stepIt == stepTypeMap.end()) {
-      return std::nullopt;
-    } else {
-      steps.push_back(stepIt->second);
+    if (auto const step = parseCompilerAndPlatforms(current)) {
+      steps.push_back(*step);
     }
   }
 
@@ -310,7 +338,7 @@ auto parseAndAdjustSteps(std::vector<TestStep>& steps, std::string_view stepsAnd
     std::cout << "Warning: Invalid expectation '" << expectedString << "'\n";
   }
 
-  for (auto& [type, stepResult]: steps) {
+  for (auto& [type, environments, stepResult]: steps) {
     if (std::ranges::find(*stepTypes, type) != stepTypes->end()) {
       stepResult = *result;
     }
@@ -344,7 +372,7 @@ auto processTestHeader(std::string const& path) -> std::optional<TestData> {
       if (auto const stepTypes = parseStepTypes(stepString); !stepTypes) {
         std::cout << "Warning in '" << path << "': Invalid Step Types '" << stepString << "'\n";
       } else {
-        std::ranges::for_each(*stepTypes, [&steps](auto const type) { steps.emplace_back(type, TestStepResult::Success); });
+        std::ranges::for_each(*stepTypes, [&steps](auto const type) { steps.emplace_back(type, std::vector<TestStepEnv>(), TestStepResult::Success); });
       }
     } else if (headerItem.starts_with(headerPrefixExpected)) {
       parseAndAdjustSteps(steps, headerItem.substr(headerPrefixExpected.length()));
