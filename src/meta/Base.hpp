@@ -12,17 +12,9 @@ namespace cds {
 namespace meta {
 template <typename...> using Void = void;
 
-template <typename T> auto value() -> T {
-  __builtin_trap();
-}
-
-template <typename T> auto reference() -> T& {
-  __builtin_trap();
-}
-
-template <typename T> auto address() -> T* {
-  __builtin_trap();
-}
+template <typename T> auto value() -> T;
+template <typename T> auto reference() -> T&;
+template <typename T> auto address() -> T*;
 
 namespace impl {
 template <typename T, T v> struct Integral {
@@ -32,9 +24,9 @@ template <typename T, T v> struct Integral {
 };
 
 
-template <bool v> struct Bool : Integral<bool, v> {};
-using True = Bool<true>;
-using False = Bool<false>;
+template <bool v> using Bool = Integral<bool, v>;
+using True = Bool<true>::Type;
+using False = Bool<false>::Type;
 
 
 template <bool, typename, typename> struct Conditional { using Type = void; };
@@ -44,11 +36,11 @@ template <typename T, typename F> struct Conditional<false, T, F> { using Type =
 
 template <typename, typename = void> struct IsCdsIntegral : False {};
 template <typename, typename = void> struct IsStdIntegral : False {};
-template <typename T> struct IsCdsIntegral<T, Void<typename T::Value>> : True {};
-template <typename T> struct IsStdIntegral<T, Void<typename T::value>> : True {};
+template <typename T> struct IsCdsIntegral<T, Void<typename T::Type>> : True {};
+template <typename T> struct IsStdIntegral<T, Void<typename T::type>> : True {};
 
 
-template <typename T, typename = IsCdsIntegral<T>, typename = IsStdIntegral<T>> struct ConvertIntegral {
+template <typename T, typename = typename IsCdsIntegral<T>::Type, typename = typename IsStdIntegral<T>::Type> struct ConvertIntegral {
   using ValueType = void;
   using Type = void;
 };
@@ -60,7 +52,7 @@ template <typename T> struct ConvertIntegral<T, False, True> : Integral<typename
 template <typename F, typename... R> struct And : Bool<F::value && And<R...>::value> {};
 template <typename I> struct And<I>: Bool<I::value> {};
 
-template <typename F, typename... R> struct Or : Bool<F::value && Or<R...>::value> {};
+template <typename F, typename... R> struct Or : Bool<F::value || Or<R...>::value> {};
 template <typename I> struct Or<I>: Bool<I::value> {};
 
 
@@ -164,17 +156,9 @@ template <typename T> struct IsConstVolatile : And<IsConst<T>, IsVolatile<T>> {}
 
 template <typename F, typename T, typename = Or<IsVoid<F>, IsFunction<T>, IsArray<T>>> class IsConvertible : public IsVoid<T> {};
 template <typename F, typename T> class IsConvertible<F, T, False> {
-  template <typename T1> static auto convert(T1) -> void {
-    __builtin_trap();
-  }
-
-  template <typename F1, typename T1, typename = decltype(convert<T1>(value<F1>()))> static auto test(int) -> True {
-    __builtin_trap();
-  }
-
-  template <typename, typename> static auto test(...) -> False {
-    __builtin_trap();
-  }
+  template <typename T1> static auto convert(T1) -> void;
+  template <typename F1, typename T1, typename = decltype(convert<T1>(value<F1>()))> static auto test(int) -> True;
+  template <typename, typename> static auto test(...) -> False;
 
 public:
   using Type = decltype(test<F, T>(0));
@@ -304,7 +288,7 @@ template <template <typename...> class Formula, typename P> struct Any<Formula, 
 template <template <typename...> class Formula, typename... TParams> struct None: Bool<All<Formula, TParams...>::value> {};
 }
 
-template <typename Type, Type value> using Integral = impl::Integral<Type, value>;
+template <typename Type, Type value> using Integral = typename impl::Integral<Type, value>::Type;
 
 template <bool value> using Bool = impl::Bool<value>;
 using True = impl::True;
@@ -312,9 +296,9 @@ using False = impl::False;
 
 template <bool condition, typename IfTrue, typename IfFalse> using Conditional = typename impl::Conditional<condition, IfTrue, IfFalse>::Type;
 
-template <typename... Integrals> using And = impl::And<Integrals...>;
-template <typename... Integrals> using Or = impl::Or<Integrals...>;
-template <typename Integral> using Not = Bool<!Integral::value>;
+template <typename... Integrals> using And = typename impl::And<Integrals...>::Type;
+template <typename... Integrals> using Or = typename impl::Or<Integrals...>::Type;
+template <typename Integral> using Not = typename Bool<!Integral::value>::Type;
 
 template <bool condition, typename Replacement> using EnableIf = typename impl::EnableIf<condition, Replacement>::Type;
 
@@ -369,7 +353,7 @@ template <typename Type> using IsVolatile = impl::IsVolatile<Type>;
 template <typename Type> using IsConstVolatile = impl::IsConstVolatile<Type>;
 
 template <typename From, typename To> using IsConvertible = typename impl::IsConvertible<From, To>::Type;
-template <typename Left, typename Right> using IsSame = impl::IsSame<Left, Right>;
+template <typename Left, typename Right> using IsSame = typename impl::IsSame<Left, Right>::Type;
 
 template <typename Type> using AddPointer = typename impl::AddPointer<Type>::Type;
 template <typename Type> using AddConst = typename impl::AddConst<Type>::Type;
