@@ -11,14 +11,24 @@
 #define ASSERT_EQ(lhs, rhs)                                                         \
   ::dcr::compare<::dcr::CompareType::Eq>(__FILE__, __LINE__, #lhs, #rhs, lhs, rhs)
 
+#define ASSERT_NE(lhs, rhs) \
+  ::dcr::compare<::dcr::CompareType::Ne>(__FILE__, __LINE__, #lhs, #rhs, lhs, rhs)
+
 namespace dcr {
-enum class CompareType { Eq };
+enum class CompareType { Eq, Ne };
 template <CompareType> struct Comparator {};
 
 template <> struct Comparator<CompareType::Eq> {
   static constexpr auto expectationDesc = "Expected equality of these values";
   template <typename Lhs, typename Rhs> static auto invoke(Lhs&& lhs, Rhs&& rhs) -> bool {
     return std::forward<Lhs>(lhs) == std::forward<Rhs>(rhs);
+  }
+};
+
+template <> struct Comparator<CompareType::Ne> {
+  static constexpr auto expectationDesc = "Expected inequality of these values";
+  template <typename Lhs, typename Rhs> static auto invoke(Lhs&& lhs, Rhs&& rhs) -> bool {
+    return std::forward<Lhs>(lhs) != std::forward<Rhs>(rhs);
   }
 };
 

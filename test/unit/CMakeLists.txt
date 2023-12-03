@@ -1,5 +1,7 @@
 set(
     CDS_UNIT_TEST_SOURCES
-    valid/Compiler.test.cpp
+    valid/MetaCompilerLinuxClang.test.cpp
+    valid/MetaCompilerLinuxGcc.test.cpp
+    valid/MetaBase.cpp
     PARENT_SCOPE
 )

@@ -535,6 +535,23 @@ auto profPath(std::string const& src, Standard standard, TestStepEnv const& env)
   return withoutExt + ".profraw";
 }
 
+std::mutex debugLock;
+[[maybe_unused]] auto debugCmd(char const* cmd, char** args, char** env) {
+  std::lock_guard g(debugLock);
+  std::stringstream oss;
+  oss
+      << "[DEBUG] - " << cmd;
+  oss << " [ARGS] -\n";
+  for (auto s = args; *s; ++s) {
+    oss << " " << *s << '\n';
+  }
+  // oss << " [ENV] -\n";
+  // for (auto s = env; *s; ++s) {
+    // oss << " " << *s << '\n';
+  // }
+  std::cout << oss.str();
+}
+
 auto awaitProcess(std::optional<std::string> executable, std::vector<std::string>& args, std::vector<std::string>& env) -> std::tuple<bool, std::string, std::string, bool> {
   if (!executable) {
     return {true, "", "", true};
@@ -564,6 +581,7 @@ auto awaitProcess(std::optional<std::string> executable, std::vector<std::string
 
   fillOtherEnv(cEnv);
   toCArr(cEnv, env);
+  // debugCmd(executable->c_str(), cArgs.data(), cEnv.data());
 
   pid_t const childId = fork();
   if (childId == 0) {
@@ -638,10 +656,22 @@ auto getCompilerName(TestStepEnv const& env) -> std::optional<std::string> {
   return std::nullopt;
 }
 
+auto defineDcrStdIdentifier(std::vector<std::string>& args, Standard std) {
+  using namespace std::string_literals;
+  args.emplace_back("-D");
+  args.emplace_back("DCR_CPP"s + toString(std));
+  auto const sinceStds = stdRange(StandardRange{.begin = Standard::Cpp11, .end = std});
+  for (auto const& sinceStd: sinceStds) {
+    args.emplace_back("-D");
+    args.emplace_back("DCR_SINCECPP"s + toString(sinceStd));
+  }
+}
+
 auto executeCompile(CompileData const& data, std::vector<std::string> const& extraArgs) {
   auto const& [path, standard, testEnv] = data;
   std::vector<std::string> fullArgs = extraArgs;
   std::vector<std::string> env;
+  defineDcrStdIdentifier(fullArgs, data.standard);
   fullArgs.push_back(path);
   fullArgs.emplace_back("-o");
   fullArgs.push_back(executablePath(path, standard, testEnv));
