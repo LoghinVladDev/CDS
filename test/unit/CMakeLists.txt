@@ -3,5 +3,7 @@ set(
     valid/MetaCompilerLinuxClang.test.cpp
     valid/MetaCompilerLinuxGcc.test.cpp
     valid/MetaBase.cpp
+    valid/MetaTypeTraits.cpp
+    valid/MetaObjectTraits.cpp
     PARENT_SCOPE
 )

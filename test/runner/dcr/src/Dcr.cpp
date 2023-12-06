@@ -678,6 +678,17 @@ struct Job {
   std::unique_ptr<Job> creates;
 };
 
+/**
+ * Acquires jobs for the "Standard" test step, updates the total and skipped counts,
+ * and adds the acquired jobs to the specified vector.
+ *
+ * @param total     [in, out] the total number of jobs
+ * @param skipped   [in, out] the number of jobs skipped
+ * @param placeInto [out] the vector to place acquired jobs into
+ * @param path      [in] the path of the test
+ * @param standard  [in] the standard to use for the test
+ * @param steps     [in] the list of test steps
+ */
 auto acquireJobsForStandard(
     int& total,
     int& skipped,
@@ -882,10 +893,6 @@ auto executeRunners(
   std::vector<std::jthread> runners;
   for (int thIdx = 0; thIdx < std::min(dcrParams.threadCount, static_cast<int>(std::size(jobs))); ++ thIdx) {
     runners.emplace_back(threadRunnerFn);
-  }
-
-  for (auto& runner: runners) {
-    runner.join();
   }
 }
 
