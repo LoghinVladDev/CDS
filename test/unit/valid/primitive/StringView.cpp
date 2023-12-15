@@ -1,0 +1,347 @@
+// DCR-TEST
+// STEPS: compile(linux:gcc;linux:clang),run(linux:gcc;linux:clang)
+// STD: 11-2b
+
+#include "cds/StringView"
+#include <cassert>
+#include "UnitTest.hpp"
+
+using namespace cds;
+
+namespace {
+int ptrCalls = 0;
+int refCalls = 0;
+struct CustomUtils : cds::impl::StringUtils<char, cds::meta::StringTraits<char>> {
+public:
+  template<typename T, meta::EnableIf<meta::Not<meta::IsBoundedArray<meta::RemoveCVRef<T>>>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(14))) static Size length(T &&l) {
+    ++ptrCalls;
+    return StringUtils::length(cds::forward<T>(l));
+  }
+
+  template<typename T, meta::EnableIf<meta::IsBoundedArray<meta::RemoveCVRef<T>>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(11))) static Size length(T &&l) {
+    ++refCalls;
+    return StringUtils::length(cds::forward<T>(l));
+  }
+};
+
+class CustomSV : public cds::impl::BaseStringView<char, CustomUtils> {
+  using cds::impl::BaseStringView<char, CustomUtils>::BaseStringView;
+};
+}
+
+TEST(StringView, FromLiteralEnsureRefUsage) {
+  refCalls = 0;
+  ptrCalls = 0;
+  CustomSV sv1("test");
+  auto const* buf = "test2";
+  char const buf2[] = "test3";
+  CustomSV sv2(buf);
+  CustomSV sv3(buf2);
+
+  ASSERT_EQ(refCalls, 2);
+  ASSERT_EQ(ptrCalls, 1);
+}
+
+TEST(StringView, BaseCopyMove) {
+  refCalls = 0;
+  ptrCalls = 0;
+  CustomSV sv1;
+  CustomSV sv2;
+  ASSERT_EQ(sv1, sv2);
+
+  CustomSV sv3("abcd");
+  CustomSV sv4(sv3);
+  CustomSV tbm(sv3);
+  CustomSV sv5(std::move(tbm));
+  ASSERT_EQ(sv3, sv4);
+  ASSERT_EQ(sv4, sv5);
+  ASSERT_EQ(sv5, sv3);
+
+  ASSERT_EQ(ptrCalls, 0);
+  ASSERT_EQ(refCalls, 1);
+}
+
+TEST(StringView, Compare) {
+  CustomSV n = nullptr;
+  CustomSV a = "a";
+  CustomSV b = "b";
+  CustomSV c = "c";
+
+  ASSERT_EQ(a, a);
+  ASSERT_EQ(b, b);
+  ASSERT_EQ(c, c);
+
+  ASSERT_NE(a, n);
+  ASSERT_NE(a, b);
+  ASSERT_NE(a, c);
+
+  ASSERT_NE(b, n);
+  ASSERT_NE(b, a);
+  ASSERT_NE(b, c);
+
+  ASSERT_NE(c, n);
+  ASSERT_NE(c, a);
+  ASSERT_NE(c, b);
+
+  ASSERT_NE(n, a);
+  ASSERT_NE(n, b);
+  ASSERT_NE(n, c);
+
+  ASSERT_LT(n, a);
+  ASSERT_LT(n, b);
+  ASSERT_LT(n, b);
+  ASSERT_LT(a, b);
+  ASSERT_LT(a, c);
+  ASSERT_LT(b, c);
+
+  ASSERT_LE(n, n);
+  ASSERT_LE(n, a);
+  ASSERT_LE(n, b);
+  ASSERT_LE(n, b);
+  ASSERT_LE(a, a);
+  ASSERT_LE(a, b);
+  ASSERT_LE(a, c);
+  ASSERT_LE(b, b);
+  ASSERT_LE(b, c);
+
+  ASSERT_GT(a, n);
+  ASSERT_GT(b, n);
+  ASSERT_GT(c, n);
+  ASSERT_GT(b, a);
+  ASSERT_GT(c, a);
+  ASSERT_GT(c, b);
+
+  ASSERT_GE(n, n);
+  ASSERT_GE(a, n);
+  ASSERT_GE(b, n);
+  ASSERT_GE(c, n);
+  ASSERT_GE(b, a);
+  ASSERT_GE(b, b);
+  ASSERT_GE(c, a);
+  ASSERT_GE(c, b);
+  ASSERT_GE(c, c);
+}
+
+TEST(StringView, baseMembers) {
+  StringView sv1;
+  StringView sv2(sv1.data());
+  StringView sv3("abcd");
+  StringView sv4(sv3.data());
+
+  ASSERT_EQ(sv1.data(), nullptr);
+  ASSERT_EQ(sv1.length(), 0u);
+  ASSERT_EQ(sv1.size(), 0u);
+  ASSERT_TRUE(sv1.empty());
+  ASSERT_FALSE(sv1);
+
+  ASSERT_EQ(sv2.data(), nullptr);
+  ASSERT_EQ(sv2.length(), 0u);
+  ASSERT_EQ(sv2.size(), 0u);
+  ASSERT_TRUE(sv2.empty());
+  ASSERT_FALSE(sv2);
+
+  ASSERT_EQ(sv3.data(), std::string("abcd"));
+  ASSERT_EQ(sv3.length(), 4u);
+  ASSERT_EQ(sv3.size(), 4u);
+  ASSERT_FALSE(sv3.empty());
+  ASSERT_TRUE(sv3);
+
+  ASSERT_EQ(sv4.data(), std::string("abcd"));
+  ASSERT_EQ(sv4.length(), 4u);
+  ASSERT_EQ(sv4.size(), 4u);
+  ASSERT_FALSE(sv4.empty());
+  ASSERT_TRUE(sv4);
+
+  sv4.clear();
+  ASSERT_EQ(sv4.data(), nullptr);
+  ASSERT_EQ(sv4.size(), 0u);
+  ASSERT_TRUE(sv4.empty());
+  ASSERT_FALSE(sv4);
+}
+
+TEST(StringView, assign) {
+  refCalls = 0;
+  ptrCalls = 0;
+  CustomSV sv1;
+  ASSERT_EQ(sv1.size(), 0u);
+
+  sv1 = "abcd";
+  ASSERT_EQ(sv1.size(), 4u);
+
+  auto const* p = "abcde";
+  sv1 = p;
+  ASSERT_EQ(sv1.size(), 5u);
+
+  char const arr[] = "abcdef";
+  sv1 = arr;
+  ASSERT_EQ(sv1.size(), 6u);
+
+  ASSERT_EQ(refCalls, 2u);
+  ASSERT_EQ(ptrCalls, 1u);
+}
+
+TEST(StringView, iter) {
+  StringView sv = "abcd";
+  ASSERT_EQ(*begin(sv), 'a');
+  ASSERT_EQ(*(begin(sv) + 0), 'a');
+  ASSERT_EQ(*(begin(sv) + 1), 'b');
+  ASSERT_EQ(*(begin(sv) + 2), 'c');
+  ASSERT_EQ(*(begin(sv) + 3), 'd');
+  ASSERT_EQ(begin(sv) + 4, end(sv));
+
+  ASSERT_EQ(*cbegin(sv), 'a');
+  ASSERT_EQ(*(cbegin(sv) + 0), 'a');
+  ASSERT_EQ(*(cbegin(sv) + 1), 'b');
+  ASSERT_EQ(*(cbegin(sv) + 2), 'c');
+  ASSERT_EQ(*(cbegin(sv) + 3), 'd');
+  ASSERT_EQ(cbegin(sv) + 4, cend(sv));
+
+  ASSERT_EQ(*rbegin(sv), 'd');
+  ASSERT_EQ(*(rbegin(sv) + 0), 'd');
+  ASSERT_EQ(*(rbegin(sv) + 1), 'c');
+  ASSERT_EQ(*(rbegin(sv) + 2), 'b');
+  ASSERT_EQ(*(rbegin(sv) + 3), 'a');
+  ASSERT_EQ(rbegin(sv) + 4, rend(sv));
+
+  ASSERT_EQ(*crbegin(sv), 'd');
+  ASSERT_EQ(*(crbegin(sv) + 0), 'd');
+  ASSERT_EQ(*(crbegin(sv) + 1), 'c');
+  ASSERT_EQ(*(crbegin(sv) + 2), 'b');
+  ASSERT_EQ(*(crbegin(sv) + 3), 'a');
+  ASSERT_EQ(crbegin(sv) + 4, crend(sv));
+}
+
+TEST(StringView, CompareCompatLiteral) {
+  StringView sv = "abcd";
+  ASSERT_EQ(sv, "abcd");
+  ASSERT_NE(sv, "abce");
+  ASSERT_GT(sv, "abc");
+  ASSERT_GT(sv, "abcc");
+  ASSERT_LT(sv, "abd");
+  ASSERT_LT(sv, "abce");
+  ASSERT_GE(sv, "abc");
+  ASSERT_GE(sv, "abcc");
+  ASSERT_GE(sv, "abcd");
+  ASSERT_LE(sv, "abd");
+  ASSERT_LE(sv, "abce");
+  ASSERT_LE(sv, "abcd");
+
+  ASSERT_EQ("abcd", sv);
+  ASSERT_NE("abce", sv);
+  ASSERT_LT("abc", sv);
+  ASSERT_LT("abcc", sv);
+  ASSERT_GT("abd", sv);
+  ASSERT_GT("abce", sv);
+  ASSERT_LE("abc", sv);
+  ASSERT_LE("abcc", sv);
+  ASSERT_LE("abcd", sv);
+  ASSERT_GE("abd", sv);
+  ASSERT_GE("abce", sv);
+  ASSERT_GE("abcd", sv);
+}
+
+TEST(StringView, Positionals) {
+  StringView sv = "abcd";
+  ASSERT_EQ(sv[0], 'a');
+  ASSERT_EQ(sv[1], 'b');
+  ASSERT_EQ(sv[2], 'c');
+  ASSERT_EQ(sv[3], 'd');
+
+  ASSERT_EQ(sv.at(0), 'a');
+  ASSERT_EQ(sv.at(1), 'b');
+  ASSERT_EQ(sv.at(2), 'c');
+  ASSERT_EQ(sv.at(3), 'd');
+
+  ASSERT_EQ(sv.front(), 'a');
+  ASSERT_EQ(sv.back(), 'd');
+}
+
+TEST(StringView, Sub) {
+  StringView sv = "abcd";
+  ASSERT_EQ(sv.sub(0), "abcd");
+  ASSERT_EQ(sv.sub(1), "bcd");
+  ASSERT_EQ(sv.sub(2), "cd");
+  ASSERT_EQ(sv.sub(3), "d");
+
+  ASSERT_EQ(sv.sub(0, 4), "abcd");
+  ASSERT_EQ(sv.sub(0, 3), "abc");
+  ASSERT_EQ(sv.sub(0, 2), "ab");
+  ASSERT_EQ(sv.sub(0, 1), "a");
+
+  ASSERT_EQ(sv.sub(1, 4), "bcd");
+  ASSERT_EQ(sv.sub(1, 3), "bc");
+  ASSERT_EQ(sv.sub(1, 2), "b");
+
+  ASSERT_EQ(sv.sub(2, 4), "cd");
+  ASSERT_EQ(sv.sub(2, 3), "c");
+
+  ASSERT_EQ(sv.sub(3, 4), "d");
+
+  ASSERT_EQ(sv.sub(0, 0), "");
+  ASSERT_EQ(sv.sub(1, 0), "");
+  ASSERT_EQ(sv.sub(1, 1), "");
+  ASSERT_EQ(sv.sub(2, 1), "");
+  ASSERT_EQ(sv.sub(2, 2), "");
+  ASSERT_EQ(sv.sub(3, 2), "");
+  ASSERT_EQ(sv.sub(3, 3), "");
+  ASSERT_EQ(sv.sub(4, 3), "");
+
+  ASSERT_EQ(sv(0), "abcd");
+  ASSERT_EQ(sv(1), "bcd");
+  ASSERT_EQ(sv(2), "cd");
+  ASSERT_EQ(sv(3), "d");
+
+  ASSERT_EQ(sv(0, 4), "abcd");
+  ASSERT_EQ(sv(0, 3), "abc");
+  ASSERT_EQ(sv(0, 2), "ab");
+  ASSERT_EQ(sv(0, 1), "a");
+
+  ASSERT_EQ(sv(1, 4), "bcd");
+  ASSERT_EQ(sv(1, 3), "bc");
+  ASSERT_EQ(sv(1, 2), "b");
+
+  ASSERT_EQ(sv(2, 4), "cd");
+  ASSERT_EQ(sv(2, 3), "c");
+
+  ASSERT_EQ(sv(3, 4), "d");
+
+  ASSERT_EQ(sv(0, 0), "");
+  ASSERT_EQ(sv(1, 0), "");
+  ASSERT_EQ(sv(1, 1), "");
+  ASSERT_EQ(sv(2, 1), "");
+  ASSERT_EQ(sv(2, 2), "");
+  ASSERT_EQ(sv(3, 2), "");
+  ASSERT_EQ(sv(3, 3), "");
+  ASSERT_EQ(sv(4, 3), "");
+}
+
+#ifdef DCR_SINCECPP20
+TEST(StringView, Spaceship) {
+  char const a1[] = "abcd";
+  char const a2[] = "abcd";
+  assert(+a1 != +a2 && "Something weird");
+  StringView sv1 = a1;
+  StringView sv2 = a2;
+  StringView sv3 = "abc";
+  StringView sv4 = "abcde";
+
+  ASSERT_EQ(sv1 <=> sv1, std::strong_ordering::equivalent);
+  ASSERT_EQ(sv1 <=> sv2, std::strong_ordering::equal);
+  ASSERT_EQ(sv1 <=> sv3, std::strong_ordering::greater);
+  ASSERT_EQ(sv1 <=> sv4, std::strong_ordering::less);
+}
+
+TEST(StringView, SpaceshipCompatLiteral) {
+  StringView sv1 = "abc";
+  ASSERT_EQ(sv1 <=> "abc", std::strong_ordering::equal);
+  ASSERT_EQ(sv1 <=> "abcd", std::strong_ordering::less);
+  ASSERT_EQ(sv1 <=> "ab", std::strong_ordering::greater);
+  ASSERT_EQ("abc" <=> sv1, std::strong_ordering::equal);
+  ASSERT_EQ("abcd" <=> sv1, std::strong_ordering::greater);
+  ASSERT_EQ("ab" <=> sv1, std::strong_ordering::less);
+}
+#endif
+
+

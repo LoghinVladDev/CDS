@@ -4,10 +4,10 @@ list(TRANSFORM CDS_UNIT_TEST_SOURCES
 if(DEFINED CDS_DCR_INCLUDE_TEST_SOURCES_FOR_COV)
   set(DCR_COVERAGE_TEST_SOURCES ${CDS_UNIT_TEST_SOURCES})
 else()
-  set(DCR_COVERAGE_TEST_SOURCES ""
-          ../../../src/meta/TypeTraits.hpp)
+  set(DCR_COVERAGE_TEST_SOURCES "")
 endif()
 
+set(DCR_MACRO_HELPERS)
 if(CDS_STANDARD STREQUAL "11")
   set(DCR_MACRO_HELPERS
       DCR_CPP11
@@ -55,6 +55,8 @@ elseif(CDS_STANDARD STREQUAL "2b")
   )
 endif()
 
+set(DCR_EXPORT_MACRO_HELPERS ${DCR_MACRO_HELPERS} PARENT_SCOPE)
+
 set(DCR_SOURCES
     src/Dcr.cpp
     src/Test.cpp
@@ -73,13 +75,14 @@ add_executable(cds_unit_tests_dcr
     UnitTest.cpp)
 
 target_compile_definitions(cds_unit_tests_dcr PRIVATE
-    ${DCR_MACRO_HELPERS})
+    ${DCR_MACRO_HELPERS}
+    ${CDS_UNIT_TEST_OPTIONS_MACROS})
 
 target_include_directories(lib.dcr
-    PRIVATE ".")
+    PRIVATE "." "../../../include")
 
 target_include_directories(cds_unit_tests_dcr
-    PRIVATE ".")
+    PRIVATE "." "../../../include")
 
 target_link_libraries(cds_unit_tests_dcr
     lib.dcr)

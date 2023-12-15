@@ -18,8 +18,12 @@ add_executable(cds_unit_tests_gtest
     ${CDS_UNIT_TEST_SOURCES}
     UnitTest.cpp)
 
+target_compile_definitions(cds_unit_tests_gtest PRIVATE
+    ${DCR_EXPORT_MACRO_HELPERS}
+    ${CDS_UNIT_TEST_OPTIONS_MACROS})
+
 target_include_directories(cds_unit_tests_gtest
-    PRIVATE ".")
+    PRIVATE "." "../../../include")
 
 target_link_libraries(cds_unit_tests_gtest
     lib.gtest)

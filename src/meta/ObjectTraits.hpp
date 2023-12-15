@@ -4,6 +4,7 @@
 
 #ifndef CDS_META_OBJECT_TRAITS_HPP
 #define CDS_META_OBJECT_TRAITS_HPP
+#pragma once
 
 #include "TypeTraits.hpp"
 
@@ -12,7 +13,7 @@ namespace meta {
 namespace impl {
 template <typename T> struct IsTriviallyCopyable : ConvertIntegral<std::is_trivially_copyable<T>> {};
 template <typename T, typename... A> struct IsTriviallyConstructible : ConvertIntegral<std::is_trivially_constructible<T, A...>> {};
-template <typename T, typename A> struct IsTriviallyAssignable : ConvertIntegral<std::is_trivially_assignable<T, A>> {};
+template <typename T, typename A> struct IsTriviallyAssignable : ConvertIntegral<std::is_trivially_assignable<typename AddLValRef<T>::Type, A>> {};
 template <typename T> struct IsTriviallyDestructible : ConvertIntegral<std::is_trivially_destructible<T>> {};
 template <typename T> struct IsTriviallyDefaultConstructible : ConvertIntegral<std::is_trivially_default_constructible<T>> {};
 template <typename T> struct IsTriviallyCopyConstructible : ConvertIntegral<std::is_trivially_copy_constructible<T>> {};
@@ -23,6 +24,12 @@ template <typename T> struct IsTriviallyMoveAssignable : ConvertIntegral<std::is
 template <typename T> struct IsDefaultConstructible : ConvertIntegral<std::is_default_constructible<T>> {};
 template <typename T> struct IsCopyConstructible : ConvertIntegral<std::is_copy_constructible<T>> {};
 template <typename T> struct IsMoveConstructible : ConvertIntegral<std::is_move_constructible<T>> {};
+template <typename T, typename... A> struct IsConstructible : ConvertIntegral<std::is_constructible<T, A...>> {};
+
+template <typename T, typename P = T, typename R = T&, typename = void> struct IsAssignable : False {};
+template <typename T, typename P, typename R> struct IsAssignable<T, P, R, Void<decltype(lvalue<T>() = value<P>())>> :
+    IsSame<decltype(lvalue<T>() = value<P>()), R>::Type {};
+
 template <typename T> struct IsCopyAssignable : ConvertIntegral<std::is_copy_assignable<T>> {};
 template <typename T> struct IsMoveAssignable : ConvertIntegral<std::is_move_assignable<T>> {};
 
@@ -77,10 +84,10 @@ template <typename T, typename R> struct IsSubCompatible<T, R, Void<decltype(val
 template <typename T, typename R> struct IsMulCompatible<T, R, Void<decltype(value<T>() * value<R>())>> : True {};
 template <typename T, typename R> struct IsDivCompatible<T, R, Void<decltype(value<T>() / value<R>())>> : True {};
 template <typename T, typename R> struct IsModCompatible<T, R, Void<decltype(value<T>() % value<R>())>> : True {};
-template <typename T> struct IsPrefixIncrementable<T, Void<decltype(++reference<T>())>> : True {};
-template <typename T> struct IsPostfixIncrementable<T, Void<decltype(reference<T>()++)>> : True {};
-template <typename T> struct IsPrefixDecrementable<T, Void<decltype(--reference<T>())>> : True {};
-template <typename T> struct IsPostfixDecrementable<T, Void<decltype(reference<T>()--)>> : True {};
+template <typename T> struct IsPrefixIncrementable<T, Void<decltype(++lvalue<T>())>> : True {};
+template <typename T> struct IsPostfixIncrementable<T, Void<decltype(lvalue<T>()++)>> : True {};
+template <typename T> struct IsPrefixDecrementable<T, Void<decltype(--lvalue<T>())>> : True {};
+template <typename T> struct IsPostfixDecrementable<T, Void<decltype(lvalue<T>()--)>> : True {};
 template <> struct IsPrefixIncrementable<bool> : False {};
 template <> struct IsPostfixIncrementable<bool> : False {};
 
@@ -105,24 +112,26 @@ template <typename T, typename R> struct IsBitwiseXorCompatible<T, R, Void<declt
 template <typename T, typename R> struct IsBitwiseLshCompatible<T, R, Void<decltype(value<T>() << value<R>())>> : True {};
 template <typename T, typename R> struct IsBitwiseRshCompatible<T, R, Void<decltype(value<T>() >> value<R>())>> : True {};
 
-template <typename T, typename R> struct IsAddAssignCompatible<T, R, Void<decltype(value<T>() += value<R>())>> : True {};
-template <typename T, typename R> struct IsSubAssignCompatible<T, R, Void<decltype(value<T>() -= value<R>())>> : True {};
-template <typename T, typename R> struct IsMulAssignCompatible<T, R, Void<decltype(value<T>() *= value<R>())>> : True {};
-template <typename T, typename R> struct IsDivAssignCompatible<T, R, Void<decltype(value<T>() /= value<R>())>> : True {};
-template <typename T, typename R> struct IsModAssignCompatible<T, R, Void<decltype(value<T>() %= value<R>())>> : True {};
-template <typename T, typename R> struct IsBitwiseAndAssignCompatible<T, R, Void<decltype(value<T>() &= value<R>())>> : True {};
-template <typename T, typename R> struct IsBitwiseOrAssignCompatible<T, R, Void<decltype(value<T>() |= value<R>())>> : True {};
-template <typename T, typename R> struct IsBitwiseXorAssignCompatible<T, R, Void<decltype(value<T>() ^= value<R>())>> : True {};
-template <typename T, typename R> struct IsBitwiseLshAssignCompatible<T, R, Void<decltype(value<T>() <<= value<R>())>> : True {};
-template <typename T, typename R> struct IsBitwiseRshAssignCompatible<T, R, Void<decltype(value<T>() >>= value<R>())>> : True {};
+template <typename T, typename R> struct IsAddAssignCompatible<T, R, Void<decltype(lvalue<T>() += value<R>())>> : True {};
+template <typename T, typename R> struct IsSubAssignCompatible<T, R, Void<decltype(lvalue<T>() -= value<R>())>> : True {};
+template <typename T, typename R> struct IsMulAssignCompatible<T, R, Void<decltype(lvalue<T>() *= value<R>())>> : True {};
+template <typename T, typename R> struct IsDivAssignCompatible<T, R, Void<decltype(lvalue<T>() /= value<R>())>> : True {};
+template <typename T, typename R> struct IsModAssignCompatible<T, R, Void<decltype(lvalue<T>() %= value<R>())>> : True {};
+template <typename T, typename R> struct IsBitwiseAndAssignCompatible<T, R, Void<decltype(lvalue<T>() &= value<R>())>> : True {};
+template <typename T, typename R> struct IsBitwiseOrAssignCompatible<T, R, Void<decltype(lvalue<T>() |= value<R>())>> : True {};
+template <typename T, typename R> struct IsBitwiseXorAssignCompatible<T, R, Void<decltype(lvalue<T>() ^= value<R>())>> : True {};
+template <typename T, typename R> struct IsBitwiseLshAssignCompatible<T, R, Void<decltype(lvalue<T>() <<= value<R>())>> : True {};
+template <typename T, typename R> struct IsBitwiseRshAssignCompatible<T, R, Void<decltype(lvalue<T>() >>= value<R>())>> : True {};
 
 template <typename T, typename I> struct IsSubscriptCompatible<T, I, Void<decltype(value<T>()[value<I>()])>> : True {};
 template <typename T> struct IsIndirectionCompatible<T, Void<decltype(*value<T>())>> : True {};
-template <typename T> struct IsAddressOfCompatible<T, Void<decltype(&value<T>())>> : True {};
+template <typename T> struct IsAddressOfCompatible<T, Void<decltype(&lvalue<T>())>> : True {};
+
+template <typename B, typename D> struct IsBaseOf : And<All<IsClass, B, D>, typename IsConvertible<D*, B*>::Type> {};
 } // namespace impl
 
 template <typename Type> using IsTriviallyCopyable = typename impl::IsTriviallyCopyable<Type>::Type;
-template <typename Type, typename... Arguments> using IsTriviallyConstructible = typename impl::IsTriviallyConstructible<Type, Arguments...>::Type;
+template <typename Type, typename... Arguments> struct IsTriviallyConstructible : impl::IsTriviallyConstructible<Type, Arguments...>::Type {};
 template <typename Type, typename Argument> struct IsTriviallyAssignable : impl::IsTriviallyAssignable<Type, Argument>::Type {};
 template <typename Type> using IsTriviallyDestructible = typename impl::IsTriviallyDestructible<Type>::Type;
 template <typename Type> using IsTriviallyDefaultConstructible = typename impl::IsTriviallyDefaultConstructible<Type>::Type;
@@ -135,6 +144,9 @@ template <typename Type> using IsCopyConstructible = typename impl::IsCopyConstr
 template <typename Type> using IsMoveConstructible = typename impl::IsMoveConstructible<Type>::Type;
 template <typename Type> using IsCopyAssignable = typename impl::IsCopyAssignable<Type>::Type;
 template <typename Type> using IsMoveAssignable = typename impl::IsMoveAssignable<Type>::Type;
+template <typename Type, typename... Arguments> struct IsConstructible : impl::IsConstructible<Type, Arguments...>::Type {};
+
+template <typename Type, typename Param = Type, typename Return = Type&> struct IsAssignable : impl::IsAssignable<Type, Param, Return> {};
 
 template <typename Type, typename With = Type> struct IsAddCompatible : impl::IsAddCompatible<Type, With>::Type {};
 template <typename Type, typename With = Type> struct IsSubCompatible : impl::IsSubCompatible<Type, With>::Type {};
@@ -181,6 +193,9 @@ template <typename Type, typename With = Type> struct IsBitwiseRshAssignCompatib
 template <typename Type, typename Index = int> struct IsSubscriptCompatible : impl::IsSubscriptCompatible<Type, Index>::Type {};
 template <typename Type> using IsIndirectionCompatible = typename impl::IsIndirectionCompatible<Type>::Type;
 template <typename Type> using IsAddressOfCompatible = typename impl::IsAddressOfCompatible<Type>::Type;
+
+template <typename Base, typename Derived> struct IsBaseOf : impl::IsBaseOf<Base, Derived>::Type {};
+template <typename Derived, typename Base> struct IsDerivedFrom : impl::IsBaseOf<Base, Derived>::Type {};
 } // namespace meta
 } // namespace cds
 

@@ -2,9 +2,9 @@
 // STEPS: compile(linux:gcc),run(linux:gcc)
 // STD: 11+
 
-#include "UnitTest.hpp"
-#include "../../../src/meta/Compiler.hpp"
+#include "cds/meta/Compiler"
 #include <string>
+#include "UnitTest.hpp"
 
 using namespace cds::compiler;
 

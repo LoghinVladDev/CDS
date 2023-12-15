@@ -1,15 +1,14 @@
 // DCR-TEST
 // STEPS: compile(linux:gcc;linux:clang)
-// STD: 11
+// STD: 11-2b
 // EXPECTED[compile]: failure
 
-#include <cds/meta/Base>
+#include <cds/Utility>
 #include "UnitTest.hpp"
-#include <string>
 
 using namespace cds;
-using namespace cds::meta;
 
 TEST(MetaBase, IsSame) {
-  static_assert(IsSame<S16, S32>::value, "Failed IsSame");
+  int data[3] = {1, 2, 3};
+  ASSERT_TRUE(impl::contains(data, 1));
 }

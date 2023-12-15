@@ -1,9 +1,22 @@
 set(
     CDS_UNIT_TEST_SOURCES
-    valid/MetaCompilerLinuxClang.test.cpp
-    valid/MetaCompilerLinuxGcc.test.cpp
-    valid/MetaBase.cpp
-    valid/MetaTypeTraits.cpp
-    valid/MetaObjectTraits.cpp
+    valid/iterator/AddressIterator.cpp
+    valid/bindings/ContainsOfStaticBinding.cpp
+    valid/functional/FunctionalInterface.cpp
+    valid/meta/MetaBase.cpp
+    valid/meta/MetaCompilerLinuxClang.test.cpp
+    valid/meta/MetaCompilerLinuxGcc.test.cpp
+    valid/meta/MetaIteratorTraits.cpp
+    valid/meta/MetaObjectTraits.cpp
+    valid/meta/MetaTypeTraits.cpp
+    valid/primitive/StringUtils.cpp
+    valid/primitive/StringView.cpp
+    valid/meta/Utility.cpp
+    PARENT_SCOPE
+)
+
+set(
+    CDS_UNIT_TEST_OPTIONS_MACROS
+    CDS_OPTION_COMPAT_STD
     PARENT_SCOPE
 )

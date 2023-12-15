@@ -4,17 +4,18 @@
 
 #ifndef CDS_META_BASE_HPP
 #define CDS_META_BASE_HPP
+#pragma once
 
 #include "Compiler.hpp"
-#include <type_traits>
 
 namespace cds {
 namespace meta {
 template <typename...> using Void = void;
 
-template <typename T> auto value() -> T;
-template <typename T> auto reference() -> T&;
-template <typename T> auto address() -> T*;
+template <typename T> auto value() noexcept -> T;
+template <typename T> auto lvalue() noexcept -> T&;
+template <typename T> auto rvalue() noexcept -> T&&;
+template <typename T> auto address() noexcept -> T*;
 
 namespace impl {
 template <typename T, T v> struct Integral {
@@ -71,6 +72,15 @@ template <typename R> struct EnableIf<True, R> {
 
 template <typename, typename> struct IsSame : False {};
 template <typename T> struct IsSame<T, T> : True {};
+
+
+template <template <typename...> class Predicate> struct Unless {
+  template <typename... A> using Type = Bool<!Predicate<A...>::value>;
+};
+
+template <template <typename...> class Modifier, template <typename...> class After> struct Apply {
+  template <typename...A> using Type = Modifier<After<A>...>;
+};
 
 
 template <template <typename...> class Formula, typename... Params> struct BindLeft {
@@ -198,6 +208,8 @@ template <typename Integral, typename IfTrue, typename IfFalse> using Conditiona
     typename impl::Conditional<typename impl::ConvertIntegral<Integral>::Type, IfTrue, IfFalse>::Type;
 
 template <typename Left, typename Right> struct IsSame : impl::IsSame<Left, Right>::Type {};
+template <template <typename...> class Predicate> struct Unless : impl::Unless<Predicate> {};
+template <template <typename...> class Modifier, template <typename...> class After> struct Apply: impl::Apply<Modifier, After> {};
 
 template <typename... Integrals> using And = typename impl::And<Integrals...>::Type;
 template <typename... Integrals> using Or = typename impl::Or<Integrals...>::Type;

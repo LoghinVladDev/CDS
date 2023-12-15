@@ -4,6 +4,7 @@
 
 #ifndef CDS_META_COMPILER_HPP
 #define CDS_META_COMPILER_HPP
+#pragma once
 
 namespace cds {
 // Base Types
@@ -49,9 +50,38 @@ namespace compiler {
 #define CDS_ATTR_unlikely
 #define CDS_ATTR_no_unique_address
 #define CDS_ATTR_maybe_unused
-#define CDS_ATTR_nodiscard(...)
+#define CDS_ATTR_nodiscard
 #define CDS_ATTR_inline
-#define CDS_ATTR_constexpr(std) CDS_ATTR_JOIN_LATE(CDS_ATTR_constexpr_, std)
+#define CDS_ATTR_constexpr(std) CDS_ATTR_constexpr_ ## std
+#define CDS_ATTR_always_constexpr constexpr
+#define CDS_ATTR_noexcept(toggle) noexcept(!CDS_ATTR_exceptions || toggle)
+
+#define CDS_ATTR_2(a, b) CDS_ATTR_ ## a CDS_ATTR_ ## b
+#define CDS_ATTR_3(a, b, c) CDS_ATTR_ ## a CDS_ATTR_ ## b CDS_ATTR_ ## c
+
+
+#ifdef CDS_OPTION_DEFAULT_POLY
+#define CDS_ATTR_ns_poly_spec inline
+#define CDS_ATTR_ns_non_poly_spec
+#else
+#define CDS_ATTR_ns_poly_spec
+#define CDS_ATTR_ns_non_poly_spec inline
+#endif
+
+
+#ifdef CDS_OPTION_COMPAT_STD
+#define CDS_ATTR_compat_std true
+#else
+#define CDS_ATTR_compat_std false
+#endif
+
+
+#ifdef CDS_OPTION_DISABLE_EXCEPTIONS
+#define CDS_ATTR_exceptions false
+#else
+#define CDS_ATTR_exceptions true
+#endif
+
 
 #if __cplusplus >= 201103L
 #define CDS_ATTR_constexpr_11 constexpr
@@ -82,9 +112,11 @@ namespace compiler {
 #define CDS_ATTR_maybe_unused CDS_ATTR_NEWSTYLE(maybe_unused)
 #undef CDS_ATTR_nodiscard
 #define CDS_ATTR_nodiscard CDS_ATTR_NEWSTYLE(nodiscard)
+#define CDS_ATTR_noexcept_fn_type true
 #else
 #define CDS_ATTR_constexpr_17 inline
 #define CDS_ATTR_ctad false
+#define CDS_ATTR_noexcept_fn_type false
 #endif
 
 #if __cplusplus >= 202002L
@@ -106,6 +138,9 @@ namespace compiler {
 #endif
 
 #if __cplusplus >= 202302L
+#define CDS_ATTR_constexpr_23 constexpr
+#else
+#define CDS_ATTR_constexpr_23 inline
 #endif
 
 struct StdCpp11 {

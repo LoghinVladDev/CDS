@@ -28,6 +28,7 @@ namespace {
 struct DcrParams {
   bool verbose;
   bool coverage;
+  bool release;
   int threadCount;
 };
 
@@ -145,17 +146,22 @@ auto locateTestsRecursively(std::string const& dirPath) {
   return filePaths;
 }
 
-auto locateTests(std::filesystem::path const& fileOrPath) -> std::vector<std::string> {
-  if (std::filesystem::is_directory(fileOrPath)) {
-    return locateTestsRecursively(fileOrPath);
+auto locateTests(std::vector<std::filesystem::path>&& fileOrPaths) -> std::vector<std::string> {
+  std::vector<std::string> resolvedPaths;
+  for (auto&& fileOrPath : fileOrPaths) {
+    if (std::filesystem::is_directory(fileOrPath)) {
+      for (auto&& path : locateTestsRecursively(fileOrPath)) {
+        resolvedPaths.emplace_back(std::move(path));
+      }
+    } else if (std::filesystem::is_regular_file(fileOrPath)) {
+      resolvedPaths.emplace_back(std::move(fileOrPath));
+    } else {
+      std::cerr << "Path '" << fileOrPath << "' is not a file or directory\n";
+      return {};
+    }
   }
 
-  if (std::filesystem::is_regular_file(fileOrPath)) {
-    return {&fileOrPath, &fileOrPath + 1};
-  }
-
-  std::cerr << "Path '" << fileOrPath << "' is not a file or directory\n";
-  return {};
+  return resolvedPaths;
 }
 
 enum class TestStepType {Compile, Run};
@@ -761,8 +767,18 @@ auto addCoverageFlags(std::vector<std::string>& args, TestStepEnv const& env) {
     args.emplace_back("-fprofile-instr-generate");
     args.emplace_back("-O0");
     args.emplace_back("-g");
+    args.emplace_back("-mllvm");
+    args.emplace_back("-enable-name-compression=false");
   }
 }
+
+auto addReleaseFlags(std::vector<std::string>& args, TestStepEnv const& env) {
+  if (env.compiler && (*env.compiler == TestStepCompiler::Clang || *env.compiler == TestStepCompiler::Gcc)) {
+    args.emplace_back("-O3");
+    args.emplace_back("-DNDEBUG");
+  }
+}
+
 auto executeJob(auto const& job, std::vector<std::string> const& passToCompiler, DcrParams const& params) -> std::tuple<bool, std::string, std::string, bool> {
 #ifdef CDS_DCR_BLOCK_MULTIACCESS_TO_PROFRAW
   static std::mutex profrawBlock;
@@ -775,6 +791,9 @@ auto executeJob(auto const& job, std::vector<std::string> const& passToCompiler,
     withStd.push_back("-std=c++"s + toString(data.standard));
     if (params.coverage) {
       addCoverageFlags(withStd, data.testEnv);
+    }
+    if (params.release) {
+      addReleaseFlags(withStd, data.testEnv);
     }
 
     return executeCompile(data, withStd);
@@ -840,21 +859,27 @@ auto buildJobQueueFunctions(
 }
 
 auto buildJobLoggers(
+    auto& totalCount,
+    auto& runCount,
     auto& successful,
     auto& otherUpdatersLock,
     auto& failedTestPaths,
     auto& dcrParams
 ) {
+  auto const statusHeader = [&totalCount, &runCount] {
+    return std::to_string(runCount++ + 1) + "/" + std::to_string(totalCount);
+  };
+
   return std::make_tuple(
-      [&successful, &otherUpdatersLock](std::string const& jobName) {
+      [statusHeader, &successful, &otherUpdatersLock](std::string const& jobName) {
         ++successful;
         std::lock_guard g(otherUpdatersLock);
-        std::cout << jobName << " successful\n";
+        std::cout << '[' << statusHeader() << "] " << jobName << " successful\n";
       },
-      [&otherUpdatersLock, &failedTestPaths, &dcrParams](std::string const& jobName, std::string const& out, std::string const& err) {
+      [statusHeader, &otherUpdatersLock, &failedTestPaths, &dcrParams](std::string const& jobName, std::string const& out, std::string const& err) {
         std::lock_guard g(otherUpdatersLock);
         failedTestPaths.emplace_back(jobName);
-        std::cout << jobName << " failed\n";
+        std::cout << '[' << statusHeader() << "] " << jobName << " failed\n";
         if (dcrParams.verbose) {
           std::cout << "  Output: " << out << " " << err << "\n";
         }
@@ -916,9 +941,10 @@ auto execute(std::vector<TestData> const& tests, std::vector<std::string> const&
   std::mutex jobsLock;
   std::mutex otherUpdatersLock;
   std::vector<std::string> failedTestPaths;
+  int finished = 0;
 
   auto [getJob, pushJob] = buildJobQueueFunctions(jobs, jobsLock);
-  auto [logJobSuccess, logJobFailure] = buildJobLoggers(successful, otherUpdatersLock, failedTestPaths, dcrParams);
+  auto [logJobSuccess, logJobFailure] = buildJobLoggers(total, finished, successful, otherUpdatersLock, failedTestPaths, dcrParams);
   auto runJob = buildRunJob(logJobSuccess, logJobFailure, passToCompiler, dcrParams);
 
   auto threadRunnerFn = [&runJob, &getJob, &pushJob, &skipped] {
@@ -969,6 +995,36 @@ auto mapCompilers(std::vector<TestStepCompiler> const& compilersToMap) {
 }
 } // namespace
 
+auto locateWildcardMatches(std::vector<std::filesystem::path>&& paths) {
+  std::vector<std::filesystem::path> resolved;
+  for (auto&& path : paths) {
+    auto const parent = path.parent_path();
+    auto const asStr = path.string();
+    if (asStr.find('*') == std::string::npos) {
+      resolved.emplace_back(std::move(path));
+      continue;
+    }
+
+    auto const lastSep = asStr.rfind(std::filesystem::path::preferred_separator);
+    auto const child = lastSep == std::string::npos ? asStr : asStr.substr(lastSep + 1);
+    auto const wPos = child.rfind('*');
+    auto const extPos = child.rfind('.');
+    assert(wPos != std::string::npos && "Only supports leaf-level wildcard");
+    assert(child.find('*') == child.rfind('*') && "Only support single wildcard");
+    assert(wPos + 1 == extPos && "Only supports wildcard before extension");
+    auto const startingWith = child.substr(0, wPos);
+    for (auto const& file : std::filesystem::directory_iterator(parent)) {
+      auto const fileAsStr = file.path().string();
+      auto const leaf = fileAsStr.substr(fileAsStr.rfind(std::filesystem::path::preferred_separator) + 1);
+      if (leaf.starts_with(startingWith)) {
+        resolved.emplace_back(file.path());
+      }
+    }
+  }
+
+  return resolved;
+}
+
 auto run(int const argc, char const* const* argv) -> int {
   if (argc == 1) {
     std::cerr << "No path/file provided to DCR test runner\n";
@@ -986,6 +1042,14 @@ auto run(int const argc, char const* const* argv) -> int {
           [](auto const& arg) { return arg == "-v"; }
       ),
       makeParser(
+          [&dcrParams](auto const&) { dcrParams.coverage = true; },
+          [](auto const& arg) { return arg == "-c"; }
+      ),
+      makeParser(
+          [&dcrParams](auto const&) { dcrParams.release = true; },
+          [](auto const& arg) { return arg == "-r"; }
+      ),
+      makeParser(
           [&dcrParams](auto const& params) { dcrParams.threadCount = static_cast<int>(std::strtol(params[1].c_str(), nullptr, 10)); },
           [](auto const& arg) { return arg == "-j"; },
           [](auto const& arg) { return std::ranges::all_of(arg, [](char const c){ return c >= '0' && c <= '9'; }); }
@@ -994,10 +1058,6 @@ auto run(int const argc, char const* const* argv) -> int {
           [&inputFileOrDir](auto const& args) { inputFileOrDir = args[0]; },
           [](auto const&) { return true; }
       ),
-      makeParser(
-          [&dcrParams](auto const&) { dcrParams.coverage = true; },
-          [](auto const& arg) { return arg == "-c"; }
-      ),
       makeParserWithSink(
           [&passedToCompiler](auto const& args) { passedToCompiler = {&args[1], &args[args.size()]}; },
           alwaysAccept,
@@ -1005,14 +1065,17 @@ auto run(int const argc, char const* const* argv) -> int {
       )
   );
 
-  if (!std::filesystem::exists(inputFileOrDir)) {
-    std::cout << "Invalid input path '" << inputFileOrDir << "'\n";
-    return 1;
+  std::vector<std::filesystem::path> inputPaths = locateWildcardMatches({std::move(inputFileOrDir)});
+  for (auto const& path: inputPaths) {
+    if (!std::filesystem::exists(path)) {
+      std::cout << "Invalid input path '" << path << "'\n";
+      return 1;
+    }
   }
 
-  auto const testPaths = locateTests(inputFileOrDir);
+  auto const testPaths = locateTests(std::move(inputPaths));
   if (testPaths.empty()) {
-    std::cout << "No tests found at given path '" << inputFileOrDir << "'\n";
+    std::cout << "No tests found at given path\n";
     return 1;
   }
 

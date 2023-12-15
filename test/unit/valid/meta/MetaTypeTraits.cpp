@@ -2,8 +2,8 @@
 // STEPS: compile(linux:gcc;linux:clang)
 // STD: 11
 
+#include "cds/meta/TypeTraits"
 #include "UnitTest.hpp"
-#include "../../../src/meta/TypeTraits.hpp"
 
 using namespace cds;
 using namespace cds::meta;
@@ -457,4 +457,197 @@ TEST(MetaTypeTraits, BindCompat) {
   static_assert(Eq<True, All<BindLeft<IsConvertible, int*>::Type, bool>>::value, "Failed BindLeft");
   static_assert(Eq<True, All<BindRight<IsConvertible, bool>::Type, int*>>::value, "Failed BindLeft");
   static_assert(!Eq<True, All<BindRight<IsConvertible, int>::Type, int*>>::value, "Failed BindLeft");
+
+  static_assert(All<Bind<IsReferenceable, Ph<0>>::Type, int, int>::value, "Failed Bind IsReferenceable");
+  static_assert(!All<Bind<IsReferenceable, Ph<0>>::Type, void, int>::value, "Failed Bind IsReferenceable");
+  static_assert(!All<Bind<IsReferenceable, Ph<0>>::Type, int, void>::value, "Failed Bind IsReferenceable");
+
+  static_assert(All<Bind<IsVoid, Ph<0>>::Type, void, void>::value, "Failed Bind IsVoid");
+  static_assert(!All<Bind<IsVoid, Ph<0>>::Type, void, int>::value, "Failed Bind IsVoid");
+  static_assert(!All<Bind<IsVoid, Ph<0>>::Type, int, void>::value, "Failed Bind IsVoid");
+
+  enum A{aa}; enum class B{ab};
+  static_assert(All<Bind<IsEnum, Ph<0>>::Type, A, B>::value, "Failed Bind IsEnum");
+  static_assert(!All<Bind<IsEnum, Ph<0>>::Type, A, int>::value, "Failed Bind IsEnum");
+  static_assert(!All<Bind<IsEnum, Ph<0>>::Type, int, A>::value, "Failed Bind IsEnum");
+
+  union U1{}; union U2{};
+  static_assert(All<Bind<IsUnion, Ph<0>>::Type, U1, U2>::value, "Failed Bind IsUnion");
+  static_assert(!All<Bind<IsUnion, Ph<0>>::Type, U1, int>::value, "Failed Bind IsUnion");
+  static_assert(!All<Bind<IsUnion, Ph<0>>::Type, int, U2>::value, "Failed Bind IsUnion");
+
+  class C1{}; struct S1{};
+  static_assert(All<Bind<IsClass, Ph<0>>::Type, C1, S1>::value, "Failed Bind IsClass");
+  static_assert(!All<Bind<IsClass, Ph<0>>::Type, C1, int>::value, "Failed Bind IsClass");
+  static_assert(!All<Bind<IsClass, Ph<0>>::Type, int, S1>::value, "Failed Bind IsClass");
+
+  static_assert(All<Bind<IsFunction, Ph<0>>::Type, decltype(func), decltype(func)>::value, "Failed Bind IsFunction");
+  static_assert(!All<Bind<IsFunction, Ph<0>>::Type, decltype(func), int>::value, "Failed Bind IsFunction");
+  static_assert(!All<Bind<IsFunction, Ph<0>>::Type, int, decltype(func)>::value, "Failed Bind IsFunction");
+
+  static_assert(All<Bind<IsFundamental, Ph<0>>::Type, int, void>::value, "Failed Bind IsFundamental");
+  static_assert(!All<Bind<IsFundamental, Ph<0>>::Type, int, int*>::value, "Failed Bind IsFundamental");
+  static_assert(!All<Bind<IsFundamental, Ph<0>>::Type, B, int>::value, "Failed Bind IsFundamental");
+
+  static_assert(All<Bind<IsIntegral, Ph<0>>::Type, int, long>::value, "Failed Bind IsIntegral");
+  static_assert(!All<Bind<IsIntegral, Ph<0>>::Type, int, float>::value, "Failed Bind IsIntegral");
+  static_assert(!All<Bind<IsIntegral, Ph<0>>::Type, int*, int>::value, "Failed Bind IsIntegral");
+
+  static_assert(All<Bind<IsFloating, Ph<0>>::Type, float, double>::value, "Failed Bind IsFloating");
+  static_assert(!All<Bind<IsFloating, Ph<0>>::Type, float, int>::value, "Failed Bind IsFloating");
+  static_assert(!All<Bind<IsFloating, Ph<0>>::Type, int*, double>::value, "Failed Bind IsFloating");
+
+  static_assert(All<Bind<IsArithmetic, Ph<0>>::Type, float, int>::value, "Failed Bind IsArithmetic");
+  static_assert(!All<Bind<IsArithmetic, Ph<0>>::Type, float, int*>::value, "Failed Bind IsArithmetic");
+  static_assert(!All<Bind<IsArithmetic, Ph<0>>::Type, void, int>::value, "Failed Bind IsArithmetic");
+
+  static_assert(All<Bind<IsSigned, Ph<0>>::Type, float, int>::value, "Failed Bind IsSigned");
+  static_assert(!All<Bind<IsSigned, Ph<0>>::Type, float, unsigned int>::value, "Failed Bind IsSigned");
+  static_assert(!All<Bind<IsSigned, Ph<0>>::Type, void*, int>::value, "Failed Bind IsSigned");
+
+  static_assert(All<Bind<IsArray, Ph<0>>::Type, float[], int[10]>::value, "Failed Bind IsArray");
+  static_assert(!All<Bind<IsArray, Ph<0>>::Type, float*, int[10]>::value, "Failed Bind IsArray");
+  static_assert(!All<Bind<IsArray, Ph<0>>::Type, float, int[]>::value, "Failed Bind IsArray");
+
+  static_assert(All<Bind<IsBoundedArray, Ph<0>>::Type, float[5], int[10]>::value, "Failed Bind IsBoundedArray");
+  static_assert(!All<Bind<IsBoundedArray, Ph<0>>::Type, float[], int[10]>::value, "Failed Bind IsBoundedArray");
+  static_assert(!All<Bind<IsBoundedArray, Ph<0>>::Type, float[5], int>::value, "Failed Bind IsBoundedArray");
+
+  static_assert(All<Bind<IsUnboundedArray, Ph<0>>::Type, float[], int[]>::value, "Failed Bind IsUnboundedArray");
+  static_assert(!All<Bind<IsUnboundedArray, Ph<0>>::Type, float[], int[10]>::value, "Failed Bind IsUnboundedArray");
+  static_assert(!All<Bind<IsUnboundedArray, Ph<0>>::Type, float*, int[]>::value, "Failed Bind IsUnboundedArray");
+
+  static_assert(All<Bind<IsPointer, Ph<0>>::Type, float*, int*>::value, "Failed Bind IsPointer");
+  static_assert(!All<Bind<IsPointer, Ph<0>>::Type, float[], int*>::value, "Failed Bind IsPointer");
+  static_assert(!All<Bind<IsPointer, Ph<0>>::Type, float*, int[]>::value, "Failed Bind IsPointer");
+
+  static_assert(All<Bind<IsLValRef, Ph<0>>::Type, float&, int&>::value, "Failed Bind IsLValRef");
+  static_assert(!All<Bind<IsLValRef, Ph<0>>::Type, float[], int&>::value, "Failed Bind IsLValRef");
+  static_assert(!All<Bind<IsLValRef, Ph<0>>::Type, float&, int[]>::value, "Failed Bind IsLValRef");
+
+  static_assert(All<Bind<IsRValRef, Ph<0>>::Type, float&&, int&&>::value, "Failed Bind IsRValRef");
+  static_assert(!All<Bind<IsRValRef, Ph<0>>::Type, float&, int&&>::value, "Failed Bind IsRValRef");
+  static_assert(!All<Bind<IsRValRef, Ph<0>>::Type, float&&, int&>::value, "Failed Bind IsRValRef");
+
+  static_assert(All<Bind<IsRef, Ph<0>>::Type, float&&, int&>::value, "Failed Bind IsRef");
+  static_assert(!All<Bind<IsRef, Ph<0>>::Type, float&, int>::value, "Failed Bind IsRef");
+  static_assert(!All<Bind<IsRef, Ph<0>>::Type, float, int&&>::value, "Failed Bind IsRef");
+
+  static_assert(All<Bind<IsConst, Ph<0>>::Type, float const, int const>::value, "Failed Bind IsConst");
+  static_assert(!All<Bind<IsConst, Ph<0>>::Type, float, int const>::value, "Failed Bind IsConst");
+  static_assert(!All<Bind<IsConst, Ph<0>>::Type, float const, int>::value, "Failed Bind IsConst");
+
+  static_assert(All<Bind<IsVolatile, Ph<0>>::Type, float volatile, int volatile>::value, "Failed Bind IsVolatile");
+  static_assert(!All<Bind<IsVolatile, Ph<0>>::Type, float, int volatile>::value, "Failed Bind IsVolatile");
+  static_assert(!All<Bind<IsVolatile, Ph<0>>::Type, float volatile, int>::value, "Failed Bind IsVolatile");
+
+  static_assert(All<Bind<IsConstVolatile, Ph<0>>::Type, float const volatile, int const volatile>::value, "Failed Bind IsConstVolatile");
+  static_assert(!All<Bind<IsConstVolatile, Ph<0>>::Type, float const, int const volatile>::value, "Failed Bind IsConstVolatile");
+  static_assert(!All<Bind<IsConstVolatile, Ph<0>>::Type, float const volatile, int const>::value, "Failed Bind IsConstVolatile");
+}
+
+TEST(MetaObjectTraits, TypeInfoPrimitives) {
+  ASSERT_EQ("void", std::string(TypeInfo<void>::name));
+  ASSERT_EQ("bool", std::string(TypeInfo<bool>::name));
+//  ASSERT_EQ(IsSigned<char>::value ? "signed char" : "unsigned char", std::string(TypeInfo<char>::name));
+  ASSERT_EQ(IsSigned<short>::value ? "signed short" : "unsigned short", std::string(TypeInfo<short>::name));
+  ASSERT_EQ(IsSigned<int>::value ? "signed int" : "unsigned int", std::string(TypeInfo<int>::name));
+  ASSERT_EQ(IsSigned<long>::value ? "signed long" : "unsigned long", std::string(TypeInfo<long>::name));
+  ASSERT_EQ("unsigned char", std::string(TypeInfo<unsigned char>::name));
+  ASSERT_EQ("unsigned short", std::string(TypeInfo<unsigned short>::name));
+  ASSERT_EQ("unsigned int", std::string(TypeInfo<unsigned int>::name));
+  ASSERT_EQ("unsigned long", std::string(TypeInfo<unsigned long>::name));
+  ASSERT_EQ("signed char", std::string(TypeInfo<signed char>::name));
+  ASSERT_EQ("signed short", std::string(TypeInfo<signed short>::name));
+  ASSERT_EQ("signed int", std::string(TypeInfo<signed int>::name));
+  ASSERT_EQ("signed long", std::string(TypeInfo<signed long>::name));
+  ASSERT_EQ("float", std::string(TypeInfo<float>::name));
+  ASSERT_EQ("double", std::string(TypeInfo<double>::name));
+}
+
+struct Unspecialized{};
+template <typename> struct TUnspecialized{};
+struct Specialized{};
+template <typename> struct TSpecialized{};
+
+namespace cds {
+namespace meta {
+template <> struct TypeInfo<Specialized> {
+  constexpr static char const* name = "Specialized";
+};
+
+template <> struct TemplateTypeInfo<TSpecialized> {
+  constexpr static char const* name = "TSpecialized";
+};
+} // namespace meta
+} // namespace cds
+
+TEST(MetaObjectTraits, TypeInfoObjects) {
+  ASSERT_EQ("unknown", std::string(TypeInfo<Unspecialized>::name));
+  ASSERT_EQ("unknown", std::string(TemplateTypeInfo<TUnspecialized>::name));
+  ASSERT_EQ("Specialized", std::string(TypeInfo<Specialized>::name));
+  ASSERT_EQ("TSpecialized", std::string(TemplateTypeInfo<TSpecialized>::name));
+}
+
+TEST(MetaObjectTest, Decay) {
+  static_assert(IsSame<Decay<int>, int>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int&>, int>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int&&>, int>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int const>, int>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int const&>, int>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int const&&>, int>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int volatile>, int>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int volatile&>, int>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int volatile&&>, int>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int const volatile>, int>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int const volatile&>, int>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int const volatile&&>, int>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int*>, int*>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int const*>, int const*>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int volatile*>, int volatile*>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int const volatile*>, int const volatile*>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int[]>, int*>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int const[]>, int const*>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int volatile[]>, int volatile*>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int const volatile[]>, int const volatile*>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int[1]>, int*>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int const[1]>, int const*>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int volatile[1]>, int volatile*>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int const volatile[1]>, int const volatile*>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int(&)[1]>, int*>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int(&&)[1]>, int*>::value, "Failed Decay");
+  static_assert(IsSame<Decay<int(bool)>, int(*)(bool)>::value, "Failed Decay");
+}
+
+TEST(MetaObjectTest, Common) {
+  class A {public: A(int);};
+  class B {public: B(int); B(A);};
+  static_assert(IsSame<Common<int>, int>::value, "Failed Common");
+  static_assert(IsSame<Common<int, int>, int>::value, "Failed Common");
+  static_assert(IsSame<Common<int, int, int>, int>::value, "Failed Common");
+  static_assert(IsSame<Common<int, long, int>, long>::value, "Failed Common");
+  static_assert(IsSame<Common<int, float, int>, float>::value, "Failed Common");
+  static_assert(IsSame<Common<int, float, long>, float>::value, "Failed Common");
+  static_assert(IsSame<Common<int, int&>, int>::value, "Failed Common");
+  static_assert(IsSame<Common<int, int&&>, int>::value, "Failed Common");
+  static_assert(IsSame<Common<int&, int&&>, int>::value, "Failed Common");
+  static_assert(IsSame<Common<int&&, int&>, int>::value, "Failed Common");
+  static_assert(IsSame<Common<A>, A>::value, "Failed Common");
+  static_assert(IsSame<Common<int, A, int>, A>::value, "Failed Common");
+  static_assert(IsSame<Common<int, A, B, int>, B>::value, "Failed Common");
+}
+
+int& f() {
+  static int x = 3;
+  return x;
+}
+
+TEST(MetaBase, Apply) {
+  static_assert(Eq<True, All<Unless<Apply<IsConst, RemoveRef>::Type>::Type, int, int&>>::value, "Failed Bind of Apply");
+  static_assert(!Eq<True, All<Unless<Apply<IsConst, RemoveRef>::Type>::Type, int, int const&>>::value, "Failed Bind of Apply");
+  static_assert(!Eq<True, All<Unless<Apply<IsConst, RemoveRef>::Type>::Type, int const&, int>>::value, "Failed Bind of Apply");
+
+  static_assert(Eq<True, All<Bind<Unless<Apply<IsConst, RemoveRef>::Type>::Type, Ph<0>>::Type, int, float>>::value, "Failed Bind of Apply");
+  static_assert(Eq<True, All<Bind<Unless<Apply<IsConst, RemoveRef>::Type>::Type, Ph<0>>::Type, int, int&>>::value, "Failed Bind of Apply");
+  static_assert(!Eq<True, All<Bind<Unless<Apply<IsConst, RemoveRef>::Type>::Type, Ph<0>>::Type, int, int const&>>::value, "Failed Bind of Apply");
 }

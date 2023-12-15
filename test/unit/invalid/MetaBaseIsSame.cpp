@@ -3,8 +3,8 @@
 // STD: 11
 // EXPECTED[compile]: failure
 
+#include <cds/meta/Base>
 #include "UnitTest.hpp"
-#include "../../../src/meta/Base.hpp"
 #include <string>
 
 using namespace cds;

@@ -2,8 +2,8 @@
 // STEPS: compile(linux:gcc;linux:clang)
 // STD: 11
 
+#include "cds/meta/Base"
 #include "UnitTest.hpp"
-#include "../../../src/meta/Base.hpp"
 
 using namespace cds;
 using namespace cds::meta;
@@ -42,7 +42,8 @@ TEST(MetaBase, Int) {
 
 TEST(MetaBase, valueTypes) {
   static_assert(IsSame<decltype(value<int>()), int>::value, "Failed value");
-  static_assert(IsSame<decltype(reference<int>()), int&>::value, "Failed value");
+  static_assert(IsSame<decltype(lvalue<int>()), int&>::value, "Failed value");
+  static_assert(IsSame<decltype(rvalue<int>()), int&&>::value, "Failed value");
   static_assert(IsSame<decltype(address<int>()), int*>::value, "Failed value");
 }
 
@@ -232,4 +233,14 @@ TEST(MetaBase, Bind) {
   static_assert(!Eq<True, All<Bind<Bind<Eq, Int<0>, Ph<0>, Ph<1>>::Type, Int<0>, Ph<0>>::Type, Int<1>>>::value, "Failed Bind");
   static_assert(!Eq<True, All<Bind<Bind<Eq, Int<0>, Ph<0>, Ph<1>>::Type, Int<1>, Ph<0>>::Type, Int<0>>>::value, "Failed Bind");
   static_assert(!Eq<True, All<Bind<Bind<Eq, Int<1>, Ph<0>, Ph<1>>::Type, Int<0>, Ph<0>>::Type, Int<0>>>::value, "Failed Bind");
+}
+
+TEST(MetaBase, Unless) {
+  static_assert(Eq<False, Unless<IsSame>::Type<int, int>>::value, "Failed Bind");
+  static_assert(Eq<True, Unless<IsSame>::Type<int, float>>::value, "Failed Bind");
+}
+
+TEST(MetaBase, BindUnless) {
+  static_assert(Eq<True, All<Bind<Unless<IsSame>::Type, void, Ph<0>>::Type, int, float, double>>::value, "Failed Bind with Unless");
+  static_assert(Eq<False, All<Bind<Unless<IsSame>::Type, void, Ph<0>>::Type, int, void, double>>::value, "Failed Bind with Unless");
 }
