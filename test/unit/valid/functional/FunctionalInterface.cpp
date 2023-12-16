@@ -1,5 +1,5 @@
 // DCR-TEST
-// STEPS: compile(linux:gcc;linux:clang)
+// STEPS: compile(linux:gcc;linux:clang),run(linux:clang)
 // STD: 11-2b
 
 #include "cds/functional/FunctionalInterface"

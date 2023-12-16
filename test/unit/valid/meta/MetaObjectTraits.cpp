@@ -77,7 +77,7 @@ TEST(MetaObjectTraits, IsTriviallyDestructible) {
 TEST(MetaObjectTraits, IsTriviallyDefaultCopyMove) {
   struct A{};
   struct B{B() = default; B(B const&) = default; B(B&&) = default; B& operator=(B const&) = default; B& operator=(B&&) = default;};
-  struct C{C(); C(C const&); C(C&&); C& operator=(C const&); C& operator=(C&&);};
+  struct C{C(); C(C const&); C(C&&) noexcept; C& operator=(C const&); C& operator=(C&&) noexcept;};
 
   static_assert(Eq<True, IsTriviallyDefaultConstructible<int>>::value, "Failed IsTriviallyDefaultConstructible");
   static_assert(Eq<True, IsTriviallyCopyConstructible<int>>::value, "Failed IsTriviallyCopyConstructible");
@@ -107,7 +107,7 @@ TEST(MetaObjectTraits, IsTriviallyDefaultCopyMove) {
 TEST(MetaObjectTraits, IsDefaultCopyMove) {
   struct A{};
   struct B{B() = default; B(B const&) = default; B(B&&) = default; B& operator=(B const&) = default; B& operator=(B&&) = default;};
-  struct C{C(); C(C const&); C(C&&); C& operator=(C const&); C& operator=(C&&);};
+  struct C{C(); C(C const&); C(C&&) noexcept; C& operator=(C const&); C& operator=(C&&) noexcept;};
   struct D{D() = delete; D(D const&) = delete; D(D&&) = delete; D& operator=(D const&) = delete; D& operator=(D&&) = delete;};
 
   static_assert(Eq<True, IsDefaultConstructible<int>>::value, "Failed IsDefaultConstructible");
@@ -1578,7 +1578,7 @@ TEST(MetaObjectTraits, IsAddressOfCompatible) {
 TEST(MetaObjectTraits, BindCompatibilityWithIsCompatible) {
   struct A{int a;};
   struct B{B() = default; B(B const&) = default; B(B&&) = default; B& operator=(B const&) = default; B& operator=(B&&) = default;};
-  struct C{C(); C(C const&); C(C&&); C& operator=(C const&); C& operator=(C&&);};
+  struct C{C(); C(C const&); C(C&&) noexcept; C& operator=(C const&); C& operator=(C&&) noexcept;};
   struct D{D() = delete; D(D const&) = delete; D(D&&) = delete; D& operator=(D const&) = delete; D& operator=(D&&) = delete;};
   static_assert(All<Bind<IsTriviallyConstructible, A, Ph<0>>::Type, A>::value, "Failed BindIsTriviallyConstructible");
   static_assert(!All<Bind<IsTriviallyConstructible, A, Ph<0>>::Type, int, long, void>::value, "Failed BindIsTriviallyConstructible");

@@ -161,6 +161,7 @@ auto locateTests(std::vector<std::filesystem::path>&& fileOrPaths) -> std::vecto
     }
   }
 
+  (void) std::move(fileOrPaths);
   return resolvedPaths;
 }
 
@@ -1022,6 +1023,7 @@ auto locateWildcardMatches(std::vector<std::filesystem::path>&& paths) {
     }
   }
 
+  (void) std::move(paths);
   return resolved;
 }
 

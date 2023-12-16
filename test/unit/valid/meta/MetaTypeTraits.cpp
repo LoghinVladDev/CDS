@@ -1,5 +1,5 @@
 // DCR-TEST
-// STEPS: compile(linux:gcc;linux:clang)
+// STEPS: compile(linux:gcc;linux:clang),run(linux:clang)
 // STD: 11
 
 #include "cds/meta/TypeTraits"
@@ -549,7 +549,6 @@ TEST(MetaTypeTraits, BindCompat) {
 TEST(MetaObjectTraits, TypeInfoPrimitives) {
   ASSERT_EQ("void", std::string(TypeInfo<void>::name));
   ASSERT_EQ("bool", std::string(TypeInfo<bool>::name));
-//  ASSERT_EQ(IsSigned<char>::value ? "signed char" : "unsigned char", std::string(TypeInfo<char>::name));
   ASSERT_EQ(IsSigned<short>::value ? "signed short" : "unsigned short", std::string(TypeInfo<short>::name));
   ASSERT_EQ(IsSigned<int>::value ? "signed int" : "unsigned int", std::string(TypeInfo<int>::name));
   ASSERT_EQ(IsSigned<long>::value ? "signed long" : "unsigned long", std::string(TypeInfo<long>::name));

@@ -25,7 +25,7 @@ struct A_ContainsMember : public impl::ContainsOfStaticBinding<A_ContainsMember>
   std::vector<int>::const_iterator begin() const { return data.begin(); }
   std::vector<int>::const_iterator end() const { return data.end(); }
   std::vector<int> data;
-  A_ContainsMember(std::initializer_list<int> const& i) : data(i) {}
+  explicit A_ContainsMember(std::initializer_list<int> const& i) : data(i) {}
 };
 
 struct A_ContainsSelectedMember : public impl::ContainsSelectedOfStaticBinding<A_ContainsSelectedMember> {
@@ -40,7 +40,7 @@ struct A_ContainsSelectedMember : public impl::ContainsSelectedOfStaticBinding<A
   std::vector<int>::const_iterator begin() const { return data.begin(); }
   std::vector<int>::const_iterator end() const { return data.end(); }
   std::vector<int> data;
-  A_ContainsSelectedMember(std::initializer_list<int> const& i) : data(i) {}
+  explicit A_ContainsSelectedMember(std::initializer_list<int> const& i) : data(i) {}
 };
 
 struct A_ContainsContainsSelectedMember :
@@ -68,7 +68,7 @@ struct A_ContainsContainsSelectedMember :
   std::vector<int>::const_iterator begin() const { return data.begin(); }
   std::vector<int>::const_iterator end() const { return data.end(); }
   std::vector<int> data;
-  A_ContainsContainsSelectedMember(std::initializer_list<int> const& i) : data(i) {}
+  explicit A_ContainsContainsSelectedMember(std::initializer_list<int> const& i) : data(i) {}
 };
 
 TEST(ContainsOfStaticBinding, ContainsAnyOf) {

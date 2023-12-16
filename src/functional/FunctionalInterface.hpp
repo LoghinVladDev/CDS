@@ -28,7 +28,7 @@ template <typename R, typename C, typename... Ts> using MemberFunctionRVal = R(C
 namespace impl {
 template <typename MFn> struct MemberFunctionWrapper {
   template <typename RMFn, meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<RMFn>, MemberFunctionWrapper>>> = 0>
-  CDS_ATTR(2(explicit, constexpr(11))) MemberFunctionWrapper(RMFn&& fn) noexcept : _fn(cds::forward<MFn>(fn)) {}
+  CDS_ATTR(2(explicit, constexpr(11))) MemberFunctionWrapper(RMFn&& fn) noexcept : _fn(cds::forward<RMFn>(fn)) {}
 
   template <typename O, typename... Args> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(
       O&& obj, Args&&... args
