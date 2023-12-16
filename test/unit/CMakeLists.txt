@@ -6,6 +6,7 @@ set(
     valid/meta/MetaBase.cpp
     valid/meta/MetaCompilerLinuxClang.test.cpp
     valid/meta/MetaCompilerLinuxGcc.test.cpp
+    valid/meta/MetaFunctionTraits.cpp
     valid/meta/MetaIteratorTraits.cpp
     valid/meta/MetaObjectTraits.cpp
     valid/meta/MetaTypeTraits.cpp

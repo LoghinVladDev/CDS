@@ -6,8 +6,10 @@
 #define CDS_META_FUNCTION_TRAITS_HPP
 #pragma once
 
+#include <cds/meta/Compiler>
+
 namespace cds {
-template <typename... P> class Tuple {};
+template <typename...> class Tuple {};
 namespace meta {
 namespace impl {
 template <typename R, typename C, typename... A> struct MakeMemberFunctionTraits {

@@ -141,7 +141,7 @@ public:
   template <typename N1, typename N2, meta::EnableIf<meta::All<meta::IsIntegral, N1, N2>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto sub(N1 from, N2 until) const noexcept -> BaseStringView {
     Size sUntil;
-    Size sFrom = static_cast<Size>(from);
+    auto sFrom = static_cast<Size>(from);
     if (until < 0) {
       sUntil = size();
     } else {
