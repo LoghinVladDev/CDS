@@ -9,6 +9,7 @@ set(
     valid/meta/MetaFunctionTraits.cpp
     valid/meta/MetaIteratorTraits.cpp
     valid/meta/MetaObjectTraits.cpp
+    valid/meta/MetaStringTraits.cpp
     valid/meta/MetaTypeTraits.cpp
     valid/primitive/StringUtils.cpp
     valid/primitive/StringView.cpp

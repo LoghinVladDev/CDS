@@ -317,6 +317,61 @@ TEST(StringView, Sub) {
   ASSERT_EQ(sv(4, 3), "");
 }
 
+TEST(StringView, contains) {
+  StringView sv = "bC";
+  ASSERT_FALSE(sv.contains('a'));
+  ASSERT_TRUE(sv.contains('b'));
+  ASSERT_TRUE(sv.contains('C'));
+  ASSERT_FALSE(sv.contains('d'));
+
+  ASSERT_FALSE(sv.contains('a', meta::StringTraits<char>::lower));
+  ASSERT_TRUE(sv.contains('b', meta::StringTraits<char>::lower));
+  ASSERT_TRUE(sv.contains('c', meta::StringTraits<char>::lower));
+  ASSERT_FALSE(sv.contains('d', meta::StringTraits<char>::lower));
+}
+
+TEST(StringView, containsOf) {
+  StringView sv = "bC";
+  ASSERT_FALSE(sv.containsAnyOf("ad"));
+  ASSERT_TRUE(sv.containsAnyOf("bc"));
+  ASSERT_TRUE(sv.containsAnyOf(StringView("bc")));
+  ASSERT_TRUE(sv.containsAnyOf(std::string("bc")));
+  ASSERT_TRUE(sv.containsAnyOf("BC", meta::StringTraits<char>::upper));
+  ASSERT_TRUE(sv.containsAnyOf(StringView("BC"), meta::StringTraits<char>::upper));
+  ASSERT_TRUE(sv.containsAnyOf(std::string("BC"), meta::StringTraits<char>::upper));
+
+  ASSERT_FALSE(sv.containsAnyNotOf("bC"));
+  ASSERT_TRUE(sv.containsAnyNotOf("bc"));
+  ASSERT_TRUE(sv.containsAnyNotOf("Bc"));
+  ASSERT_TRUE(sv.containsAnyNotOf("BC"));
+  ASSERT_TRUE(sv.containsAnyNotOf(StringView("bc")));
+  ASSERT_TRUE(sv.containsAnyNotOf(std::string("bc")));
+  ASSERT_TRUE(sv.containsAnyNotOf("C", meta::StringTraits<char>::upper));
+  ASSERT_TRUE(sv.containsAnyNotOf(StringView("c"), meta::StringTraits<char>::upper));
+  ASSERT_TRUE(sv.containsAnyNotOf(std::string("B"), meta::StringTraits<char>::upper));
+
+  ASSERT_FALSE(sv.containsAllOf("ac"));
+  ASSERT_FALSE(sv.containsAllOf("ab"));
+  ASSERT_TRUE(sv.containsAllOf("bC"));
+  ASSERT_TRUE(sv.containsAllOf(StringView("bC")));
+  ASSERT_TRUE(sv.containsAllOf(std::string("bC")));
+  ASSERT_TRUE(sv.containsAllOf("BC", meta::StringTraits<char>::upper));
+  ASSERT_TRUE(sv.containsAllOf(StringView("BC"), meta::StringTraits<char>::upper));
+  ASSERT_TRUE(sv.containsAllOf(std::string("BC"), meta::StringTraits<char>::upper));
+
+  ASSERT_FALSE(sv.containsNoneOf("bC"));
+  ASSERT_FALSE(sv.containsNoneOf("bc"));
+  ASSERT_FALSE(sv.containsNoneOf("BC"));
+  ASSERT_TRUE(sv.containsNoneOf("ad"));
+  ASSERT_TRUE(sv.containsNoneOf("ac"));
+  ASSERT_TRUE(sv.containsNoneOf("Bc"));
+  ASSERT_TRUE(sv.containsNoneOf(StringView("ad")));
+  ASSERT_TRUE(sv.containsNoneOf(std::string("ad")));
+  ASSERT_TRUE(sv.containsNoneOf("ad", meta::StringTraits<char>::upper));
+  ASSERT_TRUE(sv.containsNoneOf(StringView("ad"), meta::StringTraits<char>::upper));
+  ASSERT_TRUE(sv.containsNoneOf(std::string("ad"), meta::StringTraits<char>::upper));
+}
+
 #ifdef DCR_SINCECPP20
 TEST(StringView, Spaceship) {
   char const a1[] = "abcd";

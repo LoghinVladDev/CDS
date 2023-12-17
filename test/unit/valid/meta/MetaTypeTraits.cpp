@@ -193,6 +193,7 @@ TEST(MetaTypeTraits, IsFunction) {
   class C{};
   struct D{void operator()();};
   auto lbd = [](){};
+
   static_assert(Eq<False, IsFunction<int>>::value, "Failed IsFunction");
   static_assert(!IsFunction<void>::value, "Failed IsFunction");
   static_assert(!IsFunction<A>::value, "Failed IsFunction");
@@ -203,6 +204,7 @@ TEST(MetaTypeTraits, IsFunction) {
   static_assert(!IsFunction<decltype(&D::operator())>::value, "Failed IsFunction");
   static_assert(!IsFunction<decltype(lbd)>::value, "Failed IsFunction");
   static_assert(IsFunction<decltype(func)>::value, "Failed IsFunction");
+  static_assert(!IsFunction<decltype(&func)>::value, "Failed IsFunction");
 }
 
 TEST(MetaTypeTraits, IsFundamental) {

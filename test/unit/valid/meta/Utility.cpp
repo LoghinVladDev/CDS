@@ -166,6 +166,63 @@ TEST(Utility, containsSelected) {
   ASSERT_FALSE(impl::contains(A_eximpl_sel(), 4, functional::memFn(&std::string::length)));
 }
 
+TEST(Utility, IsIterable) {
+  static_assert(meta::IsIterable<int[10]>::value, "Failed is iterable");
+  static_assert(meta::IsIterable<std::string>::value, "Failed is iterable");
+  static_assert(meta::IsIterable<std::vector<int>>::value, "Failed is iterable");
+  static_assert(meta::IsIterable<StringView>::value, "Failed is iterable");
+  static_assert(meta::IsIterable<StringView>::value, "Failed is iterable");
+  struct noend { int const* begin() const { return nullptr; } };
+  struct correct { int const* begin() const { return nullptr; } int const* end() const { return nullptr; } };
+  static_assert(!meta::IsIterable<noend>::value, "Failed is iterable");
+  static_assert(meta::IsIterable<correct>::value, "Failed is iterable");
+  static_assert(!meta::IsIterable<int*>::value, "Failed is iterable");
+}
+
+TEST(Utility, IsReverseIterable) {
+  static_assert(meta::IsReverseIterable<int[10]>::value, "Failed is iterable");
+  static_assert(meta::IsReverseIterable<std::string>::value, "Failed is iterable");
+  static_assert(meta::IsReverseIterable<std::vector<int>>::value, "Failed is iterable");
+  static_assert(meta::IsReverseIterable<StringView>::value, "Failed is iterable");
+  static_assert(meta::IsReverseIterable<StringView>::value, "Failed is iterable");
+  struct noend { int const* rbegin() const { return nullptr; } };
+  struct correct { int const* rbegin() const { return nullptr; } int const* rend() const { return nullptr; } };
+  static_assert(!meta::IsReverseIterable<noend>::value, "Failed is iterable");
+  static_assert(meta::IsReverseIterable<correct>::value, "Failed is iterable");
+  static_assert(!meta::IsReverseIterable<int*>::value, "Failed is iterable");
+}
+
+TEST(Utility, containsWithoutContainsMem) {
+  ASSERT_FALSE(cds::impl::contains(std::vector<int>{1, 2, 3}, 0));
+  ASSERT_TRUE(cds::impl::contains(std::vector<int>{1, 2, 3}, 1));
+  ASSERT_TRUE(cds::impl::contains(std::vector<int>{1, 2, 3}, 2));
+  ASSERT_TRUE(cds::impl::contains(std::vector<int>{1, 2, 3}, 3));
+  ASSERT_FALSE(cds::impl::contains(std::vector<int>{1, 2, 3}, 4));
+}
+
+namespace {int doubled(int v){ return v * 2; }}
+TEST(Utility, containsSelWithoutContainsMem) {
+  ASSERT_FALSE(cds::impl::contains(std::vector<int>{1, 2, 3}, 0, doubled));
+  ASSERT_FALSE(cds::impl::contains(std::vector<int>{1, 2, 3}, 1, doubled));
+  ASSERT_TRUE(cds::impl::contains(std::vector<int>{1, 2, 3}, 2, doubled));
+  ASSERT_FALSE(cds::impl::contains(std::vector<int>{1, 2, 3}, 3, doubled));
+  ASSERT_TRUE(cds::impl::contains(std::vector<int>{1, 2, 3}, 4, doubled));
+  ASSERT_FALSE(cds::impl::contains(std::vector<int>{1, 2, 3}, 5, doubled));
+  ASSERT_TRUE(cds::impl::contains(std::vector<int>{1, 2, 3}, 6, doubled));
+  ASSERT_FALSE(cds::impl::contains(std::vector<int>{1, 2, 3}, 7, doubled));
+}
+
+TEST(Utility, containsPrefsContains) {
+  struct X {
+    bool contains(int x) const { return x == 1; }
+    int const* begin() const { return nullptr; }
+    int const* end() const { return nullptr; }
+  };
+
+  ASSERT_FALSE(cds::impl::contains(X(), 0));
+  ASSERT_TRUE(cds::impl::contains(X(), 1));
+}
+
 #ifdef DCR_SINCECPP11
 template <typename T, typename V> constexpr auto sum(T&& lhs, V&& rhs) -> decltype(meta::value<T>() + meta::value<V>()) {
   return cds::forward<T>(lhs) + cds::forward<V>(rhs);
@@ -232,5 +289,15 @@ TEST(Utility, cpp14Constexpr) {
   static_assert(impl::contains(A_eximpl_c(), 1), "constexpr contains failed");
   static_assert(!impl::contains(A_eximpl_sel_c(), 0, functional::memFn(&StringView::length)), "constexpr contains by selector failure");
   static_assert(impl::contains(A_eximpl_sel_c(), 1, functional::memFn(&StringView::length)), "constexpr contains by selector failure");
+
+  struct X {
+    constexpr bool contains(int x) const { return x == 1; }
+    int const* begin() const { return nullptr; }
+    int const* end() const { return nullptr; }
+  };
+  static_assert(impl::contains(X(), 1), "constexpr contains failed");
+  constexpr int arr[2] = {1, 2};
+  static_assert(!impl::contains(arr, 0), "constexpr contains failed");
+  static_assert(impl::contains(arr, 1), "constexpr contains failed");
 }
 #endif

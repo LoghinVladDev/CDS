@@ -14,6 +14,7 @@
 #endif
 
 namespace cds {
+namespace iterator {
 namespace impl {
 template<typename T, bool fwd> class AddressIteratorBase {
 public:
@@ -103,7 +104,7 @@ public:
       I const& lhs, N rhs
   ) noexcept -> I;
 
-private:
+public:
   Address _addr{nullptr};
 };
 
@@ -293,37 +294,95 @@ template <typename Type> class ForwardAddressIterator : public impl::AddressIter
 template <typename Type> class BackwardAddressIterator : public impl::AddressIteratorBase<Type, false> {
   using impl::AddressIteratorBase<Type, false>::AddressIteratorBase;
 };
+} // namesspace iterator
 
-template <typename Type, Size size> CDS_ATTR(constexpr(11)) auto begin(Type (&array)[size]) -> ForwardAddressIterator<Type> {
+template <typename Type, Size size, meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0>
+CDS_ATTR(2(nodiscard, constexpr(11))) auto begin(Type (&array)[size]) noexcept -> iterator::ForwardAddressIterator<Type> {
   return {&array[0]};
 }
 
-template <typename Type, Size size> CDS_ATTR(constexpr(11)) auto end(Type (&array)[size]) -> ForwardAddressIterator<Type> {
+
+template <typename Type, Size size, meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0>
+CDS_ATTR(2(nodiscard, constexpr(11))) auto end(Type (&array)[size]) noexcept -> iterator::ForwardAddressIterator<Type> {
   return {&array[size]};
 }
 
-template <typename Type, Size size> CDS_ATTR(constexpr(11)) auto cbegin(Type (&array)[size]) -> ForwardAddressIterator<Type const> {
+template <typename Type, Size size, meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0>
+CDS_ATTR(2(nodiscard, constexpr(11))) auto cbegin(Type (&array)[size]) noexcept -> iterator::ForwardAddressIterator<Type const> {
   return {&array[0]};
 }
 
-template <typename Type, Size size> CDS_ATTR(constexpr(11)) auto cend(Type (&array)[size]) -> ForwardAddressIterator<Type const> {
+template <typename Type, Size size, meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0>
+CDS_ATTR(2(nodiscard, constexpr(11))) auto cend(Type (&array)[size]) noexcept -> iterator::ForwardAddressIterator<Type const> {
   return {&array[size]};
 }
 
-template <typename Type, Size size> CDS_ATTR(constexpr(11)) auto rbegin(Type (&array)[size]) -> BackwardAddressIterator<Type> {
+template <typename Type, Size size, meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0>
+CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin(Type (&array)[size]) noexcept -> iterator::BackwardAddressIterator<Type> {
   return {&array[size] - 1};
 }
 
-template <typename Type, Size size> CDS_ATTR(constexpr(11)) auto rend(Type (&array)[size]) -> BackwardAddressIterator<Type> {
+template <typename Type, Size size, meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0>
+CDS_ATTR(nodiscard) auto rend(Type (&array)[size]) noexcept -> iterator::BackwardAddressIterator<Type> {
   return {&array[0] - 1};
 }
 
-template <typename Type, Size size> CDS_ATTR(constexpr(11)) auto crbegin(Type (&array)[size]) -> BackwardAddressIterator<Type const> {
+template <typename Type, Size size, meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0>
+CDS_ATTR(2(nodiscard, constexpr(11))) auto crbegin(Type (&array)[size]) noexcept -> iterator::BackwardAddressIterator<Type const> {
   return {&array[size] - 1};
 }
 
-template <typename Type, Size size> CDS_ATTR(constexpr(11)) auto crend(Type (&array)[size]) -> BackwardAddressIterator<Type const> {
+template <typename Type, Size size, meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0>
+CDS_ATTR(nodiscard) auto crend(Type (&array)[size]) noexcept -> iterator::BackwardAddressIterator<Type const> {
   return {&array[0] - 1};
+}
+
+template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto begin(char (&string)[size]) noexcept -> iterator::ForwardAddressIterator<char> {
+  return {&string[0]};
+}
+
+template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto end(char (&string)[size]) noexcept -> iterator::ForwardAddressIterator<char> {
+  return {&string[size] - 1};
+}
+
+template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto begin(char const (&string)[size]) noexcept -> iterator::ForwardAddressIterator<char const> {
+  return {&string[0]};
+}
+
+template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto end(char const (&string)[size]) noexcept -> iterator::ForwardAddressIterator<char const> {
+  return {&string[size] - 1};
+}
+
+template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto cbegin(char const (&string)[size]) noexcept -> iterator::ForwardAddressIterator<char const> {
+  return {&string[0]};
+}
+
+template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto cend(char const (&string)[size]) noexcept -> iterator::ForwardAddressIterator<char const> {
+  return {&string[size] - 1};
+}
+
+template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin(char (&string)[size]) noexcept -> iterator::BackwardAddressIterator<char> {
+  return {&string[size] - 2};
+}
+
+template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto rend(char (&string)[size]) noexcept -> iterator::BackwardAddressIterator<char> {
+  return {&string[0] - 1};
+}
+
+template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin(char const (&string)[size]) noexcept -> iterator::BackwardAddressIterator<char const> {
+  return {&string[size] - 2};
+}
+
+template <Size size> CDS_ATTR(nodiscard) auto rend(char const (&string)[size]) noexcept -> iterator::BackwardAddressIterator<char const> {
+  return {&string[0] - 1};
+}
+
+template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto crbegin(char const (&string)[size]) noexcept -> iterator::BackwardAddressIterator<char const> {
+  return {&string[size] - 2};
+}
+
+template <Size size> CDS_ATTR(nodiscard) auto crend(char const (&string)[size]) noexcept -> iterator::BackwardAddressIterator<char const> {
+  return {&string[0] - 1};
 }
 } // namespace cds
 

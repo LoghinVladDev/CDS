@@ -21,7 +21,6 @@ template <> struct IsVoid<void> : True {};
 template <typename T> struct IsEnum : ConvertIntegral<std::is_enum<T>> {};
 template <typename T> struct IsUnion : ConvertIntegral<std::is_union<T>> {};
 template <typename T> struct IsClass : ConvertIntegral<std::is_class<T>> {};
-template <typename T> struct IsFunction : ConvertIntegral<std::is_function<T>> {};
 template <typename T> struct IsFundamental : ConvertIntegral<std::is_fundamental<T>> {};
 template <typename T> struct IsIntegral : ConvertIntegral<std::is_integral<T>> {};
 template <typename T> struct IsFloating : ConvertIntegral<std::is_floating_point<T>> {};
@@ -58,6 +57,8 @@ template <typename> struct IsVolatile : False {};
 template <typename T> struct IsVolatile<T volatile> : True {};
 
 template <typename T> struct IsConstVolatile : And<IsConst<T>, IsVolatile<T>> {};
+
+template <typename T> struct IsFunction : And<Not<IsConst<T const>>, Not<IsRef<T>>>::Type {};
 
 template <typename F, typename T, typename = typename Or<IsVoid<F>, IsFunction<T>, IsArray<T>>::Type> class IsConvertible : public IsVoid<T> {};
 template <typename F, typename T> class IsConvertible<F, T, False> {

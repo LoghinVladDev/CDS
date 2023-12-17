@@ -128,6 +128,21 @@ template <typename T> struct IsIndirectionCompatible<T, Void<decltype(*value<T>(
 template <typename T> struct IsAddressOfCompatible<T, Void<decltype(&lvalue<T>())>> : True {};
 
 template <typename B, typename D> struct IsBaseOf : And<All<IsClass, B, D>, typename IsConvertible<D*, B*>::Type> {};
+
+template <typename> struct Member {};
+template <typename T, typename C> struct Member<T C::*> { using Type = T; };
+
+template <typename> struct IsMember : False {};
+template <typename T, typename C> struct IsMember<T C::*> : True {};
+
+template <typename T> struct IsCallableObject {
+  struct Fallback { void operator()(); };
+  struct Resolver : T, Fallback {};
+  template <typename O, O> struct check;
+  template <typename> static True test(...);
+  template <typename C> static False test(check<void (Fallback::*)(), &C::operator()> const*);
+  using Type = decltype(test<Resolver>(nullptr));
+};
 } // namespace impl
 
 template <typename Type> using IsTriviallyCopyable = typename impl::IsTriviallyCopyable<Type>::Type;
@@ -196,6 +211,12 @@ template <typename Type> using IsAddressOfCompatible = typename impl::IsAddressO
 
 template <typename Base, typename Derived> struct IsBaseOf : impl::IsBaseOf<Base, Derived>::Type {};
 template <typename Derived, typename Base> struct IsDerivedFrom : impl::IsBaseOf<Base, Derived>::Type {};
+template <typename MemberType> using Member = typename impl::Member<MemberType>::Type;
+
+template <typename Type> struct IsCallableObject : Conditional<IsClass<Type>, impl::IsCallableObject<Type>, False>::Type {};
+template <typename Type> struct IsMember : impl::IsMember<Type>::Type {};
+
+template <typename Type> struct IsCallable : And<Not<IsMember<Type>>, Or<IsCallableObject<Type>, IsFunction<RemovePointer<Type>>>> {};
 } // namespace meta
 } // namespace cds
 

@@ -6,6 +6,7 @@
 #include "UnitTest.hpp"
 
 using namespace cds;
+using namespace cds::iterator;
 
 TEST(AddressIterator, constructionFwdParse) {
   int data[3] = {1, 2, 3};
@@ -451,6 +452,20 @@ TEST(AddressIterator, subscript) {
   ASSERT_EQ(b[0], data[2]);
 }
 
+TEST(AddressIterator, string) {
+  char str1[] = "ab";
+  char const str2[] = "abc";
+  ASSERT_EQ(begin(str1) - end(str1), 2);
+  ASSERT_EQ(cbegin(str1) - cend(str1), 2);
+  ASSERT_EQ(rbegin(str1) - rend(str1), 2);
+  ASSERT_EQ(crbegin(str1) - crend(str1), 2);
+
+  ASSERT_EQ(begin(str2) - end(str2), 3);
+  ASSERT_EQ(cbegin(str2) - cend(str2), 3);
+  ASSERT_EQ(rbegin(str2) - rend(str2), 3);
+  ASSERT_EQ(crbegin(str2) - crend(str2), 3);
+}
+
 #ifdef DCR_SINCECPP11
 struct F {
   constexpr F() = default;
@@ -475,8 +490,18 @@ TEST(AddressIterator, compileTimeCpp11) {
   static_assert(end(data) >= begin(data), "Failed Cpp11 Compile Time Test");
   static_assert(end(data) >= end(data), "Failed Cpp11 Compile Time Test");
   static_assert(end(data) - begin(data) == 3, "Failed Cpp11 Compile Time Test");
+  static_assert(begin(data) - end(data) == 3, "Failed Cpp11 Compile Time Test");
   static_assert(begin(data) + 3 == end(data), "Failed Cpp11 Compile Time Test");
   static_assert(end(data) - 3 == begin(data), "Failed Cpp11 Compile Time Test");
+}
+
+TEST(AddressIterator, stringCompileTime) {
+  constexpr char str2[] = "abc";
+
+  static_assert(begin(str2) - end(str2) == 3);
+  static_assert(cbegin(str2) - cend(str2) == 3);
+// reverse iteration cannot be computed at compile time (end = address - 1, which is not a constant expression
+// on compile time arrays
 }
 #endif
 

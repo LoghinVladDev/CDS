@@ -7,6 +7,7 @@
 
 #include <cds/meta/TypeTraits>
 #include <cds/meta/IteratorTraits>
+#include <cds/iterator/AddressIterator>
 
 namespace cds {
 template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto forward(meta::RemoveRef<T>& v) noexcept -> T&& {
@@ -99,7 +100,7 @@ template <typename T, typename V, typename = void> struct HasContains : False {
 };
 
 template <typename T, typename V> struct HasContains<T, V, Void<decltype(value<T>().contains(value<V>()))>> : True {
-  static constexpr bool exceptSpec = noexcept(meta::value<T>().contains(meta::value<V>()));
+  static constexpr bool exceptSpec = CDS_ATTR(noexcept(meta::value<T>().contains(meta::value<V>())));
 };
 template <typename T, typename V, typename S, typename = void> struct HasSelectorContains : False {
   static constexpr bool exceptSpec = true;
@@ -108,41 +109,107 @@ template <typename T, typename V, typename S, typename = void> struct HasSelecto
 template <typename T, typename V, typename S> struct HasSelectorContains<T, V, S, Void<
     decltype(value<T>().contains(value<V>(), value<S>()))
 >> : True {
-  static constexpr bool exceptSpec = noexcept(
+  static constexpr bool exceptSpec = CDS_ATTR(noexcept(
       meta::value<T>().contains(meta::value<V>(), meta::value<S>())
-  );
+  ));
 };
 } // namespace impl
 } // namespace meta
 
+namespace meta {
 namespace impl {
-template <typename T, typename V, typename C = meta::impl::HasContains<T, V>, meta::EnableIf<meta::Not<C>> = 0>
-CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what) noexcept -> bool {
+template <typename T, typename = void> struct IsIterable : False {};
+template <typename T, typename = void> struct IsReverseIterable : False {};
+
+template <typename T, Size s> struct IsIterable<T[s]> : True {};
+template <typename T, Size s> struct IsIterable<T(&)[s]> : True {};
+template <typename T, Size s> struct IsReverseIterable<T[s]> : True {};
+template <typename T> struct IsIterable<T, Void<
+    decltype(cds::begin(meta::value<T>())),
+    decltype(cds::end(meta::value<T>()))
+>> : True {
+  using Iterator = decltype(cds::begin(meta::value<T>()));
+};
+
+template <typename T> struct IsReverseIterable<T, Void<
+    decltype(cds::rbegin(meta::value<T>())),
+    decltype(cds::rend(meta::value<T>()))
+>> : True {
+  using ReverseIterator = decltype(cds::rbegin(meta::value<T>()));
+};
+} // namespace impl
+
+template <typename T> struct IsIterable : impl::IsIterable<T>::Type {};
+template <typename T> struct IsReverseIterable : impl::IsReverseIterable<T>::Type {};
+} // namespace meta
+
+namespace impl {
+template <
+    typename T, typename V,
+    typename C = meta::impl::HasContains<T, V>,
+    typename I = meta::impl::IsIterable<T>,
+    meta::EnableIf<meta::Not<meta::Or<C, I>>> = 0
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what) noexcept -> bool {
   (void) where;
   (void) what;
-  static_assert(C::value, "Given type does not provide a 'contains' function for target parameter");
+  static_assert(C::value || I::value, "Given type does not provide a 'contains' function for target parameter");
   return false;
 }
 
-template <typename T, typename V, typename S, typename C = meta::impl::HasSelectorContains<T, V, S>, meta::EnableIf<meta::Not<C>> = 0>
-CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what, S&& selector) noexcept -> bool {
+template <
+    typename T, typename V, typename S,
+    typename C = meta::impl::HasSelectorContains<T, V, S>,
+    typename I = meta::impl::IsIterable<T>,
+    meta::EnableIf<meta::Not<meta::Or<C, I>>> = 0
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what, S&& selector) noexcept -> bool {
   (void) where;
   (void) what;
   (void) selector;
-  static_assert(C::value, "Given type does not provide a 'contains' function with selector for target parameter");
+  static_assert(C::value || I::value, "Given type does not provide a 'contains' function with selector for target parameter");
   return false;
 }
 
 template <typename T, typename V, typename C = meta::impl::HasContains<T, V>, meta::EnableIf<C> = 0>
-CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what) noexcept(C::exceptSpec) -> bool {
-  return forward<T>(where).contains(forward<V>(what));
+CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what) CDS_ATTR(noexcept(C::exceptSpec)) -> bool {
+  return cds::forward<T>(where).contains(cds::forward<V>(what));
+}
+
+template <
+    typename T, typename V,
+    typename C = meta::impl::HasContains<T, V>,
+    typename I = meta::impl::IsIterable<T>,
+    meta::EnableIf<meta::And<I, meta::Not<C>>> = 0
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what)
+    CDS_ATTR(noexcept(noexcept(*cds::begin(cds::forward<T>(where)) == cds::forward<V>(what)))) -> bool {
+  for (auto it = cds::begin(cds::forward<T>(where)), end = cds::end(cds::forward<T>(where)); it != end; ++it) {
+    if (*it == cds::forward<V>(what)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 template <typename T, typename V, typename S, typename C = meta::impl::HasSelectorContains<T, V, S>, meta::EnableIf<C> = 0>
-CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what, S&& selector) noexcept(C::exceptSpec) -> bool {
+CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what, S&& selector) CDS_ATTR(noexcept(C::exceptSpec)) -> bool {
   return cds::forward<T>(where).contains(cds::forward<V>(what), cds::forward<S>(selector));
 }
+
+template <
+    typename T, typename V, typename S,
+    typename C = meta::impl::HasSelectorContains<T, V, S>,
+    typename I = meta::impl::IsIterable<T>,
+    meta::EnableIf<meta::And<I, meta::Not<C>>> = 0
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what, S&& selector)
+    CDS_ATTR(noexcept(noexcept(cds::forward<S>(selector)(*cds::begin(cds::forward<T>(where))) == cds::forward<V>(what)))) -> bool {
+  for (auto it = cds::begin(cds::forward<T>(where)), end = cds::end(cds::forward<T>(where)); it != end; ++it) {
+    if (cds::forward<S>(selector)(*it) == cds::forward<V>(what)) {
+      return true;
+    }
+  }
+
+  return false;
+}
 } // namespace impl
-} // namespace
+} // namespace cds
 
 #endif // CDS_META_UTILITY_HPP

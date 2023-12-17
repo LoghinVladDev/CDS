@@ -24,11 +24,11 @@ public:
   CDS_ATTR(constexpr(14)) auto operator=(Object&&) noexcept -> Object& = delete;
   CDS_ATTR(constexpr(20)) virtual ~Object() noexcept = default;
 
-  CDS_ATTR(nodiscard) virtual auto toString() const noexcept(false) -> String;
-  CDS_ATTR(2(nodiscard, constexpr(20))) virtual auto equals(Object const&) const noexcept(false) -> bool;
+  CDS_ATTR(nodiscard) virtual auto toString() const CDS_ATTR(noexcept(false)) -> String;
+  CDS_ATTR(2(nodiscard, constexpr(20))) virtual auto equals(Object const&) const CDS_ATTR(noexcept(false)) -> bool;
   CDS_ATTR(2(nodiscard, constexpr(20))) virtual auto hash() const noexcept -> Size;
 
-  template <typename OStreamType> friend auto operator<<(OStreamType&& out, Object const& object) noexcept(false) -> OStreamType&;
+  template <typename OStreamType> friend auto operator<<(OStreamType&& out, Object const& object) CDS_ATTR(noexcept(false)) -> OStreamType&;
 };
 } // namespace poly
 } // namespace cds

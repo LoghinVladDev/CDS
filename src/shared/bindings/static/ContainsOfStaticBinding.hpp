@@ -9,6 +9,7 @@
 #include <cds/Utility>
 #include <cds/meta/Base>
 #include <cds/functional/FunctionalInterface>
+#include <initializer_list>
 
 namespace cds {
 namespace impl {
@@ -18,7 +19,7 @@ protected:
   using Value = typename meta::IterableTraits<R>::Value;
 
 public:
-  template <typename F> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyOf(F&& from) const
+  template <typename F = std::initializer_list<Value>> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyOf(F&& from) const
       CDS_ATTR(noexcept(noexcept(contains(meta::lvalue<R>(), meta::value<Value>())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
@@ -29,7 +30,7 @@ public:
     return false;
   }
 
-  template <typename F> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyNotOf(F&& from) const
+  template <typename F = std::initializer_list<Value>> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyNotOf(F&& from) const
       CDS_ATTR(noexcept(noexcept(contains(meta::lvalue<F>(), meta::value<Value>())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(*iterable), e = cds::end(*iterable); i != e; ++i) {
@@ -40,7 +41,7 @@ public:
     return false;
   }
 
-  template <typename F> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAllOf(F&& from) const
+  template <typename F = std::initializer_list<Value>> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAllOf(F&& from) const
       CDS_ATTR(noexcept(noexcept(contains(meta::lvalue<R>(), meta::value<Value>())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
@@ -51,7 +52,7 @@ public:
     return true;
   }
 
-  template <typename F> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsNoneOf(F&& from) const
+  template <typename F = std::initializer_list<Value>> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsNoneOf(F&& from) const
       CDS_ATTR(noexcept(noexcept(contains(meta::lvalue<R>(), meta::value<Value>())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
@@ -69,7 +70,7 @@ protected:
   using Value = typename meta::IterableTraits<R>::Value;
 
 public:
-  template <typename F, typename S> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyOf(F&& from, S&& selector) const
+  template <typename S, typename F = std::initializer_list<meta::ReturnOf<S>>> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyOf(F&& from, S&& selector) const
       CDS_ATTR(noexcept(noexcept(contains(meta::lvalue<R>(), meta::value<Value>())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
@@ -80,8 +81,7 @@ public:
     return false;
   }
 
-  template <typename F, typename = F, typename S, meta::EnableIf<meta::impl::HasContains<F, Value>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyNotOf(F&& from, S&& selector) const
+  template <typename S, typename F = std::initializer_list<meta::ReturnOf<S>>> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyNotOf(F&& from, S&& selector) const
       CDS_ATTR(noexcept(noexcept(contains(meta::lvalue<F>(), meta::value<Value>())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(*iterable), e = cds::end(*iterable); i != e; ++i) {
@@ -92,27 +92,7 @@ public:
     return false;
   }
 
-  template <typename F, typename = F, typename S, meta::EnableIf<meta::Not<meta::impl::HasContains<F, Value>>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyNotOf(F&& from, S&& selector) const
-      CDS_ATTR(noexcept(noexcept(contains(meta::lvalue<F>(), meta::value<Value>())))) -> bool {
-    auto const* iterable = static_cast<R const*>(this);
-    for (auto i = cds::begin(*iterable), e = cds::end(*iterable); i != e; ++i) {
-      bool noMatch = true;
-      for (auto fi = cds::begin(cds::forward<F>(from)), fe = cds::end(cds::forward<F>(from)); fi != fe; ++fi) {
-        if (cds::forward<S>(selector)(*i) == *fi) {
-          noMatch = false;
-          break;
-        }
-      }
-
-      if (noMatch) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  template <typename F, typename S> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAllOf(F&& from, S&& selector) const
+  template <typename S, typename F = std::initializer_list<meta::ReturnOf<S>>> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAllOf(F&& from, S&& selector) const
       CDS_ATTR(noexcept(noexcept(contains(meta::lvalue<R>(), meta::value<Value>())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
@@ -123,7 +103,7 @@ public:
     return true;
   }
 
-  template <typename F, typename S> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsNoneOf(F&& from, S&& selector) const
+  template <typename S, typename F = std::initializer_list<meta::ReturnOf<S>>> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsNoneOf(F&& from, S&& selector) const
       CDS_ATTR(noexcept(noexcept(contains(meta::lvalue<R>(), meta::value<Value>())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {

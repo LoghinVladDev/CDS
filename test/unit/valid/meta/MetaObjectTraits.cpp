@@ -1716,3 +1716,30 @@ TEST(MetaObjectTraits, IsAssignable) {
   static_assert(IsAssignable<B, A const&, B&>::value, "Failed IsAssignable");
   static_assert(IsAssignable<B, C const&, C&>::value, "Failed IsAssignable");
 }
+
+namespace { void fn(); }
+TEST(MetaObjectTraits, IsCallableObject) {
+  struct A{};
+  struct B{bool operator()();};
+  auto lbd = [](){};
+
+  static_assert(!IsCallableObject<int>::value, "Failed IsCallableObject");
+  static_assert(!IsCallableObject<decltype(fn)>::value, "Failed IsCallableObject");
+  static_assert(!IsCallableObject<decltype(&fn)>::value, "Failed IsCallableObject");
+  static_assert(!IsCallableObject<A>::value, "Failed IsCallableObject");
+  static_assert(IsCallableObject<B>::value, "Failed IsCallableObject");
+  static_assert(IsCallableObject<decltype(lbd)>::value, "Failed IsCallableObject");
+}
+
+TEST(MetaObjectTraits, IsCallable) {
+  struct A{};
+  struct B{bool operator()();};
+  auto lbd = [](){};
+
+  static_assert(!IsCallable<int>::value, "Failed IsCallable");
+  static_assert(IsCallable<decltype(fn)>::value, "Failed IsCallable");
+  static_assert(IsCallable<decltype(&fn)>::value, "Failed IsCallable");
+  static_assert(!IsCallable<A>::value, "Failed IsCallable");
+  static_assert(IsCallable<B>::value, "Failed IsCallable");
+  static_assert(IsCallable<decltype(lbd)>::value, "Failed IsCallable");
+}

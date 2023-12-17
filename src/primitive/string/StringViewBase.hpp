@@ -17,24 +17,46 @@
 
 namespace cds {
 class Allocator;
+namespace impl {
 template <
     typename C,
     typename U = impl::StringUtils<C, meta::StringTraits<C>>,
     typename A = Allocator
 > class BaseString {};
 
-namespace impl {
-template <
+template<
     typename C,
     typename U = impl::StringUtils<C, meta::StringTraits<C>>
-> class BaseStringView {
+> class BaseStringView;
+}
+
+namespace meta {
+template <typename C, typename U> struct IterableTraits<cds::impl::BaseStringView<C, U>> {
+  using Value = C;
+};
+}
+
+namespace impl {
+template <typename C, typename U> class BaseStringView :
+    public ContainsOfStaticBinding<BaseStringView<C, U>>,
+    public ContainsSelectedOfStaticBinding<BaseStringView<C, U>> {
 public:
   using Value = C;
   using Address = C const*;
-  using Iterator = ForwardAddressIterator<C const>;
+  using Iterator = iterator::ForwardAddressIterator<C const>;
   using ConstIterator = Iterator;
-  using ReverseIterator = BackwardAddressIterator<C const>;
+  using ReverseIterator = iterator::BackwardAddressIterator<C const>;
   using ConstReverseIterator = ReverseIterator;
+
+  using ContainsOfStaticBinding<BaseStringView>::containsAnyOf;
+  using ContainsOfStaticBinding<BaseStringView>::containsAnyNotOf;
+  using ContainsOfStaticBinding<BaseStringView>::containsAllOf;
+  using ContainsOfStaticBinding<BaseStringView>::containsNoneOf;
+
+  using ContainsSelectedOfStaticBinding<BaseStringView>::containsAnyOf;
+  using ContainsSelectedOfStaticBinding<BaseStringView>::containsAnyNotOf;
+  using ContainsSelectedOfStaticBinding<BaseStringView>::containsAllOf;
+  using ContainsSelectedOfStaticBinding<BaseStringView>::containsNoneOf;
 
   CDS_ATTR(constexpr(11)) BaseStringView() noexcept = default;
   CDS_ATTR(constexpr(11)) BaseStringView(BaseStringView const&) noexcept = default;
@@ -155,7 +177,25 @@ public:
     return {_data + sFrom, sUntil - sFrom};
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(Value character) const noexcept -> bool;
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(Value character) const noexcept -> bool {
+    for (Size idx = 0u; idx < _length; ++idx) {
+      if (_data[idx] == character) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  template <typename S> CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(
+      Value character, S&& selector
+  ) const noexcept -> bool {
+    for (Size idx = 0u; idx < _length; ++idx) {
+      if (cds::forward<S>(selector)(_data[idx]) == character) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   template <typename FC, typename FU> CDS_ATTR(constexpr(14)) friend auto operator==(
       BaseStringView<FC, FU> const& lhs, BaseStringView<FC, FU> const& rhs
