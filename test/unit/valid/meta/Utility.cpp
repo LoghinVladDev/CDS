@@ -224,7 +224,7 @@ TEST(Utility, containsPrefsContains) {
 }
 
 #ifdef DCR_SINCECPP11
-template <typename T, typename V> constexpr auto sum(T&& lhs, V&& rhs) -> decltype(meta::value<T>() + meta::value<V>()) {
+template <typename T, typename V> constexpr auto sum(T&& lhs, V&& rhs) -> decltype(meta::rvalue<T>() + meta::rvalue<V>()) {
   return cds::forward<T>(lhs) + cds::forward<V>(rhs);
 }
 

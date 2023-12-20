@@ -70,72 +70,72 @@ TEST(MetaBase, ConvertIntegral) {
 }
 
 TEST(MetaBase, And) {
-  static_assert(IsSame<And<False>, False>::value, "Failed And");
-  static_assert(IsSame<And<True>, True>::value, "Failed And");
-  static_assert(IsSame<And<False, False>, False>::value, "Failed And");
-  static_assert(IsSame<And<False, True>, False>::value, "Failed And");
-  static_assert(IsSame<And<True, False>, False>::value, "Failed And");
-  static_assert(IsSame<And<True, True>, True>::value, "Failed And");
-  static_assert(IsSame<And<False, False, False>, False>::value, "Failed And");
-  static_assert(IsSame<And<False, False, True>, False>::value, "Failed And");
-  static_assert(IsSame<And<False, True, False>, False>::value, "Failed And");
-  static_assert(IsSame<And<True, False, False>, False>::value, "Failed And");
-  static_assert(IsSame<And<False, True, True>, False>::value, "Failed And");
-  static_assert(IsSame<And<True, False, True>, False>::value, "Failed And");
-  static_assert(IsSame<And<True, True, False>, False>::value, "Failed And");
-  static_assert(IsSame<And<True, True, True>, True>::value, "Failed And");
-  static_assert(IsSame<And<std::false_type>, False>::value, "Failed And");
-  static_assert(IsSame<And<std::true_type>, True>::value, "Failed And");
-  static_assert(IsSame<And<std::false_type, False>, False>::value, "Failed And");
-  static_assert(IsSame<And<std::false_type, True>, False>::value, "Failed And");
-  static_assert(IsSame<And<std::true_type, False>, False>::value, "Failed And");
-  static_assert(IsSame<And<std::true_type, True>, True>::value, "Failed And");
-  static_assert(IsSame<And<std::false_type, False, False>, False>::value, "Failed And");
-  static_assert(IsSame<And<std::false_type, False, True>, False>::value, "Failed And");
-  static_assert(IsSame<And<std::false_type, True, False>, False>::value, "Failed And");
-  static_assert(IsSame<And<std::true_type, False, False>, False>::value, "Failed And");
-  static_assert(IsSame<And<std::false_type, True, True>, False>::value, "Failed And");
-  static_assert(IsSame<And<std::true_type, False, True>, False>::value, "Failed And");
-  static_assert(IsSame<And<std::true_type, True, False>, False>::value, "Failed And");
-  static_assert(IsSame<And<std::true_type, True, True>, True>::value, "Failed And");
+  static_assert(Eq<And<False>, False>::value, "Failed And");
+  static_assert(Eq<And<True>, True>::value, "Failed And");
+  static_assert(Eq<And<False, False>, False>::value, "Failed And");
+  static_assert(Eq<And<False, True>, False>::value, "Failed And");
+  static_assert(Eq<And<True, False>, False>::value, "Failed And");
+  static_assert(Eq<And<True, True>, True>::value, "Failed And");
+  static_assert(Eq<And<False, False, False>, False>::value, "Failed And");
+  static_assert(Eq<And<False, False, True>, False>::value, "Failed And");
+  static_assert(Eq<And<False, True, False>, False>::value, "Failed And");
+  static_assert(Eq<And<True, False, False>, False>::value, "Failed And");
+  static_assert(Eq<And<False, True, True>, False>::value, "Failed And");
+  static_assert(Eq<And<True, False, True>, False>::value, "Failed And");
+  static_assert(Eq<And<True, True, False>, False>::value, "Failed And");
+  static_assert(Eq<And<True, True, True>, True>::value, "Failed And");
+  static_assert(Eq<And<std::false_type>, False>::value, "Failed And");
+  static_assert(Eq<And<std::true_type>, True>::value, "Failed And");
+  static_assert(Eq<And<std::false_type, False>, False>::value, "Failed And");
+  static_assert(Eq<And<std::false_type, True>, False>::value, "Failed And");
+  static_assert(Eq<And<std::true_type, False>, False>::value, "Failed And");
+  static_assert(Eq<And<std::true_type, True>, True>::value, "Failed And");
+  static_assert(Eq<And<std::false_type, False, False>, False>::value, "Failed And");
+  static_assert(Eq<And<std::false_type, False, True>, False>::value, "Failed And");
+  static_assert(Eq<And<std::false_type, True, False>, False>::value, "Failed And");
+  static_assert(Eq<And<std::true_type, False, False>, False>::value, "Failed And");
+  static_assert(Eq<And<std::false_type, True, True>, False>::value, "Failed And");
+  static_assert(Eq<And<std::true_type, False, True>, False>::value, "Failed And");
+  static_assert(Eq<And<std::true_type, True, False>, False>::value, "Failed And");
+  static_assert(Eq<And<std::true_type, True, True>, True>::value, "Failed And");
 }
 
 TEST(MetaBase, Or) {
-  static_assert(IsSame<Or<False>, False>::value, "Failed And");
-  static_assert(IsSame<Or<True>, True>::value, "Failed And");
-  static_assert(IsSame<Or<False, False>, False>::value, "Failed And");
-  static_assert(IsSame<Or<False, True>, True>::value, "Failed And");
-  static_assert(IsSame<Or<True, False>, True>::value, "Failed And");
-  static_assert(IsSame<Or<True, True>, True>::value, "Failed And");
-  static_assert(IsSame<Or<False, False, False>, False>::value, "Failed And");
-  static_assert(IsSame<Or<False, False, True>, True>::value, "Failed And");
-  static_assert(IsSame<Or<False, True, False>, True>::value, "Failed And");
-  static_assert(IsSame<Or<True, False, False>, True>::value, "Failed And");
-  static_assert(IsSame<Or<False, True, True>, True>::value, "Failed And");
-  static_assert(IsSame<Or<True, False, True>, True>::value, "Failed And");
-  static_assert(IsSame<Or<True, True, False>, True>::value, "Failed And");
-  static_assert(IsSame<Or<True, True, True>, True>::value, "Failed And");
-  static_assert(IsSame<Or<std::false_type>, False>::value, "Failed And");
-  static_assert(IsSame<Or<std::true_type>, True>::value, "Failed And");
-  static_assert(IsSame<Or<std::false_type, False>, False>::value, "Failed And");
-  static_assert(IsSame<Or<std::false_type, True>, True>::value, "Failed And");
-  static_assert(IsSame<Or<std::true_type, False>, True>::value, "Failed And");
-  static_assert(IsSame<Or<std::true_type, True>, True>::value, "Failed And");
-  static_assert(IsSame<Or<std::false_type, False, False>, False>::value, "Failed And");
-  static_assert(IsSame<Or<std::false_type, False, True>, True>::value, "Failed And");
-  static_assert(IsSame<Or<std::false_type, True, False>, True>::value, "Failed And");
-  static_assert(IsSame<Or<std::true_type, False, False>, True>::value, "Failed And");
-  static_assert(IsSame<Or<std::false_type, True, True>, True>::value, "Failed And");
-  static_assert(IsSame<Or<std::true_type, False, True>, True>::value, "Failed And");
-  static_assert(IsSame<Or<std::true_type, True, False>, True>::value, "Failed And");
-  static_assert(IsSame<Or<std::true_type, True, True>, True>::value, "Failed And");
+  static_assert(Eq<Or<False>, False>::value, "Failed And");
+  static_assert(Eq<Or<True>, True>::value, "Failed And");
+  static_assert(Eq<Or<False, False>, False>::value, "Failed And");
+  static_assert(Eq<Or<False, True>, True>::value, "Failed And");
+  static_assert(Eq<Or<True, False>, True>::value, "Failed And");
+  static_assert(Eq<Or<True, True>, True>::value, "Failed And");
+  static_assert(Eq<Or<False, False, False>, False>::value, "Failed And");
+  static_assert(Eq<Or<False, False, True>, True>::value, "Failed And");
+  static_assert(Eq<Or<False, True, False>, True>::value, "Failed And");
+  static_assert(Eq<Or<True, False, False>, True>::value, "Failed And");
+  static_assert(Eq<Or<False, True, True>, True>::value, "Failed And");
+  static_assert(Eq<Or<True, False, True>, True>::value, "Failed And");
+  static_assert(Eq<Or<True, True, False>, True>::value, "Failed And");
+  static_assert(Eq<Or<True, True, True>, True>::value, "Failed And");
+  static_assert(Eq<Or<std::false_type>, False>::value, "Failed And");
+  static_assert(Eq<Or<std::true_type>, True>::value, "Failed And");
+  static_assert(Eq<Or<std::false_type, False>, False>::value, "Failed And");
+  static_assert(Eq<Or<std::false_type, True>, True>::value, "Failed And");
+  static_assert(Eq<Or<std::true_type, False>, True>::value, "Failed And");
+  static_assert(Eq<Or<std::true_type, True>, True>::value, "Failed And");
+  static_assert(Eq<Or<std::false_type, False, False>, False>::value, "Failed And");
+  static_assert(Eq<Or<std::false_type, False, True>, True>::value, "Failed And");
+  static_assert(Eq<Or<std::false_type, True, False>, True>::value, "Failed And");
+  static_assert(Eq<Or<std::true_type, False, False>, True>::value, "Failed And");
+  static_assert(Eq<Or<std::false_type, True, True>, True>::value, "Failed And");
+  static_assert(Eq<Or<std::true_type, False, True>, True>::value, "Failed And");
+  static_assert(Eq<Or<std::true_type, True, False>, True>::value, "Failed And");
+  static_assert(Eq<Or<std::true_type, True, True>, True>::value, "Failed And");
 }
 
 TEST(MetaBase, Not) {
-  static_assert(IsSame<Not<False>, True>::value, "Failed Not");
-  static_assert(IsSame<Not<True>, False>::value, "Failed Not");
-  static_assert(IsSame<Not<std::false_type>, True>::value, "Failed Not");
-  static_assert(IsSame<Not<std::true_type>, False>::value, "Failed Not");
+  static_assert(Eq<Not<False>, True>::value, "Failed Not");
+  static_assert(Eq<Not<True>, False>::value, "Failed Not");
+  static_assert(Eq<Not<std::false_type>, True>::value, "Failed Not");
+  static_assert(Eq<Not<std::true_type>, False>::value, "Failed Not");
 }
 
 TEST(MetaBase, Eq) {

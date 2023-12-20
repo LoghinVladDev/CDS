@@ -226,7 +226,7 @@ struct CurrentCompiler {
 #else
 #define CDS_ATTR_mingw64 false
 #endif
-}
+} // namespace compiler
 } // namespace cds
 
 #endif // CDS_META_COMPILER_HPP

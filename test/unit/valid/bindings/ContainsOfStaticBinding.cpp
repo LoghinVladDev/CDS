@@ -2,7 +2,7 @@
 // STEPS: compile(linux:gcc;linux:clang),run(linux:gcc;linux:clang)
 // STD: 11-2b
 
-#include "../../../../src/shared/bindings/static/ContainsOfStaticBinding.hpp"
+#include "../../../../src/bindings/static/ContainsOfStaticBinding.hpp"
 #include "UnitTest.hpp"
 #include <vector>
 #include <algorithm>
@@ -20,7 +20,7 @@ template <> struct IterableTraits<A_ContainsContainsSelectedMember> { using Valu
 }
 }
 
-struct A_ContainsMember : public impl::ContainsOfStaticBinding<A_ContainsMember> {
+struct A_ContainsMember : public impl::ContainsOfStaticBinding<A_ContainsMember, impl::With<impl::Value>> {
   bool contains(int a) const { return std::find(data.begin(), data.end(), a) != data.end(); }
   std::vector<int>::const_iterator begin() const { return data.begin(); }
   std::vector<int>::const_iterator end() const { return data.end(); }
@@ -28,7 +28,7 @@ struct A_ContainsMember : public impl::ContainsOfStaticBinding<A_ContainsMember>
   explicit A_ContainsMember(std::initializer_list<int> const& i) : data(i) {}
 };
 
-struct A_ContainsSelectedMember : public impl::ContainsSelectedOfStaticBinding<A_ContainsSelectedMember> {
+struct A_ContainsSelectedMember : public impl::ContainsOfStaticBinding<A_ContainsSelectedMember, impl::With<impl::Selector>> {
   template <typename S> bool contains(int a, S&& s) const {
     for (int v : data) {
       if (a == cds::forward<S>(s)(v)) {
@@ -44,17 +44,7 @@ struct A_ContainsSelectedMember : public impl::ContainsSelectedOfStaticBinding<A
 };
 
 struct A_ContainsContainsSelectedMember :
-    public impl::ContainsOfStaticBinding<A_ContainsContainsSelectedMember>,
-    public impl::ContainsSelectedOfStaticBinding<A_ContainsContainsSelectedMember> {
-  using impl::ContainsOfStaticBinding<A_ContainsContainsSelectedMember>::containsAnyOf;
-  using impl::ContainsOfStaticBinding<A_ContainsContainsSelectedMember>::containsAnyNotOf;
-  using impl::ContainsOfStaticBinding<A_ContainsContainsSelectedMember>::containsNoneOf;
-  using impl::ContainsOfStaticBinding<A_ContainsContainsSelectedMember>::containsAllOf;
-  using impl::ContainsSelectedOfStaticBinding<A_ContainsContainsSelectedMember>::containsAnyOf;
-  using impl::ContainsSelectedOfStaticBinding<A_ContainsContainsSelectedMember>::containsAnyNotOf;
-  using impl::ContainsSelectedOfStaticBinding<A_ContainsContainsSelectedMember>::containsNoneOf;
-  using impl::ContainsSelectedOfStaticBinding<A_ContainsContainsSelectedMember>::containsAllOf;
-
+    public impl::ContainsOfStaticBinding<A_ContainsContainsSelectedMember, impl::With<impl::Value, impl::Selector>> {
   bool contains(int a) const { return std::find(data.begin(), data.end(), a) != data.end(); }
   template <typename S> bool contains(int a, S&& s) const {
     for (int v : data) {
@@ -71,7 +61,7 @@ struct A_ContainsContainsSelectedMember :
   explicit A_ContainsContainsSelectedMember(std::initializer_list<int> const& i) : data(i) {}
 };
 
-TEST(ContainsOfStaticBinding, ContainsAnyOf) {
+TEST(ContainsByValueOfStaticBinding, ContainsAnyOf) {
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAnyOf(A_ContainsMember({1})));
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAnyOf(A_ContainsMember({2})));
   ASSERT_FALSE(A_ContainsMember({1, 2}).containsAnyOf(A_ContainsMember({3})));
@@ -82,7 +72,7 @@ TEST(ContainsOfStaticBinding, ContainsAnyOf) {
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAnyOf(A_ContainsMember({1, 2, 3})));
 }
 
-TEST(ContainsOfStaticBinding, ContainsAnyNotOf) {
+TEST(ContainsByValueOfStaticBinding, ContainsAnyNotOf) {
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAnyNotOf(A_ContainsMember({1})));
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAnyNotOf(A_ContainsMember({2})));
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAnyNotOf(A_ContainsMember({3})));
@@ -93,7 +83,7 @@ TEST(ContainsOfStaticBinding, ContainsAnyNotOf) {
   ASSERT_FALSE(A_ContainsMember({1, 2}).containsAnyNotOf(A_ContainsMember({4, 1, 2})));
 }
 
-TEST(ContainsOfStaticBinding, ContainsAllOf) {
+TEST(ContainsByValueOfStaticBinding, ContainsAllOf) {
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAllOf(A_ContainsMember({1})));
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAllOf(A_ContainsMember({2})));
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAllOf(A_ContainsMember({1, 2})));
@@ -106,7 +96,7 @@ TEST(ContainsOfStaticBinding, ContainsAllOf) {
   ASSERT_FALSE(A_ContainsMember({1, 2}).containsAllOf(A_ContainsMember({3})));
 }
 
-TEST(ContainsOfStaticBinding, ContainsNoneOf) {
+TEST(ContainsByValueOfStaticBinding, ContainsNoneOf) {
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsNoneOf(A_ContainsMember({})));
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsNoneOf(A_ContainsMember({3})));
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsNoneOf(A_ContainsMember({3, 4})));
@@ -170,7 +160,7 @@ TEST(ContainsSelectedStaticBinding, ContainsNoneOf) {
   ASSERT_FALSE(A_ContainsSelectedMember({1, 2}).containsNoneOf(A_ContainsSelectedMember({4}), doubled));
 }
 
-TEST(ContainsOfStaticBinding, BothContainsAnyOf) {
+TEST(ContainsByValueOfStaticBinding, BothContainsAnyOf) {
   ASSERT_TRUE(A_ContainsContainsSelectedMember({1, 2}).containsAnyOf(A_ContainsContainsSelectedMember({1})));
   ASSERT_TRUE(A_ContainsContainsSelectedMember({1, 2}).containsAnyOf(A_ContainsContainsSelectedMember({2})));
   ASSERT_FALSE(A_ContainsContainsSelectedMember({1, 2}).containsAnyOf(A_ContainsContainsSelectedMember({3})));
@@ -181,7 +171,7 @@ TEST(ContainsOfStaticBinding, BothContainsAnyOf) {
   ASSERT_TRUE(A_ContainsContainsSelectedMember({1, 2}).containsAnyOf(A_ContainsContainsSelectedMember({1, 2, 3})));
 }
 
-TEST(ContainsOfStaticBinding, BothContainsAnyNotOf) {
+TEST(ContainsByValueOfStaticBinding, BothContainsAnyNotOf) {
   ASSERT_TRUE(A_ContainsContainsSelectedMember({1, 2}).containsAnyNotOf(A_ContainsContainsSelectedMember({1})));
   ASSERT_TRUE(A_ContainsContainsSelectedMember({1, 2}).containsAnyNotOf(A_ContainsContainsSelectedMember({2})));
   ASSERT_TRUE(A_ContainsContainsSelectedMember({1, 2}).containsAnyNotOf(A_ContainsContainsSelectedMember({3})));
@@ -192,7 +182,7 @@ TEST(ContainsOfStaticBinding, BothContainsAnyNotOf) {
   ASSERT_FALSE(A_ContainsContainsSelectedMember({1, 2}).containsAnyNotOf(A_ContainsContainsSelectedMember({4, 1, 2})));
 }
 
-TEST(ContainsOfStaticBinding, BothContainsAllOf) {
+TEST(ContainsByValueOfStaticBinding, BothContainsAllOf) {
   ASSERT_TRUE(A_ContainsContainsSelectedMember({1, 2}).containsAllOf(A_ContainsContainsSelectedMember({1})));
   ASSERT_TRUE(A_ContainsContainsSelectedMember({1, 2}).containsAllOf(A_ContainsContainsSelectedMember({2})));
   ASSERT_TRUE(A_ContainsContainsSelectedMember({1, 2}).containsAllOf(A_ContainsContainsSelectedMember({1, 2})));
@@ -205,7 +195,7 @@ TEST(ContainsOfStaticBinding, BothContainsAllOf) {
   ASSERT_FALSE(A_ContainsContainsSelectedMember({1, 2}).containsAllOf(A_ContainsContainsSelectedMember({3})));
 }
 
-TEST(ContainsOfStaticBinding, BothContainsNoneOf) {
+TEST(ContainsByValueOfStaticBinding, BothContainsNoneOf) {
   ASSERT_TRUE(A_ContainsContainsSelectedMember({1, 2}).containsNoneOf(A_ContainsContainsSelectedMember({})));
   ASSERT_TRUE(A_ContainsContainsSelectedMember({1, 2}).containsNoneOf(A_ContainsContainsSelectedMember({3})));
   ASSERT_TRUE(A_ContainsContainsSelectedMember({1, 2}).containsNoneOf(A_ContainsContainsSelectedMember({3, 4})));
@@ -268,7 +258,7 @@ TEST(ContainsSelectedStaticBinding, BothContainsNoneOf) {
   ASSERT_FALSE(A_ContainsContainsSelectedMember({1, 2}).containsNoneOf(A_ContainsContainsSelectedMember({4}), doubled));
 }
 
-TEST(ContainsOfStaticBinding, initList) {
+TEST(ContainsByValueOfStaticBinding, initList) {
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAnyOf({1}));
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAnyNotOf({1}));
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAllOf({1}));
@@ -296,16 +286,7 @@ template <> struct IterableTraits<B> { using Value = int; };
 } // namespace meta
 } // namespace cds
 
-struct B : public impl::ContainsOfStaticBinding<B>, public impl::ContainsSelectedOfStaticBinding<B> {
-  using impl::ContainsOfStaticBinding<B>::containsAnyOf;
-  using impl::ContainsOfStaticBinding<B>::containsAnyNotOf;
-  using impl::ContainsOfStaticBinding<B>::containsNoneOf;
-  using impl::ContainsOfStaticBinding<B>::containsAllOf;
-  using impl::ContainsSelectedOfStaticBinding<B>::containsAnyOf;
-  using impl::ContainsSelectedOfStaticBinding<B>::containsAnyNotOf;
-  using impl::ContainsSelectedOfStaticBinding<B>::containsNoneOf;
-  using impl::ContainsSelectedOfStaticBinding<B>::containsAllOf;
-
+struct B : public impl::ContainsOfStaticBinding<B, impl::With<impl::Value, impl::Selector>> {
   constexpr bool contains(int x) const { return x == 1 || x == 2; }
   constexpr int const* begin() const { return data; }
   constexpr int const* end() const { return data + 2; }
@@ -313,7 +294,7 @@ struct B : public impl::ContainsOfStaticBinding<B>, public impl::ContainsSelecte
 };
 
 constexpr int cdoubled(int x) { return x * 2; }
-TEST(ContainsOfStaticBinding, cpp14Constexpr) {
+TEST(ContainsByValueOfStaticBinding, cpp14Constexpr) {
   static_assert(B().containsAnyOf(B()), "failed compile time ContainsOf");
   static_assert(!B().containsAnyNotOf(B()), "failed compile time ContainsOf");
   static_assert(!B().containsNoneOf(B()), "failed compile time ContainsOf");

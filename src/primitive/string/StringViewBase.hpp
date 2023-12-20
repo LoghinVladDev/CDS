@@ -11,7 +11,9 @@
 #include <cds/iterator/AddressIterator>
 #include <cds/functional/FunctionalInterface>
 
-#include "../../shared/bindings/static/ContainsOfStaticBinding.hpp"
+#include "../../bindings/BindingSelectors.hpp"
+#include "../../bindings/static/ContainsOfStaticBinding.hpp"
+#include "../../bindings/static/FindOfStaticBinding.hpp"
 
 #include "StringUtils.hpp"
 
@@ -33,30 +35,29 @@ template<
 namespace meta {
 template <typename C, typename U> struct IterableTraits<cds::impl::BaseStringView<C, U>> {
   using Value = C;
-};
-}
-
-namespace impl {
-template <typename C, typename U> class BaseStringView :
-    public ContainsOfStaticBinding<BaseStringView<C, U>>,
-    public ContainsSelectedOfStaticBinding<BaseStringView<C, U>> {
-public:
-  using Value = C;
-  using Address = C const*;
   using Iterator = iterator::ForwardAddressIterator<C const>;
   using ConstIterator = Iterator;
   using ReverseIterator = iterator::BackwardAddressIterator<C const>;
   using ConstReverseIterator = ReverseIterator;
+};
+}
 
-  using ContainsOfStaticBinding<BaseStringView>::containsAnyOf;
-  using ContainsOfStaticBinding<BaseStringView>::containsAnyNotOf;
-  using ContainsOfStaticBinding<BaseStringView>::containsAllOf;
-  using ContainsOfStaticBinding<BaseStringView>::containsNoneOf;
+namespace impl {
+template <typename C, typename U> class CDS_ATTR(inheritsEBOs) BaseStringView :
+    public meta::IterableTraits<BaseStringView<C, U>>,
+    public ContainsOfStaticBinding<BaseStringView<C, U>, With<Value, Selector>>,
+    public FindOfStaticBinding<BaseStringView<C, U>, With<Value, Selector, Forward, Backward, Immutable>> {
+public:
+  using ITraits = meta::IterableTraits<BaseStringView<C, U>>;
+  using typename ITraits::Value;
+  using typename ITraits::Iterator;
+  using typename ITraits::ConstIterator;
+  using typename ITraits::ReverseIterator;
+  using typename ITraits::ConstReverseIterator;
+  using Address = C const*;
 
-  using ContainsSelectedOfStaticBinding<BaseStringView>::containsAnyOf;
-  using ContainsSelectedOfStaticBinding<BaseStringView>::containsAnyNotOf;
-  using ContainsSelectedOfStaticBinding<BaseStringView>::containsAllOf;
-  using ContainsSelectedOfStaticBinding<BaseStringView>::containsNoneOf;
+  static Idx const npos;
+  static Idx const invalidIndex;
 
   CDS_ATTR(constexpr(11)) BaseStringView() noexcept = default;
   CDS_ATTR(constexpr(11)) BaseStringView(BaseStringView const&) noexcept = default;
@@ -177,24 +178,54 @@ public:
     return {_data + sFrom, sUntil - sFrom};
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(Value character) const noexcept -> bool {
-    for (Size idx = 0u; idx < _length; ++idx) {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(Value character) const noexcept -> Idx {
+    for (Idx idx = 0u; idx < _length; ++idx) {
       if (_data[idx] == character) {
-        return true;
+        return idx;
       }
     }
-    return false;
+    return npos;
+  }
+
+  template <typename S> CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
+      Value character, S&& selector
+  ) const noexcept -> Idx {
+    for (Idx idx = 0u; idx < _length; ++idx) {
+      if (cds::forward<S>(selector)(_data[idx]) == character) {
+        return idx;
+      }
+    }
+    return npos;
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(Value character) const noexcept -> Idx {
+    for (Idx idx = _length - 1u; idx >= 0; --idx) {
+      if (_data[idx] == character) {
+        return idx;
+      }
+    }
+    return npos;
+  }
+
+  template <typename S> CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
+      Value character, S&& selector
+  ) const noexcept -> Idx {
+    for (Idx idx = _length - 1u; idx >= 0; --idx) {
+      if (cds::forward<S>(selector)(_data[idx]) == character) {
+        return idx;
+      }
+    }
+    return npos;
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(Value character) const noexcept -> bool {
+    return findFirst(character) != npos;
   }
 
   template <typename S> CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(
       Value character, S&& selector
   ) const noexcept -> bool {
-    for (Size idx = 0u; idx < _length; ++idx) {
-      if (cds::forward<S>(selector)(_data[idx]) == character) {
-        return true;
-      }
-    }
-    return false;
+    return findFirst(character, cds::forward<S>(selector)) != npos;
   }
 
   template <typename FC, typename FU> CDS_ATTR(constexpr(14)) friend auto operator==(
@@ -234,6 +265,9 @@ private:
   Address _data {nullptr};
   Size _length {0u};
 };
+
+template <typename C, typename U> Idx const BaseStringView<C, U>::npos = -1;
+template <typename C, typename U> Idx const BaseStringView<C, U>::invalidIndex = BaseStringView<C, U>::npos;
 
 template <typename C, typename U>
 template <typename AddressLike, meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<AddressLike>, BaseStringView<C, U>>>>>
@@ -417,6 +451,22 @@ template <typename C, typename U, typename T, meta::EnableIf<meta::And<
   return BaseStringView<C, U>(cds::forward<T>(lhs)) <=> rhs;
 }
 #endif
+
+template <typename C, typename U> struct FindOfResultMappingTraits<BaseStringView<C, U>> {
+  template <typename T, meta::EnableIf<meta::impl::IsIterator<T>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(11))) static auto adapt(BaseStringView<C, U> const& string, T&& iterator) -> Idx {
+    return end(string) == cds::forward<T>(iterator)
+        ? BaseStringView<C, U>::npos
+        : (cds::forward<T>(iterator) - begin(string));
+  }
+
+  template <typename T, meta::EnableIf<meta::impl::IsReverseIterator<T>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(11))) static auto adapt(BaseStringView<C, U> const& string, T&& iterator) -> Idx {
+    return rend(string) == cds::forward<T>(iterator)
+        ? BaseStringView<C, U>::npos
+        : (string.length() - (cds::forward<T>(iterator) - rbegin(string) + 1));
+  }
+};
 } // namespace impl
 } // namespace cds
 

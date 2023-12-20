@@ -15,11 +15,9 @@ if(NOT DEFINED CDS_STANDARD)
 endif()
 set(CMAKE_CXX_STANDARD ${CDS_STANDARD})
 
-if(NOT DEFINED CDS_SANITIZERS)
-  set(CDS_SANITIZERS "-fsanitize=address -fsanitize=undefined")
-  message("--   CDS_SANITIZERS not explicitly provided, defaulted to ${CDS_SANITIZERS}")
+if (DEFINED CDS_SANITIZERS)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CDS_SANITIZERS}")
 endif()
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CDS_SANITIZERS}")
 
 if(NOT DEFINED CDS_COVERAGE)
   message("--   CDS_COVERAGE not explicitly provided, no coverage provided")

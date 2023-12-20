@@ -372,6 +372,14 @@ TEST(StringView, containsOf) {
   ASSERT_TRUE(sv.containsNoneOf(std::string("ad"), meta::StringTraits<char>::upper));
 }
 
+TEST(StringView, find) {
+  StringView sv = "abcd";
+  ASSERT_EQ(sv.findFirstOf("BC"), StringView::npos);
+  ASSERT_EQ(sv.findFirstOf("bc"), 1);
+  ASSERT_EQ(sv.findLastOf("bc"), 2);
+  ASSERT_EQ(sv.findLastOf("BC"), StringView::npos);
+}
+
 #ifdef DCR_SINCECPP20
 TEST(StringView, Spaceship) {
   char const a1[] = "abcd";
