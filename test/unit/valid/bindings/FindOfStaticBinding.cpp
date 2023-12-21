@@ -496,9 +496,18 @@ TEST(FindOfStaticBinding, findOf) {
 
 #ifdef DCR_SINCECPP14
 struct B;
+struct B_WithAdapt;
 namespace cds {
 namespace meta {
 template <> struct IterableTraits<B> {
+  using Value = int;
+  using Iterator = iterator::ForwardAddressIterator<int>;
+  using ConstIterator = iterator::ForwardAddressIterator<int const*>;
+  using ReverseIterator = iterator::BackwardAddressIterator<int>;
+  using ConstReverseIterator = iterator::BackwardAddressIterator<int const*>;
+};
+
+template <> struct IterableTraits<B_WithAdapt> {
   using Value = int;
   using Iterator = iterator::ForwardAddressIterator<int>;
   using ConstIterator = iterator::ForwardAddressIterator<int const*>;
@@ -548,6 +557,75 @@ struct B : public FindOfStaticBinding<B, With<Forward, Backward, Value, Selector
   int data[4] = {0, 1, 2, 0}; // padding to allow first and last elem to allow constexpr
 };
 
+namespace cds {
+namespace impl {
+template <> struct FindOfResultMappingTraits<B_WithAdapt> {
+  template <typename T, meta::EnableIf<meta::impl::IsIterator<T>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(11))) static auto adapt(B_WithAdapt const& string, T&& iterator) -> Idx;
+  template <typename T, meta::EnableIf<meta::impl::IsReverseIterator<T>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(11))) static auto adapt(B_WithAdapt const& string, T&& iterator) -> Idx;
+};
+}
+}
+
+struct B_WithAdapt : public FindOfStaticBinding<B_WithAdapt, With<Forward, Backward, Value, Selector, Immutable, Mutable>> {
+  constexpr bool contains(int x) const { return x == 1 || x == 2; }
+  template <typename S> constexpr bool contains(int x, S&& s) {
+    return cds::forward<S>(s)(x) == 2 || cds::forward<S>(s)(x) == 2; }
+
+  constexpr iterator::ForwardAddressIterator<int> begin() {
+    return iterator::ForwardAddressIterator<int>{data + 1};
+  }
+
+  constexpr iterator::ForwardAddressIterator<int> end() {
+    return iterator::ForwardAddressIterator<int>{data + 3};
+  }
+
+  constexpr iterator::ForwardAddressIterator<int const> cbegin() const {
+    return iterator::ForwardAddressIterator<int const>{data + 1};
+  }
+
+  constexpr iterator::ForwardAddressIterator<int const> cend() const {
+    return iterator::ForwardAddressIterator<int const>{data + 3};
+  }
+
+  constexpr iterator::BackwardAddressIterator<int> rbegin() {
+    return iterator::BackwardAddressIterator<int>{data + 2};
+  }
+
+  constexpr iterator::BackwardAddressIterator<int> rend() {
+    return iterator::BackwardAddressIterator<int>{data};
+  }
+
+  constexpr iterator::BackwardAddressIterator<int const> crbegin() const {
+    return iterator::BackwardAddressIterator<int const>{data + 2};
+  }
+
+  constexpr iterator::BackwardAddressIterator<int const> crend() const {
+    return iterator::BackwardAddressIterator<int const>{data};
+  }
+
+  int data[4] = {0, 1, 2, 0}; // padding to allow first and last elem to allow constexpr
+};
+
+namespace cds {
+namespace impl {
+template <typename T, meta::EnableIf<meta::impl::IsIterator<T>>>
+CDS_ATTR(constexpr(11)) auto FindOfResultMappingTraits<B_WithAdapt>::adapt(B_WithAdapt const& string, T&& iterator) -> Idx {
+  return cend(string) == cds::forward<T>(iterator)
+      ? -1
+      : (cds::forward<T>(iterator) - cbegin(string));
+}
+
+template <typename T, meta::EnableIf<meta::impl::IsReverseIterator<T>>>
+CDS_ATTR(constexpr(11)) auto FindOfResultMappingTraits<B_WithAdapt>::adapt(B_WithAdapt const& string, T&& iterator) -> Idx {
+  return crend(string) == cds::forward<T>(iterator)
+      ? -1
+      : (2 - (cds::forward<T>(iterator) - crbegin(string) + 1));
+}
+}
+}
+
 constexpr int cdoubled(int x) { return x * 2; }
 constexpr bool evaluationCtx() {
   B obj;
@@ -569,6 +647,9 @@ constexpr bool evaluationCtx() {
 }
 
 TEST(FindOfStaticBinding, cpp14Constexpr) {
+  B_WithAdapt x;
   static_assert(evaluationCtx(), "Failed to evaluate constexpr");
+  static_assert(B_WithAdapt().findFirstOf(B_WithAdapt()) == 0, "Failed to evaluate constexpr");
+  static_assert(B_WithAdapt().findLastOf(B_WithAdapt()) == 1, "Failed to evaluate constexpr");
 }
 #endif

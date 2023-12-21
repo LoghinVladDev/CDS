@@ -8,26 +8,27 @@
 
 namespace cds {
 namespace impl {
+using meta::EnableIf;
+using meta::Not;
+using meta::IsBoundedArray;
+using meta::RemoveCVRef;
+
 template <typename C, typename Traits> class StringUtils {
 public:
   enum class Ordering { Less, Equal, Greater };
 
-  template <typename T, meta::EnableIf<meta::Not<meta::IsBoundedArray<meta::RemoveCVRef<T>>>> = 0>
+  template <typename T, EnableIf<Not<IsBoundedArray<RemoveCVRef<T>>>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(14))) static auto length(T&& l) noexcept -> Size {
     return ptrLength(cds::forward<T>(l));
   }
 
-  template <typename T, meta::EnableIf<meta::IsBoundedArray<meta::RemoveCVRef<T>>> = 0>
+  template <typename T, EnableIf<IsBoundedArray<RemoveCVRef<T>>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(11))) static auto length(T&& l) noexcept -> Size {
     return refLength(cds::forward<T>(l));
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) static auto compare(
-      C const* lhs,
-      Size lhsLen,
-      C const* rhs,
-      Size rhsLen
-  ) noexcept -> Ordering {
+  CDS_ATTR(2(nodiscard, constexpr(14)))
+  static auto compare(C const* lhs, Size lhsLen, C const* rhs, Size rhsLen) noexcept -> Ordering {
     if (lhsLen == 0u && rhsLen == 0u || !lhs && !rhs) { return Ordering::Equal; }
     if (!lhs) { return Ordering::Less; }
     if (!rhs) { return Ordering::Greater; }

@@ -28,7 +28,8 @@ public:
   CDS_ATTR(2(nodiscard, constexpr(20))) virtual auto equals(Object const&) const CDS_ATTR(noexcept(false)) -> bool;
   CDS_ATTR(2(nodiscard, constexpr(20))) virtual auto hash() const noexcept -> Size;
 
-  template <typename OStreamType> friend auto operator<<(OStreamType&& out, Object const& object) CDS_ATTR(noexcept(false)) -> OStreamType&;
+  template <typename OStreamType> friend auto operator<<(OStreamType&& out, Object const& object)
+      CDS_ATTR(noexcept(false)) -> OStreamType&;
 };
 } // namespace poly
 } // namespace cds

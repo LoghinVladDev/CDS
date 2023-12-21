@@ -9,6 +9,7 @@
 
 namespace cds {
 namespace impl {
+namespace sel {
 struct Value {};
 struct Selector {};
 struct Forward {};
@@ -16,10 +17,8 @@ struct Backward {};
 struct Immutable {};
 struct Mutable {};
 
-template <typename...> struct Overloading {};
 template <typename...> struct With {};
 
-namespace sel {
 template <typename S, typename M> struct Matches : ::cds::meta::IsSame<S, M> {};
 
 template <template <typename...> class S, typename M> struct TMatches : ::cds::meta::False {};

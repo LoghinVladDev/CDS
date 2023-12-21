@@ -16,6 +16,15 @@
 namespace cds {
 namespace iterator {
 namespace impl {
+using cds::meta::EnableIf;
+using cds::meta::IsBaseOf;
+using cds::meta::And;
+using cds::meta::IsIntegral;
+
+#if CDS_ATTR(spaceship)
+using std::strong_ordering;
+#endif
+
 template<typename T, bool fwd> class AddressIteratorBase {
 public:
   using Value = T;
@@ -71,42 +80,32 @@ public:
 #if CDS_ATTR(spaceship)
   template <typename Lhs, typename Rhs> CDS_ATTR(always_constexpr) friend auto operator<=>(
       AddressIteratorBase<Lhs, fwd> const& lhs, AddressIteratorBase<Rhs, fwd> const& rhs
-  ) noexcept -> std::strong_ordering;
+  ) noexcept -> strong_ordering;
 #endif
 
   template <typename Lhs, typename Rhs, bool fFwd> CDS_ATTR(constexpr(11)) friend auto operator-(
       AddressIteratorBase<Lhs, fFwd> const& lhs, AddressIteratorBase<Rhs, fFwd> const& rhs
   ) noexcept -> Size;
 
-  template <
-      typename I, typename ::cds::meta::EnableIf<::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>>
-  > CDS_ATTR(constexpr(14)) friend auto operator++(I& iterator) noexcept -> I&;
+  template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>>>
+  CDS_ATTR(constexpr(14)) friend auto operator++(I& iterator) noexcept -> I&;
+
+  template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>>>
+  CDS_ATTR(constexpr(14)) friend auto operator--(I& iterator) noexcept -> I&;
+
+  template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>>>
+  CDS_ATTR(constexpr(14)) friend auto operator++(I& iterator, int _) noexcept -> I;
+
+  template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>>>
+  CDS_ATTR(constexpr(14)) friend auto operator--(I& iterator, int _) noexcept -> I;
 
   template <
-      typename I, typename ::cds::meta::EnableIf<::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>>
-  > CDS_ATTR(constexpr(14)) friend auto operator--(I& iterator) noexcept -> I&;
+      typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>, IsIntegral<N>>>
+  > CDS_ATTR(constexpr(11)) friend auto operator+(I const& lhs, N rhs) noexcept -> I;
 
   template <
-      typename I, typename ::cds::meta::EnableIf<::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>>
-  > CDS_ATTR(constexpr(14)) friend auto operator++(I& iterator, int _) noexcept -> I;
-
-  template <
-      typename I, typename ::cds::meta::EnableIf<::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>>
-  > CDS_ATTR(constexpr(14)) friend auto operator--(I& iterator, int _) noexcept -> I;
-
-  template <typename I, typename N, typename ::cds::meta::EnableIf<meta::And<
-      ::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>,
-      ::cds::meta::IsIntegral<N>
-  >>> CDS_ATTR(constexpr(11)) friend auto operator+(
-      I const& lhs, N rhs
-  ) noexcept -> I;
-
-  template <typename I, typename N, typename ::cds::meta::EnableIf<meta::And<
-      ::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>,
-      ::cds::meta::IsIntegral<N>
-  >>> CDS_ATTR(constexpr(11)) friend auto operator-(
-      I const& lhs, N rhs
-  ) noexcept -> I;
+      typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>, IsIntegral<N>>>
+  > CDS_ATTR(constexpr(11)) friend auto operator-(I const& lhs, N rhs) noexcept -> I;
 
 private:
   Address _addr{nullptr};
@@ -181,16 +180,16 @@ template <typename Lhs, typename Rhs> CDS_ATTR(2(nodiscard, always_constexpr)) a
 
 template <typename Lhs, typename Rhs> CDS_ATTR(2(nodiscard, always_constexpr)) auto operator<=>(
     AddressIteratorBase<Lhs, false> const& lhs, AddressIteratorBase<Rhs, false> const& rhs
-) noexcept -> std::strong_ordering {
+) noexcept -> strong_ordering {
   if (lhs._addr < rhs._addr) {
-    return std::strong_ordering::greater;
+    return strong_ordering::greater;
   }
 
   if (lhs._addr > rhs._addr) {
-    return std::strong_ordering::less;
+    return strong_ordering::less;
   }
 
-  return std::strong_ordering::equal;
+  return strong_ordering::equal;
 }
 #endif
 
@@ -202,107 +201,79 @@ template <typename Lhs, typename Rhs, bool fwd> CDS_ATTR(2(nodiscard, constexpr(
       : rhs._addr - lhs._addr;
 }
 
-template <
-    typename I,
-    typename ::cds::meta::EnableIf<::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>> = 0
-> CDS_ATTR(constexpr(14)) auto operator++(I& iterator) noexcept -> I& {
+template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>> = 0>
+CDS_ATTR(constexpr(14)) auto operator++(I& iterator) noexcept -> I& {
   ++(static_cast<AddressIteratorBase<typename I::Value, true>&>(iterator)._addr);
   return iterator;
 }
 
-template <
-    typename I,
-    typename ::cds::meta::EnableIf<::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>> = 0
-> CDS_ATTR(constexpr(14)) auto operator++(I& iterator) noexcept -> I& {
+template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>> = 0>
+CDS_ATTR(constexpr(14)) auto operator++(I& iterator) noexcept -> I& {
   --static_cast<AddressIteratorBase<typename I::Value, false>&>(iterator)._addr;
   return iterator;
 }
 
-template <
-    typename I,
-    typename ::cds::meta::EnableIf<::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>> = 0
-> CDS_ATTR(constexpr(14)) auto operator--(I& iterator) noexcept -> I& {
+template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>> = 0>
+CDS_ATTR(constexpr(14)) auto operator--(I& iterator) noexcept -> I& {
   --static_cast<AddressIteratorBase<typename I::Value, true>&>(iterator)._addr;
   return iterator;
 }
 
-template <
-    typename I,
-    typename ::cds::meta::EnableIf<::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>> = 0
-> CDS_ATTR(constexpr(14)) auto operator--(I& iterator) noexcept -> I& {
+template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>> = 0>
+CDS_ATTR(constexpr(14)) auto operator--(I& iterator) noexcept -> I& {
   ++static_cast<AddressIteratorBase<typename I::Value, false>&>(iterator)._addr;
   return iterator;
 }
 
-template <
-    typename I,
-    typename ::cds::meta::EnableIf<::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>> = 0
-> CDS_ATTR(constexpr(14)) auto operator++(I& iterator, int) noexcept -> I {
+template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>> = 0>
+CDS_ATTR(constexpr(14)) auto operator++(I& iterator, int) noexcept -> I {
   I const copy = iterator;
   static_cast<AddressIteratorBase<typename I::Value, true>&>(iterator)._addr++;
   return copy;
 }
 
-template <
-    typename I,
-    typename ::cds::meta::EnableIf<::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>> = 0
-> CDS_ATTR(constexpr(14)) auto operator++(I& iterator, int) noexcept -> I {
+template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>> = 0>
+CDS_ATTR(constexpr(14)) auto operator++(I& iterator, int) noexcept -> I {
   I const copy = iterator;
   static_cast<AddressIteratorBase<typename I::Value, false>&>(iterator)._addr--;
   return copy;
 }
 
-template <
-    typename I,
-    typename ::cds::meta::EnableIf<::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>> = 0
-> CDS_ATTR(constexpr(14)) auto operator--(I& iterator, int) noexcept -> I {
+template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>> = 0>
+CDS_ATTR(constexpr(14)) auto operator--(I& iterator, int) noexcept -> I {
   I const copy = iterator;
   static_cast<AddressIteratorBase<typename I::Value, true>&>(iterator)._addr--;
   return copy;
 }
 
-template <
-    typename I,
-    typename ::cds::meta::EnableIf<::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>> = 0
-> CDS_ATTR(constexpr(14)) auto operator--(I& iterator, int) noexcept -> I {
+template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>> = 0>
+CDS_ATTR(constexpr(14)) auto operator--(I& iterator, int) noexcept -> I {
   I const copy = iterator;
   static_cast<AddressIteratorBase<typename I::Value, false>&>(iterator)._addr++;
   return copy;
 }
 
-template <typename I, typename N, typename ::cds::meta::EnableIf<::cds::meta::And<
-    ::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>,
-    ::cds::meta::IsIntegral<N>
->> = 0> CDS_ATTR(constexpr(11)) auto operator+(
-    I const& lhs, N rhs
-) noexcept -> I {
+template <
+    typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>, IsIntegral<N>>> = 0
+> CDS_ATTR(constexpr(11)) auto operator+(I const& lhs, N rhs) noexcept -> I {
   return I(static_cast<AddressIteratorBase<typename I::Value, true> const&>(lhs)._addr + rhs);
 }
 
-template <typename I, typename N, typename ::cds::meta::EnableIf<::cds::meta::And<
-    ::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>,
-    ::cds::meta::IsIntegral<N>
->> = 0> CDS_ATTR(constexpr(11)) auto operator+(
-    I const& lhs, N rhs
-) noexcept -> I {
+template <
+    typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>, IsIntegral<N>>> = 0
+> CDS_ATTR(constexpr(11)) auto operator+(I const& lhs, N rhs) noexcept -> I {
   return I(static_cast<AddressIteratorBase<typename I::Value, false> const&>(lhs)._addr - rhs);
 }
 
-template <typename I, typename N, typename ::cds::meta::EnableIf<::cds::meta::And<
-    ::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>,
-    ::cds::meta::IsIntegral<N>
->> = 0> CDS_ATTR(constexpr(11)) auto operator-(
-    I const& lhs, N rhs
-) noexcept -> I {
+template <
+    typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>, IsIntegral<N>>> = 0
+> CDS_ATTR(constexpr(11)) auto operator-(I const& lhs, N rhs) noexcept -> I {
   return I(static_cast<AddressIteratorBase<typename I::Value, true> const&>(lhs)._addr - rhs);
 }
 
-template <typename I, typename N, typename ::cds::meta::EnableIf<meta::And<
-    ::cds::meta::IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>,
-    ::cds::meta::IsIntegral<N>
->> = 0> CDS_ATTR(constexpr(11)) auto operator-(
-    I const& lhs, N rhs
-) noexcept -> I {
+template <
+    typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>, IsIntegral<N>>> = 0
+> CDS_ATTR(constexpr(11)) auto operator-(I const& lhs, N rhs) noexcept -> I {
   return I(static_cast<AddressIteratorBase<typename I::Value, false> const&>(lhs)._addr + rhs);
 }
 } // namespace impl
@@ -318,133 +289,137 @@ template <typename Type> class BackwardAddressIterator : public impl::AddressIte
 
 template <
     typename Type, Size size,
-    ::cds::meta::EnableIf<::cds::meta::Not<::cds::meta::IsSame<::cds::meta::Decay<Type>, char>>> = 0
+    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto begin(Type (&array)[size]) noexcept
-    -> ::cds::iterator::ForwardAddressIterator<Type> {
+    -> iterator::ForwardAddressIterator<Type> {
   return {&array[0]};
 }
 
 
 template <
     typename Type, Size size,
-    ::cds::meta::EnableIf<::cds::meta::Not<::cds::meta::IsSame<::cds::meta::Decay<Type>, char>>> = 0
+    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto end(Type (&array)[size]) noexcept
-    -> ::cds::iterator::ForwardAddressIterator<Type> {
+    -> iterator::ForwardAddressIterator<Type> {
   return {&array[size]};
 }
 
 template <
     typename Type, Size size,
-    ::cds::meta::EnableIf<::cds::meta::Not<::cds::meta::IsSame<::cds::meta::Decay<Type>, char>>> = 0
+    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto cbegin(Type (&array)[size]) noexcept
-    -> ::cds::iterator::ForwardAddressIterator<Type const> {
+    -> iterator::ForwardAddressIterator<Type const> {
   return {&array[0]};
 }
 
 template <
     typename Type, Size size,
-    ::cds::meta::EnableIf<::cds::meta::Not<::cds::meta::IsSame<::cds::meta::Decay<Type>, char>>> = 0
+    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto cend(Type (&array)[size]) noexcept
-    -> ::cds::iterator::ForwardAddressIterator<Type const> {
+    -> iterator::ForwardAddressIterator<Type const> {
   return {&array[size]};
 }
 
 template <
     typename Type, Size size,
-    ::cds::meta::EnableIf<::cds::meta::Not<::cds::meta::IsSame<::cds::meta::Decay<Type>, char>>> = 0
+    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin(Type (&array)[size]) noexcept
-    -> ::cds::iterator::BackwardAddressIterator<Type> {
+    -> iterator::BackwardAddressIterator<Type> {
   return {&array[size] - 1};
 }
 
 template <
     typename Type, Size size,
-    ::cds::meta::EnableIf<::cds::meta::Not<::cds::meta::IsSame<::cds::meta::Decay<Type>, char>>> = 0
+    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
 > CDS_ATTR(nodiscard) auto rend(Type (&array)[size]) noexcept
-    -> ::cds::iterator::BackwardAddressIterator<Type> {
+    -> iterator::BackwardAddressIterator<Type> {
   return {&array[0] - 1};
 }
 
 template <
     typename Type, Size size,
-    ::cds::meta::EnableIf<::cds::meta::Not<::cds::meta::IsSame<::cds::meta::Decay<Type>, char>>> = 0
+    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto crbegin(Type (&array)[size]) noexcept
-    -> ::cds::iterator::BackwardAddressIterator<Type const> {
+    -> iterator::BackwardAddressIterator<Type const> {
   return {&array[size] - 1};
 }
 
 template <
     typename Type, Size size,
-    ::cds::meta::EnableIf<::cds::meta::Not<::cds::meta::IsSame<::cds::meta::Decay<Type>, char>>> = 0
+    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
 > CDS_ATTR(nodiscard) auto crend(Type (&array)[size]) noexcept
-    -> ::cds::iterator::BackwardAddressIterator<Type const> {
+    -> iterator::BackwardAddressIterator<Type const> {
   return {&array[0] - 1};
 }
 
 template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto begin(char (&string)[size]) noexcept
-    -> ::cds::iterator::ForwardAddressIterator<char> {
+    -> iterator::ForwardAddressIterator<char> {
   return {&string[0]};
 }
 
 template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto end(char (&string)[size]) noexcept
-    -> ::cds::iterator::ForwardAddressIterator<char> {
+    -> iterator::ForwardAddressIterator<char> {
   return {&string[size] - 1};
 }
 
 template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto begin(char const (&string)[size]) noexcept
-    -> ::cds::iterator::ForwardAddressIterator<char const> {
+    -> iterator::ForwardAddressIterator<char const> {
   return {&string[0]};
 }
 
 template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto end(char const (&string)[size]) noexcept
-    -> ::cds::iterator::ForwardAddressIterator<char const> {
+    -> iterator::ForwardAddressIterator<char const> {
   return {&string[size] - 1};
 }
 
 template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto cbegin(char const (&string)[size]) noexcept
-    -> ::cds::iterator::ForwardAddressIterator<char const> {
+    -> iterator::ForwardAddressIterator<char const> {
   return {&string[0]};
 }
 
 template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto cend(char const (&string)[size]) noexcept
-    -> ::cds::iterator::ForwardAddressIterator<char const> {
+    -> iterator::ForwardAddressIterator<char const> {
   return {&string[size] - 1};
 }
 
 template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin(char (&string)[size]) noexcept
-    -> ::cds::iterator::BackwardAddressIterator<char> {
+    -> iterator::BackwardAddressIterator<char> {
   return {&string[size] - 2};
 }
 
 template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto rend(char (&string)[size]) noexcept
-    -> ::cds::iterator::BackwardAddressIterator<char> {
+    -> iterator::BackwardAddressIterator<char> {
   return {&string[0] - 1};
 }
 
 template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin(char const (&string)[size]) noexcept
-    -> ::cds::iterator::BackwardAddressIterator<char const> {
+    -> iterator::BackwardAddressIterator<char const> {
   return {&string[size] - 2};
 }
 
 template <Size size> CDS_ATTR(nodiscard) auto rend(char const (&string)[size]) noexcept
-    -> ::cds::iterator::BackwardAddressIterator<char const> {
+    -> iterator::BackwardAddressIterator<char const> {
   return {&string[0] - 1};
 }
 
 template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto crbegin(char const (&string)[size]) noexcept
-    -> ::cds::iterator::BackwardAddressIterator<char const> {
+    -> iterator::BackwardAddressIterator<char const> {
   return {&string[size] - 2};
 }
 
 template <Size size> CDS_ATTR(nodiscard) auto crend(char const (&string)[size]) noexcept
-    -> ::cds::iterator::BackwardAddressIterator<char const> {
+    -> iterator::BackwardAddressIterator<char const> {
   return {&string[0] - 1};
 }
 
 namespace meta {
 namespace impl {
-template <typename T> struct IsIterator<iterator::ForwardAddressIterator<T>> : meta::True {};
-template <typename T> struct IsReverseIterator<iterator::BackwardAddressIterator<T>> : meta::True {};
+using meta::True;
+using meta::False;
+using iterator::ForwardAddressIterator;
+using iterator::BackwardAddressIterator;
+template <typename T> struct IsIterator<ForwardAddressIterator<T>> : True {};
+template <typename T> struct IsReverseIterator<BackwardAddressIterator<T>> : True {};
 } // namespace impl
 } // namespace meta
 } // namespace cds

@@ -131,6 +131,9 @@ using meta::False;
 using meta::Any;
 using meta::Bind;
 using meta::Ph;
+
+using sel::Value;
+using sel::Selector;
 using sel::ContainsSelector;
 
 template <

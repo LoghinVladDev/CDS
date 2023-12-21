@@ -20,16 +20,10 @@
 namespace cds {
 class Allocator;
 namespace impl {
-template <
-    typename C,
-    typename U = impl::StringUtils<C, meta::StringTraits<C>>,
-    typename A = Allocator
-> class BaseString {};
+using meta::StringTraits;
 
-template<
-    typename C,
-    typename U = impl::StringUtils<C, meta::StringTraits<C>>
-> class BaseStringView;
+template <typename C, typename U = StringUtils<C, StringTraits<C>>, typename A = Allocator> class BaseString {};
+template<typename C, typename U = StringUtils<C, StringTraits<C>>> class BaseStringView;
 }
 
 namespace meta {
@@ -43,12 +37,36 @@ template <typename C, typename U> struct IterableTraits<cds::impl::BaseStringVie
 }
 
 namespace impl {
+using sel::With;
+using sel::Value;
+using sel::Selector;
+using sel::Forward;
+using sel::Backward;
+using sel::Immutable;
+
+using meta::IterableTraits;
+using meta::EnableIf;
+using meta::Not;
+using meta::IsSame;
+using meta::Decay;
+using meta::IsIntegral;
+using meta::All;
+using meta::IsConstructible;
+using meta::IsBaseOf;
+
+using meta::impl::IsIterator;
+using meta::impl::IsReverseIterator;
+
+#if CDS_ATTR(spaceship)
+using std::strong_ordering;
+#endif
+
 template <typename C, typename U> class CDS_ATTR(inheritsEBOs) BaseStringView :
-    public meta::IterableTraits<BaseStringView<C, U>>,
+    public IterableTraits<BaseStringView<C, U>>,
     public ContainsOfStaticBinding<BaseStringView<C, U>, With<Value, Selector>>,
     public FindOfStaticBinding<BaseStringView<C, U>, With<Value, Selector, Forward, Backward, Immutable>> {
 public:
-  using ITraits = meta::IterableTraits<BaseStringView<C, U>>;
+  using ITraits = IterableTraits<BaseStringView<C, U>>;
   using typename ITraits::Value;
   using typename ITraits::Iterator;
   using typename ITraits::ConstIterator;
@@ -64,7 +82,7 @@ public:
   CDS_ATTR(constexpr(11)) BaseStringView(BaseStringView &&) noexcept = default;
   CDS_ATTR(constexpr(20)) ~BaseStringView() noexcept = default;
 
-  template <typename AddressLike, meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<AddressLike>, BaseStringView>>> = 0>
+  template <typename AddressLike, EnableIf<Not<IsSame<Decay<AddressLike>, BaseStringView>>> = 0>
   CDS_ATTR(2(implicit, constexpr(11))) BaseStringView(AddressLike&& string) noexcept;
   CDS_ATTR(constexpr(11)) BaseStringView(Address data, Size length) noexcept : _data(data), _length(length) {}
 
@@ -128,12 +146,12 @@ public:
     return ConstReverseIterator(_data - 1);
   }
 
-  template <typename N, meta::EnableIf<meta::IsIntegral<N>> = 0>
+  template <typename N, EnableIf<IsIntegral<N>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator[](N idx) const noexcept -> Value {
     return _data[idx];
   }
 
-  template <typename N, meta::EnableIf<meta::IsIntegral<N>> = 0>
+  template <typename N, EnableIf<IsIntegral<N>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto at(N idx) const noexcept -> Value {
     return _data[idx];
   }
@@ -146,22 +164,22 @@ public:
     return _data[_length - 1u];
   }
 
-  template <typename N, meta::EnableIf<meta::IsIntegral<N>> = 0>
+  template <typename N, EnableIf<IsIntegral<N>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto sub(N from) const noexcept -> BaseStringView {
     return sub(from, -1);
   }
 
-  template <typename N, meta::EnableIf<meta::IsIntegral<N>> = 0>
+  template <typename N, EnableIf<IsIntegral<N>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(N from) const noexcept -> BaseStringView {
     return sub(from, -1);
   }
 
-  template <typename N1, typename N2, meta::EnableIf<meta::All<meta::IsIntegral, N1, N2>> = 0>
+  template <typename N1, typename N2, EnableIf<All<IsIntegral, N1, N2>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(N1 from, N2 until) const noexcept -> BaseStringView {
     return sub(from, until);
   }
 
-  template <typename N1, typename N2, meta::EnableIf<meta::All<meta::IsIntegral, N1, N2>> = 0>
+  template <typename N1, typename N2, EnableIf<All<IsIntegral, N1, N2>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto sub(N1 from, N2 until) const noexcept -> BaseStringView {
     Size sUntil;
     auto sFrom = static_cast<Size>(from);
@@ -255,7 +273,7 @@ public:
 #if CDS_ATTR(spaceship)
   template <typename FC, typename FU> CDS_ATTR(constexpr(14)) friend auto operator<=>(
       BaseStringView<FC, FU> const& lhs, BaseStringView<FC, FU> const& rhs
-  ) noexcept -> std::strong_ordering;
+  ) noexcept -> strong_ordering;
 #endif
 
   template <typename A = Allocator> CDS_ATTR(2(nodiscard, constexpr(20)))
@@ -270,7 +288,7 @@ template <typename C, typename U> Idx const BaseStringView<C, U>::npos = -1;
 template <typename C, typename U> Idx const BaseStringView<C, U>::invalidIndex = BaseStringView<C, U>::npos;
 
 template <typename C, typename U>
-template <typename AddressLike, meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<AddressLike>, BaseStringView<C, U>>>>>
+template <typename AddressLike, EnableIf<Not<IsSame<Decay<AddressLike>, BaseStringView<C, U>>>>>
 CDS_ATTR(constexpr(11)) BaseStringView<C, U>::BaseStringView(AddressLike &&string) noexcept :
     _data(string),
     _length(U::length(cds::forward<AddressLike>(string))) {}
@@ -281,18 +299,18 @@ template <typename C, typename U> CDS_ATTR(2(nodiscard, constexpr(14))) auto ope
   return U::compare(lhs._data, lhs._length, rhs._data, rhs._length) == U::Ordering::Equal;
 }
 
-template <typename C, typename U, typename T, meta::EnableIf<meta::And<
-    meta::IsConstructible<BaseStringView<C, U>, T>,
-    meta::Not<meta::IsBaseOf<BaseStringView<C, U>, meta::Decay<T>>>
+template <typename C, typename U, typename T, EnableIf<And<
+    IsConstructible<BaseStringView<C, U>, T>,
+    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
 >> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(
     BaseStringView<C, U> const& lhs, T&& rhs
 ) noexcept -> bool {
   return lhs == BaseStringView<C, U>(cds::forward<T>(rhs));
 }
 
-template <typename C, typename U, typename T, meta::EnableIf<meta::And<
-    meta::IsConstructible<BaseStringView<C, U>, T>,
-    meta::Not<meta::IsBaseOf<BaseStringView<C, U>, meta::Decay<T>>>
+template <typename C, typename U, typename T, EnableIf<And<
+    IsConstructible<BaseStringView<C, U>, T>,
+    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
 >> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(
     T&& lhs, BaseStringView<C, U> const& rhs
 ) noexcept -> bool {
@@ -305,18 +323,18 @@ template <typename C, typename U> CDS_ATTR(2(nodiscard, constexpr(14))) auto ope
   return U::compare(lhs._data, lhs._length, rhs._data, rhs._length) != U::Ordering::Equal;
 }
 
-template <typename C, typename U, typename T, meta::EnableIf<meta::And<
-    meta::IsConstructible<BaseStringView<C, U>, T>,
-    meta::Not<meta::IsBaseOf<BaseStringView<C, U>, meta::Decay<T>>>
+template <typename C, typename U, typename T, EnableIf<And<
+    IsConstructible<BaseStringView<C, U>, T>,
+    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
 >> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(
     BaseStringView<C, U> const& lhs, T&& rhs
 ) noexcept -> bool {
   return lhs != BaseStringView<C, U>(cds::forward<T>(rhs));
 }
 
-template <typename C, typename U, typename T, meta::EnableIf<meta::And<
-    meta::IsConstructible<BaseStringView<C, U>, T>,
-    meta::Not<meta::IsBaseOf<BaseStringView<C, U>, meta::Decay<T>>>
+template <typename C, typename U, typename T, EnableIf<And<
+    IsConstructible<BaseStringView<C, U>, T>,
+    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
 >> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(
     T&& lhs, BaseStringView<C, U> const& rhs
 ) noexcept -> bool {
@@ -329,18 +347,18 @@ template <typename C, typename U> CDS_ATTR(2(nodiscard, constexpr(14))) auto ope
   return U::compare(lhs._data, lhs._length, rhs._data, rhs._length) == U::Ordering::Less;
 }
 
-template <typename C, typename U, typename T, meta::EnableIf<meta::And<
-    meta::IsConstructible<BaseStringView<C, U>, T>,
-    meta::Not<meta::IsBaseOf<BaseStringView<C, U>, meta::Decay<T>>>
+template <typename C, typename U, typename T, EnableIf<And<
+    IsConstructible<BaseStringView<C, U>, T>,
+    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
 >> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<(
     BaseStringView<C, U> const& lhs, T&& rhs
 ) noexcept -> bool {
   return lhs < BaseStringView<C, U>(cds::forward<T>(rhs));
 }
 
-template <typename C, typename U, typename T, meta::EnableIf<meta::And<
-    meta::IsConstructible<BaseStringView<C, U>, T>,
-    meta::Not<meta::IsBaseOf<BaseStringView<C, U>, meta::Decay<T>>>
+template <typename C, typename U, typename T, EnableIf<And<
+    IsConstructible<BaseStringView<C, U>, T>,
+    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
 >> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<(
     T&& lhs, BaseStringView<C, U> const& rhs
 ) noexcept -> bool {
@@ -353,18 +371,18 @@ template <typename C, typename U> CDS_ATTR(2(nodiscard, constexpr(14))) auto ope
   return U::compare(lhs._data, lhs._length, rhs._data, rhs._length) == U::Ordering::Greater;
 }
 
-template <typename C, typename U, typename T, meta::EnableIf<meta::And<
-    meta::IsConstructible<BaseStringView<C, U>, T>,
-    meta::Not<meta::IsBaseOf<BaseStringView<C, U>, meta::Decay<T>>>
+template <typename C, typename U, typename T, EnableIf<And<
+    IsConstructible<BaseStringView<C, U>, T>,
+    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
 >> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>(
     BaseStringView<C, U> const& lhs, T&& rhs
 ) noexcept -> bool {
   return lhs > BaseStringView<C, U>(cds::forward<T>(rhs));
 }
 
-template <typename C, typename U, typename T, meta::EnableIf<meta::And<
-    meta::IsConstructible<BaseStringView<C, U>, T>,
-    meta::Not<meta::IsBaseOf<BaseStringView<C, U>, meta::Decay<T>>>
+template <typename C, typename U, typename T, EnableIf<And<
+    IsConstructible<BaseStringView<C, U>, T>,
+    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
 >> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>(
     T&& lhs, BaseStringView<C, U> const& rhs
 ) noexcept -> bool {
@@ -377,18 +395,18 @@ template <typename C, typename U> CDS_ATTR(2(nodiscard, constexpr(14))) auto ope
   return U::compare(lhs._data, lhs._length, rhs._data, rhs._length) != U::Ordering::Greater;
 }
 
-template <typename C, typename U, typename T, meta::EnableIf<meta::And<
-    meta::IsConstructible<BaseStringView<C, U>, T>,
-    meta::Not<meta::IsBaseOf<BaseStringView<C, U>, meta::Decay<T>>>
+template <typename C, typename U, typename T, EnableIf<And<
+    IsConstructible<BaseStringView<C, U>, T>,
+    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
 >> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=(
     BaseStringView<C, U> const& lhs, T&& rhs
 ) noexcept -> bool {
   return lhs <= BaseStringView<C, U>(cds::forward<T>(rhs));
 }
 
-template <typename C, typename U, typename T, meta::EnableIf<meta::And<
-    meta::IsConstructible<BaseStringView<C, U>, T>,
-    meta::Not<meta::IsBaseOf<BaseStringView<C, U>, meta::Decay<T>>>
+template <typename C, typename U, typename T, EnableIf<And<
+    IsConstructible<BaseStringView<C, U>, T>,
+    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
 >> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=(
     T&& lhs, BaseStringView<C, U> const& rhs
 ) noexcept -> bool {
@@ -401,18 +419,18 @@ template <typename C, typename U> CDS_ATTR(2(nodiscard, constexpr(14))) auto ope
   return U::compare(lhs._data, lhs._length, rhs._data, rhs._length) != U::Ordering::Less;
 }
 
-template <typename C, typename U, typename T, meta::EnableIf<meta::And<
-    meta::IsConstructible<BaseStringView<C, U>, T>,
-    meta::Not<meta::IsBaseOf<BaseStringView<C, U>, meta::Decay<T>>>
+template <typename C, typename U, typename T, EnableIf<And<
+    IsConstructible<BaseStringView<C, U>, T>,
+    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
 >> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>=(
     BaseStringView<C, U> const& lhs, T&& rhs
 ) noexcept -> bool {
 return lhs >= BaseStringView<C, U>(cds::forward<T>(rhs));
 }
 
-template <typename C, typename U, typename T, meta::EnableIf<meta::And<
-    meta::IsConstructible<BaseStringView<C, U>, T>,
-    meta::Not<meta::IsBaseOf<BaseStringView<C, U>, meta::Decay<T>>>
+template <typename C, typename U, typename T, EnableIf<And<
+    IsConstructible<BaseStringView<C, U>, T>,
+    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
 >> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>=(
     T&& lhs, BaseStringView<C, U> const& rhs
 ) noexcept -> bool {
@@ -422,45 +440,45 @@ template <typename C, typename U, typename T, meta::EnableIf<meta::And<
 #if CDS_ATTR(spaceship)
 template <typename C, typename U> CDS_ATTR(constexpr(14)) auto operator<=>(
     BaseStringView<C, U> const& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> std::strong_ordering {
+) noexcept -> strong_ordering {
   if (lhs._data == rhs._data && lhs._length == rhs._length) {
-    return std::strong_ordering::equivalent;
+    return strong_ordering::equivalent;
   }
 
   auto compareResult = U::compare(lhs._data, lhs._length, rhs._data, rhs._length);
-  if (compareResult == U::Ordering::Greater) { return std::strong_ordering::greater; }
-  if (compareResult == U::Ordering::Less) { return std::strong_ordering::less; }
-  return std::strong_ordering::equal;
+  if (compareResult == U::Ordering::Greater) { return strong_ordering::greater; }
+  if (compareResult == U::Ordering::Less) { return strong_ordering::less; }
+  return strong_ordering::equal;
 }
 
-template <typename C, typename U, typename T, meta::EnableIf<meta::And<
-    meta::IsConstructible<BaseStringView<C, U>, T>,
-    meta::Not<meta::IsBaseOf<BaseStringView<C, U>, meta::Decay<T>>>
+template <typename C, typename U, typename T, EnableIf<And<
+    IsConstructible<BaseStringView<C, U>, T>,
+    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
 >> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=>(
     BaseStringView<C, U> const& lhs, T&& rhs
-) noexcept -> std::strong_ordering {
+) noexcept -> strong_ordering {
   return lhs <=> BaseStringView<C, U>(cds::forward<T>(rhs));
 }
 
-template <typename C, typename U, typename T, meta::EnableIf<meta::And<
-    meta::IsConstructible<BaseStringView<C, U>, T>,
-    meta::Not<meta::IsBaseOf<BaseStringView<C, U>, meta::Decay<T>>>
+template <typename C, typename U, typename T, EnableIf<And<
+    IsConstructible<BaseStringView<C, U>, T>,
+    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
 >> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=>(
     T&& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> std::strong_ordering {
+) noexcept -> strong_ordering {
   return BaseStringView<C, U>(cds::forward<T>(lhs)) <=> rhs;
 }
 #endif
 
 template <typename C, typename U> struct FindOfResultMappingTraits<BaseStringView<C, U>> {
-  template <typename T, meta::EnableIf<meta::impl::IsIterator<T>> = 0>
+  template <typename T, EnableIf<IsIterator<T>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(11))) static auto adapt(BaseStringView<C, U> const& string, T&& iterator) -> Idx {
     return end(string) == cds::forward<T>(iterator)
         ? BaseStringView<C, U>::npos
         : (cds::forward<T>(iterator) - begin(string));
   }
 
-  template <typename T, meta::EnableIf<meta::impl::IsReverseIterator<T>> = 0>
+  template <typename T, EnableIf<IsReverseIterator<T>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(11))) static auto adapt(BaseStringView<C, U> const& string, T&& iterator) -> Idx {
     return rend(string) == cds::forward<T>(iterator)
         ? BaseStringView<C, U>::npos
