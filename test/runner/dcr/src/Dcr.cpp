@@ -597,19 +597,41 @@ auto awaitProcess(std::optional<std::string> executable, std::vector<std::string
     return {false, "", "", false};
   }
 
+//  ssize_t outReadCount;
+//  ssize_t errReadCount;
+//  std::array<char, 65536> errBuf{0};
+//  std::array<char, 65536> outBuf{0};
+//  std::string errContents;
+//  std::string outContents;
+//  bool stillReading = true;
+//  while (stillReading) {
+//    errReadCount = read(errRedir[0], errBuf.data(), 65536);
+//    outReadCount = read(outRedir[0], outBuf.data(), 65536);
+//    if (errReadCount != 0) errContents += std::string_view(errBuf.data(), errReadCount);
+//    if (outReadCount != 0) outContents += std::string_view(outBuf.data(), outReadCount);
+//
+//    stillReading = errReadCount != 0 || outReadCount != 0;
+//  }
+
+  auto outputAwaiter = [](auto fd, auto& out) {
+    return [fd, &out]() {
+      ssize_t readCount;
+      std::array<char, BUFSIZ> buf{0};
+      bool reading = true;
+      while (reading) {
+        readCount = read(fd, buf.data(), BUFSIZ);
+        if (readCount != 0) { out += std::string_view(buf.data(), readCount); }
+        else { reading = false; }
+      }
+    };
+  };
+
+  std::string errContents;
+  std::string outContents;
+  {std::array{std::jthread(outputAwaiter(errRedir[0], errContents)), std::jthread(outputAwaiter(outRedir[0], outContents))};}
+
   int stat;
   waitpid(childId, &stat, 0);
-
-  ssize_t readCount;
-  std::array<char, 1024> buf{0};
-  std::string outContents;
-  while (0 != (readCount = read(outRedir[0], buf.data(), 1024))) {
-    outContents += std::string_view(buf.data(), readCount);
-  }
-  std::string errContents;
-  while (0 != (readCount = read(errRedir[0], buf.data(), 1024))) {
-    errContents += std::string_view(buf.data(), readCount);
-  }
 
   close(outRedir[0]);
   close(errRedir[0]);
