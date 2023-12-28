@@ -3,6 +3,8 @@ project(CDS)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
+set(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   set(CDS_COMPILER_SPECIFIC_COVERAGE_FLAGS "-fcoverage-mapping -fprofile-instr-generate -O0 -g")
 else()

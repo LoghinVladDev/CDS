@@ -180,7 +180,7 @@ public:
   }
 
   template <typename N1, typename N2, EnableIf<All<IsIntegral, N1, N2>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto sub(N1 from, N2 until) const noexcept -> BaseStringView {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto sub(N1 from, N2 until) const noexcept -> BaseStringView {
     Size sUntil;
     auto sFrom = static_cast<Size>(from);
     if (until < 0) {
@@ -197,7 +197,7 @@ public:
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(Value character) const noexcept -> Idx {
-    for (Idx idx = 0u; idx < _length; ++idx) {
+    for (decltype(_length) idx = 0u; idx < _length; ++idx) {
       if (_data[idx] == character) {
         return idx;
       }
@@ -208,7 +208,7 @@ public:
   template <typename S> CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
       Value character, S&& selector
   ) const noexcept -> Idx {
-    for (Idx idx = 0u; idx < _length; ++idx) {
+    for (decltype(_length) idx = 0u; idx < _length; ++idx) {
       if (cds::forward<S>(selector)(_data[idx]) == character) {
         return idx;
       }
@@ -217,7 +217,7 @@ public:
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(Value character) const noexcept -> Idx {
-    for (Idx idx = _length - 1u; idx >= 0; --idx) {
+    for (decltype(_length) idx = _length - 1u; idx >= 0; --idx) {
       if (_data[idx] == character) {
         return idx;
       }
@@ -228,7 +228,7 @@ public:
   template <typename S> CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
       Value character, S&& selector
   ) const noexcept -> Idx {
-    for (Idx idx = _length - 1u; idx >= 0; --idx) {
+    for (decltype(_length) idx = _length - 1u; idx >= 0; --idx) {
       if (cds::forward<S>(selector)(_data[idx]) == character) {
         return idx;
       }
@@ -485,6 +485,20 @@ template <typename C, typename U> struct FindOfResultMappingTraits<BaseStringVie
         : (string.length() - (cds::forward<T>(iterator) - rbegin(string) + 1));
   }
 };
+
+template <typename C, typename U> struct FindStringTransformer {
+  template <typename IB, typename IE, typename I>
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(IB&& b, IE&& e, I&& i) const noexcept -> Idx {
+    return cds::forward<IE>(e) == cds::forward<I>(i)
+        ? BaseStringView<C, U>::npos
+        : (cds::forward<I>(i) - cds::forward<IB>(b));
+  }
+};
+
+//template <typename C, typename U> CDS_ATTR(constexpr(14)) auto findFirstA(BaseStringView<C, U> const& sv, C value)
+//noexcept -> Idx {
+//  return findFirst(sv, value, FindStringTransformer<C, U>());
+//}
 } // namespace impl
 } // namespace cds
 

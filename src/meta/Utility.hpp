@@ -5,36 +5,14 @@
 #ifndef CDS_META_UTILITY_HPP
 #define CDS_META_UTILITY_HPP
 
-#include <cds/meta/TypeTraits>
 #include <cds/meta/IteratorTraits>
+#include <cds/meta/Semantics>
+#include <cds/functional/Comparator>
+#include <cds/functional/Transformer>
 #include <cds/iterator/AddressIterator>
+#include <cds/iterator/Sentinel>
 
 namespace cds {
-template <typename T, meta::EnableIf<meta::Ge<meta::Int<sizeof(T)>, meta::Int<sizeof(Size)>>> = 0>
-CDS_ATTR(2(nodiscard, constexpr(11))) auto identity(T const& v) noexcept -> T const& { return v; }
-
-template <typename T, meta::EnableIf<meta::Lt<meta::Int<sizeof(T)>, meta::Int<sizeof(Size)>>> = 0>
-CDS_ATTR(2(nodiscard, constexpr(11))) auto identity(T v) noexcept -> T { return v; }
-
-template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto forward(meta::RemoveRef<T>& v) noexcept -> T&& {
-  return static_cast<T&&>(v);
-}
-
-template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto forward(meta::RemoveRef<T>&& v) noexcept -> T&& {
-  static_assert(!meta::IsLValRef<T>::value, "Attempted to use forward to convert rvalue to lvalue");
-  return static_cast<T&&>(v);
-}
-
-template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto move(T&& v) noexcept -> meta::RemoveRef<T>&& {
-  return static_cast<meta::RemoveRef<T>&&>(v);
-}
-
-template <typename T, typename U = T> CDS_ATTR(2(nodiscard, constexpr(14))) auto exchange(T& obj, U&& newVal) -> T {
-  T old = move(obj);
-  obj = cds::forward<U>(newVal);
-  return old;
-}
-
 template <typename T, typename U = T>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto minOf(T&& lhs, U&& rhs) noexcept -> meta::Common<T, U> {
   return cds::forward<T>(lhs) < cds::forward<U>(rhs) ? lhs : rhs;
@@ -58,90 +36,96 @@ template <typename T1, typename T2, typename T3, typename... R> CDS_ATTR(2(nodis
 }
 
 template <
-    typename T, typename D = meta::Decay<T>, typename E = meta::impl::HasIterableMemberFns<D>, meta::EnableIf<E> = 0
+    typename T, typename D = meta::RemoveRef<T>,
+    typename E = meta::impl::HasIterableMemberFns<D>,
+    meta::EnableIf<E> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto begin(T&& range) noexcept -> typename E::Iterator {
   return cds::forward<T>(range).begin();
 }
 
 template <
-    typename T, typename D = meta::Decay<T>, typename E = meta::impl::HasIterableMemberFns<D>, meta::EnableIf<E> = 0
+    typename T, typename D = meta::RemoveRef<T>,
+    typename E = meta::impl::HasIterableMemberFns<D>,
+    meta::EnableIf<E> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto end(T&& range) noexcept -> typename E::Iterator {
   return cds::forward<T>(range).end();
 }
 
 template <
-    typename T, typename D = meta::Decay<T>,
-    typename E1 = meta::impl::HasIterableMemberFns<D>,
-    typename E2 = meta::impl::HasConstIterableMemberFns<D>,
-    meta::EnableIf<meta::And<meta::Not<E1>, E2>> = 0
-> CDS_ATTR(2(nodiscard, constexpr(11))) auto begin(T&& range) noexcept -> typename E2::ConstIterator {
+    typename T, typename D = meta::RemoveRef<T>,
+    typename E = meta::impl::HasIterableMemberFns<D>,
+    typename CE = meta::impl::HasConstIterableMemberFns<D>,
+    meta::EnableIf<meta::And<meta::Not<E>, CE>> = 0
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto begin(T&& range) noexcept -> typename CE::ConstIterator {
   return cds::forward<T>(range).cbegin();
 }
 
 template <
-    typename T, typename D = meta::Decay<T>,
-    typename E1 = meta::impl::HasIterableMemberFns<D>,
-    typename E2 = meta::impl::HasConstIterableMemberFns<D>,
-    meta::EnableIf<meta::And<meta::Not<E1>, E2>> = 0
-> CDS_ATTR(2(nodiscard, constexpr(11))) auto end(T&& range) noexcept -> typename E2::ConstIterator {
+    typename T, typename D = meta::RemoveRef<T>,
+    typename E = meta::impl::HasIterableMemberFns<D>,
+    typename CE = meta::impl::HasConstIterableMemberFns<D>,
+    meta::EnableIf<meta::And<meta::Not<E>, CE>> = 0
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto end(T&& range) noexcept -> typename CE::ConstIterator {
   return cds::forward<T>(range).cend();
 }
 
 template <
-    typename T, typename D = meta::Decay<T>,
+    typename T, typename D = meta::RemoveRef<T>,
     typename E = meta::impl::HasConstIterableMemberFns<D>, meta::EnableIf<E> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto cbegin(T&& range) noexcept -> typename E::ConstIterator {
   return cds::forward<T>(range).cbegin();
 }
 
 template <
-    typename T, typename D = meta::Decay<T>,
+    typename T, typename D = meta::RemoveRef<T>,
     typename E = meta::impl::HasConstIterableMemberFns<D>, meta::EnableIf<E> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto cend(T&& range) noexcept -> typename E::ConstIterator {
   return cds::forward<T>(range).cend();
 }
 
 template <
-    typename T, typename D = meta::Decay<T>,
-    typename E = meta::impl::HasReverseIterableMemberFns<D>, meta::EnableIf<E> = 0
+    typename T, typename D = meta::RemoveRef<T>,
+    typename E = meta::impl::HasReverseIterableMemberFns<D>,
+    meta::EnableIf<E> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin(T&& range) noexcept -> typename E::ReverseIterator {
   return cds::forward<T>(range).rbegin();
 }
 
 template <
-    typename T, typename D = meta::Decay<T>,
-    typename E = meta::impl::HasReverseIterableMemberFns<D>, meta::EnableIf<E> = 0
+    typename T, typename D = meta::RemoveRef<T>,
+    typename E = meta::impl::HasReverseIterableMemberFns<D>,
+    meta::EnableIf<E> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto rend(T&& range) noexcept -> typename E::ReverseIterator {
   return cds::forward<T>(range).rend();
 }
 
 template <
-    typename T, typename D = meta::Decay<T>,
-    typename E1 = meta::impl::HasReverseIterableMemberFns<D>,
-    typename E2 = meta::impl::HasConstReverseIterableMemberFns<D>,
-    meta::EnableIf<meta::And<meta::Not<E1>, E2>> = 0
-> CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin(T&& range) noexcept -> typename E2::ConstReverseIterator {
+    typename T, typename D = meta::RemoveRef<T>,
+    typename E = meta::impl::HasReverseIterableMemberFns<D>,
+    typename CE = meta::impl::HasConstReverseIterableMemberFns<D>,
+    meta::EnableIf<meta::And<meta::Not<E>, CE>> = 0
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin(T&& range) noexcept -> typename CE::ConstReverseIterator {
   return cds::forward<T>(range).crbegin();
 }
 
 template <
-    typename T, typename D = meta::Decay<T>,
-    typename E1 = meta::impl::HasReverseIterableMemberFns<D>,
-    typename E2 = meta::impl::HasConstReverseIterableMemberFns<D>,
-    meta::EnableIf<meta::And<meta::Not<E1>, E2>> = 0
-> CDS_ATTR(2(nodiscard, constexpr(11))) auto rend(T&& range) noexcept -> typename E2::ConstReverseIterator {
+    typename T, typename D = meta::RemoveRef<T>,
+    typename E = meta::impl::HasReverseIterableMemberFns<D>,
+    typename CE = meta::impl::HasConstReverseIterableMemberFns<D>,
+    meta::EnableIf<meta::And<meta::Not<E>, CE>> = 0
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto rend(T&& range) noexcept -> typename CE::ConstReverseIterator {
   return cds::forward<T>(range).crend();
 }
 
 template <
-    typename T, typename D = meta::Decay<T>,
+    typename T, typename D = meta::RemoveRef<T>,
     typename E = meta::impl::HasConstReverseIterableMemberFns<D>, meta::EnableIf<E> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto crbegin(T&& range) noexcept -> typename E::ConstReverseIterator {
   return cds::forward<T>(range).crbegin();
 }
 
 template <
-    typename T, typename D = meta::Decay<T>,
+    typename T, typename D = meta::RemoveRef<T>,
     typename E = meta::impl::HasConstReverseIterableMemberFns<D>, meta::EnableIf<E> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto crend(T&& range) noexcept -> typename E::ConstReverseIterator {
   return cds::forward<T>(range).crend();
@@ -443,6 +427,353 @@ CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastNotOf(
   }
 
   return end;
+}
+} // namespace impl
+
+namespace iterator {
+namespace impl {
+using meta::rvalue;
+
+using functional::Equal;
+
+template <typename = void> struct FindResultTransformer {
+  template <typename IB, typename IE, typename I>
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(IB&& b, IE&& e, I&& i) const noexcept
+      -> decltype(*rvalue<I>()) {
+    (void) b;
+    (void) e;
+    return *cds::forward<I>(i);
+  }
+};
+
+template <typename = void> struct FindPreserveTransformer {
+  template <typename IB, typename IE, typename I>
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(IB&& b, IE&& e, I&& i) const noexcept -> I {
+    (void) b;
+    (void) e;
+    return cds::forward<I>(i);
+  }
+};
+
+template <typename I, typename V, typename P, typename T> class FindIterator {
+public:
+  using Iterator = I;
+  using Value = V;
+  using Predicate = P;
+  using Transformer = T;
+
+  template <typename RI, typename RSI> CDS_ATTR(constexpr(14)) FindIterator(RI&& b, RSI&& e, V const& v)
+      CDS_ATTR(noexcept(noexcept(this->filter()))) : _b(cds::forward<RI>(b)), _e(cds::forward<RSI>(e)), _v(v), _i(b) {
+    filter();
+  }
+
+  CDS_ATTR(constexpr(14)) auto operator++() CDS_ATTR(noexcept(noexcept(filter()))) -> FindIterator& {
+    (void) ++_i;
+    filter();
+    return *this;
+  }
+
+  template <typename FI, typename FV, typename FP, typename FT>
+  CDS_ATTR(constexpr(11)) friend auto operator==(FindIterator<FI, FV, FP, FT> const& obj, Sentinel)
+      CDS_ATTR(noexcept(noexcept(rvalue<FI>() == rvalue<FI>()))) -> bool;
+
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator*() const
+      CDS_ATTR(noexcept(noexcept(rvalue<T>()(rvalue<I>(), rvalue<I>(), rvalue<I>()))))
+      -> decltype(rvalue<T>()(rvalue<I>(), rvalue<I>(), rvalue<I>())) {
+    T const transform;
+    return transform(_b, _e, _i);
+  }
+
+private:
+  CDS_ATTR(constexpr(14)) auto filter()
+      CDS_ATTR(noexcept(noexcept(++_i) && noexcept(_i != _e) && noexcept(rvalue<P>()(_v, *_i)))) -> void {
+    P const valid;
+    while (_i != _e && !valid(_v, *_i)) {
+      ++_i;
+    }
+  }
+
+  I _i;
+  I const _b;
+  I const _e;
+  V const& _v;
+};
+
+template <typename I, typename V, typename P, typename T>
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(FindIterator<I, V, P, T> const& obj, Sentinel)
+    CDS_ATTR(noexcept(noexcept(rvalue<I>() == rvalue<I>()))) -> bool {
+  return obj._i == obj._e;
+}
+
+template <typename I, typename V, typename S, typename P, typename T> class FindSelectIterator {
+public:
+  template <typename RI> CDS_ATTR(2(explicit, constexpr(14))) FindSelectIterator(RI&& b, RI&& e, V const& v, S const& s)
+      CDS_ATTR(noexcept(noexcept(filter()))) : _b(cds::forward<RI>(b)), _e(cds::forward<RI>(e)), _s(s), _v(v), _i(b) {
+    filter();
+  }
+
+  CDS_ATTR(constexpr(14)) auto operator++() CDS_ATTR(noexcept(noexcept(filter()))) -> FindSelectIterator& {
+    (void) ++_i;
+    filter();
+    return *this;
+  }
+
+  template <typename FI, typename FV, typename FS, typename FP, typename FT>
+  CDS_ATTR(constexpr(11)) friend auto operator==(FindSelectIterator<FI, FV, FS, FP, FT> const& obj, Sentinel)
+    CDS_ATTR(noexcept(noexcept(rvalue<FI>() == rvalue<FI>()))) -> bool;
+
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator*() const
+      CDS_ATTR(noexcept(noexcept(rvalue<T>()(rvalue<I>(), rvalue<I>(), rvalue<I>()))))
+      -> decltype(rvalue<T>()(rvalue<I>(), rvalue<I>(), rvalue<I>())) {
+    T const transform;
+    return transform(_b, _e, _i);
+  }
+
+private:
+  CDS_ATTR(constexpr(14)) auto filter()
+      CDS_ATTR(noexcept(noexcept(++_i) && noexcept(_i != _e) && noexcept(rvalue<P>()(_v, _s(*_i))))) -> void {
+    P const valid;
+    while (_i != _e && !valid(_v, _s(*_i))) {
+      ++_i;
+    }
+  }
+
+  I _i;
+  I const _b;
+  I const _e;
+  S const& _s;
+  V const& _v;
+};
+
+template <typename I, typename V, typename S, typename P, typename T>
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(FindSelectIterator<I, V, S, P, T> const& obj, Sentinel)
+    CDS_ATTR(noexcept(noexcept(rvalue<I>() == rvalue<I>()))) -> bool {
+  return obj._i == obj._e;
+}
+} // namespace impl
+} // namespace iterator
+
+namespace impl {
+using meta::value;
+using meta::lvalue;
+using meta::rvalue;
+using meta::Decay;
+using meta::EnableIf;
+using meta::Not;
+using meta::Or;
+using meta::And;
+using meta::IsLValRef;
+using meta::IsRValRef;
+using meta::RemoveRef;
+using meta::IsConst;
+using meta::Conditional;
+
+using functional::Equal;
+
+using iterator::impl::FindIterator;
+using iterator::impl::FindSelectIterator;
+using iterator::impl::FindResultTransformer;
+using iterator::impl::FindPreserveTransformer;
+using iterator::Sentinel;
+
+namespace extension {
+using meta::IsSame;
+using meta::Conditional;
+template <typename T, typename R = RemoveRef<T>> using Extend
+    = Conditional<Or<IsRValRef<T>, IsSame<R, T>>, R const, R&>;
+} // namespace extension
+using extension::Extend;
+
+template <typename TAttr, typename VAttr, typename P, typename Tr> class FindIterableRange {
+public:
+  using Iterable = TAttr;
+  using Value = VAttr;
+  using Predicate = P;
+  using Transformer = Tr;
+  using UnderlyingIterator = Conditional<
+      And<Not<IsConst<TAttr>>, IsLValRef<TAttr>>,
+      decltype(cds::begin(value<TAttr>())),
+      decltype(cds::begin(value<TAttr const>()))
+  >;
+  using Iterator = FindIterator<UnderlyingIterator, RemoveRef<VAttr>, P, Tr>;
+
+  template <typename T, typename V> CDS_ATTR(2(explicit, constexpr(11))) FindIterableRange(T&& obj, V&& v)
+      CDS_ATTR(noexcept(noexcept(TAttr(cds::forward<T>(obj))) && noexcept(VAttr(cds::forward<V>(v))))) :
+      _o(cds::forward<T>(obj)), _v(cds::forward<V>(v)) {}
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto begin() const
+      CDS_ATTR(noexcept(noexcept(Iterator(cds::begin(_o), cds::end(_o), _v)))) -> Iterator {
+    return Iterator(cds::begin(_o), cds::end(_o), _v);
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto end() const noexcept -> Sentinel {
+    return {};
+  }
+
+private:
+  TAttr _o;
+  VAttr const _v;
+};
+
+template <typename TAttr, typename VAttr, typename SAttr, typename P, typename Tr> class FindSelectIterableRange {
+public:
+  using UnderlyingIterator = decltype(cds::cbegin(value<TAttr>()));
+  using Iterator = FindSelectIterator<UnderlyingIterator, RemoveRef<VAttr>, RemoveRef<SAttr>, P, Tr>;
+
+  template <typename T, typename V, typename S>
+  CDS_ATTR(2(explicit, constexpr(11))) FindSelectIterableRange(T&& obj, V&& v, S&& s) CDS_ATTR(noexcept(
+      noexcept(TAttr(cds::forward<T>(obj)))
+      && noexcept(VAttr(cds::forward<V>(v)))
+      && noexcept(SAttr(cds::forward<S>(s)))
+  )) : _o(cds::forward<T>(obj)), _v(cds::forward<V>(v)), _s(cds::forward<S>(s)) {}
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto begin() const
+      CDS_ATTR(noexcept(noexcept(Iterator(cds::cbegin(_o), cds::cend(_o), _v, _s)))) -> Iterator {
+    return Iterator(cds::cbegin(_o), cds::cend(_o), _v, _s);
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto end() const noexcept -> Sentinel {
+    return {};
+  }
+
+private:
+  TAttr const _o;
+  VAttr const _v;
+  SAttr const _s;
+};
+
+template <
+    typename I, typename V, typename T = FindResultTransformer<>,
+    typename R = FindIterableRange<Extend<I>, Extend<V>, Equal<>, T>
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto find(
+    I&& iterable, V&& value
+) CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(iterable), cds::forward<V>(value))))) -> R {
+  return R(cds::forward<I>(iterable), cds::forward<V>(value));
+}
+
+template <
+    typename I, typename V, typename S, typename T = FindResultTransformer<>,
+    typename R = FindSelectIterableRange<Extend<I>, Extend<V>, Extend<S>, Equal<>, T>
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto find(
+    I&& iterable, V&& value, S&& selector
+) CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<S>(selector))))) -> R {
+  return R(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<S>(selector));
+}
+
+template <typename I, typename V, typename P = Equal<>, typename T = FindPreserveTransformer<>>
+CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
+    I&& iterable, V&& value, P const valid = P(), T const transform = T()
+) CDS_ATTR(noexcept(
+    noexcept(cds::begin(cds::forward<I>(iterable)))
+    && noexcept(cds::end(cds::forward<I>(iterable)))
+    && noexcept(cds::begin(cds::forward<I>(iterable)) != cds::end(cds::forward<I>(iterable)))
+    && noexcept(++lvalue<decltype(cds::begin(cds::forward<I>(iterable)))>())
+    && noexcept(valid(*cds::begin(cds::forward<I>(iterable)), cds::forward<V>(value)))
+    && noexcept(transform(
+        cds::begin(cds::forward<I>(iterable)),
+        cds::end(cds::forward<I>(iterable)),
+        cds::begin(cds::forward<I>(iterable))
+    ))
+)) -> decltype(transform(
+    cds::begin(cds::forward<I>(iterable)),
+    cds::end(cds::forward<I>(iterable)),
+    cds::begin(cds::forward<I>(iterable))
+)) {
+  auto const b = cds::begin(cds::forward<I>(iterable));
+  auto const e = cds::end(cds::forward<I>(iterable));
+  for (auto i = b; i != e; ++i) {
+    if (valid(*i, cds::forward<V>(value))) {
+      return transform(b, e, i);
+    }
+  }
+  return transform(b, e, e);
+}
+
+template <typename I, typename V, typename S, typename P = Equal<>, typename T = FindPreserveTransformer<>>
+CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
+    I&& iterable, V&& value, S&& selector, P const valid = P(), T const transform = T()
+) CDS_ATTR(noexcept(
+    noexcept(cds::begin(cds::forward<I>(iterable)))
+    && noexcept(cds::end(cds::forward<I>(iterable)))
+    && noexcept(cds::begin(cds::forward<I>(iterable)) != cds::end(cds::forward<I>(iterable)))
+    && noexcept(++lvalue<decltype(cds::begin(cds::forward<I>(iterable)))>())
+    && noexcept(valid(cds::forward<S>(selector)(*cds::begin(cds::forward<I>(iterable))), cds::forward<V>(value)))
+    && noexcept(transform(
+        cds::begin(cds::forward<I>(iterable)),
+        cds::end(cds::forward<I>(iterable)),
+        cds::begin(cds::forward<I>(iterable))
+    ))
+)) -> decltype(transform(
+    cds::begin(cds::forward<I>(iterable)),
+    cds::end(cds::forward<I>(iterable)),
+    cds::begin(cds::forward<I>(iterable))
+)) {
+  auto const b = cds::begin(cds::forward<I>(iterable));
+  auto const e = cds::end(cds::forward<I>(iterable));
+  for (auto i = b; i != e; ++i) {
+    if (valid(cds::forward<S>(selector)(*i), cds::forward<V>(value))) {
+      return transform(b, e, i);
+    }
+  }
+  return transform(b, e, e);
+}
+
+template <typename I, typename V, typename P = Equal<>, typename T = FindPreserveTransformer<>>
+CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
+    I&& iterable, V&& value, P const valid = P(), T const transform = T()
+) CDS_ATTR(noexcept(
+    noexcept(cds::rbegin(cds::forward<I>(iterable)))
+    && noexcept(cds::rend(cds::forward<I>(iterable)))
+    && noexcept(cds::rbegin(cds::forward<I>(iterable)) != cds::rend(cds::forward<I>(iterable)))
+    && noexcept(++lvalue<decltype(cds::rbegin(cds::forward<I>(iterable)))>())
+    && noexcept(valid(*cds::rbegin(cds::forward<I>(iterable)), cds::forward<V>(value)))
+    && noexcept(transform(
+        cds::rbegin(cds::forward<I>(iterable)),
+        cds::rend(cds::forward<I>(iterable)),
+        cds::rbegin(cds::forward<I>(iterable))
+    ))
+)) -> decltype(transform(
+    cds::rbegin(cds::forward<I>(iterable)),
+    cds::rend(cds::forward<I>(iterable)),
+    cds::rbegin(cds::forward<I>(iterable))
+)) {
+  auto const b = cds::rbegin(cds::forward<I>(iterable));
+  auto const e = cds::rend(cds::forward<I>(iterable));
+  for (auto i = b; i != e; ++i) {
+    if (valid(*i, cds::forward<V>(value))) {
+      return transform(b, e, i);
+    }
+  }
+  return transform(b, e, e);
+}
+
+template <typename I, typename V, typename S, typename P = Equal<>, typename T = FindPreserveTransformer<>>
+CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
+    I&& iterable, V&& value, S&& selector, P const valid = P(), T const transform = T()
+) CDS_ATTR(noexcept(
+    noexcept(cds::rbegin(cds::forward<I>(iterable)))
+    && noexcept(cds::rend(cds::forward<I>(iterable)))
+    && noexcept(cds::rbegin(cds::forward<I>(iterable)) != cds::rend(cds::forward<I>(iterable)))
+    && noexcept(++lvalue<decltype(cds::rbegin(cds::forward<I>(iterable)))>())
+    && noexcept(valid(cds::forward<S>(selector)(*cds::rbegin(cds::forward<I>(iterable))), cds::forward<V>(value)))
+    && noexcept(transform(
+        cds::rbegin(cds::forward<I>(iterable)),
+        cds::rend(cds::forward<I>(iterable)),
+        cds::rbegin(cds::forward<I>(iterable))
+    ))
+)) -> decltype(transform(
+    cds::rbegin(cds::forward<I>(iterable)),
+    cds::rend(cds::forward<I>(iterable)),
+    cds::rbegin(cds::forward<I>(iterable))
+)) {
+  auto const b = cds::rbegin(cds::forward<I>(iterable));
+  auto const e = cds::rend(cds::forward<I>(iterable));
+  for (auto i = b; i != e; ++i) {
+    if (valid(cds::forward<S>(selector)(*i), cds::forward<V>(value))) {
+      return transform(b, e, i);
+    }
+  }
+  return transform(b, e, e);
 }
 } // namespace impl
 } // namespace cds

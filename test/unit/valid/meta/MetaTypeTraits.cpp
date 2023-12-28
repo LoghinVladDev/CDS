@@ -638,11 +638,6 @@ TEST(MetaObjectTest, Common) {
   static_assert(IsSame<Common<int, A, B, int>, B>::value, "Failed Common");
 }
 
-int& f() {
-  static int x = 3;
-  return x;
-}
-
 TEST(MetaBase, Apply) {
   static_assert(Eq<True, All<Unless<Apply<IsConst, RemoveRef>::Type>::Type, int, int&>>::value, "Failed Bind of Apply");
   static_assert(!Eq<True, All<Unless<Apply<IsConst, RemoveRef>::Type>::Type, int, int const&>>::value, "Failed Bind of Apply");

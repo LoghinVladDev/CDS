@@ -36,8 +36,8 @@ using Address = U32;
 
 namespace compiler {
 // standard specific
-#define CDS_ATTR_JOIN_LATE(prefix, opt) prefix ## opt
-#define CDS_ATTR(opt) CDS_ATTR_JOIN_LATE(CDS_ATTR_, opt)
+#define CDS_ATTR_JOIN_LATE(prefix, ...) prefix ## __VA_ARGS__
+#define CDS_ATTR(...) CDS_ATTR_JOIN_LATE(CDS_ATTR_, __VA_ARGS__)
 
 #define CDS_ATTR_OLDSTYLE(attr) __attribute__((attr))
 #define CDS_ATTR_NEWSTYLE(attr) [[attr]]
@@ -54,7 +54,7 @@ namespace compiler {
 #define CDS_ATTR_inline
 #define CDS_ATTR_constexpr(std) CDS_ATTR_constexpr_ ## std
 #define CDS_ATTR_always_constexpr constexpr
-#define CDS_ATTR_noexcept(toggle) noexcept(!CDS_ATTR_exceptions || toggle)
+#define CDS_ATTR_noexcept(...) noexcept(!CDS_ATTR_exceptions || __VA_ARGS__)
 
 #define CDS_ATTR_2(a, b) CDS_ATTR_ ## a CDS_ATTR_ ## b
 #define CDS_ATTR_3(a, b, c) CDS_ATTR_ ## a CDS_ATTR_ ## b CDS_ATTR_ ## c

@@ -27,7 +27,6 @@ template <typename T, T v> struct Integral {
 
 template <int i> using Int = Integral<int, i>;
 
-
 template <bool v> using Bool = Integral<bool, v>;
 using True = Bool<true>::Type;
 using False = Bool<false>::Type;

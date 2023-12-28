@@ -374,6 +374,7 @@ TEST(StringView, containsOf) {
 
 TEST(StringView, find) {
   StringView sv = "abcd";
+  char const v[] = "abc";
   ASSERT_EQ(sv.findFirstOf("BC"), StringView::npos);
   ASSERT_EQ(sv.findFirstOf("bc"), 1);
   ASSERT_EQ(sv.findLastOf("bc"), 2);
