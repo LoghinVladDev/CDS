@@ -27,6 +27,7 @@ using cds::meta::False;
 using cds::meta::EnableIf;
 using cds::meta::Not;
 using cds::meta::IsSame;
+using cds::meta::IsClass;
 using cds::meta::Decay;
 using cds::meta::ReturnOf;
 using cds::meta::IsCallable;
@@ -39,7 +40,8 @@ template <typename MFn> struct MemberFunctionWrapper {
 
   template <typename O, typename... Args> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(
       O&& obj, Args&&... args
-  ) const CDS_ATTR(noexcept(noexcept((cds::forward<O>(obj).*_fn)(cds::forward<Args>(args)...)))) -> ReturnOf<MFn> {
+  ) const CDS_ATTR(noexcept(noexcept((cds::forward<O>(obj).*_fn)(cds::forward<Args>(args)...))))
+      -> EnableIf<IsClass<Decay<O>>, ReturnOf<MFn>> {
     return (cds::forward<O>(obj).*_fn)(cds::forward<Args>(args)...);
   }
 
@@ -68,7 +70,7 @@ template <typename MFn> struct NotFunctionWrapper<MFn, False> {
   template <typename O, typename... Args> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(
       O&& obj, Args&&... args
   ) const CDS_ATTR(noexcept(noexcept((cds::forward<O>(obj).*_fn)(cds::forward<Args>(args)...))))
-      -> decltype(!(obj.*rvalue<MFn>())(cds::forward<Args>(args)...)) {
+      -> EnableIf<IsClass<Decay<O>>, decltype(!(obj.*rvalue<MFn>())(cds::forward<Args>(args)...))> {
     return !(cds::forward<O>(obj).*_fn)(cds::forward<Args>(args)...);
   }
 

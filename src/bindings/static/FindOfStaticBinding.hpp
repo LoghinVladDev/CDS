@@ -8,6 +8,7 @@
 #include "../BindingSelectors.hpp"
 #include <initializer_list>
 #include <cds/functional/FunctionalInterface>
+#include <cds/Utility>
 
 namespace cds {
 namespace impl {
@@ -16,215 +17,192 @@ using std::initializer_list;
 using meta::rvalue;
 using meta::IterableTraits;
 
-template <typename R> struct FindOfResultMappingTraits {
-  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) static auto adapt(R const& iterable, T&& iterator) -> T {
-    (void) iterable;
-    return cds::forward<T>(iterator);
-  }
-};
-
-template <typename R, typename Tr = FindOfResultMappingTraits<R>, typename = void>
+template <typename R, typename Tr, typename = void>
 class FindFirstOfByValueStaticBinding {};
 
 template <typename R, typename Tr> class FindFirstOfByValueStaticBinding<R, Tr> {
 protected:
   using Value = typename IterableTraits<R>::Value;
-  using Iterator = typename IterableTraits<R>::Iterator;
-  using Returned = decltype(Tr::adapt(rvalue<R>(), rvalue<Iterator>()));
+  using P = impl::Contains<functional::Equal<>>;
+  using NP = impl::NotContains<functional::Equal<>>;
 
 public:
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstOf(F&& from) CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findFirstOf(rvalue<R>(), cds::forward<F>(from)))
-  ))) -> Returned {
-    auto* iterable = static_cast<R*>(this);
-    return Tr::adapt(*iterable, impl::findFirstOf(*iterable, cds::forward<F>(from)));
+      impl::findFirst(rvalue<R>(), cds::forward<F>(from), P(), Tr())
+  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<F>(from), P(), Tr())) {
+    return impl::findFirst(*static_cast<R*>(this), cds::forward<F>(from), P(), Tr());
   }
 
   template <typename F = initializer_list<Value>> CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstNotOf(
       F&& from
   ) CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findFirstNotOf(rvalue<R>(), cds::forward<F>(from)))
-  ))) -> Returned {
-    auto* iterable = static_cast<R*>(this);
-    return Tr::adapt(*iterable, impl::findFirstNotOf(*iterable, cds::forward<F>(from)));
+      impl::findFirst(rvalue<R>(), cds::forward<F>(from), NP(), Tr())
+  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<F>(from), NP(), Tr())) {
+    return impl::findFirst(*static_cast<R*>(this), cds::forward<F>(from), NP(), Tr());
   }
 };
 
 template <typename R, typename Tr> class FindFirstOfByValueStaticBinding<R const, Tr> {
 protected:
   using Value = typename IterableTraits<R>::Value;
-  using Iterator = typename IterableTraits<R>::ConstIterator;
-  using Returned = decltype(Tr::adapt(rvalue<R>(), rvalue<Iterator>()));
+  using P = impl::Contains<functional::Equal<>>;
+  using NP = impl::NotContains<functional::Equal<>>;
 
 public:
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstOf(F&& from) const CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findFirstOf(rvalue<R const>(), cds::forward<F>(from)))
-  ))) -> Returned {
-    auto const* iterable = static_cast<R const*>(this);
-    return Tr::adapt(*iterable, impl::findFirstOf(*iterable, cds::forward<F>(from)));
+      impl::findFirst(rvalue<R const>(), cds::forward<F>(from), P(), Tr())
+  ))) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<F>(from), P(), Tr())) {
+    return impl::findFirst(*static_cast<R const*>(this), cds::forward<F>(from), P(), Tr());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstNotOf(F&& from) const CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findFirstNotOf(rvalue<R const>(), cds::forward<F>(from)))
-  ))) -> Returned {
-    auto const* iterable = static_cast<R const*>(this);
-    return Tr::adapt(*iterable, impl::findFirstNotOf(*iterable, cds::forward<F>(from)));
+      impl::findFirst(rvalue<R const>(), cds::forward<F>(from), NP(), Tr())
+  ))) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<F>(from), NP(), Tr())) {
+    return impl::findFirst(*static_cast<R const*>(this), cds::forward<F>(from), NP(), Tr());
   }
 };
 
-template <typename R, typename Tr = FindOfResultMappingTraits<R>, typename = void>
+template <typename R, typename Tr, typename = void>
 class FindLastOfByValueStaticBinding {};
 
 template <typename R, typename Tr> class FindLastOfByValueStaticBinding<R, Tr> {
 protected:
   using Value = typename IterableTraits<R>::Value;
-  using Iterator = typename IterableTraits<R>::ReverseIterator;
-  using Returned = decltype(Tr::adapt(rvalue<R>(), rvalue<Iterator>()));
+  using P = impl::Contains<functional::Equal<>>;
+  using NP = impl::NotContains<functional::Equal<>>;
 
 public:
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastOf(F&& from) CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findLastOf(rvalue<R>(), cds::forward<F>(from)))
-  ))) -> Returned {
-    auto* iterable = static_cast<R*>(this);
-    return Tr::adapt(*iterable, impl::findLastOf(*iterable, cds::forward<F>(from)));
+      impl::findLast(rvalue<R>(), cds::forward<F>(from), P(), Tr())
+  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<F>(from), P(), Tr())) {
+    return impl::findLast(*static_cast<R*>(this), cds::forward<F>(from), P(), Tr());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastNotOf(F&& from) CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findLastNotOf(rvalue<R>(), cds::forward<F>(from)))
-  ))) -> Returned {
-    auto* iterable = static_cast<R*>(this);
-    return Tr::adapt(*iterable, impl::findLastNotOf(*iterable, cds::forward<F>(from)));
+      impl::findLast(rvalue<R>(), cds::forward<F>(from), NP(), Tr())
+  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<F>(from), NP(), Tr())) {
+    return impl::findLast(*static_cast<R*>(this), cds::forward<F>(from), NP(), Tr());
   }
 };
 
 template <typename R, typename Tr> class FindLastOfByValueStaticBinding<R const, Tr> {
 protected:
   using Value = typename ::cds::meta::IterableTraits<R>::Value;
-  using Iterator = typename ::cds::meta::IterableTraits<R>::ConstReverseIterator;
-  using Returned = decltype(Tr::adapt(rvalue<R>(), ::cds::meta::rvalue<Iterator>()));
+  using P = impl::Contains<functional::Equal<>>;
+  using NP = impl::NotContains<functional::Equal<>>;
 
 public:
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastOf(F&& from) const CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findLastOf(rvalue<R const>(), cds::forward<F>(from)))
-  ))) -> Returned {
-    auto const* iterable = static_cast<R const*>(this);
-    return Tr::adapt(*iterable, impl::findLastOf(*iterable, cds::forward<F>(from)));
+      impl::findLast(rvalue<R const>(), cds::forward<F>(from), P(), Tr())
+  ))) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<F>(from), P(), Tr())) {
+    return impl::findLast(*static_cast<R const*>(this), cds::forward<F>(from), P(), Tr());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastNotOf(F&& from) const CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findLastNotOf(rvalue<R const>(), cds::forward<F>(from)))
-  ))) -> Returned {
-    auto const* iterable = static_cast<R const*>(this);
-    return Tr::adapt(*iterable, impl::findLastNotOf(*iterable, cds::forward<F>(from)));
+      impl::findLast(rvalue<R const>(), cds::forward<F>(from), NP(), Tr())
+  ))) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<F>(from), NP(), Tr())) {
+    return impl::findLast(*static_cast<R const*>(this), cds::forward<F>(from), NP(), Tr());
   }
 };
 
-template <typename R, typename Tr = FindOfResultMappingTraits<R>, typename = void>
+template <typename R, typename Tr, typename = void>
 class FindFirstOfBySelectorStaticBinding {};
 
 template <typename R, typename Tr> class FindFirstOfBySelectorStaticBinding<R, Tr> {
 protected:
   using Value = typename IterableTraits<R>::Value;
-  using Iterator = typename IterableTraits<R>::Iterator;
-  using Returned = decltype(Tr::adapt(rvalue<R>(), rvalue<Iterator>()));
+  using P = impl::Contains<functional::Equal<>>;
+  using NP = impl::NotContains<functional::Equal<>>;
 
 public:
   template <typename S, typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstOf(F&& from, S&& selector) CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findFirstOf(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector)))
-  ))) -> Returned {
-    auto* iterable = static_cast<R*>(this);
-    return Tr::adapt(*iterable, impl::findFirstOf(*iterable, cds::forward<F>(from), cds::forward<S>(selector)));
+      impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), P(), Tr())
+  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), P(), Tr())) {
+    return impl::findFirst(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<S>(selector), P(), Tr());
   }
 
   template <typename S, typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstNotOf(F&& from, S&& selector) CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findFirstNotOf(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector)))
-  ))) -> Returned {
-    auto* iterable = static_cast<R*>(this);
-    return Tr::adapt(*iterable, impl::findFirstNotOf(*iterable, cds::forward<F>(from), cds::forward<S>(selector)));
+      impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), Tr())
+  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), Tr())) {
+    return impl::findFirst(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<S>(selector), NP(), Tr());
   }
 };
 
 template <typename R, typename Tr> class FindFirstOfBySelectorStaticBinding<R const, Tr> {
 protected:
   using Value = typename IterableTraits<R>::Value;
-  using Iterator = typename IterableTraits<R>::ConstIterator;
-  using Returned = decltype(Tr::adapt(rvalue<R>(), rvalue<Iterator>()));
+  using P = impl::Contains<functional::Equal<>>;
+  using NP = impl::NotContains<functional::Equal<>>;
 
 public:
   template <typename S, typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstOf(F&& from, S&& selector) const CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findFirstOf(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector)))
-  ))) -> Returned {
-    auto const* iterable = static_cast<R const*>(this);
-    return Tr::adapt(*iterable, cds::impl::findFirstOf(*iterable, cds::forward<F>(from), cds::forward<S>(selector)));
+      impl::findFirst(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), P(), Tr())
+  ))) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), P(), Tr())) {
+    return impl::findFirst(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<S>(selector), P(), Tr());
   }
 
   template <typename S, typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstNotOf(F&& from, S&& selector) const CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findFirstNotOf(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector)))
-  ))) -> Returned {
-    auto const* iterable = static_cast<R const*>(this);
-    return Tr::adapt(*iterable, impl::findFirstNotOf(*iterable, cds::forward<F>(from), cds::forward<S>(selector)));
+      impl::findFirst(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), Tr())
+  ))) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), Tr())) {
+    return impl::findFirst(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<S>(selector), NP(), Tr());
   }
 };
 
-template <typename R, typename Tr = FindOfResultMappingTraits<R>, typename = void>
+template <typename R, typename Tr, typename = void>
 class FindLastOfBySelectorStaticBinding {};
 
 template <typename R, typename Tr> class FindLastOfBySelectorStaticBinding<R, Tr> {
 protected:
   using Value = typename IterableTraits<R>::Value;
-  using Iterator = typename IterableTraits<R>::ReverseIterator;
-  using Returned = decltype(Tr::adapt(rvalue<R>(), rvalue<Iterator>()));
+  using P = impl::Contains<functional::Equal<>>;
+  using NP = impl::NotContains<functional::Equal<>>;
 
 public:
   template <typename S, typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastOf(F&& from, S&& selector) CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findLastOf(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector)))
-  ))) -> Returned {
-    auto* iterable = static_cast<R*>(this);
-    return Tr::adapt(*iterable, impl::findLastOf(*iterable, cds::forward<F>(from), cds::forward<S>(selector)));
+      impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), P(), Tr())
+  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), P(), Tr())) {
+    return impl::findLast(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<S>(selector), P(), Tr());
   }
 
   template <typename S, typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastNotOf(F&& from, S&& selector) CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findLastNotOf(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector)))
-  ))) -> Returned {
-    auto* iterable = static_cast<R*>(this);
-    return Tr::adapt(*iterable, impl::findLastNotOf(*iterable, cds::forward<F>(from), cds::forward<S>(selector)));
+      impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), Tr())
+  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), Tr())) {
+    return impl::findLast(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<S>(selector), NP(), Tr());
   }
 };
 
 template <typename R, typename Tr> class FindLastOfBySelectorStaticBinding<R const, Tr> {
 protected:
   using Value = typename IterableTraits<R>::Value;
-  using Iterator = typename IterableTraits<R>::ConstReverseIterator;
-  using Returned = decltype(Tr::adapt(rvalue<R>(), rvalue<Iterator>()));
+  using P = impl::Contains<functional::Equal<>>;
+  using NP = impl::NotContains<functional::Equal<>>;
 
 public:
   template <typename S, typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastOf(F&& from, S&& selector) const CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findLastOf(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector)))
-  ))) -> Returned {
-    auto const* iterable = static_cast<R const*>(this);
-    return Tr::adapt(*iterable, impl::findLastOf(*iterable, cds::forward<F>(from), cds::forward<S>(selector)));
+      impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), P(), Tr())
+  ))) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), P(), Tr())) {
+    return impl::findLast(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<S>(selector), P(), Tr());
   }
 
   template <typename S, typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastNotOf(F&& from, S&& selector) const CDS_ATTR(noexcept(noexcept(
-      Tr::adapt(rvalue<R>(), impl::findLastNotOf(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector)))
-  ))) -> Returned {
-    auto const* iterable = static_cast<R const*>(this);
-    return Tr::adapt(*iterable, impl::findLastNotOf(*iterable, cds::forward<F>(from), cds::forward<S>(selector)));
+      impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), Tr())
+  ))) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), Tr())) {
+    return impl::findLast(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<S>(selector), NP(), Tr());
   }
 };
 
@@ -406,7 +384,7 @@ template <typename P> struct DirectionalSelector<P, True, True> {
 };
 } // namespace findOfDeriv
 
-template <typename R, typename P, typename Tr = FindOfResultMappingTraits<R>> struct FindOfStaticBinding :
+template <typename R, typename P, typename Tr = impl::FindPreserveTransformer<>> struct FindOfStaticBinding :
     public findOfDeriv::DirectionalSelector<P>::template Type<R, Tr> {};
 } // namespace impl
 } // namespace cds

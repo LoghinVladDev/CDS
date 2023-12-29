@@ -24,7 +24,7 @@ template<typename T = void> struct Identity {
 };
 
 template <> struct Identity<void> {
-  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto identity(T&& v) noexcept -> T {
+  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto identity(T&& v) noexcept -> T&& {
     return cds::forward<T>(v);
   }
 };

@@ -7,7 +7,7 @@
 #pragma once
 
 #include <cds/meta/ObjectTraits>
-#include <cds/Utility>
+#include <cds/meta/Semantics>
 
 namespace cds {
 template <typename...> class Tuple {};
@@ -359,13 +359,30 @@ struct InvokeResultOf<R(C::*)(Args...) volatile&& noexcept, Args...> : InvokeRes
 
 template <typename R, typename C, typename... Args>
 struct InvokeResultOf<R(C::*)(Args...) const volatile&& noexcept, Args...> : InvokeResult<void, R(Args...), Args...> {};
-#endif
+#endif // CDS_ATTR(noexcept_fn_type)
+
+template <typename T, typename A, typename = void> struct IsInvocableHelper : False {};
+template <typename T, typename... Args>
+struct IsInvocableHelper<T, Pack<Args...>, Void<typename InvokeResultOf<T, Args...>::Type>> : True {};
+
+template <typename R, typename T, typename A, typename = void> struct ReturnsAndIsInvocableHelper : False {};
+template <typename R, typename T, typename... Args>
+struct ReturnsAndIsInvocableHelper<R, T, Pack<Args...>, Void<typename InvokeResultOf<T, Args...>::Type>> :
+    IsSame<R, typename InvokeResultOf<T, Args...>::Type> {};
+
+template <typename T, typename... Args> struct IsInvocable : IsInvocableHelper<T, Pack<Args...>> {};
+template <typename T, typename R, typename... Args> struct ReturnsAndIsInvocable :
+    ReturnsAndIsInvocableHelper<T, R, Pack<Args...>> {};
 } // namespace impl
 template <typename Signature> struct FunctionTraits : ::cds::meta::impl::FunctionTraits<Decay<Signature>> {};
 
 template <typename Signature> using ReturnOf = typename ::cds::meta::impl::ReturnOf<Signature>::Type;
 template <typename Fn, typename... Args> using InvokeReturnOf
     = typename ::cds::meta::impl::InvokeResultOf<Fn, Args...>::Type;
+
+template <typename T, typename... Args> struct IsInvocable : ::cds::meta::impl::IsInvocable<T, Args...> {};
+template <typename T, typename R, typename... Args> struct ReturnsAndIsInvocable :
+    ::cds::meta::impl::ReturnsAndIsInvocable<T, R, Args...>::Type {};
 
 template <typename Signature> using ClassOf = typename ::cds::meta::FunctionTraits<Signature>::Class;
 template <typename Signature> using ArgsOf = typename ::cds::meta::FunctionTraits<Signature>::Args;

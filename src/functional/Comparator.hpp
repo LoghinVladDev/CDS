@@ -9,8 +9,6 @@
 
 namespace cds {
 namespace functional {
-
-
 template <typename L = void, typename R = L> struct Equal {
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(L const& lhs, R const& rhs) const noexcept -> bool {
     return lhs == rhs;

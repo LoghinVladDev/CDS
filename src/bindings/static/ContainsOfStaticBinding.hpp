@@ -23,46 +23,50 @@ using meta::rvalue;
 template <typename R> class ContainsByValueOfStaticBinding {
 protected:
   using Value = typename IterableTraits<R>::Value;
+  using P = functional::Equal<>;
 
 public:
   template <typename F = initializer_list<Value>> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyOf(F&& from)
-      const CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>())))) -> bool {
+      const CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), P())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
-      if (contains(*iterable, *i)) {
+      if (contains(*iterable, *i, P())) {
         return true;
       }
     }
     return false;
   }
 
-  template <typename F = initializer_list<Value>> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyNotOf(F&& from)
-      const CDS_ATTR(noexcept(noexcept(contains(rvalue<F>(), rvalue<Value>())))) -> bool {
+  template <typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyNotOf(F&& from)
+      const CDS_ATTR(noexcept(noexcept(contains(rvalue<F>(), rvalue<Value>(), P())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(*iterable), e = cds::end(*iterable); i != e; ++i) {
-      if (!contains(cds::forward<F>(from), *i)) {
+      if (!contains(cds::forward<F>(from), *i, P())) {
         return true;
       }
     }
     return false;
   }
 
-  template <typename F = initializer_list<Value>> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAllOf(F&& from)
-      const CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>())))) -> bool {
+  template <typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAllOf(F&& from)
+      const CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), P())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
-      if (!contains(*iterable, *i)) {
+      if (!contains(*iterable, *i, P())) {
         return false;
       }
     }
     return true;
   }
 
-  template <typename F = initializer_list<Value>> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsNoneOf(F&& from)
-      const CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>())))) -> bool {
+  template <typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto containsNoneOf(F&& from)
+      const CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), P())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
-      if (contains(*iterable, *i)) {
+      if (contains(*iterable, *i, P())) {
         return false;
       }
     }
@@ -74,14 +78,15 @@ template <typename R>
 class ContainsBySelectorOfStaticBinding {
 protected:
   using Value = typename IterableTraits<R>::Value;
+  using P = functional::Equal<>;
 
 public:
   template <typename S, typename F = initializer_list<ReturnOf<S>>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyOf(F&& from, S&& selector)
-      const CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), cds::forward<S>(selector))))) -> bool {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyOf(F&& from, S&& selector) const
+      CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), cds::forward<S>(selector), P())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
-      if (contains(*iterable, *i, cds::forward<S>(selector))) {
+      if (contains(*iterable, *i, cds::forward<S>(selector), P())) {
         return true;
       }
     }
@@ -90,10 +95,10 @@ public:
 
   template <typename S, typename F = initializer_list<ReturnOf<S>>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyNotOf(F&& from, S&& selector)
-      const CDS_ATTR(noexcept(noexcept(contains(cds::forward<F>(from), rvalue<Value>())))) -> bool {
+      const CDS_ATTR(noexcept(noexcept(contains(cds::forward<F>(from), rvalue<Value>(), P())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(*iterable), e = cds::end(*iterable); i != e; ++i) {
-      if (!contains(cds::forward<F>(from), cds::forward<S>(selector)(*i))) {
+      if (!contains(cds::forward<F>(from), cds::forward<S>(selector)(*i), P())) {
         return true;
       }
     }
@@ -101,11 +106,11 @@ public:
   }
 
   template <typename S, typename F = initializer_list<ReturnOf<S>>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAllOf(F&& from, S&& selector)
-      const CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), cds::forward<S>(selector))))) -> bool {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAllOf(F&& from, S&& selector) const
+      CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), cds::forward<S>(selector), P())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
-      if (!contains(*iterable, *i, cds::forward<S>(selector))) {
+      if (!contains(*iterable, *i, cds::forward<S>(selector), P())) {
         return false;
       }
     }
@@ -113,11 +118,11 @@ public:
   }
 
   template <typename S, typename F = initializer_list<ReturnOf<S>>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto containsNoneOf(F&& from, S&& selector)
-      const CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), cds::forward<S>(selector))))) -> bool {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto containsNoneOf(F&& from, S&& selector) const
+      CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), cds::forward<S>(selector), P())))) -> bool {
     auto const* iterable = static_cast<R const*>(this);
     for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
-      if (contains(*iterable, *i, cds::forward<S>(selector))) {
+      if (contains(*iterable, *i, cds::forward<S>(selector), P())) {
         return false;
       }
     }

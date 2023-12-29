@@ -597,22 +597,6 @@ auto awaitProcess(std::optional<std::string> executable, std::vector<std::string
     return {false, "", "", false};
   }
 
-//  ssize_t outReadCount;
-//  ssize_t errReadCount;
-//  std::array<char, 65536> errBuf{0};
-//  std::array<char, 65536> outBuf{0};
-//  std::string errContents;
-//  std::string outContents;
-//  bool stillReading = true;
-//  while (stillReading) {
-//    errReadCount = read(errRedir[0], errBuf.data(), 65536);
-//    outReadCount = read(outRedir[0], outBuf.data(), 65536);
-//    if (errReadCount != 0) errContents += std::string_view(errBuf.data(), errReadCount);
-//    if (outReadCount != 0) outContents += std::string_view(outBuf.data(), outReadCount);
-//
-//    stillReading = errReadCount != 0 || outReadCount != 0;
-//  }
-
   auto outputAwaiter = [](auto fd, auto& out) {
     return [fd, &out]() {
       ssize_t readCount;

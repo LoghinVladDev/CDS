@@ -7,6 +7,7 @@
 #include "UnitTest.hpp"
 #include <cds/StringView>
 #include <chrono>
+#include <iostream>
 
 using namespace cds;
 
@@ -119,32 +120,40 @@ TEST(Utility, iterable) {
   ASSERT_EQ(cri, crend(iterable));
 }
 
+namespace {
+template <typename I, typename V> CDS_ATTR(constexpr(14)) auto contains(I&& obj, V&& val) noexcept(noexcept(
+    impl::contains(cds::forward<I>(obj), cds::forward<V>(val), functional::Equal<>())
+)) -> decltype(impl::contains(cds::forward<I>(obj), cds::forward<V>(val), functional::Equal<>())) {
+  return impl::contains(cds::forward<I>(obj), cds::forward<V>(val), functional::Equal<>());
+}
+} // namespace
+
 TEST(Utility, contains) {
   struct A_eximpl { bool contains(int x) const { return x == 1 || x == 2 || x == 3; } };
   struct A_noex { bool contains(int x) const noexcept { return x == 1 || x == 2 || x == 3; } };
   struct A_ex { bool contains(int x) const noexcept(false) { return x == 1 || x == 2 || x == 3; } };
 
-  ASSERT_FALSE(impl::contains(A_eximpl(), 0));
-  ASSERT_TRUE(impl::contains(A_eximpl(), 1));
-  ASSERT_TRUE(impl::contains(A_eximpl(), 2));
-  ASSERT_TRUE(impl::contains(A_eximpl(), 3));
-  ASSERT_FALSE(impl::contains(A_eximpl(), 4));
+  ASSERT_FALSE(contains(A_eximpl(), 0));
+  ASSERT_TRUE(contains(A_eximpl(), 1));
+  ASSERT_TRUE(contains(A_eximpl(), 2));
+  ASSERT_TRUE(contains(A_eximpl(), 3));
+  ASSERT_FALSE(contains(A_eximpl(), 4));
 
-  ASSERT_FALSE(impl::contains(A_noex(), 0));
-  ASSERT_TRUE(impl::contains(A_noex(), 1));
-  ASSERT_TRUE(impl::contains(A_noex(), 2));
-  ASSERT_TRUE(impl::contains(A_noex(), 3));
-  ASSERT_FALSE(impl::contains(A_noex(), 4));
+  ASSERT_FALSE(contains(A_noex(), 0));
+  ASSERT_TRUE(contains(A_noex(), 1));
+  ASSERT_TRUE(contains(A_noex(), 2));
+  ASSERT_TRUE(contains(A_noex(), 3));
+  ASSERT_FALSE(contains(A_noex(), 4));
 
-  ASSERT_FALSE(impl::contains(A_ex(), 0));
-  ASSERT_TRUE(impl::contains(A_ex(), 1));
-  ASSERT_TRUE(impl::contains(A_ex(), 2));
-  ASSERT_TRUE(impl::contains(A_ex(), 3));
-  ASSERT_FALSE(impl::contains(A_ex(), 4));
+  ASSERT_FALSE(contains(A_ex(), 0));
+  ASSERT_TRUE(contains(A_ex(), 1));
+  ASSERT_TRUE(contains(A_ex(), 2));
+  ASSERT_TRUE(contains(A_ex(), 3));
+  ASSERT_FALSE(contains(A_ex(), 4));
 
-  ASSERT_EQ(noexcept(impl::contains(A_eximpl(), 0)), false);
-  ASSERT_EQ(noexcept(impl::contains(A_noex(), 0)), true);
-  ASSERT_EQ(noexcept(impl::contains(A_ex(), 0)), false);
+  ASSERT_EQ(noexcept(contains(A_eximpl(), 0)), false);
+  ASSERT_EQ(noexcept(contains(A_noex(), 0)), true);
+  ASSERT_EQ(noexcept(contains(A_ex(), 0)), false);
 }
 
 struct A_eximpl_sel {
@@ -159,12 +168,22 @@ struct A_eximpl_sel {
   std::string const data[3] = {"a", "bb", "ccc"};
 };
 
+namespace {
+template <typename I, typename V, typename S> CDS_ATTR(constexpr(14)) auto contains(I&& obj, V&& val, S&& sel) noexcept(noexcept(
+    impl::contains(cds::forward<I>(obj), cds::forward<V>(val), cds::forward<S>(sel), functional::Equal<>())
+)) -> decltype(
+    impl::contains(cds::forward<I>(obj), cds::forward<V>(val), cds::forward<S>(sel), functional::Equal<>())
+) {
+  return impl::contains(cds::forward<I>(obj), cds::forward<V>(val), cds::forward<S>(sel), functional::Equal<>());
+}
+} // namespace
+
 TEST(Utility, containsSelected) {
-  ASSERT_FALSE(impl::contains(A_eximpl_sel(), 0, functional::memFn(&std::string::length)));
-  ASSERT_TRUE(impl::contains(A_eximpl_sel(), 1, functional::memFn(&std::string::length)));
-  ASSERT_TRUE(impl::contains(A_eximpl_sel(), 2, functional::memFn(&std::string::length)));
-  ASSERT_TRUE(impl::contains(A_eximpl_sel(), 3, functional::memFn(&std::string::length)));
-  ASSERT_FALSE(impl::contains(A_eximpl_sel(), 4, functional::memFn(&std::string::length)));
+  ASSERT_FALSE(contains(A_eximpl_sel(), 0, functional::memFn(&std::string::length)));
+  ASSERT_TRUE(contains(A_eximpl_sel(), 1, functional::memFn(&std::string::length)));
+  ASSERT_TRUE(contains(A_eximpl_sel(), 2, functional::memFn(&std::string::length)));
+  ASSERT_TRUE(contains(A_eximpl_sel(), 3, functional::memFn(&std::string::length)));
+  ASSERT_FALSE(contains(A_eximpl_sel(), 4, functional::memFn(&std::string::length)));
 }
 
 TEST(Utility, IsIterable) {
@@ -194,23 +213,23 @@ TEST(Utility, IsReverseIterable) {
 }
 
 TEST(Utility, containsWithoutContainsMem) {
-  ASSERT_FALSE(cds::impl::contains(std::vector<int>{1, 2, 3}, 0));
-  ASSERT_TRUE(cds::impl::contains(std::vector<int>{1, 2, 3}, 1));
-  ASSERT_TRUE(cds::impl::contains(std::vector<int>{1, 2, 3}, 2));
-  ASSERT_TRUE(cds::impl::contains(std::vector<int>{1, 2, 3}, 3));
-  ASSERT_FALSE(cds::impl::contains(std::vector<int>{1, 2, 3}, 4));
+  ASSERT_FALSE(contains(std::vector<int>{1, 2, 3}, 0));
+  ASSERT_TRUE(contains(std::vector<int>{1, 2, 3}, 1));
+  ASSERT_TRUE(contains(std::vector<int>{1, 2, 3}, 2));
+  ASSERT_TRUE(contains(std::vector<int>{1, 2, 3}, 3));
+  ASSERT_FALSE(contains(std::vector<int>{1, 2, 3}, 4));
 }
 
 namespace {int doubled(int v){ return v * 2; }}
 TEST(Utility, containsSelWithoutContainsMem) {
-  ASSERT_FALSE(cds::impl::contains(std::vector<int>{1, 2, 3}, 0, doubled));
-  ASSERT_FALSE(cds::impl::contains(std::vector<int>{1, 2, 3}, 1, doubled));
-  ASSERT_TRUE(cds::impl::contains(std::vector<int>{1, 2, 3}, 2, doubled));
-  ASSERT_FALSE(cds::impl::contains(std::vector<int>{1, 2, 3}, 3, doubled));
-  ASSERT_TRUE(cds::impl::contains(std::vector<int>{1, 2, 3}, 4, doubled));
-  ASSERT_FALSE(cds::impl::contains(std::vector<int>{1, 2, 3}, 5, doubled));
-  ASSERT_TRUE(cds::impl::contains(std::vector<int>{1, 2, 3}, 6, doubled));
-  ASSERT_FALSE(cds::impl::contains(std::vector<int>{1, 2, 3}, 7, doubled));
+  ASSERT_FALSE(contains(std::vector<int>{1, 2, 3}, 0, doubled));
+  ASSERT_FALSE(contains(std::vector<int>{1, 2, 3}, 1, doubled));
+  ASSERT_TRUE(contains(std::vector<int>{1, 2, 3}, 2, doubled));
+  ASSERT_FALSE(contains(std::vector<int>{1, 2, 3}, 3, doubled));
+  ASSERT_TRUE(contains(std::vector<int>{1, 2, 3}, 4, doubled));
+  ASSERT_FALSE(contains(std::vector<int>{1, 2, 3}, 5, doubled));
+  ASSERT_TRUE(contains(std::vector<int>{1, 2, 3}, 6, doubled));
+  ASSERT_FALSE(contains(std::vector<int>{1, 2, 3}, 7, doubled));
 }
 
 TEST(Utility, containsPrefsContains) {
@@ -220,12 +239,22 @@ TEST(Utility, containsPrefsContains) {
     int const* end() const { return nullptr; }
   };
 
-  ASSERT_FALSE(cds::impl::contains(X(), 0));
-  ASSERT_TRUE(cds::impl::contains(X(), 1));
+  ASSERT_FALSE(contains(X(), 0));
+  ASSERT_TRUE(contains(X(), 1));
 }
 
+namespace {
+template <typename I, typename V> CDS_ATTR(constexpr(14)) auto find(I&& iter, V&& val) noexcept(noexcept(
+    impl::find(cds::forward<I>(iter), cds::forward<V>(val), functional::Equal<>(), impl::FindResultTransformer<>())
+)) -> decltype(
+    impl::find(cds::forward<I>(iter), cds::forward<V>(val), functional::Equal<>(), impl::FindResultTransformer<>())
+) {
+  return
+      impl::find(cds::forward<I>(iter), cds::forward<V>(val), functional::Equal<>(), impl::FindResultTransformer<>());
+}
+} // namespace
+
 TEST(Utility, ownership) {
-  using impl::find;
   std::vector<int> i {1, 2, 3};
   auto v = 2;
 
@@ -287,9 +316,23 @@ TEST(Utility, ownership) {
   ASSERT_EQ(cb4, cl4.end());
 }
 
-TEST(Utility, find) {
-  using impl::find;
+namespace {
+template <typename I, typename V, typename S> CDS_ATTR(constexpr(14)) auto find(I&& iter, V&& val, S&& selector)
+    noexcept(noexcept(impl::find(
+        cds::forward<I>(iter), cds::forward<V>(val), cds::forward<S>(selector),
+        functional::Equal<>(), impl::FindResultTransformer<>()
+    ))) -> decltype(impl::find(
+        cds::forward<I>(iter), cds::forward<V>(val), cds::forward<S>(selector),
+        functional::Equal<>(), impl::FindResultTransformer<>()
+    )) {
+  return impl::find(
+      cds::forward<I>(iter), cds::forward<V>(val), cds::forward<S>(selector),
+      functional::Equal<>(), impl::FindResultTransformer<>()
+  );
+}
+} // namespace
 
+TEST(Utility, find) {
   std::vector<int> v {1, 2, 3, 2, 1};
   auto locs1 = find(v, 1);
   auto b1 = locs1.begin();
@@ -341,7 +384,7 @@ TEST(Utility, timing) {
 //    callable();
 //    auto end = std::chrono::high_resolution_clock::now();
 //    auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
-////    std::cout << "Duration of '" << name << "': " << diff.count() << "ns\n";
+//    std::cout << "Duration of '" << name << "': " << diff.count() << "ns\n";
 //  };
 //
 //  int n = 10000000;
@@ -349,12 +392,12 @@ TEST(Utility, timing) {
 //  StringView sv = "abcdefghijklmnop";
 //  using impl::findFirst;
 //
-////  timed("sv", [&]{
-////    for (int i = 0; i < n; ++i) {
-////      auto volatile r = impl::FF1<>::findFirst(sv, 'b');
-////    }
-////  });
-//
+//////  timed("sv", [&]{
+//////    for (int i = 0; i < n; ++i) {
+//////      auto volatile r = impl::FF1<>::findFirst(sv, 'b');
+//////    }
+//////  });
+////
 //  auto findFirstCStr = []<int s>(char const volatile(&str)[s], char v) {
 //    for (auto idx = 0; idx + 1 < s; ++idx) {
 //      if (str[idx] == v) {
@@ -363,7 +406,7 @@ TEST(Utility, timing) {
 //    }
 //    return -1;
 //  };
-
+//
 //  timed("sv", [&]{
 //    for (int i = 0; i < n; ++i) {
 //      auto volatile r = findFirstCStr(svCstr, 'm');
@@ -378,7 +421,7 @@ TEST(Utility, timing) {
 //
 //  timed("sv", [&]{
 //    for (int i = 0; i < n; ++i) {
-//      auto volatile r = findFirst(sv, 'm');
+//      auto volatile r = findFirst(sv, 'm', functional::Equal<>(), impl::FindStringTransformer<char, impl::StringUtils<char, meta::StringTraits<char>>>());
 //    }
 //  });
 
@@ -407,43 +450,22 @@ template <typename T, typename V> constexpr auto sum(T&& lhs, V&& rhs) -> declty
   return cds::forward<T>(lhs) + cds::forward<V>(rhs);
 }
 
-struct Moveable {
-  Moveable() noexcept = default;
-  Moveable(Moveable&& m) = default;
-  constexpr int f()&& { return 1; }
-  constexpr int f() const& { return 0; }
-};
-
-constexpr Moveable& mutateToNonMove(Moveable&& m) {
-  return *static_cast<Moveable*>(&m);
-}
-
 TEST(Utility, cpp11Constexpr) {
   static_assert(sum(1, 2) == 3, "Failed Compile Time Fwd");
-  static_assert(mutateToNonMove(Moveable()).f() == 0, "Failed Compile Time Move");
-  static_assert(move(mutateToNonMove(Moveable())).f() == 1, "Failed Compile Time Move");
   static_assert(minOf(1, 2) == 1, "Failed Compile Time Min");
   static_assert(minOf(1, 2, 0) == 0, "Failed Compile Time Min");
   static_assert(maxOf(1, 2) == 2, "Failed Compile Time Max");
   static_assert(maxOf(1, 2, 3) == 3, "Failed Compile Time Max");
 
   struct Iterable {
-    constexpr int begin() { return 1; }
-    constexpr int end() { return 2; }
     constexpr int cbegin() const { return 3; }
     constexpr int cend() const { return 4; }
-    constexpr int rbegin() { return 5; }
-    constexpr int rend() { return 6; }
     constexpr int crbegin() const { return 7; }
     constexpr int crend() const { return 8; }
   };
 
-  static_assert(begin(Iterable()) == 1, "Failed Compile Time iterablefns");
-  static_assert(end(Iterable()) == 2, "Failed Compile Time iterablefns");
   static_assert(cbegin(Iterable()) == 3, "Failed Compile Time iterablefns");
   static_assert(cend(Iterable()) == 4, "Failed Compile Time iterablefns");
-  static_assert(rbegin(Iterable()) == 5, "Failed Compile Time iterablefns");
-  static_assert(rend(Iterable()) == 6, "Failed Compile Time iterablefns");
   static_assert(crbegin(Iterable()) == 7, "Failed Compile Time iterablefns");
   static_assert(crend(Iterable()) == 8, "Failed Compile Time iterablefns");
 }
@@ -462,21 +484,47 @@ struct A_eximpl_sel_c {
   StringView const data[3] = {"a", "bb", "ccc"};
 };
 
+struct Moveable {
+  Moveable() noexcept = default;
+  Moveable(Moveable&& m) = default;
+  constexpr int f()&& { return 1; }
+  constexpr int f() const& { return 0; }
+};
+
+constexpr Moveable& mutateToNonMove(Moveable&& m) {
+  return *static_cast<Moveable*>(&m);
+}
+
 TEST(Utility, cpp14Constexpr) {
+  static_assert(mutateToNonMove(Moveable()).f() == 0, "Failed Compile Time Move");
+  static_assert(move(mutateToNonMove(Moveable())).f() == 1, "Failed Compile Time Move");
+
+  struct Iterable {
+    constexpr int begin() { return 1; }
+    constexpr int end() { return 2; }
+    constexpr int rbegin() { return 5; }
+    constexpr int rend() { return 6; }
+  };
+
+  static_assert(begin(Iterable()) == 1, "Failed Compile Time iterablefns");
+  static_assert(end(Iterable()) == 2, "Failed Compile Time iterablefns");
+  static_assert(rbegin(Iterable()) == 5, "Failed Compile Time iterablefns");
+  static_assert(rend(Iterable()) == 6, "Failed Compile Time iterablefns");
+
   struct A_eximpl_c { constexpr bool contains(int x) const { return x == 1 || x == 2 || x == 3; } };
-  static_assert(!impl::contains(A_eximpl_c(), 0), "constexpr contains failed");
-  static_assert(impl::contains(A_eximpl_c(), 1), "constexpr contains failed");
-  static_assert(!impl::contains(A_eximpl_sel_c(), 0, functional::memFn(&StringView::length)), "constexpr contains by selector failure");
-  static_assert(impl::contains(A_eximpl_sel_c(), 1, functional::memFn(&StringView::length)), "constexpr contains by selector failure");
+  static_assert(!contains(A_eximpl_c(), 0), "constexpr contains failed");
+  static_assert(contains(A_eximpl_c(), 1), "constexpr contains failed");
+  static_assert(!contains(A_eximpl_sel_c(), 0, functional::memFn(&StringView::length)), "constexpr contains by selector failure");
+  static_assert(contains(A_eximpl_sel_c(), 1, functional::memFn(&StringView::length)), "constexpr contains by selector failure");
 
   struct X {
     constexpr bool contains(int x) const { return x == 1; }
     int const* begin() const { return nullptr; }
     int const* end() const { return nullptr; }
   };
-  static_assert(impl::contains(X(), 1), "constexpr contains failed");
+  static_assert(contains(X(), 1), "constexpr contains failed");
   constexpr int arr[2] = {1, 2};
-  static_assert(!impl::contains(arr, 0), "constexpr contains failed");
-  static_assert(impl::contains(arr, 1), "constexpr contains failed");
+  static_assert(!contains(arr, 0), "constexpr contains failed");
+  static_assert(contains(arr, 1), "constexpr contains failed");
 }
 #endif
