@@ -2,6 +2,7 @@ set(
     CDS_UNIT_TEST_SOURCES
     valid/iterator/AddressIterator.cpp
     valid/bindings/ContainsOfStaticBinding.cpp
+    valid/bindings/FindStaticBinding.cpp
     valid/bindings/FindOfStaticBinding.cpp
     valid/functional/FunctionalInterface.cpp
     valid/meta/MetaBase.cpp

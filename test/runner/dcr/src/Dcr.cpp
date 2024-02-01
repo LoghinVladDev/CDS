@@ -612,7 +612,7 @@ auto awaitProcess(std::optional<std::string> executable, std::vector<std::string
 
   std::string errContents;
   std::string outContents;
-  {std::array{std::jthread(outputAwaiter(errRedir[0], errContents)), std::jthread(outputAwaiter(outRedir[0], outContents))};}
+  {(void)std::array{std::jthread(outputAwaiter(errRedir[0], errContents)), std::jthread(outputAwaiter(outRedir[0], outContents))};}
 
   int stat;
   waitpid(childId, &stat, 0);

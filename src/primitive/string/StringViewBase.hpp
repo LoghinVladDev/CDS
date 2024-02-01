@@ -13,6 +13,7 @@
 
 #include "../../bindings/BindingSelectors.hpp"
 #include "../../bindings/static/ContainsOfStaticBinding.hpp"
+#include "../../bindings/static/FindStaticBinding.hpp"
 #include "../../bindings/static/FindOfStaticBinding.hpp"
 
 #include "StringUtils.hpp"
@@ -70,18 +71,38 @@ template <typename C, typename U> struct FindStringTransformer {
   }
 };
 
+namespace bindingsBSV {
+template <typename C, typename U> using Self = BaseStringView<C, U>;
+template <typename C, typename U> using Traits = IterableTraits<Self<C, U>>;
+
+using ContainsOpt = With<Value, Selector>;
+template <typename C, typename U> struct ContainsOf :
+    ContainsOfStaticBinding<Self<C, U>, ContainsOpt> {};
+
+using FindOpt = With<Value, Selector, Forward, Backward, Immutable>;
+template <typename C, typename U> struct FindTr :
+    FindStringTransformer<C, U> {};
+template <typename C, typename U> struct Find :
+    FindStaticBinding<Self<C, U>, FindOpt, FindTr<C, U>, FindTr<C, U>> {};
+template <typename C, typename U> struct FindOf :
+    FindOfStaticBinding<Self<C, U>, FindOpt, FindTr<C, U>, FindTr<C, U>> {};
+} // namespace bindingsBSV
+
 template <typename C, typename U> class CDS_ATTR(inheritsEBOs) BaseStringView :
-    public IterableTraits<BaseStringView<C, U>>,
-    public ContainsOfStaticBinding<BaseStringView<C, U>, With<Value, Selector>>,
-    public FindOfStaticBinding<BaseStringView<C, U>, With<Value, Selector, Forward, Backward, Immutable>, FindStringTransformer<C, U>> {
+    public bindingsBSV::Traits<C, U>,
+    public bindingsBSV::ContainsOf<C, U>,
+    public bindingsBSV::Find<C, U>,
+    public bindingsBSV::FindOf<C, U> {
 public:
-  using ITraits = IterableTraits<BaseStringView<C, U>>;
+  using ITraits = bindingsBSV::Traits<C, U>;
   using typename ITraits::Value;
   using typename ITraits::Iterator;
   using typename ITraits::ConstIterator;
   using typename ITraits::ReverseIterator;
   using typename ITraits::ConstReverseIterator;
   using Address = C const*;
+
+  using bindingsBSV::Find<C, U>::findFirst;
 
   static Idx const npos;
   static Idx const invalidIndex;
@@ -203,46 +224,6 @@ public:
     }
 
     return {_data + sFrom, sUntil - sFrom};
-  }
-
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(Value character) const noexcept -> Idx {
-    for (decltype(_length) idx = 0u; idx < _length; ++idx) {
-      if (_data[idx] == character) {
-        return idx;
-      }
-    }
-    return npos;
-  }
-
-  template <typename S> CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
-      Value character, S&& selector
-  ) const noexcept -> Idx {
-    for (decltype(_length) idx = 0u; idx < _length; ++idx) {
-      if (cds::forward<S>(selector)(_data[idx]) == character) {
-        return idx;
-      }
-    }
-    return npos;
-  }
-
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(Value character) const noexcept -> Idx {
-    for (decltype(_length) idx = _length - 1u; idx >= 0; --idx) {
-      if (_data[idx] == character) {
-        return idx;
-      }
-    }
-    return npos;
-  }
-
-  template <typename S> CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
-      Value character, S&& selector
-  ) const noexcept -> Idx {
-    for (decltype(_length) idx = _length - 1u; idx >= 0; --idx) {
-      if (cds::forward<S>(selector)(_data[idx]) == character) {
-        return idx;
-      }
-    }
-    return npos;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(Value character) const noexcept -> bool {
@@ -478,36 +459,6 @@ template <typename C, typename U, typename T, EnableIf<And<
   return BaseStringView<C, U>(cds::forward<T>(lhs)) <=> rhs;
 }
 #endif
-//
-//template <typename C, typename U> struct FindOfResultMappingTraits<BaseStringView<C, U>> {
-//  template <typename T, EnableIf<IsIterator<T>> = 0>
-//  CDS_ATTR(2(nodiscard, constexpr(11))) static auto adapt(BaseStringView<C, U> const& string, T&& iterator) -> Idx {
-//    return end(string) == cds::forward<T>(iterator)
-//        ? BaseStringView<C, U>::npos
-//        : (cds::forward<T>(iterator) - begin(string));
-//  }
-//
-//  template <typename T, EnableIf<IsReverseIterator<T>> = 0>
-//  CDS_ATTR(2(nodiscard, constexpr(11))) static auto adapt(BaseStringView<C, U> const& string, T&& iterator) -> Idx {
-//    return rend(string) == cds::forward<T>(iterator)
-//        ? BaseStringView<C, U>::npos
-//        : (string.length() - (cds::forward<T>(iterator) - rbegin(string) + 1));
-//  }
-//};
-//
-//template <typename C, typename U> struct FindStringTransformer {
-//  template <typename IB, typename IE, typename I>
-//  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(IB&& b, IE&& e, I&& i) const noexcept -> Idx {
-//    return cds::forward<IE>(e) == cds::forward<I>(i)
-//        ? BaseStringView<C, U>::npos
-//        : (cds::forward<I>(i) - cds::forward<IB>(b));
-//  }
-//};
-
-//template <typename C, typename U> CDS_ATTR(constexpr(14)) auto findFirstA(BaseStringView<C, U> const& sv, C value)
-//noexcept -> Idx {
-//  return findFirst(sv, value, FindStringTransformer<C, U>());
-//}
 } // namespace impl
 } // namespace cds
 

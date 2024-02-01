@@ -373,12 +373,27 @@ TEST(StringView, containsOf) {
 }
 
 TEST(StringView, find) {
-  StringView sv = "abcd";
-  char const v[] = "abc";
-  ASSERT_EQ(sv.findFirstOf("BC"), StringView::npos);
-  ASSERT_EQ(sv.findFirstOf("bc"), 1);
-  ASSERT_EQ(sv.findLastOf("bc"), 1);
-  ASSERT_EQ(sv.findLastOf("BC"), StringView::npos);
+  StringView sv = "abcb";
+
+  auto lRng = sv.find('b');
+  auto lIt = lRng.begin();
+  ASSERT_EQ(*lIt, 1);
+  ASSERT_NE(lIt, lRng.end());
+  ++lIt;
+  ASSERT_EQ(*lIt, 3);
+  ASSERT_NE(lIt, lRng.end());
+  ++lIt;
+  ASSERT_EQ(lIt, lRng.end());
+
+  auto rRng = StringView("abcb").find('b');
+  auto rIt = rRng.begin();
+  ASSERT_EQ(*rIt, 1);
+  ASSERT_NE(rIt, rRng.end());
+  ++rIt;
+  ASSERT_EQ(*rIt, 3);
+  ASSERT_NE(rIt, rRng.end());
+  ++rIt;
+  ASSERT_EQ(rIt, rRng.end());
 }
 
 #ifdef DCR_SINCECPP20

@@ -2,9 +2,8 @@
 // STEPS: compile(linux:gcc;linux:clang),run(linux:gcc;linux:clang)
 // STD: 11-2b
 
-#include "../../../../src/bindings/static/FindOfStaticBinding.hpp"
+#include "../../../../src/bindings/static/FindStaticBinding.hpp"
 #include "UnitTest.hpp"
-#include <initializer_list>
 #include <vector>
 #include <algorithm>
 #include <cds/Utility>
@@ -14,7 +13,7 @@ using namespace cds;
 using namespace cds::meta;
 using namespace cds::impl;
 using namespace cds::impl::sel;
-using namespace cds::impl::findOfDeriv;
+using namespace cds::impl::findDeriv;
 
 class Find_FwdValImm;
 class Find_FwdValMut;
@@ -84,6 +83,7 @@ template <> struct IterableTraits<Find_FwdBwdValSelImmMut> { using Value = int; 
 namespace {
 struct TCommonFwdImm : private std::vector<int> {
 public:
+  using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::cbegin;
   using std::vector<int>::cend;
@@ -91,6 +91,7 @@ public:
 
 struct TCommonFwdMut : private std::vector<int> {
 public:
+  using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::begin;
   using std::vector<int>::end;
@@ -98,6 +99,7 @@ public:
 
 struct TCommonFwdImmMut : private std::vector<int> {
 public:
+  using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::begin;
   using std::vector<int>::end;
@@ -107,6 +109,7 @@ public:
 
 struct TCommonBwdImm : private std::vector<int> {
 public:
+  using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::crbegin;
   using std::vector<int>::crend;
@@ -114,6 +117,7 @@ public:
 
 struct TCommonBwdMut : private std::vector<int> {
 public:
+  using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::rbegin;
   using std::vector<int>::rend;
@@ -121,6 +125,7 @@ public:
 
 struct TCommonBwdImmMut : private std::vector<int> {
 public:
+  using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::rbegin;
   using std::vector<int>::rend;
@@ -130,6 +135,7 @@ public:
 
 struct TCommonFwdBwdImm : private std::vector<int> {
 public:
+  using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::crbegin;
   using std::vector<int>::crend;
@@ -139,6 +145,7 @@ public:
 
 struct TCommonFwdBwdMut : private std::vector<int> {
 public:
+  using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::rbegin;
   using std::vector<int>::rend;
@@ -148,6 +155,7 @@ public:
 
 struct TCommonFwdBwdImmMut : private std::vector<int> {
 public:
+  using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::rbegin;
   using std::vector<int>::rend;
@@ -159,273 +167,351 @@ public:
   using std::vector<int>::cend;
 };
 
-class Find_FwdValImm : public TCommonFwdImm, public FindOfStaticBinding<Find_FwdValImm, With<Forward, Value, Immutable>> {
+class Find_FwdValImm : public TCommonFwdImm, public FindStaticBinding<Find_FwdValImm, With<Forward, Value, Immutable>> {
 public:
   using TCommonFwdImm::TCommonFwdImm;
-  bool contains(int a) const { return std::find(cbegin(), cend(), a) != cend(); }
 };
 
-class Find_FwdValMut : public TCommonFwdMut, public FindOfStaticBinding<Find_FwdValMut, With<Forward, Value, Mutable>> {
+class Find_FwdValMut : public TCommonFwdMut, public FindStaticBinding<Find_FwdValMut, With<Forward, Value, Mutable>> {
 public:
   using TCommonFwdMut::TCommonFwdMut;
-  bool contains(int a) { return std::find(begin(), end(), a) != end(); }
 };
 
-class Find_FwdValImmMut : public TCommonFwdImmMut, public FindOfStaticBinding<Find_FwdValImmMut, With<Forward, Value, Mutable, Immutable>> {
+class Find_FwdValImmMut : public TCommonFwdImmMut, public FindStaticBinding<Find_FwdValImmMut, With<Forward, Value, Mutable, Immutable>> {
 public:
   using TCommonFwdImmMut::TCommonFwdImmMut;
-  bool contains(int a) { return std::find(begin(), end(), a) != end(); }
-  bool contains(int a) const { return std::find(cbegin(), cend(), a) != cend(); }
 };
 
-template <typename I, typename V, typename S>
-auto lfind(I&& b, I&& e, V&& v, S&& s) noexcept -> I {
-  for (auto i = cds::forward<I>(b); i < cds::forward<I>(e); ++i) {
-    if (cds::forward<S>(s)(*i) == cds::forward<V>(v)) {
-      return i;
-    }
-  }
-  return cds::forward<I>(e);
-}
-
-class Find_FwdSelImm : public TCommonFwdImm, public FindOfStaticBinding<Find_FwdSelImm, With<Forward, Selector, Immutable>> {
+class Find_FwdSelImm : public TCommonFwdImm, public FindStaticBinding<Find_FwdSelImm, With<Forward, Selector, Immutable>> {
 public:
   using TCommonFwdImm::TCommonFwdImm;
-  template <typename S> bool contains(int a, S&& s) const { return lfind(cbegin(), cend(), a, cds::forward<S>(s)) != cend(); }
 };
 
-class Find_FwdSelMut : public TCommonFwdMut, public FindOfStaticBinding<Find_FwdSelMut, With<Forward, Selector, Mutable>> {
+class Find_FwdSelMut : public TCommonFwdMut, public FindStaticBinding<Find_FwdSelMut, With<Forward, Selector, Mutable>> {
 public:
   using TCommonFwdMut::TCommonFwdMut;
-  template <typename S> bool contains(int a, S&& s) { return lfind(begin(), end(), a, cds::forward<S>(s)) != end(); }
 };
 
-class Find_FwdSelImmMut : public TCommonFwdImmMut, public FindOfStaticBinding<Find_FwdSelImmMut, With<Forward, Selector, Immutable, Mutable>> {
+class Find_FwdSelImmMut : public TCommonFwdImmMut, public FindStaticBinding<Find_FwdSelImmMut, With<Forward, Selector, Immutable, Mutable>> {
 public:
   using TCommonFwdImmMut::TCommonFwdImmMut;
-  template <typename S> bool contains(int a, S&& s) const { return lfind(cbegin(), cend(), a, cds::forward<S>(s)) != cend(); }
-  template <typename S> bool contains(int a, S&& s) { return lfind(begin(), end(), a, cds::forward<S>(s)) != end(); }
 };
 
-class Find_FwdValSelImm : public TCommonFwdImm, public FindOfStaticBinding<Find_FwdValSelImm, With<Forward, Value, Selector, Immutable>> {
+class Find_FwdValSelImm : public TCommonFwdImm, public FindStaticBinding<Find_FwdValSelImm, With<Forward, Value, Selector, Immutable>> {
 public:
   using TCommonFwdImm::TCommonFwdImm;
-  bool contains(int a) const { return std::find(cbegin(), cend(), a) != cend(); }
-  template <typename S> bool contains(int a, S&& s) const { return lfind(cbegin(), cend(), a, cds::forward<S>(s)) != cend(); }
 };
 
-class Find_FwdValSelMut : public TCommonFwdMut, public FindOfStaticBinding<Find_FwdValSelMut, With<Selector, Forward, Value, Mutable>> {
+class Find_FwdValSelMut : public TCommonFwdMut, public FindStaticBinding<Find_FwdValSelMut, With<Selector, Forward, Value, Mutable>> {
 public:
   using TCommonFwdMut::TCommonFwdMut;
-  bool contains(int a) { return std::find(begin(), end(), a) != end(); }
-  template <typename S> bool contains(int a, S&& s) { return lfind(begin(), end(), a, cds::forward<S>(s)) != end(); }
 };
 
-class Find_FwdValSelImmMut : public TCommonFwdImmMut, public FindOfStaticBinding<Find_FwdValSelImmMut, With<Selector, Value, Immutable, Forward, Mutable>> {
+class Find_FwdValSelImmMut : public TCommonFwdImmMut, public FindStaticBinding<Find_FwdValSelImmMut, With<Selector, Value, Immutable, Forward, Mutable>> {
 public:
   using TCommonFwdImmMut::TCommonFwdImmMut;
-  bool contains(int a) { return std::find(begin(), end(), a) != end(); }
-  bool contains(int a) const { return std::find(cbegin(), cend(), a) != cend(); }
-  template <typename S> bool contains(int a, S&& s) const { return lfind(cbegin(), cend(), a, cds::forward<S>(s)) != cend(); }
-  template <typename S> bool contains(int a, S&& s) { return lfind(begin(), end(), a, cds::forward<S>(s)) != end(); }
 };
 
 
 
-class Find_BwdValImm : public TCommonBwdImm, public FindOfStaticBinding<Find_BwdValImm, With<Backward, Value, Immutable>> {
+class Find_BwdValImm : public TCommonBwdImm, public FindStaticBinding<Find_BwdValImm, With<Backward, Value, Immutable>> {
 public:
   using TCommonBwdImm::TCommonBwdImm;
-  bool contains(int a) const { return std::find(crbegin(), crend(), a) != crend(); }
 };
 
-class Find_BwdValMut : public TCommonBwdMut, public FindOfStaticBinding<Find_BwdValMut, With<Value, Backward, Mutable>> {
+class Find_BwdValMut : public TCommonBwdMut, public FindStaticBinding<Find_BwdValMut, With<Value, Backward, Mutable>> {
 public:
   using TCommonBwdMut::TCommonBwdMut;
-  bool contains(int a) { return std::find(rbegin(), rend(), a) != rend(); }
 };
 
-class Find_BwdValImmMut : public TCommonBwdImmMut, public FindOfStaticBinding<Find_BwdValImmMut, With<Value, Mutable, Immutable, Backward>> {
+class Find_BwdValImmMut : public TCommonBwdImmMut, public FindStaticBinding<Find_BwdValImmMut, With<Value, Mutable, Immutable, Backward>> {
 public:
   using TCommonBwdImmMut::TCommonBwdImmMut;
-  bool contains(int a) { return std::find(rbegin(), rend(), a) != rend(); }
-  bool contains(int a) const { return std::find(crbegin(), crend(), a) != crend(); }
 };
 
-class Find_BwdSelImm : public TCommonBwdImm, public FindOfStaticBinding<Find_BwdSelImm, With<Backward, Selector, Immutable>> {
+class Find_BwdSelImm : public TCommonBwdImm, public FindStaticBinding<Find_BwdSelImm, With<Backward, Selector, Immutable>> {
 public:
   using TCommonBwdImm::TCommonBwdImm;
-  template <typename S> bool contains(int a, S&& s) const { return lfind(crbegin(), crend(), a, cds::forward<S>(s)) != crend(); }
 };
 
-class Find_BwdSelMut : public TCommonBwdMut, public FindOfStaticBinding<Find_BwdSelMut, With<Backward, Selector, Mutable>> {
+class Find_BwdSelMut : public TCommonBwdMut, public FindStaticBinding<Find_BwdSelMut, With<Backward, Selector, Mutable>> {
 public:
   using TCommonBwdMut::TCommonBwdMut;
-  template <typename S> bool contains(int a, S&& s) { return lfind(rbegin(), rend(), a, cds::forward<S>(s)) != rend(); }
 };
 
-class Find_BwdSelImmMut : public TCommonBwdImmMut, public FindOfStaticBinding<Find_BwdSelImmMut, With<Backward, Selector, Immutable, Mutable>> {
+class Find_BwdSelImmMut : public TCommonBwdImmMut, public FindStaticBinding<Find_BwdSelImmMut, With<Backward, Selector, Immutable, Mutable>> {
 public:
   using TCommonBwdImmMut::TCommonBwdImmMut;
-  template <typename S> bool contains(int a, S&& s) const { return lfind(crbegin(), crend(), a, cds::forward<S>(s)) != crend(); }
-  template <typename S> bool contains(int a, S&& s) { return lfind(rbegin(), rend(), a, cds::forward<S>(s)) != rend(); }
 };
 
-class Find_BwdValSelImm : public TCommonBwdImm, public FindOfStaticBinding<Find_BwdValSelImm, With<Backward, Value, Selector, Immutable>> {
+class Find_BwdValSelImm : public TCommonBwdImm, public FindStaticBinding<Find_BwdValSelImm, With<Backward, Value, Selector, Immutable>> {
 public:
   using TCommonBwdImm::TCommonBwdImm;
-  bool contains(int a) const { return std::find(crbegin(), crend(), a) != crend(); }
-  template <typename S> bool contains(int a, S&& s) const { return lfind(crbegin(), crend(), a, cds::forward<S>(s)) != crend(); }
 };
 
-class Find_BwdValSelMut : public TCommonBwdMut, public FindOfStaticBinding<Find_BwdValSelMut, With<Selector, Backward, Value, Mutable>> {
+class Find_BwdValSelMut : public TCommonBwdMut, public FindStaticBinding<Find_BwdValSelMut, With<Selector, Backward, Value, Mutable>> {
 public:
   using TCommonBwdMut::TCommonBwdMut;
-  bool contains(int a) { return std::find(rbegin(), rend(), a) != rend(); }
-  template <typename S> bool contains(int a, S&& s) { return lfind(rbegin(), rend(), a, cds::forward<S>(s)) != rend(); }
 };
 
-class Find_BwdValSelImmMut : public TCommonBwdImmMut, public FindOfStaticBinding<Find_BwdValSelImmMut, With<Selector, Value, Immutable, Backward, Mutable>> {
+class Find_BwdValSelImmMut : public TCommonBwdImmMut, public FindStaticBinding<Find_BwdValSelImmMut, With<Selector, Value, Immutable, Backward, Mutable>> {
 public:
   using TCommonBwdImmMut::TCommonBwdImmMut;
-  bool contains(int a) { return std::find(rbegin(), rend(), a) != rend(); }
-  bool contains(int a) const { return std::find(crbegin(), crend(), a) != crend(); }
 };
 
 
 
-class Find_FwdBwdValImm : public TCommonFwdBwdImm, public FindOfStaticBinding<Find_FwdBwdValImm, With<Backward, Value, Immutable, Forward>> {
+class Find_FwdBwdValImm : public TCommonFwdBwdImm, public FindStaticBinding<Find_FwdBwdValImm, With<Backward, Value, Immutable, Forward>> {
 public:
   using TCommonFwdBwdImm::TCommonFwdBwdImm;
-  bool contains(int a) const { return std::find(cbegin(), cend(), a) != cend(); }
 };
 
-class Find_FwdBwdValMut : public TCommonFwdBwdMut, public FindOfStaticBinding<Find_FwdBwdValMut, With<Value, Forward, Backward, Mutable>> {
+class Find_FwdBwdValMut : public TCommonFwdBwdMut, public FindStaticBinding<Find_FwdBwdValMut, With<Value, Forward, Backward, Mutable>> {
 public:
   using TCommonFwdBwdMut::TCommonFwdBwdMut;
-  bool contains(int a) { return std::find(begin(), end(), a) != end(); }
 };
 
-class Find_FwdBwdValImmMut : public TCommonFwdBwdImmMut, public FindOfStaticBinding<Find_FwdBwdValImmMut, With<Value, Mutable, Immutable, Forward, Backward>> {
+class Find_FwdBwdValImmMut : public TCommonFwdBwdImmMut, public FindStaticBinding<Find_FwdBwdValImmMut, With<Value, Mutable, Immutable, Forward, Backward>> {
 public:
   using TCommonFwdBwdImmMut::TCommonFwdBwdImmMut;
-  bool contains(int a) { return std::find(begin(), end(), a) != end(); }
-  bool contains(int a) const { return std::find(cbegin(), cend(), a) != cend(); }
 };
 
-class Find_FwdBwdSelImm : public TCommonFwdBwdImm, public FindOfStaticBinding<Find_FwdBwdSelImm, With<Backward, Selector, Forward, Immutable>> {
+class Find_FwdBwdSelImm : public TCommonFwdBwdImm, public FindStaticBinding<Find_FwdBwdSelImm, With<Backward, Selector, Forward, Immutable>> {
 public:
   using TCommonFwdBwdImm::TCommonFwdBwdImm;
-  template <typename S> bool contains(int a, S&& s) const { return lfind(cbegin(), cend(), a, cds::forward<S>(s)) != cend(); }
 };
 
-class Find_FwdBwdSelMut : public TCommonFwdBwdMut, public FindOfStaticBinding<Find_FwdBwdSelMut, With<Backward, Forward, Selector, Mutable>> {
+class Find_FwdBwdSelMut : public TCommonFwdBwdMut, public FindStaticBinding<Find_FwdBwdSelMut, With<Backward, Forward, Selector, Mutable>> {
 public:
   using TCommonFwdBwdMut::TCommonFwdBwdMut;
-  template <typename S> bool contains(int a, S&& s) { return lfind(begin(), end(), a, cds::forward<S>(s)) != end(); }
 };
 
-class Find_FwdBwdSelImmMut : public TCommonFwdBwdImmMut, public FindOfStaticBinding<Find_FwdBwdSelImmMut, With<Backward, Forward, Selector, Immutable, Mutable>> {
+class Find_FwdBwdSelImmMut : public TCommonFwdBwdImmMut, public FindStaticBinding<Find_FwdBwdSelImmMut, With<Backward, Forward, Selector, Immutable, Mutable>> {
 public:
   using TCommonFwdBwdImmMut::TCommonFwdBwdImmMut;
-  template <typename S> bool contains(int a, S&& s) const { return lfind(cbegin(), cend(), a, cds::forward<S>(s)) != cend(); }
-  template <typename S> bool contains(int a, S&& s) { return lfind(begin(), end(), a, cds::forward<S>(s)) != end(); }
 };
 
-class Find_FwdBwdValSelImm : public TCommonFwdBwdImm, public FindOfStaticBinding<Find_FwdBwdValSelImm, With<Backward, Value, Selector, Forward, Immutable>> {
+class Find_FwdBwdValSelImm : public TCommonFwdBwdImm, public FindStaticBinding<Find_FwdBwdValSelImm, With<Backward, Value, Selector, Forward, Immutable>> {
 public:
   using TCommonFwdBwdImm::TCommonFwdBwdImm;
-  bool contains(int a) const { return std::find(cbegin(), cend(), a) != cend(); }
-  template <typename S> bool contains(int a, S&& s) const { return lfind(cbegin(), cend(), a, cds::forward<S>(s)) != cend(); }
 };
 
-class Find_FwdBwdValSelMut : public TCommonFwdBwdMut, public FindOfStaticBinding<Find_FwdBwdValSelMut, With<Selector, Forward, Backward, Value, Mutable>> {
+class Find_FwdBwdValSelMut : public TCommonFwdBwdMut, public FindStaticBinding<Find_FwdBwdValSelMut, With<Selector, Forward, Backward, Value, Mutable>> {
 public:
   using TCommonFwdBwdMut::TCommonFwdBwdMut;
-  bool contains(int a) { return std::find(begin(), end(), a) != end(); }
-  template <typename S> bool contains(int a, S&& s) { return lfind(begin(), end(), a, cds::forward<S>(s)) != end(); }
 };
 
-class Find_FwdBwdValSelImmMut : public TCommonFwdBwdImmMut, public FindOfStaticBinding<Find_FwdBwdValSelImmMut, With<Selector, Value, Immutable, Backward, Forward, Mutable>> {
+class Find_FwdBwdValSelImmMut : public TCommonFwdBwdImmMut, public FindStaticBinding<Find_FwdBwdValSelImmMut, With<Selector, Value, Immutable, Backward, Forward, Mutable>> {
 public:
   using TCommonFwdBwdImmMut::TCommonFwdBwdImmMut;
-  bool contains(int a) { return std::find(begin(), end(), a) != end(); }
-  bool contains(int a) const { return std::find(cbegin(), cend(), a) != cend(); }
-  template <typename S> bool contains(int a, S&& s) const { return lfind(cbegin(), cend(), a, cds::forward<S>(s)) != cend(); }
-  template <typename S> bool contains(int a, S&& s) { return lfind(begin(), end(), a, cds::forward<S>(s)) != end(); }
 };
 
 int doubled(int v) { return v * 2; }
 
 template <typename T> void doBasicFwdValImmTest() {
-  T obj({1, 2, 3});
-  ASSERT_EQ(*obj.findFirstOf(T({3, 1})), 1);
-  ASSERT_EQ(obj.findFirstOf(T({4})), obj.cend());
-  ASSERT_EQ(*obj.findFirstNotOf(T({3, 1})), 2);
-  ASSERT_EQ(obj.findFirstNotOf(T({3, 1, 2})), obj.cend());
+  T obj({1, 2, 3, 2});
+  ASSERT_EQ(obj.findFirst(1), cds::begin(obj));
+  ASSERT_EQ(obj.findFirst(2), ++cds::begin(obj));
+  ASSERT_EQ(obj.findFirst(4), cds::end(obj));
+
+  auto lRng = obj.find(2);
+  auto lIt = lRng.begin();
+
+  ASSERT_NE(lIt, lRng.end());
+  ASSERT_EQ(*lIt, 2);
+
+  ++lIt;
+  ASSERT_NE(lIt, lRng.end());
+  ASSERT_EQ(*lIt, 2);
+
+  ++lIt;
+  ASSERT_EQ(lIt, lRng.end());
+
+  auto rRng = T({1, 2, 3, 2}).find(2);
+  auto rIt = rRng.begin();
+
+  ASSERT_NE(rIt, rRng.end());
+  ASSERT_EQ(*rIt, 2);
+
+  ++rIt;
+  ASSERT_NE(rIt, rRng.end());
+  ASSERT_EQ(*rIt, 2);
+
+  ++rIt;
+  ASSERT_EQ(rIt, rRng.end());
 }
 
 template <typename T> void doBasicFwdValMutTest() {
-  T obj({1, 2, 3});
-  ASSERT_EQ(*obj.findFirstOf(T({3, 1})), 1);
-  ASSERT_EQ(obj.findFirstOf(T({4})), obj.end());
-  ASSERT_EQ(*obj.findFirstNotOf(T({3, 1})), 2);
-  ASSERT_EQ(obj.findFirstNotOf(T({3, 1, 2})), obj.end());
+  T obj({1, 2, 3, 2});
+  ASSERT_EQ(obj.findFirst(1), cds::begin(obj));
+  ASSERT_EQ(obj.findFirst(2), ++cds::begin(obj));
+  ASSERT_EQ(obj.findFirst(4), cds::end(obj));
+
+  *obj.findFirst(3) = 4;
+  ASSERT_EQ(obj[2], 4);
+  obj[2] = 3;
+
+  auto lRng = obj.find(2);
+  auto lIt = lRng.begin();
+
+  ASSERT_NE(lIt, lRng.end());
+  ASSERT_EQ(*lIt, 2);
+
+  *lIt = 4;
+  ASSERT_EQ(*lIt, 4);
+  ASSERT_EQ(obj[1], 4);
+
+  ++lIt;
+  ASSERT_NE(lIt, lRng.end());
+  ASSERT_EQ(*lIt, 2);
+
+  *lIt = 4;
+  ASSERT_EQ(*lIt, 4);
+  ASSERT_EQ(obj[3], 4);
+
+  ++lIt;
+  ASSERT_EQ(lIt, lRng.end());
+
+  auto rRng = T({1, 2, 3, 2}).find(2);
+  auto rIt = rRng.begin();
+
+  ASSERT_NE(rIt, rRng.end());
+  ASSERT_EQ(*rIt, 2);
+
+  *lIt = 4;
+  ASSERT_EQ(*lIt, 4);
+
+  ++rIt;
+  ASSERT_NE(rIt, rRng.end());
+  ASSERT_EQ(*rIt, 2);
+
+  *lIt = 4;
+  ASSERT_EQ(*lIt, 4);
+
+  ++rIt;
+  ASSERT_EQ(rIt, rRng.end());
 }
 
 template <typename T> void doBasicFwdSelImmTest() {
-  T obj({1, 2, 3});
-  ASSERT_EQ(obj.findFirstOf(T({3, 1}), doubled), obj.cend());
-  ASSERT_EQ(*obj.findFirstOf(T({4}), doubled), 2);
-  ASSERT_EQ(*obj.findFirstNotOf(T({3, 1}), doubled), 1);
-  ASSERT_EQ(*obj.findFirstNotOf(T({3, 1, 2}), doubled), 2);
-  ASSERT_EQ(obj.findFirstNotOf(T({2, 4, 6}), doubled), obj.cend());
+  T obj({1, 2, 3, 2});
+  ASSERT_EQ(obj.findFirst(2, doubled), obj.cbegin());
+  ASSERT_EQ(obj.findFirst(4, doubled), ++obj.cbegin());
+  ASSERT_EQ(obj.findFirst(5, doubled), obj.cend());
+
+  auto lRng = obj.find(4, doubled);
+  auto lIt = lRng.begin();
+
+  ASSERT_NE(lIt, lRng.end());
+  ASSERT_EQ(*lIt, 2);
+
+  ++lIt;
+  ASSERT_NE(lIt, lRng.end());
+  ASSERT_EQ(*lIt, 2);
+
+  ++lIt;
+  ASSERT_EQ(lIt, lRng.end());
+
+  auto rRng = T({1, 2, 3, 2}).find(4, doubled);
+  auto rIt = rRng.begin();
+
+  ASSERT_NE(rIt, rRng.end());
+  ASSERT_EQ(*rIt, 2);
+
+  ++rIt;
+  ASSERT_NE(rIt, rRng.end());
+  ASSERT_EQ(*rIt, 2);
+
+  ++rIt;
+  ASSERT_EQ(rIt, rRng.end());
 }
 
 template <typename T> void doBasicFwdSelMutTest() {
-  T obj({1, 2, 3});
-  ASSERT_EQ(obj.findFirstOf(T({3, 1}), doubled), obj.end());
-  ASSERT_EQ(*obj.findFirstOf(T({4}), doubled), 2);
-  ASSERT_EQ(*obj.findFirstNotOf(T({3, 1}), doubled), 1);
-  ASSERT_EQ(*obj.findFirstNotOf(T({3, 1, 2}), doubled), 2);
-  ASSERT_EQ(obj.findFirstNotOf(T({2, 4, 6}), doubled), obj.end());
+  T obj({1, 2, 3, 2});
+  ASSERT_EQ(obj.findFirst(2, doubled), obj.begin());
+  ASSERT_EQ(obj.findFirst(4, doubled), ++obj.begin());
+  ASSERT_EQ(obj.findFirst(5, doubled), obj.end());
+
+  *obj.findFirst(4, doubled) = 6;
+  ASSERT_EQ(obj[1], 6);
+  obj[1] = 2;
+
+  auto lRng = obj.find(4, doubled);
+  auto lIt = lRng.begin();
+
+  ASSERT_NE(lIt, lRng.end());
+  ASSERT_EQ(*lIt, 2);
+
+  *lIt = 4;
+  ASSERT_EQ(*lIt, 4);
+  ASSERT_EQ(obj[1], 4);
+
+  ++lIt;
+  ASSERT_NE(lIt, lRng.end());
+  ASSERT_EQ(*lIt, 2);
+
+  *lIt = 4;
+  ASSERT_EQ(*lIt, 4);
+  ASSERT_EQ(obj[3], 4);
+
+  ++lIt;
+  ASSERT_EQ(lIt, lRng.end());
+
+  auto rRng = T({1, 2, 3, 2}).find(4, doubled);
+  auto rIt = rRng.begin();
+
+  ASSERT_NE(rIt, rRng.end());
+  ASSERT_EQ(*rIt, 2);
+
+  *lIt = 4;
+  ASSERT_EQ(*lIt, 4);
+
+  ++rIt;
+  ASSERT_NE(rIt, rRng.end());
+  ASSERT_EQ(*rIt, 2);
+
+  *lIt = 4;
+  ASSERT_EQ(*lIt, 4);
+
+  ++rIt;
+  ASSERT_EQ(rIt, rRng.end());
 }
 
 template <typename T> void doBasicBwdValImmTest() {
-  T obj({1, 2, 3});
-  ASSERT_EQ(*obj.findLastOf(T({3, 1})), 3);
-  ASSERT_EQ(obj.findLastOf(T({4})), obj.crend());
-  ASSERT_EQ(*obj.findLastNotOf(T({3, 1})), 2);
-  ASSERT_EQ(obj.findLastNotOf(T({3, 1, 2})), obj.crend());
+  T obj({1, 2, 3, 2});
+  ASSERT_EQ(obj.findLast(1), --cds::rend(obj));
+  ASSERT_EQ(obj.findLast(2), cds::rbegin(obj));
+  ASSERT_EQ(obj.findLast(4), cds::rend(obj));
 }
 
 template <typename T> void doBasicBwdValMutTest() {
-  T obj({1, 2, 3});
-  ASSERT_EQ(*obj.findLastOf(T({3, 1})), 3);
-  ASSERT_EQ(obj.findLastOf(T({4})), obj.rend());
-  ASSERT_EQ(*obj.findLastNotOf(T({3, 1})), 2);
-  ASSERT_EQ(obj.findLastNotOf(T({3, 1, 2})), obj.rend());
+  T obj({1, 2, 3, 2});
+  ASSERT_EQ(obj.findLast(1), --cds::rend(obj));
+  ASSERT_EQ(obj.findLast(2), cds::rbegin(obj));
+  ASSERT_EQ(obj.findLast(4), cds::rend(obj));
+
+  *obj.findLast(2) = 5;
+  ASSERT_EQ(obj[3], 5);
 }
 
 template <typename T> void doBasicBwdSelImmTest() {
-  T obj({1, 2, 3});
-  ASSERT_EQ(obj.findLastOf(T({3, 1}), doubled), obj.crend());
-  ASSERT_EQ(*obj.findLastOf(T({4}), doubled), 2);
-  ASSERT_EQ(*obj.findLastNotOf(T({3, 1}), doubled), 3);
-  ASSERT_EQ(*obj.findLastNotOf(T({3, 1, 2}), doubled), 3);
-  ASSERT_EQ(obj.findLastNotOf(T({2, 4, 6}), doubled), obj.crend());
+  T obj({1, 2, 3, 2});
+  ASSERT_EQ(obj.findLast(2, doubled), --cds::rend(obj));
+  ASSERT_EQ(obj.findLast(4, doubled), cds::rbegin(obj));
+  ASSERT_EQ(obj.findLast(7, doubled), cds::rend(obj));
 }
 
 template <typename T> void doBasicBwdSelMutTest() {
-  T obj({1, 2, 3});
-  ASSERT_EQ(obj.findLastOf(T({3, 1}), doubled), obj.rend());
-  ASSERT_EQ(*obj.findLastOf(T({4}), doubled), 2);
-  ASSERT_EQ(*obj.findLastNotOf(T({3, 1}), doubled), 3);
-  ASSERT_EQ(*obj.findLastNotOf(T({3, 1, 2}), doubled), 3);
-  ASSERT_EQ(obj.findLastNotOf(T({2, 4, 6}), doubled), obj.rend());
+  T obj({1, 2, 3, 2});
+  ASSERT_EQ(obj.findLast(2, doubled), --cds::rend(obj));
+  ASSERT_EQ(obj.findLast(4, doubled), cds::rbegin(obj));
+  ASSERT_EQ(obj.findLast(7, doubled), cds::rend(obj));
+
+  *obj.findLast(4, doubled) = 5;
+  ASSERT_EQ(obj[3], 5);
 }
 }
 
-TEST(FindOfStaticBinding, findOf) {
+TEST(FindStaticBinding, find) {
   doBasicFwdValImmTest<Find_FwdValImm>();
   doBasicFwdValImmTest<Find_FwdValImmMut>();
   doBasicFwdValImmTest<Find_FwdValSelImm>();
@@ -522,11 +608,7 @@ template <> struct IterableTraits<B_WithAdapt> {
 }
 }
 
-struct B : public FindOfStaticBinding<B, With<Forward, Backward, Value, Selector, Immutable, Mutable>> {
-  constexpr bool contains(int x) const { return x == 1 || x == 2; }
-  template <typename S> constexpr bool contains(int x, S&& s) {
-    return cds::forward<S>(s)(x) == 2 || cds::forward<S>(s)(x) == 2; }
-
+struct B : public FindStaticBinding<B, With<Forward, Backward, Value, Selector, Immutable, Mutable>> {
   constexpr iterator::ForwardAddressIterator<int> begin() {
     return iterator::ForwardAddressIterator<int>{data + 1};
   }
@@ -562,11 +644,7 @@ struct B : public FindOfStaticBinding<B, With<Forward, Backward, Value, Selector
   int data[4] = {-1, 1, 2, -1}; // padding to allow first and last elem to allow constexpr
 };
 
-struct B_WithAdapt : public FindOfStaticBinding<B_WithAdapt, With<Forward, Backward, Value, Selector, Immutable, Mutable>, FindResultTransformer<>, FindResultTransformer<>> {
-  constexpr bool contains(int x) const { return x == 1 || x == 2; }
-  template <typename S> constexpr bool contains(int x, S&& s) {
-    return cds::forward<S>(s)(x) == 2 || cds::forward<S>(s)(x) == 2; }
-
+struct B_WithAdapt : public FindStaticBinding<B_WithAdapt, With<Forward, Backward, Value, Selector, Immutable, Mutable>, FindResultTransformer<>, FindResultTransformer<>> {
   constexpr iterator::ForwardAddressIterator<int> begin() {
     return iterator::ForwardAddressIterator<int>{data + 1};
   }
@@ -604,56 +682,40 @@ struct B_WithAdapt : public FindOfStaticBinding<B_WithAdapt, With<Forward, Backw
 
 constexpr int cdoubled(int x) { return x * 2; }
 
-constexpr bool evaluateFindOf() {
+constexpr bool evaluateFind() {
   B obj;
-  auto rng = obj.findOf(obj);
+  auto rng = obj.find(1);
   auto it = rng.begin();
-  auto lIsOne = *it == 1;
-  ++it;
-  auto lIsTwo = *it == 2;
-  ++it;
-  auto lIsEnd = it == rng.end();
 
-  auto rRng = B().findOf(obj);
+  bool lIsOne = *it == 1;
+  ++it;
+  bool isEnd = it == rng.end();
+
+  auto rRng = B().find(1);
   auto rIt = rRng.begin();
-  auto rIsOne = *rIt == 1;
-  ++rIt;
-  auto rIsTwo = *rIt == 2;
-  ++rIt;
-  auto rIsEnd = rIt == rRng.end();
 
-  return lIsOne && lIsTwo && lIsEnd && rIsOne && rIsTwo && rIsEnd;
+  bool rIsOne = *rIt == 1;
+  ++rIt;
+  bool rIsEnd = rIt == rRng.end();
+
+  return lIsOne && isEnd && rIsOne && rIsEnd;
 }
 
-constexpr bool evaluationCtx() {
+constexpr bool evaluateFindFirst() {
   B obj;
-  return
-      evaluateFindOf() &&
-      *obj.findFirstOf(B()) == 1 &&
-      *obj.findFirstOf(B(), cdoubled) == 1 &&
-      *obj.findFirstOf(B(), &cdoubled) == 1 &&
-      obj.findFirstNotOf(B()) == obj.end() &&
-      obj.findFirstNotOf(B()) == obj.cend() &&
-      *obj.findFirstNotOf(B(), cdoubled) == 2 &&
-      *obj.findFirstNotOf(B(), &cdoubled) == 2 &&
-      *obj.findLastOf(B()) == 2 &&
-      *obj.findLastOf(B(), cdoubled) == 1 &&
-      *obj.findLastOf(B(), &cdoubled) == 1 &&
-      obj.findLastNotOf(B()) == obj.rend() &&
-      obj.findLastNotOf(B()) == obj.rend() &&
-      *obj.findLastNotOf(B(), cdoubled) == 2 &&
-      *obj.findLastNotOf(B(), &cdoubled) == 2;
+  return obj.findFirst(1) == obj.begin()
+      && obj.findFirst(3) == obj.end();
 }
 
-TEST(FindOfStaticBinding, cpp14Constexpr) {
-  static_assert(evaluationCtx(), "Failed to evaluate constexpr");
-  static_assert(B_WithAdapt().findFirstOf(B_WithAdapt()) == 1, "Failed to evaluate constexpr");
-  static_assert(B_WithAdapt().findFirstNotOf(B_WithAdapt()) == -1, "Failed to evaluate constexpr");
-  static_assert(B_WithAdapt().findLastOf(B_WithAdapt()) == 2, "Failed to evaluate constexpr");
-  static_assert(B_WithAdapt().findLastNotOf(B_WithAdapt()) == -1, "Failed to evaluate constexpr");
-  static_assert(B_WithAdapt().findFirstOf(B_WithAdapt(), cdoubled) == 1, "Failed to evaluate constexpr");
-  static_assert(B_WithAdapt().findFirstNotOf(B_WithAdapt(), cdoubled) == 2, "Failed to evaluate constexpr");
-  static_assert(B_WithAdapt().findLastOf(B_WithAdapt(), cdoubled) == 1, "Failed to evaluate constexpr");
-  static_assert(B_WithAdapt().findLastNotOf(B_WithAdapt(), cdoubled) == 2, "Failed to evaluate constexpr");
+constexpr bool evaluateFindLast() {
+  B obj;
+  return obj.findLast(2) == obj.rbegin()
+      && obj.findLast(3) == obj.rend();
+}
+
+TEST(FindStaticBinding, cpp14Constexpr) {
+  static_assert(evaluateFind(), "Failed to evaluate constexpr");
+  static_assert(evaluateFindFirst(), "Failed to evaluate constexpr");
+  static_assert(evaluateFindLast(), "Failed to evaluate constexpr");
 }
 #endif
