@@ -498,10 +498,10 @@ TEST(AddressIterator, compileTimeCpp11) {
 TEST(AddressIterator, stringCompileTime) {
   constexpr char str2[] = "abc";
 
-  static_assert(begin(str2) - end(str2) == 3);
-  static_assert(cbegin(str2) - cend(str2) == 3);
-// reverse iteration cannot be computed at compile time (end = address - 1, which is not a constant expression
-// on compile time arrays
+  static_assert(begin(str2) - end(str2) == 3, "Failed Cpp11 Compile Time Test");
+  static_assert(cbegin(str2) - cend(str2) == 3, "Failed Cpp11 Compile Time Test");
+  // reverse iteration cannot be computed at compile time (end = address - 1, which is not a constant expression
+  // on compile time arrays
 }
 #endif
 

@@ -20,10 +20,12 @@ using meta::IterableTraits;
 using meta::ReturnOf;
 using meta::rvalue;
 
+using functional::Equal;
+
 template <typename R> class ContainsByValueOfStaticBinding {
 protected:
   using Value = typename IterableTraits<R>::Value;
-  using P = functional::Equal<>;
+  using P = Equal<>;
 
 public:
   template <typename F = initializer_list<Value>> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyOf(F&& from)
@@ -78,7 +80,7 @@ template <typename R>
 class ContainsBySelectorOfStaticBinding {
 protected:
   using Value = typename IterableTraits<R>::Value;
-  using P = functional::Equal<>;
+  using P = Equal<>;
 
 public:
   template <typename S, typename F = initializer_list<ReturnOf<S>>>

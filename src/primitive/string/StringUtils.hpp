@@ -13,18 +13,20 @@ using meta::Not;
 using meta::IsBoundedArray;
 using meta::RemoveCVRef;
 
-template <typename C, typename Traits> class StringUtils {
+template <typename C, typename T> class StringUtils {
 public:
+  using Traits = T;
+
   enum class Ordering { Less, Equal, Greater };
 
-  template <typename T, EnableIf<Not<IsBoundedArray<RemoveCVRef<T>>>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(14))) static auto length(T&& l) noexcept -> Size {
-    return ptrLength(cds::forward<T>(l));
+  template <typename ST, EnableIf<Not<IsBoundedArray<RemoveCVRef<ST>>>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(14))) static auto length(ST&& l) noexcept -> Size {
+    return ptrLength(cds::forward<ST>(l));
   }
 
-  template <typename T, EnableIf<IsBoundedArray<RemoveCVRef<T>>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(11))) static auto length(T&& l) noexcept -> Size {
-    return refLength(cds::forward<T>(l));
+  template <typename ST, EnableIf<IsBoundedArray<RemoveCVRef<ST>>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(11))) static auto length(ST&& l) noexcept -> Size {
+    return refLength(cds::forward<ST>(l));
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14)))

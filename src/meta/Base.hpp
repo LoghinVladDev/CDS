@@ -69,15 +69,13 @@ template <typename L, typename R, typename... P> struct Eq : Bool<L::value == R:
 template <typename L, typename R> struct Eq<L, R> : Bool<L::value == R::value> {};
 template <typename L, typename R> struct Ne : Bool<L::value != R::value> {};
 template <typename L, typename R> struct Gt : Bool<(L::value > R::value)> {};
-template <typename L, typename R> struct Ge : Bool<(L::value >= R::value)> {};
-template <typename L, typename R> struct Lt : Bool<(L::value < R::value)> {};
-template <typename L, typename R> struct Le : Bool<(L::value <= R::value)> {};
+template <typename L, typename R> struct Ge : Bool<L::value >= R::value> {};
+template <typename L, typename R> struct Lt : Bool<L::value < R::value> {};
+template <typename L, typename R> struct Le : Bool<L::value <= R::value> {};
 
 
-template <typename I, typename = void> struct EnableIf {};
-template <typename R> struct EnableIf<True, R> {
-  using Type = R;
-};
+template <typename, typename = void> struct EnableIf {};
+template <typename R> struct EnableIf<True, R> { using Type = R; };
 
 
 template <typename, typename> struct IsSame : False {};
@@ -126,10 +124,7 @@ template <int i, typename F, typename... R> struct PackPeek<i, Pack<F, R...>> {
   using Result = typename Conditional<
       typename Eq<Int<i>, Int<1>>::Type,
       F,
-      typename PackPeek<
-          i - 1,
-          Pack<R...>
-      >::Result
+      typename PackPeek<i - 1, Pack<R...>>::Result
   >::Type;
 };
 
@@ -192,18 +187,14 @@ template <template <typename...> class Formula, typename... TParams> struct Bind
 };
 
 template <template <typename...> class, typename...> struct All {};
-template <template <typename...> class Formula, typename F, typename... R> struct All<Formula, F, R...> : And<
-    Formula<F>,
-    All<Formula, R...>
-> {};
+template <template <typename...> class Formula, typename F, typename... R> struct All<Formula, F, R...> :
+    And<Formula<F>, All<Formula, R...>> {};
 
 template <template <typename...> class Formula, typename P> struct All<Formula, P> : Formula<P> {};
 
 template <template <typename...> class, typename...> struct Any {};
-template <template <typename...> class Formula, typename F, typename... R> struct Any<Formula, F, R...> : Or<
-    Formula<F>,
-    Any<Formula, R...>
-> {};
+template <template <typename...> class Formula, typename F, typename... R> struct Any<Formula, F, R...> :
+    Or<Formula<F>, Any<Formula, R...>> {};
 
 template <template <typename...> class Formula, typename P> struct Any<Formula, P> : Formula<P> {};
 template <template <typename...> class Formula, typename... TParams>
@@ -214,7 +205,7 @@ template <template <typename...> class Formula, typename F, typename... R> struc
     Int<(Formula<F>::value ? 1 : 0) + Count<Formula, R...>::value> {};
 
 template <template <typename...> class Formula, typename F> struct Count<Formula, F> :
-    Int<(Formula<F>::value ? 1 : 0)> {};
+    Int<Formula<F>::value ? 1 : 0> {};
 
 template <typename, typename...> struct VAContains;
 template <typename T> struct VAContains<T> : False {};
@@ -231,77 +222,60 @@ template <template <typename...> class P, typename... A, typename T> struct Cont
     VAContains<T, A...>::Type {};
 } // namespace impl
 
-template <typename Type, Type value> using Integral = typename ::cds::meta::impl::Integral<Type, value>::Type;
+template <typename Type, Type value> using Integral = typename impl::Integral<Type, value>::Type;
 
-template <int value> using Int = ::cds::meta::impl::Int<value>;
-template <bool value> using Bool = ::cds::meta::impl::Bool<value>;
-using True = ::cds::meta::impl::True;
-using False = ::cds::meta::impl::False;
+template <int value> using Int = impl::Int<value>;
+template <bool value> using Bool = impl::Bool<value>;
+using True = impl::True;
+using False = impl::False;
 
 template <typename Integral, typename IfTrue, typename IfFalse> using Conditional =
-    typename ::cds::meta::impl::Conditional<
-        typename ::cds::meta::impl::ConvertIntegral<Integral>::Type, IfTrue, IfFalse
-    >::Type;
+    typename impl::Conditional<typename impl::ConvertIntegral<Integral>::Type, IfTrue, IfFalse>::Type;
 
 template <typename Integral, template <typename...> class IfTrue, template <typename...> class IfFalse>
-using TConditional = ::cds::meta::impl::TConditional<
-    typename ::cds::meta::impl::ConvertIntegral<Integral>::Type, IfTrue, IfFalse
->;
+using TConditional = impl::TConditional<typename impl::ConvertIntegral<Integral>::Type, IfTrue, IfFalse>;
 
-template <typename Left, typename Right> struct IsSame : ::cds::meta::impl::IsSame<Left, Right>::Type {};
-template <template <typename...> class Predicate> struct Unless : ::cds::meta::impl::Unless<Predicate> {};
+template <typename Left, typename Right> struct IsSame : impl::IsSame<Left, Right>::Type {};
+template <template <typename...> class Predicate> struct Unless : impl::Unless<Predicate> {};
 template <template <typename...> class Modifier, template <typename...> class After>
-struct Apply : ::cds::meta::impl::Apply<Modifier, After> {};
+struct Apply : impl::Apply<Modifier, After> {};
 
-template <typename... Integrals> struct And : ::cds::meta::impl::And<Integrals...>::Type {};
-template <typename... Integrals> struct Or : ::cds::meta::impl::Or<Integrals...>::Type {};
+template <typename... Integrals> struct And : impl::And<Integrals...>::Type {};
+template <typename... Integrals> struct Or : impl::Or<Integrals...>::Type {};
 template <typename Integral> struct Not : Bool<!Integral::value>::Type {};
-template <typename... Integrals> struct Eq : ::cds::meta::impl::Eq<Integrals...>::Type {};
-template <typename LeftIntegral, typename RightIntegral> struct Ne :
-    ::cds::meta::impl::Ne<LeftIntegral, RightIntegral>::Type {};
-
-template <typename LeftIntegral, typename RightIntegral> struct Lt :
-    ::cds::meta::impl::Lt<LeftIntegral, RightIntegral>::Type {};
-
-template <typename LeftIntegral, typename RightIntegral> struct Le :
-    ::cds::meta::impl::Le<LeftIntegral, RightIntegral>::Type {};
-
-template <typename LeftIntegral, typename RightIntegral> struct Gt :
-    ::cds::meta::impl::Gt<LeftIntegral, RightIntegral>::Type {};
-
-template <typename LeftIntegral, typename RightIntegral> struct Ge :
-    ::cds::meta::impl::Ge<LeftIntegral, RightIntegral>::Type {};
-
+template <typename... Integrals> struct Eq : impl::Eq<Integrals...>::Type {};
+template <typename LeftIntegral, typename RightIntegral> struct Ne : impl::Ne<LeftIntegral, RightIntegral>::Type {};
+template <typename LeftIntegral, typename RightIntegral> struct Lt : impl::Lt<LeftIntegral, RightIntegral>::Type {};
+template <typename LeftIntegral, typename RightIntegral> struct Le : impl::Le<LeftIntegral, RightIntegral>::Type {};
+template <typename LeftIntegral, typename RightIntegral> struct Gt : impl::Gt<LeftIntegral, RightIntegral>::Type {};
+template <typename LeftIntegral, typename RightIntegral> struct Ge : impl::Ge<LeftIntegral, RightIntegral>::Type {};
 template <typename Integral, typename Replacement = int> using EnableIf =
-    typename ::cds::meta::impl::EnableIf<
-        typename ::cds::meta::impl::ConvertIntegral<Integral>::Type, Replacement
-    >::Type;
+    typename impl::EnableIf<typename impl::ConvertIntegral<Integral>::Type, Replacement>::Type;
 
 template <typename Replacement, typename Integral> using ReturnIf = EnableIf<Integral, Replacement>;
 
-template <template <typename...> class Formula, typename... TParams> struct Bind :
-    ::cds::meta::impl::Bind<Formula, TParams...> {};
-
+template <template <typename...> class Formula, typename... TParams> struct Bind : impl::Bind<Formula, TParams...> {};
 template <int index> using Ph = impl::Ph<index>;
+
 template <template <typename...> class Formula, typename... TParams> struct BindLeft :
-    ::cds::meta::impl::BindLeft<Formula, TParams...> {};
+    impl::BindLeft<Formula, TParams...> {};
 
 template <template <typename...> class Formula, typename... TParams> struct BindRight :
-    ::cds::meta::impl::BindRight<Formula, TParams...> {};
+    impl::BindRight<Formula, TParams...> {};
 
 template <template <typename...> class Formula, typename... TParams> struct All :
-    ::cds::meta::impl::All<Formula, TParams...>::Type {};
+    impl::All<Formula, TParams...>::Type {};
 
 template <template <typename...> class Formula, typename... TParams> struct Any :
-    ::cds::meta::impl::Any<Formula, TParams...>::Type {};
+    impl::Any<Formula, TParams...>::Type {};
 
 template <template <typename...> class Formula, typename... TParams> struct None :
-    ::cds::meta::impl::None<Formula, TParams...>::Type {};
+    impl::None<Formula, TParams...>::Type {};
 
 template <template <typename...> class Formula, typename... TParams> struct Count :
-    ::cds::meta::impl::Count<Formula, TParams...>::Type {};
+    impl::Count<Formula, TParams...>::Type {};
 
-template <typename P, typename T> struct Contains : ::cds::meta::impl::Contains<P, T>::Type {};
+template <typename P, typename T> struct Contains : impl::Contains<P, T>::Type {};
 } // namespace meta
 } // namespace cds
 

@@ -41,7 +41,7 @@ private:
 
 namespace internals {
 auto tests() -> std::vector<std::unique_ptr<Test const>>&;
-} // namespace
+} // namespace internals
 
 template <typename TestType>
 class TestRegistration {

@@ -22,17 +22,17 @@ template <typename R, typename... Types> using MapperFunction
     = decltype(&impl::mapperFunctionHint<R, Types...>);
 
 namespace impl {
-using cds::meta::True;
-using cds::meta::False;
-using cds::meta::EnableIf;
-using cds::meta::Not;
-using cds::meta::IsSame;
-using cds::meta::IsClass;
-using cds::meta::Decay;
-using cds::meta::ReturnOf;
-using cds::meta::IsCallable;
-using cds::meta::InvokeReturnOf;
-using cds::meta::rvalue;
+using meta::True;
+using meta::False;
+using meta::EnableIf;
+using meta::Not;
+using meta::IsSame;
+using meta::IsClass;
+using meta::Decay;
+using meta::ReturnOf;
+using meta::IsCallable;
+using meta::InvokeReturnOf;
+using meta::rvalue;
 
 template <typename MFn> struct MemberFunctionWrapper {
   template <typename RMFn, EnableIf<Not<IsSame<Decay<RMFn>, MemberFunctionWrapper>>> = 0>
@@ -45,7 +45,7 @@ template <typename MFn> struct MemberFunctionWrapper {
     return (cds::forward<O>(obj).*_fn)(cds::forward<Args>(args)...);
   }
 
-  MFn _fn {nullptr};
+  CDS_ATTR(no_unique_address) MFn _fn;
 };
 
 template <typename Fn, typename = typename IsCallable<Fn>::Type> struct NotFunctionWrapper {};
@@ -60,7 +60,7 @@ template <typename Fn> struct NotFunctionWrapper<Fn, True> {
     return !_fn(cds::forward<Args>(args)...);
   }
 
-  Fn _fn {nullptr};
+  CDS_ATTR(no_unique_address) Fn _fn;
 };
 
 template <typename MFn> struct NotFunctionWrapper<MFn, False> {
@@ -74,7 +74,7 @@ template <typename MFn> struct NotFunctionWrapper<MFn, False> {
     return !(cds::forward<O>(obj).*_fn)(cds::forward<Args>(args)...);
   }
 
-  MFn _fn {nullptr};
+  CDS_ATTR(no_unique_address) MFn _fn;
 };
 } // namespace impl
 

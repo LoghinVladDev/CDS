@@ -423,4 +423,53 @@ TEST(StringView, SpaceshipCompatLiteral) {
 }
 #endif
 
+TEST(StringView, split) {
+  StringView sv1 = "  abc abc abc  abc abc   ";
+  std::cout << "0\n";
+  // for (auto token : sv1.split(' ')) {
+  //   std::cout << token << '\n';
+  // }
+  // for (auto token : StringView{"ab ab"}.split(' ')) {
+  //   std::cout << token << '\n';
+  // }
+  // for (auto token : StringView{""}.split(' ')) {
+  //   std::cout << token << '\n';
+  // }
+  // for (auto token : StringView{" ac ac"}.split(' ')) {
+  //   std::cout << token << '\n';
+  // }
+  // for (auto token : StringView{"ad ad  "}.split(' ')) {
+  //   std::cout << token << '\n';
+  // }
+  // for (auto token : StringView{"ae   ae"}.split(' ')) {
+  //   std::cout << token << '\n';
+  // }
+  //
+  // auto r = StringView{"a b"}.split(' ');
+  // for (auto token : r) {
+  //   std::cout << token << '\n';
+  // }
+  //
+  // for (auto token : StringView{"ae ; ae;ae ae; ae ;"}.split(std::vector{' ', ';'})) {
+  //   std::cout << token << '\n';
+  // }
+  //
+  // std::initializer_list<char> sep2 = {' ', ';'};
+  // for (auto token : StringView{"ae ; ae;ae ae; ae ;"}.split(sep2)) {
+  //   std::cout << token << '\n';
+  // }
+  //
+  // for (auto token : StringView{"  ab   ab   ab  "}.split(' ', 0)) {
+  //   std::cout << token << '\n';
+  // }
+  //
+  // for (auto token : StringView{"  ab   ab   ab  "}.split(' ', 1)) {
+  //   std::cout << token << '\n';
+  // }
 
+  // for (auto token : split(StringView{"ae ; ae;ae ae; ae ;"}, std::initializer_list<char>{' ', ';'})) {
+  //   std::cout << token << '\n';
+  // }
+
+  std::cout << "0\n";
+}

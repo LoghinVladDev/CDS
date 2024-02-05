@@ -186,12 +186,12 @@ auto toString(Standard std) {
 }
 
 auto toString(TestStepPlatform plat) {
-  switch(plat) {
-    case TestStepPlatform::Linux: return "linux";
-    default:
-      assert(false && "Undefined platform type");
-      return "";
+  if (plat == TestStepPlatform::Linux) {
+    return "linux";
   }
+
+  assert(false && "Undefined platform type");
+  return "";
 }
 
 auto toString(TestStepCompiler const comp) {
@@ -534,10 +534,6 @@ auto profPath(std::string const& src, Standard standard, TestStepEnv const& env)
   for (auto s = args; *s; ++s) {
     oss << " " << *s << '\n';
   }
-  // oss << " [ENV] -\n";
-  // for (auto s = env; *s; ++s) {
-    // oss << " " << *s << '\n';
-  // }
   std::cout << oss.str();
 }
 
@@ -570,7 +566,6 @@ auto awaitProcess(std::optional<std::string> executable, std::vector<std::string
 
   fillOtherEnv(cEnv);
   toCArr(cEnv, env);
-  // debugCmd(executable->c_str(), cArgs.data(), cEnv.data());
 
   pid_t const childId = fork();
   if (childId == 0) {
@@ -612,7 +607,9 @@ auto awaitProcess(std::optional<std::string> executable, std::vector<std::string
 
   std::string errContents;
   std::string outContents;
-  {(void)std::array{std::jthread(outputAwaiter(errRedir[0], errContents)), std::jthread(outputAwaiter(outRedir[0], outContents))};}
+  [&await = outputAwaiter, &errR = errRedir, &errC = errContents, &outR = outRedir, &outC = outContents] {
+    (void)std::array{std::jthread(await(errR[0], errC)), std::jthread(await(outR[0], outC))};
+  }();
 
   int stat;
   waitpid(childId, &stat, 0);

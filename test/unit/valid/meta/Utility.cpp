@@ -379,70 +379,70 @@ TEST(Utility, find) {
 }
 
 TEST(Utility, timing) {
-//  auto timed = [](auto name, auto callable) {
-//    auto begin = std::chrono::high_resolution_clock::now();
-//    callable();
-//    auto end = std::chrono::high_resolution_clock::now();
-//    auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
-//    std::cout << "Duration of '" << name << "': " << diff.count() << "ns\n";
-//  };
+//   auto timed = [](auto name, auto callable) {
+//     auto begin = std::chrono::high_resolution_clock::now();
+//     callable();
+//     auto end = std::chrono::high_resolution_clock::now();
+//     auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+//     std::cout << "Duration of '" << name << "': " << diff.count() << "ns\n";
+//   };
 //
-//  int n = 10000000;
-//  char const svCstr[] = "abcdefghijklmnop";
-//  StringView sv = "abcdefghijklmnop";
-//  using impl::findFirst;
+//   int n = 10000000;
+//   char const svCstr[] = "abcdefghijklmnop";
+//   StringView sv = "abcdefghijklmnop";
+//   using impl::findFirst;
 //
-//////  timed("sv", [&]{
-//////    for (int i = 0; i < n; ++i) {
-//////      auto volatile r = impl::FF1<>::findFirst(sv, 'b');
-//////    }
-//////  });
-////
-//  auto findFirstCStr = []<int s>(char const volatile(&str)[s], char v) {
-//    for (auto idx = 0; idx + 1 < s; ++idx) {
-//      if (str[idx] == v) {
-//        return idx;
-//      }
-//    }
-//    return -1;
-//  };
+// ////  timed("sv", [&]{
+// ///    for (int i = 0; i < n; ++i) {
+// ///      auto volatile r = impl::FF1<>::findFirst(sv, 'b');
+// ///    }
+// ///  });
 //
-//  timed("sv", [&]{
-//    for (int i = 0; i < n; ++i) {
-//      auto volatile r = findFirstCStr(svCstr, 'm');
-//    }
-//  });
+//   auto findFirstCStr = []<int s>(char const(&str)[s], char v) {
+//     for (auto idx = 0; idx + 1 < s; ++idx) {
+//       if (str[idx] == v) {
+//         return idx;
+//       }
+//     }
+//     return -1;
+//   };
 //
-//  timed("sv", [&]{
-//    for (int i = 0; i < n; ++i) {
-//      auto volatile r = sv.findFirst('m');
-//    }
-//  });
+//   timed("sv", [&]{
+//     for (int i = 0; i < n; ++i) {
+//       auto volatile r = findFirstCStr(svCstr, 'm');
+//     }
+//   });
 //
-//  timed("sv", [&]{
-//    for (int i = 0; i < n; ++i) {
-//      auto volatile r = findFirst(sv, 'm', functional::Equal<>(), impl::FindStringTransformer<char, impl::StringUtils<char, meta::StringTraits<char>>>());
-//    }
-//  });
+//   timed("sv", [&]{
+//     for (int i = 0; i < n; ++i) {
+//       auto volatile r = sv.findFirst('m');
+//     }
+//   });
+//
+//   timed("sv", [&]{
+//     for (int i = 0; i < n; ++i) {
+//       auto volatile r = findFirst(sv, 'm', functional::Equal<>(), impl::FindStringTransformer<char, impl::StringUtils<char, meta::StringTraits<char>>>());
+//     }
+//   });
 
-//  timed("sv", [&]{
-//    for (int i = 0; i < n; ++i) {
-//      auto volatile r = findFirstA(sv, 'b');
-//    }
-//  });
-//
-//  timed("sv", [&]{
-//    for (int i = 0; i < n; ++i) {
-//      static constexpr impl::FF<> ff;
-//      auto volatile r = ff.findFirst(sv, 'b');
-//    }
-//  });
-//
-//  timed("sv", [&]{
-//    for (int i = 0; i < n; ++i) {
-//      auto volatile r = findFirstB(sv, 'b');
-//    }
-//  });
+  // timed("sv", [&]{
+  //   for (int i = 0; i < n; ++i) {
+  //     auto volatile r = findFirstA(sv, 'b');
+  //   }
+  // });
+  //
+  // timed("sv", [&]{
+  //   for (int i = 0; i < n; ++i) {
+  //     static constexpr impl::FF<> ff;
+  //     auto volatile r = ff.findFirst(sv, 'b');
+  //   }
+  // });
+  //
+  // timed("sv", [&]{
+  //   for (int i = 0; i < n; ++i) {
+  //     auto volatile r = findFirstB(sv, 'b');
+  //   }
+  // });
 }
 
 #ifdef DCR_SINCECPP11

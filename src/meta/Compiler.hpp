@@ -7,7 +7,6 @@
 #pragma once
 
 namespace cds {
-// Base Types
 using U8 = unsigned char;
 using U16 = unsigned short;
 using U32 = unsigned int;
@@ -34,8 +33,57 @@ using Idx = S32;
 using Address = U32;
 #endif
 
+namespace limits {
+constexpr U8 u8Min = 0x00u;
+constexpr U8 u8Max = 0xffu;
+
+constexpr U16 u16Min = 0x0000u;
+constexpr U16 u16Max = 0xffffu;
+
+constexpr U32 u32Min = 0x00000000lu;
+constexpr U32 u32Max = 0xfffffffflu;
+
+constexpr U64 u64Min = 0x0000000000000000llu;
+constexpr U64 u64Max = 0xffffffffffffffffllu;
+
+constexpr S8 s8Min = -0x80;
+constexpr S8 s8Max = 0x7f;
+
+constexpr S16 s16Min = -0x8000;
+constexpr S16 s16Max = 0x7fff;
+
+constexpr S32 s32Min = -0x80000000l;
+constexpr S32 s32Max = 0x7fffffffl;
+
+constexpr S64 s64Max = 0x7fffffffffffffffll;
+constexpr S64 s64Min = -s64Max - 1;
+} // namespace limits
+
+#if defined __x86_64__ && !defined __ILP32__ // native 64 bit
+namespace limits {
+constexpr Size sizeMin = u64Min;
+constexpr Size sizeMax = u64Max;
+
+constexpr SSize ssizeMin = s64Min;
+constexpr SSize ssizeMax = s64Max;
+
+constexpr Idx idxMin = s64Min;
+constexpr Idx idxMax = s64Max;
+} // namespace limits
+#else // 32 bit
+namespace limits {
+constexpr Size sizeMin = u32Min;
+constexpr Size sizeMax = u32Max;
+
+constexpr SSize ssizeMin = s32Min;
+constexpr SSize ssizeMax = s32Max;
+
+constexpr Idx idxMin = s32Min;
+constexpr Idx idxMax = s32Max;
+} // namespace limits
+#endif
+
 namespace compiler {
-// standard specific
 #define CDS_ATTR_JOIN_LATE(prefix, ...) prefix ## __VA_ARGS__
 #define CDS_ATTR(...) CDS_ATTR_JOIN_LATE(CDS_ATTR_, __VA_ARGS__)
 
@@ -63,24 +111,24 @@ namespace compiler {
 #ifdef CDS_OPTION_DEFAULT_POLY
 #define CDS_ATTR_ns_poly_spec inline
 #define CDS_ATTR_ns_non_poly_spec
-#else
+#else // #ifdef CDS_OPTION_DEFAULT_POLY
 #define CDS_ATTR_ns_poly_spec
 #define CDS_ATTR_ns_non_poly_spec inline
-#endif
+#endif // #ifdef CDS_OPTION_DEFAULT_POLY #else
 
 
 #ifdef CDS_OPTION_COMPAT_STD
 #define CDS_ATTR_compat_std true
-#else
+#else // #ifdef CDS_OPTION_COMPAT_STD
 #define CDS_ATTR_compat_std false
-#endif
+#endif // #ifdef CDS_OPTION_COMPAT_STD #else
 
 
 #ifdef CDS_OPTION_DISABLE_EXCEPTIONS
 #define CDS_ATTR_exceptions false
-#else
+#else // #ifdef CDS_OPTION_DISABLE_EXCEPTIONS
 #define CDS_ATTR_exceptions true
-#endif
+#endif // #ifdef CDS_OPTION_DISABLE_EXCEPTIONS #else
 
 
 #if __cplusplus >= 201103L
@@ -91,7 +139,7 @@ namespace compiler {
 #define CDS_ATTR_maybe_unused CDS_ATTR_OLDSTYLE(maybe_unused)
 #undef CDS_ATTR_carries_dependency
 #define CDS_ATTR_carries_dependency CDS_ATTR_NEWSTYLE(carries_dependency)
-#else
+#else // before cpp11
 #define CDS_ATTR_constexpr_11 inline
 #endif
 
@@ -99,7 +147,7 @@ namespace compiler {
 #define CDS_ATTR_constexpr_14 constexpr
 #undef CDS_ATTR_deprecated
 #define CDS_ATTR_deprecated(message) CDS_ATTR_NEWSTYLE(deprecated(message))
-#else
+#else // before cpp14
 #define CDS_ATTR_constexpr_14 inline
 #endif
 
@@ -113,7 +161,7 @@ namespace compiler {
 #undef CDS_ATTR_nodiscard
 #define CDS_ATTR_nodiscard CDS_ATTR_NEWSTYLE(nodiscard)
 #define CDS_ATTR_noexcept_fn_type true
-#else
+#else // before cpp17
 #define CDS_ATTR_constexpr_17 inline
 #define CDS_ATTR_ctad false
 #define CDS_ATTR_noexcept_fn_type false
@@ -130,7 +178,7 @@ namespace compiler {
 #define CDS_ATTR_no_unique_address CDS_ATTR_NEWSTYLE(no_unique_address)
 #define CDS_ATTR_explicit explicit(true)
 #define CDS_ATTR_implicit explicit(false)
-#else
+#else // before cpp20
 #define CDS_ATTR_constexpr_20 inline
 #define CDS_ATTR_spaceship false
 #define CDS_ATTR_explicit explicit
@@ -139,7 +187,7 @@ namespace compiler {
 
 #if __cplusplus >= 202302L
 #define CDS_ATTR_constexpr_23 constexpr
-#else
+#else // before cpp23
 #define CDS_ATTR_constexpr_23 inline
 #endif
 
@@ -181,15 +229,22 @@ using CurrentStd = StdCpp11;
 #define CDS_ATTR_inheritsEBOs __declspec(empty_bases)
 #define CDS_ATTR_msvc true
 
+// msvc::no_unique_address
+// https://devblogs.microsoft.com/cppblog/msvc-cpp20-and-the-std-cpp20-switch/#c20-no_unique_address
+#if _MSC_VER >= 1929 && __cplusplus >= 201402L
+#undef CDS_ATTR_no_unique_address
+#define CDS_ATTR_no_unique_address CDS_ATTR_NEWSTYLE(msvc::no_unique_address)
+#endif // msvc::no_unique_address
+
 struct CurrentCompiler {
   constexpr static char const* name = "Microsoft Visual C++";
   constexpr static char const* id = "msvc";
   constexpr static int version = MSVC_VERSION
 };
-#else
+#else // #ifdef _MSC_VER
 #define CDS_ATTR_inheritsEBOs
 #define CDS_ATTR_msvc false
-#endif
+#endif // #ifdef _MSC_VER #else
 
 #ifdef __clang__
 #define CDS_ATTR_clang true
@@ -199,9 +254,9 @@ struct CurrentCompiler {
   constexpr static char const* id = "clang";
   constexpr static int version = __clang_major__ * 10000 + __clang_minor__ * 100 + __clang_patchlevel__;
 };
-#else
+#else // #ifdef __clang__
 #define CDS_ATTR_clang false
-#endif
+#endif // #ifdef __clang__ #else
 
 #if defined(__GNUC__) && !defined(__clang__)
 #define CDS_ATTR_gcc true
@@ -211,9 +266,9 @@ struct CurrentCompiler {
   constexpr static char const* id = "gcc";
   constexpr static int version = __GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__;
 };
-#else
+#else // #if defined(__GNUC__) && !defined(__clang__)
 #define CDS_ATTR_gcc false
-#endif
+#endif // #if defined(__GNUC__) && !defined(__clang__) #else
 
 #ifdef __MINGW64__
 #define CDS_ATTR_mingw64 true
@@ -223,9 +278,9 @@ struct CurrentCompiler {
   constexpr static char const* id = "mingw-64";
   constexpr static int version = __MINGW64_VERSION_MAJOR * 10000 + __MINGW64_VERSION_MINOR * 100 + __MINGW64_VERSION_BUGFIX;
 };
-#else
+#else // #ifdef __MINGW64__
 #define CDS_ATTR_mingw64 false
-#endif
+#endif // #ifdef __MINGW64__ #else
 } // namespace compiler
 } // namespace cds
 

@@ -6,13 +6,18 @@
 #define CDS_META_STRING_TRAITS_HPP
 #pragma once
 
-#include <cds/meta/Compiler>
+#include <cds/meta/Base>
+#include <ostream>
 
 namespace cds {
 namespace meta {
-template <typename Char> struct StringTraits {};
+template <typename> struct StringTraits {
+  using IsSeparator = False;
+};
 
 template <> struct StringTraits<char> {
+  using IsSeparator = True;
+  using OStream = std::ostream;
   static constexpr char const* emptyString = "";
   static constexpr char nullChar = '\0';
   constexpr static char const* digits = "0123456789";
@@ -78,6 +83,8 @@ template <> struct StringTraits<char> {
 };
 
 template <> struct StringTraits<wchar_t> {
+  using IsSeparator = True;
+  using OStream = std::wostream;
   static constexpr wchar_t const* emptyString = L"";
   static constexpr wchar_t nullChar = L'\0';
   constexpr static wchar_t const* digits = L"0123456789";

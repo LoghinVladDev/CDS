@@ -74,9 +74,7 @@ TEST(ContainsByValueOfStaticBinding, ContainsAnyOf) {
 }
 
 TEST(ContainsByValueOfStaticBinding, ContainsAnyNotOf) {
-  decltype(cds::begin(meta::rvalue<A_ContainsMember const>())) x1;
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAnyNotOf(A_ContainsMember({1})));
-
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAnyNotOf(A_ContainsMember({2})));
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAnyNotOf(A_ContainsMember({3})));
   ASSERT_TRUE(A_ContainsMember({1, 2}).containsAnyNotOf(A_ContainsMember({1, 3})));
@@ -289,7 +287,7 @@ template <> struct IterableTraits<B> { using Value = int; };
 } // namespace meta
 } // namespace cds
 
-struct B : public impl::ContainsOfStaticBinding<B, With<Value, Selector>> {
+struct B : impl::ContainsOfStaticBinding<B, With<Value, Selector>> {
   constexpr bool contains(int x) const { return x == 1 || x == 2; }
   constexpr int const* begin() const { return data; }
   constexpr int const* end() const { return data + 2; }

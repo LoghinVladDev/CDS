@@ -16,44 +16,36 @@ namespace impl {
 template <typename R, typename C, typename... A> struct MakeMemberFunctionTraits {
   using Return = R;
   using Class = C;
-  using Args = ::cds::Tuple<A...>;
+  using Args = Tuple<A...>;
 };
 
-template <typename T> struct InvokeCall {
-  template <typename F, typename... A> static auto call(F&& f, A&&... a)
-      noexcept -> decltype(::cds::forward<F>(f)(cds::forward<A>(a)...));
+template <typename> struct InvokeCall {
+  template <typename F, typename... A> static auto call(F&& f, A&&... a) noexcept
+      -> decltype(cds::forward<F>(f)(cds::forward<A>(a)...));
 };
 
 template <typename C, typename MFn> struct InvokeCall<MFn C::*> {
-  template <
-      typename T, typename D = ::cds::meta::Decay<T>,
-      typename = ::cds::meta::EnableIf<::cds::meta::IsBaseOf<C, D>>
-  > static auto get(T&& t) noexcept -> T&&;
+  template <typename T, typename D = meta::Decay<T>, typename = meta::EnableIf<meta::IsBaseOf<C, D>>>
+  static auto get(T&& t) noexcept -> T&&;
 
-  template <
-      typename T, typename D = ::cds::meta::Decay<T>,
-      typename = ::cds::meta::EnableIf<::cds::meta::Not<::cds::meta::IsBaseOf<C, D>>>
-  > static auto get(T&& t) noexcept -> decltype(*::cds::forward<T>(t));
+  template <typename T, typename D = meta::Decay<T>, typename = meta::EnableIf<Not<meta::IsBaseOf<C, D>>>>
+  static auto get(T&& t) noexcept -> decltype(*cds::forward<T>(t));
 
-  template <typename T, typename... A, typename RMFn, typename = ::cds::meta::EnableIf<IsFunction<RMFn>>>
-  static auto call(
-      RMFn C::* memFn, T&& obj, A&&... args
-  ) noexcept -> decltype((InvokeCall::get(::cds::forward<T>(obj)).*memFn)(::cds::forward<A>(args)...));
+  template <typename T, typename... A, typename RMFn, typename = meta::EnableIf<IsFunction<RMFn>>>
+  static auto call(RMFn C::* memFn, T&& obj, A&&... args) noexcept
+      -> decltype((InvokeCall::get(::cds::forward<T>(obj)).*memFn)(cds::forward<A>(args)...));
 
   template <typename T> static auto call(MFn C::*memFn, T&& obj) noexcept
-      -> decltype(InvokeCall::get(::cds::forward<T>(obj)).*memFn);
+      -> decltype(InvokeCall::get(cds::forward<T>(obj)).*memFn);
 };
 
-template<typename Fn, typename... Args, typename DFn = ::cds::meta::Decay<Fn>> auto invokeHint(
-    Fn&& f, Args&&... args
-) -> decltype(::cds::meta::impl::InvokeCall<DFn>::call(::cds::forward<Fn>(f), ::cds::forward<Args>(args)...));
+template<typename Fn, typename... Args, typename DFn = meta::Decay<Fn>> auto invokeHint(Fn&& f, Args&&... args) noexcept
+    -> decltype(InvokeCall<DFn>::call(cds::forward<Fn>(f), cds::forward<Args>(args)...));
 
 template<typename, typename, typename...> struct InvokeResult {};
-template<typename Fn, typename...Args> struct InvokeResult<
-    decltype(void(::cds::meta::impl::invokeHint(::cds::meta::rvalue<Fn>(), ::cds::meta::rvalue<Args>()...))),
-    Fn, Args...
-> {
-  using Type = decltype(::cds::meta::impl::invokeHint(::cds::meta::rvalue<Fn>(), ::cds::meta::rvalue<Args>()...));
+template<typename Fn, typename...Args>
+struct InvokeResult<decltype(void(impl::invokeHint(meta::rvalue<Fn>(), meta::rvalue<Args>()...))), Fn, Args...> {
+  using Type = decltype(impl::invokeHint(meta::rvalue<Fn>(), meta::rvalue<Args>()...));
 };
 
 template <typename Fn, typename... Args> struct InvokeResultOf : InvokeResult<void, Fn, Args...> {};
@@ -359,13 +351,13 @@ struct InvokeResultOf<R(C::*)(Args...) volatile&& noexcept, Args...> : InvokeRes
 
 template <typename R, typename C, typename... Args>
 struct InvokeResultOf<R(C::*)(Args...) const volatile&& noexcept, Args...> : InvokeResult<void, R(Args...), Args...> {};
-#endif // CDS_ATTR(noexcept_fn_type)
+#endif // #if CDS_ATTR(noexcept_fn_type)
 
-template <typename T, typename A, typename = void> struct IsInvocableHelper : False {};
+template <typename, typename, typename = void> struct IsInvocableHelper : False {};
 template <typename T, typename... Args>
 struct IsInvocableHelper<T, Pack<Args...>, Void<typename InvokeResultOf<T, Args...>::Type>> : True {};
 
-template <typename R, typename T, typename A, typename = void> struct ReturnsAndIsInvocableHelper : False {};
+template <typename, typename, typename, typename = void> struct ReturnsAndIsInvocableHelper : False {};
 template <typename R, typename T, typename... Args>
 struct ReturnsAndIsInvocableHelper<R, T, Pack<Args...>, Void<typename InvokeResultOf<T, Args...>::Type>> :
     IsSame<R, typename InvokeResultOf<T, Args...>::Type> {};
@@ -374,18 +366,18 @@ template <typename T, typename... Args> struct IsInvocable : IsInvocableHelper<T
 template <typename T, typename R, typename... Args> struct ReturnsAndIsInvocable :
     ReturnsAndIsInvocableHelper<T, R, Pack<Args...>> {};
 } // namespace impl
-template <typename Signature> struct FunctionTraits : ::cds::meta::impl::FunctionTraits<Decay<Signature>> {};
+template <typename Signature> struct FunctionTraits : impl::FunctionTraits<Decay<Signature>> {};
 
-template <typename Signature> using ReturnOf = typename ::cds::meta::impl::ReturnOf<Signature>::Type;
+template <typename Signature> using ReturnOf = typename impl::ReturnOf<Signature>::Type;
 template <typename Fn, typename... Args> using InvokeReturnOf
-    = typename ::cds::meta::impl::InvokeResultOf<Fn, Args...>::Type;
+    = typename impl::InvokeResultOf<Fn, Args...>::Type;
 
-template <typename T, typename... Args> struct IsInvocable : ::cds::meta::impl::IsInvocable<T, Args...> {};
+template <typename T, typename... Args> struct IsInvocable : impl::IsInvocable<T, Args...> {};
 template <typename T, typename R, typename... Args> struct ReturnsAndIsInvocable :
-    ::cds::meta::impl::ReturnsAndIsInvocable<T, R, Args...>::Type {};
+    impl::ReturnsAndIsInvocable<T, R, Args...>::Type {};
 
-template <typename Signature> using ClassOf = typename ::cds::meta::FunctionTraits<Signature>::Class;
-template <typename Signature> using ArgsOf = typename ::cds::meta::FunctionTraits<Signature>::Args;
+template <typename Signature> using ClassOf = typename FunctionTraits<Signature>::Class;
+template <typename Signature> using ArgsOf = typename FunctionTraits<Signature>::Args;
 } // namespace meta
 } // namespace cds
 
