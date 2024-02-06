@@ -12,10 +12,12 @@
 namespace cds {
 namespace meta {
 template <typename> struct StringTraits {
+  using IsChar = False;
   using IsSeparator = False;
 };
 
 template <> struct StringTraits<char> {
+  using IsChar = True;
   using IsSeparator = True;
   using OStream = std::ostream;
   static constexpr char const* emptyString = "";
@@ -83,6 +85,7 @@ template <> struct StringTraits<char> {
 };
 
 template <> struct StringTraits<wchar_t> {
+  using IsChar = True;
   using IsSeparator = True;
   using OStream = std::wostream;
   static constexpr wchar_t const* emptyString = L"";

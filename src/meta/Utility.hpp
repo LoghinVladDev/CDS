@@ -10,9 +10,18 @@
 #include <cds/meta/Semantics>
 #include <cds/functional/Comparator>
 #include <cds/iterator/AddressIterator>
+
+#if CDS_ATTR(sentinel)
 #include <cds/iterator/Sentinel>
+#endif // #if CDS_ATTR(sentinel)
 
 #include <initializer_list>
+
+#if CDS_ATTR(bit_cast)
+#include <bit>
+#else // #if CDS_ATTR(bit_cast)
+#include <cstring>
+#endif // #if CDS_ATTR(bit_cast)
 
 namespace cds {
 template <typename T, typename U = T>
@@ -36,6 +45,27 @@ template <typename T1, typename T2, typename T3, typename... R> CDS_ATTR(2(nodis
 ) noexcept -> meta::Common<T1, T2, T3, R...> {
   return maxOf(cds::forward<T1>(v1), maxOf(cds::forward<T2>(v2), cds::forward<T3>(v3), cds::forward<R>(r)...));
 }
+
+#if CDS_ATTR(bit_cast)
+template <typename T, typename F> CDS_ATTR(2(nodiscard, constexpr(20))) auto bitCast(F const& from) noexcept -> T {
+  return std::bit_cast<T>(from);
+}
+#else // #if CDS_ATTR(bit_cast)
+template <typename T, typename F> CDS_ATTR(nodiscard) auto bitCast(F const& from) noexcept -> T {
+  static_assert(
+      meta::And<
+          meta::Eq<meta::Int<sizeof(F)>, meta::Int<sizeof(T)>>,
+          meta::IsTriviallyCopyable<F>,
+          meta::IsTriviallyCopyable<T>,
+          meta::IsTriviallyConstructible<T>
+      >::value,
+      "type constraints not satisfied for memory-safe bit-cast"
+  );
+  T result;
+  std::memcpy(&result, &from, sizeof(T));
+  return result;
+}
+#endif // #if CDS_ATTR(bit_cast) #else
 
 template <
     typename T, typename D = meta::RemoveRef<T>,
@@ -335,20 +365,16 @@ using meta::rvalue;
 using functional::Equal;
 
 template <typename = void> struct FindResultTransformer {
-  template <typename IB, typename IE, typename I>
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(IB&& b, IE&& e, I&& i) const noexcept
+  template <typename IB, typename IE, typename I> CDS_ATTR(2(nodiscard, constexpr(11)))
+  auto operator()(CDS_ATTR(unused) IB&& b, CDS_ATTR(unused) IE&& e, I&& i) const noexcept
       -> decltype(*rvalue<I>()) {
-    (void) b;
-    (void) e;
     return *cds::forward<I>(i);
   }
 };
 
 template <typename = void> struct FindPreserveTransformer {
-  template <typename IB, typename IE, typename I>
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(IB&& b, IE&& e, I&& i) const noexcept -> I {
-    (void) b;
-    (void) e;
+  template <typename IB, typename IE, typename I> CDS_ATTR(2(nodiscard, constexpr(11)))
+  auto operator()(CDS_ATTR(unused) IB&& b, CDS_ATTR(unused) IE&& e, I&& i) const noexcept -> I {
     return cds::forward<I>(i);
   }
 };
@@ -375,12 +401,22 @@ public:
     return *this;
   }
 
+#if CDS_ATTR(sentinel)
   template <typename FI, typename FV, typename FP, typename FT>
   CDS_ATTR(constexpr(11)) friend auto operator==(FindIterator<FI, FV, FP, FT> const& obj, Sentinel)
       CDS_ATTR(noexcept(noexcept(rvalue<FI>() == rvalue<FI>()))) -> bool;
 
   template <typename FI, typename FV, typename FP, typename FT>
   CDS_ATTR(constexpr(11)) friend auto operator!=(FindIterator<FI, FV, FP, FT> const& obj, Sentinel)
+      CDS_ATTR(noexcept(noexcept(rvalue<FI>() != rvalue<FI>()))) -> bool;
+#endif // #if CDS_ATTR(sentinel)
+
+  template <typename FI, typename FV, typename FP, typename FT> CDS_ATTR(constexpr(11))
+  friend auto operator==(FindIterator<FI, FV, FP, FT> const& lhs, FindIterator<FI, FV, FP, FT> const& rhs)
+      CDS_ATTR(noexcept(noexcept(rvalue<FI>() == rvalue<FI>()))) -> bool;
+
+  template <typename FI, typename FV, typename FP, typename FT> CDS_ATTR(constexpr(11))
+  friend auto operator!=(FindIterator<FI, FV, FP, FT> const& lhs, FindIterator<FI, FV, FP, FT> const& rhs)
       CDS_ATTR(noexcept(noexcept(rvalue<FI>() != rvalue<FI>()))) -> bool;
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator*() const
@@ -405,6 +441,7 @@ private:
   V const& _v;
 };
 
+#if CDS_ATTR(sentinel)
 template <typename I, typename V, typename P, typename T>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(FindIterator<I, V, P, T> const& obj, Sentinel)
     CDS_ATTR(noexcept(noexcept(rvalue<I>() == rvalue<I>()))) -> bool {
@@ -415,6 +452,19 @@ template <typename I, typename V, typename P, typename T>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(FindIterator<I, V, P, T> const& obj, Sentinel)
     CDS_ATTR(noexcept(noexcept(rvalue<I>() != rvalue<I>()))) -> bool {
   return obj._i != obj._e;
+}
+#endif // #if CDS_ATTR(sentinel)
+
+template <typename FI, typename FV, typename FP, typename FT> CDS_ATTR(constexpr(11))
+auto operator==(FindIterator<FI, FV, FP, FT> const& lhs, FindIterator<FI, FV, FP, FT> const& rhs)
+    CDS_ATTR(noexcept(noexcept(rvalue<FI>() == rvalue<FI>()))) -> bool {
+  return lhs._i == rhs._i;
+}
+
+template <typename FI, typename FV, typename FP, typename FT> CDS_ATTR(constexpr(11))
+auto operator!=(FindIterator<FI, FV, FP, FT> const& lhs, FindIterator<FI, FV, FP, FT> const& rhs)
+    CDS_ATTR(noexcept(noexcept(rvalue<FI>() != rvalue<FI>()))) -> bool {
+  return lhs._i != rhs._i;
 }
 
 template <typename I, typename V, typename S, typename P, typename T> class FindSelectIterator {
@@ -441,6 +491,7 @@ public:
     return *this;
   }
 
+#if CDS_ATTR(sentinel)
   template <typename FI, typename FV, typename FS, typename FP, typename FT>
   CDS_ATTR(constexpr(11)) friend auto operator==(FindSelectIterator<FI, FV, FS, FP, FT> const& obj, Sentinel)
     CDS_ATTR(noexcept(noexcept(rvalue<FI>() == rvalue<FI>()))) -> bool;
@@ -448,6 +499,17 @@ public:
   template <typename FI, typename FV, typename FS, typename FP, typename FT>
   CDS_ATTR(constexpr(11)) friend auto operator!=(FindSelectIterator<FI, FV, FS, FP, FT> const& obj, Sentinel)
     CDS_ATTR(noexcept(noexcept(rvalue<FI>() != rvalue<FI>()))) -> bool;
+#endif // #if CDS_ATTR(sentinel)
+
+  template <typename FI, typename FV, typename FS, typename FP, typename FT> CDS_ATTR(constexpr(11))
+  friend auto operator==(
+      FindSelectIterator<FI, FV, FS, FP, FT> const& lhs, FindSelectIterator<FI, FV, FS, FP, FT> const& rhs
+  ) CDS_ATTR(noexcept(noexcept(rvalue<FI>() == rvalue<FI>()))) -> bool;
+
+  template <typename FI, typename FV, typename FS, typename FP, typename FT> CDS_ATTR(constexpr(11))
+  friend auto operator!=(
+      FindSelectIterator<FI, FV, FS, FP, FT> const& lhs, FindSelectIterator<FI, FV, FS, FP, FT> const& rhs
+  ) CDS_ATTR(noexcept(noexcept(rvalue<FI>() == rvalue<FI>()))) -> bool;
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator*() const
       CDS_ATTR(noexcept(noexcept(rvalue<T>()(rvalue<I>(), rvalue<I>(), rvalue<I>()))))
@@ -472,6 +534,7 @@ private:
   V const& _v;
 };
 
+#if CDS_ATTR(sentinel)
 template <typename I, typename V, typename S, typename P, typename T>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(FindSelectIterator<I, V, S, P, T> const& obj, Sentinel)
     CDS_ATTR(noexcept(noexcept(rvalue<I>() == rvalue<I>()))) -> bool {
@@ -482,6 +545,19 @@ template <typename I, typename V, typename S, typename P, typename T>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(FindSelectIterator<I, V, S, P, T> const& obj, Sentinel)
     CDS_ATTR(noexcept(noexcept(rvalue<I>() != rvalue<I>()))) -> bool {
   return obj._i != obj._e;
+}
+#endif // #if CDS_ATTR(sentinel)
+
+template <typename I, typename V, typename S, typename P, typename T> CDS_ATTR(2(nodiscard, constexpr(11)))
+auto operator==(FindSelectIterator<I, V, S, P, T> const& lhs, FindSelectIterator<I, V, S, P, T> const& rhs)
+    CDS_ATTR(noexcept(noexcept(rvalue<I>() == rvalue<I>()))) -> bool {
+  return lhs._i == rhs._i;
+}
+
+template <typename I, typename V, typename S, typename P, typename T> CDS_ATTR(2(nodiscard, constexpr(11)))
+auto operator!=(FindSelectIterator<I, V, S, P, T> const& lhs, FindSelectIterator<I, V, S, P, T> const& rhs)
+    CDS_ATTR(noexcept(noexcept(rvalue<I>() == rvalue<I>()))) -> bool {
+  return lhs._i != rhs._i;
 }
 } // namespace impl
 } // namespace iterator
@@ -507,7 +583,10 @@ using iterator::impl::FindIterator;
 using iterator::impl::FindSelectIterator;
 using iterator::impl::FindResultTransformer;
 using iterator::impl::FindPreserveTransformer;
+
+#if CDS_ATTR(sentinel)
 using iterator::Sentinel;
+#endif // #if CDS_ATTR(sentinel)
 
 namespace extension {
 using meta::IsSame;
@@ -555,9 +634,21 @@ public:
     return ConstIterator(cds::begin(_o), cds::end(_o), _v);
   }
 
+#if CDS_ATTR(sentinel)
   CDS_ATTR(2(nodiscard, constexpr(11))) auto end() const noexcept -> Sentinel {
     return {};
   }
+#else // #if CDS_ATTR(sentinel)
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto end()
+      CDS_ATTR(noexcept(noexcept(Iterator(cds::end(_o), cds::end(_o), _v)))) -> Iterator {
+    return Iterator(cds::end(_o), cds::end(_o), _v);
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto end() const
+      CDS_ATTR(noexcept(noexcept(ConstIterator(cds::end(_o), cds::end(_o), _v)))) -> ConstIterator {
+    return ConstIterator(cds::end(_o), cds::end(_o), _v);
+  }
+#endif // #if CDS_ATTR(sentinel) #else
 
 private:
   TAttr _o;
@@ -592,9 +683,21 @@ public:
     return ConstIterator(cds::begin(_o), cds::end(_o), _v, _s);
   }
 
+#if CDS_ATTR(sentinel)
   CDS_ATTR(2(nodiscard, constexpr(11))) auto end() const noexcept -> Sentinel {
     return {};
   }
+#else // #if CDS_ATTR(sentinel)
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto end()
+      CDS_ATTR(noexcept(noexcept(Iterator(cds::end(_o), cds::end(_o), _v, _s)))) -> Iterator {
+    return Iterator(cds::end(_o), cds::end(_o), _v, _s);
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto end() const
+      CDS_ATTR(noexcept(noexcept(ConstIterator(cds::end(_o), cds::end(_o), _v, _s)))) -> ConstIterator {
+    return ConstIterator(cds::end(_o), cds::end(_o), _v, _s);
+  }
+#endif // #if CDS_ATTR(sentinel) #else
 
 private:
   TAttr _o;

@@ -4,6 +4,8 @@
 
 #include "cds/StringView"
 #include <cassert>
+#include <iostream>
+
 #include "UnitTest.hpp"
 
 using namespace cds;
@@ -426,6 +428,8 @@ TEST(StringView, SpaceshipCompatLiteral) {
 TEST(StringView, split) {
   StringView sv1 = "  abc abc abc  abc abc   ";
   std::cout << "0\n";
+  // X<Allocator>::Type x;
+  // impl::split(sv1, ' ', 5, Allocator<Idx>());
   // for (auto token : sv1.split(' ')) {
   //   std::cout << token << '\n';
   // }
@@ -450,7 +454,7 @@ TEST(StringView, split) {
   //   std::cout << token << '\n';
   // }
   //
-  // for (auto token : StringView{"ae ; ae;ae ae; ae ;"}.split(std::vector{' ', ';'})) {
+  // for (auto token : StringView{"ae ; ae;ae ae; ae ;"}.split(std::vector<char>{' ', ';'})) {
   //   std::cout << token << '\n';
   // }
   //
@@ -467,9 +471,54 @@ TEST(StringView, split) {
   //   std::cout << token << '\n';
   // }
 
-  // for (auto token : split(StringView{"ae ; ae;ae ae; ae ;"}, std::initializer_list<char>{' ', ';'})) {
+  // for (auto token : StringView{"ae ; ae;ae ae; ae ;"}.split(std::initializer_list<char>{' ', ';'})) {
   //   std::cout << token << '\n';
   // }
+
+  for (auto token : StringView{"ab  ab ab  ab"}.split("  ")) {
+    std::cout << token << '\n';
+  }
+
+  for (auto token : StringView{"ac  ac ac   ac  "}.split("  ",  1)) {
+    std::cout << token << '\n';
+  }
+
+  char const sep3[] = "  ";
+  for (auto token : StringView{"ac  ac ac   ac  "}.split(sep3,  1)) {
+    std::cout << token << '\n';
+  }
+
+  char const* sep4 = "  ";
+  for (auto token : StringView{"ac  ac ac   ac  "}.split(sep4,  1)) {
+    std::cout << token << '\n';
+  }
+
+  for (auto token : StringView{"ac  ac ac   ac  "}.split((char const*)sep4,  1)) {
+    std::cout << token << '\n';
+  }
+
+  char sep5[] = "  ";
+  for (auto token : StringView{"ac  ac ac   ac  "}.split(sep5,  1)) {
+    std::cout << token << '\n';
+  }
+
+  char* sep6 = sep5;
+  for (auto token : StringView{"ac  ac ac   ac  "}.split(sep6,  1)) {
+    std::cout << token << '\n';
+  }
+
+  for (auto token : StringView{"ac  ac ac   ac  "}.split((char*)sep6,  1)) {
+    std::cout << token << '\n';
+  }
+
+  for (auto token : StringView{"ac  ac ac   ac  "}.split(StringView{"  "},  1)) {
+    std::cout << token << '\n';
+  }
+
+  StringView pat7{"  "};
+  for (auto token : StringView{"ac  ac ac   ac  "}.split(pat7,  1)) {
+    std::cout << token << '\n';
+  }
 
   std::cout << "0\n";
 }

@@ -7,7 +7,12 @@
 #pragma once
 
 namespace cds {
-class Allocator {};
-} // namespace
+namespace meta {
+template <typename, typename = void> struct IsAllocator : False {};
+template <typename T> struct IsAllocator<T, Void<decltype(value<T>().allocate(0))>> : True {};
+} // namespace meta
+
+template <typename T> class Allocator : public std::allocator<T> {};
+} // namespace cds
 
 #endif // CDS_MEMORY_ALLOCATOR_HPP

@@ -34,17 +34,17 @@ using Address = U32;
 #endif
 
 namespace limits {
-constexpr U8 u8Min = 0x00u;
-constexpr U8 u8Max = 0xffu;
+constexpr U8 u8Min = 0x00U;
+constexpr U8 u8Max = 0xffU;
 
-constexpr U16 u16Min = 0x0000u;
-constexpr U16 u16Max = 0xffffu;
+constexpr U16 u16Min = 0x0000U;
+constexpr U16 u16Max = 0xffffU;
 
-constexpr U32 u32Min = 0x00000000lu;
-constexpr U32 u32Max = 0xfffffffflu;
+constexpr U32 u32Min = 0x00000000LU;
+constexpr U32 u32Max = 0xffffffffLU;
 
-constexpr U64 u64Min = 0x0000000000000000llu;
-constexpr U64 u64Max = 0xffffffffffffffffllu;
+constexpr U64 u64Min = 0x0000000000000000LLU;
+constexpr U64 u64Max = 0xffffffffffffffffLLU;
 
 constexpr S8 s8Min = -0x80;
 constexpr S8 s8Max = 0x7f;
@@ -52,10 +52,10 @@ constexpr S8 s8Max = 0x7f;
 constexpr S16 s16Min = -0x8000;
 constexpr S16 s16Max = 0x7fff;
 
-constexpr S32 s32Min = -0x80000000l;
-constexpr S32 s32Max = 0x7fffffffl;
+constexpr S32 s32Min = -0x80000000L;
+constexpr S32 s32Max = 0x7fffffffL;
 
-constexpr S64 s64Max = 0x7fffffffffffffffll;
+constexpr S64 s64Max = 0x7fffffffffffffffLL;
 constexpr S64 s64Min = -s64Max - 1;
 } // namespace limits
 
@@ -98,11 +98,14 @@ namespace compiler {
 #define CDS_ATTR_unlikely
 #define CDS_ATTR_no_unique_address
 #define CDS_ATTR_maybe_unused
+#define CDS_ATTR_unused CDS_ATTR_maybe_unused
 #define CDS_ATTR_nodiscard
 #define CDS_ATTR_inline
 #define CDS_ATTR_constexpr(std) CDS_ATTR_constexpr_ ## std
 #define CDS_ATTR_always_constexpr constexpr
 #define CDS_ATTR_noexcept(...) noexcept(!CDS_ATTR_exceptions || __VA_ARGS__)
+// #define CDS_ATTR_try try
+// #define CDS_ATTR_catch(...) catch(__VA_ARGS__)
 
 #define CDS_ATTR_2(a, b) CDS_ATTR_ ## a CDS_ATTR_ ## b
 #define CDS_ATTR_3(a, b, c) CDS_ATTR_ ## a CDS_ATTR_ ## b CDS_ATTR_ ## c
@@ -136,7 +139,7 @@ namespace compiler {
 #undef CDS_ATTR_noreturn
 #define CDS_ATTR_noreturn CDS_ATTR_NEWSTYLE(noreturn)
 #undef CDS_ATTR_maybe_unused
-#define CDS_ATTR_maybe_unused CDS_ATTR_OLDSTYLE(maybe_unused)
+#define CDS_ATTR_maybe_unused CDS_ATTR_OLDSTYLE(unused)
 #undef CDS_ATTR_carries_dependency
 #define CDS_ATTR_carries_dependency CDS_ATTR_NEWSTYLE(carries_dependency)
 #else // before cpp11
@@ -154,6 +157,7 @@ namespace compiler {
 #if __cplusplus >= 201703L
 #define CDS_ATTR_constexpr_17 constexpr
 #define CDS_ATTR_ctad true
+#define CDS_ATTR_sentinel true
 #undef CDS_ATTR_fallthrough
 #define CDS_ATTR_fallthrough CDS_ATTR_NEWSTYLE(fallthrough)
 #undef CDS_ATTR_maybe_unused
@@ -164,12 +168,14 @@ namespace compiler {
 #else // before cpp17
 #define CDS_ATTR_constexpr_17 inline
 #define CDS_ATTR_ctad false
+#define CDS_ATTR_sentinel false
 #define CDS_ATTR_noexcept_fn_type false
 #endif
 
 #if __cplusplus >= 202002L
 #define CDS_ATTR_constexpr_20 constexpr
 #define CDS_ATTR_spaceship true
+#define CDS_ATTR_bit_cast true
 #undef CDS_ATTR_likely
 #define CDS_ATTR_likely CDS_ATTR_NEWSTYLE(likely)
 #undef CDS_ATTR_unlikely
@@ -181,6 +187,7 @@ namespace compiler {
 #else // before cpp20
 #define CDS_ATTR_constexpr_20 inline
 #define CDS_ATTR_spaceship false
+#define CDS_ATTR_bit_cast false
 #define CDS_ATTR_explicit explicit
 #define CDS_ATTR_implicit
 #endif
