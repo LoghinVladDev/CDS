@@ -91,7 +91,7 @@ public:
 
   template <typename FS>
   CDS_ATTR(2(explicit, constexpr(11))) SplitPredicate(FS&& separator, CDS_ATTR(unused) A const& _)
-      CDS_ATTR(noexcept(noexcept(_s(cds::forward<FS>(separator))))) : _s(cds::forward<FS>(separator)) {}
+      CDS_ATTR(noexcept(noexcept(S(cds::forward<FS>(separator))))) : _s(cds::forward<FS>(separator)) {}
 
   template <typename C> CDS_ATTR(2(nodiscard, constexpr(11)))
   auto operator()(C chr) const CDS_ATTR(noexcept(noexcept(chr == _s))) -> bool {
@@ -176,20 +176,19 @@ public:
   template <typename FS, typename FA> CDS_ATTR(2(explicit, constexpr(20))) SplitPredicate(FS&& needle, FA&& alloc)
       CDS_ATTR(noexcept(noexcept(lvalue<A>().allocate(0)))) :
       A(cds::forward<FA>(alloc)),
-      _pat(cds::forward<FS>(needle)) {
-    auto l = A::allocate(len());
-    _lps = l;
-    l[0] = 0;
+      _pat(cds::forward<FS>(needle)),
+      _lps(A::allocate(len())) {
+    _lps[0] = 0;
     Size idx = 1u;
     Size parseIdx = 0;
     auto const* pattern = Utils::data(cds::forward<FS>(needle));
     while (idx < len()) {
       if (pattern[idx] == pattern[parseIdx]) {
-        l[idx++] = ++parseIdx;
+        _lps[idx++] = ++parseIdx;
       } else if (parseIdx > 0) {
-        parseIdx = l[parseIdx - 1];
+        parseIdx = _lps[parseIdx - 1];
       } else {
-        l[idx++] = 0;
+        _lps[idx++] = 0;
       }
     }
   }
@@ -268,7 +267,7 @@ public:
 private:
   template <typename PM = typename P::IsPatternMatching, EnableIf<Not<PM>> = 0> CDS_ATTR(constexpr(14))
   auto nextSegment() CDS_ATTR(noexcept(
-      noexcept(rvalue<P>(rvalue<View>().data()[0])) && noexcept(rvalue<R>().sub(0)) && noexcept(rvalue<R>().sub(0, 0))
+      noexcept(rvalue<P>()(rvalue<View>().data()[0])) && noexcept(rvalue<R>().sub(0)) && noexcept(rvalue<R>().sub(0, 0))
   )) -> void {
     if (_l == 0) {
       _segment = _r->sub(_f);
@@ -404,9 +403,17 @@ private:
 
 using extension::Extend;
 template <
+    typename I, typename S, typename R = SplitRange<Extend<I>, SplitPredicate<Extend<S>, std::nullptr_t>>,
+    EnableIf<Not<IsString<RemoveCVRef<S>>>> = 0
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto split(I&& range, S&& sep, Size limit)
+    CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(range), cds::forward<S>(sep), limit, nullptr)))) -> R {
+  return R(cds::forward<I>(range), cds::forward<S>(sep), limit, nullptr);
+}
+
+template <
     typename I, typename S, typename A, typename R = SplitRange<Extend<I>, SplitPredicate<Extend<S>, RemoveCVRef<A>>>,
-    EnableIf<meta::IsAllocator<RemoveCVRef<A>>> = 0
-> auto split(I&& range, S&& sep, Size limit, A&& alloc)
+    EnableIf<And<IsString<RemoveCVRef<S>>, meta::IsAllocator<RemoveCVRef<A>>>> = 0
+> CDS_ATTR(2(nodiscard, constexpr(20))) auto split(I&& range, S&& sep, Size limit, A&& alloc)
     CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(range), cds::forward<S>(sep), limit, cds::forward<A>(alloc))))) -> R {
   return R(cds::forward<I>(range), cds::forward<S>(sep), limit, cds::forward<A>(alloc));
 }
@@ -622,29 +629,58 @@ public:
   friend auto operator<<(typename BaseStringView<FC, FU>::OStream& out, BaseStringView<FC, FU> const& obj)
       CDS_ATTR(noexcept(noexcept(out.write(obj._data, obj._length)))) -> typename BaseStringView<FC, FU>::OStream&;
 
-  template <typename S, typename A = Allocator<Size>>
-  auto split(S&& separator, A&& alloc = A()) const&
+  template <typename S, EnableIf<Not<IsString<S>>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto split(S&& separator) const&
+      CDS_ATTR(noexcept(noexcept(impl::split(lvalue<BaseStringView const>(), cds::forward<S>(separator), 0))))
+      -> decltype(impl::split(lvalue<BaseStringView const>(), cds::forward<S>(separator), 0)) {
+    return impl::split(*this, cds::forward<S>(separator), limits::sizeMax);
+  }
+
+  template <typename S, EnableIf<Not<IsString<S>>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto split(S&& separator) const&&
+      CDS_ATTR(noexcept(noexcept(impl::split(rvalue<BaseStringView const>(), cds::forward<S>(separator), 0))))
+      -> decltype(impl::split(rvalue<BaseStringView const>(), cds::forward<S>(separator), 0)) {
+    return impl::split(cds::move(*this), cds::forward<S>(separator), limits::sizeMax);
+  }
+
+  template <typename S, EnableIf<Not<IsString<S>>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto split(S&& separator, Size limit) const& CDS_ATTR(noexcept(noexcept(
+      impl::split(lvalue<BaseStringView const>(), cds::forward<S>(separator), limit)
+  ))) -> decltype(impl::split(lvalue<BaseStringView const>(), cds::forward<S>(separator), limit)) {
+    return impl::split(*this, cds::forward<S>(separator), limit);
+  }
+
+  template <typename S, EnableIf<Not<IsString<S>>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto split(S&& separator, Size limit) const&& CDS_ATTR(noexcept(noexcept(
+      impl::split(rvalue<BaseStringView const>(), cds::forward<S>(separator), limit)
+  ))) ->
+      decltype(impl::split(rvalue<BaseStringView const>(), cds::forward<S>(separator), limit)) {
+    return impl::split(cds::move(*this), cds::forward<S>(separator), limit);
+  }
+
+  template <typename S, typename A = Allocator<Size>, EnableIf<IsString<S>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(20))) auto split(S&& separator, A&& alloc = A()) const&
       CDS_ATTR(noexcept(noexcept(impl::split(lvalue<BaseStringView const>(), cds::forward<S>(separator), 0, cds::forward<A>(alloc)))))
       -> decltype(impl::split(lvalue<BaseStringView const>(), cds::forward<S>(separator), 0, cds::forward<A>(alloc))) {
     return impl::split(*this, cds::forward<S>(separator), limits::sizeMax, cds::forward<A>(alloc));
   }
 
-  template <typename S, typename A = Allocator<Size>>
-  auto split(S&& separator, A&& alloc = A()) const&&
+  template <typename S, typename A = Allocator<Size>, EnableIf<IsString<S>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(20))) auto split(S&& separator, A&& alloc = A()) const&&
       CDS_ATTR(noexcept(noexcept(impl::split(rvalue<BaseStringView const>(), cds::forward<S>(separator), 0, cds::forward<A>(alloc)))))
       -> decltype(impl::split(rvalue<BaseStringView const>(), cds::forward<S>(separator), 0, cds::forward<A>(alloc))) {
     return impl::split(cds::move(*this), cds::forward<S>(separator), limits::sizeMax, cds::forward<A>(alloc));
   }
 
-  template <typename S, typename A = Allocator<Size>>
-  auto split(S&& separator, Size limit, A&& alloc = A()) const& CDS_ATTR(noexcept(noexcept(
+  template <typename S, typename A = Allocator<Size>, EnableIf<IsString<S>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(20))) auto split(S&& separator, Size limit, A&& alloc = A()) const& CDS_ATTR(noexcept(noexcept(
       impl::split(lvalue<BaseStringView const>(), cds::forward<S>(separator), limit, cds::forward<A>(alloc))
   ))) -> decltype(impl::split(lvalue<BaseStringView const>(), cds::forward<S>(separator), limit, cds::forward<A>(alloc))) {
     return impl::split(*this, cds::forward<S>(separator), limit, cds::forward<A>(alloc));
   }
 
-  template <typename S, typename A = Allocator<Size>>
-  auto split(S&& separator, Size limit, A&& alloc = A()) const&& CDS_ATTR(noexcept(noexcept(
+  template <typename S, typename A = Allocator<Size>, EnableIf<IsString<S>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(20))) auto split(S&& separator, Size limit, A&& alloc = A()) const&& CDS_ATTR(noexcept(noexcept(
       impl::split(rvalue<BaseStringView const>(), cds::forward<S>(separator), limit, cds::forward<A>(alloc))
   ))) ->
       decltype(impl::split(rvalue<BaseStringView const>(), cds::forward<S>(separator), limit, cds::forward<A>(alloc))) {

@@ -520,5 +520,13 @@ TEST(StringView, split) {
     std::cout << token << '\n';
   }
 
+  // static_assert(*StringView{"ab  ab"}.split("  ").begin() == "ab", "constexpr failed");
+
   std::cout << "0\n";
 }
+
+#if DCR_SINCECPP14
+void f() {
+  static_assert(*StringView{"ab ab"}.split(' ').begin() == "ab", "constexpr failed");
+}
+#endif
