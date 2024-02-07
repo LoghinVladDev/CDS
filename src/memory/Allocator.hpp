@@ -6,6 +6,8 @@
 #define CDS_MEMORY_ALLOCATOR_HPP
 #pragma once
 
+#include <memory>
+
 namespace cds {
 namespace meta {
 template <typename, typename = void> struct IsAllocator : False {};

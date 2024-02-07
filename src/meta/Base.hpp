@@ -11,6 +11,7 @@
 namespace cds {
 namespace meta {
 template <typename...> using Void = void;
+using Nullptr = decltype(nullptr);
 
 template <typename T> auto value() noexcept -> T;
 template <typename T> auto lvalue() noexcept -> T&;

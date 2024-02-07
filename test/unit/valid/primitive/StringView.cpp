@@ -398,6 +398,141 @@ TEST(StringView, find) {
   ASSERT_EQ(rIt, rRng.end());
 }
 
+namespace {
+template <typename Range, typename P> auto count(Range&& rng, P const& pred) -> int {
+  int count = 0;
+  for (auto e : cds::forward<Range>(rng)) {
+    if (pred(e)) {
+      ++count;
+    }
+  }
+  return count;
+}
+}
+
+TEST(StringView, split) {
+  using functional::memFn;
+
+  StringView sv1 = "  abc abc abc  abc abc   ";
+  auto eq = [](StringView lhs){
+    return [lhs](StringView const& rhs){ return lhs == rhs; };
+  };
+
+  auto alwaysTrue = [](StringView const&) { return true; };
+
+  ASSERT_EQ(11, count(sv1.split(' '), alwaysTrue));
+  ASSERT_EQ(6, count(sv1.split(' '), memFn(&StringView::empty)));
+  ASSERT_EQ(5, count(sv1.split(' '), eq("abc")));
+
+  ASSERT_EQ(2, count(StringView{"ab ab"}.split(' '), alwaysTrue));
+  ASSERT_EQ(2, count(StringView{"ab ab"}.split(' '), eq("ab")));
+
+  ASSERT_EQ(0, count(StringView{""}.split(' '), alwaysTrue));
+
+  ASSERT_EQ(3, count(StringView{" ac ac"}.split(' '), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{" ac ac"}.split(' '), memFn(&StringView::empty)));
+  ASSERT_EQ(2, count(StringView{" ac ac"}.split(' '), eq("ac")));
+
+  ASSERT_EQ(4, count(StringView{"ad ad  "}.split(' '), alwaysTrue));
+  ASSERT_EQ(2, count(StringView{"ad ad  "}.split(' '), memFn(&StringView::empty)));
+  ASSERT_EQ(2, count(StringView{"ad ad  "}.split(' '), eq("ad")));
+
+  auto e = memFn(&StringView::empty);
+  ASSERT_EQ(4, count(StringView{"ae   ae"}.split(' '), alwaysTrue));
+  ASSERT_EQ(2, count(StringView{"ae   ae"}.split(' '), e));
+  ASSERT_EQ(2, count(StringView{"ae   ae"}.split(' '), eq("ae")));
+
+  auto r = StringView{"a b"}.split(' ');
+  ASSERT_EQ(2, count(r, alwaysTrue));
+  ASSERT_EQ(1, count(r, eq("a")));
+  ASSERT_EQ(1, count(r, eq("b")));
+
+  ASSERT_EQ(10, count(StringView{"ae ; ae;ae ae; ae ;"}.split(std::vector<char>{' ', ';'}), alwaysTrue));
+  ASSERT_EQ(5, count(StringView{"ae ; ae;ae ae; ae ;"}.split(std::vector<char>{' ', ';'}), e));
+  ASSERT_EQ(5, count(StringView{"ae ; ae;ae ae; ae ;"}.split(std::vector<char>{' ', ';'}), eq("ae")));
+
+  std::initializer_list<char> sep2 = {' ', ';'};
+  ASSERT_EQ(10, count(StringView{"ae ; ae;ae ae; ae ;"}.split(sep2), alwaysTrue));
+  ASSERT_EQ(5, count(StringView{"ae ; ae;ae ae; ae ;"}.split(sep2), e));
+  ASSERT_EQ(5, count(StringView{"ae ; ae;ae ae; ae ;"}.split(sep2), eq("ae")));
+
+  ASSERT_EQ(1, count(StringView{"  ab   ab   ab  "}.split(' ', 0), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"  ab   ab   ab  "}.split(' ', 0), eq("  ab   ab   ab  ")));
+
+  ASSERT_EQ(2, count(StringView{"  ab   ab   ab  "}.split(' ', 1), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"  ab   ab   ab  "}.split(' ', 1), e));
+  ASSERT_EQ(1, count(StringView{"  ab   ab   ab  "}.split(' ', 1), eq(" ab   ab   ab  ")));
+
+  ASSERT_EQ(3, count(StringView{"ab  ab ab  ab"}.split("  "), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"ab  ab ab  ab"}.split("  "), eq("ab ab")));
+  ASSERT_EQ(2, count(StringView{"ab  ab ab  ab"}.split("  "), eq("ab")));
+
+  ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split("  ",  1), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split("  ",  1), eq("ac")));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split("  ",  1), eq("ac ac   ac  ")));
+
+  char const sep3[] = "  ";
+  ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split(sep3,  1), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep3,  1), eq("ac")));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep3,  1), eq("ac ac   ac  ")));
+
+  char const* sep4 = "  ";
+  ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split(sep4,  1), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep4,  1), eq("ac")));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep4,  1), eq("ac ac   ac  ")));
+
+  ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split(static_cast<char const*>(sep4),  1), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(static_cast<char const*>(sep4),  1), eq("ac")));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(static_cast<char const*>(sep4),  1), eq("ac ac   ac  ")));
+
+  char sep5[] = "  ";
+  ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split(sep5,  1), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep5,  1), eq("ac")));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep5,  1), eq("ac ac   ac  ")));
+
+  char* sep6 = sep5;
+  ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split(sep6,  1), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep6,  1), eq("ac")));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep6,  1), eq("ac ac   ac  ")));
+
+  ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split(static_cast<char*>(sep6),  1), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(static_cast<char*>(sep6),  1), eq("ac")));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(static_cast<char*>(sep6),  1), eq("ac ac   ac  ")));
+
+  ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split(StringView{"  "},  1), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(StringView{"  "},  1), eq("ac")));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(StringView{"  "},  1), eq("ac ac   ac  ")));
+
+  StringView sep7{"  "};
+  ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split(sep7,  1), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep7,  1), eq("ac")));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep7,  1), eq("ac ac   ac  ")));
+
+  StringView str1{"abc  abc"};
+  ASSERT_EQ(2, count(str1.split("  "), alwaysTrue));
+  ASSERT_EQ(2, count(str1.split("  "), eq("abc")));
+
+  ASSERT_EQ(1, count(str1.split("  ", 0), alwaysTrue));
+  ASSERT_EQ(1, count(str1.split("  ", 0), eq("abc  abc")));
+
+  ASSERT_EQ(2, count(str1.split(' ', 1), alwaysTrue));
+  ASSERT_EQ(1, count(str1.split(' ', 1), eq("abc")));
+  ASSERT_EQ(1, count(str1.split(' ', 1), eq(" abc")));
+}
+
+TEST(StringView, ostream) {
+  std::stringstream oss;
+  StringView sv{" abc "};
+  oss << sv;
+  ASSERT_EQ(oss.str(), " abc ");
+}
+
+#ifdef DCR_SINCECPP14
+TEST(StringView, cpp14Constexpr) {
+  static_assert(*StringView{"ab ab"}.split(' ').begin() == "ab", "constexpr failed");
+}
+#endif
+
 #ifdef DCR_SINCECPP20
 TEST(StringView, Spaceship) {
   char const a1[] = "abcd";
@@ -423,110 +558,8 @@ TEST(StringView, SpaceshipCompatLiteral) {
   ASSERT_EQ("abcd" <=> sv1, std::strong_ordering::greater);
   ASSERT_EQ("ab" <=> sv1, std::strong_ordering::less);
 }
-#endif
 
-TEST(StringView, split) {
-  StringView sv1 = "  abc abc abc  abc abc   ";
-  std::cout << "0\n";
-  // X<Allocator>::Type x;
-  // impl::split(sv1, ' ', 5, Allocator<Idx>());
-  // for (auto token : sv1.split(' ')) {
-  //   std::cout << token << '\n';
-  // }
-  // for (auto token : StringView{"ab ab"}.split(' ')) {
-  //   std::cout << token << '\n';
-  // }
-  // for (auto token : StringView{""}.split(' ')) {
-  //   std::cout << token << '\n';
-  // }
-  // for (auto token : StringView{" ac ac"}.split(' ')) {
-  //   std::cout << token << '\n';
-  // }
-  // for (auto token : StringView{"ad ad  "}.split(' ')) {
-  //   std::cout << token << '\n';
-  // }
-  // for (auto token : StringView{"ae   ae"}.split(' ')) {
-  //   std::cout << token << '\n';
-  // }
-  //
-  // auto r = StringView{"a b"}.split(' ');
-  // for (auto token : r) {
-  //   std::cout << token << '\n';
-  // }
-  //
-  // for (auto token : StringView{"ae ; ae;ae ae; ae ;"}.split(std::vector<char>{' ', ';'})) {
-  //   std::cout << token << '\n';
-  // }
-  //
-  // std::initializer_list<char> sep2 = {' ', ';'};
-  // for (auto token : StringView{"ae ; ae;ae ae; ae ;"}.split(sep2)) {
-  //   std::cout << token << '\n';
-  // }
-  //
-  // for (auto token : StringView{"  ab   ab   ab  "}.split(' ', 0)) {
-  //   std::cout << token << '\n';
-  // }
-  //
-  // for (auto token : StringView{"  ab   ab   ab  "}.split(' ', 1)) {
-  //   std::cout << token << '\n';
-  // }
-
-  // for (auto token : StringView{"ae ; ae;ae ae; ae ;"}.split(std::initializer_list<char>{' ', ';'})) {
-  //   std::cout << token << '\n';
-  // }
-
-  for (auto token : StringView{"ab  ab ab  ab"}.split("  ")) {
-    std::cout << token << '\n';
-  }
-
-  for (auto token : StringView{"ac  ac ac   ac  "}.split("  ",  1)) {
-    std::cout << token << '\n';
-  }
-
-  char const sep3[] = "  ";
-  for (auto token : StringView{"ac  ac ac   ac  "}.split(sep3,  1)) {
-    std::cout << token << '\n';
-  }
-
-  char const* sep4 = "  ";
-  for (auto token : StringView{"ac  ac ac   ac  "}.split(sep4,  1)) {
-    std::cout << token << '\n';
-  }
-
-  for (auto token : StringView{"ac  ac ac   ac  "}.split((char const*)sep4,  1)) {
-    std::cout << token << '\n';
-  }
-
-  char sep5[] = "  ";
-  for (auto token : StringView{"ac  ac ac   ac  "}.split(sep5,  1)) {
-    std::cout << token << '\n';
-  }
-
-  char* sep6 = sep5;
-  for (auto token : StringView{"ac  ac ac   ac  "}.split(sep6,  1)) {
-    std::cout << token << '\n';
-  }
-
-  for (auto token : StringView{"ac  ac ac   ac  "}.split((char*)sep6,  1)) {
-    std::cout << token << '\n';
-  }
-
-  for (auto token : StringView{"ac  ac ac   ac  "}.split(StringView{"  "},  1)) {
-    std::cout << token << '\n';
-  }
-
-  StringView pat7{"  "};
-  for (auto token : StringView{"ac  ac ac   ac  "}.split(pat7,  1)) {
-    std::cout << token << '\n';
-  }
-
-  // static_assert(*StringView{"ab  ab"}.split("  ").begin() == "ab", "constexpr failed");
-
-  std::cout << "0\n";
-}
-
-#if DCR_SINCECPP14
-void f() {
-  static_assert(*StringView{"ab ab"}.split(' ').begin() == "ab", "constexpr failed");
+TEST(StringView, cpp20Constexpr) {
+  static_assert(*StringView{"ab  ab"}.split("  ").begin() == "ab", "constexpr failed");
 }
 #endif

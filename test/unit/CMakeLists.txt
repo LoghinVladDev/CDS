@@ -5,6 +5,7 @@ set(
     valid/bindings/FindStaticBinding.cpp
     valid/bindings/FindOfStaticBinding.cpp
     valid/functional/FunctionalInterface.cpp
+    valid/meta/MetaStdLib.cpp
     valid/meta/MetaBase.cpp
     valid/meta/MetaCompilerLinuxClang.test.cpp
     valid/meta/MetaCompilerLinuxGcc.test.cpp

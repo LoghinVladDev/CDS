@@ -6,84 +6,6 @@
 #define CDS_META_COMPILER_HPP
 #pragma once
 
-namespace cds {
-using U8 = unsigned char;
-using U16 = unsigned short;
-using U32 = unsigned int;
-
-using S8 = signed char;
-using S16 = signed short;
-using S32 = signed int;
-
-using Byte = U8;
-
-#if defined __x86_64__ && !defined __ILP32__ // native 64 bit
-using U64 = unsigned long int;
-using S64 = signed long int;
-using Size = U64;
-using SSize = S64;
-using Idx = S64;
-using Address = U64;
-#else // 32 bit
-using U64 = unsigned long long int;
-using S64 = signed long long int;
-using Size = U32;
-using SSize = S32;
-using Idx = S32;
-using Address = U32;
-#endif
-
-namespace limits {
-constexpr U8 u8Min = 0x00U;
-constexpr U8 u8Max = 0xffU;
-
-constexpr U16 u16Min = 0x0000U;
-constexpr U16 u16Max = 0xffffU;
-
-constexpr U32 u32Min = 0x00000000LU;
-constexpr U32 u32Max = 0xffffffffLU;
-
-constexpr U64 u64Min = 0x0000000000000000LLU;
-constexpr U64 u64Max = 0xffffffffffffffffLLU;
-
-constexpr S8 s8Min = -0x80;
-constexpr S8 s8Max = 0x7f;
-
-constexpr S16 s16Min = -0x8000;
-constexpr S16 s16Max = 0x7fff;
-
-constexpr S32 s32Min = -0x80000000L;
-constexpr S32 s32Max = 0x7fffffffL;
-
-constexpr S64 s64Max = 0x7fffffffffffffffLL;
-constexpr S64 s64Min = -s64Max - 1;
-} // namespace limits
-
-#if defined __x86_64__ && !defined __ILP32__ // native 64 bit
-namespace limits {
-constexpr Size sizeMin = u64Min;
-constexpr Size sizeMax = u64Max;
-
-constexpr SSize ssizeMin = s64Min;
-constexpr SSize ssizeMax = s64Max;
-
-constexpr Idx idxMin = s64Min;
-constexpr Idx idxMax = s64Max;
-} // namespace limits
-#else // 32 bit
-namespace limits {
-constexpr Size sizeMin = u32Min;
-constexpr Size sizeMax = u32Max;
-
-constexpr SSize ssizeMin = s32Min;
-constexpr SSize ssizeMax = s32Max;
-
-constexpr Idx idxMin = s32Min;
-constexpr Idx idxMax = s32Max;
-} // namespace limits
-#endif
-
-namespace compiler {
 #define CDS_ATTR_JOIN_LATE(prefix, ...) prefix ## __VA_ARGS__
 #define CDS_ATTR(...) CDS_ATTR_JOIN_LATE(CDS_ATTR_, __VA_ARGS__)
 
@@ -198,6 +120,84 @@ namespace compiler {
 #define CDS_ATTR_constexpr_23 inline
 #endif
 
+namespace cds {
+using U8 = unsigned char;
+using U16 = unsigned short;
+using U32 = unsigned int;
+
+using S8 = signed char;
+using S16 = signed short;
+using S32 = signed int;
+
+using Byte = U8;
+
+#if defined __x86_64__ && !defined __ILP32__ // native 64 bit
+using U64 = unsigned long int;
+using S64 = signed long int;
+using Size = U64;
+using SSize = S64;
+using Idx = S64;
+using Address = U64;
+#else // 32 bit
+using U64 = unsigned long long int;
+using S64 = signed long long int;
+using Size = U32;
+using SSize = S32;
+using Idx = S32;
+using Address = U32;
+#endif
+
+namespace limits {
+constexpr U8 u8Min = 0x00U;
+constexpr U8 u8Max = 0xffU;
+
+constexpr U16 u16Min = 0x0000U;
+constexpr U16 u16Max = 0xffffU;
+
+constexpr U32 u32Min = 0x00000000LU;
+constexpr U32 u32Max = 0xffffffffLU;
+
+constexpr U64 u64Min = 0x0000000000000000LLU;
+constexpr U64 u64Max = 0xffffffffffffffffLLU;
+
+constexpr S8 s8Min = -0x80;
+constexpr S8 s8Max = 0x7f;
+
+constexpr S16 s16Min = -0x8000;
+constexpr S16 s16Max = 0x7fff;
+
+constexpr S32 s32Min = -0x80000000L;
+constexpr S32 s32Max = 0x7fffffffL;
+
+constexpr S64 s64Max = 0x7fffffffffffffffLL;
+constexpr S64 s64Min = -s64Max - 1;
+} // namespace limits
+
+#if defined __x86_64__ && !defined __ILP32__ // native 64 bit
+namespace limits {
+constexpr Size sizeMin = u64Min;
+constexpr Size sizeMax = u64Max;
+
+constexpr SSize ssizeMin = s64Min;
+constexpr SSize ssizeMax = s64Max;
+
+constexpr Idx idxMin = s64Min;
+constexpr Idx idxMax = s64Max;
+} // namespace limits
+#else // 32 bit
+namespace limits {
+constexpr Size sizeMin = u32Min;
+constexpr Size sizeMax = u32Max;
+
+constexpr SSize ssizeMin = s32Min;
+constexpr SSize ssizeMax = s32Max;
+
+constexpr Idx idxMin = s32Min;
+constexpr Idx idxMax = s32Max;
+} // namespace limits
+#endif
+
+namespace compiler {
 struct StdCpp11 {
   constexpr static int version = 11;
   constexpr static char const* literal = "cpp-11";
