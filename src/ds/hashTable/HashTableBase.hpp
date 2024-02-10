@@ -386,7 +386,7 @@ private:
     auto* nb = alloc.allocate(bCnt);
     fillInitialize(copyInitialize(_bArr, _bArr + _bCnt, nb), nb + bCnt, nullptr);
 #if CDS_ATTR(cpp20)
-    if constexpr(inConstexpr()) {
+    if (inConstexpr()) {
       if (_bArr) {
         alloc.deallocate(cds::exchange(_bArr, nb), cds::exchange(_bCnt, bCnt));
         return;
