@@ -474,6 +474,7 @@ auto processTestHeader(std::string const& path) -> std::optional<TestData> {
   }
 
   if (!isDcrTest) {
+    std::cout << "skipped file '" << path << "' since it does not have a DCR header.\n";
     return {};
   }
 
@@ -542,8 +543,8 @@ auto awaitProcess(std::optional<std::string> executable, std::vector<std::string
     return {true, "", "", true};
   }
 
-  std::array<int, 2> outRedir{0, 0};
-  std::array<int, 2> errRedir{0, 0};
+  std::array outRedir{0, 0};
+  std::array errRedir{0, 0};
   pipe(outRedir.data());
   pipe(errRedir.data());
 
@@ -558,8 +559,7 @@ auto awaitProcess(std::optional<std::string> executable, std::vector<std::string
 
   std::vector<char*> cEnv;
   auto fillOtherEnv = [](auto& envArr){
-    for (auto s = environ; *s; ++s) {
-      std::string asStr = *s;
+    for (auto* s = environ; *s; ++s) {
       envArr.push_back(*s);
     }
   };
@@ -594,11 +594,10 @@ auto awaitProcess(std::optional<std::string> executable, std::vector<std::string
 
   auto outputAwaiter = [](auto fd, auto& out) {
     return [fd, &out]() {
-      ssize_t readCount;
       std::array<char, BUFSIZ> buf{0};
       bool reading = true;
       while (reading) {
-        readCount = read(fd, buf.data(), BUFSIZ);
+        auto readCount = read(fd, buf.data(), BUFSIZ);
         if (readCount != 0) { out += std::string_view(buf.data(), readCount); }
         else { reading = false; }
       }
@@ -805,10 +804,15 @@ auto executeJob(auto const& job, std::vector<std::string> const& passToCompiler,
 
   if (job->type == TestStepType::Run) {
 #ifdef CDS_DCR_BLOCK_MULTIACCESS_TO_PROFRAW
-    std::lock_guard prowrawGuard(profrawBlock);
-#endif
+    if (!params.release) {
+      std::lock_guard prowrawGuard(profrawBlock);
+      auto const& data = std::get<RunData>(job->data);
+      return executeRun(data);
+    }
+#else
     auto const& data = std::get<RunData>(job->data);
     return executeRun(data);
+#endif
   }
 
   return {false, "", "Unknown Job Type", false};
@@ -1069,6 +1073,11 @@ auto run(int const argc, char const* const* argv) -> int {
           [](auto const& arg) { return arg == "--"; }
       )
   );
+
+  if (dcrParams.coverage && dcrParams.release) {
+    std::cout << "Launching tests in both release and coverage is unsupported\n";
+    return 0;
+  }
 
   std::vector<std::filesystem::path> inputPaths = locateWildcardMatches({std::move(inputFileOrDir)});
   for (auto const& path: inputPaths) {

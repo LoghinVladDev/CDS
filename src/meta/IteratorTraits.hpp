@@ -89,6 +89,20 @@ template <typename Iterator> struct IsRandomAccessIterator : And<
 > {};
 
 template <typename> struct IterableTraits {};
+
+
+template <template <typename...> class N, typename T, typename = typename IsConst<T>::Type>
+struct NodeIteratorTraits {};
+
+template <template <typename...> class N, typename T> struct NodeIteratorTraits<N, T, True> {
+  using Node = N<RemoveConst<T>>;
+  using Value = T;
+};
+
+template <template <typename...> class N, typename T> struct NodeIteratorTraits<N, T, False> {
+  using Node = N<T>;
+  using Value = T;
+};
 } // namespace meta
 } // namespace cds
 

@@ -4,6 +4,7 @@
 
 #ifndef CDS_SENTINEL_HPP
 #define CDS_SENTINEL_HPP
+#pragma once
 
 namespace cds {
 namespace iterator {

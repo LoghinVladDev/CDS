@@ -7,3 +7,5 @@
 /*build*/
 *kdev*
 /.cache/
+/.scannerwork/
+run_sq.sh

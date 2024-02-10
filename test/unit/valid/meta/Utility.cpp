@@ -8,6 +8,7 @@
 #include <cds/StringView>
 #include <chrono>
 #include <iostream>
+#include "../Shared.hpp"
 
 using namespace cds;
 
@@ -26,6 +27,9 @@ void tgt(A&&) {
 template <typename T> void fwd(T&& obj) {
   tgt(cds::forward<T>(obj));
 }
+
+using testing::iteq;
+using testing::citeq;
 } // namespace
 
 TEST(Utility, Forward) {
@@ -378,6 +382,149 @@ TEST(Utility, find) {
   ASSERT_EQ(locsInvalid.begin(), locsInvalid.end());
 }
 
+CDS_ATTR(constexpr(14)) auto testCopy() -> bool {
+  int srcBuf[4] = {1, 2, 3, 4};
+  int dstBuf[4] = {0, 0, 0, 0};
+
+  auto eqAtStart1 = iteq(srcBuf, srcBuf + 4, dstBuf, dstBuf + 4);
+  auto eqAtStart2 = iteq(begin(srcBuf), end(srcBuf), begin(dstBuf), end(dstBuf));
+
+  auto e = impl::copy(begin(srcBuf), end(srcBuf), begin(dstBuf));
+  auto reachedExpected = e == end(dstBuf);
+  auto eqAtEnd = citeq(srcBuf, dstBuf);
+  return !eqAtStart1 && !eqAtStart2 && reachedExpected && eqAtEnd;
+}
+
+CDS_ATTR(constexpr(14)) auto testCopyPartial() -> bool {
+  int srcBuf[4] = {1, 2, 3, 4};
+  int dstBuf[4] = {0, 0, 0, 0};
+
+  auto eqAtStart1 = iteq(srcBuf, srcBuf + 4, dstBuf, dstBuf + 4);
+  auto eqAtStart2 = iteq(begin(srcBuf), end(srcBuf), begin(dstBuf), end(dstBuf));
+
+  auto e = impl::copy(begin(srcBuf), end(srcBuf) - 2, begin(dstBuf));
+  auto reachedExpected = e == end(dstBuf) - 2;
+  auto eqAtEndFull = iteq(begin(srcBuf), end(srcBuf), begin(dstBuf), end(dstBuf));
+  auto eqAtEndPartial = iteq(begin(srcBuf), end(srcBuf) - 2, begin(dstBuf), end(dstBuf) - 2);
+
+  return !eqAtStart1 && !eqAtStart2 && reachedExpected && !eqAtEndFull && eqAtEndPartial;
+}
+
+CDS_ATTR(constexpr(14)) auto testCopyN() -> bool {
+  int srcBuf[4] = {1, 2, 3, 4};
+  int dstBuf[4] = {0, 0, 0, 0};
+
+  auto eqAtStart1 = iteq(srcBuf, srcBuf + 4, dstBuf, dstBuf + 4);
+  auto eqAtStart2 = iteq(begin(srcBuf), end(srcBuf), begin(dstBuf), end(dstBuf));
+
+  auto e = impl::copyN(begin(srcBuf), 4, begin(dstBuf));
+  auto reachedExpected = e == end(dstBuf);
+  auto eqAtEnd = iteq(begin(srcBuf), end(srcBuf), begin(dstBuf), end(dstBuf));
+  return !eqAtStart1 && !eqAtStart2 && reachedExpected && eqAtEnd;
+}
+
+CDS_ATTR(constexpr(14)) auto testCopyNPartial() -> bool {
+  int srcBuf[4] = {1, 2, 3, 4};
+  int dstBuf[4] = {0, 0, 0, 0};
+
+  auto eqAtStart1 = iteq(srcBuf, srcBuf + 4, dstBuf, dstBuf + 4);
+  auto eqAtStart2 = iteq(begin(srcBuf), end(srcBuf), begin(dstBuf), end(dstBuf));
+
+  auto e = impl::copyN(begin(srcBuf), 2, begin(dstBuf));
+  auto reachedExpected = e == end(dstBuf) - 2;
+  auto eqAtEndFull = iteq(begin(srcBuf), end(srcBuf), begin(dstBuf), end(dstBuf));
+  auto eqAtEndPartial = iteq(begin(srcBuf), end(srcBuf) - 2, begin(dstBuf), end(dstBuf) - 2);
+
+  return !eqAtStart1 && !eqAtStart2 && reachedExpected && !eqAtEndFull && eqAtEndPartial;
+}
+
+CDS_ATTR(constexpr(14)) auto testFill() -> bool {
+  int dstBuf[4] = {0, 0, 0, 0};
+  int cmpAfter[4] = {1, 1, 1, 1};
+
+  auto eqAtStart1 = iteq(cmpAfter, cmpAfter + 4, dstBuf, dstBuf + 4);
+  auto eqAtStart2 = iteq(begin(cmpAfter), end(cmpAfter), begin(dstBuf), end(dstBuf));
+
+  auto e = impl::fill(begin(dstBuf), end(dstBuf), 1);
+  auto reachedExpected = e == end(dstBuf);
+  auto eqAtEnd = iteq(begin(cmpAfter), end(cmpAfter), begin(dstBuf), end(dstBuf));
+  return !eqAtStart1 && !eqAtStart2 && reachedExpected && eqAtEnd;
+}
+
+CDS_ATTR(constexpr(14)) auto testFillPartial() -> bool {
+  int dstBuf[4] = {0, 0, 0, 0};
+  int cmpAfter[4] = {1, 1, 1, 1};
+
+  auto eqAtStart1 = iteq(cmpAfter, cmpAfter + 4, dstBuf, dstBuf + 4);
+  auto eqAtStart2 = iteq(begin(cmpAfter), end(cmpAfter), begin(dstBuf), end(dstBuf));
+
+  auto e = impl::fill(begin(dstBuf) + 1, end(dstBuf) - 1, 1);
+  auto reachedExpected = e == end(dstBuf) - 1;
+  auto eqAtEndFull = iteq(begin(cmpAfter), end(cmpAfter), begin(dstBuf), end(dstBuf));
+  auto eqAtEndPartial = iteq(begin(cmpAfter), end(cmpAfter) - 2, begin(dstBuf) + 1, end(dstBuf) - 1);
+  return !eqAtStart1 && !eqAtStart2 && reachedExpected && !eqAtEndFull && eqAtEndPartial;
+}
+
+CDS_ATTR(constexpr(14)) auto testFillN() -> bool {
+  int dstBuf[4] = {0, 0, 0, 0};
+  int cmpAfter[4] = {1, 1, 1, 1};
+
+  auto eqAtStart1 = iteq(cmpAfter, cmpAfter + 4, dstBuf, dstBuf + 4);
+  auto eqAtStart2 = iteq(begin(cmpAfter), end(cmpAfter), begin(dstBuf), end(dstBuf));
+
+  auto e = impl::fillN(begin(dstBuf), 4, 1);
+  auto reachedExpected = e == end(dstBuf);
+  auto eqAtEnd = iteq(begin(cmpAfter), end(cmpAfter), begin(dstBuf), end(dstBuf));
+  return !eqAtStart1 && !eqAtStart2 && reachedExpected && eqAtEnd;
+}
+
+CDS_ATTR(constexpr(14)) auto testFillNPartial() -> bool {
+  int dstBuf[4] = {0, 0, 0, 0};
+  int cmpAfter[4] = {1, 1, 1, 1};
+
+  auto eqAtStart1 = iteq(cmpAfter, cmpAfter + 4, dstBuf, dstBuf + 4);
+  auto eqAtStart2 = iteq(begin(cmpAfter), end(cmpAfter), begin(dstBuf), end(dstBuf));
+
+  auto e = impl::fillN(begin(dstBuf), 2, 1);
+  auto reachedExpected = e == end(dstBuf) - 2;
+  auto eqAtEndFull = iteq(begin(cmpAfter), end(cmpAfter), begin(dstBuf), end(dstBuf));
+  auto eqAtEndPartial = iteq(begin(cmpAfter), end(cmpAfter) - 2, begin(dstBuf), end(dstBuf) - 2);
+
+  return !eqAtStart1 && !eqAtStart2 && reachedExpected && !eqAtEndFull && eqAtEndPartial;
+}
+
+TEST(Utility, copy) {
+  ASSERT_TRUE(testCopy());
+}
+
+TEST(Utility, copyPartial) {
+  ASSERT_TRUE(testCopyPartial());
+}
+
+TEST(Utility, copyN) {
+  ASSERT_TRUE(testCopyN());
+}
+
+TEST(Utility, copyNPartial) {
+  ASSERT_TRUE(testCopyNPartial());
+}
+
+TEST(Utility, fill) {
+  ASSERT_TRUE(testFill());
+}
+
+TEST(Utility, fillPartial) {
+  ASSERT_TRUE(testFillPartial());
+}
+
+TEST(Utility, fillN) {
+  ASSERT_TRUE(testFillN());
+}
+
+TEST(Utility, fillNPartial) {
+  ASSERT_TRUE(testFillNPartial());
+}
+
 TEST(Utility, timing) {
 //   auto timed = [](auto name, auto callable) {
 //     auto begin = std::chrono::high_resolution_clock::now();
@@ -526,5 +673,15 @@ TEST(Utility, cpp14Constexpr) {
   constexpr int arr[2] = {1, 2};
   static_assert(!contains(arr, 0), "constexpr contains failed");
   static_assert(contains(arr, 1), "constexpr contains failed");
+
+  static_assert(testCopy(), "constexpr copy failed");
+  static_assert(testCopyPartial(), "constexpr copy partial failed");
+  static_assert(testCopyN(), "constexpr copyN failed");
+  static_assert(testCopyNPartial(), "constexpr copyN partial failed");
+
+  static_assert(testFill(), "constexpr fill failed");
+  static_assert(testFillPartial(), "constexpr fill partial failed");
+  static_assert(testFillN(), "constexpr fillN failed");
+  static_assert(testFillNPartial(), "constexpr fillN partial failed");
 }
 #endif

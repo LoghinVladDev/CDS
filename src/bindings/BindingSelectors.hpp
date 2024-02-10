@@ -4,6 +4,7 @@
 
 #ifndef CDS_SHARED_BINDING_SELECTORS_HPP
 #define CDS_SHARED_BINDING_SELECTORS_HPP
+#pragma once
 
 #include <cds/meta/Base>
 

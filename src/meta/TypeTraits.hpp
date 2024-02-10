@@ -194,6 +194,7 @@ template <typename Type> struct IsIntegral : impl::IsIntegral<Type>::Type {};
 template <typename Type> struct IsFloating : impl::IsFloating<Type>::Type {};
 template <typename Type> struct IsArithmetic : impl::IsArithmetic<Type>::Type {};
 template <typename Type> struct IsSigned : impl::IsSigned<Type>::Type {};
+template <typename Type> struct IsUnsigned : Not<IsSigned<Type>> {};
 
 template <typename Type> struct IsArray : impl::IsArray<Type>::Type {};
 template <typename Type> struct IsBoundedArray : impl::IsBoundedArray<Type>::Type {};

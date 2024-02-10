@@ -12,14 +12,18 @@ namespace cds {
 namespace functional {
 namespace impl {
 template <typename... Ts> auto predicateFunctionHint(Ts...) -> bool;
-template <typename R, typename... Ts> auto mapperFunctionHint(Ts...) -> R;
+template <typename... Ts> auto consumerFunctionHint(Ts...) -> void;
+template <typename R, typename... Ts> auto projectionFunctionHint(Ts...) -> R;
 } // namespace impl
 
 template <typename... Types> using PredicateFunction
     = decltype(&impl::predicateFunctionHint<Types...>);
 
-template <typename R, typename... Types> using MapperFunction
-    = decltype(&impl::mapperFunctionHint<R, Types...>);
+template <typename... Types> using ConsumerFunction
+    = decltype(&impl::consumerFunctionHint<Types...>);
+
+template <typename R, typename... Types> using ProjectionFunction
+    = decltype(&impl::projectionFunctionHint<R, Types...>);
 
 namespace impl {
 using meta::True;
@@ -34,7 +38,8 @@ using meta::IsCallable;
 using meta::InvokeReturnOf;
 using meta::rvalue;
 
-template <typename MFn> struct MemberFunctionWrapper {
+template <typename MFn> class MemberFunctionWrapper {
+public:
   template <typename RMFn, EnableIf<Not<IsSame<Decay<RMFn>, MemberFunctionWrapper>>> = 0>
   CDS_ATTR(2(explicit, constexpr(11))) MemberFunctionWrapper(RMFn&& fn) noexcept : _fn(cds::forward<RMFn>(fn)) {}
 
@@ -45,12 +50,14 @@ template <typename MFn> struct MemberFunctionWrapper {
     return (cds::forward<O>(obj).*_fn)(cds::forward<Args>(args)...);
   }
 
+private:
   CDS_ATTR(no_unique_address) MFn _fn;
 };
 
-template <typename Fn, typename = typename IsCallable<Fn>::Type> struct NotFunctionWrapper {};
+template <typename Fn, typename = typename IsCallable<Fn>::Type> class NotFunctionWrapper {};
 
-template <typename Fn> struct NotFunctionWrapper<Fn, True> {
+template <typename Fn> class NotFunctionWrapper<Fn, True> {
+public:
   template <typename RFn, EnableIf<Not<IsSame<Decay<RFn>, NotFunctionWrapper>>> = 0>
   CDS_ATTR(2(explicit, constexpr(11))) NotFunctionWrapper(RFn&& fn) noexcept : _fn(cds::forward<RFn>(fn)) {}
 
@@ -60,10 +67,12 @@ template <typename Fn> struct NotFunctionWrapper<Fn, True> {
     return !_fn(cds::forward<Args>(args)...);
   }
 
+private:
   CDS_ATTR(no_unique_address) Fn _fn;
 };
 
-template <typename MFn> struct NotFunctionWrapper<MFn, False> {
+template <typename MFn> class NotFunctionWrapper<MFn, False> {
+public:
   template <typename RMFn, EnableIf<Not<IsSame<Decay<RMFn>, NotFunctionWrapper>>> = 0>
   CDS_ATTR(2(explicit, constexpr(11))) NotFunctionWrapper(RMFn&& fn) noexcept : _fn(cds::forward<RMFn>(fn)) {}
 
@@ -74,6 +83,7 @@ template <typename MFn> struct NotFunctionWrapper<MFn, False> {
     return !(cds::forward<O>(obj).*_fn)(cds::forward<Args>(args)...);
   }
 
+private:
   CDS_ATTR(no_unique_address) MFn _fn;
 };
 } // namespace impl

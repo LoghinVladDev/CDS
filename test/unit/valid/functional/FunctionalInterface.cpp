@@ -18,8 +18,8 @@ TEST(FunctionalInterface, PredicateFunction) {
 }
 
 TEST(FunctionalInterface, MapperFunction) {
-  static_assert(IsSame<Decay<float(int, int)>, MapperFunction<float, int, int>>::value, "Failed Interface MapperFunction");
-  static_assert(!IsSame<Decay<float(int&, int)>, MapperFunction<float, int, int>>::value, "Failed Interface MapperFunction");
+  static_assert(IsSame<Decay<float(int, int)>, ProjectionFunction<float, int, int>>::value, "Failed Interface MapperFunction");
+  static_assert(!IsSame<Decay<float(int&, int)>, ProjectionFunction<float, int, int>>::value, "Failed Interface MapperFunction");
 }
 
 namespace {

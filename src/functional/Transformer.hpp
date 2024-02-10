@@ -4,8 +4,10 @@
 
 #ifndef CDS_FUNCTIONAL_TRANSFORMER_HPP
 #define CDS_FUNCTIONAL_TRANSFORMER_HPP
+#pragma once
 
 #include <cds/meta/Semantics>
+#include <cds/meta/ObjectTraits>
 
 namespace cds {
 namespace functional {
@@ -14,17 +16,30 @@ using meta::EnableIf;
 using meta::Ge;
 using meta::Lt;
 using meta::Int;
+using meta::Or;
+using meta::Not;
+using meta::And;
+using meta::IsTriviallyConstructible;
 
-template<typename T = void> struct Identity {
-  template <typename T1 = T, EnableIf<Ge<Int<sizeof(T1)>, Int<sizeof(Size)>>>>
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto identity(T const &v) noexcept -> T const& { return v; }
+template<typename T = void, typename = void> struct Identity {};
 
-  template <typename T1 = T, EnableIf<Lt<Int<sizeof(T1)>, Int<sizeof(Size)>>>>
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto identity(T v) noexcept -> T { return v; }
+template <typename T>
+struct Identity<T, EnableIf<Or<Ge<Int<sizeof(T)>, Int<sizeof(Size)>>, Not<IsTriviallyConstructible<T>>>, void>> {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(T const& obj) const noexcept -> T const& {
+    return obj;
+  }
 };
 
-template <> struct Identity<void> {
-  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto identity(T&& v) noexcept -> T&& {
+template <typename T>
+struct Identity<T, EnableIf<And<Lt<Int<sizeof(T)>, Int<sizeof(Size)>>, IsTriviallyConstructible<T>>, void>> {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(T obj) const noexcept -> T {
+    return obj;
+  }
+};
+
+
+template <> struct Identity<void, void> {
+  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(T&& v) const noexcept -> T&& {
     return cds::forward<T>(v);
   }
 };

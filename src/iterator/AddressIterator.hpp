@@ -33,13 +33,13 @@ public:
   static constexpr bool forward = fwd;
 
   CDS_ATTR(constexpr(11)) AddressIteratorBase() noexcept = default;
-  CDS_ATTR(constexpr(11)) AddressIteratorBase(AddressIteratorBase const &) noexcept = default;
+  CDS_ATTR(constexpr(11)) AddressIteratorBase(AddressIteratorBase const&) noexcept = default;
   CDS_ATTR(constexpr(11)) AddressIteratorBase(AddressIteratorBase &&) noexcept = default;
-  CDS_ATTR(2(implicit, constexpr(11))) AddressIteratorBase(Address address) noexcept: _addr(address) {}
+  CDS_ATTR(2(implicit, constexpr(11))) AddressIteratorBase(Address address) noexcept: _addr{address} {}
   ~AddressIteratorBase() noexcept = default;
 
-  CDS_ATTR(constexpr(14)) auto operator=(AddressIteratorBase const &) noexcept -> AddressIteratorBase & = default;
-  CDS_ATTR(constexpr(14)) auto operator=(AddressIteratorBase &&) noexcept -> AddressIteratorBase & = default;
+  CDS_ATTR(constexpr(14)) auto operator=(AddressIteratorBase const&) noexcept -> AddressIteratorBase& = default;
+  CDS_ATTR(constexpr(14)) auto operator=(AddressIteratorBase &&) noexcept -> AddressIteratorBase& = default;
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator*() const noexcept -> Reference {
     return *_addr;
@@ -226,28 +226,28 @@ CDS_ATTR(constexpr(14)) auto operator--(I& iterator) noexcept -> I& {
 }
 
 template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>> = 0>
-CDS_ATTR(constexpr(14)) auto operator++(I& iterator, int) noexcept -> I {
+CDS_ATTR(2(nodiscard, constexpr(14))) auto operator++(I& iterator, int) noexcept -> I {
   I const copy = iterator;
   ++static_cast<AddressIteratorBase<typename I::Value, true>&>(iterator)._addr;
   return copy;
 }
 
 template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>> = 0>
-CDS_ATTR(constexpr(14)) auto operator++(I& iterator, int) noexcept -> I {
+CDS_ATTR(2(nodiscard, constexpr(14))) auto operator++(I& iterator, int) noexcept -> I {
   I const copy = iterator;
   --static_cast<AddressIteratorBase<typename I::Value, false>&>(iterator)._addr;
   return copy;
 }
 
 template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>> = 0>
-CDS_ATTR(constexpr(14)) auto operator--(I& iterator, int) noexcept -> I {
+CDS_ATTR(2(nodiscard, constexpr(14))) auto operator--(I& iterator, int) noexcept -> I {
   I const copy = iterator;
   --static_cast<AddressIteratorBase<typename I::Value, true>&>(iterator)._addr;
   return copy;
 }
 
 template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>> = 0>
-CDS_ATTR(constexpr(14)) auto operator--(I& iterator, int) noexcept -> I {
+CDS_ATTR(2(nodiscard, constexpr(14))) auto operator--(I& iterator, int) noexcept -> I {
   I const copy = iterator;
   ++static_cast<AddressIteratorBase<typename I::Value, false>&>(iterator)._addr;
   return copy;
@@ -255,25 +255,25 @@ CDS_ATTR(constexpr(14)) auto operator--(I& iterator, int) noexcept -> I {
 
 template <
     typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>, IsIntegral<N>>> = 0
-> CDS_ATTR(constexpr(11)) auto operator+(I const& lhs, N rhs) noexcept -> I {
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator+(I const& lhs, N rhs) noexcept -> I {
   return I(static_cast<AddressIteratorBase<typename I::Value, true> const&>(lhs)._addr + rhs);
 }
 
 template <
     typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>, IsIntegral<N>>> = 0
-> CDS_ATTR(constexpr(11)) auto operator+(I const& lhs, N rhs) noexcept -> I {
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator+(I const& lhs, N rhs) noexcept -> I {
   return I(static_cast<AddressIteratorBase<typename I::Value, false> const&>(lhs)._addr - rhs);
 }
 
 template <
     typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>, IsIntegral<N>>> = 0
-> CDS_ATTR(constexpr(11)) auto operator-(I const& lhs, N rhs) noexcept -> I {
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator-(I const& lhs, N rhs) noexcept -> I {
   return I(static_cast<AddressIteratorBase<typename I::Value, true> const&>(lhs)._addr - rhs);
 }
 
 template <
     typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>, IsIntegral<N>>> = 0
-> CDS_ATTR(constexpr(11)) auto operator-(I const& lhs, N rhs) noexcept -> I {
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator-(I const& lhs, N rhs) noexcept -> I {
   return I(static_cast<AddressIteratorBase<typename I::Value, false> const&>(lhs)._addr + rhs);
 }
 } // namespace impl

@@ -4,10 +4,12 @@
 
 #ifndef CDS_META_UTILITY_HPP
 #define CDS_META_UTILITY_HPP
+#pragma once
 
 #include <cds/meta/IteratorTraits>
 #include <cds/meta/FunctionTraits>
 #include <cds/meta/Semantics>
+#include <cds/meta/StdLib>
 #include <cds/functional/Comparator>
 #include <cds/iterator/AddressIterator>
 
@@ -46,26 +48,11 @@ template <typename T1, typename T2, typename T3, typename... R> CDS_ATTR(2(nodis
   return maxOf(cds::forward<T1>(v1), maxOf(cds::forward<T2>(v2), cds::forward<T3>(v3), cds::forward<R>(r)...));
 }
 
-#if CDS_ATTR(bit_cast)
-template <typename T, typename F> CDS_ATTR(2(nodiscard, constexpr(20))) auto bitCast(F const& from) noexcept -> T {
-  return std::bit_cast<T>(from);
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto asConst(T& obj) noexcept -> meta::AddConst<T>& {
+  return obj;
 }
-#else // #if CDS_ATTR(bit_cast)
-template <typename T, typename F> CDS_ATTR(nodiscard) auto bitCast(F const& from) noexcept -> T {
-  static_assert(
-      meta::And<
-          meta::Eq<meta::Int<sizeof(F)>, meta::Int<sizeof(T)>>,
-          meta::IsTriviallyCopyable<F>,
-          meta::IsTriviallyCopyable<T>,
-          meta::IsTriviallyConstructible<T>
-      >::value,
-      "type constraints not satisfied for memory-safe bit-cast"
-  );
-  T result;
-  std::memcpy(&result, &from, sizeof(T));
-  return result;
-}
-#endif // #if CDS_ATTR(bit_cast) #else
+
+template <typename T> auto asConst(T&& obj) noexcept -> void = delete;
 
 template <
     typename T, typename D = meta::RemoveRef<T>,
@@ -230,6 +217,8 @@ using meta::impl::HasContains;
 using meta::impl::HasSelectorContains;
 using meta::IsInvocable;
 using meta::IsSame;
+using meta::True;
+using meta::RemoveCVRef;
 
 using functional::Equal;
 
@@ -705,30 +694,32 @@ private:
   SAttr const _s;
 };
 
+template <typename, typename> struct GenericFindEnabledFor : True {};
+
 template <
     typename I, typename V, typename P, typename T,
-    typename R = FindIterableRange<Extend<I>, Extend<V>, P, T>
+    typename R = FindIterableRange<Extend<I>, Extend<V>, P, T>,
+    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto find(
-    I&& iterable, V&& value, P const& equal, T const& transform
+    I&& iterable, V&& value, CDS_ATTR(unused) P const& equal, CDS_ATTR(unused) T const& transform
 ) CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(iterable), cds::forward<V>(value))))) -> R {
-  (void) equal;
-  (void) transform;
   return R(cds::forward<I>(iterable), cds::forward<V>(value));
 }
 
 template <
     typename I, typename V, typename S, typename P, typename T,
-    typename R = FindSelectIterableRange<Extend<I>, Extend<V>, Extend<S>, P, T>
+    typename R = FindSelectIterableRange<Extend<I>, Extend<V>, Extend<S>, P, T>,
+    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto find(
-    I&& iterable, V&& value, S&& selector, P const& equal, T const& transform
+    I&& iterable, V&& value, S&& selector, CDS_ATTR(unused) P const& equal, CDS_ATTR(unused) T const& transform
 ) CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<S>(selector))))) -> R {
-  (void) equal;
-  (void) transform;
   return R(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<S>(selector));
 }
 
-template <typename I, typename V, typename P, typename T>
-CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
+template <
+    typename I, typename V, typename P, typename T,
+    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>>> = 0
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
     I&& iterable, V&& value, P const& valid, T const& transform
 ) CDS_ATTR(noexcept(
     noexcept(cds::begin(cds::forward<I>(iterable)) != cds::end(cds::forward<I>(iterable)))
@@ -754,8 +745,10 @@ CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
   return transform(b, e, e);
 }
 
-template <typename I, typename V, typename S, typename P, typename T>
-CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
+template <
+    typename I, typename V, typename S, typename P, typename T,
+    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>>> = 0
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
     I&& iterable, V&& value, S&& selector, P const& valid, T const& transform
 ) CDS_ATTR(noexcept(
     noexcept(cds::begin(cds::forward<I>(iterable)) != cds::end(cds::forward<I>(iterable)))
@@ -781,8 +774,10 @@ CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
   return transform(b, e, e);
 }
 
-template <typename I, typename V, typename P, typename T>
-CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
+template <
+    typename I, typename V, typename P, typename T,
+    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>>> = 0
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
     I&& iterable, V&& value, P const& valid, T const& transform
 ) CDS_ATTR(noexcept(
     noexcept(cds::begin(cds::forward<I>(iterable)) != cds::end(cds::forward<I>(iterable)))
@@ -809,8 +804,10 @@ CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
   return transform(b, e, l);
 }
 
-template <typename I, typename V, typename S, typename P, typename T>
-CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
+template <
+    typename I, typename V, typename S, typename P, typename T,
+    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>>> = 0
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
     I&& iterable, V&& value, S&& selector, P const& valid, T const& transform
 ) CDS_ATTR(noexcept(
     noexcept(cds::begin(cds::forward<I>(iterable)) != cds::end(cds::forward<I>(iterable)))
@@ -880,6 +877,116 @@ public:
 private:
   CDS_ATTR(no_unique_address) P _equal;
 };
+
+template <typename I, typename S, typename O>
+CDS_ATTR(constexpr(14)) auto copy(I sFirst, S sLast, O dFirst) CDS_ATTR(noexcept(
+    noexcept(*dFirst = *sFirst) &&
+    noexcept(sFirst != sLast) &&
+    noexcept(++sFirst) &&
+    noexcept(++dFirst)
+)) -> O {
+  for (; sFirst != sLast; ++sFirst, ++dFirst) {
+    *dFirst = *sFirst;
+  }
+  return dFirst;
+}
+
+template <typename I, typename S, typename O>
+CDS_ATTR(constexpr(14)) auto copyN(I sFirst, S count, O dFirst) CDS_ATTR(noexcept(
+    noexcept(*dFirst = *sFirst) &&
+    noexcept(++sFirst) &&
+    noexcept(++dFirst)
+)) -> O {
+  for (S cnt = 0; cnt != count; ++sFirst, ++dFirst, ++cnt) {
+    *dFirst = *sFirst;
+  }
+  return dFirst;
+}
+
+template <typename I, typename S, typename O>
+CDS_ATTR(constexpr(20)) auto copyInitialize(I sFirst, S sLast, O dFirst) CDS_ATTR(noexcept(
+    noexcept(construct(dFirst, *sFirst)) &&
+    noexcept(sFirst != sLast) &&
+    noexcept(++sFirst) &&
+    noexcept(++dFirst)
+)) -> O {
+  for (; sFirst != sLast; ++sFirst, ++dFirst) {
+    construct(dFirst, *sFirst);
+  }
+  return dFirst;
+}
+
+template <typename I, typename S, typename O>
+CDS_ATTR(constexpr(20)) auto copyNInitialize(I sFirst, S count, O dFirst) CDS_ATTR(noexcept(
+    noexcept(construct(dFirst, *sFirst)) &&
+    noexcept(++sFirst) &&
+    noexcept(++dFirst)
+)) -> O {
+  for (S cnt = 0; cnt != count; ++sFirst, ++dFirst, ++cnt) {
+    construct(dFirst, *sFirst);
+  }
+  return dFirst;
+}
+
+template <typename I, typename S, typename T>
+CDS_ATTR(constexpr(14)) auto fill(I first, S last, T const& value) CDS_ATTR(noexcept(
+    noexcept(*first = value) &&
+    noexcept(first != last) &&
+    noexcept(++first)
+)) -> I {
+  for (; first != last; ++first) {
+    *first = value;
+  }
+  return first;
+}
+
+template <typename I, typename S, typename T>
+CDS_ATTR(constexpr(14)) auto fillN(I first, S count, T const& value) CDS_ATTR(noexcept(
+    noexcept(*first = value) &&
+    noexcept(++first)
+)) -> I {
+  for (S cnt = 0; cnt != count; ++first, ++cnt) {
+    *first = value;
+  }
+  return first;
+}
+
+template <typename I, typename S, typename T>
+CDS_ATTR(constexpr(14)) auto fillInitialize(I first, S last, T const& value) CDS_ATTR(noexcept(
+    noexcept(construct(first, value)) &&
+    noexcept(first != last) &&
+    noexcept(++first)
+)) -> I {
+  for (; first != last; ++first) {
+    construct(first, value);
+  }
+  return first;
+}
+
+template <typename I, typename S, typename T>
+CDS_ATTR(constexpr(14)) auto fillNInitialize(I first, S count, T const& value) CDS_ATTR(noexcept(
+    noexcept(construct(first, value)) &&
+    noexcept(++first)
+)) -> I {
+  for (S cnt = 0; cnt != count; ++first, ++cnt) {
+    construct(first, value);
+  }
+  return first;
+}
+
+template <typename I, typename S>
+CDS_ATTR(constexpr(20)) auto destruct(I first, S last) noexcept -> void {
+  for (; first != last; ++first) {
+    destruct(first);
+  }
+}
+
+template <typename I, typename S>
+CDS_ATTR(constexpr(20)) auto destructN(I first, S count) noexcept -> void {
+  for (S cnt = 0; cnt != count; ++first, ++cnt) {
+    destruct(first);
+  }
+}
 } // namespace impl
 } // namespace cds
 

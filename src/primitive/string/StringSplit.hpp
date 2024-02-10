@@ -13,6 +13,9 @@
 #include <cds/memory/Allocator>
 
 #include "StringUtils.hpp"
+#include "StringPattern.hpp"
+
+#include "../../ds/hashTable/HashTableBase.hpp"
 
 #include <ostream>
 
@@ -53,7 +56,7 @@ public:
   using IsPatternMatching = False;
 
   template <typename FS>
-  CDS_ATTR(2(explicit, constexpr(11))) SplitPredicate(FS&& separator, CDS_ATTR(unused) A const& _)
+  CDS_ATTR(2(explicit, constexpr(11))) SplitPredicate(FS&& separator, CDS_ATTR(unused) A const& alloc)
       CDS_ATTR(noexcept(noexcept(S(cds::forward<FS>(separator))))) : _s(cds::forward<FS>(separator)) {}
 
   template <typename C> CDS_ATTR(2(nodiscard, constexpr(11)))
@@ -71,7 +74,7 @@ public:
   using IsPatternMatching = False;
 
   template <typename FS>
-  CDS_ATTR(2(explicit, constexpr(11))) SplitPredicate(FS&& separator, CDS_ATTR(unused) A const& _)
+  CDS_ATTR(2(explicit, constexpr(11))) SplitPredicate(FS&& separator, CDS_ATTR(unused) A const& alloc)
       CDS_ATTR(noexcept(noexcept(S(cds::forward<FS>(separator))))) : _s(cds::forward<FS>(separator)) {}
 
   template <typename C> CDS_ATTR(2(nodiscard, constexpr(11)))
@@ -83,124 +86,11 @@ private:
   S _s;
 };
 
-template <typename> struct PatUtils {};
-
-template <typename C, Size s> struct ArrPatUtils {
-  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) static auto length(T&&) noexcept -> Size {
-    return s;
-  }
-
-  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) static auto data(T&& data) noexcept -> C const* {
-    return cds::forward<T>(data);
-  }
-};
-
-template <typename C, Size s> struct PatUtils<C(&)[s]> : ArrPatUtils<C, s - 1> {};
-template <typename C, Size s> struct PatUtils<C const(&)[s]> : ArrPatUtils<C, s - 1> {};
-
-template <typename C> struct PtrPatUtils {
-  using Utils = StringUtils<C, StringTraits<C>>;
-
-  CDS_ATTR(2(nodiscard, constexpr(14))) static auto length(C const* ptr) noexcept -> Size {
-    return Utils::length(ptr);
-  }
-
-  CDS_ATTR(2(nodiscard, constexpr(14))) static auto data(C const* ptr) noexcept -> C const* {
-    return ptr;
-  }
-};
-
-template <typename C> struct PatUtils<C*> : PtrPatUtils<C> {};
-template <typename C> struct PatUtils<C*&> : PtrPatUtils<C> {};
-template <typename C> struct PatUtils<C const*> : PtrPatUtils<C> {};
-template <typename C> struct PatUtils<C const*&> : PtrPatUtils<C> {};
-
-template <typename C> struct BSVPatUtils {
-  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) static auto length(T&& sv) noexcept -> Size {
-    return cds::forward<T>(sv).length();
-  }
-
-  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) static auto data(T&& sv) noexcept -> C const* {
-    return cds::forward<T>(sv).data();
-  }
-};
-
-template <typename C, typename U> struct PatUtils<BaseStringView<C, U>> : BSVPatUtils<C> {};
-template <typename C, typename U> struct PatUtils<BaseStringView<C, U>&> : BSVPatUtils<C> {};
-template <typename C, typename U> struct PatUtils<BaseStringView<C, U> const> : BSVPatUtils<C> {};
-template <typename C, typename U> struct PatUtils<BaseStringView<C, U> const&> : BSVPatUtils<C> {};
-
-template <typename S, typename A, typename I> class SplitPredicate<S, A, False, I, True> : private A {
+template <typename S, typename A, typename I> class SplitPredicate<S, A, False, I, True> : public KMPBase<S, A> {
 public:
   using Allocates = True;
   using IsPatternMatching = True;
-  using Utils = PatUtils<S>;
-
-  template <typename FS, typename FA> CDS_ATTR(2(explicit, constexpr(20))) SplitPredicate(FS&& needle, FA&& alloc)
-      CDS_ATTR(noexcept(noexcept(lvalue<A>().allocate(0)))) :
-      A(cds::forward<FA>(alloc)),
-      _pat(cds::forward<FS>(needle)) {
-    // clang 16.0.x + glibcxx does not force allocator __gnu__::__always_inline__
-    if (inConstexpr()) {
-      _lps = new Size[len()];
-    } else {
-      _lps = A::allocate(len());
-    }
-
-    _lps[0] = 0;
-    Size idx = 1u;
-    Size parseIdx = 0;
-    auto const* pattern = Utils::data(cds::forward<FS>(needle));
-    while (idx < len()) {
-      if (pattern[idx] == pattern[parseIdx]) {
-        _lps[idx++] = ++parseIdx;
-      } else if (parseIdx > 0) {
-        parseIdx = _lps[parseIdx - 1];
-      } else {
-        _lps[idx++] = 0;
-      }
-    }
-  }
-
-  template <typename Ref = IsRef<S>, EnableIf<Ref> = 0>
-  CDS_ATTR(2(explicit, constexpr(14))) SplitPredicate(SplitPredicate&& pred) noexcept :
-      A(cds::move(pred)), _pat(pred._pat), _lps(cds::exchange(pred._lps, nullptr)) {}
-
-  template <typename Ref = IsRef<S>, EnableIf<Not<Ref>> = 0>
-  CDS_ATTR(2(explicit, constexpr(14))) SplitPredicate(SplitPredicate&& pred)
-      CDS_ATTR(noexcept(noexcept(S(cds::move(pred._pat))))) :
-      A(cds::move(pred)), _pat(cds::move(pred._pat)), _lps(cds::exchange(pred._lps, nullptr)) {}
-
-  SplitPredicate(SplitPredicate const&) noexcept = delete;
-  auto operator=(SplitPredicate const&) noexcept -> SplitPredicate& = delete;
-  auto operator=(SplitPredicate&&) noexcept -> SplitPredicate& = delete;
-
-  CDS_ATTR(constexpr(20)) ~SplitPredicate() noexcept {
-    // clang 16.0.x + glibcxx does not force allocator __gnu__::__always_inline__
-    if (inConstexpr()) {
-      delete[] _lps;
-    } else {
-      A::deallocate(_lps, len());
-    }
-  }
-
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto len() const
-      CDS_ATTR(noexcept(noexcept(Utils::length(value<S>())))) -> Size {
-    return Utils::length(_pat);
-  }
-
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto data() const
-      CDS_ATTR(noexcept(noexcept(Utils::data(value<S>())))) -> decltype(Utils::data(value<S>())) {
-    return Utils::data(_pat);
-  }
-
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto lps() const noexcept -> Size const* {
-    return _lps;
-  }
-
-private:
-  S _pat;
-  Size* _lps;
+  using KMPBase<S, A>::KMPBase;
 };
 
 template <typename R, typename P> class SplitIterator {
@@ -391,15 +281,6 @@ template <
     CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(range), cds::forward<S>(sep), limit, cds::forward<A>(alloc))))) -> R {
   return R(cds::forward<I>(range), cds::forward<S>(sep), limit, cds::forward<A>(alloc));
 }
-
-template <typename C, typename U> struct FindStringTransformer {
-  template <typename IB, typename IE, typename I>
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(IB&& b, IE&& e, I&& i) const noexcept -> Idx {
-    return cds::forward<IE>(e) == cds::forward<I>(i)
-        ? BaseStringView<C, U>::npos
-        : (cds::forward<I>(i) - cds::forward<IB>(b));
-  }
-};
 } // namespace impl
 } // namespace cds
 

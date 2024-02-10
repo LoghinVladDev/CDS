@@ -4,6 +4,7 @@
 
 #ifndef CDS_COMPARATOR_HPP
 #define CDS_COMPARATOR_HPP
+#pragma once
 
 #include <cds/meta/Semantics>
 

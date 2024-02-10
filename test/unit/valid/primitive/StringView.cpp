@@ -527,6 +527,16 @@ TEST(StringView, ostream) {
   ASSERT_EQ(oss.str(), " abc ");
 }
 
+TEST(StringView, findWithStrings) {
+  StringView sv{"test test test"};
+  // for (auto const idx : impl::find(sv, "test", functional::Equal<>(), impl::FindStringTransformer<char, impl::StringUtils<char, meta::StringTraits<char>>>())) {
+  //   std::cout << idx << '\n';
+  // }
+  // for (auto const idx : sv.find("test")) {
+  //   std::cout << idx << '\n';
+  // }
+}
+
 #ifdef DCR_SINCECPP14
 TEST(StringView, cpp14Constexpr) {
   static_assert(*StringView{"ab ab"}.split(' ').begin() == "ab", "constexpr failed");

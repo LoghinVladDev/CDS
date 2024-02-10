@@ -57,6 +57,7 @@
 
 
 #if __cplusplus >= 201103L
+#define CDS_ATTR_cpp11 true
 #define CDS_ATTR_constexpr_11 constexpr
 #undef CDS_ATTR_noreturn
 #define CDS_ATTR_noreturn CDS_ATTR_NEWSTYLE(noreturn)
@@ -65,18 +66,22 @@
 #undef CDS_ATTR_carries_dependency
 #define CDS_ATTR_carries_dependency CDS_ATTR_NEWSTYLE(carries_dependency)
 #else // before cpp11
+#define CDS_ATTR_cpp11 false
 #define CDS_ATTR_constexpr_11 inline
 #endif
 
 #if __cplusplus >= 201402L
+#define CDS_ATTR_cpp14 true
 #define CDS_ATTR_constexpr_14 constexpr
 #undef CDS_ATTR_deprecated
 #define CDS_ATTR_deprecated(message) CDS_ATTR_NEWSTYLE(deprecated(message))
 #else // before cpp14
+#define CDS_ATTR_cpp14 false
 #define CDS_ATTR_constexpr_14 inline
 #endif
 
 #if __cplusplus >= 201703L
+#define CDS_ATTR_cpp17 true
 #define CDS_ATTR_constexpr_17 constexpr
 #define CDS_ATTR_ctad true
 #define CDS_ATTR_sentinel true
@@ -88,6 +93,7 @@
 #define CDS_ATTR_nodiscard CDS_ATTR_NEWSTYLE(nodiscard)
 #define CDS_ATTR_noexcept_fn_type true
 #else // before cpp17
+#define CDS_ATTR_cpp17 false
 #define CDS_ATTR_constexpr_17 inline
 #define CDS_ATTR_ctad false
 #define CDS_ATTR_sentinel false
@@ -95,9 +101,9 @@
 #endif
 
 #if __cplusplus >= 202002L
+#define CDS_ATTR_cpp20 true
 #define CDS_ATTR_constexpr_20 constexpr
 #define CDS_ATTR_spaceship true
-#define CDS_ATTR_bit_cast true
 #undef CDS_ATTR_likely
 #define CDS_ATTR_likely CDS_ATTR_NEWSTYLE(likely)
 #undef CDS_ATTR_unlikely
@@ -107,16 +113,18 @@
 #define CDS_ATTR_explicit explicit(true)
 #define CDS_ATTR_implicit explicit(false)
 #else // before cpp20
+#define CDS_ATTR_cpp20 false
 #define CDS_ATTR_constexpr_20 inline
 #define CDS_ATTR_spaceship false
-#define CDS_ATTR_bit_cast false
 #define CDS_ATTR_explicit explicit
 #define CDS_ATTR_implicit
 #endif
 
 #if __cplusplus >= 202302L
+#define CDS_ATTR_cpp23 true
 #define CDS_ATTR_constexpr_23 constexpr
 #else // before cpp23
+#define CDS_ATTR_cpp23 false
 #define CDS_ATTR_constexpr_23 inline
 #endif
 
@@ -129,7 +137,7 @@ using S8 = signed char;
 using S16 = signed short;
 using S32 = signed int;
 
-using Byte = U8;
+enum class Byte : U8 {};
 
 #if defined __x86_64__ && !defined __ILP32__ // native 64 bit
 using U64 = unsigned long int;
@@ -255,6 +263,7 @@ struct CurrentCompiler {
 
 #ifdef __clang__
 #define CDS_ATTR_clang true
+#define CDS_ATTR_ld_size 80
 
 struct CurrentCompiler {
   constexpr static char const* name = "LLVM clang";
@@ -267,6 +276,7 @@ struct CurrentCompiler {
 
 #if defined(__GNUC__) && !defined(__clang__)
 #define CDS_ATTR_gcc true
+#define CDS_ATTR_ld_size 80
 
 struct CurrentCompiler {
   constexpr static char const* name = "GNU gcc";
