@@ -72,7 +72,7 @@ public:
 
 protected:
   CDS_ATTR(nodiscard) auto get(K const& key) CDS_ATTR(noexcept(noexcept(
-      noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>()), key))
+      noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>().data), key))
       && noexcept(alloc())
       && noexcept(alloc(0))
       && noexcept(rvalue<H>()(key))
@@ -112,7 +112,7 @@ protected:
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto get(K const& key) const CDS_ATTR(noexcept(
-      noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>()), key))
+      noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>().data), key))
       && noexcept(rvalue<H>()(key))
   )) -> Type const* {
     KC const comp;
@@ -133,7 +133,7 @@ protected:
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto at(K const& key) CDS_ATTR(noexcept(
-      noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>()), key))
+      noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>().data), key))
       && noexcept(rvalue<H>()(key))
   )) -> Type* {
     KC const comp;
@@ -154,7 +154,7 @@ protected:
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto at(K const& key) const CDS_ATTR(noexcept(
-      noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>()), key))
+      noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>().data), key))
       && noexcept(rvalue<H>()(key))
   )) -> Type const* {
     KC const comp;
@@ -237,7 +237,7 @@ public:
   template <typename KF, typename... A> CDS_ATTR(constexpr(20)) auto tryEmplace(KF&& key, A&&... args)
       CDS_ATTR(noexcept(
           noexcept(construct(alloc(), nullptr, cds::forward<KF>(key), cds::forward<A>(args)...))
-          && noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>()), cds::forward<KF>(key)))
+          && noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>().data), cds::forward<KF>(key)))
           && noexcept(alloc(0))
           && noexcept(rvalue<H>()(cds::forward<KF>(key)))
               )) -> T& {

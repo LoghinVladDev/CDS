@@ -41,21 +41,20 @@ template <typename T> struct U64PrimeRehashTable {
 // ODR before cpp17
 template <typename T> T const U64PrimeRehashTable<T>::_ft[U64PrimeRehashTable<T>::_fts];
 
-template <typename T> struct PrimeRehashTable {};
+template <typename T = Size> struct PrimeRehashTable {};
 template <> struct PrimeRehashTable<U64> : U64PrimeRehashTable<U64> {};
 
-template <Size = sizeof(Size)> class PrimeRehashPolicy {};
-template <> class PrimeRehashPolicy<sizeof(U64)> : public RehashPolicy<U64, true>, private PrimeRehashTable<U64> {
+template <typename Table> class TableRehashPolicy : public RehashPolicy<U64, true>, private Table {
 public:
-  CDS_ATTR(2(explicit, constexpr(11))) PrimeRehashPolicy(U64 lf = 1) noexcept : _lf(lf) {}
-  CDS_ATTR(constexpr(11)) PrimeRehashPolicy(PrimeRehashPolicy const&) = default;
+  CDS_ATTR(2(explicit, constexpr(11))) TableRehashPolicy(U64 lf = 1) noexcept : _lf(lf) {}
+  CDS_ATTR(constexpr(11)) TableRehashPolicy(TableRehashPolicy const&) = default;
 
   CDS_ATTR(constexpr(14)) auto reset() noexcept -> void {
     _fi = 0;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(17))) auto current() const noexcept -> U64 {
-    return _ft[_fi];
+    return Table::_ft[_fi];
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto load() const noexcept -> U64 {
@@ -63,8 +62,8 @@ public:
   }
 
   CDS_ATTR(2(nodiscard, constexpr(17))) auto balance(Size bCnt, Size eCnt, Size rCnt) noexcept -> BalanceResult {
-    if (_fi + 1 == _fts) {
-      return {_ft[_fi], BalanceType::Impossible};
+    if (_fi + 1 == Table::_fts) {
+      return {Table::_ft[_fi], BalanceType::Impossible};
     }
 
     auto const req = rCnt + eCnt;
@@ -76,14 +75,14 @@ public:
       }
 
       if (req <= adj * mgf) {
-        return {_ft[++_fi], BalanceType::Required};
+        return {Table::_ft[++_fi], BalanceType::Required};
       }
     }
 
-    while (_fi + 1 != _fts && req > _ft[_fi] * _lf) {
+    while (_fi + 1 != Table::_fts && req > Table::_ft[_fi] * _lf) {
       ++_fi;
     }
-    return {_ft[_fi], BalanceType::Required};
+    return {Table::_ft[_fi], BalanceType::Required};
   }
 
 private:
@@ -92,9 +91,8 @@ private:
 };
 } // namespace prp
 
-template <typename S = Size> class PrimeRehashPolicy : public prp::PrimeRehashPolicy<sizeof(S)> {
-  using prp::PrimeRehashPolicy<sizeof(S)>::PrimeRehashPolicy;
-};
+using prp::TableRehashPolicy;
+using prp::PrimeRehashTable;
 } // namespace impl
 } // namespace cds
 

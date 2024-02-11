@@ -928,6 +928,31 @@ CDS_ATTR(constexpr(20)) auto copyNInitialize(I sFirst, S count, O dFirst) CDS_AT
   return dFirst;
 }
 
+template <typename I, typename S, typename O>
+CDS_ATTR(constexpr(20)) auto moveInitialize(I sFirst, S sLast, O dFirst) CDS_ATTR(noexcept(
+    noexcept(construct(dFirst, cds::move(*sFirst))) &&
+    noexcept(sFirst != sLast) &&
+    noexcept(++sFirst) &&
+    noexcept(++dFirst)
+)) -> O {
+  for (; sFirst != sLast; ++sFirst, ++dFirst) {
+    construct(dFirst, cds::move(*sFirst));
+  }
+  return dFirst;
+}
+
+template <typename I, typename S, typename O>
+CDS_ATTR(constexpr(20)) auto moveNInitialize(I sFirst, S count, O dFirst) CDS_ATTR(noexcept(
+    noexcept(construct(dFirst, cds::move(*sFirst))) &&
+    noexcept(++sFirst) &&
+    noexcept(++dFirst)
+)) -> O {
+  for (S cnt = 0; cnt != count; ++sFirst, ++dFirst, ++cnt) {
+    construct(dFirst, cds::move(*sFirst));
+  }
+  return dFirst;
+}
+
 template <typename I, typename S, typename T>
 CDS_ATTR(constexpr(14)) auto fill(I first, S last, T const& value) CDS_ATTR(noexcept(
     noexcept(*first = value) &&

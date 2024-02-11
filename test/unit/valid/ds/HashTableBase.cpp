@@ -19,7 +19,8 @@ using cds::functional::Equal;
 using cds::functional::Hash;
 using cds::functional::impl::Identity;
 using cds::impl::HashTableBase;
-using cds::impl::PrimeRehashPolicy;
+using cds::impl::TableRehashPolicy;
+using cds::impl::PrimeRehashTable;
 using cds::impl::FwdNode;
 
 using cds::asConst;
@@ -39,10 +40,10 @@ template <typename T> using HashTableAllocator
     = AllocatorSet<NodeAllocator<T>, BucketAllocator<T>>;
 
 template <typename T, typename K, typename KP> class DefaultHashTable :
-    public HashTableBase<T, K, Hash<>, PrimeRehashPolicy<>, KP, Equal<>, HashTableAllocator<T>> {
+    public HashTableBase<T, K, Hash<>, TableRehashPolicy<PrimeRehashTable<>>, KP, Equal<>, HashTableAllocator<T>> {
 public:
-  using Base = HashTableBase<T, K, Hash<>, PrimeRehashPolicy<>, KP, Equal<>, HashTableAllocator<T>>;
-  using HashTableBase<T, K, Hash<>, PrimeRehashPolicy<>, KP, Equal<>, HashTableAllocator<T>>::HashTableBase;
+  using Base = HashTableBase<T, K, Hash<>, TableRehashPolicy<PrimeRehashTable<>>, KP, Equal<>, HashTableAllocator<T>>;
+  using HashTableBase<T, K, Hash<>, TableRehashPolicy<PrimeRehashTable<>>, KP, Equal<>, HashTableAllocator<T>>::HashTableBase;
   using Base::at;
   using Base::copy;
   using Base::move;

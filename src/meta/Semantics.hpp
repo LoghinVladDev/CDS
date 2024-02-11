@@ -23,7 +23,7 @@ template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto move(T&& v) noe
 }
 
 template <typename T, typename U = T> CDS_ATTR(2(nodiscard, constexpr(14))) auto exchange(T& obj, U&& newVal) -> T {
-  T old = move(obj);
+  T old = cds::move(obj);
   obj = cds::forward<U>(newVal);
   return old;
 }

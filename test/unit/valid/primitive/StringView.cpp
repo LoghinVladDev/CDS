@@ -520,6 +520,22 @@ TEST(StringView, split) {
   ASSERT_EQ(1, count(str1.split(' ', 1), eq(" abc")));
 }
 
+using namespace cds::impl::ahoCorasick;
+class VA;
+using V = Vertex<char, VA>;
+class VA : public AllocatorSet<
+  Allocator<FwdNode<Link<char const>>>,
+  Allocator<FwdNode<Link<char const>>*>,
+  Allocator<FwdNode<Size>>,
+  Allocator<int>,
+  Allocator<V>
+> {};
+
+TEST(StringView, aho) {
+  std::vector<StringView> svs = {"abc", "aba", "abb", "abe"};
+  AhoCorasick<char, VA> aho(svs);
+}
+
 TEST(StringView, ostream) {
   std::stringstream oss;
   StringView sv{" abc "};

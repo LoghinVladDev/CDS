@@ -7,11 +7,12 @@
 
 namespace {
 using cds::Size;
-using cds::impl::PrimeRehashPolicy;
+using cds::impl::TableRehashPolicy;
+using cds::impl::PrimeRehashTable;
 }
 
 TEST(RehashPolicy, PrimeRehashPolicy) {
-  PrimeRehashPolicy<> policy;
+  TableRehashPolicy<PrimeRehashTable<>> policy;
   using BT = decltype(policy)::BalanceType;
 
   ASSERT_EQ(policy.current(), 13);
@@ -32,10 +33,12 @@ TEST(RehashPolicy, PrimeRehashPolicy) {
   ASSERT_EQ(r2.type, BT::Required);
   ASSERT_EQ(r2.size, 59);
 
-  (void) policy.balance(59, 282800996033ULL, 1);
-  auto r3 = policy.balance(282800996033ULL, 282800996033ULL, 1);
+  using Table = cds::impl::prp::PrimeRehashTable<Size>;
+  auto const tableEnd = Table::_ft[Table::_fts - 1];
+  (void) policy.balance(59, tableEnd, 1);
+  auto r3 = policy.balance(tableEnd, tableEnd, 1);
   ASSERT_EQ(r3.type, BT::Impossible);
-  ASSERT_EQ(r3.size, 282800996033ULL);
+  ASSERT_EQ(r3.size, tableEnd);
   ASSERT_EQ(policy.load(), 1);
 
   policy.reset();
@@ -49,7 +52,7 @@ TEST(RehashPolicy, PrimeRehashPolicy) {
 }
 
 TEST(RehashPolicy, LoadFactorPrimeRehashPolicy) {
-  PrimeRehashPolicy<> policy(2);
+  TableRehashPolicy<PrimeRehashTable<>> policy(2);
   using BT = decltype(policy)::BalanceType;
 
   ASSERT_EQ(policy.current(), 13);
@@ -66,8 +69,8 @@ TEST(RehashPolicy, LoadFactorPrimeRehashPolicy) {
 
 #if DCR_SINCECPP11
 TEST(RehashPolicy, constexpr11) {
-  constexpr PrimeRehashPolicy<> policy;
-  constexpr PrimeRehashPolicy<> loadedPolicy(2);
+  constexpr TableRehashPolicy<PrimeRehashTable<>> policy;
+  constexpr TableRehashPolicy<PrimeRehashTable<>> loadedPolicy(2);
   static_assert(policy.load() == 1, "Failed constexpr test");
   static_assert(loadedPolicy.load() == 2, "Failed constexpr test");
 }
@@ -75,7 +78,7 @@ TEST(RehashPolicy, constexpr11) {
 
 #if DCR_SINCECPP17
 constexpr bool constexpr17Cont() {
-  PrimeRehashPolicy<> policy;
+  TableRehashPolicy<PrimeRehashTable<>> policy;
   using T = decltype(policy)::BalanceType;
   auto sOk = policy.current() == 13;
   auto r1 = policy.balance(0, 1, 1);
