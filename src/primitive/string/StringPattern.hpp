@@ -196,16 +196,22 @@ template <typename T, Size = sizeof(T)> struct Link {};
 template <typename T> struct Link<T, 1> {
   U64 id: 56;
   T key;
+
+  CDS_ATTR(constexpr(11)) Link(U64 i, T k) noexcept : id(i), key(k) {}
 };
 
 template <typename T> struct Link<T, 2> {
   U64 id: 48;
   T key;
+
+  CDS_ATTR(constexpr(11)) Link(U64 i, T k) noexcept : id(i), key(k) {}
 };
 
 template <typename T> struct Link<T, 4> {
   U64 id : 32;
   T key;
+
+  CDS_ATTR(constexpr(11)) Link(U64 i, T k) noexcept : id(i), key(k) {}
 };
 
 struct LinkKeyProjection {
@@ -222,6 +228,9 @@ struct SplitWordIdLinkLeafId {
   U64 suffixLink : 48;
   U16 hWordId : 15;
   U8 leaf : 1;
+
+  CDS_ATTR(constexpr(11)) SplitWordIdLinkLeafId() noexcept :
+      endWordLink(0), lWordId(0), suffixLink(0), hWordId(0), leaf(0) {}
 
   CDS_ATTR(constexpr(14)) auto setId(U32 id) noexcept -> void {
     lWordId = id & 0xffffU;
@@ -240,6 +249,9 @@ template <typename T> struct LinkLeafId<T, 4> {
   U32 suffixLink : 32;
   U32 wordId : 31;
   U8 leaf : 1;
+
+  CDS_ATTR(constexpr(11)) LinkLeafId() noexcept :
+      endWordLink(0), suffixLink(0), wordId(0), leaf(0) {}
 
   CDS_ATTR(constexpr(14)) auto setId(U32 id) noexcept -> void {
     wordId = id;
@@ -265,7 +277,7 @@ template <
   };
 
   Children children;
-  Link<C> parent;
+  Link<C> parent {0, 0};
 };
 
 template <
