@@ -46,6 +46,13 @@ template <> struct IntegralOfEquivalentSize<double> {
   using Type = U64;
 };
 
+#if CDS_ATTR(msvc)
+template <> struct IntegralOfEquivalentSize<long double> {
+  static_assert(sizeof(long double) == 8,
+                "Invalid Integral equivalent for floating point constant");
+  using Type = U64;
+};
+#else
 template <> struct IntegralOfEquivalentSize<long double> {
   static_assert(sizeof(long double) == 16,
                 "Invalid Integral equivalent for floating point constant");
@@ -53,6 +60,7 @@ template <> struct IntegralOfEquivalentSize<long double> {
     U8 asBytes[16];
   };
 };
+#endif
 
 template <Size n> CDS_ATTR(2(nodiscard, constexpr(14))) auto hash8(U8 const* buffer) noexcept -> U8 {
   U8 r = 0;
@@ -100,6 +108,7 @@ template <Size n> CDS_ATTR(2(nodiscard, constexpr(14))) auto hash64(U8 const* bu
 }
 } // namespace impl
 
+#if CDS_ATTR(ld_size) > 64
 template <> struct Hash<typename impl::IntegralOfEquivalentSize<long double>::Type, void> {
   CDS_ATTR(2(nodiscard, constexpr(14)))
   auto operator()(typename impl::IntegralOfEquivalentSize<long double>::Type const & value) const noexcept -> Size {
@@ -112,6 +121,7 @@ template <> struct Hash<typename impl::IntegralOfEquivalentSize<long double>::Ty
 #endif // #if CDS_ATTR(ld_size) == 80 #elif CDS_ATTR(ld_size) == 128 #else
   }
 };
+#endif // #if CDS_ATTR(ld_size) > 64
 
 template <typename T> struct Hash<T, meta::EnableIf<meta::And<meta::IsFloating<T>, meta::IsSigned<T>>, void>> {
   CDS_ATTR(2(nodiscard, constexpr(20))) auto operator()(T value) const noexcept -> Size {

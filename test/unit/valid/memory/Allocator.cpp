@@ -7,6 +7,8 @@
 #include <cds/Utility>
 #include "UnitTest.hpp"
 
+#include <stdint.h>
+
 namespace {
 using cds::Allocator;
 using cds::AllocatorSet;

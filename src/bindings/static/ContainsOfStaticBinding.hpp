@@ -181,7 +181,7 @@ template <typename P> struct MethodSelector<P, True, True> {
 } // namespace deriv
 
 template <typename R, typename P> class CDS_ATTR(inheritsEBOs) ContainsOfStaticBinding :
-    public containsOfDeriv::MethodSelector<P>::template Type<R>::Type {};
+    public containsOfDeriv::MethodSelector<P>::template Type<R> {};
 } // namespace impl
 } // namespace cds
 

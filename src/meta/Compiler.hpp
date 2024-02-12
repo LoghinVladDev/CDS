@@ -26,6 +26,7 @@
 #define CDS_ATTR_constexpr(std) CDS_ATTR_constexpr_ ## std
 #define CDS_ATTR_always_constexpr constexpr
 #define CDS_ATTR_noexcept(...) noexcept(!CDS_ATTR_exceptions || __VA_ARGS__)
+#define CDS_ATTR_friend_noexcept(...) CDS_ATTR_noexcept(__VA_ARGS__)
 // #define CDS_ATTR_try try
 // #define CDS_ATTR_catch(...) catch(__VA_ARGS__)
 
@@ -56,7 +57,21 @@
 #endif // #ifdef CDS_OPTION_DISABLE_EXCEPTIONS #else
 
 
-#if __cplusplus >= 201103L
+#ifdef _MSC_VER
+#define CDS_ATTR_std _MSVC_LANG
+#else // #ifdef _MSC_VER
+#define CDS_ATTR_std __cplusplus
+#endif // #ifdef _MSC_VER #else
+
+
+#define CDS_ATTR_std11 201103L
+#define CDS_ATTR_std14 201402L
+#define CDS_ATTR_std17 201703L
+#define CDS_ATTR_std20 202002L
+#define CDS_ATTR_std23 202302L
+
+
+#if CDS_ATTR(std) >= CDS_ATTR(std11)
 #define CDS_ATTR_cpp11 true
 #define CDS_ATTR_constexpr_11 constexpr
 #undef CDS_ATTR_noreturn
@@ -70,7 +85,7 @@
 #define CDS_ATTR_constexpr_11 inline
 #endif
 
-#if __cplusplus >= 201402L
+#if CDS_ATTR(std) >= CDS_ATTR(std14)
 #define CDS_ATTR_cpp14 true
 #define CDS_ATTR_constexpr_14 constexpr
 #undef CDS_ATTR_deprecated
@@ -80,7 +95,7 @@
 #define CDS_ATTR_constexpr_14 inline
 #endif
 
-#if __cplusplus >= 201703L
+#if CDS_ATTR(std) >= CDS_ATTR(std17)
 #define CDS_ATTR_cpp17 true
 #define CDS_ATTR_constexpr_17 constexpr
 #define CDS_ATTR_ctad true
@@ -100,7 +115,7 @@
 #define CDS_ATTR_noexcept_fn_type false
 #endif
 
-#if __cplusplus >= 202002L
+#if CDS_ATTR(std) >= CDS_ATTR(std20)
 #define CDS_ATTR_cpp20 true
 #define CDS_ATTR_constexpr_20 constexpr
 #define CDS_ATTR_spaceship true
@@ -120,7 +135,7 @@
 #define CDS_ATTR_implicit
 #endif
 
-#if __cplusplus >= 202302L
+#if CDS_ATTR(std) >= CDS_ATTR(std23)
 #define CDS_ATTR_cpp23 true
 #define CDS_ATTR_constexpr_23 constexpr
 #else // before cpp23
@@ -139,20 +154,68 @@ using S32 = signed int;
 
 enum class Byte : U8 {};
 
-#if defined __x86_64__ && !defined __ILP32__ // native 64 bit
+// compiler & platform specific
+#ifdef _MSC_VER
+#define CDS_ATTR_msvc true
+#else // #ifdef _MSC_VER
+#define CDS_ATTR_msvc false
+#endif // #ifdef _MSC_VER #else
+
+#ifdef __clang__
+#define CDS_ATTR_clang true
+#else // #ifdef __clang__
+#define CDS_ATTR_clang false
+#endif // #ifdef __clang__ #else
+
+#if defined(__GNUC__) && !defined(__clang__)
+#define CDS_ATTR_gcc true
+#else // #if defined(__GNUC__) && !defined(__clang__)
+#define CDS_ATTR_gcc false
+#endif // #if defined(__GNUC__) && !defined(__clang__) #else
+
+#ifdef __MINGW64__
+#define CDS_ATTR_mingw64 true
+#else // #ifdef __MINGW64__
+#define CDS_ATTR_mingw64 false
+#endif // #ifdef __MINGW64__ #else
+
+#if CDS_ATTR(gcc) || CDS_ATTR(clang)
+#if defined(__x86_64__) && !defined(__ILP32__)
+#define CDS_ATTR_bitarch 64
+#else // 32bit
+#define CDS_ATTR_bitarch 32
+#endif
+#endif // #if CDS_ATTR(gcc) || CDS_ATTR(clang) #endif
+
+#if CDS_ATTR(msvc)
+#if _WIN64
+#define CDS_ATTR_bitarch 64
+#else
+#define CDS_ATTR_bitarch 32
+#endif
+#endif // #if CDS_ATTR(msvc) #else
+
+#if CDS_ATTR(bitarch) == 64 // native 64 bit
+#if CDS_ATTR(msvc)
+using U64 = unsigned long long int;
+using S64 = signed long long int;
+#else
 using U64 = unsigned long int;
 using S64 = signed long int;
+#endif
 using Size = U64;
 using SSize = S64;
 using Idx = S64;
 using Address = U64;
-#else // 32 bit
+#elif CDS_ATTR(bitarch) == 32
 using U64 = unsigned long long int;
 using S64 = signed long long int;
 using Size = U32;
 using SSize = S32;
 using Idx = S32;
 using Address = U32;
+#else
+static_assert(false, "Undefined architecture bits (reg/addr size)");
 #endif
 
 namespace limits {
@@ -227,13 +290,13 @@ struct StdCpp23 {
   constexpr static char const* literal = "cpp-23";
 };
 
-#if __cplusplus > 202002L
+#if CDS_ATTR(std) > CDS_ATTR(std20)
 using CurrentStd = StdCpp23;
-#elif __cplusplus > 201703L
+#elif CDS_ATTR(std) > CDS_ATTR(std17)
 using CurrentStd = StdCpp20;
-#elif __cplusplus > 201402L
+#elif CDS_ATTR(std) > CDS_ATTR(std14)
 using CurrentStd = StdCpp17;
-#elif __cplusplus > 201103L
+#elif CDS_ATTR(std) > CDS_ATTR(std11)
 using CurrentStd = StdCpp14;
 #else
 using CurrentStd = StdCpp11;
@@ -242,27 +305,30 @@ using CurrentStd = StdCpp11;
 // compiler & platform specific
 #ifdef _MSC_VER
 #define CDS_ATTR_inheritsEBOs __declspec(empty_bases)
-#define CDS_ATTR_msvc true
+#define CDS_ATTR_ld_size 64
 
 // msvc::no_unique_address
 // https://devblogs.microsoft.com/cppblog/msvc-cpp20-and-the-std-cpp20-switch/#c20-no_unique_address
-#if _MSC_VER >= 1929 && __cplusplus >= 201402L
+#if _MSC_VER >= 1929 && CDS_ATTR(std) >= CDS_ATTR(std14)
 #undef CDS_ATTR_no_unique_address
 #define CDS_ATTR_no_unique_address CDS_ATTR_NEWSTYLE(msvc::no_unique_address)
 #endif // msvc::no_unique_address
 
+// Replace instances of noexcept specifications in friend functions with nothing.
+// MSVC front-end does not resolve these correctly.
+#undef CDS_ATTR_friend_noexcept
+#define CDS_ATTR_friend_noexcept(...)
+
 struct CurrentCompiler {
   constexpr static char const* name = "Microsoft Visual C++";
   constexpr static char const* id = "msvc";
-  constexpr static int version = MSVC_VERSION
+  constexpr static int version = _MSC_VER;
 };
 #else // #ifdef _MSC_VER
 #define CDS_ATTR_inheritsEBOs
-#define CDS_ATTR_msvc false
 #endif // #ifdef _MSC_VER #else
 
 #ifdef __clang__
-#define CDS_ATTR_clang true
 #define CDS_ATTR_ld_size 80
 
 struct CurrentCompiler {
@@ -270,12 +336,9 @@ struct CurrentCompiler {
   constexpr static char const* id = "clang";
   constexpr static int version = __clang_major__ * 10000 + __clang_minor__ * 100 + __clang_patchlevel__;
 };
-#else // #ifdef __clang__
-#define CDS_ATTR_clang false
 #endif // #ifdef __clang__ #else
 
 #if defined(__GNUC__) && !defined(__clang__)
-#define CDS_ATTR_gcc true
 #define CDS_ATTR_ld_size 80
 
 struct CurrentCompiler {
@@ -283,20 +346,15 @@ struct CurrentCompiler {
   constexpr static char const* id = "gcc";
   constexpr static int version = __GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__;
 };
-#else // #if defined(__GNUC__) && !defined(__clang__)
-#define CDS_ATTR_gcc false
 #endif // #if defined(__GNUC__) && !defined(__clang__) #else
 
 #ifdef __MINGW64__
-#define CDS_ATTR_mingw64 true
 
 struct CurrentCompiler {
   constexpr static char const* name = "MINGW gcc-64";
   constexpr static char const* id = "mingw-64";
   constexpr static int version = __MINGW64_VERSION_MAJOR * 10000 + __MINGW64_VERSION_MINOR * 100 + __MINGW64_VERSION_BUGFIX;
 };
-#else // #ifdef __MINGW64__
-#define CDS_ATTR_mingw64 false
 #endif // #ifdef __MINGW64__ #else
 } // namespace compiler
 } // namespace cds
