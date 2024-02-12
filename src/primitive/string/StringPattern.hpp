@@ -19,6 +19,7 @@
 #include "../../policy/RehashPolicy.hpp"
 
 #include <ostream>
+#include <iostream>
 
 namespace cds {
 namespace impl {
@@ -226,11 +227,10 @@ struct SplitWordIdLinkLeafId {
   U64 endWordLink : 48;
   U16 lWordId : 16;
   U64 suffixLink : 48;
-  U16 hWordId : 15;
-  U8 leaf : 1;
+  U16 hWordId : 16;
 
   CDS_ATTR(constexpr(11)) SplitWordIdLinkLeafId() noexcept :
-      endWordLink(0), lWordId(0), suffixLink(0), hWordId(0), leaf(0) {}
+      endWordLink(0), lWordId(0), suffixLink(0), hWordId(0) {}
 
   CDS_ATTR(constexpr(14)) auto setId(U32 id) noexcept -> void {
     lWordId = id & 0xffffU;
@@ -247,11 +247,10 @@ template <typename T> struct LinkLeafId<T, 2> : SplitWordIdLinkLeafId {};
 template <typename T> struct LinkLeafId<T, 4> {
   U32 endWordLink : 32;
   U32 suffixLink : 32;
-  U32 wordId : 31;
-  U8 leaf : 1;
+  U32 wordId : 32;
 
   CDS_ATTR(constexpr(11)) LinkLeafId() noexcept :
-      endWordLink(0), suffixLink(0), wordId(0), leaf(0) {}
+      endWordLink(0), suffixLink(0), wordId(0) {}
 
   CDS_ATTR(constexpr(14)) auto setId(U32 id) noexcept -> void {
     wordId = id;
@@ -278,6 +277,10 @@ template <
 
   Children children;
   Link<C> parent {0, 0};
+
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto leaf() const noexcept -> bool {
+    return children.empty();
+  }
 };
 
 template <
@@ -296,13 +299,14 @@ public:
     construct(&_vertices[0]);
 
     U32 wId = 0;
-    auto v = _r;
     for (auto&& str : cds::forward<I>(stringSet)) {
+      auto v = _r;
       using U = PatternUtils<RemoveCVRef<decltype(str)>>;
       for (auto c : str) {
         auto r = _vertices[v].children.get(c);
         if (!r.alive) {
           auto& nv = newVertex();
+          nv.suffixLink = limits::u32Max;
           // nv.suffixLink = -1; probably not needed
           nv.parent.id = v;
           nv.parent.key = c;
@@ -310,7 +314,6 @@ public:
         }
         v = r.data->id;
       }
-      _vertices[v].leaf = 1;
       _vertices[v].setId(wId);
       construct(_lengths + wId++, U::length(str));
     }
@@ -323,6 +326,49 @@ public:
     destruct(_lengths, _lengths + _lSize);
     AS::template get<V>().deallocate(_vertices, _cap);
     AS::template get<int>().deallocate(_lengths, _lSize);
+  }
+
+  template <typename SV> void parse(SV&& text) const noexcept {
+    auto s = _r;
+    Size idx = 0;
+    for (auto c : cds::forward<SV>(text)) {
+      while (true) {
+        auto e = _vertices[s].children.at(c);
+        if (e) {
+          s = e->id;
+          break;
+        }
+        if (s == _r) {
+          break;
+        }
+        s = _vertices[s].suffixLink;
+      }
+
+      auto cs = s;
+      while (true) {
+        cs = _vertices[cs].endWordLink;
+        if (cs == _r) {
+          break;
+        }
+
+        auto l = _lengths[_vertices[cs].id()];
+        std::cout << idx + 1 - l << " " << l << '\n';
+
+        cs = _vertices[cs].suffixLink;
+      }
+      ++idx;
+    }
+  }
+
+  void dump(std::ostream& out) const noexcept {
+    for (int i = 0; i < _size; ++i) {
+      out << "V " << i << ", -> [";
+      for (auto b = cds::begin(_vertices[i].children), e = cds::end(_vertices[i].children); b != e; ++b) {
+        out << b->key << ":" << b->id << ", ";
+      }
+      out << "], sl -> " << _vertices[i].suffixLink << ", l -> " << _vertices[i].leaf()
+          << ", p = " << _vertices[i].parent.id << ", pc = " << static_cast<char>(_vertices[i].parent.key) << '\n';
+    }
   }
 
 private:
@@ -340,6 +386,7 @@ private:
         b = n;
       } else {
         b->next = n;
+        b = n;
       }
     };
 
@@ -378,7 +425,7 @@ private:
 
     if (_vertices[v].parent.id == _r) {
       _vertices[v].suffixLink = _r;
-      if (_vertices[v].leaf) {
+      if (_vertices[v].leaf()) {
         _vertices[v].endWordLink = v;
       } else {
         _vertices[v].endWordLink = _vertices[_vertices[v].suffixLink].endWordLink;
@@ -402,7 +449,7 @@ private:
       cbv = _vertices[cbv].suffixLink;
     }
 
-    if (_vertices[v].leaf) {
+    if (_vertices[v].leaf()) {
       _vertices[v].endWordLink = v;
     } else {
       _vertices[v].endWordLink = _vertices[_vertices[v].suffixLink].endWordLink;

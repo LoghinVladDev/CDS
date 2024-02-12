@@ -13,8 +13,8 @@ namespace cds {
 namespace functional {
 namespace impl {
 using meta::EnableIf;
-using meta::Ge;
-using meta::Lt;
+using meta::Gt;
+using meta::Le;
 using meta::Int;
 using meta::Or;
 using meta::Not;
@@ -24,14 +24,14 @@ using meta::IsTriviallyConstructible;
 template<typename T = void, typename = void> struct Identity {};
 
 template <typename T>
-struct Identity<T, EnableIf<Or<Ge<Int<sizeof(T)>, Int<sizeof(Size)>>, Not<IsTriviallyConstructible<T>>>, void>> {
+struct Identity<T, EnableIf<Or<Gt<Int<sizeof(T)>, Int<sizeof(Size)>>, Not<IsTriviallyConstructible<T>>>, void>> {
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(T const& obj) const noexcept -> T const& {
     return obj;
   }
 };
 
 template <typename T>
-struct Identity<T, EnableIf<And<Lt<Int<sizeof(T)>, Int<sizeof(Size)>>, IsTriviallyConstructible<T>>, void>> {
+struct Identity<T, EnableIf<And<Le<Int<sizeof(T)>, Int<sizeof(Size)>>, IsTriviallyConstructible<T>>, void>> {
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(T obj) const noexcept -> T {
     return obj;
   }
