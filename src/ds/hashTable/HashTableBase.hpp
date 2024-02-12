@@ -24,6 +24,8 @@ using meta::RemoveConst;
 using meta::rvalue;
 using meta::inConstexpr;
 
+using iterator::HashTableIterator;
+
 template <typename T, typename K, typename H, typename RP, typename KP, typename KC, typename AS>
 class CDS_ATTR(inheritsEBOs) HashTableBase : private H, private RP, private AS {
 private:
@@ -36,8 +38,8 @@ public:
   using RehashPolicy = RP;
   using AllocSet = AS;
 
-  using Iterator = iterator::HashTableIterator<T>;
-  using ConstIterator = iterator::HashTableIterator<T const>;
+  using Iterator = HashTableIterator<T>;
+  using ConstIterator = HashTableIterator<T const>;
 
   struct UninitializedGetResult {
     Type* data;

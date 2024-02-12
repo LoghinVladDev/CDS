@@ -532,9 +532,8 @@ class VA : public AllocatorSet<
 > {};
 
 TEST(StringView, aho) {
-  std::vector<StringView> svs = {"abba", "cab", "baba", "caab", "ac", "abac", "bac"};
+  std::vector<StringView> svs = {"abba", "cab", "baba", "caab", "ab", "abac", "bac"};
   AhoCorasick<char, VA> aho(svs);
-  aho.dump(std::cout);
 
   aho.parse(StringView{"abbabba"});
 }

@@ -16,6 +16,7 @@
 #include "StringUtils.hpp"
 
 #include "../../ds/hashTable/HashTableBase.hpp"
+#include "../../ds/linkedList/SingleLinkedListBase.hpp"
 #include "../../policy/RehashPolicy.hpp"
 
 #include <ostream>
@@ -227,10 +228,11 @@ struct SplitWordIdLinkLeafId {
   U64 endWordLink : 48;
   U16 lWordId : 16;
   U64 suffixLink : 48;
-  U16 hWordId : 16;
+  U16 hWordId : 15;
+  U8 leaf : 1;
 
   CDS_ATTR(constexpr(11)) SplitWordIdLinkLeafId() noexcept :
-      endWordLink(0), lWordId(0), suffixLink(0), hWordId(0) {}
+      endWordLink(0), lWordId(0), suffixLink(0), hWordId(0), leaf(0) {}
 
   CDS_ATTR(constexpr(14)) auto setId(U32 id) noexcept -> void {
     lWordId = id & 0xffffU;
@@ -247,10 +249,11 @@ template <typename T> struct LinkLeafId<T, 2> : SplitWordIdLinkLeafId {};
 template <typename T> struct LinkLeafId<T, 4> {
   U32 endWordLink : 32;
   U32 suffixLink : 32;
-  U32 wordId : 32;
+  U32 wordId : 31;
+  U8 leaf : 1;
 
   CDS_ATTR(constexpr(11)) LinkLeafId() noexcept :
-      endWordLink(0), suffixLink(0), wordId(0) {}
+      endWordLink(0), suffixLink(0), wordId(0), leaf(0) {}
 
   CDS_ATTR(constexpr(14)) auto setId(U32 id) noexcept -> void {
     wordId = id;
@@ -275,12 +278,13 @@ template <
     using Base::at;
   };
 
-  Children children;
-  Link<C> parent {0, 0};
+  using ParentLink = Link<C>;
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto leaf() const noexcept -> bool {
-    return children.empty();
-  }
+  Children children;
+  Link<C> parent;
+
+  CDS_ATTR(2(explicit, constexpr(11))) Vertex(Link<C> parentLink, AS const& allocatorSet) noexcept :
+      parent{parentLink}, children{allocatorSet} {}
 };
 
 template <
@@ -289,6 +293,7 @@ template <
 > class AhoCorasick : private AS {
 public:
   using V = Vertex<C, AS>;
+  using ParentLink = typename V::ParentLink;
 
   template <typename I> CDS_ATTR(2(explicit, constexpr(20)))
   AhoCorasick(I&& stringSet, Size startingSize = 16) noexcept(false) :
@@ -296,25 +301,25 @@ public:
       _lengths(AS::template get<int>().allocate(cds::forward<I>(stringSet).size())),
       _lSize(cds::forward<I>(stringSet).size()),
       _cap(startingSize) {
-    construct(&_vertices[0]);
+    construct(&_vertices[0], ParentLink{0, 0}, static_cast<AS const&>(*this));
 
     U32 wId = 0;
-    for (auto&& str : cds::forward<I>(stringSet)) {
-      auto v = _r;
+    for (auto i = cds::begin(cds::forward<I>(stringSet)), e = cds::end(cds::forward<I>(stringSet)); i != e; ++i) {
+      auto vId = _r;
+      auto* v = _vertices + vId;
+      auto const& str = *i;
       using U = PatternUtils<RemoveCVRef<decltype(str)>>;
       for (auto c : str) {
-        auto r = _vertices[v].children.get(c);
+        auto r = v->children.get(c);
         if (!r.alive) {
-          auto& nv = newVertex();
-          nv.suffixLink = limits::u32Max;
-          // nv.suffixLink = -1; probably not needed
-          nv.parent.id = v;
-          nv.parent.key = c;
+          addVertex(ParentLink(vId, c));
           construct(r.data, _size - 1, c);
         }
-        v = r.data->id;
+        vId = r.data->id;
+        v = _vertices + vId;
       }
-      _vertices[v].setId(wId);
+      v->setId(wId);
+      v->leaf = 1;
       construct(_lengths + wId++, U::length(str));
     }
 
@@ -360,103 +365,70 @@ public:
     }
   }
 
-  void dump(std::ostream& out) const noexcept {
-    for (int i = 0; i < _size; ++i) {
-      out << "V " << i << ", -> [";
-      for (auto b = cds::begin(_vertices[i].children), e = cds::end(_vertices[i].children); b != e; ++b) {
-        out << b->key << ":" << b->id << ", ";
-      }
-      out << "], sl -> " << _vertices[i].suffixLink << ", l -> " << _vertices[i].leaf()
-          << ", p = " << _vertices[i].parent.id << ", pc = " << static_cast<char>(_vertices[i].parent.key) << '\n';
-    }
-  }
-
 private:
   CDS_ATTR(constexpr(20)) auto traverse() noexcept(false) -> void {
-    // replace with SLL
-    using N = FwdNode<Size>;
-    N* h = nullptr;
-    N* b = nullptr;
-    auto& a = AS::template get<FwdNode<Size>>();
-    auto push = [&h, &b, &a](Size v) {
-      auto* n = a.allocate(1);
-      construct(n, nullptr, v);
-      if (!b) {
-        h = n;
-        b = n;
-      } else {
-        b->next = n;
-        b = n;
-      }
+    auto& alloc = AS::template get<FwdNode<Size>>();
+    class TraversalQueue : public SingleLinkedListBase<Size, Equal<>, RemoveCVRef<decltype(alloc)>> {
+    public:
+      using SingleLinkedListBase<Size, Equal<>, RemoveCVRef<decltype(alloc)>>::SingleLinkedListBase;
+      using SingleLinkedListBase<Size, Equal<>, RemoveCVRef<decltype(alloc)>>::front;
     };
 
-    auto pop = [&b, &h, &a]() {
-      auto v = h->data;
-      auto* c = h;
-      h = h->next;
-      destruct(c);
-      a.deallocate(c, 1);
-      if (h == nullptr) {
-        b = nullptr;
-      }
-      return v;
-    };
-
-    auto empty = [&h]() {
-      return h == nullptr;
-    };
-
-    push(_r);
-    while(!empty()) {
-      auto v = pop();
+    TraversalQueue queue{alloc};
+    queue.emplaceBack(_r);
+    while(!queue.empty()) {
+      auto v = *queue.front();
+      queue.pop();
       computeLink(v);
       for (auto it = begin(_vertices[v].children), e = end(_vertices[v].children); it != e; ++it) {
-        push(it->id);
+        queue.emplaceBack(static_cast<Size>(it->id));
       }
     }
   }
 
-  CDS_ATTR(constexpr(20)) auto computeLink(Size v) noexcept(false) -> void {
-    if (v == _r) {
-      _vertices[v].suffixLink = _r;
-      _vertices[v].endWordLink = _r;
+  CDS_ATTR(constexpr(20)) auto computeLink(Size vId) noexcept(false) -> void {
+    auto* const v = _vertices + vId;
+    if (vId == _r) {
+      v->suffixLink = _r;
+      v->endWordLink = _r;
       return;
     }
 
-    if (_vertices[v].parent.id == _r) {
-      _vertices[v].suffixLink = _r;
-      if (_vertices[v].leaf()) {
-        _vertices[v].endWordLink = v;
+    if (v->parent.id == _r) {
+      v->suffixLink = _r;
+      if (v->leaf) {
+        v->endWordLink = vId;
       } else {
-        _vertices[v].endWordLink = _vertices[_vertices[v].suffixLink].endWordLink;
+        v->endWordLink = _vertices[v->suffixLink].endWordLink;
       }
       return;
     }
 
-    auto cbv = _vertices[_vertices[v].parent.id].suffixLink;
-    auto c = _vertices[v].parent.key;
+    auto cbvId = _vertices[v->parent.id].suffixLink;
+    auto c = v->parent.key;
 
     while(true) {
-      auto const link = _vertices[cbv].children.at(c);
+      auto* const cbv = _vertices + cbvId;
+      auto const link = cbv->children.at(c);
       if (link) {
-        _vertices[v].suffixLink = link->id;
+        v->suffixLink = link->id;
         break;
       }
-      if (cbv == _r) {
-        _vertices[v].suffixLink = _r;
+      if (cbvId == _r) {
+        v->suffixLink = _r;
         break;
       }
-      cbv = _vertices[cbv].suffixLink;
+      cbvId = cbv->suffixLink;
     }
 
-    if (_vertices[v].leaf()) {
-      _vertices[v].endWordLink = v;
+    if (v->leaf) {
+      v->endWordLink = vId;
     } else {
-      _vertices[v].endWordLink = _vertices[_vertices[v].suffixLink].endWordLink;
+      v->endWordLink = _vertices[v->suffixLink].endWordLink;
     }
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(20))) auto newVertex() noexcept(false) -> V& {
+  CDS_ATTR(constexpr(20)) auto addVertex(ParentLink link) noexcept(false) -> void {
     if (_size == _cap) {
       auto nc = _cap * 2;
       auto* nb = AS::template get<V>().allocate(nc);
@@ -465,7 +437,7 @@ private:
       AS::template get<V>().deallocate(cds::exchange(_vertices, nb), cds::exchange(_cap, nc));
     }
 
-    return *construct(_vertices + _size++);
+    construct(_vertices + _size++, link, static_cast<AS const&>(*this));
   }
 
   V* _vertices;
