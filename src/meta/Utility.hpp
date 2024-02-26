@@ -247,7 +247,7 @@ template <
   (void) equal;
   static_assert(
       C::value || I::value || RI::value,
-      "Given type does not provide a 'contains' function with selector for target parameter"
+      "Given type does not provide a 'contains' function with projector for target parameter"
   );
   return false;
 }

@@ -12,7 +12,7 @@ namespace cds {
 namespace impl {
 namespace sel {
 struct Value {};
-struct Selector {};
+struct Projector {};
 struct Immutable {};
 struct Mutable {};
 

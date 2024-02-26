@@ -20,138 +20,138 @@ template <typename, typename, typename, typename = void> class FindByValueStatic
 
 template <typename R, typename TrAll, typename TrOne> class FindByValueStaticBinding<R, TrAll, TrOne> {
 protected:
-  using P = Equal<>;
+  using E = Equal<>;
 
 public:
   template <typename V> CDS_ATTR(2(nodiscard, constexpr(14))) auto find(V&& value)& CDS_ATTR(noexcept(noexcept(
-      impl::find(lvalue<R>(), cds::forward<V>(value), P(), TrAll())
-  ))) -> decltype(impl::find(lvalue<R>(), cds::forward<V>(value), P(), TrAll())) {
-    return impl::find(*static_cast<R*>(this), cds::forward<V>(value), P(), TrAll());
+      impl::find(lvalue<R>(), cds::forward<V>(value), E(), TrAll())
+  ))) -> decltype(impl::find(lvalue<R>(), cds::forward<V>(value), E(), TrAll())) {
+    return impl::find(*static_cast<R*>(this), cds::forward<V>(value), E(), TrAll());
   }
 
   template <typename V> CDS_ATTR(2(nodiscard, constexpr(14))) auto find(V&& value)&& CDS_ATTR(noexcept(noexcept(
-      impl::find(rvalue<R>(), cds::forward<V>(value), P(), TrAll())
-  ))) -> decltype(impl::find(rvalue<R>(), cds::forward<V>(value), P(), TrAll())) {
-    return impl::find(cds::move(*static_cast<R*>(this)), cds::forward<V>(value), P(), TrAll());
+      impl::find(rvalue<R>(), cds::forward<V>(value), E(), TrAll())
+  ))) -> decltype(impl::find(rvalue<R>(), cds::forward<V>(value), E(), TrAll())) {
+    return impl::find(cds::move(*static_cast<R*>(this)), cds::forward<V>(value), E(), TrAll());
   }
 
   template <typename V> CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(V&& value) CDS_ATTR(noexcept(noexcept(
-      impl::findFirst(rvalue<R>(), cds::forward<V>(value), P(), TrOne())
-  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<V>(value), P(), TrOne())) {
-    return impl::findFirst(*static_cast<R*>(this), cds::forward<V>(value), P(), TrOne());
+      impl::findFirst(rvalue<R>(), cds::forward<V>(value), E(), TrOne())
+  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<V>(value), E(), TrOne())) {
+    return impl::findFirst(*static_cast<R*>(this), cds::forward<V>(value), E(), TrOne());
   }
 
   template <typename V> CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(V&& value) CDS_ATTR(noexcept(noexcept(
-      impl::findLast(rvalue<R>(), cds::forward<V>(value), P(), TrOne())
-  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<V>(value), P(), TrOne())) {
-    return impl::findLast(*static_cast<R*>(this), cds::forward<V>(value), P(), TrOne());
+      impl::findLast(rvalue<R>(), cds::forward<V>(value), E(), TrOne())
+  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<V>(value), E(), TrOne())) {
+    return impl::findLast(*static_cast<R*>(this), cds::forward<V>(value), E(), TrOne());
   }
 };
 
 template <typename R, typename TrAll, typename TrOne> class FindByValueStaticBinding<R const, TrAll, TrOne> {
 protected:
-  using P = Equal<>;
+  using E = Equal<>;
 
 public:
   template <typename V> CDS_ATTR(2(nodiscard, constexpr(14))) auto find(V&& value) const& CDS_ATTR(noexcept(noexcept(
-      impl::find(lvalue<R const>(), cds::forward<V>(value), P(), TrAll())
-  ))) -> decltype(impl::find(lvalue<R const>(), cds::forward<V>(value), P(), TrAll())) {
-    return impl::find(*static_cast<R const*>(this), cds::forward<V>(value), P(), TrAll());
+      impl::find(lvalue<R const>(), cds::forward<V>(value), E(), TrAll())
+  ))) -> decltype(impl::find(lvalue<R const>(), cds::forward<V>(value), E(), TrAll())) {
+    return impl::find(*static_cast<R const*>(this), cds::forward<V>(value), E(), TrAll());
   }
 
   template <typename V> CDS_ATTR(2(nodiscard, constexpr(14))) auto find(V&& value) const&& CDS_ATTR(noexcept(noexcept(
-      impl::find(rvalue<R const>(), cds::forward<V>(value), P(), TrAll())
-  ))) -> decltype(impl::find(rvalue<R const>(), cds::forward<V>(value), P(), TrAll())) {
-    return impl::find(cds::move(*static_cast<R const*>(this)), cds::forward<V>(value), P(), TrAll());
+      impl::find(rvalue<R const>(), cds::forward<V>(value), E(), TrAll())
+  ))) -> decltype(impl::find(rvalue<R const>(), cds::forward<V>(value), E(), TrAll())) {
+    return impl::find(cds::move(*static_cast<R const*>(this)), cds::forward<V>(value), E(), TrAll());
   }
 
   template <typename V> CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(V&& value) const CDS_ATTR(noexcept(
-      noexcept(impl::findFirst(rvalue<R const>(), cds::forward<V>(value), P(), TrOne()))
-  )) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<V>(value), P(), TrOne())) {
-    return impl::findFirst(*static_cast<R const*>(this), cds::forward<V>(value), P(), TrOne());
+      noexcept(impl::findFirst(rvalue<R const>(), cds::forward<V>(value), E(), TrOne()))
+  )) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<V>(value), E(), TrOne())) {
+    return impl::findFirst(*static_cast<R const*>(this), cds::forward<V>(value), E(), TrOne());
   }
 
   template <typename V> CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(V&& value) const CDS_ATTR(noexcept(
-      noexcept(impl::findLast(rvalue<R const>(), cds::forward<V>(value), P(), TrOne()))
-  )) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<V>(value), P(), TrOne())) {
-    return impl::findLast(*static_cast<R const*>(this), cds::forward<V>(value), P(), TrOne());
+      noexcept(impl::findLast(rvalue<R const>(), cds::forward<V>(value), E(), TrOne()))
+  )) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<V>(value), E(), TrOne())) {
+    return impl::findLast(*static_cast<R const*>(this), cds::forward<V>(value), E(), TrOne());
   }
 };
 
-template <typename, typename, typename, typename = void> class FindBySelectorStaticBinding {};
+template <typename, typename, typename, typename = void> class FindByProjectorStaticBinding {};
 
-template <typename R, typename TrAll, typename TrOne> class FindBySelectorStaticBinding<R, TrAll, TrOne> {
+template <typename R, typename TrAll, typename TrOne> class FindByProjectorStaticBinding<R, TrAll, TrOne> {
 protected:
-  using P = Equal<>;
+  using E = Equal<>;
 
 public:
-  template <typename V, typename S>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto find(V&& value, S&& selector)& CDS_ATTR(noexcept(noexcept(
-      impl::find(lvalue<R>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrAll())
-  ))) -> decltype(impl::find(lvalue<R>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrAll())) {
-    return impl::find(*static_cast<R*>(this), cds::forward<V>(value), cds::forward<S>(selector), P(), TrAll());
+  template <typename V, typename P>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto find(V&& value, P&& projector)& CDS_ATTR(noexcept(noexcept(
+      impl::find(lvalue<R>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrAll())
+  ))) -> decltype(impl::find(lvalue<R>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrAll())) {
+    return impl::find(*static_cast<R*>(this), cds::forward<V>(value), cds::forward<P>(projector), E(), TrAll());
   }
 
-  template <typename V, typename S>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto find(V&& value, S&& selector)&& CDS_ATTR(noexcept(noexcept(
-      impl::find(rvalue<R>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrAll())
-  ))) -> decltype(impl::find(rvalue<R>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrAll())) {
+  template <typename V, typename P>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto find(V&& value, P&& projector)&& CDS_ATTR(noexcept(noexcept(
+      impl::find(rvalue<R>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrAll())
+  ))) -> decltype(impl::find(rvalue<R>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrAll())) {
     return impl::find(
-        cds::move(*static_cast<R*>(this)), cds::forward<V>(value), cds::forward<S>(selector), P(), TrAll()
+        cds::move(*static_cast<R*>(this)), cds::forward<V>(value), cds::forward<P>(projector), E(), TrAll()
     );
   }
 
-  template <typename V, typename S>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(V&& value, S&& selector) CDS_ATTR(noexcept(noexcept(
-      impl::findFirst(rvalue<R>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrOne())
-  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrOne())) {
-    return impl::findFirst(*static_cast<R*>(this), cds::forward<V>(value), cds::forward<S>(selector), P(), TrOne());
+  template <typename V, typename P>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(V&& value, P&& projector) CDS_ATTR(noexcept(noexcept(
+      impl::findFirst(rvalue<R>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrOne())
+  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrOne())) {
+    return impl::findFirst(*static_cast<R*>(this), cds::forward<V>(value), cds::forward<P>(projector), E(), TrOne());
   }
 
-  template <typename V, typename S>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(V&& value, S&& selector) CDS_ATTR(noexcept(noexcept(
-      impl::findLast(rvalue<R>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrOne())
-  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrOne())) {
-    return impl::findLast(*static_cast<R*>(this), cds::forward<V>(value), cds::forward<S>(selector), P(), TrOne());
+  template <typename V, typename P>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(V&& value, P&& projector) CDS_ATTR(noexcept(noexcept(
+      impl::findLast(rvalue<R>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrOne())
+  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrOne())) {
+    return impl::findLast(*static_cast<R*>(this), cds::forward<V>(value), cds::forward<P>(projector), E(), TrOne());
   }
 };
 
-template <typename R, typename TrAll, typename TrOne> class FindBySelectorStaticBinding<R const, TrAll, TrOne> {
+template <typename R, typename TrAll, typename TrOne> class FindByProjectorStaticBinding<R const, TrAll, TrOne> {
 protected:
-  using P = Equal<>;
+  using E = Equal<>;
 
 public:
-  template <typename V, typename S>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto find(V&& value, S&& selector) const& CDS_ATTR(noexcept(noexcept(
-      impl::find(lvalue<R const>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrAll())
-  ))) -> decltype(impl::find(lvalue<R const>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrAll())) {
-    return impl::find(*static_cast<R const*>(this), cds::forward<V>(value), cds::forward<S>(selector), P(), TrAll());
+  template <typename V, typename P>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto find(V&& value, P&& projector) const& CDS_ATTR(noexcept(noexcept(
+      impl::find(lvalue<R const>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrAll())
+  ))) -> decltype(impl::find(lvalue<R const>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrAll())) {
+    return impl::find(*static_cast<R const*>(this), cds::forward<V>(value), cds::forward<P>(projector), E(), TrAll());
   }
 
-  template <typename V, typename S>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto find(V&& value, S&& selector) const&& CDS_ATTR(noexcept(noexcept(
-      impl::find(rvalue<R const>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrAll())
-  ))) -> decltype(impl::find(rvalue<R const>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrAll())) {
+  template <typename V, typename P>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto find(V&& value, P&& projector) const&& CDS_ATTR(noexcept(noexcept(
+      impl::find(rvalue<R const>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrAll())
+  ))) -> decltype(impl::find(rvalue<R const>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrAll())) {
     return impl::find(
-        cds::move(*static_cast<R const*>(this)), cds::forward<V>(value), cds::forward<S>(selector), P(), TrAll()
+        cds::move(*static_cast<R const*>(this)), cds::forward<V>(value), cds::forward<P>(projector), E(), TrAll()
     );
   }
 
-  template <typename V, typename S>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(V&& value, S&& selector) const CDS_ATTR(noexcept(
-      noexcept(impl::findFirst(rvalue<R const>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrOne()))
-  )) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrOne())) {
+  template <typename V, typename P>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(V&& value, P&& projector) const CDS_ATTR(noexcept(
+      noexcept(impl::findFirst(rvalue<R const>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrOne()))
+  )) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrOne())) {
     return impl::findFirst(
-        *static_cast<R const*>(this), cds::forward<V>(value), cds::forward<S>(selector), P(), TrOne()
+        *static_cast<R const*>(this), cds::forward<V>(value), cds::forward<P>(projector), E(), TrOne()
     );
   }
 
-  template <typename V, typename S>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(V&& value, S&& selector) const CDS_ATTR(noexcept(
-      noexcept(impl::findLast(rvalue<R const>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrOne()))
-  )) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<V>(value), cds::forward<S>(selector), P(), TrOne())) {
+  template <typename V, typename P>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(V&& value, P&& projector) const CDS_ATTR(noexcept(
+      noexcept(impl::findLast(rvalue<R const>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrOne()))
+  )) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<V>(value), cds::forward<P>(projector), E(), TrOne())) {
     return impl::findLast(
-        *static_cast<R const*>(this), cds::forward<V>(value), cds::forward<S>(selector), P(), TrOne()
+        *static_cast<R const*>(this), cds::forward<V>(value), cds::forward<P>(projector), E(), TrOne()
     );
   }
 };
@@ -160,7 +160,7 @@ namespace findDeriv {
 using sel::Mutable;
 using sel::Immutable;
 using sel::Value;
-using sel::Selector;
+using sel::Projector;
 using sel::ContainsSelector;
 
 using meta::Int;
@@ -173,11 +173,11 @@ using meta::False;
 template <
     typename P,
     typename = typename ContainsSelector<P, Value>::Type,
-    typename = typename ContainsSelector<P, Selector>::Type
+    typename = typename ContainsSelector<P, Projector>::Type
 > struct MethodSelector {
   static_assert(
-      Any<Bind<ContainsSelector, P, Ph<0>>::template Type, Value, Selector>::value,
-      "Must select Value, Selector or both"
+      Any<Bind<ContainsSelector, P, Ph<0>>::template Type, Value, Projector>::value,
+      "Must select Value, Projector or both"
   );
 };
 
@@ -188,21 +188,21 @@ template <typename P> struct MethodSelector<P, True, False> {
 
 template <typename P> struct MethodSelector<P, False, True> {
   template <typename... A> class CDS_ATTR(inheritsEBOs) Type :
-      public FindBySelectorStaticBinding<A...> {};
+      public FindByProjectorStaticBinding<A...> {};
 };
 
 template <typename P> struct MethodSelector<P, True, True> {
   template <typename... A> class CDS_ATTR(inheritsEBOs) Type :
       public FindByValueStaticBinding<A...>,
-      public FindBySelectorStaticBinding<A...> {
+      public FindByProjectorStaticBinding<A...> {
   public:
     using FindByValueStaticBinding<A...>::find;
     using FindByValueStaticBinding<A...>::findFirst;
     using FindByValueStaticBinding<A...>::findLast;
 
-    using FindBySelectorStaticBinding<A...>::find;
-    using FindBySelectorStaticBinding<A...>::findFirst;
-    using FindBySelectorStaticBinding<A...>::findLast;
+    using FindByProjectorStaticBinding<A...>::find;
+    using FindByProjectorStaticBinding<A...>::findFirst;
+    using FindByProjectorStaticBinding<A...>::findLast;
   };
 };
 

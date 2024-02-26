@@ -29,7 +29,7 @@ struct A_ContainsMember : public impl::ContainsOfStaticBinding<A_ContainsMember,
   explicit A_ContainsMember(std::initializer_list<int> const& i) : data(i) {}
 };
 
-struct A_ContainsSelectedMember : public impl::ContainsOfStaticBinding<A_ContainsSelectedMember, With<Selector>> {
+struct A_ContainsSelectedMember : public impl::ContainsOfStaticBinding<A_ContainsSelectedMember, With<Projector>> {
   template <typename S> bool contains(int a, S&& s) const {
     for (int v : data) {
       if (a == cds::forward<S>(s)(v)) {
@@ -45,7 +45,7 @@ struct A_ContainsSelectedMember : public impl::ContainsOfStaticBinding<A_Contain
 };
 
 struct A_ContainsContainsSelectedMember :
-    public impl::ContainsOfStaticBinding<A_ContainsContainsSelectedMember, With<Value, Selector>> {
+    public impl::ContainsOfStaticBinding<A_ContainsContainsSelectedMember, With<Value, Projector>> {
   bool contains(int a) const { return std::find(data.begin(), data.end(), a) != data.end(); }
   template <typename S> bool contains(int a, S&& s) const {
     for (int v : data) {
@@ -287,7 +287,7 @@ template <> struct IterableTraits<B> { using Value = int; };
 } // namespace meta
 } // namespace cds
 
-struct B : impl::ContainsOfStaticBinding<B, With<Value, Selector>> {
+struct B : impl::ContainsOfStaticBinding<B, With<Value, Projector>> {
   constexpr bool contains(int x) const { return x == 1 || x == 2; }
   constexpr int const* begin() const { return data; }
   constexpr int const* end() const { return data + 2; }

@@ -26,7 +26,7 @@ namespace cds {
 namespace impl {
 using sel::With;
 using sel::Value;
-using sel::Selector;
+using sel::Projector;
 using sel::Immutable;
 
 using meta::IterableTraits;
@@ -60,11 +60,11 @@ namespace bindingsBSV {
 template <typename C, typename U> using Self = BaseStringView<C, U>;
 template <typename C, typename U> using Traits = IterableTraits<Self<C, U>>;
 
-using ContainsOpt = With<Value, Selector>;
+using ContainsOpt = With<Value, Projector>;
 template <typename C, typename U> struct ContainsOf :
     ContainsOfStaticBinding<Self<C, U>, ContainsOpt> {};
 
-using FindOpt = With<Value, Selector, Immutable>;
+using FindOpt = With<Value, Projector, Immutable>;
 template <typename C, typename U> struct FindTr :
     FindStringTransformer<C, U> {};
 template <typename C, typename U> struct Find :

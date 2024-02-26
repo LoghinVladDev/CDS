@@ -157,40 +157,40 @@ auto lfind(I&& b, I&& e, V&& v, S&& s) noexcept -> I {
   return cds::forward<I>(e);
 }
 
-class Find_FwdSelImm : public TCommonFwdImm, public FindOfStaticBinding<Find_FwdSelImm, With<Selector, Immutable>> {
+class Find_FwdSelImm : public TCommonFwdImm, public FindOfStaticBinding<Find_FwdSelImm, With<Projector, Immutable>> {
 public:
   using TCommonFwdImm::TCommonFwdImm;
   template <typename S> bool contains(int a, S&& s) const { return lfind(cbegin(), cend(), a, cds::forward<S>(s)) != cend(); }
 };
 
-class Find_FwdSelMut : public TCommonFwdMut, public FindOfStaticBinding<Find_FwdSelMut, With<Selector, Mutable>> {
+class Find_FwdSelMut : public TCommonFwdMut, public FindOfStaticBinding<Find_FwdSelMut, With<Projector, Mutable>> {
 public:
   using TCommonFwdMut::TCommonFwdMut;
   template <typename S> bool contains(int a, S&& s) { return lfind(begin(), end(), a, cds::forward<S>(s)) != end(); }
 };
 
-class Find_FwdSelImmMut : public TCommonFwdImmMut, public FindOfStaticBinding<Find_FwdSelImmMut, With<Selector, Immutable, Mutable>> {
+class Find_FwdSelImmMut : public TCommonFwdImmMut, public FindOfStaticBinding<Find_FwdSelImmMut, With<Projector, Immutable, Mutable>> {
 public:
   using TCommonFwdImmMut::TCommonFwdImmMut;
   template <typename S> bool contains(int a, S&& s) const { return lfind(cbegin(), cend(), a, cds::forward<S>(s)) != cend(); }
   template <typename S> bool contains(int a, S&& s) { return lfind(begin(), end(), a, cds::forward<S>(s)) != end(); }
 };
 
-class Find_FwdValSelImm : public TCommonFwdImm, public FindOfStaticBinding<Find_FwdValSelImm, With<Value, Selector, Immutable>> {
+class Find_FwdValSelImm : public TCommonFwdImm, public FindOfStaticBinding<Find_FwdValSelImm, With<Value, Projector, Immutable>> {
 public:
   using TCommonFwdImm::TCommonFwdImm;
   bool contains(int a) const { return std::find(cbegin(), cend(), a) != cend(); }
   template <typename S> bool contains(int a, S&& s) const { return lfind(cbegin(), cend(), a, cds::forward<S>(s)) != cend(); }
 };
 
-class Find_FwdValSelMut : public TCommonFwdMut, public FindOfStaticBinding<Find_FwdValSelMut, With<Selector, Value, Mutable>> {
+class Find_FwdValSelMut : public TCommonFwdMut, public FindOfStaticBinding<Find_FwdValSelMut, With<Projector, Value, Mutable>> {
 public:
   using TCommonFwdMut::TCommonFwdMut;
   bool contains(int a) { return std::find(begin(), end(), a) != end(); }
   template <typename S> bool contains(int a, S&& s) { return lfind(begin(), end(), a, cds::forward<S>(s)) != end(); }
 };
 
-class Find_FwdValSelImmMut : public TCommonFwdImmMut, public FindOfStaticBinding<Find_FwdValSelImmMut, With<Selector, Value, Immutable, Mutable>> {
+class Find_FwdValSelImmMut : public TCommonFwdImmMut, public FindOfStaticBinding<Find_FwdValSelImmMut, With<Projector, Value, Immutable, Mutable>> {
 public:
   using TCommonFwdImmMut::TCommonFwdImmMut;
   bool contains(int a) { return std::find(begin(), end(), a) != end(); }
@@ -647,7 +647,7 @@ template <> struct IterableTraits<B_WithAdapt> {
 }
 }
 
-struct B : public FindOfStaticBinding<B, With<Value, Selector, Immutable, Mutable>> {
+struct B : public FindOfStaticBinding<B, With<Value, Projector, Immutable, Mutable>> {
   constexpr bool contains(int x) const { return x == 1 || x == 2; }
   template <typename S> constexpr bool contains(int x, S&& s) {
     return cds::forward<S>(s)(x) == 2 || cds::forward<S>(s)(x) == 2; }
@@ -687,7 +687,7 @@ struct B : public FindOfStaticBinding<B, With<Value, Selector, Immutable, Mutabl
   int data[4] = {-1, 1, 2, -1}; // padding to allow first and last elem to allow constexpr
 };
 
-struct B_WithAdapt : public FindOfStaticBinding<B_WithAdapt, With<Value, Selector, Immutable, Mutable>, FindResultTransformer<>, FindResultTransformer<>> {
+struct B_WithAdapt : public FindOfStaticBinding<B_WithAdapt, With<Value, Projector, Immutable, Mutable>, FindResultTransformer<>, FindResultTransformer<>> {
   constexpr bool contains(int x) const { return x == 1 || x == 2; }
   template <typename S> constexpr bool contains(int x, S&& s) {
     return cds::forward<S>(s)(x) == 2 || cds::forward<S>(s)(x) == 2; }

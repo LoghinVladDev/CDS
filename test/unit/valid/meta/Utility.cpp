@@ -161,11 +161,11 @@ TEST(Utility, contains) {
 }
 
 struct A_eximpl_sel {
-  template <typename S>
-  bool contains(int x, S&& selector) {
-    if (cds::forward<S>(selector)(data[0]) == x) { return true; }
-    if (cds::forward<S>(selector)(data[1]) == x) { return true; }
-    if (cds::forward<S>(selector)(data[2]) == x) { return true; }
+  template <typename P>
+  bool contains(int x, P&& projector) {
+    if (cds::forward<P>(projector)(data[0]) == x) { return true; }
+    if (cds::forward<P>(projector)(data[1]) == x) { return true; }
+    if (cds::forward<P>(projector)(data[2]) == x) { return true; }
     return false;
   }
 
@@ -173,12 +173,12 @@ struct A_eximpl_sel {
 };
 
 namespace {
-template <typename I, typename V, typename S> CDS_ATTR(constexpr(14)) auto contains(I&& obj, V&& val, S&& sel) noexcept(noexcept(
-    impl::contains(cds::forward<I>(obj), cds::forward<V>(val), cds::forward<S>(sel), functional::Equal<>())
+template <typename I, typename V, typename P> CDS_ATTR(constexpr(14)) auto contains(I&& obj, V&& val, P&& sel) noexcept(noexcept(
+    impl::contains(cds::forward<I>(obj), cds::forward<V>(val), cds::forward<P>(sel), functional::Equal<>())
 )) -> decltype(
-    impl::contains(cds::forward<I>(obj), cds::forward<V>(val), cds::forward<S>(sel), functional::Equal<>())
+    impl::contains(cds::forward<I>(obj), cds::forward<V>(val), cds::forward<P>(sel), functional::Equal<>())
 ) {
-  return impl::contains(cds::forward<I>(obj), cds::forward<V>(val), cds::forward<S>(sel), functional::Equal<>());
+  return impl::contains(cds::forward<I>(obj), cds::forward<V>(val), cds::forward<P>(sel), functional::Equal<>());
 }
 } // namespace
 
@@ -321,16 +321,16 @@ TEST(Utility, ownership) {
 }
 
 namespace {
-template <typename I, typename V, typename S> CDS_ATTR(constexpr(14)) auto find(I&& iter, V&& val, S&& selector)
+template <typename I, typename V, typename P> CDS_ATTR(constexpr(14)) auto find(I&& iter, V&& val, P&& projector)
     noexcept(noexcept(impl::find(
-        cds::forward<I>(iter), cds::forward<V>(val), cds::forward<S>(selector),
+        cds::forward<I>(iter), cds::forward<V>(val), cds::forward<P>(projector),
         functional::Equal<>(), impl::FindResultTransformer<>()
     ))) -> decltype(impl::find(
-        cds::forward<I>(iter), cds::forward<V>(val), cds::forward<S>(selector),
+        cds::forward<I>(iter), cds::forward<V>(val), cds::forward<P>(projector),
         functional::Equal<>(), impl::FindResultTransformer<>()
     )) {
   return impl::find(
-      cds::forward<I>(iter), cds::forward<V>(val), cds::forward<S>(selector),
+      cds::forward<I>(iter), cds::forward<V>(val), cds::forward<P>(projector),
       functional::Equal<>(), impl::FindResultTransformer<>()
   );
 }
@@ -620,11 +620,11 @@ TEST(Utility, cpp11Constexpr) {
 
 #ifdef DCR_SINCECPP14
 struct A_eximpl_sel_c {
-  template <typename S>
-  constexpr bool contains(int x, S&& selector) {
-    if (cds::forward<S>(selector)(data[0]) == x) { return true; }
-    if (cds::forward<S>(selector)(data[1]) == x) { return true; }
-    if (cds::forward<S>(selector)(data[2]) == x) { return true; }
+  template <typename P>
+  constexpr bool contains(int x, P&& projector) {
+    if (cds::forward<P>(projector)(data[0]) == x) { return true; }
+    if (cds::forward<P>(projector)(data[1]) == x) { return true; }
+    if (cds::forward<P>(projector)(data[2]) == x) { return true; }
     return false;
   }
 
@@ -661,8 +661,8 @@ TEST(Utility, cpp14Constexpr) {
   struct A_eximpl_c { constexpr bool contains(int x) const { return x == 1 || x == 2 || x == 3; } };
   static_assert(!contains(A_eximpl_c(), 0), "constexpr contains failed");
   static_assert(contains(A_eximpl_c(), 1), "constexpr contains failed");
-  static_assert(!contains(A_eximpl_sel_c(), 0, functional::memFn(&StringView::length)), "constexpr contains by selector failure");
-  static_assert(contains(A_eximpl_sel_c(), 1, functional::memFn(&StringView::length)), "constexpr contains by selector failure");
+  static_assert(!contains(A_eximpl_sel_c(), 0, functional::memFn(&StringView::length)), "constexpr contains by projector failure");
+  static_assert(contains(A_eximpl_sel_c(), 1, functional::memFn(&StringView::length)), "constexpr contains by projector failure");
 
   struct X {
     constexpr bool contains(int x) const { return x == 1; }

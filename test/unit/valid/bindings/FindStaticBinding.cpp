@@ -142,32 +142,32 @@ public:
   using TCommonFwdImmMut::TCommonFwdImmMut;
 };
 
-class Find_FwdSelImm : public TCommonFwdImm, public FindStaticBinding<Find_FwdSelImm, With<Selector, Immutable>> {
+class Find_FwdSelImm : public TCommonFwdImm, public FindStaticBinding<Find_FwdSelImm, With<Projector, Immutable>> {
 public:
   using TCommonFwdImm::TCommonFwdImm;
 };
 
-class Find_FwdSelMut : public TCommonFwdMut, public FindStaticBinding<Find_FwdSelMut, With<Selector, Mutable>> {
+class Find_FwdSelMut : public TCommonFwdMut, public FindStaticBinding<Find_FwdSelMut, With<Projector, Mutable>> {
 public:
   using TCommonFwdMut::TCommonFwdMut;
 };
 
-class Find_FwdSelImmMut : public TCommonFwdImmMut, public FindStaticBinding<Find_FwdSelImmMut, With<Selector, Immutable, Mutable>> {
+class Find_FwdSelImmMut : public TCommonFwdImmMut, public FindStaticBinding<Find_FwdSelImmMut, With<Projector, Immutable, Mutable>> {
 public:
   using TCommonFwdImmMut::TCommonFwdImmMut;
 };
 
-class Find_FwdValSelImm : public TCommonFwdImm, public FindStaticBinding<Find_FwdValSelImm, With<Value, Selector, Immutable>> {
+class Find_FwdValSelImm : public TCommonFwdImm, public FindStaticBinding<Find_FwdValSelImm, With<Value, Projector, Immutable>> {
 public:
   using TCommonFwdImm::TCommonFwdImm;
 };
 
-class Find_FwdValSelMut : public TCommonFwdMut, public FindStaticBinding<Find_FwdValSelMut, With<Selector, Value, Mutable>> {
+class Find_FwdValSelMut : public TCommonFwdMut, public FindStaticBinding<Find_FwdValSelMut, With<Projector, Value, Mutable>> {
 public:
   using TCommonFwdMut::TCommonFwdMut;
 };
 
-class Find_FwdValSelImmMut : public TCommonFwdImmMut, public FindStaticBinding<Find_FwdValSelImmMut, With<Selector, Value, Immutable, Mutable>> {
+class Find_FwdValSelImmMut : public TCommonFwdImmMut, public FindStaticBinding<Find_FwdValSelImmMut, With<Projector, Value, Immutable, Mutable>> {
 public:
   using TCommonFwdImmMut::TCommonFwdImmMut;
 };
@@ -442,7 +442,7 @@ template <> struct IterableTraits<B_WithAdapt> {
 }
 }
 
-struct B : public FindStaticBinding<B, With<Value, Selector, Immutable, Mutable>> {
+struct B : public FindStaticBinding<B, With<Value, Projector, Immutable, Mutable>> {
   constexpr iterator::ForwardAddressIterator<int> begin() {
     return iterator::ForwardAddressIterator<int>{data + 1};
   }
@@ -478,7 +478,7 @@ struct B : public FindStaticBinding<B, With<Value, Selector, Immutable, Mutable>
   int data[4] = {-1, 1, 2, -1}; // padding to allow first and last elem to allow constexpr
 };
 
-struct B_WithAdapt : public FindStaticBinding<B_WithAdapt, With<Value, Selector, Immutable, Mutable>, FindResultTransformer<>, FindResultTransformer<>> {
+struct B_WithAdapt : public FindStaticBinding<B_WithAdapt, With<Value, Projector, Immutable, Mutable>, FindResultTransformer<>, FindResultTransformer<>> {
   constexpr iterator::ForwardAddressIterator<int> begin() {
     return iterator::ForwardAddressIterator<int>{data + 1};
   }

@@ -28,263 +28,269 @@ template <typename, typename, typename, typename = void> class FindOfByValueStat
 template <typename R, typename TrAll, typename TrOne> class FindOfByValueStaticBinding<R, TrAll, TrOne> {
 protected:
   using Value = typename IterableTraits<R>::Value;
-  using P = Contains<Equal<>>;
-  using NP = NotContains<Equal<>>;
+  using E = Contains<Equal<>>;
+  using NE = NotContains<Equal<>>;
 
 public:
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from)& CDS_ATTR(noexcept(noexcept(
-      impl::find(lvalue<R>(), cds::forward<F>(from), P(), TrAll())
-  ))) -> decltype(impl::find(lvalue<R>(), cds::forward<F>(from), P(), TrAll())) {
-    return impl::find(*static_cast<R*>(this), cds::forward<F>(from), P(), TrAll());
+      impl::find(lvalue<R>(), cds::forward<F>(from), E(), TrAll())
+  ))) -> decltype(impl::find(lvalue<R>(), cds::forward<F>(from), E(), TrAll())) {
+    return impl::find(*static_cast<R*>(this), cds::forward<F>(from), E(), TrAll());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from)& CDS_ATTR(noexcept(noexcept(
-      impl::find(lvalue<R>(), cds::forward<F>(from), NP(), TrAll())
-  ))) -> decltype(impl::find(lvalue<R>(), cds::forward<F>(from), NP(), TrAll())) {
-    return impl::find(*static_cast<R*>(this), cds::forward<F>(from), NP(), TrAll());
+      impl::find(lvalue<R>(), cds::forward<F>(from), NE(), TrAll())
+  ))) -> decltype(impl::find(lvalue<R>(), cds::forward<F>(from), NE(), TrAll())) {
+    return impl::find(*static_cast<R*>(this), cds::forward<F>(from), NE(), TrAll());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from)&& CDS_ATTR(noexcept(noexcept(
-      impl::find(rvalue<R>(), cds::forward<F>(from), P(), TrAll())
-  ))) -> decltype(impl::find(rvalue<R>(), cds::forward<F>(from), P(), TrAll())) {
-    return impl::find(cds::move(*static_cast<R*>(this)), cds::forward<F>(from), P(), TrAll());
+      impl::find(rvalue<R>(), cds::forward<F>(from), E(), TrAll())
+  ))) -> decltype(impl::find(rvalue<R>(), cds::forward<F>(from), E(), TrAll())) {
+    return impl::find(cds::move(*static_cast<R*>(this)), cds::forward<F>(from), E(), TrAll());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from)&& CDS_ATTR(noexcept(noexcept(
-      impl::find(rvalue<R>(), cds::forward<F>(from), NP(), TrAll())
-  ))) -> decltype(impl::find(rvalue<R>(), cds::forward<F>(from), NP(), TrAll())) {
-    return impl::find(cds::move(*static_cast<R*>(this)), cds::forward<F>(from), NP(), TrAll());
+      impl::find(rvalue<R>(), cds::forward<F>(from), NE(), TrAll())
+  ))) -> decltype(impl::find(rvalue<R>(), cds::forward<F>(from), NE(), TrAll())) {
+    return impl::find(cds::move(*static_cast<R*>(this)), cds::forward<F>(from), NE(), TrAll());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstOf(F&& from) CDS_ATTR(noexcept(noexcept(
-      impl::findFirst(rvalue<R>(), cds::forward<F>(from), P(), TrOne())
-  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<F>(from), P(), TrOne())) {
-    return impl::findFirst(*static_cast<R*>(this), cds::forward<F>(from), P(), TrOne());
+      impl::findFirst(rvalue<R>(), cds::forward<F>(from), E(), TrOne())
+  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<F>(from), E(), TrOne())) {
+    return impl::findFirst(*static_cast<R*>(this), cds::forward<F>(from), E(), TrOne());
   }
 
   template <typename F = initializer_list<Value>> CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstNotOf(
       F&& from
   ) CDS_ATTR(noexcept(noexcept(
-      impl::findFirst(rvalue<R>(), cds::forward<F>(from), NP(), TrOne())
-  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<F>(from), NP(), TrOne())) {
-    return impl::findFirst(*static_cast<R*>(this), cds::forward<F>(from), NP(), TrOne());
+      impl::findFirst(rvalue<R>(), cds::forward<F>(from), NE(), TrOne())
+  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<F>(from), NE(), TrOne())) {
+    return impl::findFirst(*static_cast<R*>(this), cds::forward<F>(from), NE(), TrOne());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastOf(F&& from) CDS_ATTR(noexcept(noexcept(
-      impl::findLast(rvalue<R>(), cds::forward<F>(from), P(), TrOne())
-  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<F>(from), P(), TrOne())) {
-    return impl::findLast(*static_cast<R*>(this), cds::forward<F>(from), P(), TrOne());
+      impl::findLast(rvalue<R>(), cds::forward<F>(from), E(), TrOne())
+  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<F>(from), E(), TrOne())) {
+    return impl::findLast(*static_cast<R*>(this), cds::forward<F>(from), E(), TrOne());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastNotOf(F&& from) CDS_ATTR(noexcept(noexcept(
-      impl::findLast(rvalue<R>(), cds::forward<F>(from), NP(), TrOne())
-  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<F>(from), NP(), TrOne())) {
-    return impl::findLast(*static_cast<R*>(this), cds::forward<F>(from), NP(), TrOne());
+      impl::findLast(rvalue<R>(), cds::forward<F>(from), NE(), TrOne())
+  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<F>(from), NE(), TrOne())) {
+    return impl::findLast(*static_cast<R*>(this), cds::forward<F>(from), NE(), TrOne());
   }
 };
 
 template <typename R, typename TrAll, typename TrOne> class FindOfByValueStaticBinding<R const, TrAll, TrOne> {
 protected:
   using Value = typename IterableTraits<R>::Value;
-  using P = Contains<Equal<>>;
-  using NP = NotContains<Equal<>>;
+  using E = Contains<Equal<>>;
+  using NE = NotContains<Equal<>>;
 
 public:
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from) const& CDS_ATTR(noexcept(noexcept(
-      impl::find(lvalue<R const>(), cds::forward<F>(from), P(), TrAll())
-  ))) -> decltype(impl::find(lvalue<R const>(), cds::forward<F>(from), P(), TrAll())) {
-    return impl::find(*static_cast<R const*>(this), cds::forward<F>(from), P(), TrAll());
+      impl::find(lvalue<R const>(), cds::forward<F>(from), E(), TrAll())
+  ))) -> decltype(impl::find(lvalue<R const>(), cds::forward<F>(from), E(), TrAll())) {
+    return impl::find(*static_cast<R const*>(this), cds::forward<F>(from), E(), TrAll());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from) const& CDS_ATTR(noexcept(noexcept(
-      impl::find(lvalue<R const>(), cds::forward<F>(from), NP(), TrAll())
-  ))) -> decltype(impl::find(lvalue<R const>(), cds::forward<F>(from), NP(), TrAll())) {
-    return impl::find(*static_cast<R const*>(this), cds::forward<F>(from), NP(), TrAll());
+      impl::find(lvalue<R const>(), cds::forward<F>(from), NE(), TrAll())
+  ))) -> decltype(impl::find(lvalue<R const>(), cds::forward<F>(from), NE(), TrAll())) {
+    return impl::find(*static_cast<R const*>(this), cds::forward<F>(from), NE(), TrAll());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from) const&& CDS_ATTR(noexcept(noexcept(
-      impl::find(rvalue<R const>(), cds::forward<F>(from), P(), TrAll())
-  ))) -> decltype(impl::find(rvalue<R const>(), cds::forward<F>(from), P(), TrAll())) {
-    return impl::find(cds::move(*static_cast<R const*>(this)), cds::forward<F>(from), P(), TrAll());
+      impl::find(rvalue<R const>(), cds::forward<F>(from), E(), TrAll())
+  ))) -> decltype(impl::find(rvalue<R const>(), cds::forward<F>(from), E(), TrAll())) {
+    return impl::find(cds::move(*static_cast<R const*>(this)), cds::forward<F>(from), E(), TrAll());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from) const&& CDS_ATTR(noexcept(noexcept(
-      impl::find(rvalue<R const>(), cds::forward<F>(from), NP(), TrAll())
-  ))) -> decltype(impl::find(rvalue<R const>(), cds::forward<F>(from), NP(), TrAll())) {
-    return impl::find(cds::move(*static_cast<R const*>(this)), cds::forward<F>(from), NP(), TrAll());
+      impl::find(rvalue<R const>(), cds::forward<F>(from), NE(), TrAll())
+  ))) -> decltype(impl::find(rvalue<R const>(), cds::forward<F>(from), NE(), TrAll())) {
+    return impl::find(cds::move(*static_cast<R const*>(this)), cds::forward<F>(from), NE(), TrAll());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstOf(F&& from) const CDS_ATTR(noexcept(noexcept(
-      impl::findFirst(rvalue<R const>(), cds::forward<F>(from), P(), TrOne())
-  ))) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<F>(from), P(), TrOne())) {
-    return impl::findFirst(*static_cast<R const*>(this), cds::forward<F>(from), P(), TrOne());
+      impl::findFirst(rvalue<R const>(), cds::forward<F>(from), E(), TrOne())
+  ))) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<F>(from), E(), TrOne())) {
+    return impl::findFirst(*static_cast<R const*>(this), cds::forward<F>(from), E(), TrOne());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstNotOf(F&& from) const CDS_ATTR(noexcept(noexcept(
-      impl::findFirst(rvalue<R const>(), cds::forward<F>(from), NP(), TrOne())
-  ))) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<F>(from), NP(), TrOne())) {
-    return impl::findFirst(*static_cast<R const*>(this), cds::forward<F>(from), NP(), TrOne());
+      impl::findFirst(rvalue<R const>(), cds::forward<F>(from), NE(), TrOne())
+  ))) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<F>(from), NE(), TrOne())) {
+    return impl::findFirst(*static_cast<R const*>(this), cds::forward<F>(from), NE(), TrOne());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastOf(F&& from) const CDS_ATTR(noexcept(noexcept(
-      impl::findLast(rvalue<R const>(), cds::forward<F>(from), P(), TrOne())
-  ))) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<F>(from), P(), TrOne())) {
-    return impl::findLast(*static_cast<R const*>(this), cds::forward<F>(from), P(), TrOne());
+      impl::findLast(rvalue<R const>(), cds::forward<F>(from), E(), TrOne())
+  ))) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<F>(from), E(), TrOne())) {
+    return impl::findLast(*static_cast<R const*>(this), cds::forward<F>(from), E(), TrOne());
   }
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastNotOf(F&& from) const CDS_ATTR(noexcept(noexcept(
-      impl::findLast(rvalue<R const>(), cds::forward<F>(from), NP(), TrOne())
-  ))) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<F>(from), NP(), TrOne())) {
-    return impl::findLast(*static_cast<R const*>(this), cds::forward<F>(from), NP(), TrOne());
+      impl::findLast(rvalue<R const>(), cds::forward<F>(from), NE(), TrOne())
+  ))) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<F>(from), NE(), TrOne())) {
+    return impl::findLast(*static_cast<R const*>(this), cds::forward<F>(from), NE(), TrOne());
   }
 };
 
-template <typename, typename, typename, typename = void> class FindOfBySelectorStaticBinding {};
+template <typename, typename, typename, typename = void> class FindOfByProjectorStaticBinding {};
 
-template <typename R, typename TrAll, typename TrOne> class FindOfBySelectorStaticBinding<R, TrAll, TrOne> {
+template <typename R, typename TrAll, typename TrOne> class FindOfByProjectorStaticBinding<R, TrAll, TrOne> {
 protected:
   using Value = typename IterableTraits<R>::Value;
-  using P = Contains<Equal<>>;
-  using NP = NotContains<Equal<>>;
+  using E = Contains<Equal<>>;
+  using NE = NotContains<Equal<>>;
 
 public:
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, S&& selector)& CDS_ATTR(noexcept(noexcept(
-      impl::find(lvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), P(), TrAll())
-  ))) -> decltype(impl::find(lvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector) , P(), TrAll())) {
-    return impl::find(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<S>(selector), P(), TrAll());
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, P&& projector)& CDS_ATTR(noexcept(noexcept(
+      impl::find(lvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll())
+  ))) -> decltype(impl::find(lvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector) , E(), TrAll())) {
+    return impl::find(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll());
   }
 
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, S&& selector)& CDS_ATTR(noexcept(noexcept(
-      impl::find(lvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrAll())
-  ))) -> decltype(impl::find(lvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrAll())) {
-    return impl::find(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrAll());
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, P&& projector)& CDS_ATTR(noexcept(noexcept(
+      impl::find(lvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())
+  ))) -> decltype(impl::find(lvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())) {
+    return impl::find(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll());
   }
 
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, S&& selector)&& CDS_ATTR(noexcept(noexcept(
-      impl::find(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), P(), TrAll())
-  ))) -> decltype(impl::find(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector) , P(), TrAll())) {
-    return impl::find(cds::move(*static_cast<R*>(this)), cds::forward<F>(from), cds::forward<S>(selector), P(), TrAll());
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, P&& projector)&& CDS_ATTR(noexcept(noexcept(
+      impl::find(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll())
+  ))) -> decltype(impl::find(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector) , E(), TrAll())) {
+    return 
+        impl::find(cds::move(*static_cast<R*>(this)), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll());
   }
 
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, S&& selector)&& CDS_ATTR(noexcept(noexcept(
-      impl::find(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrAll())
-  ))) -> decltype(impl::find(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrAll())) {
-    return impl::find(cds::move(*static_cast<R*>(this)), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrAll());
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, P&& projector)&& CDS_ATTR(noexcept(noexcept(
+      impl::find(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())
+  ))) -> decltype(impl::find(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())) {
+    return 
+        impl::find(cds::move(*static_cast<R*>(this)), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll());
   }
 
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstOf(F&& from, S&& selector) CDS_ATTR(noexcept(noexcept(
-      impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), P(), TrOne())
-  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), P(), TrOne())) {
-    return impl::findFirst(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<S>(selector), P(), TrOne());
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstOf(F&& from, P&& projector) CDS_ATTR(noexcept(noexcept(
+      impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())
+  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())) {
+    return impl::findFirst(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne());
   }
 
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstNotOf(F&& from, S&& selector) CDS_ATTR(noexcept(noexcept(
-      impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrOne())
-  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrOne())) {
-    return impl::findFirst(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrOne());
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstNotOf(F&& from, P&& projector) CDS_ATTR(noexcept(noexcept(
+      impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne())
+  ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne())) {
+    return impl::findFirst(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne());
   }
 
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastOf(F&& from, S&& selector) CDS_ATTR(noexcept(noexcept(
-      impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), P(), TrOne())
-  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), P(), TrOne())) {
-    return impl::findLast(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<S>(selector), P(), TrOne());
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastOf(F&& from, P&& projector) CDS_ATTR(noexcept(noexcept(
+      impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())
+  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())) {
+    return impl::findLast(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne());
   }
 
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastNotOf(F&& from, S&& selector) CDS_ATTR(noexcept(noexcept(
-      impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrOne())
-  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrOne())) {
-    return impl::findLast(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrOne());
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastNotOf(F&& from, P&& projector) CDS_ATTR(noexcept(noexcept(
+      impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne())
+  ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne())) {
+    return impl::findLast(*static_cast<R*>(this), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne());
   }
 };
 
-template <typename R, typename TrAll, typename TrOne> class FindOfBySelectorStaticBinding<R const, TrAll, TrOne> {
+template <typename R, typename TrAll, typename TrOne> class FindOfByProjectorStaticBinding<R const, TrAll, TrOne> {
 protected:
   using Value = typename IterableTraits<R>::Value;
-  using P = Contains<Equal<>>;
-  using NP = NotContains<Equal<>>;
+  using E = Contains<Equal<>>;
+  using NE = NotContains<Equal<>>;
 
 public:
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, S&& selector) const& CDS_ATTR(noexcept(noexcept(
-      impl::find(lvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), P(), TrAll())
-  ))) -> decltype(impl::find(lvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector) , P(), TrAll())) {
-    return impl::find(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<S>(selector), P(), TrAll());
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, P&& projector) const& CDS_ATTR(noexcept(noexcept(
+      impl::find(lvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll())
+  ))) -> decltype(impl::find(lvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll())) {
+    return impl::find(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll());
   }
 
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, S&& selector) const& CDS_ATTR(noexcept(noexcept(
-      impl::find(lvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrAll())
-  ))) -> decltype(impl::find(lvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrAll())) {
-    return impl::find(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrAll());
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, P&& projector) const& CDS_ATTR(noexcept(noexcept(
+      impl::find(lvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())
+  ))) -> decltype(impl::find(lvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())) {
+    return impl::find(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll());
   }
 
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, S&& selector) const&& CDS_ATTR(noexcept(noexcept(
-      impl::find(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), P(), TrAll())
-  ))) -> decltype(impl::find(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector) , P(), TrAll())) {
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, P&& projector) const&& CDS_ATTR(noexcept(noexcept(
+      impl::find(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll())
+  ))) -> decltype(impl::find(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll())) {
     return impl::find(
-        cds::move(*static_cast<R const*>(this)), cds::forward<F>(from), cds::forward<S>(selector), P(), TrAll()
+        cds::move(*static_cast<R const*>(this)), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll()
     );
   }
 
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, S&& selector) const&& CDS_ATTR(noexcept(noexcept(
-      impl::find(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrAll())
-  ))) -> decltype(impl::find(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrAll())) {
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, P&& projector) const&& CDS_ATTR(noexcept(noexcept(
+      impl::find(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())
+  ))) -> decltype(impl::find(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())) {
     return impl::find(
-        cds::move(*static_cast<R const*>(this)), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrAll()
+        cds::move(*static_cast<R const*>(this)), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll()
     );
   }
 
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstOf(F&& from, S&& selector) const CDS_ATTR(noexcept(noexcept(
-      impl::findFirst(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), P(), TrOne())
-  ))) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), P(), TrOne())) {
-    return impl::findFirst(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<S>(selector), P(), TrOne());
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstOf(F&& from, P&& projector) const CDS_ATTR(noexcept(noexcept(
+      impl::findFirst(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())
+  ))) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())) {
+    return 
+        impl::findFirst(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne());
   }
 
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstNotOf(F&& from, S&& selector) const CDS_ATTR(noexcept(noexcept(
-      impl::findFirst(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrOne())
-  ))) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrOne())) {
-    return impl::findFirst(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrOne());
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstNotOf(F&& from, P&& projector) const CDS_ATTR(noexcept(noexcept(
+      impl::findFirst(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne())
+  ))) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne())) {
+    return 
+        impl::findFirst(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne());
   }
 
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastOf(F&& from, S&& selector) const CDS_ATTR(noexcept(noexcept(
-      impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), P(), TrOne())
-  ))) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), P(), TrOne())) {
-    return impl::findLast(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<S>(selector), P(), TrOne());
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastOf(F&& from, P&& projector) const CDS_ATTR(noexcept(noexcept(
+      impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())
+  ))) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())) {
+    return 
+        impl::findLast(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne());
   }
 
-  template <typename S, typename F = initializer_list<Value>>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastNotOf(F&& from, S&& selector) const CDS_ATTR(noexcept(noexcept(
-      impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrOne())
-  ))) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrOne())) {
-    return impl::findLast(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<S>(selector), NP(), TrOne());
+  template <typename P, typename F = initializer_list<Value>>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastNotOf(F&& from, P&& projector) const CDS_ATTR(noexcept(noexcept(
+      impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne())
+  ))) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne())) {
+    return 
+        impl::findLast(*static_cast<R const*>(this), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne());
   }
 };
 
@@ -296,7 +302,7 @@ using meta::Bind;
 using meta::Ph;
 
 using sel::Value;
-using sel::Selector;
+using sel::Projector;
 using sel::Mutable;
 using sel::Immutable;
 using sel::ContainsSelector;
@@ -304,11 +310,11 @@ using sel::ContainsSelector;
 template <
     typename P,
     typename = typename ContainsSelector<P, Value>::Type,
-    typename = typename ContainsSelector<P, Selector>::Type
+    typename = typename ContainsSelector<P, Projector>::Type
 > struct MethodSelector {
   static_assert(
-      Any<Bind<ContainsSelector, P, Ph<0>>::template Type, Value, Selector>::value,
-      "Must select Value, Selector or both"
+      Any<Bind<ContainsSelector, P, Ph<0>>::template Type, Value, Projector>::value,
+      "Must select Value, Projector or both"
   );
 };
 
@@ -319,13 +325,13 @@ template <typename P> struct MethodSelector<P, True, False> {
 
 template <typename P> struct MethodSelector<P, False, True> {
   template <typename... A> class CDS_ATTR(inheritsEBOs) Type :
-    public FindOfBySelectorStaticBinding<A...> {};
+    public FindOfByProjectorStaticBinding<A...> {};
 };
 
 template <typename P> struct MethodSelector<P, True, True> {
   template <typename... A> class CDS_ATTR(inheritsEBOs) Type :
       public FindOfByValueStaticBinding<A...>,
-      public FindOfBySelectorStaticBinding<A...> {
+      public FindOfByProjectorStaticBinding<A...> {
   public:
     using FindOfByValueStaticBinding<A...>::findOf;
     using FindOfByValueStaticBinding<A...>::findNotOf;
@@ -334,12 +340,12 @@ template <typename P> struct MethodSelector<P, True, True> {
     using FindOfByValueStaticBinding<A...>::findLastOf;
     using FindOfByValueStaticBinding<A...>::findLastNotOf;
 
-    using FindOfBySelectorStaticBinding<A...>::findOf;
-    using FindOfBySelectorStaticBinding<A...>::findNotOf;
-    using FindOfBySelectorStaticBinding<A...>::findFirstOf;
-    using FindOfBySelectorStaticBinding<A...>::findFirstNotOf;
-    using FindOfBySelectorStaticBinding<A...>::findLastOf;
-    using FindOfBySelectorStaticBinding<A...>::findLastNotOf;
+    using FindOfByProjectorStaticBinding<A...>::findOf;
+    using FindOfByProjectorStaticBinding<A...>::findNotOf;
+    using FindOfByProjectorStaticBinding<A...>::findFirstOf;
+    using FindOfByProjectorStaticBinding<A...>::findFirstNotOf;
+    using FindOfByProjectorStaticBinding<A...>::findLastOf;
+    using FindOfByProjectorStaticBinding<A...>::findLastNotOf;
   };
 };
 
