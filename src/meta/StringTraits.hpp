@@ -7,7 +7,7 @@
 #pragma once
 
 #include <cds/meta/Base>
-#include <ostream>
+#include <iosfwd>
 
 namespace cds {
 namespace meta {

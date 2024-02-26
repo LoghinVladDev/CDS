@@ -11,9 +11,16 @@
 #include <memory>
 
 namespace cds {
+template <typename... Allocs> class AllocatorSet;
+
 namespace meta {
+
 template <typename, typename = void> struct IsAllocator : False {};
 template <typename T> struct IsAllocator<T, Void<decltype(value<T>().allocate(0))>> : True {};
+template <typename, typename = void> struct IsAllocatorSet : False {};
+template <typename T> struct IsAllocatorSet<T, Void<typename T::IsAllocatorSet>> : True {};
+
+template <typename T> struct IsAllocatorOrAllocatorSet : Or<IsAllocator<T>, IsAllocatorSet<T>> {};
 
 namespace allocatorForImpl {
 class InvalidAllocator {};
@@ -37,14 +44,14 @@ public:
 
 template <typename... Allocs> class AllocatorSet : public Allocs... {
 public:
+  using IsAllocatorSet = meta::True;
+
   template <typename T> CDS_ATTR(2(nodiscard, constexpr(14))) auto get() noexcept -> meta::AllocatorFor<T, Allocs...>& {
-    static_assert(
-        meta::Not<meta::IsSame<
-            meta::AllocatorFor<T, Allocs...>,
-            meta::allocatorForImpl::InvalidAllocator
-        >>::value,
-        "Allocator for requested type does not exist in AllocatorSet"
-    );
+    constexpr auto requestedAllocatorExists = meta::Not<meta::IsSame<
+        meta::AllocatorFor<T, Allocs...>,
+        meta::allocatorForImpl::InvalidAllocator
+    >>::value;
+    static_assert(requestedAllocatorExists, "Allocator for requested type does not exist in AllocatorSet");
     return *static_cast<meta::AllocatorFor<T, Allocs...>*>(this);
   }
 };

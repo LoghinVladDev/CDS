@@ -554,42 +554,42 @@ TEST(Utility, timing) {
 //     return -1;
 //   };
 //
-//   timed("sv", [&]{
+//   timed("sv1", [&]{
 //     for (int i = 0; i < n; ++i) {
 //       auto volatile r = findFirstCStr(svCstr, 'm');
 //     }
 //   });
 //
-//   timed("sv", [&]{
+//   timed("sv2", [&]{
 //     for (int i = 0; i < n; ++i) {
 //       auto volatile r = sv.findFirst('m');
 //     }
 //   });
 //
-//   timed("sv", [&]{
+//   timed("sv3", [&]{
 //     for (int i = 0; i < n; ++i) {
 //       auto volatile r = findFirst(sv, 'm', functional::Equal<>(), impl::FindStringTransformer<char, impl::StringUtils<char, meta::StringTraits<char>>>());
 //     }
 //   });
-
-  // timed("sv", [&]{
-  //   for (int i = 0; i < n; ++i) {
-  //     auto volatile r = findFirstA(sv, 'b');
-  //   }
-  // });
-  //
-  // timed("sv", [&]{
-  //   for (int i = 0; i < n; ++i) {
-  //     static constexpr impl::FF<> ff;
-  //     auto volatile r = ff.findFirst(sv, 'b');
-  //   }
-  // });
-  //
-  // timed("sv", [&]{
-  //   for (int i = 0; i < n; ++i) {
-  //     auto volatile r = findFirstB(sv, 'b');
-  //   }
-  // });
+////
+////   timed("sv", [&]{
+////     for (int i = 0; i < n; ++i) {
+////       auto volatile r = findFirstA(sv, 'b');
+////     }
+////   });
+////
+////   timed("sv", [&]{
+////     for (int i = 0; i < n; ++i) {
+////       static constexpr impl::FF<> ff;
+////       auto volatile r = ff.findFirst(sv, 'b');
+////     }
+////   });
+////
+////   timed("sv", [&]{
+////     for (int i = 0; i < n; ++i) {
+////       auto volatile r = findFirstB(sv, 'b');
+////     }
+////   });
 }
 
 #ifdef DCR_SINCECPP11

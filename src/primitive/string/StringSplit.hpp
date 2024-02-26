@@ -17,7 +17,9 @@
 
 #include "../../ds/hashTable/HashTableBase.hpp"
 
-#include <ostream>
+#include "../../stdlib/ostream.hpp"
+#include "../../stdlib/string.hpp"
+#include "../../stdlib/string_view.hpp"
 
 namespace cds {
 namespace impl {
@@ -39,21 +41,95 @@ template <typename> struct IsString : False {};
 template <typename C> struct IsString<C*> : StringTraits<C>::IsChar {};
 template <typename C> struct IsString<C const*> : StringTraits<C>::IsChar {};
 template <typename C, typename U> struct IsString<BaseStringView<C, U>> : True {};
+
+#if CDS_ATTR(std_compat)
+template <typename C, typename T, typename A> struct IsString<std::basic_string<C, T, A>> : True {};
+#if CDS_ATTR(cpp17)
+template <typename C, typename T> struct IsString<std::basic_string_view<C, T>> : True {};
+#endif
+#endif
+
+template <typename T> struct CharTypeOfString {
+  using Type = RemoveCVRef<decltype(*cds::begin(rvalue<T>()))>;
+};
+
+template <typename C> struct CharTypeOfString<C*> {
+  using Type = C;
+};
 } // namespace isStringImpl
 
 template <typename T> struct IsString : isStringImpl::IsString<Decay<T>> {};
+template <typename T> struct CharTypeOfString : isStringImpl::CharTypeOfString<Decay<T>> {};
 
-template <
-    typename S, typename,
-    typename = typename StringTraits<S>::IsSeparator,
-    typename = typename IsIterable<S>::Type,
-    typename = typename IsString<S>::Type
-> class SplitPredicate {};
+namespace splitAllocationTraits {
+template <typename, typename = void> struct SplitAllocationTraits {
+  using Required = False;
+};
 
-template <typename S, typename A> class SplitPredicate<S, A, True, False, False> {
+template <typename T> struct SplitAllocationTraits<T, EnableIf<IsString<T>, void>> {
+  using Required = True;
+  using Alloc = Allocator<Size>;
+};
+
+template <typename T>
+struct SplitAllocationTraits<T, EnableIf<And<IsIterable<T>, IsString<decltype(*cds::begin(rvalue<T>()))>>, void>> {
+  using S = RemoveCVRef<decltype(*cds::begin(rvalue<T>()))>;
+  using C = typename CharTypeOfString<S>::Type;
+
+  class AhoCorasickAllocatorSet;
+  using AhoCorasickVertex = ahoCorasick::Vertex<C, AhoCorasickAllocatorSet>;
+  class AhoCorasickAllocatorSet : public AllocatorSet<
+      Allocator<FwdNode<ahoCorasick::Link<C const>>>,
+      Allocator<FwdNode<ahoCorasick::Link<C const>>*>,
+      Allocator<FwdNode<Size>>,
+      Allocator<int>,
+      Allocator<AhoCorasickVertex>
+  > {};
+
+  using Required = True;
+  using Alloc = AhoCorasickAllocatorSet;
+};
+} // namespace splitAllocationTraits
+
+template <typename T> struct SplitAllocationTraits : splitAllocationTraits::SplitAllocationTraits<RemoveCVRef<T>> {};
+
+namespace splitKind {
+struct ByCharacter {};
+struct ByCharacterSet {};
+struct ByString {};
+struct ByStringSet {};
+} // namespace splitKind
+
+namespace matchKind {
+struct ByCharacter {};
+struct ByErrorIndex {};
+struct ByState {};
+}
+
+template <typename, typename = void> struct SplitTraits {};
+template <typename T> struct SplitTraits<T, EnableIf<typename StringTraits<T>::IsSeparator, void>> {
+  using SplitType = splitKind::ByCharacter;
+};
+
+template <typename T> struct SplitTraits<T, EnableIf<IsString<T>, void>> {
+  using SplitType = splitKind::ByString;
+};
+
+template <typename T> struct SplitTraits<T, EnableIf<And<IsIterable<T>, Not<IsString<T>>>, void>> {
+  using SplitType = Conditional<
+      IsString<decltype(*cds::begin(rvalue<T>()))>,
+      splitKind::ByStringSet,
+      splitKind::ByCharacterSet
+  >;
+};
+
+template <typename S, typename, typename = typename SplitTraits<S>::SplitType> class SplitPredicate {};
+
+template <typename S, typename A> class SplitPredicate<S, A, splitKind::ByCharacter> {
 public:
   using Allocates = False;
   using IsPatternMatching = False;
+  using MatchKind = matchKind::ByCharacter;
 
   template <typename FS>
   CDS_ATTR(2(explicit, constexpr(11))) SplitPredicate(FS&& separator, CDS_ATTR(unused) A const& alloc)
@@ -68,10 +144,11 @@ private:
   S _s;
 };
 
-template <typename S, typename A> class SplitPredicate<S, A, False, True, False> {
+template <typename S, typename A> class SplitPredicate<S, A, splitKind::ByCharacterSet> {
 public:
   using Allocates = False;
   using IsPatternMatching = False;
+  using MatchKind = matchKind::ByCharacter;
 
   template <typename FS>
   CDS_ATTR(2(explicit, constexpr(11))) SplitPredicate(FS&& separator, CDS_ATTR(unused) A const& alloc)
@@ -86,19 +163,45 @@ private:
   S _s;
 };
 
-template <typename S, typename A, typename I> class SplitPredicate<S, A, False, I, True> : public KMPBase<S, A> {
+template <typename S, typename A> class SplitPredicate<S, A, splitKind::ByString> : public KMPBase<S, A> {
 public:
   using Allocates = True;
   using IsPatternMatching = True;
+  using MatchKind = matchKind::ByErrorIndex;
   using KMPBase<S, A>::KMPBase;
 };
 
-template <typename R, typename P> class SplitIterator {
+template <typename S, typename A> class SplitPredicate<S, A, splitKind::ByStringSet> :
+    public ahoCorasick::AhoCorasick<typename splitAllocationTraits::SplitAllocationTraits<S>::C, A> {
+  using AhoCorasick = ahoCorasick::AhoCorasick<typename splitAllocationTraits::SplitAllocationTraits<S>::C, A>;
+
+public:
+  using Allocates = True;
+  using IsPatternMatching = False;
+  using MatchKind = matchKind::ByState;
+
+  template <typename FS, typename FAS> CDS_ATTR(2(explicit, constexpr(20)))
+  SplitPredicate(FS&& separator, FAS&& allocatorSet) CDS_ATTR(noexcept(noexcept(
+      AhoCorasick(cds::forward<FS>(separator), 16, cds::forward<FAS>(allocatorSet))
+  ))) : AhoCorasick(cds::forward<FS>(separator), 16, cds::forward<FAS>(allocatorSet)) {}
+};
+
+template <typename P, typename = typename P::MatchKind> struct StateContainer {
+  CDS_ATTR(2(explicit, constexpr(11))) StateContainer(CDS_ATTR(unused) P const&) noexcept {}
+};
+
+template <typename P> struct StateContainer<P, matchKind::ByState> {
+  CDS_ATTR(2(explicit, constexpr(11))) StateContainer(P const& sm) noexcept : state(sm.initState()) {}
+  Size state;
+};
+
+template <typename R, typename P> class SplitIterator : private StateContainer<P> {
 public:
   using View = typename R::View;
 
   CDS_ATTR(2(nodiscard, constexpr(14))) SplitIterator(R const* r, P const& p, Size limit)
-      CDS_ATTR(noexcept(noexcept(nextSegment()))) : _e(!r || r->empty()), _l(limit), _r(r), _p(p) {
+      CDS_ATTR(noexcept(noexcept(nextSegment()))) :
+      StateContainer<P>(p), _e(!r || r->empty()), _l(limit), _r(r), _p(p) {
     if (r) {
       nextSegment();
     }
@@ -129,8 +232,8 @@ public:
   }
 
 private:
-  template <typename PM = typename P::IsPatternMatching, EnableIf<Not<PM>> = 0> CDS_ATTR(constexpr(14))
-  auto nextSegment() CDS_ATTR(noexcept(
+  template <typename MK = typename P::MatchKind, EnableIf<IsSame<MK, matchKind::ByCharacter>> = 0>
+  CDS_ATTR(constexpr(14)) auto nextSegment() CDS_ATTR(noexcept(
       noexcept(rvalue<P>()(rvalue<View>().data()[0])) && noexcept(rvalue<R>().sub(0)) && noexcept(rvalue<R>().sub(0, 0))
   )) -> void {
     if (_l == 0) {
@@ -155,8 +258,9 @@ private:
     --_l;
   }
 
-  template <typename PM = typename P::IsPatternMatching, EnableIf<PM> = 0> CDS_ATTR(constexpr(14))
-  auto nextSegment() CDS_ATTR(noexcept(noexcept(rvalue<R>().sub(0)) && noexcept(rvalue<R>().sub(0, 0)))) -> void {
+  template <typename MK = typename P::MatchKind, EnableIf<IsSame<MK, matchKind::ByErrorIndex>> = 0>
+  CDS_ATTR(constexpr(14)) auto nextSegment()
+      CDS_ATTR(noexcept(noexcept(rvalue<R>().sub(0)) && noexcept(rvalue<R>().sub(0, 0)))) -> void {
     if (_l == 0) {
       _segment = _r->sub(_f);
       _f = _r->length() + 1;
@@ -194,6 +298,41 @@ private:
     }
 
     _segment = _r->sub(_f, _r->length());
+    _f = _r->length() + 1;
+  }
+
+  template <typename MK = typename P::MatchKind, EnableIf<IsSame<MK, matchKind::ByState>> = 0>
+  CDS_ATTR(constexpr(14)) auto nextSegment() CDS_ATTR(noexcept(noexcept(false))) -> void {
+    if (_l == 0) {
+      _segment = _r->sub(_f);
+      _f = _r->length() + 1;
+      --_l;
+      return;
+    }
+
+    if (_f == _r->length() + 1) {
+      _e = true;
+      return;
+    }
+
+    auto endIdx = _f;
+    while (endIdx < _r->length()) {
+      auto r = _p(_r->data()[endIdx], StateContainer<P>::state);
+      if (r.kind == ahoCorasick::PredResultKind::PRK_accept) {
+
+        endIdx = endIdx + 1 - r.reverseLen;
+
+        _segment = _r->sub(_f, endIdx);
+        _f = endIdx + r.reverseLen;
+        --_l;
+
+        return;
+      }
+      StateContainer<P>::state = r.state;
+      ++endIdx;
+    }
+
+    _segment = _r->sub(_f);
     _f = _r->length() + 1;
   }
 
@@ -268,7 +407,7 @@ private:
 using extension::Extend;
 template <
     typename I, typename S, typename R = SplitRange<Extend<I>, SplitPredicate<Extend<S>, Nullptr>>,
-    EnableIf<Not<IsString<RemoveCVRef<S>>>> = 0
+    EnableIf<Not<typename SplitAllocationTraits<S>::Required>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto split(I&& range, S&& sep, Size limit)
     CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(range), cds::forward<S>(sep), limit, nullptr)))) -> R {
   return R(cds::forward<I>(range), cds::forward<S>(sep), limit, nullptr);
@@ -276,7 +415,7 @@ template <
 
 template <
     typename I, typename S, typename A, typename R = SplitRange<Extend<I>, SplitPredicate<Extend<S>, RemoveCVRef<A>>>,
-    EnableIf<And<IsString<RemoveCVRef<S>>, meta::IsAllocator<RemoveCVRef<A>>>> = 0
+    EnableIf<typename SplitAllocationTraits<S>::Required> = 0
 > CDS_ATTR(2(nodiscard, constexpr(20))) auto split(I&& range, S&& sep, Size limit, A&& alloc)
     CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(range), cds::forward<S>(sep), limit, cds::forward<A>(alloc))))) -> R {
   return R(cds::forward<I>(range), cds::forward<S>(sep), limit, cds::forward<A>(alloc));

@@ -5,9 +5,11 @@ set(
     valid/bindings/FindStaticBinding.cpp
     valid/bindings/FindOfStaticBinding.cpp
 
+    valid/ds/SingleLinkedListBase.cpp
     valid/ds/HashTableBase.cpp
 
     valid/iterator/AddressIterator.cpp
+    valid/iterator/FwdNodeIterator.cpp
     valid/iterator/HashTableIterator.cpp
 
     valid/functional/Comparator.cpp
@@ -33,6 +35,10 @@ set(
 
     valid/primitive/StringUtils.cpp
     valid/primitive/StringView.cpp
+
+    valid/stdlib/StringViewStdLibCompatNone.cpp
+    valid/stdlib/StringViewStdLibCompatSafe.cpp
+    valid/stdlib/StringViewStdLibCompatUnsafe.cpp
 
     PARENT_SCOPE
 )

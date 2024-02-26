@@ -32,7 +32,7 @@ public:
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator->() const noexcept -> Value* {
-    return _n->data;
+    return &_n->data;
   }
 
   CDS_ATTR(constexpr(14)) auto operator++() noexcept -> FwdNodeIterator& {

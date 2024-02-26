@@ -19,8 +19,9 @@
 #include "../../ds/linkedList/SingleLinkedListBase.hpp"
 #include "../../policy/RehashPolicy.hpp"
 
-#include <ostream>
-#include <iostream>
+#include "../../stdlib/ostream.hpp"
+#include "../../stdlib/string.hpp"
+#include "../../stdlib/string_view.hpp"
 
 namespace cds {
 namespace impl {
@@ -59,15 +60,15 @@ template <typename C> struct PtrPatternUtils {
     return Utils::length(ptr);
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) static auto data(C const* ptr) noexcept -> C const* {
+  CDS_ATTR(2(nodiscard, constexpr(14))) static auto data(C* ptr) noexcept -> C* {
     return ptr;
   }
 };
 
 template <typename C> struct PatternUtils<C*> : PtrPatternUtils<C> {};
 template <typename C> struct PatternUtils<C*&> : PtrPatternUtils<C> {};
-template <typename C> struct PatternUtils<C const*> : PtrPatternUtils<C> {};
-template <typename C> struct PatternUtils<C const*&> : PtrPatternUtils<C> {};
+template <typename C> struct PatternUtils<C* const> : PtrPatternUtils<C> {};
+template <typename C> struct PatternUtils<C* const&> : PtrPatternUtils<C> {};
 
 template <typename C> struct BSVPatternUtils {
   template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) static auto length(T&& sv) noexcept -> Size {
@@ -84,9 +85,21 @@ template <typename C, typename U> struct PatternUtils<BaseStringView<C, U>&> : B
 template <typename C, typename U> struct PatternUtils<BaseStringView<C, U> const> : BSVPatternUtils<C> {};
 template <typename C, typename U> struct PatternUtils<BaseStringView<C, U> const&> : BSVPatternUtils<C> {};
 
-template <typename T> constexpr auto allocate(std::size_t s) -> T* {
-  return static_cast<T*>(::operator new(s));
-}
+#if CDS_ATTR(std_compat)
+template <typename C, typename T, typename A> struct PatternUtils<std::basic_string<C, T, A>> : BSVPatternUtils<C> {};
+template <typename C, typename T, typename A> struct PatternUtils<std::basic_string<C, T, A>&> : BSVPatternUtils<C> {};
+template <typename C, typename T, typename A> struct PatternUtils<std::basic_string<C, T, A> const> :
+    BSVPatternUtils<C> {};
+template <typename C, typename T, typename A> struct PatternUtils<std::basic_string<C, T, A> const&> :
+    BSVPatternUtils<C> {};
+
+#if CDS_ATTR(cpp17)
+template <typename C, typename T> struct PatternUtils<std::basic_string_view<C, T>> : BSVPatternUtils<C> {};
+template <typename C, typename T> struct PatternUtils<std::basic_string_view<C, T>&> : BSVPatternUtils<C> {};
+template <typename C, typename T> struct PatternUtils<std::basic_string_view<C, T> const> : BSVPatternUtils<C> {};
+template <typename C, typename T> struct PatternUtils<std::basic_string_view<C, T> const&> : BSVPatternUtils<C> {};
+#endif
+#endif
 
 template <typename S, typename A> class KMPBase : private A {
 public:
@@ -199,21 +212,21 @@ template <typename T> struct Link<T, 1> {
   U64 id: 56;
   T key;
 
-  CDS_ATTR(constexpr(11)) Link(U64 i, T k) noexcept : id(i), key(k) {}
+  CDS_ATTR(constexpr(11)) Link(T k, U64 i) noexcept : id(i), key(k) {}
 };
 
 template <typename T> struct Link<T, 2> {
   U64 id: 48;
   T key;
 
-  CDS_ATTR(constexpr(11)) Link(U64 i, T k) noexcept : id(i), key(k) {}
+  CDS_ATTR(constexpr(11)) Link(T k, U64 i) noexcept : id(i), key(k) {}
 };
 
 template <typename T> struct Link<T, 4> {
   U64 id : 32;
   T key;
 
-  CDS_ATTR(constexpr(11)) Link(U64 i, T k) noexcept : id(i), key(k) {}
+  CDS_ATTR(constexpr(11)) Link(T k, U64 i) noexcept : id(i), key(k) {}
 };
 
 struct LinkKeyProjection {
@@ -274,7 +287,7 @@ template <
   public:
     using HashTableBase<L, C const, Hash<>, TableRehashPolicy<T>, LinkKeyProjection, Equal<>, AS>::HashTableBase;
     using Base = HashTableBase<L, C const, Hash<>, TableRehashPolicy<T>, LinkKeyProjection, Equal<>, AS>;
-    using Base::get;
+    using Base::tryEmplace;
     using Base::at;
   };
 
@@ -287,6 +300,13 @@ template <
       parent{parentLink}, children{allocatorSet} {}
 };
 
+enum class PredResultKind : U32 { PRK_feed, PRK_accept };
+struct PredResult {
+  PredResultKind kind;
+  int reverseLen;
+  Size state;
+};
+
 template <
     typename C,
     typename AS /* = AllocatorSet<Allocator<FwdNode<Size>>, Allocator<int>, Allocator<Vertex<C, ?>>, ...[[Vertex<> required allocators]]> */
@@ -295,8 +315,9 @@ public:
   using V = Vertex<C, AS>;
   using ParentLink = typename V::ParentLink;
 
-  template <typename I> CDS_ATTR(2(explicit, constexpr(20)))
-  AhoCorasick(I&& stringSet, Size startingSize = 16) noexcept(false) :
+  template <typename I, typename FAS> CDS_ATTR(2(explicit, constexpr(20)))
+  AhoCorasick(I&& stringSet, Size startingSize = 16, FAS&& alloc = FAS()) noexcept(false) :
+      AS(cds::forward<FAS>(alloc)),
       _vertices(AS::template get<V>().allocate(startingSize)),
       _lengths(AS::template get<int>().allocate(cds::forward<I>(stringSet).size())),
       _lSize(cds::forward<I>(stringSet).size()),
@@ -309,60 +330,64 @@ public:
       auto* v = _vertices + vId;
       auto const& str = *i;
       using U = PatternUtils<RemoveCVRef<decltype(str)>>;
-      for (auto c : str) {
-        auto r = v->children.get(c);
-        if (!r.alive) {
-          addVertex(ParentLink(vId, c));
-          construct(r.data, _size - 1, c);
+      for (Size idx = 0, len = U::length(str); idx < len; ++idx) {
+        auto const* pat = U::data(str);
+        auto r = v->children.tryEmplace(pat[idx], _size);
+        if (get<0>(r)) {
+          addVertex(ParentLink(pat[idx], vId));
         }
-        vId = r.data->id;
+        vId = get<1>(r)->id;
         v = _vertices + vId;
       }
       v->setId(wId);
       v->leaf = 1;
       construct(_lengths + wId++, U::length(str));
     }
-
     traverse();
   }
 
-  ~AhoCorasick() noexcept {
+  CDS_ATTR(constexpr(14)) AhoCorasick(AhoCorasick&& aho) noexcept :
+      AS(cds::move(aho)),
+      _vertices(cds::exchange(aho._vertices, nullptr)),
+      _lengths(cds::exchange(aho._lengths, nullptr)),
+      _lSize(cds::exchange(aho._lSize, 0)),
+      _cap(cds::exchange(aho._cap, 0)),
+      _size(cds::exchange(aho._size, 0)),
+      _r(cds::exchange(aho._r, 0)) {}
+
+  AhoCorasick(AhoCorasick const&) = delete;
+  auto operator=(AhoCorasick const&) -> AhoCorasick& = delete;
+  auto operator=(AhoCorasick&&) -> AhoCorasick& = delete;
+
+  CDS_ATTR(constexpr(20)) ~AhoCorasick() noexcept {
     destruct(_vertices, _vertices + _size);
     destruct(_lengths, _lengths + _lSize);
     AS::template get<V>().deallocate(_vertices, _cap);
     AS::template get<int>().deallocate(_lengths, _lSize);
   }
 
-  template <typename SV> void parse(SV&& text) const noexcept {
-    auto s = _r;
-    Size idx = 0;
-    for (auto c : cds::forward<SV>(text)) {
-      while (true) {
-        auto e = _vertices[s].children.at(c);
-        if (e) {
-          s = e->id;
-          break;
-        }
-        if (s == _r) {
-          break;
-        }
-        s = _vertices[s].suffixLink;
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto initState() const noexcept -> Size {
+    return _r;
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto operator()(C c, Size state) const noexcept -> PredResult {
+    while (true) {
+      auto e = _vertices[state].children.at(c);
+      if (e) {
+        state = e->id;
+        break;
       }
-
-      auto cs = s;
-      while (true) {
-        cs = _vertices[cs].endWordLink;
-        if (cs == _r) {
-          break;
-        }
-
-        auto l = _lengths[_vertices[cs].id()];
-        std::cout << idx + 1 - l << " " << l << '\n';
-
-        cs = _vertices[cs].suffixLink;
+      if (state == _r) {
+        break;
       }
-      ++idx;
+      state = _vertices[state].suffixLink;
     }
+
+    if (_vertices[state].endWordLink == _r) {
+      return {PredResultKind::PRK_feed, 0, state};
+    }
+
+    return {PredResultKind::PRK_accept, _lengths[_vertices[_vertices[state].endWordLink].id()], state};
   }
 
 private:
@@ -386,7 +411,7 @@ private:
     }
   }
 
-  CDS_ATTR(constexpr(20)) auto computeLink(Size vId) noexcept(false) -> void {
+  CDS_ATTR(constexpr(14)) auto computeLink(Size vId) noexcept(false) -> void {
     auto* const v = _vertices + vId;
     if (vId == _r) {
       v->suffixLink = _r;

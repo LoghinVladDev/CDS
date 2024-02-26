@@ -18,10 +18,23 @@
 #include <unordered_set>
 #include <utility>
 #include <variant>
-#include <bits/ranges_algo.h>
+#include <mutex>
+#include <thread>
+// #include <bits/ranges_algo.h>
+#include <algorithm>
 #include <sys/wait.h>
 #include <source_location>
+#include <sstream>
 
+namespace {
+class jthread : public std::thread {
+public:
+  using std::thread::thread;
+  ~jthread() noexcept {
+    join();
+  }
+};
+}
 
 namespace dcr {
 namespace {
@@ -607,7 +620,7 @@ auto awaitProcess(std::optional<std::string> executable, std::vector<std::string
   std::string errContents;
   std::string outContents;
   [&await = outputAwaiter, &errR = errRedir, &errC = errContents, &outR = outRedir, &outC = outContents] {
-    (void)std::array{std::jthread(await(errR[0], errC)), std::jthread(await(outR[0], outC))};
+    (void)std::array{jthread(await(errR[0], errC)), jthread(await(outR[0], outC))};
   }();
 
   int stat;
@@ -923,9 +936,9 @@ auto executeRunners(
     auto& dcrParams,
     auto& jobs
 ) {
-  std::vector<std::jthread> runners;
+  std::vector<std::unique_ptr<jthread>> runners;
   for (int thIdx = 0; thIdx < std::min(dcrParams.threadCount, static_cast<int>(std::size(jobs))); ++ thIdx) {
-    runners.emplace_back(threadRunnerFn);
+    runners.emplace_back(std::make_unique<jthread>(threadRunnerFn));
   }
 }
 

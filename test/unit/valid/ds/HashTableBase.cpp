@@ -47,7 +47,6 @@ public:
   using Base::at;
   using Base::copy;
   using Base::move;
-  using Base::get;
 };
 }
 
@@ -59,7 +58,13 @@ TEST(HashTableBase, construct) {
 }
 
 TEST(HashTableBase, emplaceAndGet) {
+  using cds::impl::get;
   auto ihs = DefaultHashTable<int, int, Identity<>>();
+  auto tes = [](bool status, int expected) {
+    return [=](cds::impl::TryEmplaceResult<int> res) {
+      return get<0>(res) == status && *get<1>(res) == expected;
+    };
+  };
 
   ASSERT_EQ(ihs.bucketCount(), 0);
   ASSERT_EQ(ihs.size(), 0);
@@ -68,10 +73,10 @@ TEST(HashTableBase, emplaceAndGet) {
   ASSERT_EQ(ihs.at(2), nullptr);
   ASSERT_EQ(asConst(ihs).at(1), nullptr);
   ASSERT_EQ(asConst(ihs).at(2), nullptr);
-  ASSERT_EQ(ihs.tryEmplace(1), 1);
+  ASSERT_TRUE(tes(true, 1)(ihs.tryEmplace(1)));
   ASSERT_EQ(ihs.bucketCount(), 13);
   ASSERT_EQ(ihs.size(), 1);
-  ASSERT_EQ(ihs.tryEmplace(1), 1);
+  ASSERT_TRUE(tes(false, 1)(ihs.tryEmplace(1)));
   ASSERT_EQ(ihs.size(), 1);
   ASSERT_NE(ihs.at(1), nullptr);
   ASSERT_EQ(ihs.at(2), nullptr);
@@ -80,16 +85,16 @@ TEST(HashTableBase, emplaceAndGet) {
   ASSERT_EQ(asConst(ihs).at(2), nullptr);
   ASSERT_EQ(*asConst(ihs).at(1), 1);
 
-  ASSERT_EQ(ihs.tryEmplace(5), 5);
+  ASSERT_TRUE(tes(true, 5)(ihs.tryEmplace(5)));
   ASSERT_EQ(ihs.size(), 2);
 
-  ASSERT_EQ(ihs.tryEmplace(14), 14);
-  ASSERT_EQ(ihs.tryEmplace(27), 27);
+  ASSERT_TRUE(tes(true, 14)(ihs.tryEmplace(14)));
+  ASSERT_TRUE(tes(true, 27)(ihs.tryEmplace(27)));
   ASSERT_EQ(ihs.size(), 4);
   ASSERT_EQ(ihs.bucketCount(), 13);
 
   for (int i = 50; i < 70; ++i) {
-    ASSERT_EQ(ihs.tryEmplace(i), i);
+    ASSERT_TRUE(tes(true, i)(ihs.tryEmplace(i)));
   }
 
   ASSERT_EQ(ihs.bucketCount(), 29);
@@ -120,7 +125,7 @@ TEST(HashTableBase, emplaceAndGet) {
   }
 
   for (int i = 29; i <= 29 * 6; i += 29) {
-    ASSERT_EQ(ihs.tryEmplace(i), i);
+    ASSERT_TRUE(tes(i != 58, i)(ihs.tryEmplace(i)));
   }
 
   ASSERT_EQ(ihs.size(), 29);
@@ -240,52 +245,6 @@ TEST(HashTableBase, move) {
   ASSERT_TRUE(ihs.empty());
   ASSERT_EQ(ihs.size(), 0);
   ASSERT_EQ(ihs.bucketCount(), 0);
-}
-
-TEST(HashTableBase, get) {
-  auto ihs = DefaultHashTable<int, int, Identity<>>();
-
-  ASSERT_EQ(asConst(ihs).get(1), nullptr);
-  auto r1 = ihs.get(1);
-  ASSERT_EQ(r1.alive, false);
-  ASSERT_NE(r1.data, nullptr);
-  construct(r1.data, 1);
-  ASSERT_NE(asConst(ihs).get(1), nullptr);
-  ASSERT_EQ(*asConst(ihs).get(1), 1);
-
-  auto r2 = ihs.get(1);
-  ASSERT_EQ(r2.alive, true);
-  ASSERT_EQ(*r2.data, 1);
-
-  auto r3 = ihs.get(14);
-  ASSERT_EQ(r3.alive, false);
-  ASSERT_NE(r3.data, nullptr);
-  construct(r3.data, 14);
-  ASSERT_NE(asConst(ihs).get(14), nullptr);
-  ASSERT_EQ(*asConst(ihs).get(14), 14);
-  ASSERT_NE(asConst(ihs).get(1), nullptr);
-  ASSERT_EQ(*asConst(ihs).get(1), 1);
-
-  ASSERT_EQ(ihs.size(), 2);
-  ASSERT_EQ(ihs.bucketCount(), 13);
-
-  std::vector<int> equiv {14, 1};
-  ASSERT_TRUE(citeq(ihs, equiv));
-
-  for (int i = 20; i < 50; ++i) {
-    auto r = ihs.get(i);
-    ASSERT_EQ(r.alive, false);
-    ASSERT_NE(r.data, nullptr);
-    construct(r.data, i);
-    ASSERT_NE(asConst(ihs).get(i), nullptr);
-    ASSERT_EQ(*asConst(ihs).get(i), i);
-  }
-
-  equiv = {1, 14, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-           34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49};
-  ASSERT_TRUE(citeq(equiv, ihs));
-
-  ASSERT_EQ(asConst(ihs).get(1000), nullptr);
 }
 
 #ifdef DCR_SINCECPP20

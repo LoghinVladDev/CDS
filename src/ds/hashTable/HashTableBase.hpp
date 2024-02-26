@@ -26,6 +26,11 @@ using meta::inConstexpr;
 
 using iterator::HashTableIterator;
 
+template <typename T> struct TryEmplaceResult {
+  bool inserted;
+  T* elem;
+};
+
 template <typename T, typename K, typename H, typename RP, typename KP, typename KC, typename AS>
 class CDS_ATTR(inheritsEBOs) HashTableBase : private H, private RP, private AS {
 private:
@@ -73,67 +78,6 @@ public:
   }
 
 protected:
-  CDS_ATTR(nodiscard) auto get(K const& key) CDS_ATTR(noexcept(noexcept(
-      noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>().data), key))
-      && noexcept(alloc())
-      && noexcept(alloc(0))
-      && noexcept(rvalue<H>()(key))
-  ))) -> UninitializedGetResult {
-    KC const comp;
-    KP const proj;
-    if (!_bArr) {
-      alloc(RP::current());
-    }
-
-    auto hash = (*this)(key);
-    auto*& buck = bucket(hash);
-    auto head = buck;
-    auto size = 0;
-
-    while (head) {
-      if (comp(proj(head->data), key)) {
-        return {&head->data, true};
-      }
-      head = head->next;
-      ++size;
-    }
-
-    head = alloc();
-    head->next = buck;
-    buck = head;
-    ++_eCnt;
-
-    if (size >= RP::load()) {
-      auto const rh = RP::balance(_bCnt, _eCnt, 1);
-      if (rh.type == RP::BalanceType::Required) {
-        rehash(rh.size, hash, head);
-      }
-    }
-
-    return {&head->data, false};
-  }
-
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto get(K const& key) const CDS_ATTR(noexcept(
-      noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>().data), key))
-      && noexcept(rvalue<H>()(key))
-  )) -> Type const* {
-    KC const comp;
-    KP const proj;
-    if (empty()) {
-      return nullptr;
-    }
-
-    auto head = bucket((*this)(key));
-    while (head) {
-      if (comp(proj(head->data), key)) {
-        return &head->data;
-      }
-      head = head->next;
-    }
-
-    return nullptr;
-  }
-
   CDS_ATTR(2(nodiscard, constexpr(14))) auto at(K const& key) CDS_ATTR(noexcept(
       noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>().data), key))
       && noexcept(rvalue<H>()(key))
@@ -242,7 +186,7 @@ public:
           && noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>().data), cds::forward<KF>(key)))
           && noexcept(alloc(0))
           && noexcept(rvalue<H>()(cds::forward<KF>(key)))
-              )) -> T& {
+      )) -> TryEmplaceResult<T> {
     KC const comp;
     KP const proj;
     if (!_bArr) {
@@ -255,7 +199,7 @@ public:
     auto size = 0;
     while (head) {
       if (comp(proj(head->data), cds::forward<KF>(key))) {
-        return head->data;
+        return {false, &head->data};
       }
       head = head->next;
       ++size;
@@ -272,7 +216,7 @@ public:
       }
     }
 
-    return head->data;
+    return {true, &head->data};
   }
 
   CDS_ATTR(constexpr(20)) auto clear() noexcept -> void {
@@ -420,6 +364,27 @@ private:
   Size _eCnt {0u};
   Node** _bArr {nullptr};
 };
+
+template <Size, typename> struct Get {};
+
+template <typename T> struct Get<0, TryEmplaceResult<T>> {
+  using P = TryEmplaceResult<T>;
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(P const& pack) const noexcept -> bool {
+    return pack.inserted;
+  }
+};
+
+template <typename T> struct Get<1, TryEmplaceResult<T>> {
+  using P = TryEmplaceResult<T>;
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(P const& pack) const noexcept -> T* {
+    return pack.elem;
+  }
+};
+
+template <int index, typename T, typename C = Get<index, RemoveCVRef<T>>>
+CDS_ATTR(2(nodiscard, constexpr(11))) auto get(T&& pack) noexcept -> decltype(rvalue<C>()(cds::forward<T>(pack))) {
+  return C()(cds::forward<T>(pack));
+}
 } // namespace impl
 } // namespace cds
 

@@ -40,15 +40,29 @@
 #else // #ifdef CDS_OPTION_DEFAULT_POLY
 #define CDS_ATTR_ns_poly_spec
 #define CDS_ATTR_ns_non_poly_spec inline
-#endif // #ifdef CDS_OPTION_DEFAULT_POLY #else
+#endif// #ifdef CDS_OPTION_DEFAULT_POLY #else
 
 
-#ifdef CDS_OPTION_COMPAT_STD
-#define CDS_ATTR_compat_std true
-#else // #ifdef CDS_OPTION_COMPAT_STD
-#define CDS_ATTR_compat_std false
-#endif // #ifdef CDS_OPTION_COMPAT_STD #else
+#define CDS_ATTR_std_compat_none 0
+#define CDS_ATTR_std_compat_safe 1
+#define CDS_ATTR_std_compat_unsafe 2
 
+
+#ifndef CDS_OPTION_STD_COMPAT_MODE
+#define CDS_ATTR_std_compat_mode CDS_ATTR_std_compat_safe
+#else // #ifdef CDS_OPTION_STD_COMPAT_MODE
+#if !(CDS_OPTION_STD_COMPAT_MODE >= CDS_ATTR(std_compat_none) && CDS_OPTION_STD_COMPAT_MODE <= CDS_ATTR(std_compat_unsafe))
+#error Invalid stdlib compat mode
+#else
+#define CDS_ATTR_std_compat_mode CDS_OPTION_STD_COMPAT_MODE
+#endif
+#endif // #ifdef CDS_OPTION_STD_COMPAT_MODE #else
+
+#if CDS_ATTR(std_compat_mode) == CDS_ATTR(std_compat_none)
+#define CDS_ATTR_std_compat false
+#else
+#define CDS_ATTR_std_compat true
+#endif
 
 #ifdef CDS_OPTION_DISABLE_EXCEPTIONS
 #define CDS_ATTR_exceptions false

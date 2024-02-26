@@ -2,7 +2,7 @@
 // STEPS: compile(linux:gcc;linux:clang),run(linux:gcc;linux:clang)
 // STD: 11-2b
 
-#include "cds/StringView"
+#include <cds/StringView>
 #include <cassert>
 #include <iostream>
 
@@ -22,7 +22,7 @@ public:
   }
 
   template<typename T, meta::EnableIf<meta::IsBoundedArray<meta::RemoveCVRef<T>>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(11))) static Size length(T &&l) {
+  CDS_ATTR(2(nodiscard, constexpr(14))) static Size length(T &&l) {
     ++refCalls;
     return StringUtils::length(cds::forward<T>(l));
   }
@@ -420,6 +420,8 @@ TEST(StringView, split) {
 
   auto alwaysTrue = [](StringView const&) { return true; };
 
+  using namespace cds::impl;
+//  SplitPredicate<char, Nullptr> y = 0;
   ASSERT_EQ(11, count(sv1.split(' '), alwaysTrue));
   ASSERT_EQ(6, count(sv1.split(' '), memFn(&StringView::empty)));
   ASSERT_EQ(5, count(sv1.split(' '), eq("abc")));
@@ -508,6 +510,11 @@ TEST(StringView, split) {
   ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep7,  1), eq("ac")));
   ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep7,  1), eq("ac ac   ac  ")));
 
+  ASSERT_EQ(2, count(StringView{"ac  ac"}.split(std::string{"  "}), alwaysTrue));
+#if CDS_ATTR(cpp17)
+  ASSERT_EQ(2, count(StringView{"ac  ac"}.split(std::string_view{"  "}), alwaysTrue));
+#endif
+
   StringView str1{"abc  abc"};
   ASSERT_EQ(2, count(str1.split("  "), alwaysTrue));
   ASSERT_EQ(2, count(str1.split("  "), eq("abc")));
@@ -518,24 +525,52 @@ TEST(StringView, split) {
   ASSERT_EQ(2, count(str1.split(' ', 1), alwaysTrue));
   ASSERT_EQ(1, count(str1.split(' ', 1), eq("abc")));
   ASSERT_EQ(1, count(str1.split(' ', 1), eq(" abc")));
-}
 
-using namespace cds::impl::ahoCorasick;
-class VA;
-using V = Vertex<char, VA>;
-class VA : public AllocatorSet<
-  Allocator<FwdNode<Link<char const>>>,
-  Allocator<FwdNode<Link<char const>>*>,
-  Allocator<FwdNode<Size>>,
-  Allocator<int>,
-  Allocator<V>
-> {};
+  ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}), alwaysTrue));
+  ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}), eq("abc")));
+  ASSERT_EQ(2, count(StringView{"abc  abc1__abc"}.split(std::vector<StringView>{"  ", "__"}), eq("abc")));
+  ASSERT_EQ(1, count(StringView{"abc  abc1__abc"}.split(std::vector<StringView>{"  ", "__"}), eq("abc1")));
 
-TEST(StringView, aho) {
-  std::vector<StringView> svs = {"abba", "cab", "baba", "caab", "ab", "abac", "bac"};
-  AhoCorasick<char, VA> aho(svs);
+  StringView str2{"abc  abc__abc"};
+  ASSERT_EQ(3, count(str2.split(std::vector<StringView>{"  ", "__"}), alwaysTrue));
+  ASSERT_EQ(3, count(str2.split(std::vector<StringView>{"  ", "__"}), eq("abc")));
 
-  aho.parse(StringView{"abbabba"});
+  std::vector<StringView> sepsStrs{"  ", "__"};
+  ASSERT_EQ(3, count(str2.split(sepsStrs), alwaysTrue));
+  ASSERT_EQ(3, count(str2.split(sepsStrs), eq("abc")));
+
+  ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(sepsStrs), alwaysTrue));
+  ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(sepsStrs), eq("abc")));
+
+  ASSERT_EQ(4, count(StringView{"  abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"  abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}), memFn(&StringView::empty)));
+  ASSERT_EQ(3, count(StringView{"  abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}), eq("abc")));
+
+  ASSERT_EQ(4, count(StringView{"abc  abc__abc__"}.split(std::vector<StringView>{"  ", "__"}), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"abc  abc__abc__"}.split(std::vector<StringView>{"  ", "__"}), memFn(&StringView::empty)));
+  ASSERT_EQ(3, count(StringView{"abc  abc__abc__"}.split(std::vector<StringView>{"  ", "__"}), eq("abc")));
+
+  ASSERT_EQ(4, count(StringView{"abc  abc  __abc"}.split(std::vector<StringView>{"  ", "__"}), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"abc  abc  __abc"}.split(std::vector<StringView>{"  ", "__"}), memFn(&StringView::empty)));
+  ASSERT_EQ(3, count(StringView{"abc  abc  __abc"}.split(std::vector<StringView>{"  ", "__"}), eq("abc")));
+
+  ASSERT_EQ(6, count(StringView{"__abc  abc  __abc  "}.split(std::vector<StringView>{"  ", "__"}), alwaysTrue));
+  ASSERT_EQ(3, count(StringView{"__abc  abc  __abc  "}.split(std::vector<StringView>{"  ", "__"}), memFn(&StringView::empty)));
+  ASSERT_EQ(3, count(StringView{"__abc  abc  __abc  "}.split(std::vector<StringView>{"  ", "__"}), eq("abc")));
+
+  ASSERT_EQ(1, count(StringView{"abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}, 0), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}, 0), eq("abc  abc__abc")));
+
+  ASSERT_EQ(2, count(StringView{"abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}, 1), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}, 1), eq("abc")));
+  ASSERT_EQ(1, count(StringView{"abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}, 1), eq("abc__abc")));
+
+  ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}), alwaysTrue));
+  ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(std::vector<char const*>{"  ", "__"}), alwaysTrue));
+  ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(std::vector<std::string>{"  ", "__"}), alwaysTrue));
+#if CDS_ATTR(cpp17)
+  ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(std::vector<std::string_view>{"  ", "__"}), alwaysTrue));
+#endif
 }
 
 TEST(StringView, ostream) {
@@ -589,5 +624,6 @@ TEST(StringView, SpaceshipCompatLiteral) {
 
 TEST(StringView, cpp20Constexpr) {
   static_assert(*StringView{"ab  ab"}.split("  ").begin() == "ab", "constexpr failed");
+  static_assert(*++StringView{"ab  ab1__ab"}.split(std::vector<StringView>{"  ", "__"}).begin() == "ab1", "constexpr failed");
 }
 #endif

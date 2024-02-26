@@ -32,8 +32,8 @@ public:
       CDS_ATTR(noexcept(noexcept(A(alloc)))) : A(alloc) {}
 
   CDS_ATTR(constexpr(20)) SingleLinkedListBase(SingleLinkedListBase const& list)
-      CDS_ATTR(noexcept(noexcept(copyOnceClean(list)))) {
-    copyOnceClean(list);
+      CDS_ATTR(noexcept(noexcept(copyOnceCleared(list)))) {
+    copyOnceCleared(list);
   }
 
   CDS_ATTR(constexpr(14)) SingleLinkedListBase(SingleLinkedListBase&& list) noexcept :
@@ -157,19 +157,19 @@ protected:
   }
 
   CDS_ATTR(constexpr(20)) auto move(SingleLinkedListBase&& list)
-      CDS_ATTR(noexcept(noexcept(moveOnceCleared(std::move(list))))) -> void {
+      CDS_ATTR(noexcept(noexcept(moveOnceCleared(cds::move(list))))) -> void {
     if (&list == this) {
       return;
     }
 
     clear();
-    moveOnceCleared(std::move(list));
+    moveOnceCleared(cds::move(list));
   }
 
   CDS_ATTR(constexpr(14)) auto moveOnceCleared(SingleLinkedListBase&& list) noexcept -> void {
     _f = cds::exchange(list._f, nullptr);
     _b = cds::exchange(list._b, nullptr);
-    A::operator=(std::move(list));
+    A::operator=(cds::move(list));
   }
 
   CDS_ATTR(constexpr(20)) auto alloc() CDS_ATTR(noexcept(noexcept(rvalue<A>().allocate(1)))) -> Node* {
