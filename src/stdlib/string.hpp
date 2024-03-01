@@ -4,6 +4,7 @@
 
 #ifndef CDS_STDLIB_STRING_HPP
 #define CDS_STDLIB_STRING_HPP
+#pragma once
 
 #include <cds/meta/Compiler>
 #include <cds/meta/StdLib>
@@ -20,6 +21,8 @@ template <typename, typename, typename> class basic_string;
 inline namespace __cxx11 {
 template <typename, typename, typename> class basic_string;
 }
+#elif CDS_ATTR(msvclibcxx)
+template <typename, typename, typename> class basic_string;
 #endif
 } // namespace std
 #endif

@@ -58,8 +58,14 @@ template <typename T> struct IsVolatile<T volatile> : meta::True {};
 
 template <typename T> struct IsConstVolatile : meta::And<IsConst<T>, IsVolatile<T>> {};
 
+#if CDS_ATTR(msvc)
+#pragma warning(disable: 4180)
+#endif
 template <typename T> struct IsFunction :
     meta::And<Not<IsConst<T const>>, Not<IsRef<T>>>::Type {};
+#if CDS_ATTR(msvc)
+#pragma warning(default: 4180)
+#endif
 
 template <typename F, typename T, typename = typename meta::Or<IsVoid<F>, IsFunction<T>, IsArray<T>>::Type>
 class IsConvertible : public IsVoid<T> {};

@@ -23,6 +23,10 @@
 #include "../../stdlib/string.hpp"
 #include "../../stdlib/string_view.hpp"
 
+#if CDS_ATTR(msvc)
+#pragma warning(disable: 4244)
+#endif
+
 namespace cds {
 namespace impl {
 using meta::EnableIf;
@@ -393,10 +397,12 @@ public:
 private:
   CDS_ATTR(constexpr(20)) auto traverse() noexcept(false) -> void {
     auto& alloc = AS::template get<FwdNode<Size>>();
-    class TraversalQueue : public SingleLinkedListBase<Size, Equal<>, RemoveCVRef<decltype(alloc)>> {
+    using QueueAllocator = RemoveCVRef<decltype(alloc)>;
+    class TraversalQueue : public SingleLinkedListBase<Size, Equal<>, QueueAllocator> {
     public:
-      using SingleLinkedListBase<Size, Equal<>, RemoveCVRef<decltype(alloc)>>::SingleLinkedListBase;
-      using SingleLinkedListBase<Size, Equal<>, RemoveCVRef<decltype(alloc)>>::front;
+      using Base = SingleLinkedListBase<Size, Equal<>, QueueAllocator>;
+      using SingleLinkedListBase<Size, Equal<>, QueueAllocator>::SingleLinkedListBase;
+      using Base::front;
     };
 
     TraversalQueue queue{alloc};
@@ -475,5 +481,9 @@ private:
 } // namespace ahoCorasick
 } // namespace impl
 } // namespace cds
+
+#if CDS_ATTR(msvc)
+#pragma warning(default: 4244)
+#endif
 
 #endif // CDS_PRIMITIVE_STRING_PATTERN_HPP

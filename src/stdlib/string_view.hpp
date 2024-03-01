@@ -4,6 +4,7 @@
 
 #ifndef CDS_STDLIB_STRING_VIEW_HPP
 #define CDS_STDLIB_STRING_VIEW_HPP
+#pragma once
 
 #include <cds/meta/Compiler>
 #include <cds/meta/StdLib>
@@ -18,6 +19,8 @@ inline namespace __1 {
 template <typename, typename> class basic_string_view;
 }
 #elif CDS_ATTR(stdlibcxx)
+template <typename, typename> class basic_string_view;
+#elif CDS_ATTR(msvclibcxx)
 template <typename, typename> class basic_string_view;
 #endif
 } // namespace std

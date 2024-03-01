@@ -19,6 +19,10 @@
 
 #include <initializer_list>
 
+#if CDS_ATTR(msvc)
+#pragma warning(disable: 4180)
+#endif
+
 namespace cds {
 template <typename T, typename U = T>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto minOf(T&& lhs, U&& rhs) noexcept -> meta::Common<T, U> {
@@ -1006,5 +1010,9 @@ CDS_ATTR(constexpr(20)) auto destructN(I first, S count) noexcept -> void {
 }
 } // namespace impl
 } // namespace cds
+
+#if CDS_ATTR(msvc)
+#pragma warning(default: 4180)
+#endif
 
 #endif // CDS_META_UTILITY_HPP

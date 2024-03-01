@@ -5,6 +5,7 @@
 #include <cds/StringView>
 #include <cassert>
 #include <iostream>
+#include <array>
 
 #include "UnitTest.hpp"
 
@@ -622,8 +623,21 @@ TEST(StringView, SpaceshipCompatLiteral) {
   ASSERT_EQ("ab" <=> sv1, std::strong_ordering::less);
 }
 
+namespace {
+consteval auto evaluate() {
+  StringView sv{"ab  ab1__ab"};
+  std::array<StringView, 2> svr{"  ", "__"};
+  auto r = sv.split(svr);
+  auto it = r.begin();
+  ++it;
+  auto const b = *it == "ab1";
+  return b;
+}
+}
+
 TEST(StringView, cpp20Constexpr) {
   static_assert(*StringView{"ab  ab"}.split("  ").begin() == "ab", "constexpr failed");
-  static_assert(*++StringView{"ab  ab1__ab"}.split(std::vector<StringView>{"  ", "__"}).begin() == "ab1", "constexpr failed");
+  static_assert(evaluate(), "constexpr failed");
+  // static_assert(*++StringView{"ab  ab1__ab"}.split(std::vector<StringView>{"  ", "__"}).begin() == "ab1", "constexpr failed");
 }
 #endif
