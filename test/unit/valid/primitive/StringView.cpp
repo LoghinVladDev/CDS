@@ -638,6 +638,5 @@ consteval auto evaluate() {
 TEST(StringView, cpp20Constexpr) {
   static_assert(*StringView{"ab  ab"}.split("  ").begin() == "ab", "constexpr failed");
   static_assert(evaluate(), "constexpr failed");
-  // static_assert(*++StringView{"ab  ab1__ab"}.split(std::vector<StringView>{"  ", "__"}).begin() == "ab1", "constexpr failed");
 }
 #endif

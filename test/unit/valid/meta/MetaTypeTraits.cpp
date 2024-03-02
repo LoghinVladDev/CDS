@@ -82,8 +82,8 @@ TEST(MetaTypeTraits, RemoveCVRef) {
   static_assert(IsSame<RemoveCVRef<int const volatile* const volatile>, int const volatile*>::value, "Failed RemoveCVRef");
   static_assert(IsSame<RemoveCVRef<int&>, int>::value, "Failed RemoveCVRef");
   static_assert(IsSame<RemoveCVRef<int&&>, int>::value, "Failed RemoveCVRef");
-  static_assert(IsSame<RemoveCVRef<int const volatile&>, int const volatile>::value, "Failed RemoveCVRef");
-  static_assert(IsSame<RemoveCVRef<int const volatile&&>, int const volatile>::value, "Failed RemoveCVRef");
+  static_assert(IsSame<RemoveCVRef<int const volatile&>, int>::value, "Failed RemoveCVRef");
+  static_assert(IsSame<RemoveCVRef<int const volatile&&>, int>::value, "Failed RemoveCVRef");
   static_assert(IsSame<RemoveCVRef<int[]>, int[]>::value, "Failed RemoveCVRef");
   static_assert(IsSame<RemoveCVRef<int[]>, int[]>::value, "Failed RemoveCVRef");
   static_assert(IsSame<RemoveCVRef<int const volatile[]>, int[]>::value, "Failed RemoveCVRef");

@@ -174,7 +174,7 @@ template <typename Type> using RemoveConst = typename impl::RemoveConst<Type>::T
 template <typename Type> using RemoveVolatile = typename impl::RemoveVolatile<Type>::Type;
 template <typename Type> using RemoveConstVolatile = RemoveConst<RemoveVolatile<Type>>;
 template <typename Type> using RemoveRef = typename impl::RemoveRef<Type>::Type;
-template <typename Type> using RemoveCVRef = RemoveRef<RemoveConstVolatile<Type>>;
+template <typename Type> using RemoveCVRef = RemoveConstVolatile<RemoveRef<Type>>;
 template <typename Type> using RemovePointer
     = typename impl::RemovePointer<Type, RemoveConstVolatile<Type>>::Type;
 

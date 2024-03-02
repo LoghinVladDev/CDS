@@ -690,12 +690,12 @@ private:
   PAttr const _p;
 };
 
-template <typename, typename> struct GenericFindEnabledFor : True {};
+template <typename, typename, typename> struct GenericFindEnabledFor : True {};
 
 template <
     typename I, typename V, typename E, typename T,
     typename R = FindIterableRange<Extend<I>, Extend<V>, E, T>,
-    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>>> = 0
+    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto find(
     I&& iterable, V&& value, CDS_ATTR(unused) E const& equal, CDS_ATTR(unused) T const& transform
 ) CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(iterable), cds::forward<V>(value))))) -> R {
@@ -705,7 +705,7 @@ template <
 template <
     typename I, typename V, typename P, typename E, typename T,
     typename R = FindSelectIterableRange<Extend<I>, Extend<V>, Extend<P>, E, T>,
-    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>>> = 0
+    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto find(
     I&& iterable, V&& value, P&& projector, CDS_ATTR(unused) E const& equal, CDS_ATTR(unused) T const& transform
 ) CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector))))) -> R {
@@ -714,7 +714,7 @@ template <
 
 template <
     typename I, typename V, typename E, typename T,
-    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>>> = 0
+    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
     I&& iterable, V&& value, E const& equal, T const& transform
 ) CDS_ATTR(noexcept(
@@ -743,7 +743,7 @@ template <
 
 template <
     typename I, typename V, typename P, typename E, typename T,
-    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>>> = 0
+    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
     I&& iterable, V&& value, P&& projector, E const& equal, T const& transform
 ) CDS_ATTR(noexcept(
@@ -772,7 +772,7 @@ template <
 
 template <
     typename I, typename V, typename E, typename T,
-    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>>> = 0
+    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
     I&& iterable, V&& value, E const& equal, T const& transform
 ) CDS_ATTR(noexcept(
@@ -802,7 +802,7 @@ template <
 
 template <
     typename I, typename V, typename P, typename E, typename T,
-    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>>> = 0
+    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
     I&& iterable, V&& value, P&& projector, E const& equal, T const& transform
 ) CDS_ATTR(noexcept(

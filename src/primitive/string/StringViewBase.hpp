@@ -11,14 +11,15 @@
 #include <cds/iterator/AddressIterator>
 #include <cds/memory/Allocator>
 
+#include "StringViewBaseDecl.hpp"
+#include "StringSplit.hpp"
+#include "StringFind.hpp"
+
 #include "../../bindings/BindingSelectors.hpp"
 #include "../../bindings/static/ContainsOfStaticBinding.hpp"
 #include "../../bindings/static/FindStaticBinding.hpp"
 #include "../../bindings/static/FindOfStaticBinding.hpp"
 
-#include "StringViewBaseDecl.hpp"
-#include "StringSplit.hpp"
-#include "StringFind.hpp"
 
 #include "../../stdlib/ostream.hpp"
 

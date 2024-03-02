@@ -1,25 +1,26 @@
-// //
-// // Created by loghin on 12/8/23.
-// //
 //
-// #ifndef CDS_PRIMITIVE_STRING_FIND_HPP
-// #define CDS_PRIMITIVE_STRING_FIND_HPP
-// #pragma once
+// Created by loghin on 12/8/23.
 //
-// #include <cds/Utility>
-//
-// #include "StringViewBaseDecl.hpp"
-//
-// namespace cds {
-// namespace impl {
-// using meta::Not;
-// using meta::RemoveCVRef;
-// using meta::False;
-// using meta::True;
-//
-// template <typename C, typename U, typename V>
-// struct GenericFindEnabledFor<BaseStringView<C, U>, V> : Not<IsString<RemoveCVRef<V>>> {};
-//
+
+#ifndef CDS_PRIMITIVE_STRING_FIND_HPP
+#define CDS_PRIMITIVE_STRING_FIND_HPP
+#pragma once
+
+#include <cds/Utility>
+
+#include "StringViewBaseDecl.hpp"
+
+namespace cds {
+namespace impl {
+using meta::Not;
+using meta::RemoveCVRef;
+using meta::False;
+using meta::True;
+using functional::Equal;
+
+template <typename C, typename U, typename V>
+struct GenericFindEnabledFor<BaseStringView<C, U>, V, Equal<>> : Not<IsString<RemoveCVRef<V>>> {};
+
 // template <typename> struct IsBaseStringView : False {};
 // template <typename C, typename U> struct IsBaseStringView<BaseStringView<C, U>> : True {};
 //
@@ -128,7 +129,7 @@
 // ) CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(view), cds::forward<V>(value))))) -> R {
 //   return R(cds::forward<I>(view), cds::forward<V>(value));
 // }
-// } // namespace impl
-// } // namespace cds
-//
-// #endif // CDS_PRIMITIVE_STRING_FIND_HPP
+} // namespace impl
+} // namespace cds
+
+#endif // CDS_PRIMITIVE_STRING_FIND_HPP
