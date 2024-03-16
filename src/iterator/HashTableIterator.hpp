@@ -26,7 +26,7 @@ public:
   CDS_ATTR(constexpr(11)) HashTableIterator(HashTableIterator&&) noexcept = default;
   ~HashTableIterator() noexcept = default;
 
-  CDS_ATTR(constexpr(14)) HashTableIterator(Node** bArr, Size bCnt) noexcept :
+  CDS_ATTR(constexpr(14)) HashTableIterator(Node** const bArr, Size const bCnt) noexcept :
       _bArr{bArr}, _bCnt{bCnt}, _curr{bArr == nullptr ? nullptr : bArr[0]} {
     assert((bArr == nullptr) == (bCnt == 0) && "Constraint not satisfied -> isNull(bArr) == isZero(bCnt)");
     nextBucket();
@@ -35,7 +35,9 @@ public:
   CDS_ATTR(2(implicit, constexpr(11))) HashTableIterator(meta::Nullptr) noexcept :
       _bArr{nullptr}, _bCnt{0}, _curr{nullptr} {}
 
-  CDS_ATTR(constexpr(11)) HashTableIterator(Node** bArr, Size bCnt, Node* curr, Node* prev, Size bIdx) noexcept :
+  CDS_ATTR(constexpr(11)) HashTableIterator(
+      Node** bArr, Size const bCnt, Node* curr, Node* prev, Size const bIdx
+  ) noexcept :
       _bArr{bArr}, _bCnt{bCnt}, _bIdx{bIdx}, _prev{prev}, _curr{curr} {}
 
   CDS_ATTR(constexpr(14)) auto operator=(HashTableIterator const&) noexcept -> HashTableIterator& = default;

@@ -469,7 +469,7 @@ TEST(AddressIterator, string) {
 #ifdef DCR_SINCECPP11
 struct F {
   constexpr F() = default;
-  constexpr bool f() const noexcept { return true; }
+  CDS_ATTR(nodiscard) constexpr bool f() const noexcept { return true; }
 };
 
 TEST(AddressIterator, compileTimeCpp11) {
@@ -510,28 +510,28 @@ constexpr bool validateCpp14CompileTime() {
   int data[3] = {1, 2, 3};
 
   auto b1 = begin(data);
-  bool preIncValid =
+  bool const preIncValid =
       ++b1 != begin(data) &&
       ++b1 != begin(data) &&
       ++b1 != begin(data) &&
       b1 == end(data);
 
   auto b2 = begin(data);
-  bool preDecValid =
+  bool const preDecValid =
       b2++ == begin(data) &&
       b2++ != begin(data) &&
       b2++ != begin(data) &&
       b2 == end(data);
 
   auto e1 = end(data);
-  bool postIncValid =
+  bool const postIncValid =
       --e1 != end(data) &&
       --e1 != end(data) &&
       --e1 != end(data) &&
       e1 == begin(data);
 
   auto e2 = end(data);
-  bool postDecValid =
+  bool const postDecValid =
       e2-- == end(data) &&
       e2-- != end(data) &&
       e2-- != end(data) &&
@@ -548,21 +548,21 @@ TEST(AddressIterator, compileTimeCpp14) {
 #ifdef DCR_SINCECPP20
 TEST(AddressIterator, Spaceship) {
   int data[3] = {1, 2, 3};
-  auto first = begin(data);
+  auto const first = begin(data);
   auto second = first;
   ++ second;
   auto third = second;
   ++ third;
 
-  auto r11 = first <=> first;
-  auto r12 = first <=> second;
-  auto r13 = first <=> third;
-  auto r21 = second <=> first;
-  auto r22 = second <=> second;
-  auto r23 = second <=> third;
-  auto r31 = third <=> first;
-  auto r32 = third <=> second;
-  auto r33 = third <=> third;
+  auto const r11 = first <=> first;
+  auto const r12 = first <=> second;
+  auto const r13 = first <=> third;
+  auto const r21 = second <=> first;
+  auto const r22 = second <=> second;
+  auto const r23 = second <=> third;
+  auto const r31 = third <=> first;
+  auto const r32 = third <=> second;
+  auto const r33 = third <=> third;
 
   ASSERT_EQ(r11, std::strong_ordering::equal);
   ASSERT_EQ(r12, std::strong_ordering::less);
@@ -579,21 +579,21 @@ TEST(AddressIterator, Spaceship) {
 
 TEST(AddressIterator, RSpaceship) {
   int data[3] = {1, 2, 3};
-  auto first = rbegin(data);
+  auto const first = rbegin(data);
   auto second = first;
   ++ second;
   auto third = second;
   ++ third;
 
-  auto r11 = first <=> first;
-  auto r12 = first <=> second;
-  auto r13 = first <=> third;
-  auto r21 = second <=> first;
-  auto r22 = second <=> second;
-  auto r23 = second <=> third;
-  auto r31 = third <=> first;
-  auto r32 = third <=> second;
-  auto r33 = third <=> third;
+  auto const r11 = first <=> first;
+  auto const r12 = first <=> second;
+  auto const r13 = first <=> third;
+  auto const r21 = second <=> first;
+  auto const r22 = second <=> second;
+  auto const r23 = second <=> third;
+  auto const r31 = third <=> first;
+  auto const r32 = third <=> second;
+  auto const r33 = third <=> third;
 
   ASSERT_EQ(r11, std::strong_ordering::equal);
   ASSERT_EQ(r12, std::strong_ordering::less);
@@ -610,9 +610,9 @@ TEST(AddressIterator, RSpaceship) {
 
 TEST(AddressIterator, compileTimeCpp20) {
   constexpr int data[3] = {1, 2, 3};
-  static_assert((begin(data) <=> begin(data)) == std::strong_ordering::equal, "Failed Cpp20 Compile Time Test");
-  static_assert((begin(data) <=> end(data)) == std::strong_ordering::less, "Failed Cpp20 Compile Time Test");
-  static_assert((end(data) <=> begin(data)) == std::strong_ordering::greater, "Failed Cpp20 Compile Time Test");
-  static_assert((end(data) <=> end(data)) == std::strong_ordering::equal, "Failed Cpp20 Compile Time Test");
+  static_assert(begin(data) <=> begin(data) == std::strong_ordering::equal, "Failed Cpp20 Compile Time Test");
+  static_assert(begin(data) <=> end(data) == std::strong_ordering::less, "Failed Cpp20 Compile Time Test");
+  static_assert(end(data) <=> begin(data) == std::strong_ordering::greater, "Failed Cpp20 Compile Time Test");
+  static_assert(end(data) <=> end(data) == std::strong_ordering::equal, "Failed Cpp20 Compile Time Test");
 }
 #endif

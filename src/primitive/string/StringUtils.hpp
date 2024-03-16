@@ -6,6 +6,10 @@
 #define CDS_PRIMITIVE_STRING_UTILS_HPP
 #pragma once
 
+#include <cds/meta/Compiler>
+#include <cds/meta/Base>
+#include <cds/Utility>
+
 namespace cds {
 namespace impl {
 using meta::EnableIf;
@@ -17,7 +21,7 @@ template <typename C, typename T> class StringUtils {
 public:
   using Traits = T;
 
-  enum class Ordering { Less, Equal, Greater };
+  enum class Ordering : U8 { Less, Equal, Greater };
 
   template <typename ST, EnableIf<Not<IsBoundedArray<RemoveCVRef<ST>>>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(14))) static auto length(ST&& l) noexcept -> Size {

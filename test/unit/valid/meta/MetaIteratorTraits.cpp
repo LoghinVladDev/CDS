@@ -202,12 +202,12 @@ TEST(MetaIteratorTraits, IsRandomAccessIterator) {
 TEST(MetaIteratorTraits, HasIterableMemberFns) {
   struct None {};
   struct It { int* begin(); int* end(); };
-  struct CIt { int const* cbegin() const; int const* cend() const; };
+  struct CIt { CDS_ATTR(nodiscard) int const* cbegin() const; CDS_ATTR(nodiscard) int const* cend() const; };
   struct RIt { int* rbegin(); int* rend(); };
-  struct CRIt { int const* crbegin() const; int const* crend() const; };
+  struct CRIt { CDS_ATTR(nodiscard) int const* crbegin() const; CDS_ATTR(nodiscard) int const* crend() const; };
   struct All : It, CIt, RIt, CRIt {};
-  struct ItExtra : It { int const* begin() const; int const* end() const; };
-  struct RItExtra : RIt { int const* rbegin() const; int const* rend() const; };
+  struct ItExtra : It { CDS_ATTR(nodiscard) int const* begin() const; CDS_ATTR(nodiscard) int const* end() const; };
+  struct RItExtra : RIt { CDS_ATTR(nodiscard) int const* rbegin() const; CDS_ATTR(nodiscard) int const* rend() const; };
   struct AllExtra : ItExtra, CIt, RItExtra, CRIt {};
 
   static_assert(!impl::HasIterableMemberFns<None>::value, "Failed HasIterableMemberFns");

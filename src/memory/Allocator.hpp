@@ -6,6 +6,7 @@
 #define CDS_MEMORY_ALLOCATOR_HPP
 #pragma once
 
+#include <cds/meta/Compiler>
 #include <cds/meta/Base>
 
 #include <memory>

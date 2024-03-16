@@ -27,8 +27,6 @@
 #define CDS_ATTR_always_constexpr constexpr
 #define CDS_ATTR_noexcept(...) noexcept(!CDS_ATTR_exceptions || __VA_ARGS__)
 #define CDS_ATTR_friend_noexcept(...) CDS_ATTR_noexcept(__VA_ARGS__)
-// #define CDS_ATTR_try try
-// #define CDS_ATTR_catch(...) catch(__VA_ARGS__)
 
 #define CDS_ATTR_2(a, b) CDS_ATTR_ ## a CDS_ATTR_ ## b
 #define CDS_ATTR_3(a, b, c) CDS_ATTR_ ## a CDS_ATTR_ ## b CDS_ATTR_ ## c
@@ -285,23 +283,23 @@ constexpr Idx idxMax = s32Max;
 namespace compiler {
 struct StdCpp11 {
   constexpr static int version = 11;
-  constexpr static char const* literal = "cpp-11";
+  constexpr static auto const* literal = "cpp-11";
 };
 struct StdCpp14 {
   constexpr static int version = 14;
-  constexpr static char const* literal = "cpp-14";
+  constexpr static auto const* literal = "cpp-14";
 };
 struct StdCpp17 {
   constexpr static int version = 17;
-  constexpr static char const* literal = "cpp-17";
+  constexpr static auto const* literal = "cpp-17";
 };
 struct StdCpp20 {
   constexpr static int version = 20;
-  constexpr static char const* literal = "cpp-20";
+  constexpr static auto const* literal = "cpp-20";
 };
 struct StdCpp23 {
   constexpr static int version = 23;
-  constexpr static char const* literal = "cpp-23";
+  constexpr static auto const* literal = "cpp-23";
 };
 
 #if CDS_ATTR(std) > CDS_ATTR(std20)
@@ -346,8 +344,8 @@ struct CurrentCompiler {
 #define CDS_ATTR_ld_size 80
 
 struct CurrentCompiler {
-  constexpr static char const* name = "LLVM clang";
-  constexpr static char const* id = "clang";
+  constexpr static auto const* name = "LLVM clang";
+  constexpr static auto const* id = "clang";
   constexpr static int version = __clang_major__ * 10000 + __clang_minor__ * 100 + __clang_patchlevel__;
 };
 #endif // #ifdef __clang__ #else
@@ -356,8 +354,8 @@ struct CurrentCompiler {
 #define CDS_ATTR_ld_size 80
 
 struct CurrentCompiler {
-  constexpr static char const* name = "GNU gcc";
-  constexpr static char const* id = "gcc";
+  constexpr static auto const* name = "GNU gcc";
+  constexpr static auto const* id = "gcc";
   constexpr static int version = __GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__;
 };
 #endif // #if defined(__GNUC__) && !defined(__clang__) #else
@@ -365,8 +363,8 @@ struct CurrentCompiler {
 #ifdef __MINGW64__
 
 struct CurrentCompiler {
-  constexpr static char const* name = "MINGW gcc-64";
-  constexpr static char const* id = "mingw-64";
+  constexpr static auto const* name = "MINGW gcc-64";
+  constexpr static auto const* id = "mingw-64";
   constexpr static int version = __MINGW64_VERSION_MAJOR * 10000 + __MINGW64_VERSION_MINOR * 100 + __MINGW64_VERSION_BUGFIX;
 };
 #endif // #ifdef __MINGW64__ #else

@@ -10,7 +10,7 @@ using namespace cds::meta;
 
 namespace {
 bool neverSkip(char) { return false; }
-template <typename F = decltype(&neverSkip)> auto validateCharRange(char s, char e, char const* p, F skip = &neverSkip) -> bool {
+template <typename F = decltype(&neverSkip)> auto validateCharRange(char const s, char const e, char const* p, F skip = &neverSkip) -> bool {
   for (auto i = s; i <= e;) {
     if (skip(i)) {
       ++i;
@@ -27,7 +27,7 @@ template <typename F = decltype(&neverSkip)> auto validateCharRange(char s, char
   return *p == '\0';
 }
 
-template <typename F> auto validateCharRange(char s, char e, F fn) -> bool {
+template <typename F> auto validateCharRange(char const s, char const e, F fn) -> bool {
   for (auto i = s; i <= e; ++i) {
     if (!fn(i)) {
       return false;
@@ -80,13 +80,14 @@ TEST(MetaStringTraits, charUtils) {
 
   using T = StringTraits<char>;
   ASSERT_EQ(std::string(T::emptyString), "");
+  /// cast to force ODR
   ASSERT_EQ(static_cast<char>(T::nullChar), '\0');
 
   ASSERT_TRUE(validateCharRange('0', '9', T::digits));
   ASSERT_TRUE(validateCharRange('a', 'z', T::lowercaseAlphabet));
   ASSERT_TRUE(validateCharRange('A', 'Z', T::uppercaseAlphabet));
   ASSERT_EQ(std::string(T::vowels), "AEIOUaeiou");
-  ASSERT_TRUE(validateCharRange('A', 'z', T::consonants, [](char c) {
+  ASSERT_TRUE(validateCharRange('A', 'z', T::consonants, [](char const c) {
     return !(c >= 'a' && c <= 'z'
         || c >= 'A' && c <= 'Z')
         || (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')

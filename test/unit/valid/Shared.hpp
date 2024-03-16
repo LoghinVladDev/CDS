@@ -8,6 +8,8 @@
 #include <cds/iterator/AddressIterator>
 #include <cds/Utility>
 
+#include "../../../src/iterator/Iterator.hpp"
+
 namespace testing {
 template <typename I1, typename S1, typename I2, typename S2> CDS_ATTR(2(nodiscard, constexpr(14)))
 auto iteq(I1 b1, S1 e1, I2 b2, S2 e2) noexcept -> bool {

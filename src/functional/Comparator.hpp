@@ -2,8 +2,8 @@
 // Created by loghin on 12/22/23.
 //
 
-#ifndef CDS_COMPARATOR_HPP
-#define CDS_COMPARATOR_HPP
+#ifndef CDS_FUNCTIONAL_COMPARATOR_HPP
+#define CDS_FUNCTIONAL_COMPARATOR_HPP
 #pragma once
 
 #include <cds/meta/Semantics>
@@ -25,4 +25,4 @@ CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(L&& lhs, R&& rhs) const no
 } // namespace functional
 } // namespace cds
 
-#endif //CDS_COMPARATOR_HPP
+#endif // CDS_FUNCTIONAL_COMPARATOR_HPP

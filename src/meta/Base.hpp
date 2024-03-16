@@ -6,8 +6,6 @@
 #define CDS_META_BASE_HPP
 #pragma once
 
-#include "Compiler.hpp"
-
 namespace cds {
 namespace meta {
 template <typename...> using Void = void;

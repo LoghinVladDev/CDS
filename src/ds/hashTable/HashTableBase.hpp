@@ -6,10 +6,6 @@
 #define CDS_DS_HASH_TABLE_BASE_HPP
 #pragma once
 
-#include <cds/meta/StdLib>
-#include <cds/meta/Semantics>
-#include <cds/memory/ByteStorage>
-#include <cds/functional/FunctionalInterface>
 #include <cds/iterator/HashTableIterator>
 #include <cds/Utility>
 
@@ -19,7 +15,7 @@
 
 namespace cds {
 namespace impl {
-using meta::RemoveConst;
+using meta::RemoveCVRef;
 
 using meta::rvalue;
 using meta::inConstexpr;
@@ -33,7 +29,6 @@ template <typename T> struct TryEmplaceResult {
 
 template <typename T, typename K, typename H, typename RP, typename KP, typename KC, typename AS>
 class CDS_ATTR(inheritsEBOs) HashTableBase : private H, private RP, private AS {
-private:
   using Node = FwdNode<T>;
 
 public:
@@ -275,7 +270,7 @@ public:
   }
 
 private:
-  CDS_ATTR(constexpr(20)) auto rehash(Size bCnt, Size hashNN, Node const* NN) CDS_ATTR(noexcept(
+  CDS_ATTR(constexpr(20)) auto rehash(Size const bCnt, Size const hashNN, Node const* const NN) CDS_ATTR(noexcept(
     noexcept(alloc(bCnt)) && noexcept(rvalue<H>()(rvalue<KP>()(rvalue<T>())))
   )) -> void {
     KP const proj;
@@ -312,20 +307,20 @@ private:
     }
   }
 
-  CDS_ATTR(constexpr(14)) static auto rehashEmplace(Node*& into, Node* node) noexcept -> void {
+  CDS_ATTR(constexpr(14)) static auto rehashEmplace(Node*& into, Node* const node) noexcept -> void {
     node->next = into;
     into = node;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto bucket(Size hash) noexcept -> Node*& {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto bucket(Size const hash) noexcept -> Node*& {
     return _bArr[hash % _bCnt];
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto bucket(Size hash) const noexcept -> Node const* {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto bucket(Size const hash) const noexcept -> Node const* {
     return _bArr[hash % _bCnt];
   }
 
-  CDS_ATTR(constexpr(20)) auto alloc(Size bCnt)
+  CDS_ATTR(constexpr(20)) auto alloc(Size const bCnt)
       CDS_ATTR(noexcept(noexcept(rvalue<AS>().template get<Node*>().allocate(0)))) -> void {
     assert(bCnt > _bCnt && "Invalid bucket allocation, expected new size to be greater");
     auto& alloc = AS::template get<Node*>();

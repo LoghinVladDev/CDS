@@ -2,12 +2,11 @@
 // STEPS: compile(linux:gcc;linux:clang),run(linux:gcc;linux:clang)
 // STD: 11+
 
-#include <cds/meta/StdLib>
 #include <cds/memory/Allocator>
 #include <cds/Utility>
 #include "UnitTest.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace {
 using cds::Allocator;
@@ -57,8 +56,8 @@ TEST(Allocator, objUninitConsistency) {
 
 TEST(Allocator, allocSet) {
   auto allocSet = AllocatorSet<Allocator<int>, Allocator<float>>();
-  auto pInt = allocSet.template get<int>().allocate(1);
-  auto pFloat = allocSet.template get<float>().allocate(1);
+  auto* pInt = allocSet.template get<int>().allocate(1);
+  auto* pFloat = allocSet.template get<float>().allocate(1);
   ASSERT_NE(static_cast<void*>(pInt), static_cast<void*>(pFloat));
   allocSet.template get<int>().deallocate(pInt, 1);
   allocSet.template get<float>().deallocate(pFloat, 1);
@@ -84,14 +83,14 @@ public:
   }
 
 private:
-  alignas(T) Byte pool[cds::maxOf(size, sizeof(T))];
+  alignas(T) Byte pool[cds::maxOf(size, sizeof(T))]{};
 };
 } // namespace
 
 TEST(Allocator, allocSetMixed) {
   auto allocSet = AllocatorSet<Allocator<int>, StaticPoolAllocator<float, 1024>>();
-  auto pInt = allocSet.template get<int>().allocate(1);
-  auto pFloat = allocSet.template get<float>().allocate(1);
+  auto* pInt = allocSet.template get<int>().allocate(1);
+  auto* pFloat = allocSet.template get<float>().allocate(1);
   ASSERT_NE(static_cast<void*>(pInt), static_cast<void*>(pFloat));
   allocSet.template get<int>().deallocate(pInt, 1);
   allocSet.template get<float>().deallocate(pFloat, 1);
@@ -100,12 +99,12 @@ TEST(Allocator, allocSetMixed) {
 #ifdef DCR_SINCECPP20
 consteval auto dynUser() -> bool {
   auto a = Allocator<int>();
-  auto p = a.allocate(4);
+  auto* p = a.allocate(4);
   a.deallocate(p, 4);
 
   struct S {int x; int y;};
   auto a2 = Allocator<S>();
-  auto p1 = a2.allocate(1);
+  auto* p1 = a2.allocate(1);
   cds::impl::construct(p1, 1, 2);
   bool v = p1->x == 1 && p1->y == 2;
   cds::impl::destruct(p1);

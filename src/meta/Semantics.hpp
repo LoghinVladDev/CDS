@@ -6,7 +6,7 @@
 #define CDS_META_SEMANTICS_HPP
 #pragma once
 
-#include "TypeTraits.hpp"
+#include <cds/meta/TypeTraits>
 
 namespace cds {
 template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto forward(meta::RemoveRef<T>& v) noexcept -> T&& {
@@ -27,6 +27,12 @@ template <typename T, typename U = T> CDS_ATTR(2(nodiscard, constexpr(14))) auto
   obj = cds::forward<U>(newVal);
   return old;
 }
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto asConst(T& obj) noexcept -> meta::AddConst<T>& {
+  return obj;
+}
+
+template <typename T> auto asConst(T&& obj) noexcept -> void = delete;
 } // namespace cds
 
 #endif // CDS_META_SEMANTICS_HPP

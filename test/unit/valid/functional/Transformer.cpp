@@ -11,7 +11,7 @@ using cds::functional::impl::Identity;
 
 class S {
 public:
-  CDS_ATTR(constexpr(11)) S(int x) : _x(x) {}
+  CDS_ATTR(constexpr(11)) S(int const x) : _x(x) {}
   CDS_ATTR(constexpr(11)) bool operator==(S const& obj) const { return _x == obj._x; }
 private:
   int _x;

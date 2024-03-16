@@ -23,18 +23,18 @@ TEST(FunctionalInterface, MapperFunction) {
 }
 
 namespace {
-bool eq(int x, int y) { return x == y; }
+bool eq(int const x, int const y) { return x == y; }
 template <typename T, typename V> bool teq(T x, V y) { return x == y; }
 }
 
 TEST(FunctionalInterface, memFn) {
-  struct X { int f() { return 1; } };
+  struct X { int f() { (void)this; return 1; } };
   ASSERT_EQ(memFn(&X::f)(X()), 1);
 }
 
 TEST(FunctionalInterface, notFn) {
-  auto leq = [](int x, int y) { return x == y; };
-  struct X {int x = 1; bool comp(int y) { return x == y; }};
+  auto leq = [](int const x, int const y) { return x == y; };
+  struct X {int x = 1; bool comp(int const y) { return x == y; }};
 
   ASSERT_TRUE(notFn(eq)(1, 2));
   ASSERT_TRUE(notFn(teq<int, int>)(1, 2));
@@ -51,7 +51,7 @@ TEST(FunctionalInterface, notFn) {
 
 #ifdef DCR_SINCECPP11
 TEST(FunctionalInterface, cpp11Constexpr) {
-  struct X { constexpr int f() { return 1; } constexpr bool isEven(int x) { return x % 2 == 0; } };
+  struct X { constexpr int f() { return 1; } constexpr bool isEven(int const x) { return x % 2 == 0; } };
   static_assert(memFn(&X::f)(X()) == 1, "Failed Compile Time memFn");
 
   static_assert(!memFn(&X::isEven)(X(), 1), "Failed Compile Time memFn");

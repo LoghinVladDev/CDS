@@ -34,7 +34,7 @@ TEST(Comparator, transparent) {
 
 #ifdef DCR_SINCECPP11
 TEST(Comparator, constexpr11) {
-  constexpr Equal<> const eq;
+  constexpr Equal<> eq;
   static_assert(eq(1, 1), "Failed constexpr");
   static_assert(!eq(0, 1), "Failed constexpr");
   static_assert(!eq(1, 0), "Failed constexpr");

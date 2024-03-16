@@ -19,7 +19,6 @@
 #include "../../ds/linkedList/SingleLinkedListBase.hpp"
 #include "../../policy/RehashPolicy.hpp"
 
-#include "../../stdlib/ostream.hpp"
 #include "../../stdlib/string.hpp"
 #include "../../stdlib/string_view.hpp"
 
@@ -31,16 +30,10 @@ namespace cds {
 namespace impl {
 using meta::EnableIf;
 using meta::Not;
-using meta::Decay;
 using meta::All;
-using meta::True;
-using meta::False;
 using meta::IsRef;
-using meta::Nullptr;
 
-using meta::lvalue;
-using meta::rvalue;
-using meta::inConstexpr;
+using meta::value;
 
 template <typename> struct PatternUtils {};
 
@@ -171,32 +164,35 @@ private:
 };
 
 namespace ahoCorasick {
-using meta::Int;
 using meta::Eq;
 using meta::EnableIf;
+using meta::IsSame;
+
 using functional::Hash;
 using functional::Equal;
+
 using impl::TableRehashPolicy;
 using impl::FwdNode;
+
 using cds::Allocator;
 using cds::AllocatorSet;
 
 template <typename T> struct AhoCorasickU8RehashTable {
-  static Size const _fts = 7U;
-  constexpr static T const _ft[_fts] = { 2U, 5U, 13U, 29U, 59U, 127U, 256U };
+  static Size constexpr _fts = 7U;
+  static T constexpr _ft[_fts] = { 2U, 5U, 13U, 29U, 59U, 127U, 256U };
 };
 
 template <typename T> struct AhoCorasickU16RehashTable {
-  static Size const _fts = 14U;
-  constexpr static T const _ft[_fts] = {
+  static Size constexpr _fts = 14U;
+  static T constexpr _ft[_fts] = {
       2U, 5U, 13U, 29U, 59U, 127U, 257U, 521U,
       1049U, 2099U, 4201U, 8419U, 16843U, 32768U
   };
 };
 
 template <typename T> struct AhoCorasickU32RehashTable {
-  static Size const _fts = 31U;
-  constexpr static T const _ft[_fts] = {
+  static Size constexpr _fts = 31U;
+  static T constexpr _ft[_fts] = {
       2U, 5U, 13U, 29U, 59U, 127U, 257U, 521U, 1049U, 2099U,
       4201U, 8419U, 16843U, 33703U, 67409U, 134837U, 269683U,
       539389U, 1078787U, 2157587U, 4315183U, 8630387U,
@@ -206,9 +202,9 @@ template <typename T> struct AhoCorasickU32RehashTable {
 };
 
 // ODR before cpp17
-template <typename T> T const AhoCorasickU8RehashTable<T>::_ft[AhoCorasickU8RehashTable<T>::_fts];
-template <typename T> T const AhoCorasickU16RehashTable<T>::_ft[AhoCorasickU16RehashTable<T>::_fts];
-template <typename T> T const AhoCorasickU32RehashTable<T>::_ft[AhoCorasickU32RehashTable<T>::_fts];
+template <typename T> T const AhoCorasickU8RehashTable<T>::_ft[_fts];
+template <typename T> T const AhoCorasickU16RehashTable<T>::_ft[_fts];
+template <typename T> T const AhoCorasickU32RehashTable<T>::_ft[_fts];
 
 template <typename T, Size = sizeof(T)> struct AhoCorasickRehashTable {};
 template <typename T> struct AhoCorasickRehashTable<T, 1> : AhoCorasickU8RehashTable<U64> {};
@@ -220,21 +216,21 @@ template <typename T> struct Link<T, 1> {
   U64 id: 56;
   T key;
 
-  CDS_ATTR(constexpr(11)) Link(T k, U64 i) noexcept : id(i), key(k) {}
+  CDS_ATTR(constexpr(11)) Link(T k, U64 const i) noexcept : id(i), key(k) {}
 };
 
 template <typename T> struct Link<T, 2> {
   U64 id: 48;
   T key;
 
-  CDS_ATTR(constexpr(11)) Link(T k, U64 i) noexcept : id(i), key(k) {}
+  CDS_ATTR(constexpr(11)) Link(T k, U64 const i) noexcept : id(i), key(k) {}
 };
 
 template <typename T> struct Link<T, 4> {
   U64 id : 32;
   T key;
 
-  CDS_ATTR(constexpr(11)) Link(T k, U64 i) noexcept : id(i), key(k) {}
+  CDS_ATTR(constexpr(11)) Link(T k, U64 const i) noexcept : id(i), key(k) {}
 };
 
 struct LinkKeyProjection {
@@ -255,7 +251,7 @@ struct SplitWordIdLinkLeafId {
   CDS_ATTR(constexpr(11)) SplitWordIdLinkLeafId() noexcept :
       endWordLink(0), lWordId(0), suffixLink(0), hWordId(0), leaf(0) {}
 
-  CDS_ATTR(constexpr(14)) auto setId(U32 id) noexcept -> void {
+  CDS_ATTR(constexpr(14)) auto setId(U32 const id) noexcept -> void {
     lWordId = id & 0xffffU;
     hWordId = id >> 16;
   }
@@ -276,7 +272,7 @@ template <typename T> struct LinkLeafId<T, 4> {
   CDS_ATTR(constexpr(11)) LinkLeafId() noexcept :
       endWordLink(0), suffixLink(0), wordId(0), leaf(0) {}
 
-  CDS_ATTR(constexpr(14)) auto setId(U32 id) noexcept -> void {
+  CDS_ATTR(constexpr(14)) auto setId(U32 const id) noexcept -> void {
     wordId = id;
   }
 
@@ -308,7 +304,7 @@ template <
       parent{parentLink}, children{allocatorSet} {}
 };
 
-enum class PredResultKind : U32 { PRK_feed, PRK_accept };
+enum class PredResultKind : U8 { PRK_feed, PRK_accept };
 struct PredResult {
   PredResultKind kind;
   int reverseLen;
@@ -474,7 +470,10 @@ private:
       auto* nb = AS::template get<V>().allocate(nc);
       moveInitialize(_vertices, _vertices + _cap, nb);
       destruct(_vertices, _vertices + _cap);
-      AS::template get<V>().deallocate(cds::exchange(_vertices, nb), cds::exchange(_cap, nc));
+      AS::template get<V>().deallocate(
+          cds::exchange(_vertices, nb),
+          cds::exchange(_cap, nc)
+      );
     }
 
     construct(_vertices + _size++, link, static_cast<AS const&>(*this));

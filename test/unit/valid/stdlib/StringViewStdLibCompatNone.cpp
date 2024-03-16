@@ -7,12 +7,11 @@
 
 using namespace cds;
 
-namespace {
 using cds::StringView;
 
-void compatTest1() {
-  StringView sv;
-}
+void svNoneCompat1() {
+  StringView const sv;
+  (void) sv;
 }
 
 #include <string>
@@ -21,8 +20,7 @@ void compatTest1() {
 #include <string_view>
 #endif
 
-namespace {
-void compatTest2() {
-  StringView sv2;
-}
+void svNoneCompat2() {
+  StringView const sv2;
+  (void) sv2;
 }

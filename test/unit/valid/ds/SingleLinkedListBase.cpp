@@ -129,12 +129,12 @@ TEST(SingleLinkedListBase, pop) {
 namespace {
 consteval auto cexpr20eval() {
   SLL<int> sll;
-  auto empty = sll.empty();
+  auto const empty = sll.empty();
   sll.emplaceBack(1);
   sll.emplaceBack(2);
   sll.emplaceBack(3);
 
-  auto nempty = !sll.empty();
+  auto const nempty = !sll.empty();
 
   return empty && nempty;
 }

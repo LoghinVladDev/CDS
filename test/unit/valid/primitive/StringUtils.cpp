@@ -2,16 +2,16 @@
 // STEPS: compile(linux:gcc;linux:clang),run(linux:gcc;linux:clang)
 // STD: 11-2b
 
-#include "cds/StringView"
+#include <cds/StringView>
 #include "UnitTest.hpp"
 
 using namespace cds::impl;
-using U = StringUtils<char, cds::meta::StringTraits<char>>;
+using U = StringUtils<char, StringTraits<char>>;
 
 TEST(StringUtils, Length) {
   ASSERT_EQ(U::length(nullptr), 0u);
   ASSERT_EQ(U::length("test"), 4u);
-  char const* ptr = "test";
+  auto const* ptr = "test";
   ASSERT_EQ(U::length(ptr), 4u);
 }
 

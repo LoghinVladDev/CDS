@@ -6,7 +6,7 @@
 #define CDS_PRIMITIVE_STRING_FIND_HPP
 #pragma once
 
-#include <cds/Utility>
+#include "../../algorithm/GenericFind.hpp"
 
 #include "StringViewBaseDecl.hpp"
 #include "StringPattern.hpp"
@@ -23,7 +23,7 @@ using meta::Void;
 using functional::Equal;
 
 namespace detail {
-template <typename T, typename R, typename = void> struct IteratorOfOr {
+template <typename, typename R, typename = void> struct IteratorOfOr {
   using Type = R;
 };
 
@@ -103,7 +103,7 @@ template <typename T, typename V, typename E> struct UsesStringFind : And<
   Or<IsBaseString<T>, IsBaseStringView<T>>
 > {};
 
-template <typename S, typename E, typename A, typename = void> struct Predicate {};
+template <typename, typename, typename, typename = void> struct Predicate {};
 
 template <typename S, typename A> struct Predicate<S, Equal<>, A, EnableIf<IsString<Decay<S>>, void>> {
   using Alloc = Allocator<Size>;
@@ -172,10 +172,11 @@ public:
   }
 
   CDS_ATTR(constexpr(14)) StringFindIterator(StringFindIterator const& it) CDS_ATTR(noexcept(noexcept(I(it._i)))) :
-      StateContainer<P>(it), _i(it._i), _b(it._b), _e(it._e), _p(it._p) {}
+      StateContainer<P>(it), _i(it._i), _b(it._b), _e(it._e), _p(it._p), _m(it._m) {}
 
-  CDS_ATTR(constexpr(11)) StringFindIterator(StringFindIterator&& it)
-      noexcept : StateContainer<P>(cds::move(it)), _i(cds::move(it._i)), _b(it._b), _e(it._e), _p(it._p) {}
+  CDS_ATTR(constexpr(14)) StringFindIterator(StringFindIterator&& it) noexcept :
+      StateContainer<P>(cds::move(it)), _i(cds::move(it._i)), _b(it._b), _e(it._e),
+      _p(it._p), _m(cds::exchange(it._m, 0)) {}
 
 #if CDS_ATTR(sentinel)
   template <typename FR, typename FP, typename FT> CDS_ATTR(constexpr(11))
@@ -303,19 +304,24 @@ template <typename FR, typename FP, typename FT> CDS_ATTR(2(nodiscard, constexpr
   return lhs._i != rhs._i || lhs._p.isEnd(lhs._m);
 }
 
-template <typename I, typename P, typename Proj, typename T> class StringProjectFindIterator : private StateContainer<P> {
+template <typename I, typename P, typename Proj, typename T>
+class StringProjectFindIterator : private StateContainer<P> {
 public:
-  template <typename RI, typename RSI, typename FP> CDS_ATTR(constexpr(14)) StringProjectFindIterator(RI&& b, RSI&& e, P const& p, FP&& projector)
+  template <typename RI, typename RSI, typename FP> CDS_ATTR(constexpr(14))
+  StringProjectFindIterator(RI&& b, RSI&& e, P const& p, FP&& projector)
       CDS_ATTR(noexcept(noexcept(filter()))) :
-      StateContainer<P>(p), _i(cds::forward<RI>(b)), _b(cds::forward<RI>(b)), _e(cds::forward<RSI>(e)), _p(p), _proj(cds::forward<FP>(projector)) {
+      StateContainer<P>(p), _i(cds::forward<RI>(b)), _b(cds::forward<RI>(b)), _e(cds::forward<RSI>(e)),
+      _p(p), _proj(cds::forward<FP>(projector)) {
     filter();
   }
 
-  CDS_ATTR(constexpr(14)) StringProjectFindIterator(StringProjectFindIterator const& it) CDS_ATTR(noexcept(noexcept(I(it._i)))) :
-      StateContainer<P>(it), _i(it._i), _b(it._b), _e(it._e), _p(it._p), _proj(it._proj) {}
+  CDS_ATTR(constexpr(14)) StringProjectFindIterator(StringProjectFindIterator const& it)
+      CDS_ATTR(noexcept(noexcept(I(it._i)))) :
+      StateContainer<P>(it), _i(it._i), _b(it._b), _e(it._e), _p(it._p), _proj(it._proj), _m(it._m) {}
 
-  CDS_ATTR(constexpr(11)) StringProjectFindIterator(StringProjectFindIterator&& it)
-      noexcept : StateContainer<P>(cds::move(it)), _i(cds::move(it._i)), _b(it._b), _e(it._e), _p(it._p), _proj(it._proj) {}
+  CDS_ATTR(constexpr(14)) StringProjectFindIterator(StringProjectFindIterator&& it) noexcept :
+      StateContainer<P>(cds::move(it)), _i(cds::move(it._i)), _b(it._b), _e(it._e), _p(it._p),
+      _proj(it._proj), _m(cds::exchange(it._m, 0)) {}
 
 #if CDS_ATTR(sentinel)
   template <typename FR, typename FP, typename FProj, typename FT> CDS_ATTR(constexpr(11))
@@ -501,7 +507,9 @@ public:
   StringProjectedFindIterableRange(FR&& view, V&& value, FP&& projector, A&& alloc) CDS_ATTR(noexcept(
       noexcept(R(cds::forward<FR>(view))) && noexcept(P(cds::forward<V>(value), cds::forward<A>(alloc)))
       && noexcept(Proj(cds::forward<FP>(projector)))
-  )) : P(cds::forward<V>(value), cds::forward<A>(alloc)), _r(cds::forward<FR>(view)), _p(cds::forward<FP>(projector)) {}
+  )) :
+      P(cds::forward<V>(value), cds::forward<A>(alloc)), _r(cds::forward<FR>(view)),
+      _p(cds::forward<FP>(projector)) {}
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto begin()
       CDS_ATTR(noexcept(noexcept(Iterator(cds::begin(_r), cds::end(_r), value<P>(), _p)))) -> Iterator {
@@ -546,12 +554,20 @@ template <
 }
 
 template <
-    typename I, typename V, typename P, typename E, typename T, typename A = typename stringFind::Predicate<V, E, Nullptr>::Alloc,
-    typename R = StringProjectedFindIterableRange<Extend<I>, typename stringFind::Predicate<V, E, A>::Type, Extend<P>, T>,
+    typename I, typename V, typename P, typename E, typename T,
+    typename A = typename stringFind::Predicate<V, E, Nullptr>::Alloc,
+    typename R = StringProjectedFindIterableRange<
+        Extend<I>,
+        typename stringFind::Predicate<V, E, A>::Type,
+        Extend<P>,
+        T
+    >,
     EnableIf<stringFind::UsesStringFind<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(20))) auto find(
     I&& view, V&& value, P&& projector, CDS_ATTR(unused) E const& equal, CDS_ATTR(unused) T const& transform, A&& alloc
-) CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(view), cds::forward<V>(value), cds::forward<P>(projector), cds::forward<A>(alloc))))) -> R {
+) CDS_ATTR(noexcept(noexcept(
+    R(cds::forward<I>(view), cds::forward<V>(value), cds::forward<P>(projector), cds::forward<A>(alloc))
+))) -> R {
   static_assert(Not<IsSame<E, NotContains<Equal<>>>>::value, "Usage of `findNot*` is ambiguous with multiple strings");
   return R(cds::forward<I>(view), cds::forward<V>(value), cds::forward<P>(projector), cds::forward<A>(alloc));
 }

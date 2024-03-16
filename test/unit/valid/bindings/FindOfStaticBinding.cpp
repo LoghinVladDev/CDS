@@ -8,6 +8,7 @@
 #include <vector>
 #include <algorithm>
 #include <cds/Utility>
+#include <cds/iterator/AddressIterator>
 
 namespace {
 using namespace cds;
@@ -43,7 +44,6 @@ template <> struct IterableTraits<Find_FwdValSelImmMut> { using Value = int; usi
 
 namespace {
 struct TCommonFwdImm : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::cbegin;
@@ -51,7 +51,6 @@ public:
 };
 
 struct TCommonFwdMut : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::begin;
@@ -59,7 +58,6 @@ public:
 };
 
 struct TCommonFwdImmMut : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::begin;
@@ -69,7 +67,6 @@ public:
 };
 
 struct TCommonBwdImm : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::crbegin;
@@ -77,7 +74,6 @@ public:
 };
 
 struct TCommonBwdMut : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::rbegin;
@@ -85,7 +81,6 @@ public:
 };
 
 struct TCommonBwdImmMut : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::rbegin;
@@ -95,7 +90,6 @@ public:
 };
 
 struct TCommonFwdBwdImm : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::crbegin;
@@ -105,7 +99,6 @@ public:
 };
 
 struct TCommonFwdBwdMut : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::rbegin;
@@ -115,7 +108,6 @@ public:
 };
 
 struct TCommonFwdBwdImmMut : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::rbegin;
@@ -131,7 +123,7 @@ public:
 class Find_FwdValImm : public TCommonFwdImm, public FindOfStaticBinding<Find_FwdValImm, With<Value, Immutable>> {
 public:
   using TCommonFwdImm::TCommonFwdImm;
-  bool contains(int a) const { return std::find(cbegin(), cend(), a) != cend(); }
+  CDS_ATTR(nodiscard) bool contains(int const a) const { return std::find(cbegin(), cend(), a) != cend(); }
 };
 
 class Find_FwdValMut : public TCommonFwdMut, public FindOfStaticBinding<Find_FwdValMut, With<Value, Mutable>> {
@@ -143,8 +135,8 @@ public:
 class Find_FwdValImmMut : public TCommonFwdImmMut, public FindOfStaticBinding<Find_FwdValImmMut, With<Value, Mutable, Immutable>> {
 public:
   using TCommonFwdImmMut::TCommonFwdImmMut;
-  bool contains(int a) { return std::find(begin(), end(), a) != end(); }
-  bool contains(int a) const { return std::find(cbegin(), cend(), a) != cend(); }
+  bool contains(int const a) { return std::find(begin(), end(), a) != end(); }
+  CDS_ATTR(nodiscard) bool contains(int const a) const { return std::find(cbegin(), cend(), a) != cend(); }
 };
 
 template <typename I, typename V, typename S>
@@ -179,27 +171,27 @@ public:
 class Find_FwdValSelImm : public TCommonFwdImm, public FindOfStaticBinding<Find_FwdValSelImm, With<Value, Projector, Immutable>> {
 public:
   using TCommonFwdImm::TCommonFwdImm;
-  bool contains(int a) const { return std::find(cbegin(), cend(), a) != cend(); }
+  CDS_ATTR(nodiscard) bool contains(int const a) const { return std::find(cbegin(), cend(), a) != cend(); }
   template <typename S> bool contains(int a, S&& s) const { return lfind(cbegin(), cend(), a, cds::forward<S>(s)) != cend(); }
 };
 
 class Find_FwdValSelMut : public TCommonFwdMut, public FindOfStaticBinding<Find_FwdValSelMut, With<Projector, Value, Mutable>> {
 public:
   using TCommonFwdMut::TCommonFwdMut;
-  bool contains(int a) { return std::find(begin(), end(), a) != end(); }
+  bool contains(int const a) { return std::find(begin(), end(), a) != end(); }
   template <typename S> bool contains(int a, S&& s) { return lfind(begin(), end(), a, cds::forward<S>(s)) != end(); }
 };
 
 class Find_FwdValSelImmMut : public TCommonFwdImmMut, public FindOfStaticBinding<Find_FwdValSelImmMut, With<Projector, Value, Immutable, Mutable>> {
 public:
   using TCommonFwdImmMut::TCommonFwdImmMut;
-  bool contains(int a) { return std::find(begin(), end(), a) != end(); }
-  bool contains(int a) const { return std::find(cbegin(), cend(), a) != cend(); }
+  bool contains(int const a) { return std::find(begin(), end(), a) != end(); }
+  CDS_ATTR(nodiscard) bool contains(int const a) const { return std::find(cbegin(), cend(), a) != cend(); }
   template <typename S> bool contains(int a, S&& s) const { return lfind(cbegin(), cend(), a, cds::forward<S>(s)) != cend(); }
   template <typename S> bool contains(int a, S&& s) { return lfind(begin(), end(), a, cds::forward<S>(s)) != end(); }
 };
 
-int doubled(int v) { return v * 2; }
+int doubled(int const v) { return v * 2; }
 
 template <typename T> void doBasicAllValImmTest() {
   T obj({1, 2, 3, 4});
@@ -648,7 +640,7 @@ template <> struct IterableTraits<B_WithAdapt> {
 }
 
 struct B : public FindOfStaticBinding<B, With<Value, Projector, Immutable, Mutable>> {
-  constexpr bool contains(int x) const { return x == 1 || x == 2; }
+  CDS_ATTR(nodiscard) constexpr bool contains(int const x) const { (void) this; return x == 1 || x == 2; }
   template <typename S> constexpr bool contains(int x, S&& s) {
     return cds::forward<S>(s)(x) == 2 || cds::forward<S>(s)(x) == 2; }
 
@@ -660,11 +652,11 @@ struct B : public FindOfStaticBinding<B, With<Value, Projector, Immutable, Mutab
     return iterator::ForwardAddressIterator<int>{data + 3};
   }
 
-  constexpr iterator::ForwardAddressIterator<int const> cbegin() const {
+  CDS_ATTR(nodiscard) constexpr iterator::ForwardAddressIterator<int const> cbegin() const {
     return iterator::ForwardAddressIterator<int const>{data + 1};
   }
 
-  constexpr iterator::ForwardAddressIterator<int const> cend() const {
+  CDS_ATTR(nodiscard) constexpr iterator::ForwardAddressIterator<int const> cend() const {
     return iterator::ForwardAddressIterator<int const>{data + 3};
   }
 
@@ -676,11 +668,11 @@ struct B : public FindOfStaticBinding<B, With<Value, Projector, Immutable, Mutab
     return iterator::BackwardAddressIterator<int>{data};
   }
 
-  constexpr iterator::BackwardAddressIterator<int const> crbegin() const {
+  CDS_ATTR(nodiscard) constexpr iterator::BackwardAddressIterator<int const> crbegin() const {
     return iterator::BackwardAddressIterator<int const>{data + 2};
   }
 
-  constexpr iterator::BackwardAddressIterator<int const> crend() const {
+  CDS_ATTR(nodiscard) constexpr iterator::BackwardAddressIterator<int const> crend() const {
     return iterator::BackwardAddressIterator<int const>{data};
   }
 
@@ -688,7 +680,7 @@ struct B : public FindOfStaticBinding<B, With<Value, Projector, Immutable, Mutab
 };
 
 struct B_WithAdapt : public FindOfStaticBinding<B_WithAdapt, With<Value, Projector, Immutable, Mutable>, FindResultTransformer<>, FindResultTransformer<>> {
-  constexpr bool contains(int x) const { return x == 1 || x == 2; }
+  CDS_ATTR(nodiscard) constexpr bool contains(int const x) const { (void) this; return x == 1 || x == 2; }
   template <typename S> constexpr bool contains(int x, S&& s) {
     return cds::forward<S>(s)(x) == 2 || cds::forward<S>(s)(x) == 2; }
 
@@ -700,11 +692,11 @@ struct B_WithAdapt : public FindOfStaticBinding<B_WithAdapt, With<Value, Project
     return iterator::ForwardAddressIterator<int>{data + 3};
   }
 
-  constexpr iterator::ForwardAddressIterator<int const> cbegin() const {
+  CDS_ATTR(nodiscard) constexpr iterator::ForwardAddressIterator<int const> cbegin() const {
     return iterator::ForwardAddressIterator<int const>{data + 1};
   }
 
-  constexpr iterator::ForwardAddressIterator<int const> cend() const {
+  CDS_ATTR(nodiscard) constexpr iterator::ForwardAddressIterator<int const> cend() const {
     return iterator::ForwardAddressIterator<int const>{data + 3};
   }
 
@@ -716,36 +708,36 @@ struct B_WithAdapt : public FindOfStaticBinding<B_WithAdapt, With<Value, Project
     return iterator::BackwardAddressIterator<int>{data};
   }
 
-  constexpr iterator::BackwardAddressIterator<int const> crbegin() const {
+  CDS_ATTR(nodiscard) constexpr iterator::BackwardAddressIterator<int const> crbegin() const {
     return iterator::BackwardAddressIterator<int const>{data + 2};
   }
 
-  constexpr iterator::BackwardAddressIterator<int const> crend() const {
+  CDS_ATTR(nodiscard) constexpr iterator::BackwardAddressIterator<int const> crend() const {
     return iterator::BackwardAddressIterator<int const>{data};
   }
 
   int data[4] = {-1, 1, 2, -1}; // padding to allow first and last elem to allow constexpr
 };
 
-constexpr int cdoubled(int x) { return x * 2; }
+constexpr int cdoubled(int const x) { return x * 2; }
 
 constexpr bool evaluateFindOf() {
   B obj;
   auto rng = obj.findOf(obj);
   auto it = rng.begin();
-  auto lIsOne = *it == 1;
+  auto const lIsOne = *it == 1;
   ++it;
-  auto lIsTwo = *it == 2;
+  auto const lIsTwo = *it == 2;
   ++it;
-  auto lIsEnd = it == rng.end();
+  auto const lIsEnd = it == rng.end();
 
   auto rRng = B().findOf(obj);
   auto rIt = rRng.begin();
-  auto rIsOne = *rIt == 1;
+  auto const rIsOne = *rIt == 1;
   ++rIt;
-  auto rIsTwo = *rIt == 2;
+  auto const rIsTwo = *rIt == 2;
   ++rIt;
-  auto rIsEnd = rIt == rRng.end();
+  auto const rIsEnd = rIt == rRng.end();
 
   return lIsOne && lIsTwo && lIsEnd && rIsOne && rIsTwo && rIsEnd;
 }

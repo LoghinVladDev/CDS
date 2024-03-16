@@ -6,11 +6,6 @@
 #define CDS_PRIMITIVE_STRING_VIEW_BASE_HPP
 #pragma once
 
-#include <cds/Utility>
-#include <cds/meta/StdLib>
-#include <cds/iterator/AddressIterator>
-#include <cds/memory/Allocator>
-
 #include "StringViewBaseDecl.hpp"
 #include "StringSplit.hpp"
 #include "StringFind.hpp"
@@ -105,7 +100,7 @@ public:
 
   template <typename AddressLike, EnableIf<Not<IsSame<Decay<AddressLike>, BaseStringView>>> = 0>
   CDS_ATTR(2(implicit, constexpr(11))) BaseStringView(AddressLike&& string) noexcept;
-  CDS_ATTR(constexpr(11)) BaseStringView(Address data, Size length) noexcept : _data(data), _length(length) {}
+  CDS_ATTR(constexpr(11)) BaseStringView(Address data, Size const length) noexcept : _data(data), _length(length) {}
 
   CDS_ATTR(constexpr(14)) auto operator=(BaseStringView const&) noexcept -> BaseStringView& = default;
   CDS_ATTR(constexpr(14)) auto operator=(BaseStringView&&) noexcept -> BaseStringView& = default;

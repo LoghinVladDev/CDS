@@ -1717,11 +1717,14 @@ TEST(MetaObjectTraits, IsAssignable) {
   static_assert(IsAssignable<B, C const&, C&>::value, "Failed IsAssignable");
 }
 
-namespace { void fn(); }
+namespace {void fn() {
+  // nothing to implement
+}}
 TEST(MetaObjectTraits, IsCallableObject) {
   struct A{};
   struct B{bool operator()();};
   auto lbd = [](){};
+  (void) lbd;
 
   static_assert(!IsCallableObject<int>::value, "Failed IsCallableObject");
   static_assert(!IsCallableObject<decltype(fn)>::value, "Failed IsCallableObject");
@@ -1735,6 +1738,7 @@ TEST(MetaObjectTraits, IsCallable) {
   struct A{};
   struct B{bool operator()();};
   auto lbd = [](){};
+  (void) lbd;
 
   static_assert(!IsCallable<int>::value, "Failed IsCallable");
   static_assert(IsCallable<decltype(fn)>::value, "Failed IsCallable");

@@ -7,10 +7,13 @@
 #pragma once
 
 #include <cds/meta/Compiler>
+#include <cds/meta/Base>
 
 namespace cds {
 namespace impl {
-template <typename S, bool hasLoadFactor> class RehashPolicy {
+using meta::True;
+
+template <typename, typename> class RehashPolicy {
 public:
   enum class BalanceType : U8 {
     Stable,
@@ -26,8 +29,8 @@ public:
 
 namespace prp {
 template <typename T> struct U64PrimeRehashTable {
-  static Size const _fts = 35U;
-  constexpr static T const _ft[_fts] = {
+  static Size constexpr _fts = 35U;
+  static T constexpr _ft[_fts] = {
       13ULL, 29ULL, 59ULL, 127ULL, 257ULL, 521ULL, 1049ULL, 2099ULL,
       4201ULL, 8419ULL, 16843ULL, 33703ULL, 67409ULL, 134837ULL,
       269683ULL, 539389ULL, 1078787ULL, 2157587ULL, 4315183ULL,
@@ -39,14 +42,14 @@ template <typename T> struct U64PrimeRehashTable {
 };
 
 // ODR before cpp17
-template <typename T> T const U64PrimeRehashTable<T>::_ft[U64PrimeRehashTable<T>::_fts];
+template <typename T> T const U64PrimeRehashTable<T>::_ft[_fts];
 
-template <typename T = Size> struct PrimeRehashTable {};
+template <typename = Size> struct PrimeRehashTable {};
 template <> struct PrimeRehashTable<U64> : U64PrimeRehashTable<U64> {};
 
-template <typename Table> class TableRehashPolicy : public RehashPolicy<U64, true>, private Table {
+template <typename Table> class TableRehashPolicy : public RehashPolicy<U64, True>, private Table {
 public:
-  CDS_ATTR(2(explicit, constexpr(11))) TableRehashPolicy(U64 lf = 1) noexcept : _lf(lf) {}
+  CDS_ATTR(2(explicit, constexpr(11))) TableRehashPolicy(U64 const lf = 1) noexcept : _lf(lf) {}
   CDS_ATTR(constexpr(11)) TableRehashPolicy(TableRehashPolicy const&) = default;
 
   CDS_ATTR(constexpr(14)) auto reset() noexcept -> void {
@@ -61,7 +64,9 @@ public:
     return _lf;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(17))) auto balance(Size bCnt, Size eCnt, Size rCnt) noexcept -> BalanceResult {
+  CDS_ATTR(2(nodiscard, constexpr(17))) auto balance(
+      Size const bCnt, Size const eCnt, Size const rCnt
+  ) noexcept -> BalanceResult {
     if (_fi + 1 == Table::_fts) {
       return {Table::_ft[_fi], BalanceType::Impossible};
     }
@@ -69,7 +74,7 @@ public:
     auto const req = rCnt + eCnt;
     if (bCnt != 0) {
       auto const adj = bCnt * _lf;
-      auto const mgf = 2u;
+      auto constexpr mgf = 2u;
       if (adj >= req) {
         return {current(), BalanceType::Stable};
       }

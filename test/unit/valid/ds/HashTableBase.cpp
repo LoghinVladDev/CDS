@@ -51,8 +51,8 @@ public:
 }
 
 TEST(HashTableBase, construct) {
-  auto ihs = DefaultHashTable<int, int, Identity<>>();
-  auto ihs2 = DefaultHashTable<int, int, Identity<>>(Hash<>());
+  auto const ihs = DefaultHashTable<int, int, Identity<>>();
+  auto const ihs2 = DefaultHashTable<int, int, Identity<>>(Hash<>());
   (void) ihs;
   (void) ihs2;
 }
@@ -60,7 +60,7 @@ TEST(HashTableBase, construct) {
 TEST(HashTableBase, emplaceAndGet) {
   using cds::impl::get;
   auto ihs = DefaultHashTable<int, int, Identity<>>();
-  auto tes = [](bool status, int expected) {
+  auto tes = [](bool const status, int const expected) {
     return [=](cds::impl::TryEmplaceResult<int> res) {
       return get<0>(res) == status && *get<1>(res) == expected;
     };
@@ -166,8 +166,8 @@ TEST(HashTableBase, copyCtr) {
   ASSERT_TRUE(citeq(ihsCopy, equiv));
   ASSERT_EQ(ihsCopy.bucketCount(), 59);
 
-  auto eihs = DefaultHashTable<int, int, Identity<>>();
-  auto eihsCopy = eihs;
+  auto const eihs = DefaultHashTable<int, int, Identity<>>();
+  auto const eihsCopy = eihs;
   ASSERT_TRUE(eihsCopy.empty());
   ASSERT_TRUE(citeq(ihsCopy, equiv));
   ASSERT_EQ(ihsCopy.bucketCount(), 59);
@@ -193,7 +193,7 @@ TEST(HashTableBase, copy) {
   ASSERT_TRUE(citeq(ihsCopy, equiv));
   ASSERT_EQ(ihsCopy.bucketCount(), 59);
 
-  auto eihs = DefaultHashTable<int, int, Identity<>>();
+  auto const eihs = DefaultHashTable<int, int, Identity<>>();
   auto eihsCopy = DefaultHashTable<int, int, Identity<>>();
   eihsCopy.copy(eihs);
   ASSERT_TRUE(eihsCopy.empty());
@@ -256,12 +256,12 @@ consteval auto evalConstexpr20() {
   ihs1.tryEmplace(2);
   ihs1.tryEmplace(3);
 
-  bool e = ihs1.at(2) != nullptr;
-  bool ev = *ihs1.at(2) == 2;
-  bool ne = ihs1.at(4) == nullptr;
+  bool const e = ihs1.at(2) != nullptr;
+  bool const ev = *ihs1.at(2) == 2;
+  bool const ne = ihs1.at(4) == nullptr;
 
-  std::vector<int> equiv{1, 2, 3};
-  bool iseq = citeq(equiv, ihs1);
+  std::vector<int> const equiv{1, 2, 3};
+  bool const iseq = citeq(equiv, ihs1);
   return iseq && e && ev && ne;
 }
 

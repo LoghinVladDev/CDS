@@ -21,7 +21,7 @@ using meta::Not;
 using meta::And;
 using meta::IsTriviallyConstructible;
 
-template<typename T = void, typename = void> struct Identity {};
+template<typename = void, typename = void> struct Identity {};
 
 template <typename T>
 struct Identity<T, EnableIf<Or<Gt<Int<sizeof(T)>, Int<sizeof(Size)>>, Not<IsTriviallyConstructible<T>>>, void>> {

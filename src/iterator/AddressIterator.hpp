@@ -9,6 +9,8 @@
 #include <cds/meta/IteratorTraits>
 #include <cds/meta/ObjectTraits>
 
+#include <cds/iterator/Iterator>
+
 #if CDS_ATTR(spaceship)
 #include <compare>
 #endif // #if CDS_ATTR(spaceship)
@@ -415,7 +417,6 @@ template <Size size> CDS_ATTR(nodiscard) auto crend(char const (&string)[size]) 
 namespace meta {
 namespace impl {
 using meta::True;
-using meta::False;
 using iterator::ForwardAddressIterator;
 using iterator::BackwardAddressIterator;
 template <typename T> struct IsIterator<ForwardAddressIterator<T>> : True {};

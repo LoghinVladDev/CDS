@@ -6,18 +6,19 @@
 #define CDS_MEMORY_BYTE_STORAGE_HPP
 #pragma once
 
-#include <cds/meta/Semantics>
 #include <cds/meta/StdLib>
 
 namespace cds {
 namespace impl {
+using meta::address;
+
 template <typename T, Size s = sizeof(T)> struct ByteStorage {
   static constexpr auto size = s;
   using Type = T;
 
   template <typename... A> auto construct(A&&... args)
       CDS_ATTR(noexcept(noexcept(impl::construct(meta::address<T>(), cds::forward<A>(args)...))))
-      -> decltype(impl::construct(meta::address<T>(), cds::forward<A>(args)...)) {
+      -> decltype(impl::construct(address<T>(), cds::forward<A>(args)...)) {
     return impl::construct(static_cast<T*>(static_cast<void*>(byteData)), cds::forward<A>(args)...);
   }
 

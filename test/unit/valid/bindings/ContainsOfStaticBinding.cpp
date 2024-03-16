@@ -22,9 +22,9 @@ template <> struct IterableTraits<A_ContainsContainsSelectedMember> { using Valu
 }
 
 struct A_ContainsMember : public impl::ContainsOfStaticBinding<A_ContainsMember, With<Value>> {
-  bool contains(int a) const { return std::find(data.begin(), data.end(), a) != data.end(); }
-  std::vector<int>::const_iterator begin() const { return data.begin(); }
-  std::vector<int>::const_iterator end() const { return data.end(); }
+  CDS_ATTR(nodiscard) bool contains(int a) const { return std::find(data.begin(), data.end(), a) != data.end(); }
+  CDS_ATTR(nodiscard) std::vector<int>::const_iterator begin() const { return data.begin(); }
+  CDS_ATTR(nodiscard) std::vector<int>::const_iterator end() const { return data.end(); }
   std::vector<int> data;
   explicit A_ContainsMember(std::initializer_list<int> const& i) : data(i) {}
 };
@@ -38,15 +38,15 @@ struct A_ContainsSelectedMember : public impl::ContainsOfStaticBinding<A_Contain
     }
     return false;
   }
-  std::vector<int>::const_iterator begin() const { return data.begin(); }
-  std::vector<int>::const_iterator end() const { return data.end(); }
+  CDS_ATTR(nodiscard) std::vector<int>::const_iterator begin() const { return data.begin(); }
+  CDS_ATTR(nodiscard) std::vector<int>::const_iterator end() const { return data.end(); }
   std::vector<int> data;
   explicit A_ContainsSelectedMember(std::initializer_list<int> const& i) : data(i) {}
 };
 
 struct A_ContainsContainsSelectedMember :
     public impl::ContainsOfStaticBinding<A_ContainsContainsSelectedMember, With<Value, Projector>> {
-  bool contains(int a) const { return std::find(data.begin(), data.end(), a) != data.end(); }
+  CDS_ATTR(nodiscard) bool contains(int a) const { return std::find(data.begin(), data.end(), a) != data.end(); }
   template <typename S> bool contains(int a, S&& s) const {
     for (int v : data) {
       if (a == cds::forward<S>(s)(v)) {
@@ -56,8 +56,8 @@ struct A_ContainsContainsSelectedMember :
     return false;
   }
 
-  std::vector<int>::const_iterator begin() const { return data.begin(); }
-  std::vector<int>::const_iterator end() const { return data.end(); }
+  CDS_ATTR(nodiscard) std::vector<int>::const_iterator begin() const { return data.begin(); }
+  CDS_ATTR(nodiscard) std::vector<int>::const_iterator end() const { return data.end(); }
   std::vector<int> data;
   explicit A_ContainsContainsSelectedMember(std::initializer_list<int> const& i) : data(i) {}
 };
@@ -288,9 +288,9 @@ template <> struct IterableTraits<B> { using Value = int; };
 } // namespace cds
 
 struct B : impl::ContainsOfStaticBinding<B, With<Value, Projector>> {
-  constexpr bool contains(int x) const { return x == 1 || x == 2; }
-  constexpr int const* begin() const { return data; }
-  constexpr int const* end() const { return data + 2; }
+  CDS_ATTR(nodiscard) constexpr bool contains(int x) const { return x == 1 || x == 2; }
+  CDS_ATTR(nodiscard) constexpr int const* begin() const { return data; }
+  CDS_ATTR(nodiscard) constexpr int const* end() const { return data + 2; }
   int const data[2] = {1, 2};
 };
 

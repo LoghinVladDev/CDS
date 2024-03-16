@@ -207,7 +207,7 @@ TEST(FunctionTraits, InvokeReturnOf) {
   static_assert(IsSame<InvokeReturnOf<long(int, long), int, long>, long>::value, "Failed InvokeReturnOf");
   static_assert(IsSame<InvokeReturnOf<decltype(f3_n), double>, void>::value, "Failed InvokeReturnOf");
   static_assert(IsSame<InvokeReturnOf<void(int), double>, void>::value, "Failed InvokeReturnOf");
-//meta::impl::InvokeCall<Member<decltype(&X::f2)>>::
+
   static_assert(IsSame<InvokeReturnOf<Member<decltype(&X::f1)>>, void>::value, "Failed InvokeReturnOf");
   static_assert(IsSame<InvokeReturnOf<Member<decltype(&X::f2)>>, void>::value, "Failed InvokeReturnOf");
   static_assert(IsSame<InvokeReturnOf<Member<decltype(&X::f3)>>, void>::value, "Failed InvokeReturnOf");

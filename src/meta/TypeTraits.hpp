@@ -6,7 +6,8 @@
 #define CDS_META_TYPE_TRAITS_HPP
 #pragma once
 
-#include "Base.hpp"
+#include <cds/meta/Compiler>
+#include <cds/meta/Base>
 #include <type_traits>
 
 namespace cds {
@@ -216,25 +217,25 @@ template <typename Type> struct IsConstVolatile : impl::IsConstVolatile<Type>::T
 template <typename From, typename To> struct IsConvertible : impl::IsConvertible<From, To>::Type {};
 
 template <typename> struct TypeInfo {
-  constexpr static char const* name = "unknown";
+  constexpr static auto const* name = "unknown";
 };
 
 template <template <typename...> class> struct TemplateTypeInfo {
-  constexpr static char const* name = "unknown";
+  constexpr static auto const* name = "unknown";
 };
 
-template <> struct TypeInfo<void> { constexpr static char const* name = "void"; };
-template <> struct TypeInfo<bool> { constexpr static char const* name = "bool"; };
-template <> struct TypeInfo<signed char> { constexpr static char const* name = "signed char"; };
-template <> struct TypeInfo<signed short> { constexpr static char const* name = "signed short"; };
-template <> struct TypeInfo<signed int> { constexpr static char const* name = "signed int"; };
-template <> struct TypeInfo<signed long> { constexpr static char const* name = "signed long"; };
-template <> struct TypeInfo<unsigned char> { constexpr static char const* name = "unsigned char"; };
-template <> struct TypeInfo<unsigned short> { constexpr static char const* name = "unsigned short"; };
-template <> struct TypeInfo<unsigned int> { constexpr static char const* name = "unsigned int"; };
-template <> struct TypeInfo<unsigned long> { constexpr static char const* name = "unsigned long"; };
-template <> struct TypeInfo<float> { constexpr static char const* name = "float"; };
-template <> struct TypeInfo<double> { constexpr static char const* name = "double"; };
+template <> struct TypeInfo<void> { constexpr static auto const* name = "void"; };
+template <> struct TypeInfo<bool> { constexpr static auto const* name = "bool"; };
+template <> struct TypeInfo<signed char> { constexpr static auto const* name = "signed char"; };
+template <> struct TypeInfo<signed short> { constexpr static auto const* name = "signed short"; };
+template <> struct TypeInfo<signed int> { constexpr static auto const* name = "signed int"; };
+template <> struct TypeInfo<signed long> { constexpr static auto const* name = "signed long"; };
+template <> struct TypeInfo<unsigned char> { constexpr static auto const* name = "unsigned char"; };
+template <> struct TypeInfo<unsigned short> { constexpr static auto const* name = "unsigned short"; };
+template <> struct TypeInfo<unsigned int> { constexpr static auto const* name = "unsigned int"; };
+template <> struct TypeInfo<unsigned long> { constexpr static auto const* name = "unsigned long"; };
+template <> struct TypeInfo<float> { constexpr static auto const* name = "float"; };
+template <> struct TypeInfo<double> { constexpr static auto const* name = "double"; };
 
 template <typename Type> using Decay = typename impl::Decay<Type>::Type;
 template <typename... Types> using Common = typename impl::Common<Types...>::Type;

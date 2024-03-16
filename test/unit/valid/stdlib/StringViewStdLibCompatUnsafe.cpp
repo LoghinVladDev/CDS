@@ -7,12 +7,11 @@
 
 using namespace cds;
 
-namespace {
 using cds::StringView;
 
-void compatTest1() {
-  StringView sv;
-}
+void svUnsafeCompat1() {
+  StringView const sv;
+  (void) sv;
 }
 
 #include <string>
@@ -21,14 +20,12 @@ void compatTest1() {
 #include <string_view>
 #endif
 
-namespace {
-void compatTest2() {
-  StringView sv2;
+void svUnsafeCompat2() {
+  StringView const sv2;
   (void) sv2.split(std::string{"abc"});
 #if CDS_ATTR(cpp17)
   (void) sv2.split(std::string_view{"abc"});
 #endif
   std::stringstream oss;
   oss << sv2;
-}
 }

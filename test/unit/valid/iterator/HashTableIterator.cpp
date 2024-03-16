@@ -15,7 +15,7 @@ template <typename = void> auto l() noexcept -> Nullptr {
   return nullptr;
 }
 
-template <typename I, typename F, typename... T> auto l(F&& first, T&&... ints) noexcept -> Node<I>* {
+template <typename I, typename F, typename... T> auto l(F&& first, T&&... ints) noexcept(false) -> Node<I>* {
   return new Node<I> {l<I>(std::forward<T>(ints)...), std::forward<F>(first)};
 }
 
@@ -29,7 +29,7 @@ template <typename A, typename F, typename... T> auto pushArr(A&& arr, F&& first
 }
 
 template <typename T> struct MapFixture { Node<T>** buckets; Size count; };
-template <typename I, typename... T> auto b(T&&... nodes) noexcept -> MapFixture<I> {
+template <typename I, typename... T> auto b(T&&... nodes) noexcept(false) -> MapFixture<I> {
   auto arr = new Node<I>*[sizeof...(T)];
   pushArr(arr, std::forward<T>(nodes)...);
   return {arr, sizeof...(T)};
@@ -60,6 +60,7 @@ public:
   }
 
   auto end() -> HashTableIterator<T> {
+    (void)this;
     return {nullptr};
   }
 

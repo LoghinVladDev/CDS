@@ -6,8 +6,6 @@
 #define CDS_FUNCTIONAL_HASH_HPP
 #pragma once
 
-#include <cds/meta/TypeTraits>
-#include <cds/meta/Semantics>
 #include <cds/meta/StdLib>
 
 namespace cds {

@@ -6,20 +6,24 @@
 #define CDS_PRIMITIVE_STRING_SPLIT_HPP
 #pragma once
 
-#include <cds/Utility>
-#include <cds/meta/StdLib>
 #include <cds/meta/StringTraits>
 #include <cds/iterator/AddressIterator>
 #include <cds/memory/Allocator>
 
-#include "StringUtils.hpp"
+#if CDS_ATTR(sentinel)
+#include <cds/iterator/Sentinel>
+#endif // CDS_ATTR(sentinel)
+
 #include "StringPattern.hpp"
+
+#include "../../algorithm/GenericContains.hpp"
 
 #include "../../ds/hashTable/HashTableBase.hpp"
 
 #include "../../stdlib/ostream.hpp"
-#include "../../stdlib/string.hpp"
 #include "../../stdlib/string_view.hpp"
+
+#include "../../meta/Extension.hpp"
 
 namespace cds {
 namespace impl {
@@ -29,12 +33,22 @@ using meta::Decay;
 using meta::All;
 using meta::True;
 using meta::False;
-using meta::IsRef;
 using meta::Nullptr;
+using meta::And;
+using meta::Conditional;
+using meta::IsSame;
 
+using meta::value;
 using meta::lvalue;
 using meta::rvalue;
-using meta::inConstexpr;
+
+using meta::IsIterable;
+
+using functional::Equal;
+
+#if CDS_ATTR(sentinel)
+using iterator::Sentinel;
+#endif
 
 namespace isStringImpl {
 template <typename> struct IsString : False {};

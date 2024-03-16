@@ -4,6 +4,7 @@
 
 #ifndef CDS_ITERATOR_FWD_NODE_ITERATOR_HPP
 #define CDS_ITERATOR_FWD_NODE_ITERATOR_HPP
+#pragma once
 
 #include <cds/meta/IteratorTraits>
 

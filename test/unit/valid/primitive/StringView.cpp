@@ -15,8 +15,7 @@ using namespace cds;
 namespace {
 int ptrCalls = 0;
 int refCalls = 0;
-struct CustomUtils : cds::impl::StringUtils<char, cds::meta::StringTraits<char>> {
-public:
+struct CustomUtils : impl::StringUtils<char, meta::StringTraits<char>> {
   template<typename T, meta::EnableIf<meta::Not<meta::IsBoundedArray<meta::RemoveCVRef<T>>>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(14))) static Size length(T &&l) {
     ++ptrCalls;
@@ -30,35 +29,39 @@ public:
   }
 };
 
-class CustomSV : public cds::impl::BaseStringView<char, CustomUtils> {
-  using cds::impl::BaseStringView<char, CustomUtils>::BaseStringView;
+class CustomSV : public impl::BaseStringView<char, CustomUtils> {
+  using BaseStringView<char, CustomUtils>::BaseStringView;
 };
 }
 
 TEST(StringView, FromLiteralEnsureRefUsage) {
   refCalls = 0;
   ptrCalls = 0;
-  CustomSV sv1("test");
+  CustomSV const sv1("test");
   auto const* buf = "test2";
   char const buf2[] = "test3";
-  CustomSV sv2(buf);
-  CustomSV sv3(buf2);
+  CustomSV const sv2(buf);
+  CustomSV const sv3(buf2);
 
   ASSERT_EQ(refCalls, 2);
   ASSERT_EQ(ptrCalls, 1);
+
+  (void) sv1;
+  (void) sv2;
+  (void) sv3;
 }
 
 TEST(StringView, BaseCopyMove) {
   refCalls = 0;
   ptrCalls = 0;
-  CustomSV sv1;
-  CustomSV sv2;
+  CustomSV const sv1;
+  CustomSV const sv2;
   ASSERT_EQ(sv1, sv2);
 
-  CustomSV sv3("abcd");
-  CustomSV sv4(sv3);
+  CustomSV const sv3("abcd");
+  CustomSV const sv4(sv3);
   CustomSV tbm(sv3);
-  CustomSV sv5(std::move(tbm));
+  CustomSV const sv5(std::move(tbm));
   ASSERT_EQ(sv3, sv4);
   ASSERT_EQ(sv4, sv5);
   ASSERT_EQ(sv5, sv3);
@@ -377,7 +380,7 @@ TEST(StringView, containsOf) {
 }
 
 TEST(StringView, find) {
-  StringView sv = "abcb";
+  StringView const sv = "abcb";
 
   auto lRng = sv.find('b');
   auto lIt = lRng.begin();
@@ -423,7 +426,6 @@ TEST(StringView, split) {
   auto alwaysTrue = [](StringView const&) { return true; };
 
   using namespace cds::impl;
-//  SplitPredicate<char, Nullptr> y = 0;
   ASSERT_EQ(11, count(sv1.split(' '), alwaysTrue));
   ASSERT_EQ(6, count(sv1.split(' '), memFn(&StringView::empty)));
   ASSERT_EQ(5, count(sv1.split(' '), eq("abc")));
@@ -480,7 +482,7 @@ TEST(StringView, split) {
   ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep3,  1), eq("ac")));
   ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep3,  1), eq("ac ac   ac  ")));
 
-  char const* sep4 = "  ";
+  auto const* sep4 = "  ";
   ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split(sep4,  1), alwaysTrue));
   ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep4,  1), eq("ac")));
   ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep4,  1), eq("ac ac   ac  ")));

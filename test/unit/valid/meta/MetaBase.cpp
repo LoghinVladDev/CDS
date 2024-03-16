@@ -2,8 +2,10 @@
 // STEPS: compile(linux:gcc;linux:clang),run(linux:clang)
 // STD: 11
 
-#include "cds/meta/Base"
+#include <cds/meta/Base>
 #include "UnitTest.hpp"
+
+#include <cds/meta/Compiler>
 
 using namespace cds;
 using namespace cds::meta;

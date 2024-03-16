@@ -1,6 +1,9 @@
 set(
     CDS_UNIT_TEST_SOURCES
 
+    valid/algorithm/GenericContains.cpp
+    valid/algorithm/GenericFind.cpp
+
     valid/bindings/ContainsOfStaticBinding.cpp
     valid/bindings/FindStaticBinding.cpp
     valid/bindings/FindOfStaticBinding.cpp
@@ -8,6 +11,7 @@ set(
     valid/ds/SingleLinkedListBase.cpp
     valid/ds/HashTableBase.cpp
 
+    valid/iterator/Iterator.cpp
     valid/iterator/AddressIterator.cpp
     valid/iterator/FwdNodeIterator.cpp
     valid/iterator/HashTableIterator.cpp
@@ -17,13 +21,14 @@ set(
     valid/functional/Hash.cpp
     valid/functional/Transformer.cpp
 
-    valid/meta/MetaStdLib.cpp
     valid/meta/MetaBase.cpp
     valid/meta/MetaCompilerLinuxClang.test.cpp
     valid/meta/MetaCompilerLinuxGcc.test.cpp
     valid/meta/MetaFunctionTraits.cpp
     valid/meta/MetaIteratorTraits.cpp
     valid/meta/MetaObjectTraits.cpp
+    valid/meta/MetaSemantics.cpp
+    valid/meta/MetaStdLib.cpp
     valid/meta/MetaStringTraits.cpp
     valid/meta/MetaTypeTraits.cpp
     valid/meta/Utility.cpp

@@ -7,6 +7,7 @@
 #include <vector>
 #include <algorithm>
 #include <cds/Utility>
+#include <cds/iterator/AddressIterator>
 
 namespace {
 using namespace cds;
@@ -42,7 +43,6 @@ template <> struct IterableTraits<Find_ValSelImmMut> { using Value = int; using 
 
 namespace {
 struct TCommonFwdImm : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::cbegin;
@@ -50,7 +50,6 @@ public:
 };
 
 struct TCommonFwdMut : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::begin;
@@ -58,7 +57,6 @@ public:
 };
 
 struct TCommonFwdImmMut : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::begin;
@@ -68,7 +66,6 @@ public:
 };
 
 struct TCommonBwdImm : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::crbegin;
@@ -76,7 +73,6 @@ public:
 };
 
 struct TCommonBwdMut : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::rbegin;
@@ -84,7 +80,6 @@ public:
 };
 
 struct TCommonBwdImmMut : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::rbegin;
@@ -94,7 +89,6 @@ public:
 };
 
 struct TCommonFwdBwdImm : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::crbegin;
@@ -104,7 +98,6 @@ public:
 };
 
 struct TCommonFwdBwdMut : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::rbegin;
@@ -114,7 +107,6 @@ public:
 };
 
 struct TCommonFwdBwdImmMut : private std::vector<int> {
-public:
   using std::vector<int>::operator[];
   using std::vector<int>::vector;
   using std::vector<int>::rbegin;
@@ -172,7 +164,7 @@ public:
   using TCommonFwdImmMut::TCommonFwdImmMut;
 };
 
-int doubled(int v) { return v * 2; }
+int doubled(int const v) { return v * 2; }
 
 template <typename T> void doBasicFwdValImmTest() {
   T obj({1, 2, 3, 2});
@@ -451,11 +443,11 @@ struct B : public FindStaticBinding<B, With<Value, Projector, Immutable, Mutable
     return iterator::ForwardAddressIterator<int>{data + 3};
   }
 
-  constexpr iterator::ForwardAddressIterator<int const> cbegin() const {
+  CDS_ATTR(nodiscard) constexpr iterator::ForwardAddressIterator<int const> cbegin() const {
     return iterator::ForwardAddressIterator<int const>{data + 1};
   }
 
-  constexpr iterator::ForwardAddressIterator<int const> cend() const {
+  CDS_ATTR(nodiscard) constexpr iterator::ForwardAddressIterator<int const> cend() const {
     return iterator::ForwardAddressIterator<int const>{data + 3};
   }
 
@@ -467,11 +459,11 @@ struct B : public FindStaticBinding<B, With<Value, Projector, Immutable, Mutable
     return iterator::BackwardAddressIterator<int>{data};
   }
 
-  constexpr iterator::BackwardAddressIterator<int const> crbegin() const {
+  CDS_ATTR(nodiscard) constexpr iterator::BackwardAddressIterator<int const> crbegin() const {
     return iterator::BackwardAddressIterator<int const>{data + 2};
   }
 
-  constexpr iterator::BackwardAddressIterator<int const> crend() const {
+  CDS_ATTR(nodiscard) constexpr iterator::BackwardAddressIterator<int const> crend() const {
     return iterator::BackwardAddressIterator<int const>{data};
   }
 
@@ -487,11 +479,11 @@ struct B_WithAdapt : public FindStaticBinding<B_WithAdapt, With<Value, Projector
     return iterator::ForwardAddressIterator<int>{data + 3};
   }
 
-  constexpr iterator::ForwardAddressIterator<int const> cbegin() const {
+  CDS_ATTR(nodiscard) constexpr iterator::ForwardAddressIterator<int const> cbegin() const {
     return iterator::ForwardAddressIterator<int const>{data + 1};
   }
 
-  constexpr iterator::ForwardAddressIterator<int const> cend() const {
+  CDS_ATTR(nodiscard) constexpr iterator::ForwardAddressIterator<int const> cend() const {
     return iterator::ForwardAddressIterator<int const>{data + 3};
   }
 
@@ -503,34 +495,34 @@ struct B_WithAdapt : public FindStaticBinding<B_WithAdapt, With<Value, Projector
     return iterator::BackwardAddressIterator<int>{data};
   }
 
-  constexpr iterator::BackwardAddressIterator<int const> crbegin() const {
+  CDS_ATTR(nodiscard) constexpr iterator::BackwardAddressIterator<int const> crbegin() const {
     return iterator::BackwardAddressIterator<int const>{data + 2};
   }
 
-  constexpr iterator::BackwardAddressIterator<int const> crend() const {
+  CDS_ATTR(nodiscard) constexpr iterator::BackwardAddressIterator<int const> crend() const {
     return iterator::BackwardAddressIterator<int const>{data};
   }
 
   int data[4] = {-1, 1, 2, -1}; // padding to allow first and last elem to allow constexpr
 };
 
-constexpr int cdoubled(int x) { return x * 2; }
+constexpr int cdoubled(int const x) { return x * 2; }
 
 constexpr bool evaluateFind() {
   B obj;
   auto rng = obj.find(1);
   auto it = rng.begin();
 
-  bool lIsOne = *it == 1;
+  bool const lIsOne = *it == 1;
   ++it;
-  bool isEnd = it == rng.end();
+  bool const isEnd = it == rng.end();
 
   auto rRng = B().find(1);
   auto rIt = rRng.begin();
 
-  bool rIsOne = *rIt == 1;
+  bool const rIsOne = *rIt == 1;
   ++rIt;
-  bool rIsEnd = rIt == rRng.end();
+  bool const rIsEnd = rIt == rRng.end();
 
   return lIsOne && isEnd && rIsOne && rIsEnd;
 }

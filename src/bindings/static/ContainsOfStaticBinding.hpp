@@ -12,6 +12,9 @@
 #include <cds/functional/FunctionalInterface>
 #include <initializer_list>
 
+#include "../../algorithm/GenericContains.hpp"
+#include "../../iterator/Iterator.hpp"
+
 namespace cds {
 namespace impl {
 using std::initializer_list;

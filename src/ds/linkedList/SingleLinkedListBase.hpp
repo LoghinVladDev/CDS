@@ -18,7 +18,6 @@ using meta::rvalue;
 using iterator::FwdNodeIterator;
 
 template <typename T, typename C, typename A> class CDS_ATTR(inheritsEBOs) SingleLinkedListBase : private A {
-private:
   using Node = FwdNode<T>;
 
 public:

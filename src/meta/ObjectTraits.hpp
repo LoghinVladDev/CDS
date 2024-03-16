@@ -6,7 +6,7 @@
 #define CDS_META_OBJECT_TRAITS_HPP
 #pragma once
 
-#include "TypeTraits.hpp"
+#include <cds/meta/TypeTraits>
 
 namespace cds {
 namespace meta {

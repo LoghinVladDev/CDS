@@ -11,21 +11,24 @@
 namespace cds {
 namespace meta {
 namespace impl {
-template <typename, template <typename...> class, typename = void> struct IteratorIsPrefixIncrementable :
-    meta::False {};
+using meta::Void;
+using meta::False;
+using meta::lvalue;
+
+template <typename, template <typename...> class, typename = void> struct IteratorIsPrefixIncrementable : False {};
 
 template <typename I, template <typename...> class P>
-struct IteratorIsPrefixIncrementable<I, P, Void<decltype(++meta::lvalue<I>())>> : P<decltype(++meta::lvalue<I>())> {};
+struct IteratorIsPrefixIncrementable<I, P, Void<decltype(++lvalue<I>())>> : P<decltype(++lvalue<I>())> {};
 
-template <typename, template <typename...> class, typename = void> struct IteratorIsIndirectable : meta::False {};
+template <typename, template <typename...> class, typename = void> struct IteratorIsIndirectable : False {};
 
 template <typename I, template <typename...> class P>
-struct IteratorIsIndirectable<I, P, Void<decltype(*meta::rvalue<I>())>> : P<decltype(*meta::rvalue<I>())> {};
+struct IteratorIsIndirectable<I, P, Void<decltype(*meta::rvalue<I>())>> : P<decltype(*rvalue<I>())> {};
 
-template <typename, typename = void> struct HasIterableMemberFns : meta::False {};
-template <typename, typename = void> struct HasConstIterableMemberFns : meta::False {};
-template <typename, typename = void> struct HasReverseIterableMemberFns : meta::False {};
-template <typename, typename = void> struct HasConstReverseIterableMemberFns : meta::False {};
+template <typename, typename = void> struct HasIterableMemberFns : False {};
+template <typename, typename = void> struct HasConstIterableMemberFns : False {};
+template <typename, typename = void> struct HasReverseIterableMemberFns : False {};
+template <typename, typename = void> struct HasConstReverseIterableMemberFns : False {};
 
 template <typename T>
 struct HasIterableMemberFns<T, Void<decltype(meta::rvalue<T>().begin()), decltype(meta::rvalue<T>().end())>> :

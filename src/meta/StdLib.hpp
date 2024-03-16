@@ -7,11 +7,11 @@
 #pragma once
 
 #include <cds/meta/Compiler>
-#include <cds/meta/ObjectTraits>
-#include <type_traits>
+#include <cds/meta/Semantics>
 
 #ifdef __GLIBCXX__
 #define CDS_ATTR_stdlibcxx true
+#include <cds/meta/ObjectTraits>
 #if CDS_ATTR(cpp20)
 #include <memory>
 #include <bit>
@@ -29,7 +29,6 @@
 #include <memory>
 #include <bit>
 #else // #if CDS_ATTR(cpp20)
-#include <cds/meta/Semantics>
 #include <cstring>
 #endif // #if CDS_ATTR(cpp20) #else
 #else // #ifdef _LIBCPP_STD_VER
@@ -59,9 +58,9 @@ CDS_ATTR(2(nodiscard, constexpr(11))) auto inConstexpr() noexcept -> bool {
 namespace impl {
 #if CDS_ATTR(cpp20)
 template <typename T, typename... A> CDS_ATTR(constexpr(20)) auto construct(T* location, A&&... args)
-    CDS_ATTR(noexcept(noexcept(std::construct_at(location, std::forward<A>(args)...))))
-    -> decltype(std::construct_at(location, std::forward<A>(args)...)) {
-  return std::construct_at(location, std::forward<A>(args)...);
+    CDS_ATTR(noexcept(noexcept(std::construct_at(location, cds::forward<A>(args)...))))
+    -> decltype(std::construct_at(location, cds::forward<A>(args)...)) {
+  return std::construct_at(location, cds::forward<A>(args)...);
 }
 
 template <typename T> CDS_ATTR(constexpr(20))
@@ -115,9 +114,9 @@ CDS_ATTR(2(nodiscard, constexpr(11))) auto inConstexpr() noexcept -> bool {
 namespace impl {
 #if CDS_ATTR(cpp20)
 template <typename T, typename... A> CDS_ATTR(constexpr(20)) auto construct(T* location, A&&... args)
-    CDS_ATTR(noexcept(noexcept(std::construct_at(location, std::forward<A>(args)...))))
-    -> decltype(std::construct_at(location, std::forward<A>(args)...)) {
-  return std::construct_at(location, std::forward<A>(args)...);
+    CDS_ATTR(noexcept(noexcept(std::construct_at(location, cds::forward<A>(args)...))))
+    -> decltype(std::construct_at(location, cds::forward<A>(args)...)) {
+  return std::construct_at(location, cds::forward<A>(args)...);
 }
 
 template <typename T> CDS_ATTR(constexpr(20))
@@ -171,9 +170,9 @@ CDS_ATTR(2(nodiscard, constexpr(11))) auto inConstexpr() noexcept -> bool {
 namespace impl {
 #if CDS_ATTR(cpp20)
 template <typename T, typename... A> CDS_ATTR(constexpr(20)) auto construct(T* location, A&&... args)
-    CDS_ATTR(noexcept(noexcept(std::construct_at(location, std::forward<A>(args)...))))
-    -> decltype(std::construct_at(location, std::forward<A>(args)...)) {
-  return std::construct_at(location, std::forward<A>(args)...);
+    CDS_ATTR(noexcept(noexcept(std::construct_at(location, cds::forward<A>(args)...))))
+    -> decltype(std::construct_at(location, cds::forward<A>(args)...)) {
+  return std::construct_at(location, cds::forward<A>(args)...);
 }
 
 template <typename T> CDS_ATTR(constexpr(20))

@@ -5,6 +5,8 @@
 #include "cds/meta/TypeTraits"
 #include "UnitTest.hpp"
 
+#include <cstdint>
+
 using namespace cds;
 using namespace cds::meta;
 
@@ -156,8 +158,8 @@ TEST(MetaTypeTraits, IsVoid) {
 }
 
 TEST(MetaTypeTraits, IsEnum) {
-  enum A{Ab};
-  enum class B{a};
+  enum A : std::uint8_t {Ab};
+  enum class B : std::uint8_t {a};
   static_assert(Eq<IsEnum<int>, False>::value, "Failed IsEnum");
   static_assert(!IsEnum<void>::value, "Failed IsEnum");
   static_assert(IsEnum<A>::value, "Failed IsEnum");
@@ -193,6 +195,7 @@ TEST(MetaTypeTraits, IsFunction) {
   class C{};
   struct D{void operator()();};
   auto lbd = [](){};
+  (void) lbd;
 
   static_assert(Eq<False, IsFunction<int>>::value, "Failed IsFunction");
   static_assert(!IsFunction<void>::value, "Failed IsFunction");
@@ -468,7 +471,7 @@ TEST(MetaTypeTraits, BindCompat) {
   static_assert(!All<Bind<IsVoid, Ph<0>>::Type, void, int>::value, "Failed Bind IsVoid");
   static_assert(!All<Bind<IsVoid, Ph<0>>::Type, int, void>::value, "Failed Bind IsVoid");
 
-  enum A{aa}; enum class B{ab};
+  enum A : std::uint8_t {aa}; enum class B : std::uint8_t {ab};
   static_assert(All<Bind<IsEnum, Ph<0>>::Type, A, B>::value, "Failed Bind IsEnum");
   static_assert(!All<Bind<IsEnum, Ph<0>>::Type, A, int>::value, "Failed Bind IsEnum");
   static_assert(!All<Bind<IsEnum, Ph<0>>::Type, int, A>::value, "Failed Bind IsEnum");
@@ -574,11 +577,11 @@ template <typename> struct TSpecialized{};
 namespace cds {
 namespace meta {
 template <> struct TypeInfo<Specialized> {
-  constexpr static char const* name = "Specialized";
+  constexpr static auto const* name = "Specialized";
 };
 
 template <> struct TemplateTypeInfo<TSpecialized> {
-  constexpr static char const* name = "TSpecialized";
+  constexpr static auto const* name = "TSpecialized";
 };
 } // namespace meta
 } // namespace cds

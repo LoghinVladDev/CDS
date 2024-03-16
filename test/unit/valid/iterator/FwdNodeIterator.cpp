@@ -68,6 +68,6 @@ TEST(FwdNodeIterator, parse) {
 
 TEST(FwdNodeIterator, addr) {
   FwdNode<std::string> strNode{nullptr, "abcd"};
-  FwdNodeIterator<std::string> strNodeIt{&strNode};
+  FwdNodeIterator<std::string> const strNodeIt{&strNode};
   ASSERT_EQ(strNodeIt->length(), 4);
 }

@@ -6,8 +6,8 @@
 #define CDS_PRIMITIVE_STRING_VIEW_BASE_DECL_HPP
 #pragma once
 
-#include <cds/meta/IteratorTraits>
 #include <cds/meta/StringTraits>
+#include <cds/iterator/AddressIterator>
 #include <cds/memory/Allocator>
 
 #include "StringUtils.hpp"
