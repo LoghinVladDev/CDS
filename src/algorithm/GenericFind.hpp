@@ -13,6 +13,10 @@
 #include <cds/iterator/Sentinel>
 #endif // CDS_ATTR(sentinel)
 
+#if CDS_ATTR(msvc)
+#pragma warning(disable: 4180)
+#endif
+
 namespace cds {
 namespace iterator {
 namespace impl {
@@ -751,5 +755,9 @@ template <
 }
 } // namespace impl
 } // namespace cds
+
+#if CDS_ATTR(msvc)
+#pragma warning(default: 4180)
+#endif
 
 #endif // CDS_ALGORITHM_GENERIC_FIND_HPP
