@@ -100,12 +100,6 @@ struct ByString {};
 struct ByStringSet {};
 } // namespace splitKind
 
-namespace matchKind {
-struct ByCharacter {};
-struct ByErrorIndex {};
-struct ByState {};
-}
-
 template <typename, typename = void> struct SplitTraits {};
 template <typename T> struct SplitTraits<T, EnableIf<typename StringTraits<T>::IsSeparator, void>> {
   using SplitType = splitKind::ByCharacter;
@@ -184,15 +178,6 @@ public:
   SplitPredicate(FS&& separator, FAS&& allocatorSet) CDS_ATTR(noexcept(noexcept(
       AhoCorasick(cds::forward<FS>(separator), 16, cds::forward<FAS>(allocatorSet))
   ))) : AhoCorasick(cds::forward<FS>(separator), 16, cds::forward<FAS>(allocatorSet)) {}
-};
-
-template <typename P, typename = typename P::MatchKind> struct StateContainer {
-  CDS_ATTR(2(explicit, constexpr(11))) StateContainer(CDS_ATTR(unused) P const&) noexcept {}
-};
-
-template <typename P> struct StateContainer<P, matchKind::ByState> {
-  CDS_ATTR(2(explicit, constexpr(11))) StateContainer(P const& sm) noexcept : state(sm.initState()) {}
-  Size state;
 };
 
 template <typename R, typename P> class SplitIterator : private StateContainer<P> {
@@ -366,7 +351,7 @@ auto operator!=(SplitIterator<FR, FP> const& lhs, SplitIterator<FR, FP> const& r
   return lhs._e != rhs._e;
 }
 
-template <typename R, typename P> class SplitRange {
+template <typename R, typename P> class SplitRange : private P {
 public:
   using Iterable = R;
   using Predicate = P;
@@ -375,16 +360,16 @@ public:
   template <typename FR, typename S, typename A, typename DA = typename P::Allocates, EnableIf<DA> = 0>
   CDS_ATTR(constexpr(20)) SplitRange(FR&& view, S&& separator, Size limit, A&& alloc) CDS_ATTR(noexcept(
         noexcept(R(cds::forward<FR>(view))) && noexcept(P(cds::forward<S>(separator), cds::forward<A>(alloc)))
-  )) : _r(cds::forward<FR>(view)), _p(cds::forward<S>(separator), cds::forward<A>(alloc)), _l(limit) {}
+  )) : P(cds::forward<S>(separator), cds::forward<A>(alloc)), _r(cds::forward<FR>(view)), _l(limit) {}
 
   template <typename FR, typename S, typename A, typename DA = typename P::Allocates, EnableIf<Not<DA>> = 0>
   CDS_ATTR(constexpr(11)) SplitRange(FR&& view, S&& separator, Size limit, A&& alloc) CDS_ATTR(noexcept(
         noexcept(R(cds::forward<FR>(view))) && noexcept(P(cds::forward<S>(separator), cds::forward<A>(alloc)))
-  )) : _r(cds::forward<FR>(view)), _p(cds::forward<S>(separator), cds::forward<A>(alloc)), _l(limit) {}
+  )) : P(cds::forward<S>(separator), cds::forward<A>(alloc)), _r(cds::forward<FR>(view)), _l(limit) {}
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto begin() const
       CDS_ATTR(noexcept(noexcept(Iterator(nullptr, value<P>(), 0)))) -> Iterator {
-    return Iterator(&_r, _p, _l);
+    return Iterator(&_r, static_cast<P const&>(*this), _l);
   }
 
 #if CDS_ATTR(sentinel)
@@ -394,13 +379,12 @@ public:
 #else // #if CDS_ATTR(sentinel)
   CDS_ATTR(2(nodiscard, constexpr(14))) auto end() const
       CDS_ATTR(noexcept(noexcept(Iterator(nullptr, value<P>(), 0)))) -> Iterator {
-    return Iterator(nullptr, _p, _l);
+    return Iterator(nullptr, static_cast<P const&>(*this), _l);
   }
 #endif // #if CDS_ATTR(sentinel) #else
 
 private:
   R _r;
-  P _p;
   Size _l;
 };
 

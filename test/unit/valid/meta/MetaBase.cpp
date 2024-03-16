@@ -70,8 +70,6 @@ TEST(MetaBase, ConvertIntegral) {
 }
 
 TEST(MetaBase, And) {
-  static_assert(Eq<And<False>, False>::value, "Failed And");
-  static_assert(Eq<And<True>, True>::value, "Failed And");
   static_assert(Eq<And<False, False>, False>::value, "Failed And");
   static_assert(Eq<And<False, True>, False>::value, "Failed And");
   static_assert(Eq<And<True, False>, False>::value, "Failed And");
@@ -84,8 +82,7 @@ TEST(MetaBase, And) {
   static_assert(Eq<And<True, False, True>, False>::value, "Failed And");
   static_assert(Eq<And<True, True, False>, False>::value, "Failed And");
   static_assert(Eq<And<True, True, True>, True>::value, "Failed And");
-  static_assert(Eq<And<std::false_type>, False>::value, "Failed And");
-  static_assert(Eq<And<std::true_type>, True>::value, "Failed And");
+
   static_assert(Eq<And<std::false_type, False>, False>::value, "Failed And");
   static_assert(Eq<And<std::false_type, True>, False>::value, "Failed And");
   static_assert(Eq<And<std::true_type, False>, False>::value, "Failed And");
@@ -101,8 +98,6 @@ TEST(MetaBase, And) {
 }
 
 TEST(MetaBase, Or) {
-  static_assert(Eq<Or<False>, False>::value, "Failed And");
-  static_assert(Eq<Or<True>, True>::value, "Failed And");
   static_assert(Eq<Or<False, False>, False>::value, "Failed And");
   static_assert(Eq<Or<False, True>, True>::value, "Failed And");
   static_assert(Eq<Or<True, False>, True>::value, "Failed And");
@@ -115,8 +110,7 @@ TEST(MetaBase, Or) {
   static_assert(Eq<Or<True, False, True>, True>::value, "Failed And");
   static_assert(Eq<Or<True, True, False>, True>::value, "Failed And");
   static_assert(Eq<Or<True, True, True>, True>::value, "Failed And");
-  static_assert(Eq<Or<std::false_type>, False>::value, "Failed And");
-  static_assert(Eq<Or<std::true_type>, True>::value, "Failed And");
+
   static_assert(Eq<Or<std::false_type, False>, False>::value, "Failed And");
   static_assert(Eq<Or<std::false_type, True>, True>::value, "Failed And");
   static_assert(Eq<Or<std::true_type, False>, True>::value, "Failed And");

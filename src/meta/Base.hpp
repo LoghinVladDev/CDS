@@ -241,10 +241,19 @@ template <template <typename...> class Predicate> struct Unless : impl::Unless<P
 template <template <typename...> class Modifier, template <typename...> class After>
 struct Apply : impl::Apply<Modifier, After> {};
 
-template <typename... Integrals> struct And : impl::And<Integrals...>::Type {};
-template <typename... Integrals> struct Or : impl::Or<Integrals...>::Type {};
+template <typename... Integrals> struct And : impl::And<Integrals...>::Type {
+  static_assert(sizeof...(Integrals) > 1, "Requires at least two integrals.");
+};
+
+template <typename... Integrals> struct Or : impl::Or<Integrals...>::Type {
+  static_assert(sizeof...(Integrals) > 1, "Requires at least two integrals.");
+};
+
 template <typename Integral> struct Not : Bool<!Integral::value>::Type {};
-template <typename... Integrals> struct Eq : impl::Eq<Integrals...>::Type {};
+template <typename... Integrals> struct Eq : impl::Eq<Integrals...>::Type {
+  static_assert(sizeof...(Integrals) > 1, "Requires at least two integrals.");
+};
+
 template <typename LeftIntegral, typename RightIntegral> struct Ne : impl::Ne<LeftIntegral, RightIntegral>::Type {};
 template <typename LeftIntegral, typename RightIntegral> struct Lt : impl::Lt<LeftIntegral, RightIntegral>::Type {};
 template <typename LeftIntegral, typename RightIntegral> struct Le : impl::Le<LeftIntegral, RightIntegral>::Type {};

@@ -31,24 +31,28 @@ template <typename T>
 struct HasIterableMemberFns<T, Void<decltype(meta::rvalue<T>().begin()), decltype(meta::rvalue<T>().end())>> :
     meta::True {
   using Iterator = decltype(meta::rvalue<T>().begin());
+  using Sentinel = decltype(meta::rvalue<T>().end());
 };
 
 template <typename T> struct HasConstIterableMemberFns<
     T, Void<decltype(meta::rvalue<T>().cbegin()), decltype(meta::rvalue<T>().cend())>
 > : meta::True {
   using ConstIterator = decltype(meta::rvalue<T>().cbegin());
+  using Sentinel = decltype(meta::rvalue<T>().cend());
 };
 
 template <typename T> struct HasReverseIterableMemberFns<
     T, Void<decltype(meta::rvalue<T>().rbegin()), decltype(meta::rvalue<T>().rend())>
 > : meta::True {
   using ReverseIterator = decltype(meta::rvalue<T>().rbegin());
+  using Sentinel = decltype(meta::rvalue<T>().rend());
 };
 
 template <typename T> struct HasConstReverseIterableMemberFns<
     T, Void<decltype(meta::rvalue<T>().crbegin()), decltype(meta::rvalue<T>().crend())>
 > : meta::True {
   using ConstReverseIterator = decltype(meta::rvalue<T>().crbegin());
+  using Sentinel = decltype(meta::rvalue<T>().crend());
 };
 
 template <typename> struct IsIterator : False {};

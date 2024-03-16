@@ -8,6 +8,7 @@
 #include <array>
 
 #include "UnitTest.hpp"
+#include "../Shared.hpp"
 
 using namespace cds;
 
@@ -581,14 +582,176 @@ TEST(StringView, ostream) {
   ASSERT_EQ(oss.str(), " abc ");
 }
 
-TEST(StringView, findWithStrings) {
-  StringView sv{"test test test"};
-  // for (auto const idx : impl::find(sv, "test", functional::Equal<>(), impl::FindStringTransformer<char, impl::StringUtils<char, meta::StringTraits<char>>>())) {
-  //   std::cout << idx << '\n';
-  // }
-  // for (auto const idx : sv.find("test")) {
-  //   std::cout << idx << '\n';
-  // }
+TEST(StringView, findClient) {
+  ASSERT_TRUE(testing::citeq(StringView{"abcb"}.find('b'), std::vector<int>{1, 3}));
+  ASSERT_TRUE(testing::citeq(StringView{"abcb"}.find('d'), std::vector<int>{}));
+
+  StringView sv {"test test test"};
+  ASSERT_TRUE(testing::citeq(sv.find("test"), std::vector<int> {0, 5, 10}));
+  ASSERT_TRUE(testing::citeq(StringView {"testtesttest"}.find("test"), std::vector<int> {0, 4, 8}));
+  ASSERT_TRUE(testing::citeq(StringView {"test test test"}.find("test"), std::vector<int> {0, 5, 10}));
+  ASSERT_TRUE(testing::citeq(StringView {"test test test "}.find("test"), std::vector<int> {0, 5, 10}));
+  ASSERT_TRUE(testing::citeq(StringView {"test test tes"}.find("test"), std::vector<int> {0, 5}));
+  ASSERT_TRUE(testing::citeq(StringView {" test test test"}.find("test"), std::vector<int> {1, 6, 11}));
+  ASSERT_TRUE(testing::citeq(StringView {"est test test"}.find("test"), std::vector<int> {4, 9}));
+  ASSERT_TRUE(testing::citeq(StringView {" test test test "}.find("test"), std::vector<int> {1, 6, 11}));
+  ASSERT_TRUE(testing::citeq(StringView {" test test tes"}.find("test"), std::vector<int> {1, 6}));
+  ASSERT_TRUE(testing::citeq(StringView {"est test test "}.find("test"), std::vector<int> {4, 9}));
+  ASSERT_TRUE(testing::citeq(StringView {"est test tes"}.find("test"), std::vector<int> {4}));
+}
+
+TEST(StringView, findProjectionClient) {
+  ASSERT_TRUE(testing::citeq(StringView{"abcb"}.find('B', toupper), std::vector<int>{1, 3}));
+  ASSERT_TRUE(testing::citeq(StringView{"abcb"}.find('D', toupper), std::vector<int>{}));
+
+  StringView sv {"test test test"};
+  ASSERT_TRUE(testing::citeq(sv.find("TEST", toupper), std::vector<int> {0, 5, 10}));
+  ASSERT_TRUE(testing::citeq(StringView {"testtesttest"}.find("TEST", toupper), std::vector<int> {0, 4, 8}));
+  ASSERT_TRUE(testing::citeq(StringView {"test test test"}.find("TEST", toupper), std::vector<int> {0, 5, 10}));
+  ASSERT_TRUE(testing::citeq(StringView {"test test test "}.find("TEST", toupper), std::vector<int> {0, 5, 10}));
+  ASSERT_TRUE(testing::citeq(StringView {"test test tes"}.find("TEST", toupper), std::vector<int> {0, 5}));
+  ASSERT_TRUE(testing::citeq(StringView {" test test test"}.find("TEST", toupper), std::vector<int> {1, 6, 11}));
+  ASSERT_TRUE(testing::citeq(StringView {"est test test"}.find("TEST", toupper), std::vector<int> {4, 9}));
+  ASSERT_TRUE(testing::citeq(StringView {" test test test "}.find("TEST", toupper), std::vector<int> {1, 6, 11}));
+  ASSERT_TRUE(testing::citeq(StringView {" test test tes"}.find("TEST", toupper), std::vector<int> {1, 6}));
+  ASSERT_TRUE(testing::citeq(StringView {"est test test "}.find("TEST", toupper), std::vector<int> {4, 9}));
+  ASSERT_TRUE(testing::citeq(StringView {"est test tes"}.find("TEST", toupper), std::vector<int> {4}));
+}
+
+TEST(StringView, findFirstClient) {
+  ASSERT_EQ(StringView{"abcb"}.findFirst('b'), 1);
+  ASSERT_EQ(StringView{"abcb"}.findFirst('d'), StringView::npos);
+  ASSERT_EQ(StringView{"abcb"}.findFirst("bc"), 1);
+  ASSERT_EQ(StringView{"abcb"}.findFirst("bd"), StringView::npos);
+}
+
+TEST(StringView, findProjectionFirstClient) {
+  ASSERT_EQ(StringView{"abcb"}.findFirst('B', toupper), 1);
+  ASSERT_EQ(StringView{"abcb"}.findFirst('D', toupper), StringView::npos);
+  ASSERT_EQ(StringView{"abcb"}.findFirst("BC", toupper), 1);
+  ASSERT_EQ(StringView{"abcb"}.findFirst("BD", toupper), StringView::npos);
+}
+
+TEST(StringView, findLastClient) {
+  ASSERT_EQ(StringView{"abcb"}.findLast('b'), 3);
+  ASSERT_EQ(StringView{"abcb"}.findLast('d'), StringView::npos);
+  ASSERT_EQ(StringView{"abcbc"}.findLast("bc"), 3);
+  ASSERT_EQ(StringView{"abcb"}.findLast("bd"), StringView::npos);
+}
+
+TEST(StringView, findProjectionLastClient) {
+  ASSERT_EQ(StringView{"abcb"}.findLast('B', toupper), 3);
+  ASSERT_EQ(StringView{"abcb"}.findLast('D', toupper), StringView::npos);
+  ASSERT_EQ(StringView{"abcbc"}.findLast("BC", toupper), 3);
+  ASSERT_EQ(StringView{"abcb"}.findLast("BD", toupper), StringView::npos);
+}
+
+TEST(StringView, findOfClient) {
+  ASSERT_TRUE(testing::citeq(StringView{"abcb"}.findOf(std::vector<char>{'a', 'c'}), std::vector<int>{0, 2}));
+  ASSERT_TRUE(testing::citeq(StringView{"abcb"}.findOf(std::vector<char>{'d'}), std::vector<int>{}));
+
+  ASSERT_TRUE(testing::citeq(StringView{"abcb"}.findOf("ac"), std::vector<int>{0, 2}));
+
+  StringView sv1 {"abc bcd cde def"};
+  ASSERT_TRUE(testing::citeq(sv1.findOf(std::vector<StringView>{"bc", "bcd", "def"}), std::vector<int> {1, 4, 12}));
+  ASSERT_TRUE(testing::citeq(StringView{"abc bcd cde def"}.findOf(std::vector<StringView>{"bc", "bcd", "def"}), std::vector<int> {1, 4, 12}));
+  ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde def"}.findOf(std::vector<StringView>{"bc", "bcd", "def"}), std::vector<int> {0, 3, 11}));
+  ASSERT_TRUE(testing::citeq(StringView{"c bcd cde def"}.findOf(std::vector<StringView>{"bc", "bcd", "def"}), std::vector<int> {2, 10}));
+  ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde def "}.findOf(std::vector<StringView>{"bc", "bcd", "def"}), std::vector<int> {0, 3, 11}));
+  ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde de"}.findOf(std::vector<StringView>{"bc", "bcd", "def"}), std::vector<int> {0, 3}));
+}
+
+TEST(StringView, findProjectedOfClient) {
+  ASSERT_TRUE(testing::citeq(StringView{"abcb"}.findOf(std::vector<char>{'A', 'C'}, toupper), std::vector<int>{0, 2}));
+  ASSERT_TRUE(testing::citeq(StringView{"abcb"}.findOf(std::vector<char>{'D'}, toupper), std::vector<int>{}));
+
+  ASSERT_TRUE(testing::citeq(StringView{"abcb"}.findOf("AC", toupper), std::vector<int>{0, 2}));
+
+  StringView sv1 {"abc bcd cde def"};
+  ASSERT_TRUE(testing::citeq(sv1.findOf(std::vector<StringView>{"BC", "BCD", "DEF"}, toupper), std::vector<int> {1, 4, 12}));
+  ASSERT_TRUE(testing::citeq(StringView{"abc bcd cde def"}.findOf(std::vector<StringView>{"BC", "BCD", "DEF"}, toupper), std::vector<int> {1, 4, 12}));
+  ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde def"}.findOf(std::vector<StringView>{"BC", "BCD", "DEF"}, toupper), std::vector<int> {0, 3, 11}));
+  ASSERT_TRUE(testing::citeq(StringView{"c bcd cde def"}.findOf(std::vector<StringView>{"BC", "BCD", "DEF"}, toupper), std::vector<int> {2, 10}));
+  ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde def "}.findOf(std::vector<StringView>{"BC", "BCD", "DEF"}, toupper), std::vector<int> {0, 3, 11}));
+  ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde de"}.findOf(std::vector<StringView>{"BC", "BCD", "DEF"}, toupper), std::vector<int> {0, 3}));
+}
+
+TEST(StringView, findFirstOfClient) {
+  ASSERT_EQ(StringView{"abcb"}.findFirstOf(std::vector<char>{'c', 'b'}), 1);
+  ASSERT_EQ(StringView{"abcb"}.findFirstOf("cb"), 1);
+  ASSERT_EQ(StringView{"abcb"}.findFirstOf(std::vector<char>{'d'}), StringView::npos);
+  ASSERT_EQ(StringView{"abcb"}.findFirstOf(std::vector<char>{}), StringView::npos);
+
+  StringView sv1 {"abc bcd cde def"};
+  ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{"cde", "bcd", "def"}), 4);
+  ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{"ggg"}), StringView::npos);
+  ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{}), StringView::npos);
+}
+
+TEST(StringView, findProjectedFirstOfClient) {
+  ASSERT_EQ(StringView{"abcb"}.findFirstOf(std::vector<char>{'C', 'B'}, toupper), 1);
+  ASSERT_EQ(StringView{"abcb"}.findFirstOf("CB", toupper), 1);
+  ASSERT_EQ(StringView{"abcb"}.findFirstOf(std::vector<char>{'D'}, toupper), StringView::npos);
+  ASSERT_EQ(StringView{"abcb"}.findFirstOf(std::vector<char>{}, toupper), StringView::npos);
+
+  StringView sv1 {"abc bcd cde def"};
+  ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{"CDE", "BCD", "DEF"}, toupper), 4);
+  ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{"GGG"}, toupper), StringView::npos);
+  ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{}, toupper), StringView::npos);
+}
+
+TEST(StringView, findLastOfClient) {
+  ASSERT_EQ(StringView{"abcb"}.findLastOf(std::vector<char>{'c', 'b'}), 3);
+  ASSERT_EQ(StringView{"abcbc"}.findLastOf("cb"), 4);
+  ASSERT_EQ(StringView{"abcb"}.findLastOf(std::vector<char>{'d'}), StringView::npos);
+  ASSERT_EQ(StringView{"abcb"}.findLastOf(std::vector<char>{}), StringView::npos);
+
+  StringView sv1 {"abc bcd cde def"};
+  ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{"cde", "bcd", "def"}), 12);
+  ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{"ggg"}), StringView::npos);
+  ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{}), StringView::npos);
+}
+
+TEST(StringView, findProjectedLastOfClient) {
+  ASSERT_EQ(StringView{"abcb"}.findLastOf(std::vector<char>{'C', 'B'}, toupper), 3);
+  ASSERT_EQ(StringView{"abcbc"}.findLastOf("CB", toupper), 4);
+  ASSERT_EQ(StringView{"abcb"}.findLastOf(std::vector<char>{'D'}, toupper), StringView::npos);
+  ASSERT_EQ(StringView{"abcb"}.findLastOf(std::vector<char>{}, toupper), StringView::npos);
+
+  StringView sv1 {"abc bcd cde def"};
+  ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{"CDE", "BCD", "DEF"}, toupper), 12);
+  ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{"GGG"}, toupper), StringView::npos);
+  ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{}, toupper), StringView::npos);
+}
+
+TEST(StringView, findNotOfClient) {
+  ASSERT_TRUE(testing::citeq(StringView{"abc"}.findNotOf("b"), std::vector<int>{0, 2}));
+  ASSERT_TRUE(testing::citeq(StringView{"abc"}.findNotOf(std::vector<int>{'b'}), std::vector<int>{0, 2}));
+}
+
+TEST(StringView, findProjectedNotOfClient) {
+  ASSERT_TRUE(testing::citeq(StringView{"abc"}.findNotOf("B", toupper), std::vector<int>{0, 2}));
+  ASSERT_TRUE(testing::citeq(StringView{"abc"}.findNotOf(std::vector<int>{'B'}, toupper), std::vector<int>{0, 2}));
+}
+
+TEST(StringView, findFirstNotOfClient) {
+  ASSERT_EQ(StringView{"abc"}.findFirstNotOf("a"), 1);
+  ASSERT_EQ(StringView{"abc"}.findFirstNotOf("abc"), StringView::npos);
+}
+
+TEST(StringView, findProjectedFirstNotOfClient) {
+  ASSERT_EQ(StringView{"abc"}.findFirstNotOf("A", toupper), 1);
+  ASSERT_EQ(StringView{"abc"}.findFirstNotOf("ABC", toupper), StringView::npos);
+}
+
+TEST(StringView, findLastNotOfClient) {
+  ASSERT_EQ(StringView{"abca"}.findLastNotOf("a"), 2);
+  ASSERT_EQ(StringView{"abc"}.findLastNotOf("abc"), StringView::npos);
+}
+
+TEST(StringView, findProjectedLastNotOfClient) {
+  ASSERT_EQ(StringView{"abca"}.findLastNotOf("A", toupper), 2);
+  ASSERT_EQ(StringView{"abc"}.findLastNotOf("ABC", toupper), StringView::npos);
 }
 
 #ifdef DCR_SINCECPP14

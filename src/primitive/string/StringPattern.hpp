@@ -161,6 +161,10 @@ public:
     return _lps;
   }
 
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto isEnd(Size idx) const noexcept -> bool {
+    return idx == len();
+  }
+
 private:
   S _pat;
   Size* _lps;
@@ -319,7 +323,8 @@ public:
   using V = Vertex<C, AS>;
   using ParentLink = typename V::ParentLink;
 
-  template <typename I, typename FAS> CDS_ATTR(2(explicit, constexpr(20)))
+  template <typename I, typename FAS, EnableIf<Not<IsSame<RemoveCVRef<I>, AhoCorasick>>> = 0>
+  CDS_ATTR(2(explicit, constexpr(20)))
   AhoCorasick(I&& stringSet, Size startingSize = 16, FAS&& alloc = FAS()) noexcept(false) :
       AS(cds::forward<FAS>(alloc)),
       _vertices(AS::template get<V>().allocate(startingSize)),
@@ -392,6 +397,10 @@ public:
     }
 
     return {PredResultKind::PRK_accept, _lengths[_vertices[_vertices[state].endWordLink].id()], state};
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto isEnd(Size idx) const noexcept -> bool {
+    return _vertices[idx].endWordLink != _r;
   }
 
 private:
@@ -479,6 +488,21 @@ private:
   Size _r {0};
 };
 } // namespace ahoCorasick
+
+namespace matchKind {
+struct ByCharacter {};
+struct ByErrorIndex {};
+struct ByState {};
+}
+
+template <typename P, typename = typename P::MatchKind> struct StateContainer {
+  CDS_ATTR(2(explicit, constexpr(11))) StateContainer(CDS_ATTR(unused) P const&) noexcept {}
+};
+
+template <typename P> struct StateContainer<P, matchKind::ByState> {
+  CDS_ATTR(2(explicit, constexpr(11))) StateContainer(P const& sm) noexcept : state(sm.initState()) {}
+  Size state;
+};
 } // namespace impl
 } // namespace cds
 

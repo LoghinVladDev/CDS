@@ -64,7 +64,7 @@ template <
     typename T, typename D = meta::RemoveRef<T>,
     typename E = meta::impl::HasIterableMemberFns<D>,
     meta::EnableIf<E> = 0
-> CDS_ATTR(2(nodiscard, constexpr(11))) auto end(T&& range) noexcept -> typename E::Iterator {
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto end(T&& range) noexcept -> typename E::Sentinel {
   return cds::forward<T>(range).end();
 }
 
@@ -82,7 +82,7 @@ template <
     typename E = meta::impl::HasIterableMemberFns<D>,
     typename CE = meta::impl::HasConstIterableMemberFns<D>,
     meta::EnableIf<meta::And<meta::Not<E>, CE>> = 0
-> CDS_ATTR(2(nodiscard, constexpr(11))) auto end(T&& range) noexcept -> typename CE::ConstIterator {
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto end(T&& range) noexcept -> typename CE::Sentinel {
   return cds::forward<T>(range).cend();
 }
 
@@ -96,7 +96,7 @@ template <
 template <
     typename T, typename D = meta::RemoveRef<T>,
     typename E = meta::impl::HasConstIterableMemberFns<D>, meta::EnableIf<E> = 0
-> CDS_ATTR(2(nodiscard, constexpr(11))) auto cend(T&& range) noexcept -> typename E::ConstIterator {
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto cend(T&& range) noexcept -> typename E::Sentinel {
   return cds::forward<T>(range).cend();
 }
 
@@ -112,7 +112,7 @@ template <
     typename T, typename D = meta::RemoveRef<T>,
     typename E = meta::impl::HasReverseIterableMemberFns<D>,
     meta::EnableIf<E> = 0
-> CDS_ATTR(2(nodiscard, constexpr(11))) auto rend(T&& range) noexcept -> typename E::ReverseIterator {
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto rend(T&& range) noexcept -> typename E::Sentinel {
   return cds::forward<T>(range).rend();
 }
 
@@ -130,7 +130,7 @@ template <
     typename E = meta::impl::HasReverseIterableMemberFns<D>,
     typename CE = meta::impl::HasConstReverseIterableMemberFns<D>,
     meta::EnableIf<meta::And<meta::Not<E>, CE>> = 0
-> CDS_ATTR(2(nodiscard, constexpr(11))) auto rend(T&& range) noexcept -> typename CE::ConstReverseIterator {
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto rend(T&& range) noexcept -> typename CE::Sentinel {
   return cds::forward<T>(range).crend();
 }
 
@@ -144,7 +144,7 @@ template <
 template <
     typename T, typename D = meta::RemoveRef<T>,
     typename E = meta::impl::HasConstReverseIterableMemberFns<D>, meta::EnableIf<E> = 0
-> CDS_ATTR(2(nodiscard, constexpr(11))) auto crend(T&& range) noexcept -> typename E::ConstReverseIterator {
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto crend(T&& range) noexcept -> typename E::Sentinel {
   return cds::forward<T>(range).crend();
 }
 
@@ -242,7 +242,7 @@ template <
     typename C = HasProjectorContains<T, V, P>,
     typename I = IsIterable<T>,
     typename RI = IsReverseIterable<T>,
-    EnableIf<And<Not<Or<C, I, RI>>>> = 0
+    EnableIf<Not<Or<C, I, RI>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what, P&& projector, E const& equal)
     noexcept -> bool {
   (void) where;
@@ -375,10 +375,7 @@ public:
 
   template <typename RI, typename RSI> CDS_ATTR(constexpr(14)) FindIterator(RI&& b, RSI&& e, V const& v)
       CDS_ATTR(noexcept(noexcept(filter()))) :
-      _i(cds::forward<RI>(b)),
-      _b(cds::forward<RI>(b)),
-      _e(cds::forward<RSI>(e)),
-      _v(v) {
+      _i(cds::forward<RI>(b)), _b(cds::forward<RI>(b)), _e(cds::forward<RSI>(e)), _v(v) {
     filter();
   }
 
@@ -463,11 +460,7 @@ public:
   template <typename RI, typename RSI> CDS_ATTR(constexpr(14))
   FindProjectIterator(RI&& b, RSI&& e, V const& v, P const& s)
       CDS_ATTR(noexcept(noexcept(filter()))) :
-      _i(cds::forward<RI>(b)),
-      _b(cds::forward<RI>(b)),
-      _e(cds::forward<RSI>(e)),
-      _p(s),
-      _v(v) {
+      _i(cds::forward<RI>(b)), _b(cds::forward<RI>(b)), _e(cds::forward<RSI>(e)), _p(s), _v(v) {
     filter();
   }
 
@@ -690,7 +683,11 @@ private:
   PAttr const _p;
 };
 
+using meta::False;
 template <typename, typename, typename> struct GenericFindEnabledFor : True {};
+template <typename, typename, typename, typename = void> struct FindUsesAllocation : False {};
+template <typename, typename, typename> struct GenericFindFirstUsingFind : False {};
+template <typename, typename, typename> struct GenericFindLastUsingFind : False {};
 
 template <
     typename I, typename V, typename E, typename T,
@@ -702,10 +699,18 @@ template <
   return R(cds::forward<I>(iterable), cds::forward<V>(value));
 }
 
+namespace isProjector {
+template <typename, typename, typename = void> struct IsProjector : meta::False {};
+template <typename T, typename P>
+struct IsProjector<T, P, meta::Void<decltype(rvalue<P>()(*cds::begin(rvalue<T>())))>> : meta::True {};
+} // namespace isProjector
+
+template <typename T, typename P> struct IsProjector : isProjector::IsProjector<RemoveCVRef<T>, RemoveCVRef<P>> {};
+
 template <
     typename I, typename V, typename P, typename E, typename T,
     typename R = FindSelectIterableRange<Extend<I>, Extend<V>, Extend<P>, E, T>,
-    EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>> = 0
+    EnableIf<And<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>, IsProjector<I, P>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto find(
     I&& iterable, V&& value, P&& projector, CDS_ATTR(unused) E const& equal, CDS_ATTR(unused) T const& transform
 ) CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector))))) -> R {
@@ -742,6 +747,45 @@ template <
 }
 
 template <
+    typename I, typename V, typename E, typename T,
+    EnableIf<And<
+        GenericFindFirstUsingFind<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>,
+        Not<FindUsesAllocation<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>>
+    >> = 0
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
+    I&& iterable, V&& value, E const& equal, T const& transform
+) CDS_ATTR(noexcept(noexcept(*find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform).begin())))
+    -> decltype(*find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform).begin()) {
+  auto const r = find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform);
+  auto const i = r.begin();
+  if (i != r.end()) {
+    return *i;
+  }
+
+  auto const e = cds::end(cds::forward<I>(iterable));
+  return transform(cds::begin(cds::forward<I>(iterable)), e, e);
+}
+
+template <
+    typename I, typename V, typename E, typename T,
+    typename U = FindUsesAllocation<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>,
+    EnableIf<And<GenericFindFirstUsingFind<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>, U>> = 0,
+    typename A = typename U::Alloc
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
+    I&& iterable, V&& value, E const& equal, T const& transform, A&& alloc
+) CDS_ATTR(noexcept(noexcept(*find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform, cds::forward<A>(alloc)).begin())))
+    -> decltype(*find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform, cds::forward<A>(alloc)).begin()) {
+  auto const r = find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform, cds::forward<A>(alloc));
+  auto const i = r.begin();
+  if (i != r.end()) {
+    return *i;
+  }
+
+  auto const e = cds::end(cds::forward<I>(iterable));
+  return transform(cds::begin(cds::forward<I>(iterable)), e, e);
+}
+
+template <
     typename I, typename V, typename P, typename E, typename T,
     EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
@@ -768,6 +812,45 @@ template <
     }
   }
   return transform(b, e, e);
+}
+
+template <
+    typename I, typename V, typename P, typename E, typename T,
+    EnableIf<And<
+        GenericFindFirstUsingFind<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>,
+        Not<FindUsesAllocation<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>>
+    >> = 0
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
+    I&& iterable, V&& value, P&& projector, E const& equal, T const& transform
+) CDS_ATTR(noexcept(noexcept(*find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform).begin())))
+    -> decltype(*find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform).begin()) {
+  auto const r = find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform);
+  auto const i = r.begin();
+  if (i != r.end()) {
+    return *i;
+  }
+
+  auto const e = cds::end(cds::forward<I>(iterable));
+  return transform(cds::begin(cds::forward<I>(iterable)), e, e);
+}
+
+template <
+    typename I, typename V, typename P, typename E, typename T,
+    typename U = FindUsesAllocation<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>,
+    EnableIf<And<GenericFindFirstUsingFind<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>, U>> = 0,
+    typename A = typename U::Alloc
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
+    I&& iterable, V&& value, P&& projector, E const& equal, T const& transform, A&& alloc
+) CDS_ATTR(noexcept(noexcept(*find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform, cds::forward<A>(alloc)).begin())))
+    -> decltype(*find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform, cds::forward<A>(alloc)).begin()) {
+  auto const r = find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform, cds::forward<A>(alloc));
+  auto const i = r.begin();
+  if (i != r.end()) {
+    return *i;
+  }
+
+  auto const e = cds::end(cds::forward<I>(iterable));
+  return transform(cds::begin(cds::forward<I>(iterable)), e, e);
 }
 
 template <
@@ -801,6 +884,57 @@ template <
 }
 
 template <
+    typename I, typename V, typename E, typename T,
+    EnableIf<And<
+        GenericFindLastUsingFind<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>,
+        Not<FindUsesAllocation<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>>
+    >> = 0
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
+    I&& iterable, V&& value, E const& equal, T const& transform
+) CDS_ATTR(noexcept(noexcept(*find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform).begin())))
+    -> decltype(*find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform).begin()) {
+  auto const r = find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform);
+  auto i = r.begin();
+  auto p = i;
+  while (i != r.end()) {
+    p = i;
+    ++i;
+  }
+
+  if (p == r.end()) {
+    auto const e = cds::end(cds::forward<I>(iterable));
+    return transform(cds::begin(cds::forward<I>(iterable)), e, e);
+  }
+
+  return *p;
+}
+
+template <
+    typename I, typename V, typename E, typename T,
+    typename U = FindUsesAllocation<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>,
+    EnableIf<And<GenericFindLastUsingFind<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>, U>> = 0,
+    typename A = typename U::Alloc
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
+    I&& iterable, V&& value, E const& equal, T const& transform, A&& alloc
+) CDS_ATTR(noexcept(noexcept(*find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform, cds::forward<A>(alloc)).begin())))
+    -> decltype(*find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform, cds::forward<A>(alloc)).begin()) {
+  auto const r = find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform, cds::forward<A>(alloc));
+  auto i = r.begin();
+  auto p = i;
+  while (i != r.end()) {
+    p = i;
+    ++i;
+  }
+
+  if (p == r.end()) {
+    auto const e = cds::end(cds::forward<I>(iterable));
+    return transform(cds::begin(cds::forward<I>(iterable)), e, e);
+  }
+
+  return *p;
+}
+
+template <
     typename I, typename V, typename P, typename E, typename T,
     EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
@@ -828,6 +962,57 @@ template <
     }
   }
   return transform(b, e, l);
+}
+
+template <
+    typename I, typename V, typename P, typename E, typename T,
+    EnableIf<And<
+        GenericFindLastUsingFind<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>,
+        Not<FindUsesAllocation<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>>
+    >> = 0
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
+    I&& iterable, V&& value, P&& projector, E const& equal, T const& transform
+) CDS_ATTR(noexcept(noexcept(*find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform).begin())))
+    -> decltype(*find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform).begin()) {
+  auto const r = find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform);
+  auto i = r.begin();
+  auto p = i;
+  while (i != r.end()) {
+    p = i;
+    ++i;
+  }
+
+  if (p == r.end()) {
+    auto const e = cds::end(cds::forward<I>(iterable));
+    return transform(cds::begin(cds::forward<I>(iterable)), e, e);
+  }
+
+  return *p;
+}
+
+template <
+    typename I, typename V, typename P, typename E, typename T,
+    typename U = FindUsesAllocation<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>,
+    EnableIf<And<GenericFindLastUsingFind<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>, U>> = 0,
+    typename A = typename U::Alloc
+> CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
+    I&& iterable, V&& value, P&& projector, E const& equal, T const& transform, A&& alloc
+) CDS_ATTR(noexcept(noexcept(*find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform, cds::forward<A>(alloc)).begin())))
+    -> decltype(*find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform, cds::forward<A>(alloc)).begin()) {
+  auto const r = find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform, cds::forward<A>(alloc));
+  auto i = r.begin();
+  auto p = i;
+  while (i != r.end()) {
+    p = i;
+    ++i;
+  }
+
+  if (p == r.end()) {
+    auto const e = cds::end(cds::forward<I>(iterable));
+    return transform(cds::begin(cds::forward<I>(iterable)), e, e);
+  }
+
+  return *p;
 }
 
 template <typename E> class Contains {

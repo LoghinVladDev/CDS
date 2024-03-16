@@ -123,7 +123,7 @@ template <> struct Hash<typename impl::IntegralOfEquivalentSize<long double>::Ty
 };
 #endif // #if CDS_ATTR(ld_size) > 64
 
-template <typename T> struct Hash<T, meta::EnableIf<meta::And<meta::IsFloating<T>>, void>> {
+template <typename T> struct Hash<T, meta::EnableIf<meta::IsFloating<T>, void>> {
   CDS_ATTR(2(nodiscard, constexpr(20))) auto operator()(T value) const noexcept -> Size {
     using ET = typename impl::IntegralOfEquivalentSize<T>::Type;
     Hash<ET> const h;

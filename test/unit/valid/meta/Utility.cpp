@@ -526,14 +526,14 @@ TEST(Utility, fillNPartial) {
 }
 
 TEST(Utility, timing) {
-//   auto timed = [](auto name, auto callable) {
-//     auto begin = std::chrono::high_resolution_clock::now();
-//     callable();
-//     auto end = std::chrono::high_resolution_clock::now();
-//     auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
-//     std::cout << "Duration of '" << name << "': " << diff.count() << "ns\n";
-//   };
-//
+   // auto timed = [](auto name, auto callable) {
+   //   auto begin = std::chrono::high_resolution_clock::now();
+   //   callable();
+   //   auto end = std::chrono::high_resolution_clock::now();
+   //   auto diff = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+   //   std::cout << "Duration of '" << name << "': " << diff.count() << "ns\n";
+   // };
+
 //   int n = 10000000;
 //   char const svCstr[] = "abcdefghijklmnop";
 //   StringView sv = "abcdefghijklmnop";
