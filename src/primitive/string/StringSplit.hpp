@@ -33,7 +33,7 @@ using meta::Decay;
 using meta::All;
 using meta::True;
 using meta::False;
-using meta::Nullptr;
+using meta::Null;
 using meta::And;
 using meta::Conditional;
 using meta::IsSame;
@@ -404,7 +404,7 @@ private:
 
 using extension::Extend;
 template <
-    typename I, typename S, typename R = SplitRange<Extend<I>, SplitPredicate<Extend<S>, Nullptr>>,
+    typename I, typename S, typename R = SplitRange<Extend<I>, SplitPredicate<Extend<S>, Null>>,
     EnableIf<Not<typename SplitAllocationTraits<S>::Required>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto split(I&& range, S&& sep, Size limit)
     CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(range), cds::forward<S>(sep), limit, nullptr)))) -> R {

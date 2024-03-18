@@ -1,6 +1,6 @@
 // DCR-TEST
 // STEPS: compile(linux:gcc;linux:clang),run(linux:gcc;linux:clang)
-// STD: 11-2b
+// STD: 11+
 
 #include "../../../../src/bindings/static/FindStaticBinding.hpp"
 #include "UnitTest.hpp"

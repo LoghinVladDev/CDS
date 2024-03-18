@@ -1,6 +1,6 @@
 // DCR-TEST
 // STEPS: compile(linux:gcc;linux:clang)
-// STD: 11-2b
+// STD: 11+
 
 #define CDS_OPTION_STD_COMPAT_MODE 1
 #include <cds/StringView>

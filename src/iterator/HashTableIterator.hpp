@@ -32,7 +32,7 @@ public:
     nextBucket();
   }
 
-  CDS_ATTR(2(implicit, constexpr(11))) HashTableIterator(meta::Nullptr) noexcept :
+  CDS_ATTR(2(implicit, constexpr(11))) HashTableIterator(meta::Null) noexcept :
       _bArr{nullptr}, _bCnt{0}, _curr{nullptr} {}
 
   CDS_ATTR(constexpr(11)) HashTableIterator(

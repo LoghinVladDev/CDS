@@ -1,6 +1,6 @@
 // DCR-TEST
 // STEPS: compile(linux:gcc;linux:clang),run(linux:gcc;linux:clang)
-// STD: 11-2b
+// STD: 11+
 
 #include "../../../../src/algorithm/GenericFind.hpp"
 #include "UnitTest.hpp"
@@ -150,6 +150,35 @@ TEST(GenericFind, find) {
 
   auto locsInvalid = find(v, 3, doubled);
   ASSERT_EQ(locsInvalid.begin(), locsInvalid.end());
+
+  auto m1 = std::move(b1);
+  auto m2 = std::move(b1d);
+  (void) m1;
+  (void) m2;
+
+  m1 = b2;
+  (void) m1;
+  m1 = std::move(b2);
+
+  auto b2d = locs1Doubled.begin();
+  m2 = b2d;
+  (void) m2;
+  m2 = std::move(b2d);
+
+  (void) m1;
+  (void) m2;
+
+  m1 = m1;
+  m1 = std::move(m1);
+
+  m2 = m2;
+  m2 = std::move(m2);
+
+  ASSERT_EQ(m1, m1);
+  ASSERT_FALSE(m1 != m1);
+
+  ASSERT_EQ(m2, m2);
+  ASSERT_FALSE(m2 != m2);
 }
 
 TEST(GenericFind, constant) {

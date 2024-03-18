@@ -6,7 +6,6 @@
 #define CDS_ALGORITHM_GENERIC_CONTAINS_HPP
 #pragma once
 
-#include <cds/iterator/Iterator>
 #include <cds/iterator/AddressIterator>
 #include <cds/functional/Comparator>
 

@@ -7,11 +7,11 @@
 
 namespace {
 using cds::Size;
-using cds::meta::Nullptr;
+using cds::meta::Null;
 using cds::iterator::HashTableIterator;
 template <typename T> using Node = cds::impl::FwdNode<T>;
 
-template <typename = void> auto l() noexcept -> Nullptr {
+template <typename = void> auto l() noexcept -> Null {
   return nullptr;
 }
 

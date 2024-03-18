@@ -9,12 +9,13 @@
 #include "StringViewBaseDecl.hpp"
 #include "StringSplit.hpp"
 #include "StringFind.hpp"
+#include "StringUtils.hpp"
 
 #include "../../bindings/BindingSelectors.hpp"
 #include "../../bindings/static/ContainsOfStaticBinding.hpp"
 #include "../../bindings/static/FindStaticBinding.hpp"
 #include "../../bindings/static/FindOfStaticBinding.hpp"
-
+#include "../../bindings/static/GenericLoopBinding.hpp"
 
 #include "../../stdlib/ostream.hpp"
 
@@ -67,13 +68,18 @@ template <typename C, typename U> struct Find :
     FindStaticBinding<Self<C, U>, FindOpt, FindTr<C, U>, FindTr<C, U>> {};
 template <typename C, typename U> struct FindOf :
     FindOfStaticBinding<Self<C, U>, FindOpt, FindTr<C, U>, FindTr<C, U>> {};
+
+using LoopOpt = With<Immutable>;
+template <typename C, typename U> struct GenericLoop :
+    GenericLoopBinding<Self<C, U>, LoopOpt> {};
 } // namespace bindingsBSV
 
 template <typename C, typename U> class CDS_ATTR(inheritsEBOs) BaseStringView :
     public bindingsBSV::Traits<C, U>,
     public bindingsBSV::ContainsOf<C, U>,
     public bindingsBSV::Find<C, U>,
-    public bindingsBSV::FindOf<C, U> {
+    public bindingsBSV::FindOf<C, U>,
+    public bindingsBSV::GenericLoop<C, U> {
 public:
   using STraits = typename U::Traits;
   using ITraits = bindingsBSV::Traits<C, U>;
@@ -207,14 +213,30 @@ public:
     return {_data + sFrom, sUntil - sFrom};
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(Value character) const noexcept -> bool {
-    return findFirst(character) != npos;
+  template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(N&& needle) const
+      CDS_ATTR(noexcept(noexcept(findFirst(cds::forward<N>(needle))))) -> bool {
+    return findFirst(cds::forward<N>(needle)) != npos;
   }
 
-  template <typename S> CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(
-      Value character, S&& selector
-  ) const noexcept -> bool {
-    return findFirst(character, cds::forward<S>(selector)) != npos;
+  template <typename N, typename S, EnableIf<Not<IsAllocatorOrAllocatorSet<S>>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(
+      N&& needle, S&& selector
+  ) const CDS_ATTR(noexcept(noexcept(findFirst(cds::forward<N>(needle), cds::forward<S>(selector))))) -> bool {
+    return findFirst(cds::forward<N>(needle), cds::forward<S>(selector)) != npos;
+  }
+
+  template <typename N, typename A, EnableIf<IsAllocatorOrAllocatorSet<A>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(N&& needle, A&& alloc) const
+      CDS_ATTR(noexcept(noexcept(findFirst(cds::forward<N>(needle), cds::forward<A>(alloc))))) -> bool {
+    return findFirst(cds::forward<N>(needle), cds::forward<A>(alloc)) != npos;
+  }
+
+  template <typename N, typename S, typename A> CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(
+      N&& needle, S&& selector, A&& alloc
+  ) const CDS_ATTR(noexcept(noexcept(
+      findFirst(cds::forward<N>(needle), cds::forward<S>(selector), cds::forward<A>(alloc))
+  ))) -> bool {
+    return findFirst(cds::forward<N>(needle), cds::forward<S>(selector), cds::forward<A>(alloc)) != npos;
   }
 
   template <typename FC, typename FU> CDS_ATTR(constexpr(14)) friend auto operator==(
@@ -248,7 +270,20 @@ public:
 #endif // #if CDS_ATTR(spaceship)
 
   template <typename A = Allocator<C>> CDS_ATTR(2(nodiscard, constexpr(20)))
-  auto str(A const& alloc = A()) const CDS_ATTR(noexcept(false)) -> BaseString<C, U, A>;
+  auto str(A&& alloc = A()) const CDS_ATTR(noexcept(false)) -> BaseString<C, U, A>;
+
+  template <typename A = Allocator<C>> CDS_ATTR(2(nodiscard, constexpr(20)))
+  auto toString(A&& alloc = A()) const CDS_ATTR(noexcept(false)) -> BaseString<C, U, A> {
+    return str(cds::forward<A>(alloc));
+  }
+
+  template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) auto startsWith(N&& needle) const noexcept -> bool {
+    return U::startsWith(data(), size(), cds::forward<N>(needle));
+  }
+
+  template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) auto endsWith(N&& needle) const noexcept -> bool {
+    return U::endsWith(data(), size(), cds::forward<N>(needle));
+  }
 
   template <typename FC, typename FU>
   friend auto operator<<(typename BaseStringView<FC, FU>::OStream& out, BaseStringView<FC, FU> const& obj)
@@ -335,7 +370,7 @@ template <typename C, typename U>
 template <typename AddressLike, EnableIf<Not<IsSame<Decay<AddressLike>, BaseStringView<C, U>>>>>
 CDS_ATTR(constexpr(11)) BaseStringView<C, U>::BaseStringView(AddressLike &&string) noexcept :
     _data(string),
-    _length(U::length(cds::forward<AddressLike>(string))) {}
+    _length(StringAbstract<AddressLike>::length(cds::forward<AddressLike>(string))) {}
 
 template <typename C, typename U> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator==(
     BaseStringView<C, U> const& lhs, BaseStringView<C, U> const& rhs

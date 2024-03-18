@@ -6,21 +6,16 @@
 #define CDS_PRIMITIVE_STRING_PATTERN_HPP
 #pragma once
 
-#include <cds/Utility>
 #include <cds/functional/Hash>
 #include <cds/meta/StdLib>
-#include <cds/meta/StringTraits>
 #include <cds/iterator/AddressIterator>
 #include <cds/memory/Allocator>
 
-#include "StringUtils.hpp"
+#include "StringAbstract.hpp"
 
 #include "../../ds/hashTable/HashTableBase.hpp"
 #include "../../ds/linkedList/SingleLinkedListBase.hpp"
 #include "../../policy/RehashPolicy.hpp"
-
-#include "../../stdlib/string.hpp"
-#include "../../stdlib/string_view.hpp"
 
 #if CDS_ATTR(msvc)
 #pragma warning(disable: 4244)
@@ -35,72 +30,9 @@ using meta::IsRef;
 
 using meta::value;
 
-template <typename> struct PatternUtils {};
-
-template <typename C, Size s> struct ArrPatternUtils {
-  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) static auto length(T&&) noexcept -> Size {
-    return s;
-  }
-
-  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) static auto data(T&& data) noexcept -> C const* {
-    return cds::forward<T>(data);
-  }
-};
-
-template <typename C, Size s> struct PatternUtils<C(&)[s]> : ArrPatternUtils<C, s - 1> {};
-template <typename C, Size s> struct PatternUtils<C const(&)[s]> : ArrPatternUtils<C, s - 1> {};
-
-template <typename C> struct PtrPatternUtils {
-  using Utils = StringUtils<C, StringTraits<C>>;
-
-  CDS_ATTR(2(nodiscard, constexpr(14))) static auto length(C const* ptr) noexcept -> Size {
-    return Utils::length(ptr);
-  }
-
-  CDS_ATTR(2(nodiscard, constexpr(14))) static auto data(C* ptr) noexcept -> C* {
-    return ptr;
-  }
-};
-
-template <typename C> struct PatternUtils<C*> : PtrPatternUtils<C> {};
-template <typename C> struct PatternUtils<C*&> : PtrPatternUtils<C> {};
-template <typename C> struct PatternUtils<C* const> : PtrPatternUtils<C> {};
-template <typename C> struct PatternUtils<C* const&> : PtrPatternUtils<C> {};
-
-template <typename C> struct BSVPatternUtils {
-  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) static auto length(T&& sv) noexcept -> Size {
-    return cds::forward<T>(sv).length();
-  }
-
-  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) static auto data(T&& sv) noexcept -> C const* {
-    return cds::forward<T>(sv).data();
-  }
-};
-
-template <typename C, typename U> struct PatternUtils<BaseStringView<C, U>> : BSVPatternUtils<C> {};
-template <typename C, typename U> struct PatternUtils<BaseStringView<C, U>&> : BSVPatternUtils<C> {};
-template <typename C, typename U> struct PatternUtils<BaseStringView<C, U> const> : BSVPatternUtils<C> {};
-template <typename C, typename U> struct PatternUtils<BaseStringView<C, U> const&> : BSVPatternUtils<C> {};
-
-#if CDS_ATTR(std_compat)
-template <typename C, typename T, typename A> struct PatternUtils<std::basic_string<C, T, A>> : BSVPatternUtils<C> {};
-template <typename C, typename T, typename A> struct PatternUtils<std::basic_string<C, T, A>&> : BSVPatternUtils<C> {};
-template <typename C, typename T, typename A> struct PatternUtils<std::basic_string<C, T, A> const> :
-    BSVPatternUtils<C> {};
-template <typename C, typename T, typename A> struct PatternUtils<std::basic_string<C, T, A> const&> :
-    BSVPatternUtils<C> {};
-
-#if CDS_ATTR(cpp17)
-template <typename C, typename T> struct PatternUtils<std::basic_string_view<C, T>> : BSVPatternUtils<C> {};
-template <typename C, typename T> struct PatternUtils<std::basic_string_view<C, T>&> : BSVPatternUtils<C> {};
-template <typename C, typename T> struct PatternUtils<std::basic_string_view<C, T> const> : BSVPatternUtils<C> {};
-template <typename C, typename T> struct PatternUtils<std::basic_string_view<C, T> const&> : BSVPatternUtils<C> {};
-#endif
-#endif
-
 template <typename S, typename A> class KMPBase : private A {
 public:
-  using Utils = PatternUtils<S>;
+  using Utils = StringAbstract<S>;
 
   template <typename FS, typename FA> CDS_ATTR(constexpr(20)) KMPBase(FS&& needle, FA&& alloc)
       CDS_ATTR(noexcept(noexcept(A(cds::forward<FA>(alloc)).allocate(0)))) :
@@ -334,7 +266,7 @@ public:
       auto vId = _r;
       auto* v = _vertices + vId;
       auto const& str = *i;
-      using U = PatternUtils<RemoveCVRef<decltype(str)>>;
+      using U = StringAbstract<RemoveCVRef<decltype(str)>>;
       for (Size idx = 0, len = U::length(str); idx < len; ++idx) {
         auto const* pat = U::data(str);
         auto r = v->children.tryEmplace(pat[idx], _size);

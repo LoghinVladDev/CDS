@@ -1,6 +1,6 @@
 // DCR-TEST
 // STEPS: compile(linux:gcc;linux:clang),run(linux:gcc;linux:clang)
-// STD: 11-2b
+// STD: 11+
 
 #include <cds/iterator/Iterator>
 #include "UnitTest.hpp"
@@ -84,6 +84,24 @@ TEST(Iterator, iterable) {
   ASSERT_NE(cri, crend(iterable));
   --cri;
   ASSERT_EQ(cri, crend(iterable));
+}
+
+TEST(Iterable, reverseConstButNotConst) {
+  struct X : private std::vector<int> {
+    X() : std::vector<int>{1, 2} {}
+    using std::vector<int>::crbegin;
+    using std::vector<int>::crend;
+  };
+
+  X x;
+  ASSERT_NE(cds::rbegin(x), cds::rend(x));
+  ASSERT_EQ(*cds::rbegin(x), 2);
+  auto it = cds::rbegin(x);
+  ++it;
+  ASSERT_NE(it, cds::rend(x));
+  ASSERT_EQ(*it, 1);
+  ++it;
+  ASSERT_EQ(it, cds::rend(x));
 }
 
 #ifdef DCR_SINCECPP11

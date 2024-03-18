@@ -3,6 +3,7 @@ set(
 
     valid/algorithm/GenericContains.cpp
     valid/algorithm/GenericFind.cpp
+    valid/algorithm/GenericLoop.cpp
 
     valid/bindings/ContainsOfStaticBinding.cpp
     valid/bindings/FindStaticBinding.cpp
@@ -19,6 +20,7 @@ set(
     valid/functional/Comparator.cpp
     valid/functional/FunctionalInterface.cpp
     valid/functional/Hash.cpp
+    valid/functional/Invoke.cpp
     valid/functional/Transformer.cpp
 
     valid/meta/MetaBase.cpp
@@ -38,6 +40,7 @@ set(
 
     valid/policy/RehashPolicy.cpp
 
+    valid/primitive/StringAbstract.cpp
     valid/primitive/StringUtils.cpp
     valid/primitive/StringView.cpp
 

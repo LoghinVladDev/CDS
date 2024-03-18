@@ -6,8 +6,7 @@
 #define CDS_ITERATOR_ADDRESS_ITERATOR_HPP
 #pragma once
 
-#include <cds/meta/IteratorTraits>
-#include <cds/meta/ObjectTraits>
+#include <cds/meta/StringTraits>
 
 #include <cds/iterator/Iterator>
 
@@ -290,128 +289,115 @@ template <typename Type> class BackwardAddressIterator : public impl::AddressIte
 } // namesspace iterator
 
 template <
-    typename Type, Size size,
-    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
+    typename Type, Size size,meta::EnableIf<meta::Not<typename meta::StringTraits<meta::Decay<Type>>::IsChar>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto begin(Type (&array)[size]) noexcept
     -> iterator::ForwardAddressIterator<Type> {
   return {&array[0]};
 }
 
-
 template <
-    typename Type, Size size,
-    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
+    typename Type, Size size,meta::EnableIf<meta::Not<typename meta::StringTraits<meta::Decay<Type>>::IsChar>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto end(Type (&array)[size]) noexcept
     -> iterator::ForwardAddressIterator<Type> {
   return {&array[size]};
 }
 
 template <
-    typename Type, Size size,
-    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
+    typename Type, Size size,meta::EnableIf<meta::Not<typename meta::StringTraits<meta::Decay<Type>>::IsChar>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto cbegin(Type (&array)[size]) noexcept
     -> iterator::ForwardAddressIterator<Type const> {
   return {&array[0]};
 }
 
 template <
-    typename Type, Size size,
-    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
+    typename Type, Size size,meta::EnableIf<meta::Not<typename meta::StringTraits<meta::Decay<Type>>::IsChar>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto cend(Type (&array)[size]) noexcept
     -> iterator::ForwardAddressIterator<Type const> {
   return {&array[size]};
 }
 
 template <
-    typename Type, Size size,
-    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
+    typename Type, Size size,meta::EnableIf<meta::Not<typename meta::StringTraits<meta::Decay<Type>>::IsChar>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin(Type (&array)[size]) noexcept
     -> iterator::BackwardAddressIterator<Type> {
   return {&array[size] - 1};
 }
 
 template <
-    typename Type, Size size,
-    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
+    typename Type, Size size,meta::EnableIf<meta::Not<typename meta::StringTraits<meta::Decay<Type>>::IsChar>> = 0
 > CDS_ATTR(nodiscard) auto rend(Type (&array)[size]) noexcept
     -> iterator::BackwardAddressIterator<Type> {
   return {&array[0] - 1};
 }
 
 template <
-    typename Type, Size size,
-    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
+    typename Type, Size size,meta::EnableIf<meta::Not<typename meta::StringTraits<meta::Decay<Type>>::IsChar>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto crbegin(Type (&array)[size]) noexcept
     -> iterator::BackwardAddressIterator<Type const> {
   return {&array[size] - 1};
 }
 
 template <
-    typename Type, Size size,
-    meta::EnableIf<meta::Not<meta::IsSame<meta::Decay<Type>, char>>> = 0
+    typename Type, Size size,meta::EnableIf<meta::Not<typename meta::StringTraits<meta::Decay<Type>>::IsChar>> = 0
 > CDS_ATTR(nodiscard) auto crend(Type (&array)[size]) noexcept
     -> iterator::BackwardAddressIterator<Type const> {
   return {&array[0] - 1};
 }
 
-template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto begin(char (&string)[size]) noexcept
-    -> iterator::ForwardAddressIterator<char> {
-  return {&string[0]};
+template <
+    typename Type, Size size,meta::EnableIf<typename meta::StringTraits<meta::Decay<Type>>::IsChar> = 0
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto begin(Type (&array)[size]) noexcept
+    -> iterator::ForwardAddressIterator<Type> {
+  return {&array[0]};
 }
 
-template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto end(char (&string)[size]) noexcept
-    -> iterator::ForwardAddressIterator<char> {
-  return {&string[size] - 1};
+template <
+    typename Type, Size size,meta::EnableIf<typename meta::StringTraits<meta::Decay<Type>>::IsChar> = 0
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto end(Type (&array)[size]) noexcept
+    -> iterator::ForwardAddressIterator<Type> {
+  return {&array[size] - 1};
 }
 
-template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto begin(char const (&string)[size]) noexcept
-    -> iterator::ForwardAddressIterator<char const> {
-  return {&string[0]};
+template <
+    typename Type, Size size,meta::EnableIf<typename meta::StringTraits<meta::Decay<Type>>::IsChar> = 0
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto cbegin(Type (&array)[size]) noexcept
+    -> iterator::ForwardAddressIterator<Type const> {
+  return {&array[0]};
 }
 
-template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto end(char const (&string)[size]) noexcept
-    -> iterator::ForwardAddressIterator<char const> {
-  return {&string[size] - 1};
+template <
+    typename Type, Size size,meta::EnableIf<typename meta::StringTraits<meta::Decay<Type>>::IsChar> = 0
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto cend(Type (&array)[size]) noexcept
+    -> iterator::ForwardAddressIterator<Type const> {
+  return {&array[size] - 1};
 }
 
-template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto cbegin(char const (&string)[size]) noexcept
-    -> iterator::ForwardAddressIterator<char const> {
-  return {&string[0]};
+template <
+    typename Type, Size size,meta::EnableIf<typename meta::StringTraits<meta::Decay<Type>>::IsChar> = 0
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin(Type (&array)[size]) noexcept
+    -> iterator::BackwardAddressIterator<Type> {
+  return {&array[size] - 2};
 }
 
-template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto cend(char const (&string)[size]) noexcept
-    -> iterator::ForwardAddressIterator<char const> {
-  return {&string[size] - 1};
+template <
+    typename Type, Size size,meta::EnableIf<typename meta::StringTraits<meta::Decay<Type>>::IsChar> = 0
+> CDS_ATTR(nodiscard) auto rend(Type (&array)[size]) noexcept
+    -> iterator::BackwardAddressIterator<Type> {
+  return {&array[0] - 1};
 }
 
-template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin(char (&string)[size]) noexcept
-    -> iterator::BackwardAddressIterator<char> {
-  return {&string[size] - 2};
+template <
+    typename Type, Size size,meta::EnableIf<typename meta::StringTraits<meta::Decay<Type>>::IsChar> = 0
+> CDS_ATTR(2(nodiscard, constexpr(11))) auto crbegin(Type (&array)[size]) noexcept
+    -> iterator::BackwardAddressIterator<Type const> {
+  return {&array[size] - 2};
 }
 
-template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto rend(char (&string)[size]) noexcept
-    -> iterator::BackwardAddressIterator<char> {
-  return {&string[0] - 1};
-}
-
-template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin(char const (&string)[size]) noexcept
-    -> iterator::BackwardAddressIterator<char const> {
-  return {&string[size] - 2};
-}
-
-template <Size size> CDS_ATTR(nodiscard) auto rend(char const (&string)[size]) noexcept
-    -> iterator::BackwardAddressIterator<char const> {
-  return {&string[0] - 1};
-}
-
-template <Size size> CDS_ATTR(2(nodiscard, constexpr(11))) auto crbegin(char const (&string)[size]) noexcept
-    -> iterator::BackwardAddressIterator<char const> {
-  return {&string[size] - 2};
-}
-
-template <Size size> CDS_ATTR(nodiscard) auto crend(char const (&string)[size]) noexcept
-    -> iterator::BackwardAddressIterator<char const> {
-  return {&string[0] - 1};
+template <
+    typename Type, Size size,meta::EnableIf<typename meta::StringTraits<meta::Decay<Type>>::IsChar> = 0
+> CDS_ATTR(nodiscard) auto crend(Type (&array)[size]) noexcept
+    -> iterator::BackwardAddressIterator<Type const> {
+  return {&array[0] - 1};
 }
 
 namespace meta {

@@ -2,8 +2,8 @@
 // Created by loghin on 12/17/23.
 //
 
-#ifndef CDS_SHARED_BINDINGS_STATIC_FIND_OF_BINDING_STATIC_HPP
-#define CDS_SHARED_BINDINGS_STATIC_FIND_OF_BINDING_STATIC_HPP
+#ifndef CDS_BINDINGS_STATIC_FIND_OF_BINDING_STATIC_HPP
+#define CDS_BINDINGS_STATIC_FIND_OF_BINDING_STATIC_HPP
 #pragma once
 
 #include "../BindingSelectors.hpp"
@@ -323,7 +323,8 @@ protected:
 
 public:
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<R, RemoveCVRef<F>, E>>> = 0
+      typename P, typename F = initializer_list<Value>,
+        EnableIf<And<Not<FindUsesAllocation<R, RemoveCVRef<F>, E>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, P&& projector)& CDS_ATTR(noexcept(noexcept(
       impl::find(lvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll())
   ))) -> decltype(impl::find(lvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector) , E(), TrAll())) {
@@ -331,7 +332,8 @@ public:
   }
 
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<R, RemoveCVRef<F>, NE>>> = 0
+      typename P, typename F = initializer_list<Value>,
+      EnableIf<And<Not<FindUsesAllocation<R, RemoveCVRef<F>, NE>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, P&& projector)& CDS_ATTR(noexcept(noexcept(
       impl::find(lvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())
   ))) -> decltype(impl::find(lvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())) {
@@ -339,7 +341,8 @@ public:
   }
 
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<R, RemoveCVRef<F>, E>>> = 0
+      typename P, typename F = initializer_list<Value>,
+      EnableIf<And<Not<FindUsesAllocation<R, RemoveCVRef<F>, E>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, P&& projector)&& CDS_ATTR(noexcept(noexcept(
       impl::find(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll())
   ))) -> decltype(impl::find(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector) , E(), TrAll())) {
@@ -349,7 +352,8 @@ public:
   }
 
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<R, RemoveCVRef<F>, NE>>> = 0
+      typename P, typename F = initializer_list<Value>,
+      EnableIf<And<Not<FindUsesAllocation<R, RemoveCVRef<F>, NE>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, P&& projector)&& CDS_ATTR(noexcept(noexcept(
       impl::find(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())
   ))) -> decltype(impl::find(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())) {
@@ -359,7 +363,8 @@ public:
   }
 
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<R, RemoveCVRef<F>, E>>> = 0
+      typename P, typename F = initializer_list<Value>,
+      EnableIf<And<Not<FindUsesAllocation<R, RemoveCVRef<F>, E>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstOf(F&& from, P&& projector) CDS_ATTR(noexcept(noexcept(
       impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())
   ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())) {
@@ -367,7 +372,8 @@ public:
   }
 
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<R, RemoveCVRef<F>, NE>>> = 0
+      typename P, typename F = initializer_list<Value>,
+      EnableIf<And<Not<FindUsesAllocation<R, RemoveCVRef<F>, NE>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstNotOf(F&& from, P&& projector) CDS_ATTR(noexcept(noexcept(
       impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne())
   ))) -> decltype(impl::findFirst(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne())) {
@@ -375,7 +381,8 @@ public:
   }
 
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<R, RemoveCVRef<F>, E>>> = 0
+      typename P, typename F = initializer_list<Value>,
+      EnableIf<And<Not<FindUsesAllocation<R, RemoveCVRef<F>, E>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastOf(F&& from, P&& projector) CDS_ATTR(noexcept(noexcept(
       impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())
   ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())) {
@@ -383,7 +390,8 @@ public:
   }
 
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<R, RemoveCVRef<F>, NE>>> = 0
+      typename P, typename F = initializer_list<Value>,
+      EnableIf<And<Not<FindUsesAllocation<R, RemoveCVRef<F>, NE>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastNotOf(F&& from, P&& projector) CDS_ATTR(noexcept(noexcept(
       impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne())
   ))) -> decltype(impl::findLast(rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne())) {
@@ -392,7 +400,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<R, RemoveCVRef<F>, E>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, P&& projector, A&& alloc = A())&
       CDS_ATTR(noexcept(noexcept(impl::find(
           lvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll(), cds::forward<A>(alloc)
@@ -407,7 +416,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<R, RemoveCVRef<F>, NE>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, P&& projector, A&& alloc = A())&
       CDS_ATTR(noexcept(noexcept(impl::find(
           lvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll(), cds::forward<A>(alloc)
@@ -422,7 +432,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<R, RemoveCVRef<F>, E>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, P&& projector, A&& alloc = A())&&
       CDS_ATTR(noexcept(noexcept(impl::find(
           rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll(), cds::forward<A>(alloc)
@@ -437,7 +448,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<R, RemoveCVRef<F>, NE>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, P&& projector, A&& alloc = A())&&
       CDS_ATTR(noexcept(noexcept(impl::find(
           rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll(), cds::forward<A>(alloc)
@@ -452,7 +464,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<R, RemoveCVRef<F>, E>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstOf(F&& from, P&& projector, A&& alloc = A())
       CDS_ATTR(noexcept(noexcept(impl::findFirst(
           rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne(), cds::forward<A>(alloc)
@@ -467,7 +480,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<R, RemoveCVRef<F>, NE>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstNotOf(F&& from, P&& projector, A&& alloc = A())
       CDS_ATTR(noexcept(noexcept(impl::findFirst(
           rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne(), cds::forward<A>(alloc)
@@ -482,7 +496,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<R, RemoveCVRef<F>, E>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastOf(F&& from, P&& projector, A&& alloc = A())
       CDS_ATTR(noexcept(noexcept(impl::findLast(
           rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne(), cds::forward<A>(alloc)
@@ -497,7 +512,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<R, RemoveCVRef<F>, NE>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastNotOf(F&& from, P&& projector, A&& alloc = A())
       CDS_ATTR(noexcept(noexcept(impl::findLast(
           rvalue<R>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne(), cds::forward<A>(alloc)
@@ -520,7 +536,8 @@ protected:
 
 public:
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, E>>> = 0
+      typename P, typename F = initializer_list<Value>,
+      EnableIf<And<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, E>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, P&& projector) const& CDS_ATTR(noexcept(noexcept(
       impl::find(lvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll())
   ))) -> decltype(impl::find(lvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll())) {
@@ -528,7 +545,8 @@ public:
   }
 
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, NE>>> = 0
+      typename P, typename F = initializer_list<Value>,
+      EnableIf<And<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, NE>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, P&& projector) const& CDS_ATTR(noexcept(noexcept(
       impl::find(lvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())
   ))) -> decltype(impl::find(lvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())) {
@@ -536,7 +554,8 @@ public:
   }
 
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, E>>> = 0
+      typename P, typename F = initializer_list<Value>,
+      EnableIf<And<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, E>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, P&& projector) const&& CDS_ATTR(noexcept(noexcept(
       impl::find(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll())
   ))) -> decltype(impl::find(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll())) {
@@ -546,7 +565,8 @@ public:
   }
 
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, NE>>> = 0
+      typename P, typename F = initializer_list<Value>,
+      EnableIf<And<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, NE>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, P&& projector) const&& CDS_ATTR(noexcept(noexcept(
       impl::find(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())
   ))) -> decltype(impl::find(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll())) {
@@ -556,7 +576,8 @@ public:
   }
 
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, E>>> = 0
+      typename P, typename F = initializer_list<Value>,
+      EnableIf<And<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, E>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstOf(F&& from, P&& projector) const CDS_ATTR(noexcept(noexcept(
       impl::findFirst(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())
   ))) -> decltype(impl::findFirst(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())) {
@@ -566,7 +587,8 @@ public:
   }
 
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, NE>>> = 0
+      typename P, typename F = initializer_list<Value>,
+      EnableIf<And<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, NE>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstNotOf(F&& from, P&& projector) const CDS_ATTR(noexcept(noexcept(
       impl::findFirst(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne())
   ))) -> decltype(
@@ -578,7 +600,8 @@ public:
   }
 
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, E>>> = 0
+      typename P, typename F = initializer_list<Value>,
+      EnableIf<And<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, E>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastOf(F&& from, P&& projector) const CDS_ATTR(noexcept(noexcept(
       impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())
   ))) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne())) {
@@ -588,7 +611,8 @@ public:
   }
 
   template <
-      typename P, typename F = initializer_list<Value>, EnableIf<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, NE>>> = 0
+      typename P, typename F = initializer_list<Value>,
+      EnableIf<And<Not<FindUsesAllocation<RNC, RemoveCVRef<F>, NE>>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastNotOf(F&& from, P&& projector) const CDS_ATTR(noexcept(noexcept(
       impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne())
   ))) -> decltype(impl::findLast(rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne())) {
@@ -614,7 +638,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<RNC, RemoveCVRef<F>, NE>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, P&& projector, A&& alloc = A()) const&
       CDS_ATTR(noexcept(noexcept(impl::find(
           lvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll(), cds::forward<A>(alloc)
@@ -629,7 +654,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<RNC, RemoveCVRef<F>, E>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, P&& projector, A&& alloc = A()) const&&
       CDS_ATTR(noexcept(noexcept(impl::find(
           rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll(), cds::forward<A>(alloc)
@@ -644,7 +670,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<RNC, RemoveCVRef<F>, NE>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findNotOf(F&& from, P&& projector, A&& alloc = A()) const&&
       CDS_ATTR(noexcept(noexcept(impl::find(
           rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrAll(), cds::forward<A>(alloc)
@@ -659,7 +686,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<RNC, RemoveCVRef<F>, E>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstOf(F&& from, P&& projector, A&& alloc = A()) const
       CDS_ATTR(noexcept(noexcept(impl::findFirst(
           rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne(), cds::forward<A>(alloc)
@@ -674,7 +702,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<RNC, RemoveCVRef<F>, NE>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirstNotOf(F&& from, P&& projector, A&& alloc = A()) const
       CDS_ATTR(noexcept(noexcept(impl::findFirst(
           rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne(), cds::forward<A>(alloc)
@@ -689,7 +718,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<RNC, RemoveCVRef<F>, E>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastOf(F&& from, P&& projector, A&& alloc = A()) const
       CDS_ATTR(noexcept(noexcept(impl::findLast(
           rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrOne(), cds::forward<A>(alloc)
@@ -704,7 +734,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<RNC, RemoveCVRef<F>, NE>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLastNotOf(F&& from, P&& projector, A&& alloc = A()) const
       CDS_ATTR(noexcept(noexcept(impl::findLast(
           rvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), NE(), TrOne(), cds::forward<A>(alloc)
@@ -826,4 +857,4 @@ template <
 } // namespace impl
 } // namespace cds
 
-#endif // CDS_SHARED_BINDINGS_STATIC_FIND_OF_BINDING_STATIC_HPP
+#endif // CDS_BINDINGS_STATIC_FIND_OF_BINDING_STATIC_HPP

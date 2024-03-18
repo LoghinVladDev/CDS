@@ -135,12 +135,14 @@ template <typename T> struct Hash<T*, void> {
   }
 };
 
-template <> struct Hash<meta::Nullptr, void> {
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(meta::Nullptr) const noexcept -> Size {
+template <> struct Hash<meta::Null, void> {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(meta::Null) const noexcept -> Size {
     return 0;
   }
 };
 } // namespace functional
 } // namespace cds
+
+#include "../common/StringHash.hpp"
 
 #endif // CDS_FUNCTIONAL_HASH_HPP

@@ -1,6 +1,6 @@
 // DCR-TEST
 // STEPS: compile(linux:gcc;linux:clang),run(linux:gcc;linux:clang)
-// STD: 11-2b
+// STD: 11+
 
 #include <cds/StringView>
 #include <cassert>
@@ -13,47 +13,10 @@
 using namespace cds;
 
 namespace {
-int ptrCalls = 0;
-int refCalls = 0;
-struct CustomUtils : impl::StringUtils<char, meta::StringTraits<char>> {
-  template<typename T, meta::EnableIf<meta::Not<meta::IsBoundedArray<meta::RemoveCVRef<T>>>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(14))) static Size length(T &&l) {
-    ++ptrCalls;
-    return StringUtils::length(cds::forward<T>(l));
-  }
-
-  template<typename T, meta::EnableIf<meta::IsBoundedArray<meta::RemoveCVRef<T>>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(14))) static Size length(T &&l) {
-    ++refCalls;
-    return StringUtils::length(cds::forward<T>(l));
-  }
-};
-
-class CustomSV : public impl::BaseStringView<char, CustomUtils> {
-  using BaseStringView<char, CustomUtils>::BaseStringView;
-};
-}
-
-TEST(StringView, FromLiteralEnsureRefUsage) {
-  refCalls = 0;
-  ptrCalls = 0;
-  CustomSV const sv1("test");
-  auto const* buf = "test2";
-  char const buf2[] = "test3";
-  CustomSV const sv2(buf);
-  CustomSV const sv3(buf2);
-
-  ASSERT_EQ(refCalls, 2);
-  ASSERT_EQ(ptrCalls, 1);
-
-  (void) sv1;
-  (void) sv2;
-  (void) sv3;
+using CustomSV = impl::BaseStringView<char, impl::StringUtils<char, impl::StringTraits<char>>>;
 }
 
 TEST(StringView, BaseCopyMove) {
-  refCalls = 0;
-  ptrCalls = 0;
   CustomSV const sv1;
   CustomSV const sv2;
   ASSERT_EQ(sv1, sv2);
@@ -65,9 +28,6 @@ TEST(StringView, BaseCopyMove) {
   ASSERT_EQ(sv3, sv4);
   ASSERT_EQ(sv4, sv5);
   ASSERT_EQ(sv5, sv3);
-
-  ASSERT_EQ(ptrCalls, 0);
-  ASSERT_EQ(refCalls, 1);
 }
 
 TEST(StringView, Compare) {
@@ -169,8 +129,6 @@ TEST(StringView, baseMembers) {
 }
 
 TEST(StringView, assign) {
-  refCalls = 0;
-  ptrCalls = 0;
   CustomSV sv1;
   ASSERT_EQ(sv1.size(), 0u);
 
@@ -184,9 +142,6 @@ TEST(StringView, assign) {
   char const arr[] = "abcdef";
   sv1 = arr;
   ASSERT_EQ(sv1.size(), 6u);
-
-  ASSERT_EQ(refCalls, 2u);
-  ASSERT_EQ(ptrCalls, 1u);
 }
 
 TEST(StringView, iter) {
@@ -335,6 +290,12 @@ TEST(StringView, contains) {
   ASSERT_TRUE(sv.contains('b', meta::StringTraits<char>::lower));
   ASSERT_TRUE(sv.contains('c', meta::StringTraits<char>::lower));
   ASSERT_FALSE(sv.contains('d', meta::StringTraits<char>::lower));
+}
+
+TEST(StringView, containsString) {
+  StringView sv = "abcd";
+  ASSERT_TRUE(sv.contains("bc"));
+  ASSERT_FALSE(sv.contains("bd"));
 }
 
 TEST(StringView, containsOf) {
@@ -754,6 +715,116 @@ TEST(StringView, findLastNotOfClient) {
 TEST(StringView, findProjectedLastNotOfClient) {
   ASSERT_EQ(StringView{"abca"}.findLastNotOf("A", toupper), 2);
   ASSERT_EQ(StringView{"abc"}.findLastNotOf("ABC", toupper), StringView::npos);
+}
+
+TEST(StringView, findExtraCov) {
+  auto r1 = StringView{"abc"}.find("bc");
+  auto b = r1.begin();
+  auto b1 = std::move(b);
+  auto e1 = r1.end();
+
+  b1 = b1;
+  b1 = std::move(b1);
+  auto b2 = r1.begin();
+  b2 = std::move(b1);
+
+  /// By design
+  ASSERT_NE(b2, r1.begin());
+  ASSERT_FALSE(b2 == r1.begin());
+
+  (void) e1;
+}
+
+TEST(StringView, findExtraCov2) {
+  auto r1 = StringView{"abc"}.find("BC", toupper);
+  auto b = r1.begin();
+  auto b1 = std::move(b);
+  auto e1 = r1.end();
+
+  b1 = b1;
+  b1 = std::move(b1);
+  auto b2 = r1.begin();
+  b2 = std::move(b1);
+
+  /// By design
+  ASSERT_NE(b2, r1.begin());
+  ASSERT_FALSE(b2 == r1.begin());
+
+  (void) e1;
+}
+
+TEST(StringView, loremIpsumFind) {
+  auto r = StringView{R"(
+Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+Excepteur sint occaecat cupidatat non proident,
+sunt in culpa qui officia deserunt mollit anim id est laborum.)"}
+  .findOf(std::vector<StringView>{"Lorem", "ipsum", "dolor", "sit", "amet", "consectetur",
+    "adipiscing", "elit",
+    "sed", "do", "eiusmod", "tempor", "incididunt", "ut", "labore", "et", "dolore","magna", "aliqua",
+"Ut", "enim", "ad", "minim", "veniam", "quis", "nostrud", "exercitation", "ullamco", "laboris",
+"nisi", "ut", "aliquip", "ex", "ea", "commodo", "consequat"," Duis", "aute", "irure", "dolor", "in",
+"reprehenderit", "in", "voluptate", "velit", "esse", "cillum", "dolore", "eu", "fugiat", "nulla",
+    "pariatur",
+"Excepteur", "sint", "occaecat", "cupidatat", "non", "proident",
+"sunt", "in", "culpa", "qui", "officia", "deserunt", "mollit", "anim", "id", "est", "laborum"});
+
+  for (auto it = r.begin(); it != r.end(); ++it) {
+    // do nothing, loop check
+    ASSERT_GE(*it, 0);
+  }
+}
+
+TEST(StringView, functional) {
+  StringView const sv{"abcd"};
+
+  int count = 0;
+  sv.forEach([&count](char const c) {
+    (void) c;
+    ++count;
+  });
+
+  ASSERT_EQ(count, 4);
+
+  using T = meta::StringTraits<char>;
+  ASSERT_TRUE(sv.some(1, T::isVowel));
+  ASSERT_TRUE(sv.atLeast(1, T::isVowel));
+  ASSERT_TRUE(sv.atMost(1, T::isVowel));
+  ASSERT_TRUE(sv.moreThan(0, T::isVowel));
+  ASSERT_TRUE(sv.lessThan(2, T::isVowel));
+  ASSERT_EQ(sv.count(T::isVowel), 1);
+  ASSERT_TRUE(sv.any(T::isVowel));
+  ASSERT_FALSE(sv.all(T::isVowel));
+  ASSERT_TRUE(sv.all(T::isLetter));
+  ASSERT_TRUE(sv.none(T::isDigit));
+  ASSERT_FALSE(sv.none(T::isVowel));
+}
+
+TEST(StringView, containsAllocation) {
+  StringView const sv {"abcd"};
+  ASSERT_TRUE(sv.contains("bc", Allocator<Size>()));
+  ASSERT_TRUE(sv.contains("BC", toupper, Allocator<Size>()));
+}
+
+TEST(StringView, startsEndsWith) {
+  StringView const sv {"abcd"};
+
+  ASSERT_TRUE(sv.startsWith('a'));
+  ASSERT_FALSE(sv.startsWith('b'));
+  ASSERT_TRUE(sv.endsWith('d'));
+  ASSERT_FALSE(sv.endsWith('c'));
+
+  ASSERT_TRUE(sv.startsWith("ab"));
+  ASSERT_FALSE(sv.startsWith("bb"));
+  ASSERT_TRUE(sv.startsWith(""));
+  ASSERT_FALSE(sv.startsWith("abcde"));
+  ASSERT_TRUE(sv.endsWith("cd"));
+  ASSERT_FALSE(sv.endsWith("dd"));
+  ASSERT_TRUE(sv.endsWith(""));
+  ASSERT_FALSE(sv.endsWith("aabcd"));
 }
 
 #ifdef DCR_SINCECPP14

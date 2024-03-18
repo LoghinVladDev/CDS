@@ -1,6 +1,6 @@
 // DCR-TEST
 // STEPS: compile(linux:gcc;linux:clang),run(linux:gcc;linux:clang)
-// STD: 11-2b
+// STD: 11+
 
 #include "../../../../src/bindings/static/ContainsOfStaticBinding.hpp"
 #include "UnitTest.hpp"
@@ -22,7 +22,7 @@ template <> struct IterableTraits<A_ContainsContainsSelectedMember> { using Valu
 }
 
 struct A_ContainsMember : public impl::ContainsOfStaticBinding<A_ContainsMember, With<Value>> {
-  CDS_ATTR(nodiscard) bool contains(int a) const { return std::find(data.begin(), data.end(), a) != data.end(); }
+  CDS_ATTR(nodiscard) bool contains(int const a) const { return std::find(data.begin(), data.end(), a) != data.end(); }
   CDS_ATTR(nodiscard) std::vector<int>::const_iterator begin() const { return data.begin(); }
   CDS_ATTR(nodiscard) std::vector<int>::const_iterator end() const { return data.end(); }
   std::vector<int> data;

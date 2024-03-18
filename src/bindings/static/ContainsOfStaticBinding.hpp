@@ -2,8 +2,8 @@
 // Created by loghin on 12/14/23.
 //
 
-#ifndef CDS_SHARED_BINDINGS_STATIC_CONTAINS_OF_BINDING_STATIC_HPP
-#define CDS_SHARED_BINDINGS_STATIC_CONTAINS_OF_BINDING_STATIC_HPP
+#ifndef CDS_BINDINGS_STATIC_CONTAINS_OF_BINDING_STATIC_HPP
+#define CDS_BINDINGS_STATIC_CONTAINS_OF_BINDING_STATIC_HPP
 #pragma once
 
 #include "../BindingSelectors.hpp"
@@ -195,4 +195,4 @@ template <typename R, typename P> class CDS_ATTR(inheritsEBOs) ContainsOfStaticB
 } // namespace impl
 } // namespace cds
 
-#endif // CDS_SHARED_BINDINGS_STATIC_CONTAINS_OF_BINDING_STATIC_HPP
+#endif // CDS_BINDINGS_STATIC_CONTAINS_OF_BINDING_STATIC_HPP

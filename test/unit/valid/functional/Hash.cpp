@@ -1,6 +1,6 @@
 // DCR-TEST
 // STEPS: compile(linux:gcc;linux:clang),run(linux:clang)
-// STD: 11-2b
+// STD: 11+
 
 #include <cds/functional/Hash>
 #include "UnitTest.hpp"
@@ -208,6 +208,21 @@ TEST(Hash, transparency) {
   ASSERT_EQ(th(S{5}), 5);
 }
 
+#include <cds/StringView>
+#include <string>
+
+TEST(Hash, string) {
+  Hash<> const h;
+
+  ASSERT_EQ(h(""), 0);
+  ASSERT_EQ(h("a"), static_cast<cds::Size>('a'));
+  ASSERT_EQ(h("ab"), static_cast<cds::Size>('a') * 31 + static_cast<cds::Size>('b'));
+  ASSERT_EQ(h("abc"), (static_cast<cds::Size>('a') * 31 + static_cast<cds::Size>('b')) * 31 + static_cast<cds::Size>('c'));
+
+  ASSERT_EQ(h("abcdef"), h(cds::StringView{"abcdef"}));
+  ASSERT_EQ(h("abcdef"), h(std::string{"abcdef"}));
+}
+
 #ifdef DCR_SINCECPP11
 TEST(Hash, constexpr11Test) {
   Hash<> const hf;
@@ -228,6 +243,15 @@ TEST(Hash, constexpr14Test) {
   static_assert(cds::functional::impl::hash16<2>(v2) == 10, "Failed constexpr test");
   static_assert(cds::functional::impl::hash32<4>(v3) == 10, "Failed constexpr test");
   static_assert(cds::functional::impl::hash64<8>(v4) == 10, "Failed constexpr test");
+}
+#endif
+
+#ifdef DCR_SINCECPP17
+#include <string_view>
+
+TEST(Hash, string_view) {
+  Hash<> const h;
+  ASSERT_EQ(h("abcdef"), h(std::string_view{"abcdef"}));
 }
 #endif
 

@@ -136,19 +136,19 @@ struct Predicate<T, Cont<Equal<>>, A, EnableIf<And<
 };
 } // namespace stringFind
 
-template <typename S, typename V, typename E, typename = typename IsString<RemoveCVRef<V>>::Type>
+template <typename, typename V, typename, typename = typename IsString<RemoveCVRef<V>>::Type>
 struct ConditionalAlloc {};
 
 template <typename S, typename V> struct ConditionalAlloc<S, V, Equal<>, True> {
-  using Alloc = typename stringFind::Predicate<V, Equal<>, Nullptr>::Alloc;
+  using Alloc = typename stringFind::Predicate<V, Equal<>, Null>::Alloc;
 };
 
 template <typename S, typename V> struct ConditionalAlloc<S, V, Contains<Equal<>>, False> {
-  using Alloc = typename stringFind::Predicate<V, Contains<Equal<>>, Nullptr>::Alloc;
+  using Alloc = typename stringFind::Predicate<V, Contains<Equal<>>, Null>::Alloc;
 };
 
 template <typename S, typename V> struct ConditionalAlloc<S, V, NotContains<Equal<>>, False> {
-  using Alloc = typename stringFind::Predicate<V, NotContains<Equal<>>, Nullptr>::Alloc;
+  using Alloc = typename stringFind::Predicate<V, NotContains<Equal<>>, Null>::Alloc;
 };
 
 template <typename C, typename U, typename V>
@@ -547,7 +547,7 @@ private:
 };
 
 template <
-    typename I, typename V, typename E, typename T, typename A = typename stringFind::Predicate<V, E, Nullptr>::Alloc,
+    typename I, typename V, typename E, typename T, typename A = typename stringFind::Predicate<V, E, Null>::Alloc,
     typename R = StringFindIterableRange<Extend<I>, typename stringFind::Predicate<V, E, A>::Type, T>,
     EnableIf<stringFind::UsesStringFind<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(20))) auto find(
@@ -559,7 +559,7 @@ template <
 
 template <
     typename I, typename V, typename P, typename E, typename T,
-    typename A = typename stringFind::Predicate<V, E, Nullptr>::Alloc,
+    typename A = typename stringFind::Predicate<V, E, Null>::Alloc,
     typename R = StringProjectedFindIterableRange<
         Extend<I>,
         typename stringFind::Predicate<V, E, A>::Type,

@@ -1,6 +1,6 @@
 // DCR-TEST
 // STEPS: compile(linux:gcc;linux:clang)
-// STD: 11-2b
+// STD: 11+
 // EXPECTED[compile]: failure
 
 #include <cds/Utility>

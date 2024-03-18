@@ -1,6 +1,6 @@
 // DCR-TEST
 // STEPS: compile(linux:gcc;linux:clang),run(linux:clang)
-// STD: 11-2b
+// STD: 11+
 
 #include <cds/meta/StringTraits>
 #include "UnitTest.hpp"

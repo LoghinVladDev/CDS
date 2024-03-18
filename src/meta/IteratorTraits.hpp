@@ -110,6 +110,14 @@ template <template <typename...> class N, typename T> struct NodeIteratorTraits<
   using Node = N<T>;
   using Value = T;
 };
+
+namespace sentinelForImpl {
+template <typename T, typename = void> struct SentinelFor {
+  using Type = T;
+};
+} // namespace sentinelForImpl
+
+template <typename T> using SentinelFor = typename sentinelForImpl::SentinelFor<T>::Type;
 } // namespace meta
 } // namespace cds
 
