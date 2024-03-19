@@ -8,6 +8,7 @@ set(
     valid/bindings/ContainsOfStaticBinding.cpp
     valid/bindings/FindStaticBinding.cpp
     valid/bindings/FindOfStaticBinding.cpp
+    valid/bindings/GenericLoopBinding.cpp
 
     valid/ds/SingleLinkedListBase.cpp
     valid/ds/HashTableBase.cpp

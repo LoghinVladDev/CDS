@@ -151,20 +151,11 @@ template <typename Fn> struct FunctionRValue<Fn, meta::False> {
   using Type = Fn;
 };
 
-template <typename, typename = void> struct InvokeTraits : meta::False {
-  using ReturnType = void;
-};
+template <typename, typename = void> struct InvokeTraits : meta::False {};
 
 template <typename Fn, typename... Args>
-struct InvokeTraits<
-    Pack<Fn, Args...>,
-    Void<decltype(Invoke<typename FunctionRValue<Fn>::Type>::call(
-        rvalue<typename FunctionRValue<Fn>::Type>(), rvalue<Args>()...)
-    )>
-> : meta::True {
-  using ReturnType = decltype(Invoke<typename FunctionRValue<Fn>::Type>::call(
-      rvalue<typename FunctionRValue<Fn>::Type>(), meta::rvalue<Args>()...)
-  );
+struct InvokeTraits<Pack<Fn, Args...>, Void<decltype(Invoke<Fn>::call(rvalue<Fn>(), rvalue<Args>()...))>> : meta::True {
+  using ReturnType = decltype(Invoke<Fn>::call(rvalue<Fn>(), meta::rvalue<Args>()...));
 };
 } // namespace impl
 template <typename Signature> struct FunctionTraits : impl::FunctionTraits<Decay<Signature>> {};

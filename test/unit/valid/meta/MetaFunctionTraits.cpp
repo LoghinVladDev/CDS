@@ -208,33 +208,45 @@ TEST(FunctionTraits, InvokeReturnOf) {
   static_assert(IsSame<InvokeReturnOf<decltype(f3_n), double>, void>::value, "Failed InvokeReturnOf");
   static_assert(IsSame<InvokeReturnOf<void(int), double>, void>::value, "Failed InvokeReturnOf");
 
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f1)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f2)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f3)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f4)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f5)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f6)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f7)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f8)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f9)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f10)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f11)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f12)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f13)>, int>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f14), int, long>, long>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f1), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f2), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f3), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f4), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f5), X&>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f6), X const&>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f7), X&>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f8), X&>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f9), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f10), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f11), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f12), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f13), X>, int>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f14), X, int, long>, long>::value, "Failed InvokeReturnOf");
 
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f1_n)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f2_n)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f3_n)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f4_n)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f5_n)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f6_n)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f7_n)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f8_n)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f9_n)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f10_n)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f11_n)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f12_n)>, void>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f13_n)>, int>::value, "Failed InvokeReturnOf");
-  static_assert(IsSame<InvokeReturnOf<decltype(&X::f14_n), int, long>, long>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f1_n), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f2_n), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f3_n), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f4_n), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f5_n), X&>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f6_n), X const&>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f7_n), X&>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f8_n), X&>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f9_n), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f10_n), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f11_n), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f12_n), X>, void>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f13_n), X>, int>::value, "Failed InvokeReturnOf");
+  static_assert(IsSame<InvokeReturnOf<decltype(&X::f14_n), X, int, long>, long>::value, "Failed InvokeReturnOf");
+}
+
+TEST(MetaFunctionTraits, IsInvocable) {
+  static_assert(IsInvocable<decltype(f1)>::value, "Failed IsInvocable");
+  static_assert(!IsInvocable<decltype(f1), int>::value, "Failed IsInvocable");
+  static_assert(IsInvocable<decltype(f2), int, long>::value, "Failed IsInvocable");
+  static_assert(IsInvocable<decltype(f2), int, int>::value, "Failed IsInvocable");
+  static_assert(!IsInvocable<decltype(f2), int, int, char>::value, "Failed IsInvocable");
+  static_assert(!IsInvocable<decltype(f2)>::value, "Failed IsInvocable");
+
+  static_assert(IsInvocable<decltype(&X::f1), X>::value, "Failed IsInvocable");
+  static_assert(!IsInvocable<decltype(&X::f1)>::value, "Failed IsInvocable");
 }

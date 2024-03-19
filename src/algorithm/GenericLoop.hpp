@@ -12,24 +12,25 @@
 
 namespace cds {
 namespace impl {
-using functional::invoke;
+using meta::IsInvocable;
+using meta::ReturnIf;
 
 template <typename I, typename S, typename C> CDS_ATTR(constexpr(14))
 auto forEach(I&& begin, S&& end, C&& consumer) CDS_ATTR(noexcept(
-    noexcept(invoke(cds::forward<C>(consumer), *cds::forward<I>(begin)))
-)) -> void {
+    noexcept(functional::invoke(cds::forward<C>(consumer), *cds::forward<I>(begin)))
+)) -> ReturnIf<void, IsInvocable<C, decltype(*meta::rvalue<I>())>> {
   for (auto it = cds::forward<I>(begin); it != cds::forward<S>(end); ++it) {
-    (void) invoke(cds::forward<C>(consumer), *it);
+    (void) functional::invoke(cds::forward<C>(consumer), *it);
   }
 }
 
 template <typename I, typename S, typename P> CDS_ATTR(2(nodiscard, constexpr(14)))
-auto some(I&& begin, S&& end, Size count, P&& predicate) CDS_ATTR(noexcept(
-    noexcept(invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
-)) -> bool {
+auto some(I&& begin, S&& end, Size const count, P&& predicate) CDS_ATTR(noexcept(
+    noexcept(functional::invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
+)) -> ReturnIf<bool, IsInvocable<P, decltype(*meta::rvalue<I>())>> {
   Size valid = 0u;
   for (auto it = cds::forward<I>(begin); it != cds::forward<S>(end); ++it) {
-    if (invoke(cds::forward<P>(predicate), *it)) {
+    if (functional::invoke(cds::forward<P>(predicate), *it)) {
       ++valid;
     }
 
@@ -41,12 +42,12 @@ auto some(I&& begin, S&& end, Size count, P&& predicate) CDS_ATTR(noexcept(
 }
 
 template <typename I, typename S, typename P> CDS_ATTR(2(nodiscard, constexpr(14)))
-auto atLeast(I&& begin, S&& end, Size count, P&& predicate) CDS_ATTR(noexcept(
-    noexcept(invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
-)) -> bool {
+auto atLeast(I&& begin, S&& end, Size const count, P&& predicate) CDS_ATTR(noexcept(
+    noexcept(functional::invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
+)) -> ReturnIf<bool, IsInvocable<P, decltype(*meta::rvalue<I>())>> {
   Size valid = 0u;
   for (auto it = cds::forward<I>(begin); it != cds::forward<S>(end); ++it) {
-    if (invoke(cds::forward<P>(predicate), *it)) {
+    if (functional::invoke(cds::forward<P>(predicate), *it)) {
       ++valid;
     }
 
@@ -58,12 +59,12 @@ auto atLeast(I&& begin, S&& end, Size count, P&& predicate) CDS_ATTR(noexcept(
 }
 
 template <typename I, typename S, typename P> CDS_ATTR(2(nodiscard, constexpr(14)))
-auto atMost(I&& begin, S&& end, Size count, P&& predicate) CDS_ATTR(noexcept(
-    noexcept(invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
-)) -> bool {
+auto atMost(I&& begin, S&& end, Size const count, P&& predicate) CDS_ATTR(noexcept(
+    noexcept(functional::invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
+)) -> ReturnIf<bool, IsInvocable<P, decltype(*meta::rvalue<I>())>> {
   Size valid = 0u;
   for (auto it = cds::forward<I>(begin); it != cds::forward<S>(end); ++it) {
-    if (invoke(cds::forward<P>(predicate), *it)) {
+    if (functional::invoke(cds::forward<P>(predicate), *it)) {
       ++valid;
     }
 
@@ -75,16 +76,16 @@ auto atMost(I&& begin, S&& end, Size count, P&& predicate) CDS_ATTR(noexcept(
 }
 
 template <typename I, typename S, typename P> CDS_ATTR(2(nodiscard, constexpr(14)))
-auto moreThan(I&& begin, S&& end, Size count, P&& predicate) CDS_ATTR(noexcept(
-    noexcept(invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
-)) -> bool {
+auto moreThan(I&& begin, S&& end, Size const count, P&& predicate) CDS_ATTR(noexcept(
+    noexcept(functional::invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
+)) -> ReturnIf<bool, IsInvocable<P, decltype(*meta::rvalue<I>())>> {
   return atLeast(cds::forward<I>(begin), cds::forward<S>(end), count + 1u, cds::forward<P>(predicate));
 }
 
 template <typename I, typename S, typename P> CDS_ATTR(2(nodiscard, constexpr(14)))
-auto lessThan(I&& begin, S&& end, Size count, P&& predicate) CDS_ATTR(noexcept(
-    noexcept(invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
-)) -> bool {
+auto lessThan(I&& begin, S&& end, Size const count, P&& predicate) CDS_ATTR(noexcept(
+    noexcept(functional::invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
+)) -> ReturnIf<bool, IsInvocable<P, decltype(*meta::rvalue<I>())>> {
   if (count == 0u) {
     return false;
   }
@@ -93,11 +94,11 @@ auto lessThan(I&& begin, S&& end, Size count, P&& predicate) CDS_ATTR(noexcept(
 
 template <typename I, typename S, typename P> CDS_ATTR(2(nodiscard, constexpr(14)))
 auto count(I&& begin, S&& end, P&& predicate) CDS_ATTR(noexcept(
-    noexcept(invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
-)) -> Size {
+    noexcept(functional::invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
+)) -> ReturnIf<Size, IsInvocable<P, decltype(*meta::rvalue<I>())>> {
   Size valid = 0u;
   for (auto it = cds::forward<I>(begin); it != cds::forward<S>(end); ++it) {
-    if (invoke(cds::forward<P>(predicate), *it)) {
+    if (functional::invoke(cds::forward<P>(predicate), *it)) {
       ++valid;
     }
   }
@@ -106,10 +107,10 @@ auto count(I&& begin, S&& end, P&& predicate) CDS_ATTR(noexcept(
 
 template <typename I, typename S, typename P> CDS_ATTR(2(nodiscard, constexpr(14)))
 auto any(I&& begin, S&& end, P&& predicate) CDS_ATTR(noexcept(
-    noexcept(invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
-)) -> bool {
+    noexcept(functional::invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
+)) -> ReturnIf<bool, IsInvocable<P, decltype(*meta::rvalue<I>())>> {
   for (auto it = cds::forward<I>(begin); it != cds::forward<S>(end); ++it) {
-    if (invoke(cds::forward<P>(predicate), *it)) {
+    if (functional::invoke(cds::forward<P>(predicate), *it)) {
       return true;
     }
   }
@@ -118,10 +119,10 @@ auto any(I&& begin, S&& end, P&& predicate) CDS_ATTR(noexcept(
 
 template <typename I, typename S, typename P> CDS_ATTR(2(nodiscard, constexpr(14)))
 auto all(I&& begin, S&& end, P&& predicate) CDS_ATTR(noexcept(
-    noexcept(invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
-)) -> bool {
+    noexcept(functional::invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
+)) -> ReturnIf<bool, IsInvocable<P, decltype(*meta::rvalue<I>())>> {
   for (auto it = cds::forward<I>(begin); it != cds::forward<S>(end); ++it) {
-    if (!invoke(cds::forward<P>(predicate), *it)) {
+    if (!functional::invoke(cds::forward<P>(predicate), *it)) {
       return false;
     }
   }
@@ -130,10 +131,10 @@ auto all(I&& begin, S&& end, P&& predicate) CDS_ATTR(noexcept(
 
 template <typename I, typename S, typename P> CDS_ATTR(2(nodiscard, constexpr(14)))
 auto none(I&& begin, S&& end, P&& predicate) CDS_ATTR(noexcept(
-    noexcept(invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
-)) -> bool {
+    noexcept(functional::invoke(cds::forward<P>(predicate), *cds::forward<I>(begin)))
+)) -> ReturnIf<bool, IsInvocable<P, decltype(*meta::rvalue<I>())>> {
   for (auto it = cds::forward<I>(begin); it != cds::forward<S>(end); ++it) {
-    if (invoke(cds::forward<P>(predicate), *it)) {
+    if (functional::invoke(cds::forward<P>(predicate), *it)) {
       return false;
     }
   }

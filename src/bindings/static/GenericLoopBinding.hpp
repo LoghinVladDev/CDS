@@ -21,7 +21,7 @@ template <typename, typename = void> class GenericLoopStaticBinding {};
 
 template <typename I> class GenericLoopStaticBinding<I> {
   using Iterator = typename IterableTraits<I>::Iterator;
-  using Sentinel = SentinelFor<I>;
+  using Sentinel = SentinelFor<Iterator>;
 public:
   template <typename C> CDS_ATTR(2(nodiscard, constexpr(14))) auto forEach(C&& consumer) CDS_ATTR(noexcept(
       noexcept(impl::forEach(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<C>(consumer)))
@@ -100,7 +100,7 @@ public:
 
 template <typename I> class GenericLoopStaticBinding<I const> {
     using Iterator = typename IterableTraits<I>::ConstIterator;
-    using Sentinel = SentinelFor<I>;
+    using Sentinel = SentinelFor<Iterator>;
 public:
   template <typename C> CDS_ATTR(2(nodiscard, constexpr(14))) auto forEach(C&& consumer) const CDS_ATTR(noexcept(
       noexcept(impl::forEach(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<C>(consumer)))
