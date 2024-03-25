@@ -95,6 +95,13 @@ template <typename T> struct StreamPrint<T, LocalVoid<decltype(localLVOf<std::os
   }
 };
 
+template <std::size_t s> struct StreamPrint<wchar_t const(&)[s]> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<UTF-16 Encoded String, printing is incompatible>";
+  }
+};
+
 template <typename T> auto descOperand(std::string const& asStr, T&& op) -> std::string {
   std::stringstream oss;
   oss << "  " << asStr;

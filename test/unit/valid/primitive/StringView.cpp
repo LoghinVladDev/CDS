@@ -827,9 +827,53 @@ TEST(StringView, startsEndsWith) {
   ASSERT_FALSE(sv.endsWith("aabcd"));
 }
 
+TEST(StringView, literal) {
+  using namespace cds::literals;
+  ASSERT_EQ("abcd"_sv, "abcd");
+  ASSERT_EQ(L"abcd"_sv, L"abcd");
+}
+
+TEST(StringView, constructions) {
+  StringView const sv1 = "abcd";
+  char const buf[] = "abcd";
+  StringView const sv2 = buf;
+  std::string str = "abcd";
+  StringView const sv3 = str;
+  ASSERT_EQ(sv1, sv2);
+  ASSERT_EQ(sv1, sv3);
+}
+
+TEST(StringView, assignments) {
+  StringView sv;
+  sv = "abcd";
+  ASSERT_EQ(sv, "abcd");
+  char const buf[] = "abcd";
+  sv = buf;
+  ASSERT_EQ(sv, "abcd");
+  std::string const sv3 = "abcd";
+  sv = sv3;
+  ASSERT_EQ(sv, "abcd");
+}
+
 #ifdef DCR_SINCECPP14
 TEST(StringView, cpp14Constexpr) {
   static_assert(*StringView{"ab ab"}.split(' ').begin() == "ab", "constexpr failed");
+}
+#endif
+
+#ifdef DCR_SINCECPP17
+
+TEST(StringView, constructions17) {
+  std::string_view strv = "abcd";
+  StringView const sv4 = strv;
+  ASSERT_EQ(sv4, "abcd");
+}
+
+TEST(StringView, assignments17) {
+  StringView sv;
+  std::string_view sv4 = "abcd";
+  sv = sv4;
+  ASSERT_EQ(sv, "abcd");
 }
 #endif
 

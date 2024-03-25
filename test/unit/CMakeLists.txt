@@ -41,6 +41,7 @@ set(
 
     valid/policy/RehashPolicy.cpp
 
+    valid/primitive/String.cpp
     valid/primitive/StringAbstract.cpp
     valid/primitive/StringUtils.cpp
     valid/primitive/StringView.cpp

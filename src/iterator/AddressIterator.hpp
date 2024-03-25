@@ -79,7 +79,7 @@ public:
   ) noexcept -> bool;
 
 #if CDS_ATTR(spaceship)
-  template <typename Lhs, typename Rhs> CDS_ATTR(always_constexpr) friend auto operator<=>(
+  template <typename Lhs, typename Rhs> CDS_ATTR(constexpr(14)) friend auto operator<=>(
       AddressIteratorBase<Lhs, fwd> const& lhs, AddressIteratorBase<Rhs, fwd> const& rhs
   ) noexcept -> strong_ordering;
 #endif // #if CDS_ATTR(spaceship)
@@ -173,13 +173,13 @@ template <typename Lhs, typename Rhs> CDS_ATTR(2(nodiscard, constexpr(11))) auto
 }
 
 #if CDS_ATTR(spaceship)
-template <typename Lhs, typename Rhs> CDS_ATTR(2(nodiscard, always_constexpr)) auto operator<=>(
+template <typename Lhs, typename Rhs> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator<=>(
     AddressIteratorBase<Lhs, true> const& lhs, AddressIteratorBase<Rhs, true> const& rhs
 ) noexcept -> std::strong_ordering {
   return lhs._addr <=> rhs._addr;
 }
 
-template <typename Lhs, typename Rhs> CDS_ATTR(2(nodiscard, always_constexpr)) auto operator<=>(
+template <typename Lhs, typename Rhs> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator<=>(
     AddressIteratorBase<Lhs, false> const& lhs, AddressIteratorBase<Rhs, false> const& rhs
 ) noexcept -> strong_ordering {
   if (lhs._addr < rhs._addr) {

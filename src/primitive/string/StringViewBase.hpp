@@ -44,7 +44,7 @@ using meta::rvalue;
 using std::strong_ordering;
 #endif // #if CDS_ATTR(spaceship)
 
-template <typename C, typename U> struct FindStringTransformer {
+template <typename C, typename U> struct FindStringViewTransformer {
   template <typename IB, typename IE, typename I>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(IB&& b, IE&& e, I&& i) const noexcept -> Idx {
     return cds::forward<IE>(e) == cds::forward<I>(i)
@@ -63,7 +63,7 @@ template <typename C, typename U> struct ContainsOf :
 
 using FindOpt = With<Value, Projector, Immutable>;
 template <typename C, typename U> struct FindTr :
-    FindStringTransformer<C, U> {};
+    FindStringViewTransformer<C, U> {};
 template <typename C, typename U> struct Find :
     FindStaticBinding<Self<C, U>, FindOpt, FindTr<C, U>, FindTr<C, U>> {};
 template <typename C, typename U> struct FindOf :
@@ -104,8 +104,11 @@ public:
   CDS_ATTR(constexpr(11)) BaseStringView(BaseStringView &&) noexcept = default;
   CDS_ATTR(constexpr(20)) ~BaseStringView() noexcept = default;
 
-  template <typename AddressLike, EnableIf<Not<IsSame<Decay<AddressLike>, BaseStringView>>> = 0>
-  CDS_ATTR(2(implicit, constexpr(11))) BaseStringView(AddressLike&& string) noexcept;
+  template <typename Convertible, EnableIf<Not<IsSame<RemoveCVRef<Convertible>, BaseStringView>>> = 0>
+  CDS_ATTR(2(implicit, constexpr(11))) BaseStringView(Convertible&& string) noexcept :
+      _data(StringAbstract<Convertible>::data(cds::forward<Convertible>(string))),
+      _length(StringAbstract<Convertible>::length(cds::forward<Convertible>(string))) {}
+
   CDS_ATTR(constexpr(11)) BaseStringView(Address data, Size const length) noexcept : _data(data), _length(length) {}
 
   CDS_ATTR(constexpr(14)) auto operator=(BaseStringView const&) noexcept -> BaseStringView& = default;
@@ -366,12 +369,6 @@ private:
 template <typename C, typename U> Idx const BaseStringView<C, U>::npos = -1;
 template <typename C, typename U> Idx const BaseStringView<C, U>::invalidIndex = npos;
 
-template <typename C, typename U>
-template <typename AddressLike, EnableIf<Not<IsSame<Decay<AddressLike>, BaseStringView<C, U>>>>>
-CDS_ATTR(constexpr(11)) BaseStringView<C, U>::BaseStringView(AddressLike &&string) noexcept :
-    _data(string),
-    _length(StringAbstract<AddressLike>::length(cds::forward<AddressLike>(string))) {}
-
 template <typename C, typename U> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator==(
     BaseStringView<C, U> const& lhs, BaseStringView<C, U> const& rhs
 ) noexcept -> bool {
@@ -556,6 +553,18 @@ auto operator<<(typename BaseStringView<FC, FU>::OStream& out, BaseStringView<FC
   return out;
 }
 } // namespace impl
+
+namespace literals {
+CDS_ATTR(2(nodiscard, consteval(20, constexpr(11))))
+auto operator ""_sv(char const* string, std::size_t length) noexcept -> impl::BaseStringView<char> {
+  return {string, length};
+}
+
+CDS_ATTR(2(nodiscard, consteval(20, constexpr(11))))
+auto operator ""_sv(wchar_t const* string, std::size_t length) noexcept -> impl::BaseStringView<wchar_t> {
+  return {string, length};
+}
+}
 } // namespace cds
 
 #endif // CDS_PRIMITIVE_STRING_VIEW_BASE_HPP

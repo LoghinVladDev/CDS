@@ -6,14 +6,10 @@
 #define CDS_PRIMITIVE_STRING_HPP
 #pragma once
 
-#include <cds/memory/Allocator>
-#include <cds/meta/Compiler>
-#include <cds/meta/StringTraits>
-#include <cds/iterator/AddressIterator>
-
 #include "string/StringBase.hpp"
 
 namespace cds {
+using String = impl::BaseString<char>;
 } // namespace cds
 
 #endif // CDS_PRIMITIVE_STRING_HPP

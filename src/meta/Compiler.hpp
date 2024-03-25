@@ -24,7 +24,7 @@
 #define CDS_ATTR_nodiscard
 #define CDS_ATTR_inline
 #define CDS_ATTR_constexpr(std) CDS_ATTR_constexpr_ ## std
-#define CDS_ATTR_always_constexpr constexpr
+#define CDS_ATTR_consteval(std, fallback) CDS_ATTR_consteval_ ## std (fallback)
 #define CDS_ATTR_noexcept(...) noexcept(!CDS_ATTR_exceptions || __VA_ARGS__)
 #define CDS_ATTR_friend_noexcept(...) CDS_ATTR_noexcept(__VA_ARGS__)
 
@@ -130,6 +130,7 @@
 #if CDS_ATTR(std) >= CDS_ATTR(std20)
 #define CDS_ATTR_cpp20 true
 #define CDS_ATTR_constexpr_20 constexpr
+#define CDS_ATTR_consteval_20(_) consteval
 #define CDS_ATTR_spaceship true
 #undef CDS_ATTR_likely
 #define CDS_ATTR_likely CDS_ATTR_NEWSTYLE(likely)
@@ -142,6 +143,7 @@
 #else // before cpp20
 #define CDS_ATTR_cpp20 false
 #define CDS_ATTR_constexpr_20 inline
+#define CDS_ATTR_consteval_20(fallback) CDS_ATTR_ ## fallback
 #define CDS_ATTR_spaceship false
 #define CDS_ATTR_explicit explicit
 #define CDS_ATTR_implicit
@@ -150,9 +152,11 @@
 #if CDS_ATTR(std) >= CDS_ATTR(std23)
 #define CDS_ATTR_cpp23 true
 #define CDS_ATTR_constexpr_23 constexpr
+#define CDS_ATTR_consteval_23(_) consteval
 #else // before cpp23
 #define CDS_ATTR_cpp23 false
 #define CDS_ATTR_constexpr_23 inline
+#define CDS_ATTR_consteval_23(fallback) CDS_ATTR_ ## fallback
 #endif
 
 namespace cds {
