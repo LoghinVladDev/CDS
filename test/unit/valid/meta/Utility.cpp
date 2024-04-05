@@ -210,6 +210,42 @@ TEST(Utility, destructN) {
   impl::destructN(dstBuf, 4);
 }
 
+TEST(Utility, compare) {
+  char const buf1[] = "a";
+  char const buf2[] = "a";
+
+  using A = impl::StringAbstract<>;
+  using t = char const*;
+  auto const c1 = &impl::compare<t, t, t, t>;
+  ASSERT_EQ(c1(nullptr, nullptr, nullptr, nullptr), impl::Ordering::Equal);
+  ASSERT_EQ(c1(buf1, buf1, nullptr, nullptr), impl::Ordering::Equal);
+  ASSERT_EQ(c1(buf1, buf1, buf2, buf2), impl::Ordering::Equal);
+  ASSERT_EQ(c1(buf1, buf1 + 1, buf2, buf2 + 1), impl::Ordering::Equal);
+  ASSERT_EQ(impl::compare(cds::begin(buf1), cds::begin(buf1), cds::begin(buf2), cds::begin(buf2)), impl::Ordering::Equal);
+  ASSERT_EQ(impl::compare(cds::begin(buf1), cds::end(buf1), cds::begin(buf2), cds::end(buf2)), impl::Ordering::Equal);
+
+  ASSERT_EQ(c1(nullptr, nullptr, buf1, buf1 + A::length(buf1)), impl::Ordering::Less);
+  ASSERT_EQ(c1(buf1, buf1 + A::length(buf1), nullptr, nullptr), impl::Ordering::Greater);
+
+  char const buf3[] = "aa";
+  char const buf4[] = "ab";
+  ASSERT_EQ(impl::compare(buf3, buf3 + A::length(buf3), buf4, buf4 + A::length(buf4)), impl::Ordering::Less);
+  ASSERT_EQ(impl::compare(buf4, buf3 + A::length(buf4), buf3, buf4 + A::length(buf3)), impl::Ordering::Greater);
+  ASSERT_EQ(impl::compare(cds::begin(buf3), cds::end(buf3), cds::begin(buf4), cds::end(buf4)), impl::Ordering::Less);
+  ASSERT_EQ(impl::compare(cds::begin(buf4), cds::end(buf4), cds::begin(buf3), cds::end(buf3)), impl::Ordering::Greater);
+
+  char const buf5[] = "aab";
+  ASSERT_EQ(impl::compare(buf3, buf3 + A::length(buf3), buf5, buf5 + A::length(buf5)), impl::Ordering::Less);
+  ASSERT_EQ(impl::compare(buf5, buf5 + A::length(buf5), buf3, buf3 + A::length(buf3)), impl::Ordering::Greater);
+  ASSERT_EQ(impl::compare(buf5, buf5 + A::length(buf3), buf3, buf3 + A::length(buf3)), impl::Ordering::Equal);
+  ASSERT_EQ(impl::compare(cds::begin(buf3), cds::end(buf3), cds::begin(buf5), cds::end(buf5)), impl::Ordering::Less);
+  ASSERT_EQ(impl::compare(cds::begin(buf5), cds::end(buf5), cds::begin(buf3), cds::end(buf3)), impl::Ordering::Greater);
+}
+
+TEST(Utility, ignore) {
+  cds::impl::ignore = 3;
+}
+
 #ifdef DCR_SINCECPP14
 TEST(Utility, cpp14Constexpr) {
   static_assert(testCopy(), "constexpr copy failed");

@@ -10,6 +10,7 @@
 #include "StringSplit.hpp"
 #include "StringFind.hpp"
 #include "StringUtils.hpp"
+#include "StringOperator.hpp"
 
 #include "../../bindings/BindingSelectors.hpp"
 #include "../../bindings/static/ContainsOfStaticBinding.hpp"
@@ -79,7 +80,8 @@ template <typename C, typename U> class CDS_ATTR(inheritsEBOs) BaseStringView :
     public bindingsBSV::ContainsOf<C, U>,
     public bindingsBSV::Find<C, U>,
     public bindingsBSV::FindOf<C, U>,
-    public bindingsBSV::GenericLoop<C, U> {
+    public bindingsBSV::GenericLoop<C, U>,
+    private strop::StringOperatorUser {
 public:
   using STraits = typename U::Traits;
   using ITraits = bindingsBSV::Traits<C, U>;
@@ -135,7 +137,7 @@ public:
   }
 
   CDS_ATTR(constexpr(14)) auto clear() noexcept -> void {
-    _data = nullptr;
+    // _data = nullptr;
     _length = 0u;
   }
 
@@ -190,22 +192,22 @@ public:
   }
 
   template <typename N, EnableIf<IsIntegral<N>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto sub(N from) const noexcept -> BaseStringView {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto sub(N from) const noexcept -> View {
     return sub(from, size());
   }
 
   template <typename N, EnableIf<IsIntegral<N>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(N from) const noexcept -> BaseStringView {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(N from) const noexcept -> View {
     return sub(from, size());
   }
 
   template <typename N1, typename N2, EnableIf<All<IsIntegral, N1, N2>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(N1 from, N2 until) const noexcept -> BaseStringView {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(N1 from, N2 until) const noexcept -> View {
     return sub(from, until);
   }
 
   template <typename N1, typename N2, EnableIf<All<IsIntegral, N1, N2>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto sub(N1 from, N2 until) const noexcept -> BaseStringView {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto sub(N1 from, N2 until) const noexcept -> View {
     auto const sUntil = static_cast<Size>(until);
     auto const sFrom = static_cast<Size>(from);
 
@@ -241,36 +243,6 @@ public:
   ))) -> bool {
     return findFirst(cds::forward<N>(needle), cds::forward<S>(selector), cds::forward<A>(alloc)) != npos;
   }
-
-  template <typename FC, typename FU> CDS_ATTR(constexpr(14)) friend auto operator==(
-      BaseStringView<FC, FU> const& lhs, BaseStringView<FC, FU> const& rhs
-  ) noexcept -> bool;
-
-  template <typename FC, typename FU> CDS_ATTR(constexpr(14)) friend auto operator!=(
-      BaseStringView<FC, FU> const& lhs, BaseStringView<FC, FU> const& rhs
-  ) noexcept -> bool;
-
-  template <typename FC, typename FU> CDS_ATTR(constexpr(14)) friend auto operator<(
-      BaseStringView<FC, FU> const& lhs, BaseStringView<FC, FU> const& rhs
-  ) noexcept -> bool;
-
-  template <typename FC, typename FU> CDS_ATTR(constexpr(14)) friend auto operator>(
-      BaseStringView<FC, FU> const& lhs, BaseStringView<FC, FU> const& rhs
-  ) noexcept -> bool;
-
-  template <typename FC, typename FU> CDS_ATTR(constexpr(14)) friend auto operator<=(
-      BaseStringView<FC, FU> const& lhs, BaseStringView<FC, FU> const& rhs
-  ) noexcept -> bool;
-
-  template <typename FC, typename FU> CDS_ATTR(constexpr(14)) friend auto operator>=(
-      BaseStringView<FC, FU> const& lhs, BaseStringView<FC, FU> const& rhs
-  ) noexcept -> bool;
-
-#if CDS_ATTR(spaceship)
-  template <typename FC, typename FU> CDS_ATTR(constexpr(14)) friend auto operator<=>(
-      BaseStringView<FC, FU> const& lhs, BaseStringView<FC, FU> const& rhs
-  ) noexcept -> strong_ordering;
-#endif // #if CDS_ATTR(spaceship)
 
   template <typename A = Allocator<C>> CDS_ATTR(2(nodiscard, constexpr(20)))
   auto str(A&& alloc = A()) const CDS_ATTR(noexcept(false)) -> BaseString<C, U, A>;
@@ -369,183 +341,6 @@ private:
 template <typename C, typename U> Idx const BaseStringView<C, U>::npos = -1;
 template <typename C, typename U> Idx const BaseStringView<C, U>::invalidIndex = npos;
 
-template <typename C, typename U> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator==(
-    BaseStringView<C, U> const& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> bool {
-  return U::compare(lhs._data, lhs._length, rhs._data, rhs._length) == U::Ordering::Equal;
-}
-
-template <typename C, typename U, typename T, EnableIf<And<
-    IsConstructible<BaseStringView<C, U>, T>,
-    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
->> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(
-    BaseStringView<C, U> const& lhs, T&& rhs
-) noexcept -> bool {
-  return lhs == BaseStringView<C, U>(cds::forward<T>(rhs));
-}
-
-template <typename C, typename U, typename T, EnableIf<And<
-    IsConstructible<BaseStringView<C, U>, T>,
-    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
->> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(
-    T&& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> bool {
-  return BaseStringView<C, U>(cds::forward<T>(lhs)) == rhs;
-}
-
-template <typename C, typename U> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator!=(
-    BaseStringView<C, U> const& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> bool {
-  return U::compare(lhs._data, lhs._length, rhs._data, rhs._length) != U::Ordering::Equal;
-}
-
-template <typename C, typename U, typename T, EnableIf<And<
-    IsConstructible<BaseStringView<C, U>, T>,
-    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
->> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(
-    BaseStringView<C, U> const& lhs, T&& rhs
-) noexcept -> bool {
-  return lhs != BaseStringView<C, U>(cds::forward<T>(rhs));
-}
-
-template <typename C, typename U, typename T, EnableIf<And<
-    IsConstructible<BaseStringView<C, U>, T>,
-    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
->> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(
-    T&& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> bool {
-  return BaseStringView<C, U>(cds::forward<T>(lhs)) != rhs;
-}
-
-template <typename C, typename U> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator<(
-    BaseStringView<C, U> const& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> bool {
-  return U::compare(lhs._data, lhs._length, rhs._data, rhs._length) == U::Ordering::Less;
-}
-
-template <typename C, typename U, typename T, EnableIf<And<
-    IsConstructible<BaseStringView<C, U>, T>,
-    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
->> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<(
-    BaseStringView<C, U> const& lhs, T&& rhs
-) noexcept -> bool {
-  return lhs < BaseStringView<C, U>(cds::forward<T>(rhs));
-}
-
-template <typename C, typename U, typename T, EnableIf<And<
-    IsConstructible<BaseStringView<C, U>, T>,
-    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
->> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<(
-    T&& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> bool {
-  return BaseStringView<C, U>(cds::forward<T>(lhs)) < rhs;
-}
-
-template <typename C, typename U> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator>(
-    BaseStringView<C, U> const& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> bool {
-  return U::compare(lhs._data, lhs._length, rhs._data, rhs._length) == U::Ordering::Greater;
-}
-
-template <typename C, typename U, typename T, EnableIf<And<
-    IsConstructible<BaseStringView<C, U>, T>,
-    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
->> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>(
-    BaseStringView<C, U> const& lhs, T&& rhs
-) noexcept -> bool {
-  return lhs > BaseStringView<C, U>(cds::forward<T>(rhs));
-}
-
-template <typename C, typename U, typename T, EnableIf<And<
-    IsConstructible<BaseStringView<C, U>, T>,
-    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
->> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>(
-    T&& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> bool {
-  return BaseStringView<C, U>(cds::forward<T>(lhs)) > rhs;
-}
-
-template <typename C, typename U> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator<=(
-    BaseStringView<C, U> const& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> bool {
-  return U::compare(lhs._data, lhs._length, rhs._data, rhs._length) != U::Ordering::Greater;
-}
-
-template <typename C, typename U, typename T, EnableIf<And<
-    IsConstructible<BaseStringView<C, U>, T>,
-    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
->> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=(
-    BaseStringView<C, U> const& lhs, T&& rhs
-) noexcept -> bool {
-  return lhs <= BaseStringView<C, U>(cds::forward<T>(rhs));
-}
-
-template <typename C, typename U, typename T, EnableIf<And<
-    IsConstructible<BaseStringView<C, U>, T>,
-    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
->> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=(
-    T&& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> bool {
-  return BaseStringView<C, U>(cds::forward<T>(lhs)) <= rhs;
-}
-
-template <typename C, typename U> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator>=(
-    BaseStringView<C, U> const& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> bool {
-  return U::compare(lhs._data, lhs._length, rhs._data, rhs._length) != U::Ordering::Less;
-}
-
-template <typename C, typename U, typename T, EnableIf<And<
-    IsConstructible<BaseStringView<C, U>, T>,
-    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
->> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>=(
-    BaseStringView<C, U> const& lhs, T&& rhs
-) noexcept -> bool {
-return lhs >= BaseStringView<C, U>(cds::forward<T>(rhs));
-}
-
-template <typename C, typename U, typename T, EnableIf<And<
-    IsConstructible<BaseStringView<C, U>, T>,
-    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
->> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>=(
-    T&& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> bool {
-  return BaseStringView<C, U>(cds::forward<T>(lhs)) >= rhs;
-}
-
-#if CDS_ATTR(spaceship)
-template <typename C, typename U> CDS_ATTR(constexpr(14)) auto operator<=>(
-    BaseStringView<C, U> const& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> strong_ordering {
-  if (lhs._data == rhs._data && lhs._length == rhs._length) {
-    return strong_ordering::equivalent;
-  }
-
-  auto const compareResult = U::compare(lhs._data, lhs._length, rhs._data, rhs._length);
-  if (compareResult == U::Ordering::Greater) { return strong_ordering::greater; }
-  if (compareResult == U::Ordering::Less) { return strong_ordering::less; }
-  return strong_ordering::equal;
-}
-
-template <typename C, typename U, typename T, EnableIf<And<
-    IsConstructible<BaseStringView<C, U>, T>,
-    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
->> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=>(
-    BaseStringView<C, U> const& lhs, T&& rhs
-) noexcept -> strong_ordering {
-  return lhs <=> BaseStringView<C, U>(cds::forward<T>(rhs));
-}
-
-template <typename C, typename U, typename T, EnableIf<And<
-    IsConstructible<BaseStringView<C, U>, T>,
-    Not<IsBaseOf<BaseStringView<C, U>, Decay<T>>>
->> = 0> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=>(
-    T&& lhs, BaseStringView<C, U> const& rhs
-) noexcept -> strong_ordering {
-  return BaseStringView<C, U>(cds::forward<T>(lhs)) <=> rhs;
-}
-#endif // #if CDS_ATTR(spaceship)
-
 template <typename FC, typename FU>
 auto operator<<(typename BaseStringView<FC, FU>::OStream& out, BaseStringView<FC, FU> const& obj)
     CDS_ATTR(noexcept(noexcept(out.write(obj._data, obj._length)))) -> typename BaseStringView<FC, FU>::OStream& {
@@ -566,5 +361,7 @@ auto operator ""_sv(wchar_t const* string, std::size_t length) noexcept -> impl:
 }
 }
 } // namespace cds
+
+#include "../../common/StringConversion.hpp"
 
 #endif // CDS_PRIMITIVE_STRING_VIEW_BASE_HPP

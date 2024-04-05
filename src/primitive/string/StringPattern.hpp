@@ -424,7 +424,7 @@ namespace matchKind {
 struct ByCharacter {};
 struct ByErrorIndex {};
 struct ByState {};
-}
+} // namespace matchKind
 
 template <typename P, typename = typename P::MatchKind> struct StateContainer {
   CDS_ATTR(2(explicit, constexpr(11))) StateContainer(CDS_ATTR(unused) P const&) noexcept {}
@@ -434,6 +434,20 @@ template <typename P> struct StateContainer<P, matchKind::ByState> {
   CDS_ATTR(2(explicit, constexpr(11))) StateContainer(P const& sm) noexcept : state(sm.initState()) {}
   Size state;
 };
+
+namespace ahoCorasick {
+template <template <typename> class BaseAllocator> struct AhoCorasickAllocatorBuilder {
+  template <typename C> class Type;
+  template <typename C> using AhoCorasickVertex = Vertex<C, Type<C>>;
+  template <typename C> class Type : public AllocatorSet <
+      BaseAllocator<FwdNode<Link<C const>>>,
+      BaseAllocator<FwdNode<Link<C const>>*>,
+      BaseAllocator<FwdNode<Size>>,
+      BaseAllocator<int>,
+      BaseAllocator<AhoCorasickVertex<C>>
+  > {};
+};
+}
 } // namespace impl
 } // namespace cds
 

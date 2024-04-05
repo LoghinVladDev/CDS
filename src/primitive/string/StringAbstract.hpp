@@ -6,8 +6,7 @@
 #define CDS_STRING_ABSTRACT_HPP
 #pragma once
 
-#include <cds/meta/StringTraits>
-
+#include "StringBaseDecl.hpp"
 #include "StringViewBaseDecl.hpp"
 
 #include "../../stdlib/string.hpp"
@@ -90,6 +89,15 @@ template <typename C> struct StringAbstract<C*> : stringAbstractDetail::Pointer<
 template <typename C> struct StringAbstract<C*&> : stringAbstractDetail::Pointer<C>, True {};
 template <typename C> struct StringAbstract<C* const> : stringAbstractDetail::Pointer<C>, True {};
 template <typename C> struct StringAbstract<C* const&> : stringAbstractDetail::Pointer<C>, True {};
+
+template <typename C, typename U, typename A> struct StringAbstract<BaseString<C, U, A>> :
+    stringAbstractDetail::StringView<C>, True {};
+template <typename C, typename U, typename A> struct StringAbstract<BaseString<C, U, A>&> :
+    stringAbstractDetail::StringView<C>, True {};
+template <typename C, typename U, typename A> struct StringAbstract<BaseString<C, U, A> const> :
+    stringAbstractDetail::StringView<C>, True {};
+template <typename C, typename U, typename A> struct StringAbstract<BaseString<C, U, A> const&> :
+    stringAbstractDetail::StringView<C>, True {};
 
 template <typename C, typename U> struct StringAbstract<BaseStringView<C, U>> :
     stringAbstractDetail::StringView<C>, True {};

@@ -10,11 +10,16 @@
 
 #include "UnitTest.hpp"
 #include "../Shared.hpp"
+#include "../TrackerAllocator.hpp"
 
 namespace {
-using cds::String;
+using String = cds::impl::BaseString<
+    char,
+    cds::impl::StringUtils<char, cds::meta::StringTraits<char>>,
+    testing::TrackerAllocator<char>
+>;
 using cds::StringView;
 }
 
-#define STRING_TEST_ID String
+#define STRING_TEST_ID StringTracked
 #include "StringTest.hpp"

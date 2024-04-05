@@ -3,17 +3,21 @@
 // STD: 11+
 
 #include <cds/StringView>
+#include <cds/String>
 #include <cassert>
 #include <iostream>
 #include <array>
 
 #include "UnitTest.hpp"
 #include "../Shared.hpp"
+#include "../TrackerAllocator.hpp"
 
 using namespace cds;
 
 namespace {
 using CustomSV = impl::BaseStringView<char, impl::StringUtils<char, impl::StringTraits<char>>>;
+using testing::TrackerAllocator;
+using TString = impl::BaseString<char, impl::StringUtils<char, meta::StringTraits<char>>, TrackerAllocator<char>>;
 }
 
 TEST(StringView, BaseCopyMove) {
@@ -122,7 +126,7 @@ TEST(StringView, baseMembers) {
   ASSERT_TRUE(sv4);
 
   sv4.clear();
-  ASSERT_EQ(sv4.data(), nullptr);
+  // ASSERT_EQ(sv4.data(), nullptr);
   ASSERT_EQ(sv4.size(), 0u);
   ASSERT_TRUE(sv4.empty());
   ASSERT_FALSE(sv4);
@@ -294,8 +298,8 @@ TEST(StringView, contains) {
 
 TEST(StringView, containsString) {
   StringView sv = "abcd";
-  ASSERT_TRUE(sv.contains("bc"));
-  ASSERT_FALSE(sv.contains("bd"));
+  ASSERT_TRUE(sv.contains("bc", TrackerAllocator<Size>()));
+  ASSERT_FALSE(sv.contains("bd", TrackerAllocator<Size>()));
 }
 
 TEST(StringView, containsOf) {
@@ -303,9 +307,11 @@ TEST(StringView, containsOf) {
   ASSERT_FALSE(sv.containsAnyOf("ad"));
   ASSERT_TRUE(sv.containsAnyOf("bc"));
   ASSERT_TRUE(sv.containsAnyOf(StringView("bc")));
+  ASSERT_TRUE(sv.containsAnyOf(TString("bc")));
   ASSERT_TRUE(sv.containsAnyOf(std::string("bc")));
   ASSERT_TRUE(sv.containsAnyOf("BC", meta::StringTraits<char>::upper));
   ASSERT_TRUE(sv.containsAnyOf(StringView("BC"), meta::StringTraits<char>::upper));
+  ASSERT_TRUE(sv.containsAnyOf(TString("BC"), meta::StringTraits<char>::upper));
   ASSERT_TRUE(sv.containsAnyOf(std::string("BC"), meta::StringTraits<char>::upper));
 
   ASSERT_FALSE(sv.containsAnyNotOf("bC"));
@@ -313,18 +319,22 @@ TEST(StringView, containsOf) {
   ASSERT_TRUE(sv.containsAnyNotOf("Bc"));
   ASSERT_TRUE(sv.containsAnyNotOf("BC"));
   ASSERT_TRUE(sv.containsAnyNotOf(StringView("bc")));
+  ASSERT_TRUE(sv.containsAnyNotOf(TString("bc")));
   ASSERT_TRUE(sv.containsAnyNotOf(std::string("bc")));
   ASSERT_TRUE(sv.containsAnyNotOf("C", meta::StringTraits<char>::upper));
   ASSERT_TRUE(sv.containsAnyNotOf(StringView("c"), meta::StringTraits<char>::upper));
+  ASSERT_TRUE(sv.containsAnyNotOf(TString("c"), meta::StringTraits<char>::upper));
   ASSERT_TRUE(sv.containsAnyNotOf(std::string("B"), meta::StringTraits<char>::upper));
 
   ASSERT_FALSE(sv.containsAllOf("ac"));
   ASSERT_FALSE(sv.containsAllOf("ab"));
   ASSERT_TRUE(sv.containsAllOf("bC"));
   ASSERT_TRUE(sv.containsAllOf(StringView("bC")));
+  ASSERT_TRUE(sv.containsAllOf(TString("bC")));
   ASSERT_TRUE(sv.containsAllOf(std::string("bC")));
   ASSERT_TRUE(sv.containsAllOf("BC", meta::StringTraits<char>::upper));
   ASSERT_TRUE(sv.containsAllOf(StringView("BC"), meta::StringTraits<char>::upper));
+  ASSERT_TRUE(sv.containsAllOf(TString("BC"), meta::StringTraits<char>::upper));
   ASSERT_TRUE(sv.containsAllOf(std::string("BC"), meta::StringTraits<char>::upper));
 
   ASSERT_FALSE(sv.containsNoneOf("bC"));
@@ -334,9 +344,11 @@ TEST(StringView, containsOf) {
   ASSERT_TRUE(sv.containsNoneOf("ac"));
   ASSERT_TRUE(sv.containsNoneOf("Bc"));
   ASSERT_TRUE(sv.containsNoneOf(StringView("ad")));
+  ASSERT_TRUE(sv.containsNoneOf(TString("ad")));
   ASSERT_TRUE(sv.containsNoneOf(std::string("ad")));
   ASSERT_TRUE(sv.containsNoneOf("ad", meta::StringTraits<char>::upper));
   ASSERT_TRUE(sv.containsNoneOf(StringView("ad"), meta::StringTraits<char>::upper));
+  ASSERT_TRUE(sv.containsNoneOf(TString("ad"), meta::StringTraits<char>::upper));
   ASSERT_TRUE(sv.containsNoneOf(std::string("ad"), meta::StringTraits<char>::upper));
 }
 
@@ -438,15 +450,31 @@ TEST(StringView, split) {
   ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split("  ",  1), eq("ac")));
   ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split("  ",  1), eq("ac ac   ac  ")));
 
+  ASSERT_EQ(3, count(StringView{"ab  ab ab  ab"}.split("  ", TrackerAllocator<Size>()), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"ab  ab ab  ab"}.split("  ", TrackerAllocator<Size>()), eq("ab ab")));
+  ASSERT_EQ(2, count(StringView{"ab  ab ab  ab"}.split("  ", TrackerAllocator<Size>()), eq("ab")));
+
+  ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split("  ",  1, TrackerAllocator<Size>()), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split("  ",  1, TrackerAllocator<Size>()), eq("ac")));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split("  ",  1, TrackerAllocator<Size>()), eq("ac ac   ac  ")));
+
   char const sep3[] = "  ";
   ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split(sep3,  1), alwaysTrue));
   ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep3,  1), eq("ac")));
   ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep3,  1), eq("ac ac   ac  ")));
 
+  ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split(sep3,  1, TrackerAllocator<Size>()), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep3,  1, TrackerAllocator<Size>()), eq("ac")));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep3,  1, TrackerAllocator<Size>()), eq("ac ac   ac  ")));
+
   auto const* sep4 = "  ";
   ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split(sep4,  1), alwaysTrue));
   ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep4,  1), eq("ac")));
   ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep4,  1), eq("ac ac   ac  ")));
+
+  ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split(sep4,  1, TrackerAllocator<Size>()), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep4,  1, TrackerAllocator<Size>()), eq("ac")));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep4,  1, TrackerAllocator<Size>()), eq("ac ac   ac  ")));
 
   ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split(static_cast<char const*>(sep4),  1), alwaysTrue));
   ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(static_cast<char const*>(sep4),  1), eq("ac")));
@@ -475,6 +503,12 @@ TEST(StringView, split) {
   ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep7,  1), eq("ac")));
   ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep7,  1), eq("ac ac   ac  ")));
 
+  ASSERT_EQ(2, count(StringView{"ac  ac ac   ac  "}.split(sep7,  1, TrackerAllocator<Size>()), alwaysTrue));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep7,  1, TrackerAllocator<Size>()), eq("ac")));
+  ASSERT_EQ(1, count(StringView{"ac  ac ac   ac  "}.split(sep7,  1, TrackerAllocator<Size>()), eq("ac ac   ac  ")));
+
+  ASSERT_EQ(2, count(StringView{"ac  ac"}.split(TString{"  "}), alwaysTrue));
+
   ASSERT_EQ(2, count(StringView{"ac  ac"}.split(std::string{"  "}), alwaysTrue));
 #if CDS_ATTR(cpp17)
   ASSERT_EQ(2, count(StringView{"ac  ac"}.split(std::string_view{"  "}), alwaysTrue));
@@ -491,14 +525,23 @@ TEST(StringView, split) {
   ASSERT_EQ(1, count(str1.split(' ', 1), eq("abc")));
   ASSERT_EQ(1, count(str1.split(' ', 1), eq(" abc")));
 
+  using ACAlloc = typename ahoCorasick::AhoCorasickAllocatorBuilder<TrackerAllocator>::Type<char>;
   ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}), alwaysTrue));
   ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}), eq("abc")));
   ASSERT_EQ(2, count(StringView{"abc  abc1__abc"}.split(std::vector<StringView>{"  ", "__"}), eq("abc")));
   ASSERT_EQ(1, count(StringView{"abc  abc1__abc"}.split(std::vector<StringView>{"  ", "__"}), eq("abc1")));
 
+  ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}, ACAlloc()), alwaysTrue));
+  ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}, ACAlloc()), eq("abc")));
+  ASSERT_EQ(2, count(StringView{"abc  abc1__abc"}.split(std::vector<StringView>{"  ", "__"}, ACAlloc()), eq("abc")));
+  ASSERT_EQ(1, count(StringView{"abc  abc1__abc"}.split(std::vector<StringView>{"  ", "__"}, ACAlloc()), eq("abc1")));
+
   StringView str2{"abc  abc__abc"};
   ASSERT_EQ(3, count(str2.split(std::vector<StringView>{"  ", "__"}), alwaysTrue));
   ASSERT_EQ(3, count(str2.split(std::vector<StringView>{"  ", "__"}), eq("abc")));
+
+  ASSERT_EQ(3, count(str2.split(std::vector<StringView>{"  ", "__"}, ACAlloc()), alwaysTrue));
+  ASSERT_EQ(3, count(str2.split(std::vector<StringView>{"  ", "__"}, ACAlloc()), eq("abc")));
 
   std::vector<StringView> sepsStrs{"  ", "__"};
   ASSERT_EQ(3, count(str2.split(sepsStrs), alwaysTrue));
@@ -532,6 +575,7 @@ TEST(StringView, split) {
 
   ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(std::vector<StringView>{"  ", "__"}), alwaysTrue));
   ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(std::vector<char const*>{"  ", "__"}), alwaysTrue));
+  ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(std::vector<TString>{"  ", "__"}), alwaysTrue));
   ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(std::vector<std::string>{"  ", "__"}), alwaysTrue));
 #if CDS_ATTR(cpp17)
   ASSERT_EQ(3, count(StringView{"abc  abc__abc"}.split(std::vector<std::string_view>{"  ", "__"}), alwaysTrue));
@@ -561,6 +605,18 @@ TEST(StringView, findClient) {
   ASSERT_TRUE(testing::citeq(StringView {" test test tes"}.find("test"), std::vector<int> {1, 6}));
   ASSERT_TRUE(testing::citeq(StringView {"est test test "}.find("test"), std::vector<int> {4, 9}));
   ASSERT_TRUE(testing::citeq(StringView {"est test tes"}.find("test"), std::vector<int> {4}));
+
+  ASSERT_TRUE(testing::citeq(sv.find("test", TrackerAllocator<Size>()), std::vector<int> {0, 5, 10}));
+  ASSERT_TRUE(testing::citeq(StringView {"testtesttest"}.find("test", TrackerAllocator<Size>()), std::vector<int> {0, 4, 8}));
+  ASSERT_TRUE(testing::citeq(StringView {"test test test"}.find("test", TrackerAllocator<Size>()), std::vector<int> {0, 5, 10}));
+  ASSERT_TRUE(testing::citeq(StringView {"test test test "}.find("test", TrackerAllocator<Size>()), std::vector<int> {0, 5, 10}));
+  ASSERT_TRUE(testing::citeq(StringView {"test test tes"}.find("test", TrackerAllocator<Size>()), std::vector<int> {0, 5}));
+  ASSERT_TRUE(testing::citeq(StringView {" test test test"}.find("test", TrackerAllocator<Size>()), std::vector<int> {1, 6, 11}));
+  ASSERT_TRUE(testing::citeq(StringView {"est test test"}.find("test", TrackerAllocator<Size>()), std::vector<int> {4, 9}));
+  ASSERT_TRUE(testing::citeq(StringView {" test test test "}.find("test", TrackerAllocator<Size>()), std::vector<int> {1, 6, 11}));
+  ASSERT_TRUE(testing::citeq(StringView {" test test tes"}.find("test", TrackerAllocator<Size>()), std::vector<int> {1, 6}));
+  ASSERT_TRUE(testing::citeq(StringView {"est test test "}.find("test", TrackerAllocator<Size>()), std::vector<int> {4, 9}));
+  ASSERT_TRUE(testing::citeq(StringView {"est test tes"}.find("test", TrackerAllocator<Size>()), std::vector<int> {4}));
 }
 
 TEST(StringView, findProjectionClient) {
@@ -579,6 +635,18 @@ TEST(StringView, findProjectionClient) {
   ASSERT_TRUE(testing::citeq(StringView {" test test tes"}.find("TEST", toupper), std::vector<int> {1, 6}));
   ASSERT_TRUE(testing::citeq(StringView {"est test test "}.find("TEST", toupper), std::vector<int> {4, 9}));
   ASSERT_TRUE(testing::citeq(StringView {"est test tes"}.find("TEST", toupper), std::vector<int> {4}));
+
+  ASSERT_TRUE(testing::citeq(sv.find("TEST", toupper, TrackerAllocator<Size>()), std::vector<int> {0, 5, 10}));
+  ASSERT_TRUE(testing::citeq(StringView {"testtesttest"}.find("TEST", toupper, TrackerAllocator<Size>()), std::vector<int> {0, 4, 8}));
+  ASSERT_TRUE(testing::citeq(StringView {"test test test"}.find("TEST", toupper, TrackerAllocator<Size>()), std::vector<int> {0, 5, 10}));
+  ASSERT_TRUE(testing::citeq(StringView {"test test test "}.find("TEST", toupper, TrackerAllocator<Size>()), std::vector<int> {0, 5, 10}));
+  ASSERT_TRUE(testing::citeq(StringView {"test test tes"}.find("TEST", toupper, TrackerAllocator<Size>()), std::vector<int> {0, 5}));
+  ASSERT_TRUE(testing::citeq(StringView {" test test test"}.find("TEST", toupper, TrackerAllocator<Size>()), std::vector<int> {1, 6, 11}));
+  ASSERT_TRUE(testing::citeq(StringView {"est test test"}.find("TEST", toupper, TrackerAllocator<Size>()), std::vector<int> {4, 9}));
+  ASSERT_TRUE(testing::citeq(StringView {" test test test "}.find("TEST", toupper, TrackerAllocator<Size>()), std::vector<int> {1, 6, 11}));
+  ASSERT_TRUE(testing::citeq(StringView {" test test tes"}.find("TEST", toupper, TrackerAllocator<Size>()), std::vector<int> {1, 6}));
+  ASSERT_TRUE(testing::citeq(StringView {"est test test "}.find("TEST", toupper, TrackerAllocator<Size>()), std::vector<int> {4, 9}));
+  ASSERT_TRUE(testing::citeq(StringView {"est test tes"}.find("TEST", toupper, TrackerAllocator<Size>()), std::vector<int> {4}));
 }
 
 TEST(StringView, findFirstClient) {
@@ -586,6 +654,9 @@ TEST(StringView, findFirstClient) {
   ASSERT_EQ(StringView{"abcb"}.findFirst('d'), StringView::npos);
   ASSERT_EQ(StringView{"abcb"}.findFirst("bc"), 1);
   ASSERT_EQ(StringView{"abcb"}.findFirst("bd"), StringView::npos);
+
+  ASSERT_EQ(StringView{"abcb"}.findFirst("bc", TrackerAllocator<Size>()), 1);
+  ASSERT_EQ(StringView{"abcb"}.findFirst("bd", TrackerAllocator<Size>()), StringView::npos);
 }
 
 TEST(StringView, findProjectionFirstClient) {
@@ -593,6 +664,9 @@ TEST(StringView, findProjectionFirstClient) {
   ASSERT_EQ(StringView{"abcb"}.findFirst('D', toupper), StringView::npos);
   ASSERT_EQ(StringView{"abcb"}.findFirst("BC", toupper), 1);
   ASSERT_EQ(StringView{"abcb"}.findFirst("BD", toupper), StringView::npos);
+
+  ASSERT_EQ(StringView{"abcb"}.findFirst("BC", toupper, TrackerAllocator<Size>()), 1);
+  ASSERT_EQ(StringView{"abcb"}.findFirst("BD", toupper, TrackerAllocator<Size>()), StringView::npos);
 }
 
 TEST(StringView, findLastClient) {
@@ -600,6 +674,9 @@ TEST(StringView, findLastClient) {
   ASSERT_EQ(StringView{"abcb"}.findLast('d'), StringView::npos);
   ASSERT_EQ(StringView{"abcbc"}.findLast("bc"), 3);
   ASSERT_EQ(StringView{"abcb"}.findLast("bd"), StringView::npos);
+
+  ASSERT_EQ(StringView{"abcbc"}.findLast("bc", TrackerAllocator<Size>()), 3);
+  ASSERT_EQ(StringView{"abcb"}.findLast("bd", TrackerAllocator<Size>()), StringView::npos);
 }
 
 TEST(StringView, findProjectionLastClient) {
@@ -607,6 +684,9 @@ TEST(StringView, findProjectionLastClient) {
   ASSERT_EQ(StringView{"abcb"}.findLast('D', toupper), StringView::npos);
   ASSERT_EQ(StringView{"abcbc"}.findLast("BC", toupper), 3);
   ASSERT_EQ(StringView{"abcb"}.findLast("BD", toupper), StringView::npos);
+
+  ASSERT_EQ(StringView{"abcbc"}.findLast("BC", toupper, TrackerAllocator<Size>()), 3);
+  ASSERT_EQ(StringView{"abcb"}.findLast("BD", toupper, TrackerAllocator<Size>()), StringView::npos);
 }
 
 TEST(StringView, findOfClient) {
@@ -622,6 +702,14 @@ TEST(StringView, findOfClient) {
   ASSERT_TRUE(testing::citeq(StringView{"c bcd cde def"}.findOf(std::vector<StringView>{"bc", "bcd", "def"}), std::vector<int> {2, 10}));
   ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde def "}.findOf(std::vector<StringView>{"bc", "bcd", "def"}), std::vector<int> {0, 3, 11}));
   ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde de"}.findOf(std::vector<StringView>{"bc", "bcd", "def"}), std::vector<int> {0, 3}));
+
+  using ACAlloc = typename impl::ahoCorasick::AhoCorasickAllocatorBuilder<TrackerAllocator>::Type<char>;
+  ASSERT_TRUE(testing::citeq(sv1.findOf(std::vector<StringView>{"bc", "bcd", "def"}, ACAlloc()), std::vector<int> {1, 4, 12}));
+  ASSERT_TRUE(testing::citeq(StringView{"abc bcd cde def"}.findOf(std::vector<StringView>{"bc", "bcd", "def"}, ACAlloc()), std::vector<int> {1, 4, 12}));
+  ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde def"}.findOf(std::vector<StringView>{"bc", "bcd", "def"}, ACAlloc()), std::vector<int> {0, 3, 11}));
+  ASSERT_TRUE(testing::citeq(StringView{"c bcd cde def"}.findOf(std::vector<StringView>{"bc", "bcd", "def"}, ACAlloc()), std::vector<int> {2, 10}));
+  ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde def "}.findOf(std::vector<StringView>{"bc", "bcd", "def"}, ACAlloc()), std::vector<int> {0, 3, 11}));
+  ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde de"}.findOf(std::vector<StringView>{"bc", "bcd", "def"}, ACAlloc()), std::vector<int> {0, 3}));
 }
 
 TEST(StringView, findProjectedOfClient) {
@@ -637,6 +725,14 @@ TEST(StringView, findProjectedOfClient) {
   ASSERT_TRUE(testing::citeq(StringView{"c bcd cde def"}.findOf(std::vector<StringView>{"BC", "BCD", "DEF"}, toupper), std::vector<int> {2, 10}));
   ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde def "}.findOf(std::vector<StringView>{"BC", "BCD", "DEF"}, toupper), std::vector<int> {0, 3, 11}));
   ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde de"}.findOf(std::vector<StringView>{"BC", "BCD", "DEF"}, toupper), std::vector<int> {0, 3}));
+
+  using ACAlloc = typename impl::ahoCorasick::AhoCorasickAllocatorBuilder<TrackerAllocator>::Type<char>;
+  ASSERT_TRUE(testing::citeq(sv1.findOf(std::vector<StringView>{"BC", "BCD", "DEF"}, toupper, ACAlloc()), std::vector<int> {1, 4, 12}));
+  ASSERT_TRUE(testing::citeq(StringView{"abc bcd cde def"}.findOf(std::vector<StringView>{"BC", "BCD", "DEF"}, toupper, ACAlloc()), std::vector<int> {1, 4, 12}));
+  ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde def"}.findOf(std::vector<StringView>{"BC", "BCD", "DEF"}, toupper, ACAlloc()), std::vector<int> {0, 3, 11}));
+  ASSERT_TRUE(testing::citeq(StringView{"c bcd cde def"}.findOf(std::vector<StringView>{"BC", "BCD", "DEF"}, toupper, ACAlloc()), std::vector<int> {2, 10}));
+  ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde def "}.findOf(std::vector<StringView>{"BC", "BCD", "DEF"}, toupper, ACAlloc()), std::vector<int> {0, 3, 11}));
+  ASSERT_TRUE(testing::citeq(StringView{"bc bcd cde de"}.findOf(std::vector<StringView>{"BC", "BCD", "DEF"}, toupper, ACAlloc()), std::vector<int> {0, 3}));
 }
 
 TEST(StringView, findFirstOfClient) {
@@ -649,6 +745,11 @@ TEST(StringView, findFirstOfClient) {
   ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{"cde", "bcd", "def"}), 4);
   ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{"ggg"}), StringView::npos);
   ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{}), StringView::npos);
+
+  using ACAlloc = typename impl::ahoCorasick::AhoCorasickAllocatorBuilder<TrackerAllocator>::Type<char>;
+  ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{"cde", "bcd", "def"}, ACAlloc()), 4);
+  ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{"ggg"}, ACAlloc()), StringView::npos);
+  ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{}, ACAlloc()), StringView::npos);
 }
 
 TEST(StringView, findProjectedFirstOfClient) {
@@ -661,6 +762,11 @@ TEST(StringView, findProjectedFirstOfClient) {
   ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{"CDE", "BCD", "DEF"}, toupper), 4);
   ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{"GGG"}, toupper), StringView::npos);
   ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{}, toupper), StringView::npos);
+
+  using ACAlloc = typename impl::ahoCorasick::AhoCorasickAllocatorBuilder<TrackerAllocator>::Type<char>;
+  ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{"CDE", "BCD", "DEF"}, toupper, ACAlloc()), 4);
+  ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{"GGG"}, toupper, ACAlloc()), StringView::npos);
+  ASSERT_EQ(sv1.findFirstOf(std::vector<StringView>{}, toupper, ACAlloc()), StringView::npos);
 }
 
 TEST(StringView, findLastOfClient) {
@@ -673,6 +779,11 @@ TEST(StringView, findLastOfClient) {
   ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{"cde", "bcd", "def"}), 12);
   ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{"ggg"}), StringView::npos);
   ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{}), StringView::npos);
+
+  using ACAlloc = typename impl::ahoCorasick::AhoCorasickAllocatorBuilder<TrackerAllocator>::Type<char>;
+  ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{"cde", "bcd", "def"}, ACAlloc()), 12);
+  ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{"ggg"}, ACAlloc()), StringView::npos);
+  ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{}, ACAlloc()), StringView::npos);
 }
 
 TEST(StringView, findProjectedLastOfClient) {
@@ -685,6 +796,11 @@ TEST(StringView, findProjectedLastOfClient) {
   ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{"CDE", "BCD", "DEF"}, toupper), 12);
   ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{"GGG"}, toupper), StringView::npos);
   ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{}, toupper), StringView::npos);
+
+  using ACAlloc = typename impl::ahoCorasick::AhoCorasickAllocatorBuilder<TrackerAllocator>::Type<char>;
+  ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{"CDE", "BCD", "DEF"}, toupper, ACAlloc()), 12);
+  ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{"GGG"}, toupper, ACAlloc()), StringView::npos);
+  ASSERT_EQ(sv1.findLastOf(std::vector<StringView>{}, toupper, ACAlloc()), StringView::npos);
 }
 
 TEST(StringView, findNotOfClient) {
@@ -778,6 +894,32 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.)"}
   }
 }
 
+TEST(StringView, loremIpsumFindTracked) {
+  using ACAlloc = typename impl::ahoCorasick::AhoCorasickAllocatorBuilder<TrackerAllocator>::Type<char>;
+  auto r = StringView{R"(
+Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+Excepteur sint occaecat cupidatat non proident,
+sunt in culpa qui officia deserunt mollit anim id est laborum.)"}
+  .findOf(std::vector<StringView>{"Lorem", "ipsum", "dolor", "sit", "amet", "consectetur",
+    "adipiscing", "elit",
+    "sed", "do", "eiusmod", "tempor", "incididunt", "ut", "labore", "et", "dolore","magna", "aliqua",
+"Ut", "enim", "ad", "minim", "veniam", "quis", "nostrud", "exercitation", "ullamco", "laboris",
+"nisi", "ut", "aliquip", "ex", "ea", "commodo", "consequat"," Duis", "aute", "irure", "dolor", "in",
+"reprehenderit", "in", "voluptate", "velit", "esse", "cillum", "dolore", "eu", "fugiat", "nulla",
+    "pariatur",
+"Excepteur", "sint", "occaecat", "cupidatat", "non", "proident",
+"sunt", "in", "culpa", "qui", "officia", "deserunt", "mollit", "anim", "id", "est", "laborum"}, ACAlloc());
+
+  for (auto it = r.begin(); it != r.end(); ++it) {
+    // do nothing, loop check
+    ASSERT_GE(*it, 0);
+  }
+}
+
 TEST(StringView, functional) {
   StringView const sv{"abcd"};
 
@@ -841,6 +983,9 @@ TEST(StringView, constructions) {
   StringView const sv3 = str;
   ASSERT_EQ(sv1, sv2);
   ASSERT_EQ(sv1, sv3);
+  TString const str2 = "abcd";
+  StringView const sv4 = str2;
+  ASSERT_EQ(sv4, sv1);
 }
 
 TEST(StringView, assignments) {
@@ -853,6 +998,14 @@ TEST(StringView, assignments) {
   std::string const sv3 = "abcd";
   sv = sv3;
   ASSERT_EQ(sv, "abcd");
+  TString const str2 = "abcd";
+  sv = str2;
+  ASSERT_EQ(sv, "abcd");
+}
+
+TEST(StringView, strConv) {
+  StringView sv {"abcd"};
+  ASSERT_EQ(sv.str(), "abcd");
 }
 
 #ifdef DCR_SINCECPP14

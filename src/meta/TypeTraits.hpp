@@ -169,6 +169,22 @@ template <typename C, typename R> struct Fold<C, R, void> {};
 
 template <typename T, typename V> struct Common<T, V> : CommonDecayed<T, V>::Type {};
 template <typename T, typename V, typename... R> struct Common<T, V, R...> : Fold<Common<T, V>, Pack<R...>> {};
+
+template <typename T> struct SignedEquivalent {};
+template <> struct SignedEquivalent<char> { using Type = signed char; };
+template <> struct SignedEquivalent<U8> { using Type = S8; };
+template <> struct SignedEquivalent<U16> { using Type = S16; };
+template <> struct SignedEquivalent<U32> { using Type = S32; };
+template <> struct SignedEquivalent<U64> { using Type = S64; };
+template <> struct SignedEquivalent<unsigned long long> { using Type = signed long long; };
+
+template <typename T> struct UnsignedEquivalent {};
+template <> struct UnsignedEquivalent<char> { using Type = unsigned char; };
+template <> struct UnsignedEquivalent<S8> { using Type = U8; };
+template <> struct UnsignedEquivalent<S16> { using Type = U16; };
+template <> struct UnsignedEquivalent<S32> { using Type = U32; };
+template <> struct UnsignedEquivalent<S64> { using Type = U64; };
+template <> struct UnsignedEquivalent<signed long long> { using Type = unsigned long long; };
 } // namespace impl
 
 template <typename Type> using RemoveConst = typename impl::RemoveConst<Type>::Type;
@@ -215,6 +231,9 @@ template <typename Type> struct IsVolatile : impl::IsVolatile<Type>::Type {};
 template <typename Type> struct IsConstVolatile : impl::IsConstVolatile<Type>::Type {};
 
 template <typename From, typename To> struct IsConvertible : impl::IsConvertible<From, To>::Type {};
+
+template <typename T> using SignedEquivalent = typename impl::SignedEquivalent<T>::Type;
+template <typename T> using UnsignedEquivalent = typename impl::UnsignedEquivalent<T>::Type;
 
 template <typename> struct TypeInfo {
   constexpr static char const* name = "unknown";

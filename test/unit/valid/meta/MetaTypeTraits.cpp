@@ -650,3 +650,36 @@ TEST(MetaBase, Apply) {
   static_assert(Eq<True, All<Bind<Unless<Apply<IsConst, RemoveRef>::Type>::Type, Ph<0>>::Type, int, int&>>::value, "Failed Bind of Apply");
   static_assert(!Eq<True, All<Bind<Unless<Apply<IsConst, RemoveRef>::Type>::Type, Ph<0>>::Type, int, int const&>>::value, "Failed Bind of Apply");
 }
+
+TEST(MetaBase, SignedEquivalent) {
+  static_assert(IsSame<S8, SignedEquivalent<U8>>::value, "Failed SignedEquivalent");
+  static_assert(IsSame<S16, SignedEquivalent<U16>>::value, "Failed SignedEquivalent");
+  static_assert(IsSame<S32, SignedEquivalent<U32>>::value, "Failed SignedEquivalent");
+  static_assert(IsSame<S64, SignedEquivalent<U64>>::value, "Failed SignedEquivalent");
+
+  static_assert(IsSame<S8, SignedEquivalent<unsigned char>>::value, "Failed SignedEquivalent");
+  static_assert(IsSame<S16, SignedEquivalent<unsigned short>>::value, "Failed SignedEquivalent");
+  static_assert(IsSame<S16, SignedEquivalent<unsigned short int>>::value, "Failed SignedEquivalent");
+  static_assert(IsSame<S32, SignedEquivalent<unsigned>>::value, "Failed SignedEquivalent");
+  static_assert(IsSame<S32, SignedEquivalent<unsigned int>>::value, "Failed SignedEquivalent");
+  static_assert(IsSame<S64, SignedEquivalent<unsigned long>>::value, "Failed SignedEquivalent");
+  static_assert(IsSame<signed long long, SignedEquivalent<unsigned long long>>::value, "Failed SignedEquivalent");
+  static_assert(IsSame<signed long long, SignedEquivalent<unsigned long long int>>::value, "Failed SignedEquivalent");
+}
+
+TEST(MetaBase, UnsignedEquivalent) {
+  static_assert(IsSame<U8, UnsignedEquivalent<S8>>::value, "Failed UnsignedEquivalent");
+  static_assert(IsSame<U16, UnsignedEquivalent<S16>>::value, "Failed UnsignedEquivalent");
+  static_assert(IsSame<U32, UnsignedEquivalent<S32>>::value, "Failed UnsignedEquivalent");
+  static_assert(IsSame<U64, UnsignedEquivalent<S64>>::value, "Failed UnsignedEquivalent");
+
+  static_assert(IsSame<U8, UnsignedEquivalent<char>>::value, "Failed UnsignedEquivalent");
+  static_assert(IsSame<U16, UnsignedEquivalent<short>>::value, "Failed UnsignedEquivalent");
+  static_assert(IsSame<U16, UnsignedEquivalent<short int>>::value, "Failed UnsignedEquivalent");
+  static_assert(IsSame<U32, UnsignedEquivalent<signed>>::value, "Failed UnsignedEquivalent");
+  static_assert(IsSame<U32, UnsignedEquivalent<int>>::value, "Failed UnsignedEquivalent");
+  static_assert(IsSame<U64, UnsignedEquivalent<long>>::value, "Failed UnsignedEquivalent");
+  static_assert(IsSame<unsigned long long, UnsignedEquivalent<long long>>::value, "Failed UnsignedEquivalent");
+  static_assert(IsSame<unsigned long long, UnsignedEquivalent<signed long long>>::value, "Failed UnsignedEquivalent");
+  static_assert(IsSame<unsigned long long, UnsignedEquivalent<signed long long int>>::value, "Failed UnsignedEquivalent");
+}

@@ -55,6 +55,7 @@ template <typename> struct IsString : False {};
 template <typename C> struct IsString<C*> : StringTraits<C>::IsChar {};
 template <typename C> struct IsString<C const*> : StringTraits<C>::IsChar {};
 template <typename C, typename U> struct IsString<BaseStringView<C, U>> : True {};
+template <typename C, typename U, typename A> struct IsString<BaseString<C, U, A>> : True {};
 
 #if CDS_ATTR(std_compat)
 template <typename C, typename T, typename A> struct IsString<std::basic_string<C, T, A>> : True {};

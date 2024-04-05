@@ -22,7 +22,7 @@
 #define CDS_ATTR_maybe_unused
 #define CDS_ATTR_unused CDS_ATTR_maybe_unused
 #define CDS_ATTR_nodiscard
-#define CDS_ATTR_inline
+#define CDS_ATTR_inline inline
 #define CDS_ATTR_constexpr(std) CDS_ATTR_constexpr_ ## std
 #define CDS_ATTR_consteval(std, fallback) CDS_ATTR_consteval_ ## std (fallback)
 #define CDS_ATTR_noexcept(...) noexcept(!CDS_ATTR_exceptions || __VA_ARGS__)
@@ -196,7 +196,7 @@ enum class Byte : U8 {};
 #endif // #ifdef __MINGW64__ #else
 
 #if CDS_ATTR(gcc) || CDS_ATTR(clang)
-#if defined(__x86_64__) && !defined(__ILP32__)
+#if defined(__x86_64__) && !defined(__ILP32__) || defined(__arm64) || defined(__arm64__)
 #define CDS_ATTR_bitarch 64
 #else // 32bit
 #define CDS_ATTR_bitarch 32
@@ -344,7 +344,16 @@ struct CurrentCompiler {
 #define CDS_ATTR_inheritsEBOs
 #endif // #ifdef _MSC_VER #else
 
-#ifdef __clang__
+#if defined(__clang__)
+#if defined(__APPLE__)
+#define CDS_ATTR_ld_size 64
+
+struct CurrentCompiler {
+  constexpr static auto const* name = "LLVM/Apple clang";
+  constexpr static auto const* id = "clang";
+  constexpr static int version = __clang_major__ * 10000 + __clang_minor__ * 100 + __clang_patchlevel__;
+};
+#else
 #define CDS_ATTR_ld_size 80
 
 struct CurrentCompiler {
@@ -352,6 +361,7 @@ struct CurrentCompiler {
   constexpr static auto const* id = "clang";
   constexpr static int version = __clang_major__ * 10000 + __clang_minor__ * 100 + __clang_patchlevel__;
 };
+#endif
 #endif // #ifdef __clang__ #else
 
 #if defined(__GNUC__) && !defined(__clang__)
@@ -373,6 +383,16 @@ struct CurrentCompiler {
 };
 #endif // #ifdef __MINGW64__ #else
 } // namespace compiler
+
+namespace impl {
+CDS_ATTR(2(noreturn, inline)) auto unreachable() noexcept -> void {
+#if defined(_MSC_VER) && !defined(__clang__)
+  __assume(false);
+#else
+  __builtin_unreachable();
+#endif
+}
+} // namespace impl
 } // namespace cds
 
 #endif // CDS_META_COMPILER_HPP

@@ -22,9 +22,19 @@
 #include <thread>
 // #include <bits/ranges_algo.h>
 #include <algorithm>
-#include <sys/wait.h>
 #include <source_location>
 #include <sstream>
+
+#include <sys/wait.h>
+#include <unistd.h>
+
+#if __APPLE__
+extern char** environ;
+
+int execvpe(const char* name, char* const* const argv, char* const* const envv) {
+  return execve(name, argv, envv);
+}
+#endif
 
 namespace {
 class jthread : public std::thread {

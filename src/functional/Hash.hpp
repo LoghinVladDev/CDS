@@ -44,19 +44,19 @@ template <> struct IntegralOfEquivalentSize<double> {
   using Type = U64;
 };
 
-#if CDS_ATTR(msvc)
-template <> struct IntegralOfEquivalentSize<long double> {
-  static_assert(sizeof(long double) == 8,
-                "Invalid Integral equivalent for floating point constant");
-  using Type = U64;
-};
-#else
+#if CDS_ATTR(ld_size) > 64
 template <> struct IntegralOfEquivalentSize<long double> {
   static_assert(sizeof(long double) == 16,
                 "Invalid Integral equivalent for floating point constant");
   struct Type {
     U8 asBytes[16];
   };
+};
+#else
+template <> struct IntegralOfEquivalentSize<long double> {
+  static_assert(sizeof(long double) == 8,
+                "Invalid Integral equivalent for floating point constant");
+  using Type = U64;
 };
 #endif
 

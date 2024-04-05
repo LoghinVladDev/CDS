@@ -25,6 +25,7 @@ set(
     valid/functional/Transformer.cpp
 
     valid/meta/MetaBase.cpp
+    valid/meta/MetaCompilerAppleClang.test.cpp
     valid/meta/MetaCompilerLinuxClang.test.cpp
     valid/meta/MetaCompilerLinuxGcc.test.cpp
     valid/meta/MetaFunctionTraits.cpp
@@ -43,12 +44,15 @@ set(
 
     valid/primitive/String.cpp
     valid/primitive/StringAbstract.cpp
+    valid/primitive/StringTracked.cpp
     valid/primitive/StringUtils.cpp
     valid/primitive/StringView.cpp
 
     valid/stdlib/StringViewStdLibCompatNone.cpp
     valid/stdlib/StringViewStdLibCompatSafe.cpp
     valid/stdlib/StringViewStdLibCompatUnsafe.cpp
+
+    valid/utils/TrackerAllocator.cpp
 
     PARENT_SCOPE
 )

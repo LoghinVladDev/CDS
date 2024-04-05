@@ -623,7 +623,8 @@ public:
 
   template <
       typename P, typename F = initializer_list<Value>, typename U = FindUsesAllocation<RNC, RemoveCVRef<F>, E>,
-      typename A = typename U::Alloc, EnableIf<And<U, IsAllocatorOrAllocatorSet<A>>> = 0
+      typename A = typename U::Alloc,
+      EnableIf<And<U, IsAllocatorOrAllocatorSet<A>, Not<IsAllocatorOrAllocatorSet<P>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto findOf(F&& from, P&& projector, A&& alloc = A()) const&
       CDS_ATTR(noexcept(noexcept(impl::find(
           lvalue<R const>(), cds::forward<F>(from), cds::forward<P>(projector), E(), TrAll(), cds::forward<A>(alloc)

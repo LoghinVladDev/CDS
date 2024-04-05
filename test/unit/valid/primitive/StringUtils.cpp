@@ -9,27 +9,6 @@ using namespace cds::impl;
 using U = StringUtils<char, StringTraits<char>>;
 using A = StringAbstract<>;
 
-TEST(StringUtils, Compare) {
-  char const buf1[] = "a";
-  char const buf2[] = "a";
-  ASSERT_EQ(U::compare(nullptr, 0u, nullptr, 0u), U::Ordering::Equal);
-  ASSERT_EQ(U::compare(buf1, 0u, nullptr, 0u), U::Ordering::Equal);
-  ASSERT_EQ(U::compare(buf1, 0u, buf2, 0u), U::Ordering::Equal);
-
-  ASSERT_EQ(U::compare(nullptr, 0u, buf1, A::length(buf1)), U::Ordering::Less);
-  ASSERT_EQ(U::compare(buf1, A::length(buf1), nullptr, 0u), U::Ordering::Greater);
-
-  char const buf3[] = "aa";
-  char const buf4[] = "ab";
-  ASSERT_EQ(U::compare(buf3, A::length(buf3), buf4, A::length(buf4)), U::Ordering::Less);
-  ASSERT_EQ(U::compare(buf4, A::length(buf4), buf3, A::length(buf3)), U::Ordering::Greater);
-
-  char const buf5[] = "aab";
-  ASSERT_EQ(U::compare(buf3, A::length(buf3), buf5, A::length(buf5)), U::Ordering::Less);
-  ASSERT_EQ(U::compare(buf5, A::length(buf5), buf3, A::length(buf3)), U::Ordering::Greater);
-  ASSERT_EQ(U::compare(buf3, A::length(buf3), buf3, A::length(buf3)), U::Ordering::Equal);
-}
-
 TEST(StringUtils, StartsWith) {
   char const n[] = "abc";
   char const a[] = "";

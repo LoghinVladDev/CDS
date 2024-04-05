@@ -57,18 +57,21 @@ TEST(MetaBase, Conditional) {
 }
 
 TEST(MetaBase, IsCdsIntegral) {
-  static_assert(IsSame<impl::IsCdsIntegral<True>::Type, True>::value, "Failed IsCdsIntegral");
-  static_assert(IsSame<impl::IsCdsIntegral<std::true_type>::Type, False>::value, "Failed IsCdsIntegral");
+  using cds::meta::impl::IsCdsIntegral;
+  static_assert(IsSame<IsCdsIntegral<True>::Type, True>::value, "Failed IsCdsIntegral");
+  static_assert(IsSame<IsCdsIntegral<std::true_type>::Type, False>::value, "Failed IsCdsIntegral");
 }
 
 TEST(MetaBase, IsStdIntegral) {
-  static_assert(IsSame<impl::IsStdIntegral<True>::Type, False>::value, "Failed IsStdIntegral");
-  static_assert(IsSame<impl::IsStdIntegral<std::true_type>::Type, True>::value, "Failed IsStdIntegral");
+  using cds::meta::impl::IsStdIntegral;
+  static_assert(IsSame<IsStdIntegral<True>::Type, False>::value, "Failed IsStdIntegral");
+  static_assert(IsSame<IsStdIntegral<std::true_type>::Type, True>::value, "Failed IsStdIntegral");
 }
 
 TEST(MetaBase, ConvertIntegral) {
-  static_assert(IsSame<impl::ConvertIntegral<std::true_type>::Type, True>::value, "Failed ConvertIntegral");
-  static_assert(IsSame<impl::ConvertIntegral<True>::Type, True>::value, "Failed ConvertIntegral");
+  using cds::meta::impl::ConvertIntegral;
+  static_assert(IsSame<ConvertIntegral<std::true_type>::Type, True>::value, "Failed ConvertIntegral");
+  static_assert(IsSame<ConvertIntegral<True>::Type, True>::value, "Failed ConvertIntegral");
 }
 
 TEST(MetaBase, And) {

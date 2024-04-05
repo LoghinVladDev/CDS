@@ -38,6 +38,8 @@ template <typename T1, typename T2, typename T3, typename... R> CDS_ATTR(2(nodis
 namespace impl {
 using meta::lvalue;
 
+enum class Ordering : U8 { Less, Equal, Greater };
+
 template <typename I, typename S, typename O>
 CDS_ATTR(constexpr(14)) auto copy(I sFirst, S sLast, O dFirst) CDS_ATTR(noexcept(
     noexcept(*dFirst = *sFirst)
@@ -172,6 +174,25 @@ CDS_ATTR(constexpr(20)) auto destructN(I first, S count) noexcept -> void {
     destruct(first);
   }
 }
+
+template <typename I1, typename S1, typename I2, typename S2> CDS_ATTR(2(nodiscard, constexpr(14))) auto compare(
+    I1 b1, S1 e1, I2 b2, S2 e2
+) noexcept -> Ordering {
+  for (; b1 != e1 && b2 != e2; ++b1, ++b2) {
+    if (*b1 > *b2) { return Ordering::Greater; }
+    if (*b1 < *b2) { return Ordering::Less; }
+  }
+
+  if (b1 != e1) { return Ordering::Greater; }
+  if (b2 != e2) { return Ordering::Less; }
+  return Ordering::Equal;
+}
+
+struct Ignore {
+  template <typename T> CDS_ATTR(constexpr(14)) auto operator=(T&&) const noexcept -> void {}
+};
+
+static Ignore constexpr ignore;
 } // namespace impl
 } // namespace cds
 

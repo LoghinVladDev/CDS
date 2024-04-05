@@ -69,6 +69,28 @@ template <typename C, typename U, typename V, template <typename> class Cont>
 struct GenericFindLastUsingFind<BaseStringView<C, U>, V, Cont<Equal<>>> :
     And<IsIterable<RemoveCVRef<V>>, IsString<DereferenceOfOr<IteratorOfOr<V, void>, void>>> {};
 
+template <typename C, typename U, typename A, typename V>
+struct GenericFindEnabledFor<BaseString<C, U, A>, V, Equal<>> : Not<
+    IsString<RemoveCVRef<V>>> {};
+
+template <typename C, typename U, typename A, typename V>
+struct GenericFindFirstUsingFind<BaseString<C, U, A>, V, Equal<>> : IsString<RemoveCVRef<V>> {};
+
+template <typename C, typename U, typename A, typename V>
+struct GenericFindLastUsingFind<BaseString<C, U, A>, V, Equal<>> : IsString<RemoveCVRef<V>> {};
+
+template <typename C, typename U, typename A, typename V, template <typename> class Cont>
+struct GenericFindEnabledFor<BaseString<C, U, A>, V, Cont<Equal<>>> :
+    Not<And<IsIterable<RemoveCVRef<V>>, IsString<DereferenceOfOr<IteratorOfOr<V, void>, void>>>> {};
+
+template <typename C, typename U, typename A, typename V, template <typename> class Cont>
+struct GenericFindFirstUsingFind<BaseString<C, U, A>, V, Cont<Equal<>>> :
+    And<IsIterable<RemoveCVRef<V>>, IsString<DereferenceOfOr<IteratorOfOr<V, void>, void>>> {};
+
+template <typename C, typename U, typename A, typename V, template <typename> class Cont>
+struct GenericFindLastUsingFind<BaseString<C, U, A>, V, Cont<Equal<>>> :
+    And<IsIterable<RemoveCVRef<V>>, IsString<DereferenceOfOr<IteratorOfOr<V, void>, void>>> {};
+
 template <typename S, typename A> class StringFindKmpPredicate : public KMPBase<S, A> {
 public:
   using MatchKind = matchKind::ByErrorIndex;
@@ -100,7 +122,7 @@ template <typename> struct IsBaseStringView : False {};
 template <typename C, typename U> struct IsBaseStringView<BaseStringView<C, U>> : True {};
 
 template <typename> struct IsBaseString : False {};
-// template <typename C, typename U, typename A> struct IsBaseString<BaseString<C, U, A>> : True {};
+template <typename C, typename U, typename A> struct IsBaseString<BaseString<C, U, A>> : True {};
 
 template <typename T, typename V, typename E> struct UsesStringFind : And<
   Not<GenericFindEnabledFor<T, V, E>>,
@@ -166,6 +188,22 @@ struct FindUsesAllocation<
     BaseStringView<C, U>, V, NotContains<E>,
     EnableIf<And<IsIterable<RemoveCVRef<V>>, IsString<DereferenceOfOr<IteratorOfOr<V, void>, void>>>, void>
 > : True, ConditionalAlloc<BaseStringView<C, U>, V, NotContains<Equal<>>> {};
+
+template <typename C, typename U, typename A, typename V>
+struct FindUsesAllocation<BaseString<C, U, A>, V, Equal<>, EnableIf<IsString<RemoveCVRef<V>>, void>> :
+    True, ConditionalAlloc<BaseString<C, U, A>, V, Equal<>> {};
+
+template <typename C, typename U, typename A, typename V, typename E>
+struct FindUsesAllocation<
+    BaseString<C, U, A>, V, Contains<E>,
+    EnableIf<And<IsIterable<RemoveCVRef<V>>, IsString<DereferenceOfOr<IteratorOfOr<V, void>, void>>>, void>
+> : True, ConditionalAlloc<BaseString<C, U, A>, V, Contains<Equal<>>> {};
+
+template <typename C, typename U, typename A, typename V, typename E>
+struct FindUsesAllocation<
+    BaseString<C, U, A>, V, NotContains<E>,
+    EnableIf<And<IsIterable<RemoveCVRef<V>>, IsString<DereferenceOfOr<IteratorOfOr<V, void>, void>>>, void>
+> : True, ConditionalAlloc<BaseString<C, U, A>, V, NotContains<Equal<>>> {};
 
 template <typename I, typename P, typename T> class StringFindIterator : private StateContainer<P> {
 public:
