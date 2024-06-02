@@ -176,7 +176,9 @@ template <> struct SignedEquivalent<U8> { using Type = S8; };
 template <> struct SignedEquivalent<U16> { using Type = S16; };
 template <> struct SignedEquivalent<U32> { using Type = S32; };
 template <> struct SignedEquivalent<U64> { using Type = S64; };
+#if defined(__linux) && CDS_ATTR(bitarch) == 64
 template <> struct SignedEquivalent<unsigned long long> { using Type = signed long long; };
+#endif
 
 template <typename T> struct UnsignedEquivalent {};
 template <> struct UnsignedEquivalent<char> { using Type = unsigned char; };
@@ -184,7 +186,9 @@ template <> struct UnsignedEquivalent<S8> { using Type = U8; };
 template <> struct UnsignedEquivalent<S16> { using Type = U16; };
 template <> struct UnsignedEquivalent<S32> { using Type = U32; };
 template <> struct UnsignedEquivalent<S64> { using Type = U64; };
+#if defined(__linux) && CDS_ATTR(bitarch) == 64
 template <> struct UnsignedEquivalent<signed long long> { using Type = unsigned long long; };
+#endif
 } // namespace impl
 
 template <typename Type> using RemoveConst = typename impl::RemoveConst<Type>::Type;
@@ -245,6 +249,9 @@ template <template <typename...> class> struct TemplateTypeInfo {
 
 template <> struct TypeInfo<void> { constexpr static char const* name = "void"; };
 template <> struct TypeInfo<bool> { constexpr static char const* name = "bool"; };
+template <> struct TypeInfo<wchar_t> { constexpr static char const* name = "wchar_t"; };
+template <> struct TypeInfo<char16_t> { constexpr static char const* name = "char16_t"; };
+template <> struct TypeInfo<char32_t> { constexpr static char const* name = "char32_t"; };
 template <> struct TypeInfo<signed char> { constexpr static char const* name = "signed char"; };
 template <> struct TypeInfo<signed short> { constexpr static char const* name = "signed short"; };
 template <> struct TypeInfo<signed int> { constexpr static char const* name = "signed int"; };
@@ -255,6 +262,10 @@ template <> struct TypeInfo<unsigned int> { constexpr static char const* name = 
 template <> struct TypeInfo<unsigned long> { constexpr static char const* name = "unsigned long"; };
 template <> struct TypeInfo<float> { constexpr static char const* name = "float"; };
 template <> struct TypeInfo<double> { constexpr static char const* name = "double"; };
+
+#if CDS_ATTR(cpp20)
+template <> struct TypeInfo<char8_t> { constexpr static char const* name = "char8_t"; };
+#endif
 
 template <typename Type> using Decay = typename impl::Decay<Type>::Type;
 template <typename... Types> using Common = typename impl::Common<Types...>::Type;

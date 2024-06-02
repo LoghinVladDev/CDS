@@ -20,7 +20,6 @@
 #include <variant>
 #include <mutex>
 #include <thread>
-// #include <bits/ranges_algo.h>
 #include <algorithm>
 #include <source_location>
 #include <sstream>
@@ -184,17 +183,17 @@ auto locateTests(std::vector<std::filesystem::path>&& fileOrPaths) -> std::vecto
     }
   }
 
-  (void) std::move(fileOrPaths);
+  fileOrPaths.clear();
   return resolvedPaths;
 }
 
 enum class TestStepType {Compile, Run};
 enum class TestStepResult {Success, Failure};
-enum class TestStepPlatform {Linux};
-enum class TestStepCompiler {Clang, Gcc};
+enum class TestStepPlatform {Linux, All};
+enum class TestStepCompiler {Clang, Gcc, All};
 enum class Standard {Cpp11 = 0, Cpp14 = 1, Cpp17 = 2, Cpp20 = 3, Cpp23 = 4, Cpp2c = 5, Highest=Cpp23, End = 6};
 
-auto toString(Standard std) {
+auto toString(Standard const std) {
   switch(std) {
     using enum dcr::Standard;
     case Cpp11: return "11";
@@ -208,19 +207,23 @@ auto toString(Standard std) {
   }
 }
 
-auto toString(TestStepPlatform plat) {
-  if (plat == TestStepPlatform::Linux) {
-    return "linux";
+auto toString(TestStepPlatform const plat) {
+  switch (plat) {
+    using enum TestStepPlatform;
+    case Linux: return "linux";
+    case All: return "all";
+    default:
+      assert(false && "Undefined platform type");
+      return "";
   }
-
-  assert(false && "Undefined platform type");
-  return "";
 }
 
 auto toString(TestStepCompiler const comp) {
   switch(comp) {
-    case TestStepCompiler::Clang: return "clang++";
-    case TestStepCompiler::Gcc: return "g++";
+    using enum TestStepCompiler;
+    case Clang: return "clang++";
+    case Gcc: return "g++";
+    case All: return "<all, undefined invocation>";
     default:
       assert(false && "Undefined compiler type");
       return "";
@@ -230,6 +233,7 @@ auto toString(TestStepCompiler const comp) {
 struct TestStepEnv {
   std::optional<TestStepPlatform> platform;
   std::optional<TestStepCompiler> compiler;
+  std::vector<std::string> flags;
 };
 
 struct TestStep {
@@ -253,6 +257,7 @@ using namespace std::string_view_literals;
 constexpr auto headerPrefixStd = "STD: "sv;
 constexpr auto headerPrefixSteps = "STEPS: "sv;
 constexpr auto headerPrefixExpected = "EXPECTED"sv;
+constexpr auto headerPrefixFlags = "FLAGS"sv;
 std::unordered_map<std::string_view, Standard> const standardMap = {
     {"11", Standard::Cpp11},
     {"1a", Standard::Cpp11},
@@ -269,21 +274,23 @@ std::unordered_map<std::string_view, Standard> const standardMap = {
 
 std::unordered_map<std::string_view, TestStepType> const stepTypeMap = {
     {"compile", TestStepType::Compile},
-    {"run", TestStepType::Run}
+    {"run", TestStepType::Run},
 };
 
 std::unordered_map<std::string_view, TestStepResult> const expectationMap = {
     {"success", TestStepResult::Success},
-    {"failure", TestStepResult::Failure}
+    {"failure", TestStepResult::Failure},
 };
 
 std::unordered_map<std::string_view, TestStepCompiler> const compilerMap = {
     {"clang", TestStepCompiler::Clang},
     {"gcc", TestStepCompiler::Gcc},
+    {"*", TestStepCompiler::All},
 };
 
 std::unordered_map<std::string_view, TestStepPlatform> const platformMap = {
     {"linux", TestStepPlatform::Linux},
+    {"*", TestStepPlatform::All},
 };
 
 auto trim(std::string_view const str) -> std::string_view {
@@ -459,6 +466,101 @@ auto parseAndAdjustSteps(std::vector<TestStep>& steps, std::string_view stepsAnd
   }
 }
 
+auto parseFlagsGetWholeStep(std::string_view step)
+    -> std::optional<std::tuple<TestStepType, TestStepPlatform, TestStepCompiler>> {
+  if (auto const stepIt = stepTypeMap.find(step); stepIt != stepTypeMap.end()) {
+    return {{stepIt->second, TestStepPlatform::All, TestStepCompiler::All}};
+  }
+  std::cout << "Invalid step specified : '" << step << "'\n";
+  return std::nullopt;
+}
+
+auto parseFlagsGetStepInfo(TestStepType type, std::string_view conditionsString)
+    -> std::optional<std::tuple<TestStepType, TestStepPlatform, TestStepCompiler>> {
+  auto const sepIdx = conditionsString.find(':');
+  if (sepIdx == std::string_view::npos) {
+    std::cout << "Expected ':' in step condition - platform/*:compiler/*\n";
+    return std::nullopt;
+  }
+
+  auto const platString = conditionsString.substr(0, sepIdx);
+  auto const platIt = platformMap.find(platString);
+  if (platIt == platformMap.end()) {
+    std::cout << "Invalid platform specified : '" << platString << "'\n";
+    return std::nullopt;
+  }
+  auto const compString = conditionsString.substr(sepIdx + 1);
+  auto const compIt = compilerMap.find(compString);
+  if (compIt == compilerMap.end()) {
+    std::cout << "Invalid compiler specified : '" << compString << "'\n";
+    return std::nullopt;
+  }
+  return {{type, {platIt->second}, {compIt->second}}};
+}
+
+auto parseFlagsGetWildcardStep(std::string_view stepsString)
+    -> std::optional<std::tuple<TestStepType, TestStepPlatform, TestStepCompiler>> {
+  auto lbraceIdx = stepsString.find('(');
+  if (lbraceIdx == std::string_view::npos) {
+    return parseFlagsGetWholeStep(stepsString);
+  }
+
+  auto const rbraceIdx = stepsString.find(')');
+  if (rbraceIdx == std::string_view::npos) {
+    std::cout << "Expected ')' after <step>(<conditions>\n";
+    return std::nullopt;
+  }
+
+  if (auto const stepIt = stepTypeMap.find(stepsString.substr(0, lbraceIdx)); stepIt != stepTypeMap.end()) {
+    return parseFlagsGetStepInfo(stepIt->second, stepsString.substr(lbraceIdx + 1, stepsString.length() - lbraceIdx - 2));
+  }
+  return std::nullopt;
+}
+
+auto parseAndAppendStepFlagsFor(std::vector<TestStep>& steps, std::string_view stepsString, std::string_view flagsString) {
+  auto const flagsApplyTo = parseFlagsGetWildcardStep(stepsString);
+  if (!flagsApplyTo) {
+    return;
+  }
+
+  auto const [stepType, stepPlat, stepComp] = *flagsApplyTo;
+  for (auto& step : steps) {
+    if (step.type != stepType) {
+      continue;
+    }
+
+    for (auto& env : step.enviroments) {
+      if (env.platform && stepPlat != TestStepPlatform::All && stepPlat != *env.platform
+          || env.compiler && stepComp != TestStepCompiler::All && stepComp != *env.compiler) {
+        continue;
+      }
+
+      std::stringstream asBuf;
+      asBuf << flagsString;
+      std::string flag;
+      while (asBuf >> flag) {
+        env.flags.push_back(std::move(flag));
+      }
+    }
+  }
+}
+
+auto parseAndAppendStepFlags(std::vector<TestStep>& steps, std::string_view stepsAndFlagsString) {
+  if (!stepsAndFlagsString.starts_with('[')) {
+    std::cout << "Expected '[' after FLAGS\n";
+    return;
+  }
+
+  stepsAndFlagsString = stepsAndFlagsString.substr(1);
+  auto const endIdx = stepsAndFlagsString.find("]: ");
+  if (endIdx == std::string_view::npos) {
+    std::cout << "Expected ']: ' after FLAGS[<steps>\n";
+    return;
+  }
+
+  parseAndAppendStepFlagsFor(steps, stepsAndFlagsString.substr(0, endIdx), stepsAndFlagsString.substr(endIdx + "]: "sv.length()));
+}
+
 auto processTestHeader(std::string const& path) -> std::optional<TestData> {
   std::ifstream testFile(path);
   std::vector<TestStep> steps;
@@ -493,6 +595,8 @@ auto processTestHeader(std::string const& path) -> std::optional<TestData> {
       }
     } else if (headerItem.starts_with(headerPrefixExpected)) {
       parseAndAdjustSteps(steps, headerItem.substr(headerPrefixExpected.length()));
+    } else if (headerItem.starts_with(headerPrefixFlags)) {
+      parseAndAppendStepFlags(steps, headerItem.substr(headerPrefixFlags.length()));
     }
   }
 
@@ -535,16 +639,16 @@ auto executablePath(std::string const& src, Standard standard, TestStepEnv const
     relative = src.substr(lastSlIdx + 1);
   }
 
-  auto const& [plat, comp] = env;
+  auto const& [plat, comp, _] = env;
   auto const extensionIdx = relative.rfind('.');
   auto const binary = relative.substr(0, extensionIdx) + "_" + toString(standard) + "_" + toString(*plat) + "_" + toString(*comp) + ".bin";
   return "./test_binaries/" + binary;
 }
 
 auto profPath(std::string const& src, Standard standard, TestStepEnv const& env) {
-  auto execPath = executablePath(src, standard, env);
-  auto extLoc = execPath.rfind('.');
-  auto withoutExt = execPath.substr(0, extLoc);
+  auto const execPath = executablePath(src, standard, env);
+  auto const extLoc = execPath.rfind('.');
+  auto const withoutExt = execPath.substr(0, extLoc);
   return withoutExt + ".profraw";
 }
 
@@ -681,15 +785,21 @@ auto defineDcrStdIdentifier(std::vector<std::string>& args, Standard std) {
   }
 }
 
+auto addFlags(std::vector<std::string>& args, std::vector<std::string> const& flags) {
+  for (auto const& flag : flags) {
+    args.emplace_back(flag);
+  }
+}
+
 auto executeCompile(CompileData const& data, std::vector<std::string> const& extraArgs) {
   auto const& [path, standard, testEnv] = data;
   std::vector<std::string> fullArgs = extraArgs;
   std::vector<std::string> env;
   defineDcrStdIdentifier(fullArgs, data.standard);
+  addFlags(fullArgs, data.testEnv.flags);
   fullArgs.push_back(path);
   fullArgs.emplace_back("-o");
   fullArgs.push_back(executablePath(path, standard, testEnv));
-
   return awaitProcess(getCompilerName(data.testEnv), fullArgs, env);
 }
 
@@ -699,6 +809,7 @@ auto executeRun(RunData const& data) {
   auto const& execPath = executablePath(path, standard, testEnv);
   auto const& profrawPath = profPath(path, standard, testEnv);
   std::vector<std::string> args;
+  addFlags(args, testEnv.flags);
   std::vector env = {"LLVM_PROFILE_FILE="s + profrawPath};
   return awaitProcess(execPath, args, env);
 }
@@ -841,8 +952,7 @@ auto executeJob(auto const& job, std::vector<std::string> const& passToCompiler,
   return {false, "", "Unknown Job Type", false};
 }
 
-template <typename T>
-auto toString(std::optional<T> const& obj) {
+template <typename T> auto toString(std::optional<T> const& obj) {
   if (!obj) {
     return "unknown";
   }
@@ -958,8 +1068,9 @@ auto execute(std::vector<TestData> const& tests, std::vector<std::string> const&
   std::atomic successful = 0;
   std::atomic skipped = 0;
   for (auto const& test: tests) {
-    skipped = acquireJobsFromTest(total, jobs, test);
-    total += skipped;
+    auto currentSkipped = acquireJobsFromTest(total, jobs, test);
+    total += currentSkipped;
+    skipped += currentSkipped;
   }
 
   using namespace std::string_literals;
@@ -1053,7 +1164,7 @@ auto locateWildcardMatches(std::vector<std::filesystem::path>&& paths) {
     }
   }
 
-  (void) std::move(paths);
+  paths.clear();
   return resolved;
 }
 
@@ -1102,6 +1213,10 @@ auto run(int const argc, char const* const* argv) -> int {
     return 0;
   }
 
+  if (dcrParams.verbose) {
+    std::cout << "[DCR] Locating DCR compatible files at given path\n";
+  }
+
   std::vector<std::filesystem::path> inputPaths = locateWildcardMatches({std::move(inputFileOrDir)});
   for (auto const& path: inputPaths) {
     if (!std::filesystem::exists(path)) {
@@ -1116,7 +1231,38 @@ auto run(int const argc, char const* const* argv) -> int {
     return 1;
   }
 
+  if (dcrParams.verbose) {
+    std::cout << "[DCR] Located " << testPaths.size() << " compatible file(s) at given location\n";
+  }
+
   auto const tests = processTests(testPaths);
+  if (dcrParams.verbose) {
+    auto accum = [](auto const& it, auto const& sel) {
+      auto sum = 0;
+      for (auto const& e : it) {
+        sum += std::invoke(sel, e);
+      }
+      return sum;
+    };
+
+    auto numStds = [](StandardRange const& rng) {
+      auto const end = rng.end ? *rng.end : Standard::Highest;
+      return static_cast<std::underlying_type_t<Standard>>(end)
+          - static_cast<std::underlying_type_t<Standard>>(rng.begin)
+          + 1;
+    };
+
+    auto testCount = [&tests, &accum, &numStds] {
+      return accum(tests, [&accum, &numStds](TestData const& td) {
+        return accum(td.steps, [&accum](TestStep const& ts) {
+          return accum(ts.enviroments, [](auto const&){ return 1; });
+        }) * numStds(td.standard);
+      });
+    };
+    std::cout << "[DCR] Located " << testCount() << " tests in compatible files\n"
+                 "[DCR] Starting async execution...\n";
+  }
+
   return execute(tests, passedToCompiler, dcrParams);
 }
 } // namespace dcr

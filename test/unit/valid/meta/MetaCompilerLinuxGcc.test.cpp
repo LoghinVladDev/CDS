@@ -51,3 +51,13 @@ TEST(MetaCompilerLinuxGcc, Standard23) {
   ASSERT_EQ(std::string(CurrentStd::literal), "cpp-23");
 }
 #endif
+
+TEST(MetaCompilerLinuxGcc, Arch) {
+#if CDS_ATTR(bitarch) == 64
+  ASSERT_EQ(sizeof(void*), 8);
+#elif CDS_ATTR(bitarch) == 32
+  ASSERT_EQ(sizeof(void*), 4);
+#else
+  ASSERT_TRUE(false); // Potentially unsupported architecture
+#endif
+}

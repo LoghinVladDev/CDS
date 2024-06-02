@@ -1,0 +1,12 @@
+// DCR-TEST
+// STEPS: compile(linux:gcc;linux:clang),run(linux:gcc;linux:clang)
+// STD: 11+
+// FLAGS[compile(linux:*)]: -m32 -DCDS_ATTR_emulated_in_constexpr=true
+
+#define CHAR_TYPE char
+#define SBO_CAPACITY 10
+#define ALLOCATOR_TYPE TrackerAllocator
+#define LITERAL(text) text
+#define LITERAL_OP(text) text ## _s
+#define CDS_ATTR_emulated_in_constexpr true
+#include "String.hpp"

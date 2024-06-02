@@ -61,6 +61,8 @@ public:
   CDS_ATTR(constexpr(14)) FindIterator(FindIterator&& it) noexcept :
       _i(cds::move(it._i)), _b(it._b), _e(it._e), _v(it._v) {}
 
+  CDS_ATTR(constexpr(20)) ~FindIterator() noexcept = default;
+
   CDS_ATTR(constexpr(14)) auto operator++() CDS_ATTR(noexcept(noexcept(filter()))) -> FindIterator& {
     (void) ++_i;
     filter();
@@ -176,6 +178,8 @@ public:
 
   CDS_ATTR(constexpr(14)) FindProjectIterator(FindProjectIterator&& it)
       noexcept : _i(cds::move(it._i)), _b(it._b), _e(it._e), _p(it._p), _v(it._v) {}
+
+  CDS_ATTR(constexpr(20)) ~FindProjectIterator() noexcept = default;
 
 #if CDS_ATTR(sentinel)
   template <typename FI, typename FV, typename FP, typename FE, typename FT>

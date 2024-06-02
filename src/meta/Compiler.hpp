@@ -119,12 +119,14 @@
 #undef CDS_ATTR_nodiscard
 #define CDS_ATTR_nodiscard CDS_ATTR_NEWSTYLE(nodiscard)
 #define CDS_ATTR_noexcept_fn_type true
+#define CDS_ATTR_if_constexpr(...) if constexpr (__VA_ARGS__)
 #else // before cpp17
 #define CDS_ATTR_cpp17 false
 #define CDS_ATTR_constexpr_17 inline
 #define CDS_ATTR_ctad false
 #define CDS_ATTR_sentinel false
 #define CDS_ATTR_noexcept_fn_type false
+#define CDS_ATTR_if_constexpr(...) if (__VA_ARGS__)
 #endif
 
 #if CDS_ATTR(std) >= CDS_ATTR(std20)
@@ -157,6 +159,10 @@
 #define CDS_ATTR_cpp23 false
 #define CDS_ATTR_constexpr_23 inline
 #define CDS_ATTR_consteval_23(fallback) CDS_ATTR_ ## fallback
+#endif
+
+#ifndef CDS_ATTR_emulated_in_constexpr
+#define CDS_ATTR_emulated_in_constexpr false
 #endif
 
 namespace cds {

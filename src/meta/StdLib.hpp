@@ -51,7 +51,11 @@
 namespace cds {
 namespace meta {
 CDS_ATTR(2(nodiscard, constexpr(11))) auto inConstexpr() noexcept -> bool {
+#if CDS_ATTR(emulated_in_constexpr)
+  return true;
+#else
   return std::__is_constant_evaluated();
+#endif
 }
 } // namespace meta
 
@@ -107,7 +111,11 @@ template <typename T, typename F> CDS_ATTR(nodiscard) auto bitCast(F const& from
 namespace cds {
 namespace meta {
 CDS_ATTR(2(nodiscard, constexpr(11))) auto inConstexpr() noexcept -> bool {
+#if CDS_ATTR(emulated_in_constexpr)
+  return true;
+#else
   return std::__libcpp_is_constant_evaluated();
+#endif
 }
 } // namespace meta
 
@@ -163,7 +171,11 @@ template <typename T, typename F> CDS_ATTR(nodiscard) auto bitCast(F const& from
 namespace cds {
 namespace meta {
 CDS_ATTR(2(nodiscard, constexpr(11))) auto inConstexpr() noexcept -> bool {
+#if CDS_ATTR(emulated_in_constexpr)
+  return true;
+#else
   return __builtin_is_constant_evaluated();
+#endif
 }
 } // namespace meta
 

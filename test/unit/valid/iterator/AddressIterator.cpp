@@ -466,6 +466,27 @@ TEST(AddressIterator, string) {
   ASSERT_EQ(crbegin(str2) - crend(str2), 3);
 }
 
+TEST(AddressIterator, base) {
+  int v[] = {1, 2, 3};
+  auto b = cds::begin(v);
+  auto e = cds::end(v);
+  auto rb = cds::rbegin(v);
+  auto re = cds::rend(v);
+  auto cb = cds::cbegin(v);
+  auto ce = cds::cend(v);
+  auto crb = cds::crbegin(v);
+  auto cre = cds::crend(v);
+
+  ASSERT_EQ(b.base(), b);
+  ASSERT_EQ(e.base(), e);
+  ASSERT_EQ(re.base(), b);
+  ASSERT_EQ(rb.base(), e);
+  ASSERT_EQ(cb.base(), cb);
+  ASSERT_EQ(ce.base(), ce);
+  ASSERT_EQ(crb.base(), ce);
+  ASSERT_EQ(cre.base(), cb);
+}
+
 #ifdef DCR_SINCECPP11
 struct F {
   constexpr F() = default;

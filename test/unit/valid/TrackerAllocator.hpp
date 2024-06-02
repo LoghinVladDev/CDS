@@ -9,6 +9,7 @@
 #include <cds/meta/Semantics>
 #include <cds/memory/Allocator>
 #include <cassert>
+#include <unordered_set>
 
 namespace testing {
 template <typename T> class TrackerAllocator : public cds::Allocator<T> {
@@ -22,6 +23,8 @@ public:
   TrackerAllocator(TrackerAllocator&& ta) noexcept :
       cds::Allocator<T>(cds::move(ta)),
       _allocated(cds::exchange(ta._allocated, 0u)),
+      _tracked(std::move(ta._tracked)),
+      _freed(std::move(ta._freed)),
       _assertOnDestruct(cds::exchange(ta._assertOnDestruct, false)) {}
 
   TrackerAllocator& operator=(TrackerAllocator const&) noexcept = delete;
@@ -33,15 +36,41 @@ public:
     validate();
     cds::Allocator<T>::operator=(cds::move(ta));
     _allocated = cds::exchange(ta._allocated, 0);
+    _tracked = std::move(ta._tracked);
+    _freed = std::move(ta._freed);
     return *this;
   }
 
   T* allocate(cds::Size bCnt) noexcept(false) {
     _allocated += sizeof(T) * bCnt;
-    return cds::Allocator<T>::allocate(bCnt);
+    auto ptr = cds::Allocator<T>::allocate(bCnt);
+    _tracked.emplace(ptr);
+    _freed.erase(ptr);
+    return ptr;
   }
 
   void deallocate(T* mem, cds::Size bCnt) noexcept {
+    if (_freed.find(mem) != _freed.end()) {
+#if NDEBUG
+      std::cerr << "Double free of memory from current allocator\n";
+      std::cerr.flush();
+      std::terminate();
+#endif
+      assert(false && "Double free attempted");
+    }
+
+    if (_tracked.find(mem) != _freed.end()) {
+      _tracked.erase(mem);
+      _freed.emplace(mem);
+    } else if (mem) {
+#if NDEBUG
+      std::cerr << "Attempted to free memory not allocated from current allocator\n";
+      std::cerr.flush();
+      std::terminate();
+#endif
+      assert(false && "Attempted to free memory not allocated from this allocator");
+    }
+
     cds::Allocator<T>::deallocate(mem, bCnt);
     _allocated -= sizeof(T) * bCnt;
   }
@@ -67,6 +96,8 @@ public:
 
 private:
   cds::Size _allocated {0u};
+  std::unordered_set<T*> _tracked;
+  std::unordered_set<T*> _freed;
   bool _assertOnDestruct {true};
 };
 } // namespace testing

@@ -137,7 +137,6 @@ public:
   }
 
   CDS_ATTR(constexpr(14)) auto clear() noexcept -> void {
-    // _data = nullptr;
     _length = 0u;
   }
 
@@ -158,19 +157,19 @@ public:
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin() const noexcept -> ReverseIterator {
-    return ReverseIterator(_data + _length - 1);
+    return ReverseIterator(_data + _length);
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto rend() const noexcept -> ReverseIterator {
-    return ReverseIterator(_data - 1);
+    return ReverseIterator(_data);
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto crbegin() const noexcept -> ConstReverseIterator {
-    return ConstReverseIterator(_data + _length - 1);
+    return ConstReverseIterator(_data + _length);
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto crend() const noexcept -> ConstReverseIterator {
-    return ConstReverseIterator(_data - 1);
+    return ConstReverseIterator(_data);
   }
 
   template <typename N, EnableIf<IsIntegral<N>> = 0>
@@ -192,17 +191,17 @@ public:
   }
 
   template <typename N, EnableIf<IsIntegral<N>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto sub(N from) const noexcept -> View {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto sub(N from) const noexcept -> View {
     return sub(from, size());
   }
 
   template <typename N, EnableIf<IsIntegral<N>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(N from) const noexcept -> View {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto operator()(N from) const noexcept -> View {
     return sub(from, size());
   }
 
   template <typename N1, typename N2, EnableIf<All<IsIntegral, N1, N2>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(N1 from, N2 until) const noexcept -> View {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto operator()(N1 from, N2 until) const noexcept -> View {
     return sub(from, until);
   }
 
@@ -333,6 +332,98 @@ public:
     return impl::split(cds::move(*this), cds::forward<S>(separator), limit, cds::forward<A>(alloc));
   }
 
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto ltrim(Char value) const noexcept -> View {
+    auto d = data();
+    auto l = length();
+    for (; l > 0 && *d == value; ++d, --l) {
+      // nothing, just advances start pointer and length
+    }
+    return View{d, l};
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto ltrim(View const& view = STraits::whitespace) const noexcept -> View {
+    auto d = data();
+    auto l = length();
+    for (; l > 0 && view.contains(*d); ++d, --l) {
+      // nothing, just advances start pointer and length
+    }
+    return View{d, l};
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto rtrim(Char value) const noexcept -> View {
+    auto d = data();
+    auto l = length();
+    for (; l > 0 && value == d[l - 1]; --l) {
+      // nothing, just advances start pointer and length
+    }
+    return View{d, l};
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto rtrim(View const& view = STraits::whitespace) const noexcept -> View {
+    auto d = data();
+    auto l = length();
+    for (; l > 0 && view.contains(d[l - 1]); --l) {
+      // nothing, just advances start pointer and length
+    }
+    return View{d, l};
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto trim(Char value) const noexcept -> View {
+    auto d = data();
+    auto l = length();
+    for (; l > 0 && value == d[l - 1]; --l) {
+      // nothing
+    }
+    for (; l > 0 && value == *d; ++d, --l) {
+      // nothing
+    }
+    return View{d, l};
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto trim(View const& view = STraits::whitespace) const noexcept -> View {
+    auto d = data();
+    auto l = length();
+    for (; l > 0 && view.contains(d[l - 1]); --l) {
+      // nothing
+    }
+    for (; l > 0 && view.contains(*d); ++d, --l) {
+      // nothing
+    }
+    return View{d, l};
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto removePrefix(Char value) const noexcept -> View {
+    return ltrim(value);
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto removePrefix(View const& view) const noexcept -> View {
+    auto d = data();
+    auto l = length();
+    auto dv = view.data();
+    auto dl = view.length();
+    for (; l > 0 && dl > 0 && *dv == *d; --l, --dl, ++d, ++dv) {
+      // nothing
+    }
+
+    return dl == 0 ? View{d, l} : *this;
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto removeSuffix(Char value) const noexcept -> View {
+    return rtrim(value);
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto removeSuffix(View const& view) const noexcept -> View {
+    auto l = length();
+    auto d = data() + l;
+    auto dl = view.length();
+    auto dv = view.data() + dl;
+    for (; l > 0 && dl > 0 && *(dv - 1) == *(d - 1); --l, --dl, --d, --dv) {
+      // nothing
+    }
+
+    return dl == 0 ? View{data(), l} : *this;
+  }
+
 private:
   Address _data {nullptr};
   Size _length {0u};
@@ -349,7 +440,7 @@ auto operator<<(typename BaseStringView<FC, FU>::OStream& out, BaseStringView<FC
 }
 } // namespace impl
 
-namespace literals {
+inline namespace literals {
 CDS_ATTR(2(nodiscard, consteval(20, constexpr(11))))
 auto operator ""_sv(char const* string, std::size_t length) noexcept -> impl::BaseStringView<char> {
   return {string, length};
@@ -359,6 +450,23 @@ CDS_ATTR(2(nodiscard, consteval(20, constexpr(11))))
 auto operator ""_sv(wchar_t const* string, std::size_t length) noexcept -> impl::BaseStringView<wchar_t> {
   return {string, length};
 }
+
+CDS_ATTR(2(nodiscard, consteval(20, constexpr(11))))
+auto operator ""_sv(char16_t const* string, std::size_t length) noexcept -> impl::BaseStringView<char16_t> {
+  return {string, length};
+}
+
+CDS_ATTR(2(nodiscard, consteval(20, constexpr(11))))
+auto operator ""_sv(char32_t const* string, std::size_t length) noexcept -> impl::BaseStringView<char32_t> {
+  return {string, length};
+}
+
+#if CDS_ATTR(cpp20)
+CDS_ATTR(2(nodiscard, consteval(20, no_fallback)))
+auto operator ""_sv(char8_t const* string, std::size_t length) noexcept -> impl::BaseStringView<char8_t> {
+  return {string, length};
+}
+#endif
 }
 } // namespace cds
 

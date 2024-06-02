@@ -116,7 +116,7 @@ struct ByStringSet {};
 } // namespace splitKind
 
 template <typename, typename = void> struct SplitTraits {};
-template <typename T> struct SplitTraits<T, EnableIf<typename StringTraits<T>::IsSeparator, void>> {
+template <typename T> struct SplitTraits<T, EnableIf<typename StringTraits<RemoveCVRef<T>>::IsSeparator, void>> {
   using SplitType = splitKind::ByCharacter;
 };
 

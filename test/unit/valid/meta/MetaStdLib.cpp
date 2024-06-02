@@ -11,5 +11,9 @@ constexpr bool validation() {
 
 TEST(MetaBase, InConstexpr) {
   static_assert(validation(), "Failed actual in-constexpr detection");
+#if CDS_ATTR(emulated_in_constexpr)
+  ASSERT_TRUE(cds::meta::inConstexpr());
+#else
   ASSERT_FALSE(cds::meta::inConstexpr());
+#endif
 }

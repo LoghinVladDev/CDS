@@ -45,6 +45,7 @@ template <> struct IntegralOfEquivalentSize<double> {
 };
 
 #if CDS_ATTR(ld_size) > 64
+#if CDS_ATTR(bitarch) == 64
 template <> struct IntegralOfEquivalentSize<long double> {
   static_assert(sizeof(long double) == 16,
                 "Invalid Integral equivalent for floating point constant");
@@ -52,6 +53,15 @@ template <> struct IntegralOfEquivalentSize<long double> {
     U8 asBytes[16];
   };
 };
+#else
+template <> struct IntegralOfEquivalentSize<long double> {
+  static_assert(sizeof(long double) == 12,
+                "Invalid Integral equivalent for floating point constant");
+  struct Type {
+    U8 asBytes[12];
+  };
+};
+#endif
 #else
 template <> struct IntegralOfEquivalentSize<long double> {
   static_assert(sizeof(long double) == 8,

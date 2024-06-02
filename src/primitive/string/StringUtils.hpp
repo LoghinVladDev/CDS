@@ -11,6 +11,7 @@
 #include <cds/Utility>
 
 #include "StringAbstract.hpp"
+#include <cstdio>
 
 namespace cds {
 namespace impl {
@@ -22,7 +23,191 @@ using meta::IsSigned;
 using meta::IsUnsigned;
 using meta::UnsignedEquivalent;
 
-template <typename C, typename T> struct StringUtils {
+template <typename> struct StringUtilsConstants {};
+
+template <typename = void> struct StringUtilsCharConstants {
+  static char constexpr minusChar = '-';
+  static char constexpr zeroChar = '0';
+  static char constexpr writeIntPrepNums[201]
+    = "0001020304050607080910111213141516171819"
+      "2021222324252627282930313233343536373839"
+      "4041424344454647484950515253545556575859"
+      "6061626364656667686970717273747576777879"
+      "8081828384858687888990919293949596979899";
+  static_assert(sizeof(writeIntPrepNums) ==
+    sizeof("0001020304050607080910111213141516171819"
+           "2021222324252627282930313233343536373839"
+           "4041424344454647484950515253545556575859"
+           "6061626364656667686970717273747576777879"
+           "8081828384858687888990919293949596979899"), "Unexpected writeIntPrepNums size");
+};
+
+template <> struct StringUtilsConstants<char> : StringUtilsCharConstants<> {};
+
+template <typename T> char const StringUtilsCharConstants<T>::minusChar;
+template <typename T> char const StringUtilsCharConstants<T>::zeroChar;
+template <typename T> char const StringUtilsCharConstants<T>::writeIntPrepNums[201];
+
+template <typename = void> struct StringUtilsWCharConstants {
+  static wchar_t constexpr minusChar = L'-';
+  static wchar_t constexpr zeroChar = L'0';
+  static wchar_t constexpr writeIntPrepNums[201]
+    = L"0001020304050607080910111213141516171819"
+       "2021222324252627282930313233343536373839"
+       "4041424344454647484950515253545556575859"
+       "6061626364656667686970717273747576777879"
+       "8081828384858687888990919293949596979899";
+  static_assert(sizeof(writeIntPrepNums) ==
+    sizeof(L"0001020304050607080910111213141516171819"
+            "2021222324252627282930313233343536373839"
+            "4041424344454647484950515253545556575859"
+            "6061626364656667686970717273747576777879"
+            "8081828384858687888990919293949596979899"), "Unexpected writeIntPrepNums size");
+};
+
+template <> struct StringUtilsConstants<wchar_t> : StringUtilsWCharConstants<> {};
+
+template <typename T> wchar_t const StringUtilsWCharConstants<T>::minusChar;
+template <typename T> wchar_t const StringUtilsWCharConstants<T>::zeroChar;
+template <typename T> wchar_t const StringUtilsWCharConstants<T>::writeIntPrepNums[201];
+
+template <typename = void> struct StringUtilsChar16Constants {
+  static char16_t constexpr minusChar = u'-';
+  static char16_t constexpr zeroChar = u'0';
+  static char16_t constexpr writeIntPrepNums[201]
+    = u"0001020304050607080910111213141516171819"
+       "2021222324252627282930313233343536373839"
+       "4041424344454647484950515253545556575859"
+       "6061626364656667686970717273747576777879"
+       "8081828384858687888990919293949596979899";
+  static_assert(sizeof(writeIntPrepNums) ==
+    sizeof(u"0001020304050607080910111213141516171819"
+            "2021222324252627282930313233343536373839"
+            "4041424344454647484950515253545556575859"
+            "6061626364656667686970717273747576777879"
+            "8081828384858687888990919293949596979899"), "Unexpected writeIntPrepNums size");
+};
+
+template <> struct StringUtilsConstants<char16_t> : StringUtilsChar16Constants<> {};
+
+template <typename T> char16_t const StringUtilsChar16Constants<T>::minusChar;
+template <typename T> char16_t const StringUtilsChar16Constants<T>::zeroChar;
+template <typename T> char16_t const StringUtilsChar16Constants<T>::writeIntPrepNums[201];
+
+template <typename = void> struct StringUtilsChar32Constants {
+  static char32_t constexpr minusChar = U'-';
+  static char32_t constexpr zeroChar = U'0';
+  static char32_t constexpr writeIntPrepNums[201]
+    = U"0001020304050607080910111213141516171819"
+       "2021222324252627282930313233343536373839"
+       "4041424344454647484950515253545556575859"
+       "6061626364656667686970717273747576777879"
+       "8081828384858687888990919293949596979899";
+  static_assert(sizeof(writeIntPrepNums) ==
+    sizeof(U"0001020304050607080910111213141516171819"
+            "2021222324252627282930313233343536373839"
+            "4041424344454647484950515253545556575859"
+            "6061626364656667686970717273747576777879"
+            "8081828384858687888990919293949596979899"), "Unexpected writeIntPrepNums size");
+};
+
+template <> struct StringUtilsConstants<char32_t> : StringUtilsChar32Constants<> {};
+
+template <typename T> char32_t const StringUtilsChar32Constants<T>::minusChar;
+template <typename T> char32_t const StringUtilsChar32Constants<T>::zeroChar;
+template <typename T> char32_t const StringUtilsChar32Constants<T>::writeIntPrepNums[201];
+
+#if CDS_ATTR(cpp20)
+template <typename = void> struct StringUtilsChar8Constants {
+  static char8_t constexpr minusChar = u8'-';
+  static char8_t constexpr zeroChar = u8'0';
+  static char8_t constexpr writeIntPrepNums[201]
+    = u8"0001020304050607080910111213141516171819"
+        "2021222324252627282930313233343536373839"
+        "4041424344454647484950515253545556575859"
+        "6061626364656667686970717273747576777879"
+        "8081828384858687888990919293949596979899";
+  static_assert(sizeof(writeIntPrepNums) ==
+    sizeof(u8"0001020304050607080910111213141516171819"
+             "2021222324252627282930313233343536373839"
+             "4041424344454647484950515253545556575859"
+             "6061626364656667686970717273747576777879"
+             "8081828384858687888990919293949596979899"), "Unexpected writeIntPrepNums size");
+};
+
+template <typename T> char8_t const StringUtilsChar8Constants<T>::minusChar;
+template <typename T> char8_t const StringUtilsChar8Constants<T>::zeroChar;
+template <typename T> char8_t const StringUtilsChar8Constants<T>::writeIntPrepNums[201];
+
+template <> struct StringUtilsConstants<char8_t> : StringUtilsChar8Constants<> {};
+#endif
+
+template <typename C> struct StringUtilsFloatingOps {
+  static auto floatingLength(float const value) noexcept -> U8 {
+    return static_cast<U8>(snprintf(nullptr, 0, "%f", value));
+  }
+
+  static auto floatingLength(double const value) noexcept -> U8 {
+    return static_cast<U8>(snprintf(nullptr, 0, "%lf", value));
+  }
+
+  static auto floatingLength(long double const value) noexcept -> U8 {
+    return static_cast<U8>(snprintf(nullptr, 0, "%Lf", value));
+  }
+
+  template <typename I> static auto writeFloating(float const value, U8 const length, I const dst) noexcept -> I {
+    char buf[64];
+    assert(length < 64 && "Too small local buffer size for floating write");
+    snprintf(buf, 63, "%f", value);
+    return impl::copy(buf, buf + length, dst);
+  }
+
+  template <typename I> static auto writeFloating(double const value, U8 const length, I const dst) noexcept -> I {
+    char buf[64];
+    assert(length < 64 && "Too small local buffer size for floating write");
+    snprintf(buf, 63, "%lf", value);
+    return impl::copy(buf, buf + length, dst);
+  }
+
+  template <typename I> static auto writeFloating(long double const value, U8 const length, I const dst) noexcept -> I {
+    char buf[64];
+    assert(length < 64 && "Too small local buffer size for floating write");
+    snprintf(buf, 63, "%Lf", value);
+    return impl::copy(buf, buf + length, dst);
+  }
+};
+
+template <> struct StringUtilsFloatingOps<char> {
+  static auto floatingLength(float const value) noexcept -> U8 {
+    return static_cast<U8>(snprintf(nullptr, 0, "%f", value));
+  }
+
+  static auto floatingLength(double const value) noexcept -> U8 {
+    return static_cast<U8>(snprintf(nullptr, 0, "%lf", value));
+  }
+
+  static auto floatingLength(long double const value) noexcept -> U8 {
+    return static_cast<U8>(snprintf(nullptr, 0, "%Lf", value));
+  }
+
+  template <typename I> static auto writeFloating(float const value, U8 const length, I const dst) noexcept -> I {
+    ignore = snprintf(dst, length + 1u, "%f", value);
+    return dst + length;
+  }
+
+  template <typename I> static auto writeFloating(double const value, U8 const length, I const dst) noexcept -> I {
+    ignore = snprintf(dst, length + 1u, "%lf", value);
+    return dst + length;
+  }
+
+  template <typename I> static auto writeFloating(long double const value, U8 const length, I const dst) noexcept -> I {
+    ignore = snprintf(dst, length + 1u, "%Lf", value);
+    return dst + length;
+  }
+};
+
+template <typename C, typename T> struct StringUtils : private StringUtilsConstants<C>, StringUtilsFloatingOps<C> {
+  using Constants = StringUtilsConstants<C>;
   using Traits = T;
 
   CDS_ATTR(2(nodiscard, constexpr(11)))
@@ -52,11 +237,11 @@ template <typename C, typename T> struct StringUtils {
   static auto endsWith(C const* str, Size len, N&& needle) noexcept -> bool {
     using Abs = StringAbstract<N>;
     auto const nlen = Abs::length(cds::forward<N>(needle));
-    auto nbeg = Abs::data(cds::forward<N>(needle)) + nlen - 1;
-    auto beg = str + len - 1;
+    auto nbeg = Abs::data(cds::forward<N>(needle)) + nlen;
+    auto beg = str + len;
     auto const nend = nbeg - nlen;
     for (auto const end = beg - len; beg != end && nbeg != nend; --beg, --nbeg) {
-      if (*beg != *nbeg) {
+      if (*(beg - 1) != *(nbeg - 1)) {
         return false;
       }
     }
@@ -82,11 +267,14 @@ template <typename C, typename T> struct StringUtils {
     for (;;) {
       if (value < base) {
         return cnt;
-      } else if (value < b2) {
+      }
+      if (value < b2) {
         return cnt + 1;
-      } else if (value < b3) {
+      }
+      if (value < b3) {
         return cnt + 2;
-      } else if (value < b4) {
+      }
+      if (value < b4) {
         return cnt + 3;
       }
 
@@ -97,73 +285,40 @@ template <typename C, typename T> struct StringUtils {
     unreachable();
   }
 
-  template <typename N, EnableIf<IsSigned<N>> = 0> CDS_ATTR(2(nodiscard, constexpr(14)))
-  static auto writeInt(N value, U8 len, C* dst) noexcept -> C* {
+  template <typename N, typename I, EnableIf<IsSigned<N>> = 0> CDS_ATTR(2(nodiscard, constexpr(14)))
+  static auto writeInt(N value, U8 len, I dst) noexcept -> I {
     using U = UnsignedEquivalent<N>;
     auto const neg = value < 0;
     auto const uns = neg
         ? static_cast<U>(~value) + 1u
         : static_cast<U>(value);
     if (neg) {
-      *(dst++) = '-';
+      *(dst++) = Constants::minusChar;
       --len;
     }
     return writeInt(uns, len, dst);
   }
 
-  template <typename N, EnableIf<IsUnsigned<N>> = 0> CDS_ATTR(2(nodiscard, constexpr(14)))
-  static auto writeInt(N value, U8 const len, C* dst) noexcept -> C* {
-    char constexpr prepNums[] =
-        "0001020304050607080910111213141516171819"
-        "2021222324252627282930313233343536373839"
-        "4041424344454647484950515253545556575859"
-        "6061626364656667686970717273747576777879"
-        "8081828384858687888990919293949596979899";
+  template <typename N, typename I, EnableIf<IsUnsigned<N>> = 0> CDS_ATTR(2(nodiscard, constexpr(14)))
+  static auto writeInt(N value, U8 const len, I dst) noexcept -> I {
     auto const end = dst + len;
     auto beg = end - 1;
     while (value >= 100) {
       auto const idx = value % 100 * 2;
       value /= 100;
-      *(beg--) = static_cast<C>(prepNums[idx + 1]);
-      *(beg--) = static_cast<C>(prepNums[idx]);
+      *(beg--) = static_cast<C>(Constants::writeIntPrepNums[idx + 1]);
+      *(beg--) = static_cast<C>(Constants::writeIntPrepNums[idx]);
     }
 
     if (value >= 10) {
       auto const idx = value * 2;
-      *(beg--) = static_cast<C>(prepNums[idx + 1]);
-      *beg = static_cast<C>(prepNums[idx]);
+      *(beg--) = static_cast<C>(Constants::writeIntPrepNums[idx + 1]);
+      *beg = static_cast<C>(Constants::writeIntPrepNums[idx]);
     } else {
-      *beg = static_cast<C>('0' + value);
+      *beg = static_cast<C>(Constants::zeroChar + value);
     }
 
     return end;
-  }
-
-  static auto floatingLength(float value) noexcept -> U8 {
-    return snprintf(nullptr, 0, "%f", value);
-  }
-
-  static auto floatingLength(double value) noexcept -> U8 {
-    return snprintf(nullptr, 0, "%lf", value);
-  }
-
-  static auto floatingLength(long double value) noexcept -> U8 {
-    return snprintf(nullptr, 0, "%Lf", value);
-  }
-
-  static auto writeFloating(float value, U8 length, C* dst) noexcept -> C* {
-    ignore = snprintf(dst, length + 1u, "%f", value);
-    return dst + length;
-  }
-
-  static auto writeFloating(double value, U8 length, C* dst) noexcept -> C* {
-    ignore = snprintf(dst, length + 1u, "%lf", value);
-    return dst + length;
-  }
-
-  static auto writeFloating(long double value, U8 length, C* dst) noexcept -> C* {
-    ignore = snprintf(dst, length + 1u, "%Lf", value);
-    return dst + length;
   }
 };
 } // namespace impl

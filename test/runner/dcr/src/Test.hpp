@@ -8,7 +8,9 @@
 #include <vector>
 #include <memory>
 
-#define TEST(suiteName, testName)                               \
+#define TEST(n1, n2) _TEST(n1, n2)
+
+#define _TEST(suiteName, testName)                              \
   namespace dcr {                                               \
   namespace generated {                                         \
   class suiteName ## testName : public ::dcr::Test {            \
@@ -32,7 +34,11 @@ public:
   virtual ~Test() noexcept = default;
 
   virtual auto _run() const noexcept(false) -> void = 0;
+#ifndef DCR_NO_SUBPROCESS_LOGGING
   auto _execute(std::ostream& out) const noexcept -> bool;
+#else
+  auto _execute() const noexcept -> bool;
+#endif
 
 private:
   char const* _suite;

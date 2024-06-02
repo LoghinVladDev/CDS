@@ -10,6 +10,7 @@
 
 namespace cds {
 using StringView = impl::BaseStringView<char>;
+using WideStringView = impl::BaseStringView<wchar_t>;
 } // namespace cds
 
 #endif // CDS_PRIMITIVE_STRING_VIEW_HPP

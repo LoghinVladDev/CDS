@@ -10,6 +10,7 @@
 
 namespace cds {
 using String = impl::BaseString<char>;
+using WideString = impl::BaseString<wchar_t>;
 } // namespace cds
 
 #endif // CDS_PRIMITIVE_STRING_HPP

@@ -42,7 +42,7 @@ public:
     construct(_lps, 0);
     Size idx = 1u;
     Size parseIdx = 0;
-    auto const* pattern = Utils::data(cds::forward<FS>(needle));
+    auto const* pattern = Utils::data(_pat);
     while (idx < len()) {
       if (pattern[idx] == pattern[parseIdx]) {
         construct(_lps + idx++, ++parseIdx);
@@ -122,6 +122,7 @@ template <typename T> struct AhoCorasickU16RehashTable {
   };
 };
 
+#if CDS_ATTR(bitarch) == 64
 template <typename T> struct AhoCorasickU32RehashTable {
   static Size constexpr _fts = 31U;
   static T constexpr _ft[_fts] = {
@@ -129,9 +130,20 @@ template <typename T> struct AhoCorasickU32RehashTable {
       4201U, 8419U, 16843U, 33703U, 67409U, 134837U, 269683U,
       539389U, 1078787U, 2157587U, 4315183U, 8630387U,
       17260781U, 34521589U, 69043189U, 138086407U, 276172823U,
-      552345671U, 1104691373U, 2209382761U, 4294967296ULL
+      552345671U, 1104691373U, 2209382761U, 4294967296ULL,
   };
 };
+#elif CDS_ATTR(bitarch) == 32
+template <typename T> struct AhoCorasickU32RehashTable {
+  static Size constexpr _fts = 27U;
+  static T constexpr _ft[_fts] = {
+    2U, 5U, 13U, 29U, 59U, 127U, 257U, 521U, 1049U, 2099U,
+    4201U, 8419U, 16843U, 33703U, 67409U, 134837U, 269683U,
+    539389U, 1078787U, 2157587U, 4315183U, 8630387U,
+    17260781U, 34521589U, 69043189U, 138086407U, 276172823U,
+};
+};
+#endif
 
 // ODR before cpp17
 template <typename T> T const AhoCorasickU8RehashTable<T>::_ft[_fts];
@@ -139,9 +151,9 @@ template <typename T> T const AhoCorasickU16RehashTable<T>::_ft[_fts];
 template <typename T> T const AhoCorasickU32RehashTable<T>::_ft[_fts];
 
 template <typename T, Size = sizeof(T)> struct AhoCorasickRehashTable {};
-template <typename T> struct AhoCorasickRehashTable<T, 1> : AhoCorasickU8RehashTable<U64> {};
-template <typename T> struct AhoCorasickRehashTable<T, 2> : AhoCorasickU16RehashTable<U64> {};
-template <typename T> struct AhoCorasickRehashTable<T, 4> : AhoCorasickU32RehashTable<U64> {};
+template <typename T> struct AhoCorasickRehashTable<T, 1> : AhoCorasickU8RehashTable<Size> {};
+template <typename T> struct AhoCorasickRehashTable<T, 2> : AhoCorasickU16RehashTable<Size> {};
+template <typename T> struct AhoCorasickRehashTable<T, 4> : AhoCorasickU32RehashTable<Size> {};
 
 template <typename T, Size = sizeof(T)> struct Link {};
 template <typename T> struct Link<T, 1> {

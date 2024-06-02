@@ -220,6 +220,8 @@ public:
       StateContainer<P>(cds::move(it)), _i(cds::move(it._i)), _b(it._b), _e(it._e),
       _p(it._p), _m(cds::exchange(it._m, 0)) {}
 
+  CDS_ATTR(constexpr(20)) ~StringFindIterator() noexcept = default;
+
 #if CDS_ATTR(sentinel)
   template <typename FR, typename FP, typename FT> CDS_ATTR(constexpr(11))
   friend auto operator==(StringFindIterator<FR, FP, FT> const& obj, Sentinel) noexcept -> bool;
@@ -364,6 +366,8 @@ public:
   CDS_ATTR(constexpr(14)) StringProjectFindIterator(StringProjectFindIterator&& it) noexcept :
       StateContainer<P>(cds::move(it)), _i(cds::move(it._i)), _b(it._b), _e(it._e), _p(it._p),
       _proj(it._proj), _m(cds::exchange(it._m, 0)) {}
+
+  CDS_ATTR(constexpr(20)) ~StringProjectFindIterator() noexcept = default;
 
 #if CDS_ATTR(sentinel)
   template <typename FR, typename FP, typename FProj, typename FT> CDS_ATTR(constexpr(11))

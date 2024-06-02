@@ -698,51 +698,6 @@ TEST(MetaObjectTraits, IsNeCompatible) {
   static_assert(!IsNeCompatible<D, D>::value, "Failed IsNeCompatible");
 }
 
-#ifdef DCR_SINCECPP20
-TEST(MetaObjectTraits, IsSpaceshipCompatible) {
-  struct A{};
-  struct B{std::strong_ordering operator<=>(B const&) const; std::strong_ordering operator<=>(int) const;};
-  struct C{std::strong_ordering operator<=>(C const&) const; std::strong_ordering operator<=>(B const&) const;};
-  struct D{std::strong_ordering operator<=>(D const&) const = delete; std::strong_ordering operator<=>(A const&) const;};
-  static_assert(IsSpaceshipCompatible<int>::value, "Failed IsSpaceshipCompatible");
-  static_assert(IsSpaceshipCompatible<int, int>::value, "Failed IsSpaceshipCompatible");
-  static_assert(IsSpaceshipCompatible<int, float>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<int*, int>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<int, A>::value, "Failed IsSpaceshipCompatible");
-  static_assert(IsSpaceshipCompatible<int, B>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<int, C>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<int, D>::value, "Failed IsSpaceshipCompatible");
-
-  static_assert(!IsSpaceshipCompatible<A>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<A, int>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<A, A>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<A, B>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<A, C>::value, "Failed IsSpaceshipCompatible");
-  static_assert(IsSpaceshipCompatible<A, D>::value, "Failed IsSpaceshipCompatible");
-
-  static_assert(IsSpaceshipCompatible<B>::value, "Failed IsSpaceshipCompatible");
-  static_assert(IsSpaceshipCompatible<B, int>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<B, A>::value, "Failed IsSpaceshipCompatible");
-  static_assert(IsSpaceshipCompatible<B, B>::value, "Failed IsSpaceshipCompatible");
-  static_assert(IsSpaceshipCompatible<B, C>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<B, D>::value, "Failed IsSpaceshipCompatible");
-
-  static_assert(IsSpaceshipCompatible<C>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<C, int>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<C, A>::value, "Failed IsSpaceshipCompatible");
-  static_assert(IsSpaceshipCompatible<C, B>::value, "Failed IsSpaceshipCompatible");
-  static_assert(IsSpaceshipCompatible<C, C>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<C, D>::value, "Failed IsSpaceshipCompatible");
-
-  static_assert(!IsSpaceshipCompatible<D>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<D, int>::value, "Failed IsSpaceshipCompatible");
-  static_assert(IsSpaceshipCompatible<D, A>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<D, B>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<D, C>::value, "Failed IsSpaceshipCompatible");
-  static_assert(!IsSpaceshipCompatible<D, D>::value, "Failed IsSpaceshipCompatible");
-}
-#endif
-
 TEST(MetaObjectTraits, IsNotCompatible) {
   struct A{};
   struct B{bool operator!() const;};
@@ -1747,3 +1702,48 @@ TEST(MetaObjectTraits, IsCallable) {
   static_assert(IsCallable<B>::value, "Failed IsCallable");
   static_assert(IsCallable<decltype(lbd)>::value, "Failed IsCallable");
 }
+
+#ifdef DCR_SINCECPP20
+TEST(MetaObjectTraits, IsSpaceshipCompatible) {
+  struct A{};
+  struct B{std::strong_ordering operator<=>(B const&) const; std::strong_ordering operator<=>(int) const;};
+  struct C{std::strong_ordering operator<=>(C const&) const; std::strong_ordering operator<=>(B const&) const;};
+  struct D{std::strong_ordering operator<=>(D const&) const = delete; std::strong_ordering operator<=>(A const&) const;};
+  static_assert(IsSpaceshipCompatible<int>::value, "Failed IsSpaceshipCompatible");
+  static_assert(IsSpaceshipCompatible<int, int>::value, "Failed IsSpaceshipCompatible");
+  static_assert(IsSpaceshipCompatible<int, float>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<int*, int>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<int, A>::value, "Failed IsSpaceshipCompatible");
+  static_assert(IsSpaceshipCompatible<int, B>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<int, C>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<int, D>::value, "Failed IsSpaceshipCompatible");
+
+  static_assert(!IsSpaceshipCompatible<A>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<A, int>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<A, A>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<A, B>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<A, C>::value, "Failed IsSpaceshipCompatible");
+  static_assert(IsSpaceshipCompatible<A, D>::value, "Failed IsSpaceshipCompatible");
+
+  static_assert(IsSpaceshipCompatible<B>::value, "Failed IsSpaceshipCompatible");
+  static_assert(IsSpaceshipCompatible<B, int>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<B, A>::value, "Failed IsSpaceshipCompatible");
+  static_assert(IsSpaceshipCompatible<B, B>::value, "Failed IsSpaceshipCompatible");
+  static_assert(IsSpaceshipCompatible<B, C>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<B, D>::value, "Failed IsSpaceshipCompatible");
+
+  static_assert(IsSpaceshipCompatible<C>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<C, int>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<C, A>::value, "Failed IsSpaceshipCompatible");
+  static_assert(IsSpaceshipCompatible<C, B>::value, "Failed IsSpaceshipCompatible");
+  static_assert(IsSpaceshipCompatible<C, C>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<C, D>::value, "Failed IsSpaceshipCompatible");
+
+  static_assert(!IsSpaceshipCompatible<D>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<D, int>::value, "Failed IsSpaceshipCompatible");
+  static_assert(IsSpaceshipCompatible<D, A>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<D, B>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<D, C>::value, "Failed IsSpaceshipCompatible");
+  static_assert(!IsSpaceshipCompatible<D, D>::value, "Failed IsSpaceshipCompatible");
+}
+#endif

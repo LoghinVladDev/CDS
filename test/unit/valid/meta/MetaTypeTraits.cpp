@@ -567,6 +567,12 @@ TEST(MetaObjectTraits, TypeInfoPrimitives) {
   ASSERT_EQ("signed long", std::string(TypeInfo<signed long>::name));
   ASSERT_EQ("float", std::string(TypeInfo<float>::name));
   ASSERT_EQ("double", std::string(TypeInfo<double>::name));
+  ASSERT_EQ("wchar_t", std::string(TypeInfo<wchar_t>::name));
+  ASSERT_EQ("char16_t", std::string(TypeInfo<char16_t>::name));
+  ASSERT_EQ("char32_t", std::string(TypeInfo<char32_t>::name));
+#if CDS_ATTR(cpp20)
+  ASSERT_EQ("char8_t", std::string(TypeInfo<char8_t>::name));
+#endif
 }
 
 struct Unspecialized{};

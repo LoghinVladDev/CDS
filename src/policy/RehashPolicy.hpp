@@ -22,7 +22,7 @@ public:
   };
 
   struct BalanceResult {
-    U64 size;
+    Size size;
     BalanceType type;
   };
 };
@@ -44,10 +44,25 @@ template <typename T> struct U64PrimeRehashTable {
 // ODR before cpp17
 template <typename T> T const U64PrimeRehashTable<T>::_ft[_fts];
 
+template <typename T> struct U32PrimeRehashTable {
+  static Size constexpr _fts = 28U;
+  static T constexpr _ft[_fts] = {
+    13ULL, 29ULL, 59ULL, 127ULL, 257ULL, 521ULL, 1049ULL, 2099ULL,
+    4201ULL, 8419ULL, 16843ULL, 33703ULL, 67409ULL, 134837ULL,
+    269683ULL, 539389ULL, 1078787ULL, 2157587ULL, 4315183ULL,
+    8630387ULL, 17260781ULL, 34521589ULL, 69043189ULL, 138086407ULL,
+    276172823ULL, 552345671ULL, 1104691373ULL, 2209382761ULL
+  };
+};
+
+// ODR before cpp17
+template <typename T> T const U32PrimeRehashTable<T>::_ft[_fts];
+
 template <typename = Size> struct PrimeRehashTable {};
 template <> struct PrimeRehashTable<U64> : U64PrimeRehashTable<U64> {};
+template <> struct PrimeRehashTable<U32> : U32PrimeRehashTable<U32> {};
 
-template <typename Table> class TableRehashPolicy : public RehashPolicy<U64, True>, private Table {
+template <typename Table> class TableRehashPolicy : public RehashPolicy<Size, True>, private Table {
 public:
   CDS_ATTR(2(explicit, constexpr(11))) TableRehashPolicy(U64 const lf = 1) noexcept : _lf(lf) {}
   CDS_ATTR(constexpr(11)) TableRehashPolicy(TableRehashPolicy const&) = default;
@@ -56,11 +71,11 @@ public:
     _fi = 0;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(17))) auto current() const noexcept -> U64 {
+  CDS_ATTR(2(nodiscard, constexpr(17))) auto current() const noexcept -> Size {
     return Table::_ft[_fi];
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto load() const noexcept -> U64 {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto load() const noexcept -> Size {
     return _lf;
   }
 
@@ -91,8 +106,8 @@ public:
   }
 
 private:
-  U64 _lf;
-  U64 _fi {0};
+  Size _lf;
+  Size _fi {0};
 };
 } // namespace prp
 

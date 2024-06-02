@@ -98,9 +98,172 @@ template <typename T> struct StreamPrint<T, LocalVoid<decltype(localLVOf<std::os
 template <std::size_t s> struct StreamPrint<wchar_t const(&)[s]> {
   template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
     (void) value;
-    out << "<UTF-16 Encoded String, printing is incompatible>";
+    out << "<Wide String, printing is incompatible>";
   }
 };
+
+template <> struct StreamPrint<wchar_t> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<wchar_t&> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<wchar_t const&> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<wchar_t*> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<wchar_t const*> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <std::size_t s> struct StreamPrint<char16_t const(&)[s]> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide String, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<char16_t> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<char16_t&> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<char16_t const&> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<char16_t*> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<char16_t const*> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <std::size_t s> struct StreamPrint<char32_t const(&)[s]> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide String, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<char32_t> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<char32_t&> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<char32_t const&> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<char32_t*> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<char32_t const*> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+#ifdef DCR_SINCECPP20
+template <std::size_t s> struct StreamPrint<char8_t const(&)[s]> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide String, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<char8_t> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<char8_t&> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<char8_t const&> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<char8_t*> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+
+template <> struct StreamPrint<char8_t const*> {
+  template <typename VT> static auto doIt(std::ostream& out, VT&& value) -> void {
+    (void) value;
+    out << "<Wide Char, printing is incompatible>";
+  }
+};
+#endif
 
 template <typename T> auto descOperand(std::string const& asStr, T&& op) -> std::string {
   std::stringstream oss;
