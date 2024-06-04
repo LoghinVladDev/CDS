@@ -109,7 +109,12 @@ template <typename C> struct StringData {
     StringSboData<C> _sbo;
   };
 
-  CDS_ATTR(constexpr(11)) StringData() noexcept = default;
+  CDS_ATTR(constexpr(14)) StringData() noexcept {
+    _sbo.sbo = true;
+    _sbo.buf[0] = StringTraits<C>::nullChar;
+    _sbo.len = 0U;
+  }
+
   CDS_ATTR(constexpr(11)) StringData(C* buf, Size c, Size l, bool s) noexcept : _nrm{buf, c, l, s} {}
 };
 
@@ -131,7 +136,7 @@ template <typename C, typename U, typename A> struct FindStringTransformer {
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(IB&& b, IE&& e, I&& i) const noexcept -> Idx {
     return cds::forward<IE>(e) == cds::forward<I>(i)
         ? BaseString<C, U, A>::npos
-        : (cds::forward<I>(i) - cds::forward<IB>(b));
+        : cds::forward<I>(i) - cds::forward<IB>(b);
   }
 };
 
@@ -189,7 +194,15 @@ public:
   static Idx const npos;
   static Idx const invalidIndex;
 
-  CDS_ATTR(constexpr(20)) BaseString() : sbo::StringData<C>{nullptr, 0, 0, false} {}
+#if CDS_ATTR(cpp20)
+  CDS_ATTR(constexpr(20)) BaseString() : sbo::StringData<C>{nullptr, 0U, 0U, false} {
+    if (!inConstexpr()) {
+      sboInit();
+    }
+  }
+#else
+  BaseString() : sbo::StringData<C>{} {}
+#endif
 
   CDS_ATTR(constexpr(20)) BaseString(Address data, Size const length, A const& alloc = A())
       CDS_ATTR(noexcept(false)) :
@@ -1581,5 +1594,6 @@ auto operator ""_s(char8_t const* string, std::size_t length) noexcept -> impl::
 } // namespace cds
 
 #include "../../common/StringConversion.hpp"
+#include "../../common/TupleString.hpp"
 
 #endif // CDS_PRIMITIVE_STRING_BASE_HPP

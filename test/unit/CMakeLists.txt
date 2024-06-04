@@ -61,6 +61,7 @@ if (CMAKE_SIZEOF_VOID_P EQUAL 4)
       valid/primitive/string_view/StringView_char16_t_x86.cpp
       valid/primitive/string_view/StringView_char32_t_x86.cpp
       valid/primitive/UnionTest.cpp
+      valid/primitive/TupleTest.cpp
 
       valid/stdlib/StringViewStdLibCompatNone_x86.cpp
       valid/stdlib/StringViewStdLibCompatSafe_x86.cpp
@@ -138,7 +139,8 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/primitive/string_view/StringView_char8_t.cpp
       valid/primitive/string_view/StringView_char16_t.cpp
       valid/primitive/string_view/StringView_char32_t.cpp
-      valid/primitive/UnionTest.cpp)
+      valid/primitive/UnionTest.cpp
+      valid/primitive/TupleTest.cpp)
 
   set(CDS_STDLIB_UNIT_TEST_SOURCES
       valid/stdlib/StringViewStdLibCompatNone.cpp

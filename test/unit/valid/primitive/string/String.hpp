@@ -1109,7 +1109,7 @@ TEST(STRING_TEST_GROUP, capacity) {
   SV nonSboData = LITERAL("aaaaaaaaaaaaaaaaaaaaaaa");
   SV nonSboData2 = LITERAL("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
   S s;
-  ASSERT_EQ(s.capacity(), 0);
+  ASSERT_EQ(s.capacity(), SBO_CAPACITY == 0 ? 0 : SBO_CAPACITY);
   S s2 = LITERAL("abcd");
   ASSERT_EQ(s2.capacity(), SBO_CAPACITY == 0 ? 31 : SBO_CAPACITY);
   S s3 = sboData;

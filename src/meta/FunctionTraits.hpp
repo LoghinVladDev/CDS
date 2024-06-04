@@ -10,7 +10,7 @@
 #include <cds/meta/Semantics>
 
 namespace cds {
-template <typename...> class Tuple {};
+template <typename...> class Tuple;
 namespace meta {
 namespace impl {
 template <typename R, typename C, typename... A> struct MakeMemberFunctionTraits {
