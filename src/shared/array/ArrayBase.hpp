@@ -482,9 +482,7 @@ protected:
       __ArrayBase const& array
   ) const noexcept -> bool;
 
-  template <typename __Comparator = decltype (&cds::predicates::lessThan <__Type>)> auto __ab_sort (  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-      __Comparator const& comparator = &cds::predicates::lessThan <__Type>
-  ) noexcept -> void;
+  template <typename __Comparator> auto __ab_sort (__Comparator const& comparator) noexcept -> void;   // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 
 private:
   /// \brief Starting and Minimum capacity for front and back allocation sizes
