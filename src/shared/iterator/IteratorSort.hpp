@@ -16,12 +16,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __IteratorType const & /* begin */,
                     __IteratorType const & /* end */,
                     __Comparator   const & /* comparator */
-            ) noexcept -> void {
-
-                /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
-                 * a used function, when it is only declared for SFINAE purposes. It will still return
-                 * a value acquired from an undefined function to avoid usage in compiled code. */
-            }
+            ) noexcept -> void;
 
 
             template <
@@ -31,12 +26,7 @@ namespace cds {             /* NOLINT(modernize-concat-nested-namespaces) */
                     __RandomAccessIteratorType  const & /* begin */,
                     __RandomAccessIteratorType  const & /* end */,
                     __Comparator                const & /* comparator */
-            ) noexcept -> __RandomAccessIteratorType {
-
-                /* function implementation left as dummy on purpose. clang-10, gcc-9 and gcc-10 detect this as
-                 * a used function, when it is only declared for SFINAE purposes. It will still return
-                 * a value acquired from an undefined function to avoid usage in compiled code. */
-            }
+            ) noexcept -> __RandomAccessIteratorType;
 
 
             template <
