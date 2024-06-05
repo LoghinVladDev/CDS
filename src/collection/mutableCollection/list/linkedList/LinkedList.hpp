@@ -383,7 +383,7 @@ public:
   auto removeAt (Index index) noexcept -> bool override;
 
   template <
-      typename __Comparator = decltype (&cds::predicates::lessThan <__ElementType>)  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+      typename __Comparator = functional::PredicateFunction<__ElementType const&, __ElementType const&>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   > auto sort (__Comparator const& comparator = &cds::predicates::lessThan <__ElementType>) noexcept -> void;
 
   __CDS_NoDiscard auto sequence () & noexcept -> Sequence <LinkedList <__ElementType> >;

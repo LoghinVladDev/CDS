@@ -315,7 +315,14 @@ __CDS_OptimalInline auto Array <__ElementType>::sort (
 
 
 template <typename __ElementType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
-template < typename __Comparator >  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+template <typename T, meta::EnableIf<meta::lessThanPossible<T, T>()>, typename __Comparator>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+__CDS_OptimalInline auto Array <__ElementType>::sort (__Comparator const& comparator) noexcept -> void {
+  return __ab_sort (comparator);
+}
+
+
+template <typename __ElementType> // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+template <typename T, meta::EnableIf<!meta::lessThanPossible<T, T>()>, typename __Comparator>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
 __CDS_OptimalInline auto Array <__ElementType>::sort (__Comparator const& comparator) noexcept -> void {
   return __ab_sort (comparator);
 }

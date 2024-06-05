@@ -148,7 +148,7 @@ protected:
       __DoubleLinkedList const& list
   ) const noexcept -> bool;
 
-  template <typename __Comparator = decltype (&cds::predicates::lessThan <__ElementType>)> auto __dll_sort (                                                                             // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+  template <typename __Comparator = functional::PredicateFunction<__ElementType const&, __ElementType const&>> auto __dll_sort (                                                                             // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
       __Comparator const& comparator = &cds::predicates::lessThan <__ElementType>
   ) noexcept -> void;
 

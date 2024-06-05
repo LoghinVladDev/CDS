@@ -409,8 +409,16 @@ public:
   __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto data () noexcept -> __ElementType*;
 
   template <
-      typename __Comparator = decltype (&cds::predicates::lessThan <__ElementType>)  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
+      typename T = __ElementType,
+      meta::EnableIf<meta::lessThanPossible<T, T>(), int> = 0,
+      typename __Comparator = functional::PredicateFunction<T const&, T const&>  // NOLINT(bugprone-reserved-identifier, cert-dcl37-c, cert-dcl51-cpp)
   > auto sort (__Comparator const & comparator = &cds::predicates::lessThan <__ElementType>) noexcept -> void;
+
+  template <
+      typename T = __ElementType,
+      meta::EnableIf<!meta::lessThanPossible<T, T>(), int> = 0,
+      typename __Comparator
+  > auto sort (__Comparator const & comparator) noexcept -> void;
 
   __CDS_NoDiscard auto sequence () & noexcept -> Sequence <Array <__ElementType>>;
   __CDS_NoDiscard auto sequence () && noexcept -> Sequence <Array <__ElementType>>;
