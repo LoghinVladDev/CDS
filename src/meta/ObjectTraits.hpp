@@ -25,12 +25,36 @@ template <typename T> struct IsTriviallyDefaultConstructible :
 
 template <typename T> struct IsTriviallyCopyConstructible : ConvertIntegral<std::is_trivially_copy_constructible<T>> {};
 template <typename T> struct IsTriviallyMoveConstructible : ConvertIntegral<std::is_trivially_move_constructible<T>> {};
-template <typename T> struct IsTriviallyCopyAssignable : ConvertIntegral<std::is_trivially_copy_assignable<T>> {};
-template <typename T> struct IsTriviallyMoveAssignable : ConvertIntegral<std::is_trivially_move_assignable<T>> {};
 template <typename T> struct IsDefaultConstructible : ConvertIntegral<std::is_default_constructible<T>> {};
 template <typename T> struct IsCopyConstructible : ConvertIntegral<std::is_copy_constructible<T>> {};
 template <typename T> struct IsMoveConstructible : ConvertIntegral<std::is_move_constructible<T>> {};
 template <typename T, typename... A> struct IsConstructible : ConvertIntegral<std::is_constructible<T, A...>> {};
+
+template <typename T, typename = typename IsDefaultConstructible<T>::Type> struct IsNoexceptDefaultConstructible :
+    meta::False {};
+
+template <typename T, typename = typename IsCopyConstructible<T>::Type> struct IsNoexceptCopyConstructible :
+    meta::False {};
+
+template <typename T, typename = typename IsMoveConstructible<T>::Type> struct IsNoexceptMoveConstructible :
+    meta::False {};
+
+template <typename, typename> struct IsConstructiblePackVariant : meta::False {};
+template <typename T, typename... Args> struct IsConstructiblePackVariant<T, Pack<Args...>> :
+    IsConstructible<T, Args...> {};
+
+template <typename T, typename APack, typename = typename IsConstructiblePackVariant<T, APack>::Type>
+struct IsNoexceptConstructiblePackVariant : meta::False {};
+
+template <typename T, typename... Args> struct IsNoexceptConstructiblePackVariant<T, Pack<Args...>, meta::True> :
+    Bool<noexcept(T(meta::value<Args>()...))> {};
+
+template <typename T, typename... Args> struct IsNoexceptConstructible :
+    IsNoexceptConstructiblePackVariant<T, Pack<Args...>> {};
+
+template <typename T> struct IsNoexceptDefaultConstructible<T, meta::True> : Bool<noexcept(T())> {};
+template <typename T> struct IsNoexceptCopyConstructible<T, meta::True> : Bool<noexcept(T(meta::lvalue<T const>()))> {};
+template <typename T> struct IsNoexceptMoveConstructible<T, meta::True> : Bool<noexcept(T(meta::rvalue<T>()))> {};
 
 template <typename T, typename = T, typename = T&, typename = void> struct IsAssignable : meta::False {};
 template <typename T, typename P, typename R>
@@ -39,6 +63,20 @@ struct IsAssignable<T, P, R, Void<decltype(meta::lvalue<T>() = meta::rvalue<P>()
 
 template <typename T> struct IsCopyAssignable : ConvertIntegral<std::is_copy_assignable<T>> {};
 template <typename T> struct IsMoveAssignable : ConvertIntegral<std::is_move_assignable<T>> {};
+template <typename T> struct IsTriviallyCopyAssignable : ConvertIntegral<std::is_trivially_copy_assignable<T>> {};
+template <typename T> struct IsTriviallyMoveAssignable : ConvertIntegral<std::is_trivially_move_assignable<T>> {};
+
+template <typename T, typename = typename IsCopyAssignable<T>::Type> struct IsNoexceptCopyAssignable
+    : meta::False {};
+
+template <typename T, typename = typename IsMoveAssignable<T>::Type> struct IsNoexceptMoveAssignable
+    : meta::False {};
+
+template <typename T> struct IsNoexceptCopyAssignable<T, meta::True>
+    : Bool<noexcept(meta::lvalue<T>() = meta::lvalue<T const>())> {};
+
+template <typename T> struct IsNoexceptMoveAssignable<T, meta::True>
+    : Bool<noexcept(meta::lvalue<T>() = meta::rvalue<T>())> {};
 
 template <typename T, typename = T, typename = void> struct IsAddCompatible : meta::False {};
 template <typename T, typename = T, typename = void> struct IsSubCompatible : meta::False {};
@@ -239,6 +277,14 @@ template <typename Type> struct IsCopyAssignable : impl::IsCopyAssignable<Type>:
 template <typename Type> struct IsMoveAssignable : impl::IsMoveAssignable<Type>::Type {};
 template <typename Type, typename... Arguments> struct IsConstructible :
     impl::IsConstructible<Type, Arguments...>::Type {};
+
+template <typename Type> struct IsNoexceptDefaultConstructible : impl::IsNoexceptDefaultConstructible<Type>::Type {};
+template <typename Type> struct IsNoexceptCopyConstructible : impl::IsNoexceptCopyConstructible<Type>::Type {};
+template <typename Type> struct IsNoexceptMoveConstructible : impl::IsNoexceptMoveConstructible<Type>::Type {};
+template <typename Type> struct IsNoexceptCopyAssignable : impl::IsNoexceptCopyAssignable<Type>::Type {};
+template <typename Type> struct IsNoexceptMoveAssignable : impl::IsNoexceptMoveAssignable<Type>::Type {};
+template <typename Type, typename... Arguments> struct IsNoexceptConstructible :
+    impl::IsNoexceptConstructible<Type, Arguments...>::Type {};
 
 template <typename Type, typename Param = Type, typename Return = Type&> struct IsAssignable :
     impl::IsAssignable<Type, Param, Return> {};

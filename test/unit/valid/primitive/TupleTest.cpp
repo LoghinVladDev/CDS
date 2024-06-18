@@ -49,6 +49,15 @@ TEST(TupleTest, makeTuple) {
   ASSERT_EQ(3, get<4>(t));
 }
 
+TEST(TupleTest, of) {
+  auto t = Tuple<>::of(2, "abcd", 4, "def", 3);
+  ASSERT_EQ(2, get<0>(t));
+  ASSERT_EQ("abcd", get<1>(t));
+  ASSERT_EQ(4, get<2>(t));
+  ASSERT_EQ("def", get<3>(t));
+  ASSERT_EQ(3, get<4>(t));
+}
+
 #if DCR_SINCECPP11
 namespace cxx11 {
 template <cds::Size idx, typename T> constexpr auto get(T const& tuple) noexcept -> decltype(tuple.template get<idx>()) {
@@ -57,22 +66,22 @@ template <cds::Size idx, typename T> constexpr auto get(T const& tuple) noexcept
 } // namespace cxx11
 
 TEST(TupleTest, constexprCpp11) {
-  static_assert(cxx11::get<0>(Tuple<int, long>{1, 3l}) == 1, "constexpr11 construct&get failed");
-  static_assert(cxx11::get<1>(Tuple<int, long>{1, 3l}) == 3l, "constexpr11 construct&get failed");
-  static_assert(Tuple<int, long>{1, 3l} == Tuple<int, long>{1, 3l}, "constexpr11 construct&op== failed");
-  static_assert(Tuple<int, long>{1, 3l} != Tuple<int, long>{2, 3l}, "constexpr11 construct&op!= failed");
-  static_assert(Tuple<int, long>{1, 3l} != Tuple<int, long>{1, 2l}, "constexpr11 construct&op!= failed");
+  static_assert(cxx11::get<0>(Tuple<int, long>{1, 3L}) == 1, "constexpr11 construct&get failed");
+  static_assert(cxx11::get<1>(Tuple<int, long>{1, 3L}) == 3L, "constexpr11 construct&get failed");
+  static_assert(Tuple<int, long>{1, 3L} == Tuple<int, long>{1, 3L}, "constexpr11 construct&op== failed");
+  static_assert(Tuple<int, long>{1, 3L} != Tuple<int, long>{2, 3L}, "constexpr11 construct&op!= failed");
+  static_assert(Tuple<int, long>{1, 3L} != Tuple<int, long>{1, 2L}, "constexpr11 construct&op!= failed");
   static_assert(cds::functional::Hash<>()(Tuple<int, int>{1, 1}) == 32, "constexpr11 hash failed");
-  static_assert(cds::makeTuple(1, 3l) == Tuple<int, long>{1, 3l}, "constexpr11 makeTuple failed");
-  static_assert(cds::makeTuple(1, 3) == Tuple<int, long>{1, 3l}, "constexpr11 makeTuple failed");
-  static_assert(cds::makeTuple(1, 3) != Tuple<int, long>{1, 2l}, "constexpr11 makeTuple failed");
+  static_assert(cds::makeTuple(1, 3L) == Tuple<int, long>{1, 3L}, "constexpr11 makeTuple failed");
+  static_assert(cds::makeTuple(1, 3) == Tuple<int, long>{1, 3L}, "constexpr11 makeTuple failed");
+  static_assert(cds::makeTuple(1, 3) != Tuple<int, long>{1, 2L}, "constexpr11 makeTuple failed");
 }
 #endif
 
 #if DCR_SINCECPP14
 TEST(TupleTest, constexprCpp14) {
-  static_assert(get<0>(Tuple<int, long>{1, 3l}) == 1, "constexpr14 construct&get failed");
-  static_assert(get<1>(Tuple<int, long>{1, 3l}) == 3l, "constexpr14 construct&get failed");
+  static_assert(get<0>(Tuple<int, long>{1, 3L}) == 1, "constexpr14 construct&get failed");
+  static_assert(get<1>(Tuple<int, long>{1, 3L}) == 3L, "constexpr14 construct&get failed");
 }
 #endif
 

@@ -21,6 +21,8 @@ using meta::Bool;
 using meta::And;
 using meta::IsEqCompatible;
 using meta::ReturnIf;
+using meta::All;
+using meta::IsNoexceptDefaultConstructible;
 
 template <Size, typename...> struct TupleNode {};
 
@@ -31,34 +33,29 @@ template <Size idx> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(
   return true;
 }
 
-template <Size nodeIndex, typename Current, typename... Remaining> struct TupleNode<nodeIndex, Current, Remaining...> :
-    TupleNode<nodeIndex + 1U, Remaining...> {
-  using Data = Current;
-  using NextNode = TupleNode<nodeIndex + 1U, Remaining...>;
+template <Size idx, typename T, typename... R> struct TupleNode<idx, T, R...> : TupleNode<idx + 1u, R...> {
+  using Data = T;
+  using NextNode = TupleNode<idx + 1u, R...>;
 
-  CDS_ATTR(constexpr(11)) TupleNode() noexcept = default;
+  CDS_ATTR(constexpr(11)) TupleNode() CDS_ATTR(noexcept(All<IsNoexceptDefaultConstructible, T, R...>::value)) = default;
 
-  template <typename CurrentArg, typename... RemainingArgs>
-  CDS_ATTR(2(constexpr(11), explicit)) TupleNode(CurrentArg&& current, RemainingArgs&&... remaining) CDS_ATTR(noexcept(
-      noexcept(NextNode(cds::forward<RemainingArgs>(remaining)...))
-      && noexcept(Current(cds::forward<CurrentArg>(current)))
+  template <typename Arg, typename... Args>
+  CDS_ATTR(2(constexpr(11), explicit)) TupleNode(Arg&& param, Args&&... remaining) CDS_ATTR(noexcept(
+      noexcept(NextNode(cds::forward<Args>(remaining)...))
+      && noexcept(T(cds::forward<Arg>(param)))
   )) :
-      NextNode(cds::forward<RemainingArgs>(remaining)...),
-      _nodeData(cds::forward<CurrentArg>(current)) {}
+      NextNode(cds::forward<Args>(remaining)...),
+      _nodeData(cds::forward<Arg>(param)) {}
 
-  template <Size otherNodeIdx, typename OtherCurrent, typename... OtherRemaining> CDS_ATTR(2(nodiscard, constexpr(11)))
-  auto operator==(TupleNode<otherNodeIdx, OtherCurrent, OtherRemaining...> const& other) const noexcept
-      -> ReturnIf<bool, And<
-          Bool<otherNodeIdx == nodeIndex>,
-          IsEqCompatible<Current, OtherCurrent>,
-          Bool<sizeof...(Remaining) == sizeof...(OtherRemaining)>>
-      > {
+  template <Size oIdx, typename OT, typename... OR> CDS_ATTR(2(nodiscard, constexpr(11)))
+  auto operator==(TupleNode<oIdx, OT, OR...> const& other) const noexcept
+      -> ReturnIf<bool, And<Bool<oIdx == idx>, IsEqCompatible<T, OT>, Bool<sizeof...(R) == sizeof...(OR)>>> {
     return _nodeData == other._nodeData
         && static_cast<NextNode const&>(*this)
-            == static_cast<typename TupleNode<otherNodeIdx, OtherCurrent, OtherRemaining...>::NextNode const&>(other);
+            == static_cast<typename TupleNode<oIdx, OT, OR...>::NextNode const&>(other);
   }
 
-  Current _nodeData;
+  T _nodeData;
 };
 
 namespace tupleNodeTraits {
@@ -66,20 +63,20 @@ using meta::False;
 using meta::True;
 
 template <typename> struct IsTupleNode : False {};
-template <Size index, typename... Types> struct IsTupleNode<TupleNode<index, Types...>> : True {};
+template <Size idx, typename... Types> struct IsTupleNode<TupleNode<idx, Types...>> : True {};
 
 template <Size, typename> struct NodeTypeInfo {};
-template <Size reqIdx, Size curIdx, typename Cur, typename... Rem> struct NodeTypeInfo<reqIdx, TupleNode<curIdx, Cur, Rem...>> {
-    using Current = TupleNode<curIdx, Cur, Rem...>;
+template <Size reqIdx, Size idx, typename T, typename... R> struct NodeTypeInfo<reqIdx, TupleNode<idx, T, R...>> {
+    using Current = TupleNode<idx, T, R...>;
     using Type = Conditional<
-        Bool<reqIdx == curIdx>,
+        Bool<reqIdx == idx>,
         Current,
         typename NodeTypeInfo<reqIdx, typename Current::NextNode>::Type
     >;
 };
 
 
-template <Size reqIdx, Size curIdx> struct NodeTypeInfo<reqIdx, TupleNode<curIdx>> {
+template <Size reqIdx, Size idx> struct NodeTypeInfo<reqIdx, TupleNode<idx>> {
     using Current = meta::Void<>;
     using Type = meta::Void<>;
 };
@@ -116,7 +113,7 @@ template <Size requestedIndex, Size nodeIdx, typename... Types> CDS_ATTR(2(nodis
 }
 
 template <Size idx> CDS_ATTR(2(nodiscard, constexpr(11)))
-auto tupleHash(TupleNode<idx> const& node) noexcept -> Size {
+auto tupleHash(CDS_ATTR(unused) TupleNode<idx> const&) noexcept -> Size {
     return 0U;
 }
 

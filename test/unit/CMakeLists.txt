@@ -14,6 +14,10 @@ if (CMAKE_SIZEOF_VOID_P EQUAL 4)
       valid/ds/SingleLinkedListBase_x86.cpp
       valid/ds/HashTableBase_x86.cpp
 
+      valid/exception/ExceptionTest.cpp
+      valid/exception/RuntimeExceptionTest.cpp
+      valid/exception/UnionTypeExceptionTest.cpp
+
       valid/functional/Comparator.cpp
       valid/functional/FunctionalInterface.cpp
       valid/functional/Hash_x86.cpp
@@ -87,6 +91,11 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/ds/SingleLinkedListBase.cpp
       valid/ds/HashTableBase.cpp)
 
+  set(CDS_EXCEPTION_UNIT_TEST_SOURCES
+      valid/exception/ExceptionTest.cpp
+      valid/exception/RuntimeExceptionTest.cpp
+      valid/exception/UnionTypeExceptionTest.cpp)
+
   set(CDS_FUNCTIONAL_UNIT_TEST_SOURCES
       valid/functional/Comparator.cpp
       valid/functional/FunctionalInterface.cpp
@@ -154,6 +163,7 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       ${CDS_ALGORITHM_UNIT_TEST_SOURCES}
       ${CDS_BINDINGS_UNIT_TEST_SOURCES}
       ${CDS_DATA_STRUCTURES_UNIT_TEST_SOURCES}
+      ${CDS_EXCEPTION_UNIT_TEST_SOURCES}
       ${CDS_FUNCTIONAL_UNIT_TEST_SOURCES}
       ${CDS_ITERATOR_UNIT_TEST_SOURCES}
       ${CDS_MEMORY_UNIT_TEST_SOURCES}

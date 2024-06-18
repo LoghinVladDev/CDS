@@ -194,6 +194,7 @@ struct Ignore {
 
 static Ignore constexpr ignore;
 } // namespace impl
+using impl::ignore;
 } // namespace cds
 
 #if CDS_ATTR(msvc)

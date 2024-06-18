@@ -30,7 +30,7 @@ CDS_ATTR(constexpr(20)) auto tupleToStringIdx(S& string, T const& tuple) -> void
 }
 
 template <typename T, typename = void> struct TupleToStringEstLen {
-  template <typename U> CDS_ATTR(constexpr(11)) static auto len(U&& obj) noexcept -> Size {
+  template <typename U> CDS_ATTR(constexpr(11)) static auto len(CDS_ATTR(unused) U&&) noexcept -> Size {
     return 0U;
   }
 };
@@ -91,7 +91,7 @@ auto tupleToString(S& string, Tuple<Types...> const& tuple) CDS_ATTR(noexcept(fa
 template <typename... Types> template <typename C, typename U, typename A>
 CDS_ATTR(2(nodiscard, constexpr(20))) auto Tuple<Types...>::toString(A&& alloc)
     const CDS_ATTR(noexcept(false)) -> impl::BaseString<C, U, A> {
-  impl::BaseString<C, U, A> result;
+  impl::BaseString<C, U, A> result{cds::forward<A>(alloc)};
   impl::tupleToString::tupleToString(result, *this);
   return result;
 }

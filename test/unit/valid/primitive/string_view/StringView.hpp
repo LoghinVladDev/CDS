@@ -944,7 +944,6 @@ TEST(STRING_VIEW_TEST_GROUP, functional) {
 
   ASSERT_EQ(count, 4);
 
-  using T = T;
   ASSERT_TRUE(sv.some(1, T::isVowel));
   ASSERT_TRUE(sv.atLeast(1, T::isVowel));
   ASSERT_TRUE(sv.atMost(1, T::isVowel));

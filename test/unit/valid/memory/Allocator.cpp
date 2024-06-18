@@ -78,7 +78,7 @@ public:
     return static_cast<T*>(static_cast<void*>(pool));
   }
 
-  void deallocate(CDS_ATTR(unused) T*, CDS_ATTR(unused) Size) noexcept {
+  void deallocate(CDS_ATTR(unused) T*, CDS_ATTR(unused) Size) const noexcept {
     // empty
   }
 

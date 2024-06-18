@@ -64,8 +64,12 @@
 
 #ifdef CDS_OPTION_DISABLE_EXCEPTIONS
 #define CDS_ATTR_exceptions false
+#define CDS_ATTR_try
+#define CDS_ATTR_catch(...)
 #else // #ifdef CDS_OPTION_DISABLE_EXCEPTIONS
 #define CDS_ATTR_exceptions true
+#define CDS_ATTR_try try
+#define CDS_ATTR_catch(except, code) catch(except) code
 #endif // #ifdef CDS_OPTION_DISABLE_EXCEPTIONS #else
 
 

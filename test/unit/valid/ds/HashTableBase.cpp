@@ -61,7 +61,7 @@ TEST(HashTableBase, emplaceAndGet) {
   using cds::impl::get;
   auto ihs = DefaultHashTable<int, int, Identity<>>();
   auto tes = [](bool const status, int const expected) {
-    return [=](cds::impl::TryEmplaceResult<int> res) {
+    return [status, expected](cds::impl::TryEmplaceResult<int> res) {
       return get<0>(res) == status && *get<1>(res) == expected;
     };
   };

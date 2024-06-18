@@ -1703,6 +1703,66 @@ TEST(MetaObjectTraits, IsCallable) {
   static_assert(IsCallable<decltype(lbd)>::value, "Failed IsCallable");
 }
 
+TEST(MetaObjectTraits, IsNoexceptDefaultConstructible) {
+  struct NexDefCtr { NexDefCtr() noexcept {} };
+  struct ExDefCtr { ExDefCtr() noexcept(false) {} };
+  struct NotCtr { NotCtr() = delete; };
+
+  static_assert(IsNoexceptDefaultConstructible<NexDefCtr>::value, "Failed IsNoexceptDefaultConstructible");
+  static_assert(!IsNoexceptDefaultConstructible<ExDefCtr>::value, "Failed IsNoexceptDefaultConstructible");
+  static_assert(!IsNoexceptDefaultConstructible<NotCtr>::value, "Failed IsNoexceptDefaultConstructible");
+}
+
+TEST(MetaObjectTraits, IsNoexceptCopyConstructible) {
+  struct NexCpyCtr { NexCpyCtr(NexCpyCtr const&) noexcept {} };
+  struct ExCpyCtr { ExCpyCtr(ExCpyCtr const&) noexcept(false) {} };
+  struct NotCopyCtr { NotCopyCtr(NotCopyCtr const&) = delete; };
+
+  static_assert(IsNoexceptCopyConstructible<NexCpyCtr>::value, "Failed IsNoexceptCopyConstructible");
+  static_assert(!IsNoexceptCopyConstructible<ExCpyCtr>::value, "Failed IsNoexceptCopyConstructible");
+  static_assert(!IsNoexceptCopyConstructible<NotCopyCtr>::value, "Failed IsNoexceptCopyConstructible");
+}
+
+TEST(MetaObjectTraits, IsNoexceptMoveConstructible) {
+  struct NexMovCtr { NexMovCtr(NexMovCtr&&) noexcept {} };
+  struct ExMovCtr { ExMovCtr(ExMovCtr&&) noexcept(false) {} };
+  struct NotMovCtr { NotMovCtr(NotMovCtr&&) = delete; };
+
+  static_assert(IsNoexceptMoveConstructible<NexMovCtr>::value, "Failed IsNoexceptMoveConstructible");
+  static_assert(!IsNoexceptMoveConstructible<ExMovCtr>::value, "Failed IsNoexceptMoveConstructible");
+  static_assert(!IsNoexceptMoveConstructible<NotMovCtr>::value, "Failed IsNoexceptMoveConstructible");
+}
+
+TEST(MetaObjectTraits, IsNoexceptCopyAssignable) {
+  struct NexCpyAss { auto operator=(NexCpyAss const&) noexcept -> NexCpyAss&; };
+  struct ExCpyAss { auto operator=(ExCpyAss const&) noexcept(false) -> ExCpyAss&; };
+  struct NotCopyAss { auto operator=(NotCopyAss const&) noexcept(false) -> NotCopyAss& = delete; };
+
+  static_assert(IsNoexceptCopyAssignable<NexCpyAss>::value, "Failed IsNoexceptCopyAssignable");
+  static_assert(!IsNoexceptCopyAssignable<ExCpyAss>::value, "Failed IsNoexceptCopyAssignable");
+  static_assert(!IsNoexceptCopyAssignable<NotCopyAss>::value, "Failed IsNoexceptCopyAssignable");
+}
+
+TEST(MetaObjectTraits, IsNoexceptMoveAssignable) {
+  struct NexMovAss { auto operator=(NexMovAss&&) noexcept -> NexMovAss&; };
+  struct ExMovAss { auto operator=(ExMovAss&&) noexcept(false) -> ExMovAss&; };
+  struct NotMoveAss { auto operator=(NotMoveAss&&) noexcept(false) -> NotMoveAss& = delete; };
+
+  static_assert(IsNoexceptMoveAssignable<NexMovAss>::value, "Failed IsNoexceptMoveAssignable");
+  static_assert(!IsNoexceptMoveAssignable<ExMovAss>::value, "Failed IsNoexceptMoveAssignable");
+  static_assert(!IsNoexceptMoveAssignable<NotMoveAss>::value, "Failed IsNoexceptMoveAssignable");
+}
+
+TEST(MetaObjectTraits, IsNoexceptConstructible) {
+  struct NoexCtr { NoexCtr(int, int) noexcept; };
+  struct ExCtr { ExCtr(int, int) noexcept(false); };
+  struct NoCtr { NoCtr(int, int) = delete; };
+
+  static_assert(IsNoexceptConstructible<NoexCtr, int, int>::value, "Failed IsNoexceptConstructible");
+  static_assert(!IsNoexceptConstructible<ExCtr, int, int>::value, "Failed IsNoexceptConstructible");
+  static_assert(!IsNoexceptConstructible<NoCtr, int, int>::value, "Failed IsNoexceptConstructible");
+}
+
 #ifdef DCR_SINCECPP20
 TEST(MetaObjectTraits, IsSpaceshipCompatible) {
   struct A{};

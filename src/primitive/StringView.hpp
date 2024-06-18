@@ -11,6 +11,21 @@
 namespace cds {
 using StringView = impl::BaseStringView<char>;
 using WideStringView = impl::BaseStringView<wchar_t>;
+
+namespace meta {
+namespace impl {
+namespace primitiveTypeInfoNames {
+template <typename = void> struct StringView { static char constexpr name[11u] = "StringView"; };
+template <typename = void> struct WideStringView { static char constexpr name[15u] = "WideStringView"; };
+
+// ODR before cpp17
+template <typename T> char const StringView<T>::name[11u];
+template <typename T> char const WideStringView<T>::name[15u];
+} // namespace primitiveTypeInfoNames
+} // namespace impl
+template <> struct TypeInfo<StringView> : impl::primitiveTypeInfoNames::StringView<> {};
+template <> struct TypeInfo<WideStringView> : impl::primitiveTypeInfoNames::WideStringView<> {};
+} // namespace meta
 } // namespace cds
 
 #endif // CDS_PRIMITIVE_STRING_VIEW_HPP

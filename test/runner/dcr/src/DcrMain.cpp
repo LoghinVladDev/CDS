@@ -11,9 +11,6 @@
 
 namespace dcr {
 namespace internals {
-namespace {
-}
-
 auto tests() -> std::vector<std::unique_ptr<Test const>>& {
   static std::vector<std::unique_ptr<Test const>> allTests;
   return allTests;

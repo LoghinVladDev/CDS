@@ -366,16 +366,22 @@ private:
     }
   }
 
-  CDS_ATTR(constexpr(14)) auto computeLink(Size vId) noexcept(false) -> void {
+  CDS_ATTR(constexpr(14)) auto computeLink(Size const _vId) noexcept(false) -> void {
+    assert(_r < static_cast<Size>(limits::u32Max) && "Implementation failure, report issue. "
+                                                     "Really should not occur in almost all cases.");
+    assert(_vId < static_cast<Size>(limits::u32Max) && "Implementation failure, report issue. "
+                                                       "Really should not occur in almost all cases.");
+    auto const vId = static_cast<U32>(_vId);
+    auto const r = static_cast<U32>(_r);
     auto* const v = _vertices + vId;
-    if (vId == _r) {
-      v->suffixLink = _r;
-      v->endWordLink = _r;
+    if (vId == r) {
+      v->suffixLink = r;
+      v->endWordLink = r;
       return;
     }
 
-    if (v->parent.id == _r) {
-      v->suffixLink = _r;
+    if (v->parent.id == r) {
+      v->suffixLink = r;
       if (v->leaf) {
         v->endWordLink = vId;
       } else {
@@ -394,8 +400,8 @@ private:
         v->suffixLink = link->id;
         break;
       }
-      if (cbvId == _r) {
-        v->suffixLink = _r;
+      if (cbvId == r) {
+        v->suffixLink = r;
         break;
       }
       cbvId = cbv->suffixLink;

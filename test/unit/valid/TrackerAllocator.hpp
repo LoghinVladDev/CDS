@@ -11,6 +11,10 @@
 #include <cassert>
 #include <unordered_set>
 
+#if defined(NDEBUG) && CDS_ATTR(libcxx)
+#include <exception>
+#endif
+
 namespace testing {
 template <typename T> class TrackerAllocator : public cds::Allocator<T> {
 public:

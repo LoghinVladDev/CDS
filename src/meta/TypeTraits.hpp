@@ -239,32 +239,74 @@ template <typename From, typename To> struct IsConvertible : impl::IsConvertible
 template <typename T> using SignedEquivalent = typename impl::SignedEquivalent<T>::Type;
 template <typename T> using UnsignedEquivalent = typename impl::UnsignedEquivalent<T>::Type;
 
-template <typename> struct TypeInfo {
-  constexpr static char const* name = "unknown";
-};
-
-template <template <typename...> class> struct TemplateTypeInfo {
-  constexpr static char const* name = "unknown";
-};
-
-template <> struct TypeInfo<void> { constexpr static char const* name = "void"; };
-template <> struct TypeInfo<bool> { constexpr static char const* name = "bool"; };
-template <> struct TypeInfo<wchar_t> { constexpr static char const* name = "wchar_t"; };
-template <> struct TypeInfo<char16_t> { constexpr static char const* name = "char16_t"; };
-template <> struct TypeInfo<char32_t> { constexpr static char const* name = "char32_t"; };
-template <> struct TypeInfo<signed char> { constexpr static char const* name = "signed char"; };
-template <> struct TypeInfo<signed short> { constexpr static char const* name = "signed short"; };
-template <> struct TypeInfo<signed int> { constexpr static char const* name = "signed int"; };
-template <> struct TypeInfo<signed long> { constexpr static char const* name = "signed long"; };
-template <> struct TypeInfo<unsigned char> { constexpr static char const* name = "unsigned char"; };
-template <> struct TypeInfo<unsigned short> { constexpr static char const* name = "unsigned short"; };
-template <> struct TypeInfo<unsigned int> { constexpr static char const* name = "unsigned int"; };
-template <> struct TypeInfo<unsigned long> { constexpr static char const* name = "unsigned long"; };
-template <> struct TypeInfo<float> { constexpr static char const* name = "float"; };
-template <> struct TypeInfo<double> { constexpr static char const* name = "double"; };
+namespace impl {
+namespace primitiveTypeInfoNames {
+template <typename = void> struct Unknown { static char constexpr name[8u] = "unknown"; };
+template <typename = void> struct Void { static char constexpr name[5u] = "void"; };
+template <typename = void> struct Bool { static char constexpr name[5u] = "bool"; };
+template <typename = void> struct WCharT { static char constexpr name[8u] = "wchar_t"; };
+template <typename = void> struct Char16T { static char constexpr name[9u] = "char16_t"; };
+template <typename = void> struct Char32T { static char constexpr name[9u] = "char32_t"; };
+template <typename = void> struct SignedChar { static char constexpr name[12u] = "signed char"; };
+template <typename = void> struct SignedShort { static char constexpr name[13u] = "signed short"; };
+template <typename = void> struct SignedInt { static char constexpr name[11u] = "signed int"; };
+template <typename = void> struct SignedLong { static char constexpr name[12u] = "signed long"; };
+template <typename = void> struct UnsignedChar { static char constexpr name[14u] = "unsigned char"; };
+template <typename = void> struct UnsignedShort { static char constexpr name[15u] = "unsigned short"; };
+template <typename = void> struct UnsignedInt { static char constexpr name[13u] = "unsigned int"; };
+template <typename = void> struct UnsignedLong { static char constexpr name[14u] = "unsigned long"; };
+template <typename = void> struct Float { static char constexpr name[6u] = "float"; };
+template <typename = void> struct Double { static char constexpr name[7u] = "double"; };
 
 #if CDS_ATTR(cpp20)
-template <> struct TypeInfo<char8_t> { constexpr static char const* name = "char8_t"; };
+template <typename = void> struct Char8T { static char constexpr name[8u] = "char8_t"; };
+#endif // #if CDS_ATTR(cpp20)
+
+// ODR before cpp17
+template <typename T> char const Unknown<T>::name[8u];
+template <typename T> char const Void<T>::name[5u];
+template <typename T> char const Bool<T>::name[5u];
+template <typename T> char const WCharT<T>::name[8u];
+template <typename T> char const Char16T<T>::name[9u];
+template <typename T> char const Char32T<T>::name[9u];
+template <typename T> char const SignedChar<T>::name[12u];
+template <typename T> char const SignedShort<T>::name[13u];
+template <typename T> char const SignedInt<T>::name[11u];
+template <typename T> char const SignedLong<T>::name[12u];
+template <typename T> char const UnsignedChar<T>::name[14u];
+template <typename T> char const UnsignedShort<T>::name[15u];
+template <typename T> char const UnsignedInt<T>::name[13u];
+template <typename T> char const UnsignedLong<T>::name[14u];
+template <typename T> char const Float<T>::name[6u];
+template <typename T> char const Double<T>::name[7u];
+
+#if CDS_ATTR(cpp20)
+template <typename T> char const Char8T<T>::name[8u];
+#endif // #if CDS_ATTR(cpp20)
+} // namespace primitiveTypeInfoNames
+} // namespace impl
+
+template <typename> struct TypeInfo : impl::primitiveTypeInfoNames::Unknown<> {};
+template <template <typename...> class> struct TemplateTypeInfo : impl::primitiveTypeInfoNames::Unknown<> {};
+
+template <> struct TypeInfo<void> : impl::primitiveTypeInfoNames::Void<> {};
+template <> struct TypeInfo<bool> : impl::primitiveTypeInfoNames::Bool<> {};
+template <> struct TypeInfo<wchar_t> : impl::primitiveTypeInfoNames::WCharT<> {};
+template <> struct TypeInfo<char16_t> : impl::primitiveTypeInfoNames::Char16T<> {};
+template <> struct TypeInfo<char32_t> : impl::primitiveTypeInfoNames::Char32T<> {};
+template <> struct TypeInfo<signed char> : impl::primitiveTypeInfoNames::SignedChar<> {};
+template <> struct TypeInfo<signed short> : impl::primitiveTypeInfoNames::SignedShort<> {};
+template <> struct TypeInfo<signed int> : impl::primitiveTypeInfoNames::SignedInt<> {};
+template <> struct TypeInfo<signed long> : impl::primitiveTypeInfoNames::SignedLong<> {};
+template <> struct TypeInfo<unsigned char> : impl::primitiveTypeInfoNames::UnsignedChar<> {};
+template <> struct TypeInfo<unsigned short> : impl::primitiveTypeInfoNames::UnsignedShort<> {};
+template <> struct TypeInfo<unsigned int> : impl::primitiveTypeInfoNames::UnsignedInt<> {};
+template <> struct TypeInfo<unsigned long> : impl::primitiveTypeInfoNames::UnsignedLong<> {};
+template <> struct TypeInfo<float> : impl::primitiveTypeInfoNames::Float<> {};
+template <> struct TypeInfo<double> : impl::primitiveTypeInfoNames::Double<> {};
+
+#if CDS_ATTR(cpp20)
+template <> struct TypeInfo<char8_t> : impl::primitiveTypeInfoNames::Char8T<> {};
 #endif
 
 template <typename Type> using Decay = typename impl::Decay<Type>::Type;

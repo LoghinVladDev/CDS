@@ -980,7 +980,6 @@ TEST(STRING_TEST_GROUP, functional) {
 
   ASSERT_EQ(count, 4);
 
-  using T = T;
   ASSERT_TRUE(sv.some(1, T::isVowel));
   ASSERT_TRUE(sv.atLeast(1, T::isVowel));
   ASSERT_TRUE(sv.atMost(1, T::isVowel));
@@ -995,7 +994,7 @@ TEST(STRING_TEST_GROUP, functional) {
 
   S s1{LITERAL("abcd")};
   auto isLower = [](CHAR_TYPE const c){ return c >= LITERAL('a') && c <= LITERAL('z'); };
-  auto makeUpper = [](CHAR_TYPE& c) { c = toupper(c); };
+  auto makeUpper = [](CHAR_TYPE& c) { c = static_cast<CHAR_TYPE>(toupper(static_cast<int>(c))); };
   auto isUpper = [](CHAR_TYPE const c){ return c >= LITERAL('A') && c <= LITERAL('Z'); };
   ASSERT_TRUE(s1.all(isLower));
   s1.forEach(makeUpper);
@@ -2134,7 +2133,7 @@ consteval auto cxx20_clear() {
   CS s2;
   s1.clear();
   s2.clear();
-  return s1.empty() && s2.empty();;
+  return s1.empty() && s2.empty();
 }
 
 consteval auto cxx20_append_move_or_temp_str() {

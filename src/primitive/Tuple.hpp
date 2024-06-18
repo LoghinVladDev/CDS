@@ -86,14 +86,25 @@ template <typename T, typename... R> struct DecayedTuple<T, R...> {
 };
 } // namespace decayedTuple
 
-template <typename... Types> using DecayedTuple = typename decayedTuple::DecayedTuple<Types...>::Type;
+namespace inlayHints {
+template <typename... Types> using Tuple = typename decayedTuple::DecayedTuple<Types...>::Type;
+} // namespace inlayHints
 } // namespace impl
 
 template <typename... Types> CDS_ATTR(2(nodiscard, constexpr(11))) auto makeTuple(Types&&... values)
-    CDS_ATTR(noexcept(noexcept(impl::DecayedTuple<Types...>(cds::forward<Types>(values)...))))
-    -> impl::DecayedTuple<Types...> {
-  return impl::DecayedTuple<Types...>{cds::forward<Types>(values)...};
+    CDS_ATTR(noexcept(noexcept(impl::inlayHints::Tuple<Types...>(cds::forward<Types>(values)...))))
+    -> impl::inlayHints::Tuple<Types...> {
+  return impl::inlayHints::Tuple<Types...>{cds::forward<Types>(values)...};
 }
+
+template <> class Tuple<> {
+public:
+  template <typename... Types> CDS_ATTR(2(nodiscard, constexpr(11))) static auto of(Types&&... values)
+      CDS_ATTR(noexcept(noexcept(impl::inlayHints::Tuple<Types...>(cds::forward<Types>(values)...))))
+      -> impl::inlayHints::Tuple<Types...> {
+    return impl::inlayHints::Tuple<Types...>{cds::forward<Types>(values)...};
+  }
+};
 } // namespace cds
 
 namespace std {

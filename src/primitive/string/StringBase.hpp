@@ -57,7 +57,7 @@ template <typename C> struct StringSboData<C, Int<1>> {
   using Size = Int<sizeof(StringNonSboData<C>) - 1u>;
 
   CDS_ATTR(constexpr(14)) auto initialize() noexcept -> void {
-    impl::fill(buf, buf + (sizeof(StringNonSboData<C>) - 1), 0);
+    impl::fill(buf, buf + (sizeof(StringNonSboData<C>) - 1), static_cast<C>(0));
   }
 };
 
@@ -70,7 +70,7 @@ template <typename C> struct StringSboData<C, Int<2>> {
   using Size = Int<sizeof(buf) / sizeof(buf[0])>;
 
   CDS_ATTR(constexpr(14)) auto initialize() noexcept -> void {
-    impl::fill(buf, buf + (sizeof(StringNonSboData<C>) / 2 - 1), 0);
+    impl::fill(buf, buf + (sizeof(StringNonSboData<C>) / 2 - 1), static_cast<C>(0));
     pad[0] = 0;
   }
 };
@@ -85,8 +85,8 @@ template <typename C> struct StringSboData<C, Int<4>> {
   using Size = Int<sizeof(buf) / sizeof(buf[0])>;
 
   CDS_ATTR(constexpr(14)) auto initialize() noexcept -> void {
-    impl::fill(buf, buf + (sizeof(StringNonSboData<C>) / 4 - 1), 0);
-    impl::fill(pad, pad + 3u, 0);
+    impl::fill(buf, buf + (sizeof(StringNonSboData<C>) / 4 - 1), static_cast<C>(0));
+    impl::fill(pad, pad + 3u, static_cast<U8>(0));
   }
 #elif CDS_ATTR(bitarch) == 32
   C buf[1u];
@@ -195,13 +195,15 @@ public:
   static Idx const invalidIndex;
 
 #if CDS_ATTR(cpp20)
-  CDS_ATTR(constexpr(20)) BaseString() : sbo::StringData<C>{nullptr, 0U, 0U, false} {
+  CDS_ATTR(2(explicit, constexpr(20))) BaseString(A const& alloc = A{}) noexcept :
+      A{alloc},
+      sbo::StringData<C>{nullptr, 0U, 0U, false} {
     if (!inConstexpr()) {
       sboInit();
     }
   }
 #else
-  BaseString() : sbo::StringData<C>{} {}
+  CDS_ATTR(explicit) BaseString(A const& alloc = A{}) noexcept : A{alloc}, sbo::StringData<C>{} {}
 #endif
 
   CDS_ATTR(constexpr(20)) BaseString(Address data, Size const length, A const& alloc = A())
@@ -210,8 +212,8 @@ public:
     copyUninitialized(data, length);
   }
 
-  CDS_ATTR(constexpr(20)) BaseString(BaseString const& str) CDS_ATTR(noexcept(false)) :
-      BaseString(str.data(), str.length()) {}
+  CDS_ATTR(constexpr(20)) BaseString(BaseString const& str, A const& alloc = A{}) CDS_ATTR(noexcept(false)) :
+      BaseString(str.data(), str.length(), alloc) {}
 
   CDS_ATTR(constexpr(20)) BaseString(BaseString&& str) noexcept : A(cds::move(str)) {
     transfer(cds::move(str));
@@ -219,6 +221,7 @@ public:
 
   template <
       typename Convertible, typename D = RemoveCVRef<Convertible>, EnableIf<And<
+          Or<IsString<Convertible>, IsSame<Null, Convertible>>,
           Not<IsSame<D, BaseString>>, Not<IsIntegral<D>>, Not<IsFloating<D>>
       >> = 0
   > CDS_ATTR(2(implicit, constexpr(20)))
@@ -595,7 +598,7 @@ public:
 #endif
       *impl::fill(end(), begin() + size, character) = STraits::nullChar;
       if (sh()) {
-        _sbo.len = size;
+        _sbo.len = static_cast<U8>(size);
       } else {
         _nrm.len = size;
       }
@@ -697,7 +700,7 @@ public:
 
     if (sh()) {
       if (size < length()) {
-        _sbo.len = size;
+        _sbo.len = static_cast<U8>(size);
         *(begin() + size) = STraits::nullChar;
       }
       return;
@@ -706,10 +709,9 @@ public:
     auto const buf = data();
     auto const cCap = cap();
     auto const cLen = length();
-    // init(size);
     if (sh(size)) {
       _sbo.sbo = true;
-      _sbo.len = minOf(cLen, size);
+      _sbo.len = static_cast<U8>(minOf(cLen, size));
     } else {
       _nrm.len = minOf(cLen, size);
       _nrm.cap = maxOf(size + 1, minCap);
@@ -733,11 +735,9 @@ public:
   CDS_ATTR(constexpr(20)) auto clear() noexcept -> void {
     if (!sh()) {
 #if CDS_ATTR(cpp20)
-      if (inConstexpr()) {
-        if (!data()) {
-          init();
-          return;
-        }
+      if (inConstexpr() && !data()) {
+        init();
+        return;
       }
 #endif
       A::deallocate(_nrm.buf, _nrm.cap);
@@ -1266,10 +1266,8 @@ private:
 #endif
       }
 #if CDS_ATTR(cpp20)
-      if (inConstexpr()) {
-        if (_nrm.len < length) {
-          impl::fillInitialize(_nrm.buf + _nrm.len, _nrm.buf + length + 1, STraits::nullChar);
-        }
+      if (inConstexpr() && _nrm.len < length) {
+        impl::fillInitialize(_nrm.buf + _nrm.len, _nrm.buf + length + 1, STraits::nullChar);
       }
 #endif
       _nrm.len = length;
@@ -1300,30 +1298,31 @@ private:
   CDS_ATTR(constexpr(14)) auto append(I b, S e) CDS_ATTR(noexcept(false)) -> BaseString& {
     auto const seqLen = e - b;
     auto const reqLen = seqLen + length();
-    if (reqLen > capacity()) {
-      auto const newCap = maxOf(reqLen + 1, minCap, capacity() * 2);
-      auto const newBuf = A::allocate(newCap);
-      construct(impl::copyInitialize(b, e, impl::copyInitialize(begin(), end(), newBuf)), STraits::nullChar);
-      if (!sh()) {
+    if (reqLen <= capacity()) {
+      return uncheckedAppend(b, e);
+    }
+
+    auto const newCap = maxOf(reqLen + 1, minCap, capacity() * 2);
+    auto const newBuf = A::allocate(newCap);
+    construct(impl::copyInitialize(b, e, impl::copyInitialize(begin(), end(), newBuf)), STraits::nullChar);
+    if (!sh()) {
 #if CDS_ATTR(cpp20)
-        if (inConstexpr()) {
-          if (_nrm.buf) {
-            A::deallocate(_nrm.buf, _nrm.cap);
-          }
-        } else {
+      if (inConstexpr()) {
+        if (_nrm.buf) {
           A::deallocate(_nrm.buf, _nrm.cap);
         }
-#else
+      } else {
         A::deallocate(_nrm.buf, _nrm.cap);
-#endif
       }
-      _nrm.len = reqLen;
-      _nrm.buf = newBuf;
-      _nrm.cap = newCap;
-      _nrm.sbo = false;
-      return *this;
+#else
+      A::deallocate(_nrm.buf, _nrm.cap);
+#endif
     }
-    return uncheckedAppend(b, e);
+    _nrm.len = reqLen;
+    _nrm.buf = newBuf;
+    _nrm.cap = newCap;
+    _nrm.sbo = false;
+    return *this;
   }
 
   template <typename I, typename S>
