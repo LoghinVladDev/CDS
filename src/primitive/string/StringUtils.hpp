@@ -140,7 +140,7 @@ template <typename T> char8_t const StringUtilsChar8Constants<T>::zeroChar;
 template <typename T> char8_t const StringUtilsChar8Constants<T>::writeIntPrepNums[201];
 
 template <> struct StringUtilsConstants<char8_t> : StringUtilsChar8Constants<> {};
-#endif
+#endif // #if CDS_ATTR(cpp20)
 
 template <typename C> struct StringUtilsFloatingOps {
   static auto floatingLength(float const value) noexcept -> U8 {

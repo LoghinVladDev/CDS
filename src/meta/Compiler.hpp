@@ -62,14 +62,24 @@
 #define CDS_ATTR_std_compat true
 #endif
 
+#ifndef CDS_OPTION_DISABLE_EXCEPTIONS
+#ifndef __EXCEPTIONS
+#define CDS_OPTION_DISABLE_EXCEPTIONS
+#endif
+#endif
+
 #ifdef CDS_OPTION_DISABLE_EXCEPTIONS
 #define CDS_ATTR_exceptions false
 #define CDS_ATTR_try
+#define CDS_ATTR_try_list(...) : __VA_ARGS__
 #define CDS_ATTR_catch(...)
+#define CDS_ATTR_throw(...) assert(false && "Undefined behavior"); std::terminate()
 #else // #ifdef CDS_OPTION_DISABLE_EXCEPTIONS
 #define CDS_ATTR_exceptions true
 #define CDS_ATTR_try try
+#define CDS_ATTR_try_list(...) try : __VA_ARGS__
 #define CDS_ATTR_catch(except, code) catch(except) code
+#define CDS_ATTR_throw(...) throw __VA_ARGS__
 #endif // #ifdef CDS_OPTION_DISABLE_EXCEPTIONS #else
 
 
@@ -181,6 +191,14 @@ using S32 = signed int;
 enum class Byte : U8 {};
 
 // compiler & platform specific
+#define CDS_ATTR_disable_warning(comp, warning) CDS_ATTR_disable_ ## comp ## _warning(warning)
+#define CDS_ATTR_enable_warning(comp, warning) CDS_ATTR_enable_ ## comp ## _warning(warning)
+#define CDS_ATTR_wrap_pragma_string(text) #text
+
+#define CDS_ATTR_disable_gcc_warning(...)
+#define CDS_ATTR_enable_gcc_warning(...)
+
+
 #ifdef _MSC_VER
 #define CDS_ATTR_msvc true
 #else // #ifdef _MSC_VER
@@ -195,6 +213,17 @@ enum class Byte : U8 {};
 
 #if defined(__GNUC__) && !defined(__clang__)
 #define CDS_ATTR_gcc true
+
+#undef CDS_ATTR_disable_gcc_warning(...)
+#undef CDS_ATTR_enable_gcc_warning(...)
+
+#define CDS_ATTR_disable_gcc_warning(warning) \
+  _Pragma("GCC diagnostic push")              \
+  _Pragma(CDS_ATTR_wrap_pragma_string(GCC diagnostic ignored warning))
+
+#define CDS_ATTR_enable_gcc_warning(warning) \
+  _Pragma("GCC diagnostic pop")
+
 #else // #if defined(__GNUC__) && !defined(__clang__)
 #define CDS_ATTR_gcc false
 #endif // #if defined(__GNUC__) && !defined(__clang__) #else

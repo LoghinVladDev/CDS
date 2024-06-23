@@ -15,6 +15,7 @@ if (CMAKE_SIZEOF_VOID_P EQUAL 4)
       valid/ds/HashTableBase_x86.cpp
 
       valid/exception/ExceptionTest.cpp
+      valid/exception/NoSuchElementExceptionTest.cpp
       valid/exception/RuntimeExceptionTest.cpp
       valid/exception/UnionTypeExceptionTest.cpp
 
@@ -47,6 +48,7 @@ if (CMAKE_SIZEOF_VOID_P EQUAL 4)
 
       valid/policy/RehashPolicy_x86.cpp
 
+      valid/primitive/OptionalTest.cpp
       valid/primitive/StringAbstract_x86.cpp
       valid/primitive/StringUtils_x86.cpp
       valid/primitive/string/String_char_Allocator_x86.cpp
@@ -93,6 +95,7 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
 
   set(CDS_EXCEPTION_UNIT_TEST_SOURCES
       valid/exception/ExceptionTest.cpp
+      valid/exception/NoSuchElementExceptionTest.cpp
       valid/exception/RuntimeExceptionTest.cpp
       valid/exception/UnionTypeExceptionTest.cpp)
 
@@ -131,6 +134,7 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/policy/RehashPolicy.cpp)
 
   set(CDS_PRIMITIVE_UNIT_TEST_SOURCES
+      valid/primitive/OptionalTest.cpp
       valid/primitive/StringAbstract.cpp
       valid/primitive/StringUtils.cpp
       valid/primitive/string/String_char_Allocator.cpp

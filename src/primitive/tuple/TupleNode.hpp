@@ -89,11 +89,6 @@ using tupleNodeTraits::IsTupleNode;
 using tupleNodeTraits::TargetData;
 using tupleNodeTraits::TargetNode;
 
-template <Size requestedIndex, typename Node, typename Target = TargetData<requestedIndex, RemoveCVRef<Node>>> using
-    GetNodeReturn = AddLValRef<Conditional<IsConst<RemoveRef<Node>>, AddConst<Target>, Target>>;
-template <Size requestedIndex, typename Node, typename Target = TargetNode<requestedIndex, RemoveCVRef<Node>>> using
-    GetNodeRoot = AddLValRef<Conditional<IsConst<RemoveRef<Node>>, AddConst<Target>, Target>>;
-
 template <Size requestedIndex, Size nodeIdx, typename... Types> CDS_ATTR(2(nodiscard, constexpr(11))) auto tupleNodeGet(
     TupleNode<nodeIdx, Types...> const& node
 ) noexcept -> TargetData<requestedIndex, TupleNode<nodeIdx, Types...>> const& {

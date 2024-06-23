@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 project(CDS)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+if(NOT DEFINED CMAKE_CXX_FLAGS)
+  set(CMAKE_CXX_FLAGS "")
+endif()
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 set(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -36,7 +39,13 @@ else()
   endif()
 endif()
 
+if(DEFINED ${CMAKE_CXX_FLAGS})
+  string(FIND ${CMAKE_CXX_FLAGS} "-fno-exceptions" CDS_CXX_FLAGS_NO_EXCEPTIONS_FLAG_IDX)
 
+  if (NOT (${CDS_CXX_FLAGS_NO_EXCEPTIONS_FLAG_IDX} STREQUAL "-1"))
+    add_compile_definitions(CDS_OPTION_DISABLE_EXCEPTIONS)
+  endif()
+endif()
 
 
 set (CDS_INCLUDE_DIRECTORIES include)

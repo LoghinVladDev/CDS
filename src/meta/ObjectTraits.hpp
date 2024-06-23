@@ -78,6 +78,13 @@ template <typename T> struct IsNoexceptCopyAssignable<T, meta::True>
 template <typename T> struct IsNoexceptMoveAssignable<T, meta::True>
     : Bool<noexcept(meta::lvalue<T>() = meta::rvalue<T>())> {};
 
+template <typename T, typename A, typename R, typename = typename IsAssignable<T, A, R>::Type>
+struct IsNoexceptAssignable {};
+
+template <typename T, typename A, typename R> struct IsNoexceptAssignable<T, A, R, False> : meta::False {};
+template <typename T, typename A, typename R> struct IsNoexceptAssignable<T, A, R, True> :
+    Bool<noexcept(lvalue<T>() = meta::rvalue<A>())> {};
+
 template <typename T, typename = T, typename = void> struct IsAddCompatible : meta::False {};
 template <typename T, typename = T, typename = void> struct IsSubCompatible : meta::False {};
 template <typename T, typename = T, typename = void> struct IsMulCompatible : meta::False {};
@@ -287,7 +294,10 @@ template <typename Type, typename... Arguments> struct IsNoexceptConstructible :
     impl::IsNoexceptConstructible<Type, Arguments...>::Type {};
 
 template <typename Type, typename Param = Type, typename Return = Type&> struct IsAssignable :
-    impl::IsAssignable<Type, Param, Return> {};
+    impl::IsAssignable<Type, Param, Return>::Type {};
+
+template <typename Type, typename Param = Type, typename Return = Type&> struct IsNoexceptAssignable :
+    impl::IsNoexceptAssignable<Type, Param, Return>::Type {};
 
 template <typename Type, typename With = Type> struct IsAddCompatible : impl::IsAddCompatible<Type, With>::Type {};
 template <typename Type, typename With = Type> struct IsSubCompatible : impl::IsSubCompatible<Type, With>::Type {};

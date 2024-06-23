@@ -292,6 +292,7 @@ TEST(UnionTest, throwInCtorDefined) {
 TEST(UnionTest, assignReplace) {
   using cds::impl::get;
   Union<int, String> u1;
+
   u1 = 3;
   ASSERT_TRUE(u1.is<int>());
   ASSERT_EQ(get<int>(u1), 3);

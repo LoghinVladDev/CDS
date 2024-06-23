@@ -13,6 +13,22 @@ auto Test::_execute(std::ostream& out) const noexcept -> bool {
 #else
 auto Test::_execute() const noexcept -> bool {
 #endif
+
+#ifndef __EXCEPTIONS
+
+  bool valid = true;
+  _run(valid);
+#ifndef DCR_NO_SUBPROCESS_LOGGING
+  if (valid) {
+    out << "Test " << _suite << " -> " << _test << " passed\n";
+  } else {
+    out << "Test " << _suite << " -> " << _test << " failed\n";
+  }
+#endif
+  return valid;
+
+#else
+
   try {
     _run();
 #ifndef DCR_NO_SUBPROCESS_LOGGING
@@ -25,6 +41,8 @@ auto Test::_execute() const noexcept -> bool {
 #endif
     return false;
   }
+
+#endif
 }
 
 } // namespace dcr

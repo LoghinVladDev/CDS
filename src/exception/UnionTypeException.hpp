@@ -2,8 +2,9 @@
 // Created by loghin on 6/17/24.
 //
 
-#ifndef CDS_TYPE_EXCEPTION_HPP
-#define CDS_TYPE_EXCEPTION_HPP
+#ifndef CDS_UNION_TYPE_EXCEPTION_HPP
+#define CDS_UNION_TYPE_EXCEPTION_HPP
+#pragma once
 
 #include <cds/exception/RuntimeException>
 
@@ -30,4 +31,4 @@ public:
 };
 } // namespace cds
 
-#endif // #ifndef CDS_TYPE_EXCEPTION_HPP
+#endif // #ifndef CDS_UNION_TYPE_EXCEPTION_HPP

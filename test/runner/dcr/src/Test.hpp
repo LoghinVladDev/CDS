@@ -10,6 +10,27 @@
 
 #define TEST(n1, n2) _TEST(n1, n2)
 
+#ifndef __EXCEPTIONS
+
+#define _TEST(suiteName, testName)                                    \
+  namespace dcr {                                                     \
+  namespace generated {                                               \
+  class suiteName ## testName : public ::dcr::Test {                  \
+  public:                                                             \
+    suiteName ## testName() : Test(#suiteName, #testName) {}          \
+    auto _run(bool& __valid) const noexcept(false) -> void override;  \
+  };                                                                  \
+                                                                      \
+  namespace {                                                         \
+    ::dcr::TestRegistration<suiteName ## testName>                    \
+    const testObject ## suiteName ## testName;                        \
+  }                                                                   \
+}                                                                     \
+}                                                                     \
+  auto ::dcr::generated::suiteName ## testName::_run(bool& __valid) const noexcept(false) -> void
+
+#else
+
 #define _TEST(suiteName, testName)                              \
   namespace dcr {                                               \
   namespace generated {                                         \
@@ -27,13 +48,19 @@
 }                                                               \
   auto ::dcr::generated::suiteName ## testName::_run() const noexcept(false) -> void
 
+#endif
+
 namespace dcr {
 class Test {
 public:
   Test(char const* suite, char const* test): _suite(suite), _test(test) {}
   virtual ~Test() noexcept = default;
 
+#ifndef __EXCEPTIONS
+  virtual auto _run(bool& __valid) const noexcept(false) -> void = 0;
+#else
   virtual auto _run() const noexcept(false) -> void = 0;
+#endif
 #ifndef DCR_NO_SUBPROCESS_LOGGING
   auto _execute(std::ostream& out) const noexcept -> bool;
 #else

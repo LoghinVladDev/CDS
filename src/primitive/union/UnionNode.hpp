@@ -2,9 +2,6 @@
 #define CDS_PRIMITIVE_UNION_NODE_HPP
 #pragma once
 
-#include "../Union.hpp"
-
-
 #include <cds/exception/UnionTypeException>
 
 namespace cds {
@@ -205,7 +202,7 @@ template <Size idx, typename T, typename... R> union UnionNode<idx, T, R...> {
 
   template <typename RT> auto raise(Size rIdx) const CDS_ATTR(noexcept(false)) -> void {
     if (rIdx == idx) {
-      throw UnionTypeException::of<T, RT>();
+      CDS_ATTR(throw(UnionTypeException::of<T, RT>()));
     }
     _nextNode.template raise<RT>(rIdx);
   }

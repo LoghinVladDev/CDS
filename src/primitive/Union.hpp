@@ -8,6 +8,8 @@
 
 #include "union/UnionNode.hpp"
 
+CDS_ATTR(disable_warning(gcc, "-Wterminate"))
+
 namespace cds {
 template <typename... Types> class Union {
   using Data = impl::UnionNode<0u, Types...>;
@@ -15,10 +17,10 @@ template <typename... Types> class Union {
 public:
   CDS_ATTR(constexpr(11)) Union() CDS_ATTR(noexcept(noexcept(Data()))) : _data{}, _idx{0u} {}
   CDS_ATTR(constexpr(14)) Union(Union const& obj)
-      CDS_ATTR(noexcept(noexcept(meta::lvalue<Data>().copyConstruct(0u, obj._data))))
-      CDS_ATTR(try) :
-          _data{obj._idx, obj._data},
-          _idx{sizeof...(Types)} {
+      CDS_ATTR(noexcept(noexcept(meta::lvalue<Data>().copyConstruct(0u, obj._data)))) CDS_ATTR(try_list(
+          _data(obj._idx, obj._data),
+          _idx(sizeof...(Types))
+      )) {
         _idx = obj._idx;
       } CDS_ATTR(catch(..., {
         throw;
@@ -192,5 +194,7 @@ template <typename T, typename... Ts> CDS_ATTR(2(nodiscard, constexpr(14))) auto
 }
 } // namespace impl
 } // namespace cds
+
+CDS_ATTR(enable_warning(gcc, "-Wterminate"))
 
 #endif // #ifndef CDS_PRIMITIVE_UNION_HPP

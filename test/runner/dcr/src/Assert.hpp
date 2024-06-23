@@ -8,6 +8,34 @@
 #include <utility>
 #include <sstream>
 
+#ifndef __EXCEPTIONS
+
+#define ASSERT_EQ(lhs, rhs) \
+  if (!::dcr::internal::compare<::dcr::internal::CompareType::Eq>(__FILE__, __LINE__, #lhs, #rhs, lhs, rhs)) { __valid = false; return; }
+
+#define ASSERT_NE(lhs, rhs) \
+  if (!::dcr::internal::compare<::dcr::internal::CompareType::Ne>(__FILE__, __LINE__, #lhs, #rhs, lhs, rhs)) { __valid = false; return; }
+
+#define ASSERT_LT(lhs, rhs) \
+  if (!return ::dcr::internal::compare<::dcr::internal::CompareType::Lt>(__FILE__, __LINE__, #lhs, #rhs, lhs, rhs)) { __valid = false; return; }
+
+#define ASSERT_LE(lhs, rhs) \
+  if (!::dcr::internal::compare<::dcr::internal::CompareType::Le>(__FILE__, __LINE__, #lhs, #rhs, lhs, rhs)) { __valid = false; return; }
+
+#define ASSERT_GT(lhs, rhs) \
+  if (!::dcr::internal::compare<::dcr::internal::CompareType::Gt>(__FILE__, __LINE__, #lhs, #rhs, lhs, rhs)) { __valid = false; return; }
+
+#define ASSERT_GE(lhs, rhs) \
+  if (!::dcr::internal::compare<::dcr::internal::CompareType::Ge>(__FILE__, __LINE__, #lhs, #rhs, lhs, rhs)) { __valid = false; return; }
+
+#define ASSERT_TRUE(expr) \
+  if (!::dcr::internal::affirm(__FILE__, __LINE__, #expr, expr)) { __valid = false; return; }
+
+#define ASSERT_FALSE(expr) \
+  if (!::dcr::internal::deny(__FILE__, __LINE__, #expr, expr)) { __valid = false; return; }
+
+#else
+
 #define ASSERT_EQ(lhs, rhs) \
   ::dcr::internal::compare<::dcr::internal::CompareType::Eq>(__FILE__, __LINE__, #lhs, #rhs, lhs, rhs)
 
@@ -31,6 +59,8 @@
 
 #define ASSERT_FALSE(expr) \
   ::dcr::internal::deny(__FILE__, __LINE__, #expr, expr)
+
+#endif
 
 namespace dcr {
 namespace internal {
@@ -296,9 +326,16 @@ template <CompareType type, typename Lhs, typename Rhs = Lhs> auto compare(
     char const* rhsAsStr,
     Lhs&& lhs,
     Rhs&& rhs
+#ifndef __EXCEPTIONS
+) -> bool {
+#else
 ) -> void {
+#endif
   using Op = Comparator<type>;
   auto const result = Op::invoke(std::forward<Lhs>(lhs), std::forward<Rhs>(rhs));
+#ifndef __EXCEPTIONS
+  return result;
+#else
   if (!result) {
     std::stringstream oss;
     oss << file << ":" << line << ": Failure\n"
@@ -307,6 +344,7 @@ template <CompareType type, typename Lhs, typename Rhs = Lhs> auto compare(
       << descOperand(rhsAsStr, std::forward<Rhs>(rhs)) << '\n';
     throw AssertionFailure(oss.str());
   }
+#endif
 }
 
 template <typename Expr> auto affirm(
@@ -314,6 +352,11 @@ template <typename Expr> auto affirm(
     int const line,
     char const* exprAsStr,
     Expr&& expr
+#ifndef __EXCEPTIONS
+) -> bool {
+  return static_cast<bool>(std::forward<Expr>(expr));
+}
+#else
 ) -> void {
   if (!std::forward<Expr>(expr)) {
     std::stringstream oss;
@@ -323,12 +366,18 @@ template <typename Expr> auto affirm(
     throw AssertionFailure(oss.str());
   }
 }
+#endif
 
 template <typename Expr> auto deny(
     char const* file,
     int const line,
     char const* exprAsStr,
     Expr&& expr
+#ifndef __EXCEPTIONS
+) -> bool {
+  return !static_cast<bool>(std::forward<Expr>(expr));
+}
+#else
 ) -> void {
   if (std::forward<Expr>(expr)) {
     std::stringstream oss;
@@ -338,6 +387,7 @@ template <typename Expr> auto deny(
     throw AssertionFailure(oss.str());
   }
 }
+#endif
 } // namespace internal
 } // namespace dcr
 

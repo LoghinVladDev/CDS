@@ -51,6 +51,14 @@ elseif(CDS_STANDARD STREQUAL "2b")
   )
 endif()
 
+if(DEFINED ${CMAKE_CXX_FLAGS})
+  string(FIND ${CMAKE_CXX_FLAGS} "-fno-exceptions" DCR_CXX_FLAGS_NO_EXCEPTIONS_FLAG_IDX)
+
+  if (NOT (${DCR_CXX_FLAGS_NO_EXCEPTIONS_FLAG_IDX} STREQUAL "-1"))
+    add_compile_definitions(DCR_NO_EXCEPTIONS)
+  endif()
+endif()
+
 set(DCR_EXPORT_MACRO_HELPERS ${DCR_MACRO_HELPERS} PARENT_SCOPE)
 
 set(DCR_SOURCES
