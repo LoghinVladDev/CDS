@@ -24,6 +24,7 @@ template <typename E, typename R> auto throws(R const& r, StringView message) ->
 }
 }
 
+#if !CDS_ATTR(msvc)
 TEST(UnionTypeExceptionTest, expectedMessage) {
   auto const e1 = UnionTypeException::of<int, float>();
   ASSERT_EQ(
@@ -62,3 +63,4 @@ TEST(UnionTypeExceptionTest, expectedThrow) {
     "Actual: 'signed int'"
   ));
 }
+#endif

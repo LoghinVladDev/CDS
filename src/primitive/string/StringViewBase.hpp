@@ -59,19 +59,19 @@ template <typename C, typename U> using Self = BaseStringView<C, U>;
 template <typename C, typename U> using Traits = IterableTraits<Self<C, U>>;
 
 using ContainsOpt = With<Value, Projector>;
-template <typename C, typename U> struct ContainsOf :
+template <typename C, typename U> struct CDS_ATTR(inheritsEBOs) ContainsOf :
     ContainsOfStaticBinding<Self<C, U>, ContainsOpt> {};
 
 using FindOpt = With<Value, Projector, Immutable>;
-template <typename C, typename U> struct FindTr :
+template <typename C, typename U> struct CDS_ATTR(inheritsEBOs) FindTr :
     FindStringViewTransformer<C, U> {};
-template <typename C, typename U> struct Find :
+template <typename C, typename U> struct CDS_ATTR(inheritsEBOs) Find :
     FindStaticBinding<Self<C, U>, FindOpt, FindTr<C, U>, FindTr<C, U>> {};
-template <typename C, typename U> struct FindOf :
+template <typename C, typename U> struct CDS_ATTR(inheritsEBOs) FindOf :
     FindOfStaticBinding<Self<C, U>, FindOpt, FindTr<C, U>, FindTr<C, U>> {};
 
 using LoopOpt = With<Immutable>;
-template <typename C, typename U> struct GenericLoop :
+template <typename C, typename U> struct CDS_ATTR(inheritsEBOs) GenericLoop :
     GenericLoopBinding<Self<C, U>, LoopOpt> {};
 } // namespace bindingsBSV
 
@@ -438,6 +438,12 @@ auto operator<<(typename BaseStringView<FC, FU>::OStream& out, BaseStringView<FC
   out.write(obj._data, obj._length);
   return out;
 }
+
+#if CDS_ATTR(bitarch) == 64u
+static_assert(sizeof(BaseStringView<char>) == 16u, "invalid string view data sizes");
+#else CDS_ATTR(bitarch) == 32u
+static_assert(sizeof(BaseStringView<char>) == 8u, "invalid string view data sizes");
+#endif
 } // namespace impl
 
 inline namespace literals {

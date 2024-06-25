@@ -178,6 +178,8 @@ template <> struct SignedEquivalent<U32> { using Type = S32; };
 template <> struct SignedEquivalent<U64> { using Type = S64; };
 #if defined(__linux) && CDS_ATTR(bitarch) == 64
 template <> struct SignedEquivalent<unsigned long long> { using Type = signed long long; };
+#elif defined(WIN32) && CDS_ATTR(bitarch) == 64
+template <> struct SignedEquivalent<unsigned long> { using Type = signed long; };
 #endif
 
 template <typename T> struct UnsignedEquivalent {};
@@ -188,6 +190,8 @@ template <> struct UnsignedEquivalent<S32> { using Type = U32; };
 template <> struct UnsignedEquivalent<S64> { using Type = U64; };
 #if defined(__linux) && CDS_ATTR(bitarch) == 64
 template <> struct UnsignedEquivalent<signed long long> { using Type = unsigned long long; };
+#elif defined(WIN32) && CDS_ATTR(bitarch) == 64
+template <> struct SignedEquivalent<signed long> { using Type = unsigned long; };
 #endif
 } // namespace impl
 

@@ -19,14 +19,14 @@ public:
   template <typename From, typename To> static auto of() noexcept -> UnionTypeException {
     auto message = impl::BaseString<char>();
     message.reserve(128u);
-    return UnionTypeException {
+    auto str =
         cds::move(message)
         + "Union Type Exception: '"
         + StringView{meta::TypeInfo<To>::name}
         + "' is not the active Union member. Actual: '"
         + StringView{meta::TypeInfo<From>::name}
-        + "'"
-    };
+        + "'";
+    return UnionTypeException {cds::move(str)};
   }
 };
 } // namespace cds

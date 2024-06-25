@@ -159,6 +159,8 @@ TEST(UnionTest, get) {
 }
 
 TEST(UnionTest, getMutate) {
+  using cds::impl::sbo::StringData;
+  ASSERT_EQ(sizeof(StringData<char>), 24);
   using cds::impl::get;
   Union<int, String> a1;
   a1.get<int>() = 5;

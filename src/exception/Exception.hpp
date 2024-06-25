@@ -14,6 +14,11 @@ class Exception : public std::exception {
   using StringView = impl::BaseStringView<char>;
 public:
   using std::exception::exception;
+
+#if CDS_ATTR(msvc)
+  Exception(char const*) = delete;
+#endif
+
   ~Exception() noexcept override = default;
   CDS_ATTR(2(nodiscard, constexpr(20))) virtual auto message() const noexcept -> StringView = 0;
 

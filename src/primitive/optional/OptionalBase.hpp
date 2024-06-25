@@ -108,20 +108,20 @@ template <typename T> struct OptionalStorageBase<T, False> {
 template <typename, typename A, typename = typename IsLValRef<A>::Type>
 struct OptionalLogicalBaseIsNoexceptConstructible {};
 
-template <typename T, typename A> struct OptionalLogicalBaseIsNoexceptConstructible<T, A, True> :
+template <typename T, typename A> struct CDS_ATTR(inheritsEBOs) OptionalLogicalBaseIsNoexceptConstructible<T, A, True> :
     IsNoexceptCopyConstructible<T>::Type {};
-template <typename T, typename A> struct OptionalLogicalBaseIsNoexceptConstructible<T, A, False> :
-    IsNoexceptMoveConstructible<T>::Type {};
+template <typename T, typename A> struct CDS_ATTR(inheritsEBOs) OptionalLogicalBaseIsNoexceptConstructible<T, A, False>
+    : IsNoexceptMoveConstructible<T>::Type {};
 
 template <typename, typename A, typename = typename IsLValRef<A>::Type>
 struct OptionalLogicalBaseIsNoexceptAssignable {};
 
-template <typename T, typename A> struct OptionalLogicalBaseIsNoexceptAssignable<T, A, True> :
+template <typename T, typename A> struct CDS_ATTR(inheritsEBOs) OptionalLogicalBaseIsNoexceptAssignable<T, A, True> :
     And<IsNoexceptCopyConstructible<T>, IsNoexceptCopyAssignable<T>>::Type {};
-template <typename T, typename A> struct OptionalLogicalBaseIsNoexceptAssignable<T, A, False> :
+template <typename T, typename A> struct CDS_ATTR(inheritsEBOs) OptionalLogicalBaseIsNoexceptAssignable<T, A, False> :
     And<IsNoexceptMoveConstructible<T>, IsNoexceptMoveAssignable<T>>::Type {};
 
-template <typename T> struct OptionalLogicalBase : OptionalStorageBase<T> {
+template <typename T> struct CDS_ATTR(inheritsEBOs) OptionalLogicalBase : OptionalStorageBase<T> {
   using LocalBase = OptionalStorageBase<T>;
   using LocalBase::_object;
   using LocalBase::_exists;
@@ -169,12 +169,12 @@ template <typename T> struct OptionalLogicalBase : OptionalStorageBase<T> {
 
 template <typename T, typename = typename IsTriviallyCopyConstructible<T>::Type> struct OptionalCopyConstructBase {};
 
-template <typename T> struct OptionalCopyConstructBase<T, True> : OptionalLogicalBase<T> {
+template <typename T> struct CDS_ATTR(inheritsEBOs) OptionalCopyConstructBase<T, True> : OptionalLogicalBase<T> {
   using LocalBase = OptionalLogicalBase<T>;
   using LocalBase::LocalBase;
 };
 
-template <typename T> struct OptionalCopyConstructBase<T, False> : OptionalLogicalBase<T> {
+template <typename T> struct CDS_ATTR(inheritsEBOs) OptionalCopyConstructBase<T, False> : OptionalLogicalBase<T> {
   using LocalBase = OptionalLogicalBase<T>;
   using LocalBase::LocalBase;
   using LocalBase::constructFrom;
@@ -194,12 +194,12 @@ template <typename T> struct OptionalCopyConstructBase<T, False> : OptionalLogic
 
 template <typename T, typename = typename IsTriviallyMoveConstructible<T>::Type> struct OptionalMoveConstructBase {};
 
-template <typename T> struct OptionalMoveConstructBase<T, True> : OptionalCopyConstructBase<T> {
+template <typename T> struct CDS_ATTR(inheritsEBOs) OptionalMoveConstructBase<T, True> : OptionalCopyConstructBase<T> {
   using LocalBase = OptionalCopyConstructBase<T>;
   using LocalBase::LocalBase;
 };
 
-template <typename T> struct OptionalMoveConstructBase<T, False> : OptionalCopyConstructBase<T> {
+template <typename T> struct CDS_ATTR(inheritsEBOs) OptionalMoveConstructBase<T, False> : OptionalCopyConstructBase<T> {
   using LocalBase = OptionalCopyConstructBase<T>;
   using LocalBase::LocalBase;
   using LocalBase::constructFrom;
@@ -219,12 +219,12 @@ template <typename T> struct OptionalMoveConstructBase<T, False> : OptionalCopyC
 
 template <typename T, typename = typename IsTriviallyCopyAssignable<T>::Type> struct OptionalCopyAssignBase {};
 
-template <typename T> struct OptionalCopyAssignBase<T, True> : OptionalMoveConstructBase<T> {
+template <typename T> struct CDS_ATTR(inheritsEBOs) OptionalCopyAssignBase<T, True> : OptionalMoveConstructBase<T> {
   using LocalBase = OptionalMoveConstructBase<T>;
   using LocalBase::LocalBase;
 };
 
-template <typename T> struct OptionalCopyAssignBase<T, False> : OptionalMoveConstructBase<T> {
+template <typename T> struct CDS_ATTR(inheritsEBOs) OptionalCopyAssignBase<T, False> : OptionalMoveConstructBase<T> {
   using LocalBase = OptionalMoveConstructBase<T>;
   using LocalBase::LocalBase;
   using LocalBase::assignFrom;
@@ -245,12 +245,12 @@ template <typename T> struct OptionalCopyAssignBase<T, False> : OptionalMoveCons
 
 template <typename T, typename = typename IsTriviallyMoveAssignable<T>::Type> struct OptionalMoveAssignBase {};
 
-template <typename T> struct OptionalMoveAssignBase<T, True> : OptionalCopyAssignBase<T> {
+template <typename T> struct CDS_ATTR(inheritsEBOs) OptionalMoveAssignBase<T, True> : OptionalCopyAssignBase<T> {
   using LocalBase = OptionalCopyAssignBase<T>;
   using LocalBase::LocalBase;
 };
 
-template <typename T> struct OptionalMoveAssignBase<T, False> : OptionalCopyAssignBase<T> {
+template <typename T> struct CDS_ATTR(inheritsEBOs) OptionalMoveAssignBase<T, False> : OptionalCopyAssignBase<T> {
   using LocalBase = OptionalCopyAssignBase<T>;
   using LocalBase::LocalBase;
   using LocalBase::assignFrom;
@@ -269,7 +269,7 @@ template <typename T> struct OptionalMoveAssignBase<T, False> : OptionalCopyAssi
   ~OptionalMoveAssignBase() = default;
 };
 
-template <typename T> struct OptionalObservableBase : OptionalMoveAssignBase<T> {
+template <typename T> struct CDS_ATTR(inheritsEBOs) OptionalObservableBase : OptionalMoveAssignBase<T> {
   using LocalBase = OptionalMoveAssignBase<T>;
   using LocalBase::LocalBase;
   using LocalBase::_exists;
@@ -355,7 +355,7 @@ template <typename T> struct OptionalObservableBase : OptionalMoveAssignBase<T> 
 template <typename> struct IsOptional : False {};
 template <typename T> struct IsOptional<Optional<T>> : True {};
 
-template <typename T> struct OptionalMonadicBase : OptionalObservableBase<T> {
+template <typename T> struct CDS_ATTR(inheritsEBOs) OptionalMonadicBase : OptionalObservableBase<T> {
   using LocalBase = OptionalObservableBase<T>;
   using LocalBase::LocalBase;
   using LocalBase::_exists;
@@ -456,7 +456,7 @@ template <typename T> struct OptionalMonadicBase : OptionalObservableBase<T> {
   }
 };
 
-template <typename T> struct OptionalBase : OptionalMonadicBase<T> {
+template <typename T> struct CDS_ATTR(inheritsEBOs) OptionalBase : OptionalMonadicBase<T> {
   using LocalBase = OptionalMonadicBase<T>;
   using LocalBase::LocalBase;
 };

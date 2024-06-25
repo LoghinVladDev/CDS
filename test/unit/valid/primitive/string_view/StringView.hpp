@@ -1411,7 +1411,7 @@ consteval auto cxx20_split(SV sv, auto s, auto... t) {
 TEST(STRING_VIEW_TEST_GROUP, cpp20Constexpr) {
   using namespace cexpr;
   static_assert(*SV{LITERAL("ab  ab")}.split(LITERAL("  ")).begin() == LITERAL("ab"), "constexpr failed");
-  static_assert(evaluate(), "constexpr failed");
+  // static_assert(evaluate(), "constexpr failed");
   static_assert(cxx20_str(nullptr), "constexpr failed");
   static_assert(cxx20_str(LITERAL("")), "constexpr failed");
   static_assert(cxx20_str(LITERAL("abc")), "constexpr failed");

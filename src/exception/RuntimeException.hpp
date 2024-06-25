@@ -17,6 +17,10 @@ class RuntimeException : public Exception {
 public:
   using Exception::Exception;
 
+#if CDS_ATTR(msvc)
+  explicit RuntimeException(char const* message) noexcept : RuntimeException(String{message}) {}
+#endif
+
   RuntimeException() noexcept : _message("") {}
   explicit RuntimeException(String message) noexcept : _message{cds::move(message)} {}
   explicit RuntimeException(std::exception const& exception) noexcept : _message{exception.what()} {}

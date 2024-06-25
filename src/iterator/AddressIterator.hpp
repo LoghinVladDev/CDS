@@ -19,14 +19,13 @@ namespace iterator {
 namespace impl {
 using meta::EnableIf;
 using meta::IsBaseOf;
-using meta::And;
 using meta::IsIntegral;
 
 #if CDS_ATTR(spaceship)
 using std::strong_ordering;
 #endif // #if CDS_ATTR(spaceship)
 
-template<typename T, bool fwd> class AddressIteratorBase {
+template <typename T, bool fwd> class AddressIteratorBase {
 public:
   using Value = T;
   using Address = T *;
@@ -104,13 +103,10 @@ public:
   template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>>>
   CDS_ATTR(constexpr(14)) friend auto operator--(I& iterator, int _) noexcept -> I;
 
-  template <
-      typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>, IsIntegral<N>>>
-  > CDS_ATTR(constexpr(11)) friend auto operator+(I const& lhs, N rhs) noexcept -> I;
-
-  template <
-      typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>, IsIntegral<N>>>
-  > CDS_ATTR(constexpr(11)) friend auto operator-(I const& lhs, N rhs) noexcept -> I;
+protected:
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto addr() const noexcept -> Address {
+    return _addr;
+  }
 
 private:
   Address _addr{nullptr};
@@ -257,38 +253,40 @@ CDS_ATTR(2(nodiscard, constexpr(14))) auto operator--(I& iterator, int) noexcept
   ++static_cast<AddressIteratorBase<typename I::Value, false>&>(iterator)._addr;
   return copy;
 }
-
-template <
-    typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>, IsIntegral<N>>> = 0
-> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator+(I const& lhs, N rhs) noexcept -> I {
-  return I(static_cast<AddressIteratorBase<typename I::Value, true> const&>(lhs)._addr + rhs);
-}
-
-template <
-    typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>, IsIntegral<N>>> = 0
-> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator+(I const& lhs, N rhs) noexcept -> I {
-  return I(static_cast<AddressIteratorBase<typename I::Value, false> const&>(lhs)._addr - rhs);
-}
-
-template <
-    typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>, IsIntegral<N>>> = 0
-> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator-(I const& lhs, N rhs) noexcept -> I {
-  return I(static_cast<AddressIteratorBase<typename I::Value, true> const&>(lhs)._addr - rhs);
-}
-
-template <
-    typename I, typename N, EnableIf<And<IsBaseOf<AddressIteratorBase<typename I::Value, false>, I>, IsIntegral<N>>> = 0
-> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator-(I const& lhs, N rhs) noexcept -> I {
-  return I(static_cast<AddressIteratorBase<typename I::Value, false> const&>(lhs)._addr + rhs);
-}
 } // namespace impl
 
 template <typename Type> class ForwardAddressIterator : public impl::AddressIteratorBase<Type, true> {
+  using impl::AddressIteratorBase<Type, true>::addr;
+
+public:
   using impl::AddressIteratorBase<Type, true>::AddressIteratorBase;
+
+  template <typename N, meta::EnableIf<meta::IsIntegral<N>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator+(N rhs) const noexcept -> ForwardAddressIterator {
+    return ForwardAddressIterator{addr() + rhs};
+  }
+
+  template <typename N, meta::EnableIf<meta::IsIntegral<N>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator-(N rhs) const noexcept -> ForwardAddressIterator {
+    return ForwardAddressIterator{addr() - rhs};
+  }
 };
 
 template <typename Type> class BackwardAddressIterator : public impl::AddressIteratorBase<Type, false> {
+  using impl::AddressIteratorBase<Type, false>::addr;
+
+public:
   using impl::AddressIteratorBase<Type, false>::AddressIteratorBase;
+
+  template <typename N, meta::EnableIf<meta::IsIntegral<N>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator+(N rhs) const noexcept -> BackwardAddressIterator {
+    return BackwardAddressIterator{addr() - rhs};
+  }
+
+  template <typename N, meta::EnableIf<meta::IsIntegral<N>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator-(N rhs) const noexcept -> BackwardAddressIterator {
+    return BackwardAddressIterator{addr() + rhs};
+  }
 };
 } // namesspace iterator
 

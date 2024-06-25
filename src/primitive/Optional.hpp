@@ -9,7 +9,7 @@
 #include "optional/OptionalBase.hpp"
 
 namespace cds {
-template <typename T> class Optional : private impl::OptionalBase<T> {
+template <typename T> class CDS_ATTR(inheritsEBOs) Optional : private impl::OptionalBase<T> {
   using Base = impl::OptionalBase<T>;
   using StorageBase = impl::OptionalStorageBase<T>;
   using ObservableBase = impl::OptionalObservableBase<T>;

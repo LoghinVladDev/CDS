@@ -5,6 +5,7 @@
 #include <UnitTest.hpp>
 #include <cds/exception/Exception>
 #include <cds/StringView>
+#include <cds/String>
 
 namespace {
 using cds::Exception;
@@ -27,7 +28,7 @@ TEST(ExceptionTest, throwing) {
   auto thrower = []() {
     class DException : public Exception {
     public:
-      [[nodiscard]] auto message() const noexcept -> cds::impl::BaseStringView<char> override {
+      [[nodiscard]] auto message() const noexcept -> cds::impl::BaseStringView<char> /* override */ {
         return "test2";
       }
     };

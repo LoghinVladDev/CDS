@@ -63,7 +63,9 @@
 #endif
 
 #ifndef CDS_OPTION_DISABLE_EXCEPTIONS
-#ifndef __EXCEPTIONS
+#if !defined(_MSC_VER) && !defined(__EXCEPTIONS)
+#define CDS_OPTION_DISABLE_EXCEPTIONS
+#elif defined(_MSC_VER) && defined(_HAS_EXCEPTIONS) && !_HAS_EXCEPTIONS
 #define CDS_OPTION_DISABLE_EXCEPTIONS
 #endif
 #endif
@@ -197,10 +199,22 @@ enum class Byte : U8 {};
 
 #define CDS_ATTR_disable_gcc_warning(...)
 #define CDS_ATTR_enable_gcc_warning(...)
+#define CDS_ATTR_disable_msvc_warning(...)
+#define CDS_ATTR_enable_msvc_warning(...)
 
 
 #ifdef _MSC_VER
 #define CDS_ATTR_msvc true
+
+#undef CDS_ATTR_disable_msvc_warning
+#undef CDS_ATTR_enable_msvc_warning
+
+#define CDS_ATTR_disable_msvc_warning(warn) \
+  __pragma(warning(disable: warn))
+
+#define CDS_ATTR_enable_msvc_warning(warn) \
+  __pragma(warning(default: warn))
+
 #else // #ifdef _MSC_VER
 #define CDS_ATTR_msvc false
 #endif // #ifdef _MSC_VER #else

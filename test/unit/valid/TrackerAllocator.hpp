@@ -63,7 +63,7 @@ public:
       assert(false && "Double free attempted");
     }
 
-    if (_tracked.find(mem) != _freed.end()) {
+    if (_tracked.find(mem) != _tracked.end()) {
       _tracked.erase(mem);
       _freed.emplace(mem);
     } else if (mem) {

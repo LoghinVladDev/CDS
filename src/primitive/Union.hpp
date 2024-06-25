@@ -9,6 +9,7 @@
 #include "union/UnionNode.hpp"
 
 CDS_ATTR(disable_warning(gcc, "-Wterminate"))
+CDS_ATTR(disable_warning(msvc, 4297))
 
 namespace cds {
 template <typename... Types> class Union {
@@ -196,5 +197,6 @@ template <typename T, typename... Ts> CDS_ATTR(2(nodiscard, constexpr(14))) auto
 } // namespace cds
 
 CDS_ATTR(enable_warning(gcc, "-Wterminate"))
+CDS_ATTR(enable_warning(msvc, 4297))
 
 #endif // #ifndef CDS_PRIMITIVE_UNION_HPP

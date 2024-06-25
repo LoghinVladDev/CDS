@@ -668,7 +668,11 @@ TEST(MetaBase, SignedEquivalent) {
   static_assert(IsSame<S16, SignedEquivalent<unsigned short int>>::value, "Failed SignedEquivalent");
   static_assert(IsSame<S32, SignedEquivalent<unsigned>>::value, "Failed SignedEquivalent");
   static_assert(IsSame<S32, SignedEquivalent<unsigned int>>::value, "Failed SignedEquivalent");
+  
+#if defined(__linux)
   static_assert(IsSame<S64, SignedEquivalent<unsigned long>>::value, "Failed SignedEquivalent");
+#endif
+
   static_assert(IsSame<signed long long, SignedEquivalent<unsigned long long>>::value, "Failed SignedEquivalent");
   static_assert(IsSame<signed long long, SignedEquivalent<unsigned long long int>>::value, "Failed SignedEquivalent");
 }
@@ -684,7 +688,11 @@ TEST(MetaBase, UnsignedEquivalent) {
   static_assert(IsSame<U16, UnsignedEquivalent<short int>>::value, "Failed UnsignedEquivalent");
   static_assert(IsSame<U32, UnsignedEquivalent<signed>>::value, "Failed UnsignedEquivalent");
   static_assert(IsSame<U32, UnsignedEquivalent<int>>::value, "Failed UnsignedEquivalent");
+
+#if defined(__linux)
   static_assert(IsSame<U64, UnsignedEquivalent<long>>::value, "Failed UnsignedEquivalent");
+#endif
+
   static_assert(IsSame<unsigned long long, UnsignedEquivalent<long long>>::value, "Failed UnsignedEquivalent");
   static_assert(IsSame<unsigned long long, UnsignedEquivalent<signed long long>>::value, "Failed UnsignedEquivalent");
   static_assert(IsSame<unsigned long long, UnsignedEquivalent<signed long long int>>::value, "Failed UnsignedEquivalent");
