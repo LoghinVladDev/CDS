@@ -44,15 +44,13 @@ namespace sbo {
 template <typename C> struct StringNonSboData {
   C* buf;
   Size cap;
-  Size len : sizeof(Size) * 8 - 1;
-  bool sbo : 1;
+  Size lenSbo;
 };
 
 template <typename C, typename = Int<sizeof(C)>> struct StringSboData {};
 template <typename C> struct StringSboData<C, Int<1>> {
   C buf[sizeof(StringNonSboData<C>) - 1u];
-  U8 len : 7;
-  bool sbo : 1;
+  U8 lenSbo;
 
   using Size = Int<sizeof(StringNonSboData<C>) - 1u>;
 
@@ -64,8 +62,7 @@ template <typename C> struct StringSboData<C, Int<1>> {
 template <typename C> struct StringSboData<C, Int<2>> {
   C buf[sizeof(StringNonSboData<C>) / 2u - 1u];
   U8 pad[1u];
-  U8 len : 7;
-  bool sbo : 1;
+  U8 lenSbo;
 
   using Size = Int<sizeof(buf) / sizeof(buf[0])>;
 
@@ -79,8 +76,7 @@ template <typename C> struct StringSboData<C, Int<4>> {
 #if CDS_ATTR(bitarch) == 64
   C buf[sizeof(StringNonSboData<C>) / 4u - 1u];
   U8 pad[3u];
-  U8 len : 7;
-  bool sbo : 1;
+  U8 lenSbo;
 
   using Size = Int<sizeof(buf) / sizeof(buf[0])>;
 
@@ -91,8 +87,7 @@ template <typename C> struct StringSboData<C, Int<4>> {
 #elif CDS_ATTR(bitarch) == 32
   C buf[1u];
   U8 pad[7u];
-  U8 len: 7;
-  bool sbo: 1;
+  U8 lenSbo;
 
   using Size = Int<0>;
 
@@ -110,12 +105,11 @@ template <typename C> struct StringData {
   };
 
   CDS_ATTR(constexpr(14)) StringData() noexcept {
-    _sbo.sbo = true;
     _sbo.buf[0] = StringTraits<C>::nullChar;
-    _sbo.len = 0U;
+    _sbo.lenSbo = 1U; // 0 len, 1 sbo
   }
 
-  CDS_ATTR(constexpr(11)) StringData(C* buf, Size c, Size l, bool s) noexcept : _nrm{buf, c, l, s} {}
+  CDS_ATTR(constexpr(11)) StringData(C* buf, Size c, Size l) noexcept : _nrm{buf, c, l} {}
 };
 
 #if CDS_ATTR(bitarch) == 64u
@@ -197,7 +191,7 @@ public:
 #if CDS_ATTR(cpp20)
   CDS_ATTR(2(explicit, constexpr(20))) BaseString(A const& alloc = A{}) noexcept :
       A{alloc},
-      sbo::StringData<C>{nullptr, 0U, 0U, false} {
+      sbo::StringData<C>{nullptr, 0U, 0U} {
     if (!inConstexpr()) {
       sboInit();
     }
@@ -348,11 +342,11 @@ public:
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto length() const noexcept -> Size {
-    return sh() ? _sbo.len : _nrm.len;
+    return static_cast<Size>((sh() ? _sbo.lenSbo : _nrm.lenSbo) >> 1u);
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto size() const noexcept -> Size {
-    return sh() ? _sbo.len : _nrm.len;
+    return static_cast<Size>((sh() ? _sbo.lenSbo : _nrm.lenSbo) >> 1u);
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto capacity() const noexcept -> Size {
@@ -592,24 +586,24 @@ public:
 #if CDS_ATTR(cpp20)
       if (inConstexpr()) {
         construct(impl::fillInitialize(data() + length(), data() + size, character), STraits::nullChar);
-        _nrm.len = size;
+        _nrm.lenSbo = size << 1u;
         return;
       }
 #endif
       *impl::fill(end(), begin() + size, character) = STraits::nullChar;
       if (sh()) {
-        _sbo.len = static_cast<U8>(size);
+        _sbo.lenSbo = static_cast<U8>(size << 1u | 1u);
       } else {
-        _nrm.len = size;
+        _nrm.lenSbo = size << 1u;
       }
       return;
     }
 
     if (sh() && sh(size)) {
-      if (_sbo.len < size) {
+      if (/* _sbo.lenSbo */ length() < size) {
         *impl::fill(end(), begin() + size, character) = STraits::nullChar;
       }
-      _sbo.len = static_cast<U8>(size);
+      _sbo.lenSbo = static_cast<U8>(size << 1u | 1u);
       return;
     }
 
@@ -617,24 +611,22 @@ public:
       auto const newCap = maxOf(size + 1, minCap);
       auto const newBuf = A::allocate(newCap);
       *impl::fill(impl::copy(begin(), end(), newBuf), newBuf + size, character) = STraits::nullChar;
-      _nrm.sbo = false;
-      _nrm.len = size;
+      _nrm.lenSbo = size << 1u;
       _nrm.cap = newCap;
       _nrm.buf = newBuf;
       return;
     }
 
     auto oldBuf = _nrm.buf;
-    auto oldLen = _nrm.len;
+    auto oldLen = _nrm.lenSbo >> 1u;
     auto oldCap = _nrm.cap;
 
     if (sh(size)) {
       sboInit(size);
     } else {
       _nrm.cap = maxOf(size + 1, minCap);
-      _nrm.len = size;
+      _nrm.lenSbo = size << 1u;
       _nrm.buf = A::allocate(_nrm.cap);
-      _nrm.sbo = false;
     }
 
 #if CDS_ATTR(cpp20)
@@ -689,8 +681,7 @@ public:
     }
     _nrm.buf = newBuf;
     _nrm.cap = newCap;
-    _nrm.len = oldLen;
-    _nrm.sbo = false;
+    _nrm.lenSbo = oldLen << 1u;
   }
 
   CDS_ATTR(constexpr(20)) auto shrink(Size size = 0u) CDS_ATTR(noexcept(false)) -> void {
@@ -700,7 +691,7 @@ public:
 
     if (sh()) {
       if (size < length()) {
-        _sbo.len = static_cast<U8>(size);
+        _sbo.lenSbo = static_cast<U8>(size << 1u | 1u);
         *(begin() + size) = STraits::nullChar;
       }
       return;
@@ -710,13 +701,11 @@ public:
     auto const cCap = cap();
     auto const cLen = length();
     if (sh(size)) {
-      _sbo.sbo = true;
-      _sbo.len = static_cast<U8>(minOf(cLen, size));
+      _sbo.lenSbo = static_cast<U8>(minOf(cLen, size) << 1u | 1u);
     } else {
-      _nrm.len = minOf(cLen, size);
+      _nrm.lenSbo = minOf(cLen, size) << 1u;
       _nrm.cap = maxOf(size + 1, minCap);
       _nrm.buf = A::allocate(_nrm.cap);
-      _nrm.sbo = false;
     }
 #if CDS_ATTR(cpp20)
     if (inConstexpr()) {
@@ -742,7 +731,6 @@ public:
 #endif
       A::deallocate(_nrm.buf, _nrm.cap);
     }
-
 
     init();
   }
@@ -776,9 +764,9 @@ public:
 #endif
     *U::writeInt(value, len, data() + length()) = STraits::nullChar;
     if (sh()) {
-      _sbo.len = static_cast<U8>(reqLen);
+      _sbo.lenSbo = static_cast<U8>(reqLen << 1u | 1u);
     } else {
-      _nrm.len = reqLen;
+      _nrm.lenSbo = reqLen << 1u;
     }
     return *this;
   }
@@ -790,9 +778,9 @@ public:
     reserve(reqLen);
     *U::writeFloating(value, len, data() + length()) = STraits::nullChar;
     if (sh()) {
-      _sbo.len = static_cast<U8>(reqLen);
+      _sbo.lenSbo = static_cast<U8>(reqLen << 1u | 1u);
     } else {
-      _nrm.len = reqLen;
+      _nrm.lenSbo = reqLen << 1u;
     }
     return *this;
   }
@@ -955,9 +943,9 @@ public:
     }
 
     if (res.sh()) {
-      res._sbo.len = static_cast<U8>(size);
+      res._sbo.lenSbo = static_cast<U8>(size << 1u | 1u);
     } else {
-      res._nrm.len = size;
+      res._nrm.lenSbo = size << 1u;
     }
 
     return res;
@@ -972,9 +960,9 @@ public:
     res.reserve(size);
     *impl::fill(res.end(), res.begin() + size, with) = STraits::nullChar;
     if (res.sh()) {
-      res._sbo.len = static_cast<U8>(size);
+      res._sbo.lenSbo = static_cast<U8>(size << 1u | 1u);
     } else {
-      res._nrm.len = size;
+      res._nrm.lenSbo = size << 1u;
     }
 
     return res;
@@ -989,9 +977,9 @@ public:
     res.reserve(size);
     *impl::fill(res.end(), res.begin() + size, with) = STraits::nullChar;
     if (res.sh()) {
-      res._sbo.len = static_cast<U8>(size);
+      res._sbo.lenSbo = static_cast<U8>(size << 1u | 1u);
     } else {
-      res._nrm.len = size;
+      res._nrm.lenSbo = size << 1u;
     }
 
     return res;
@@ -1066,9 +1054,9 @@ public:
     auto const oLen = res.length();
     res.reserve(len);
     if (res.sh()) {
-      res._sbo.len = static_cast<U8>(len);
+      res._sbo.lenSbo = static_cast<U8>(len << 1u | 1u);
     } else {
-      res._nrm.len = len;
+      res._nrm.lenSbo = len << 1u;
     }
 
     if (seqLen > repl.length()) {
@@ -1175,14 +1163,12 @@ private:
 
   CDS_ATTR(constexpr(14)) auto init() noexcept -> void {
     _nrm.buf = nullptr;
-    _nrm.len = 0;
-    _nrm.cap = 0;
-    _nrm.sbo = false;
+    _nrm.lenSbo = 0u;
+    _nrm.cap = 0u;
   }
 
   CDS_ATTR(constexpr(14)) auto sboInit(Size const len = 0) noexcept -> void {
-    _sbo.sbo = true;
-    _sbo.len = static_cast<U8>(len);
+    _sbo.lenSbo = static_cast<U8>(len << 1u | 1u);
     _sbo.initialize();
   }
 
@@ -1191,8 +1177,7 @@ private:
   }
 
   CDS_ATTR(constexpr(14)) auto nrmInit(Size const len, Size const cap) CDS_ATTR(noexcept(false)) -> void {
-    _nrm.sbo = false;
-    _nrm.len = len;
+    _nrm.lenSbo = len << 1u;
     _nrm.cap = maxOf(cap, minCap);
     _nrm.buf = A::allocate(_nrm.cap);
   }
@@ -1206,7 +1191,7 @@ private:
   }
 
   CDS_ATTR(constexpr(14)) auto sboReinit(Size const len = 0) noexcept -> void {
-    _sbo.len = static_cast<U8>(len);
+    _sbo.lenSbo = static_cast<U8>(len << 1u | 1u);
   }
 
   CDS_ATTR(constexpr(14)) auto nrmReinit(Size const len) CDS_ATTR(noexcept(false)) -> void {
@@ -1219,15 +1204,14 @@ private:
       _nrm.cap = maxOf(newCap, minCap);
       _nrm.buf = A::allocate(_nrm.cap);
     }
-    _nrm.sbo = false;
-    _nrm.len = len;
+    _nrm.lenSbo = len << 1u;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto sh() const noexcept -> bool {
 #if CDS_ATTR(cpp20)
-    return !inConstexpr() && _sbo.sbo;
+    return !inConstexpr() && ((_sbo.lenSbo & 1) != 0u);
 #else
-    return _sbo.sbo;
+    return ((_sbo.lenSbo & 1) != 0u);
 #endif
   }
 
@@ -1250,7 +1234,7 @@ private:
 
   CDS_ATTR(constexpr(20)) auto copy(Address address, Size const length) noexcept -> void {
     if (sh() && sh(length)) {
-      _sbo.len = static_cast<U8>(length);
+      _sbo.lenSbo = static_cast<U8>(length << 1u | 1u);
     } else {
       if (length >= cap()) {
         clear();
@@ -1258,20 +1242,18 @@ private:
         _nrm.buf = A::allocate(_nrm.cap);
 #if CDS_ATTR(cpp20)
         if (inConstexpr()) {
-          _nrm.len = length;
-          _nrm.sbo = false;
+          _nrm.lenSbo = length << 1u;
           construct(impl::copyInitialize(address, address + length, data()), STraits::nullChar);
           return;
         }
 #endif
       }
 #if CDS_ATTR(cpp20)
-      if (inConstexpr() && _nrm.len < length) {
-        impl::fillInitialize(_nrm.buf + _nrm.len, _nrm.buf + length + 1, STraits::nullChar);
+      if (inConstexpr() && (_nrm.lenSbo >> 1u) < length) {
+        impl::fillInitialize(_nrm.buf + (_nrm.lenSbo >> 1u), _nrm.buf + length + 1, STraits::nullChar);
       }
 #endif
-      _nrm.len = length;
-      _nrm.sbo = false;
+      _nrm.lenSbo = length << 1u;
     }
     *impl::copy(address, address + length, begin()) = STraits::nullChar;
   }
@@ -1280,14 +1262,13 @@ private:
     sbo::StringData<C>::operator=(cds::move(str));
 #if CDS_ATTR(cpp20)
     if (inConstexpr()) {
-      str._nrm.len = 0u;
+      str._nrm.lenSbo = 0u;
       str._nrm.cap = 0u;
       str._nrm.buf = nullptr;
       return;
     }
 #endif
-    str._sbo.sbo = true;
-    str._sbo.len = 0u;
+    str._sbo.lenSbo = 1u;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto cap() const noexcept -> Size {
@@ -1318,20 +1299,20 @@ private:
       A::deallocate(_nrm.buf, _nrm.cap);
 #endif
     }
-    _nrm.len = reqLen;
+    _nrm.lenSbo = reqLen << 1u;
     _nrm.buf = newBuf;
     _nrm.cap = newCap;
-    _nrm.sbo = false;
     return *this;
   }
 
   template <typename I, typename S>
   CDS_ATTR(constexpr(14)) auto uncheckedAppend(I b, S e) CDS_ATTR(noexcept(false)) -> BaseString& {
     construct(impl::copyInitialize(b, e, data() + length()), STraits::nullChar);
+    auto const newLen = length() + (e - b);
     if (sh()) {
-      _sbo.len += e - b;
+      _sbo.lenSbo = static_cast<U8>(newLen << 1u | 1u);
     } else {
-      _nrm.len += e - b;
+      _nrm.lenSbo = newLen << 1u;
     }
     return *this;
   }
@@ -1468,10 +1449,11 @@ template <typename FC, typename FU, typename FA, typename N, EnableIf<IsIntegral
   }
 #endif
   *FU::writeInt(rhs, len, res.end()) = Tr::nullChar;
+  auto const newLen = res.length() + len;
   if (res.sh()) {
-    res._sbo.len += len;
+    res._sbo.lenSbo = static_cast<U8>(newLen << 1u | 1u);
   } else {
-    res._nrm.len += len;
+    res._nrm.lenSbo = newLen << 1u;
   }
   return res;
 }
@@ -1488,10 +1470,11 @@ template <typename FC, typename FU, typename FA, typename N, EnableIf<IsIntegral
   }
 #endif
   *FU::writeInt(lhs, len, res.end()) = Tr::nullChar;
+  auto const newLen = res.length() + len;
   if (res.sh()) {
-    res._sbo.len += len;
+    res._sbo.lenSbo = static_cast<U8>(newLen << 1u | 1u);
   } else {
-    res._nrm.len += len;
+    res._nrm.lenSbo = newLen << 1u;
   }
   res.uncheckedAppend(rhs.begin(), rhs.end());
   return res;
@@ -1509,10 +1492,11 @@ template <typename FC, typename FU, typename FA, typename N, EnableIf<IsIntegral
   }
 #endif
   *FU::writeInt(rhs, len, res.end()) = Tr::nullChar;
+  auto const newLen = res.length() + len;
   if (res.sh()) {
-    res._sbo.len += len;
+    res._sbo.lenSbo = static_cast<U8>(newLen << 1u | 1u);
   } else {
-    res._nrm.len += len;
+    res._nrm.lenSbo = newLen << 1u;
   }
   return res;
 }
@@ -1524,10 +1508,11 @@ template <typename FC, typename FU, typename FA, typename F, EnableIf<IsFloating
   res.reserve(lhs.size() + len);
   res.uncheckedAppend(lhs.begin(), lhs.end());
   *FU::writeFloating(rhs, len, res.data() + res.length()) = BaseString<FC, FU, FA>::STraits::nullChar;
+  auto const newLen = res.length() + len;
   if (res.sh()) {
-    res._sbo.len += len;
+    res._sbo.lenSbo = static_cast<U8>(newLen << 1u | 1u);
   } else {
-    res._nrm.len += len;
+    res._nrm.lenSbo = newLen << 1u;
   }
   return res;
 }
@@ -1538,10 +1523,11 @@ template <typename FC, typename FU, typename FA, typename F, EnableIf<IsFloating
   auto const len = FU::floatingLength(lhs);
   res.reserve(rhs.size() + len);
   *FU::writeFloating(lhs, len, res.data()) = BaseString<FC, FU, FA>::STraits::nullChar;
+  auto const newLen = res.length() + len;
   if (res.sh()) {
-    res._sbo.len += len;
+    res._sbo.lenSbo = static_cast<U8>(newLen << 1u | 1u);
   } else {
-    res._nrm.len += len;
+    res._nrm.lenSbo = newLen << 1u;
   }
   res.uncheckedAppend(rhs.begin(), rhs.end());
   return res;
@@ -1553,10 +1539,11 @@ template <typename FC, typename FU, typename FA, typename F, EnableIf<IsFloating
   auto const len = FU::floatingLength(rhs);
   res.reserve(res.size() + len);
   *FU::writeFloating(rhs, len, res.data() + res.length()) = BaseString<FC, FU, FA>::STraits::nullChar;
+  auto const newLen = res.length() + len;
   if (res.sh()) {
-    res._sbo.len += len;
+    res._sbo.lenSbo = static_cast<U8>(newLen << 1u | 1u);
   } else {
-    res._nrm.len += len;
+    res._nrm.lenSbo = newLen << 1u;
   }
   return res;
 }

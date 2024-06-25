@@ -214,8 +214,8 @@ enum class Byte : U8 {};
 #if defined(__GNUC__) && !defined(__clang__)
 #define CDS_ATTR_gcc true
 
-#undef CDS_ATTR_disable_gcc_warning(...)
-#undef CDS_ATTR_enable_gcc_warning(...)
+#undef CDS_ATTR_disable_gcc_warning
+#undef CDS_ATTR_enable_gcc_warning
 
 #define CDS_ATTR_disable_gcc_warning(warning) \
   _Pragma("GCC diagnostic push")              \
