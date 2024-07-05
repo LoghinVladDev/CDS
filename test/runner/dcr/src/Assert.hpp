@@ -60,6 +60,14 @@
 #define ASSERT_FALSE(expr) \
   ::dcr::internal::deny(__FILE__, __LINE__, #expr, expr)
 
+#define ASSERT_THROW(stmt, except)  \
+  try {                             \
+    stmt;                           \
+    ASSERT_FALSE(true);             \
+  } catch (except const& e) {       \
+    ASSERT_TRUE(true);              \
+  } do {} while(false)
+
 #endif
 
 namespace dcr {

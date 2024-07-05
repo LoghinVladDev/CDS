@@ -441,7 +441,7 @@ auto operator<<(typename BaseStringView<FC, FU>::OStream& out, BaseStringView<FC
 
 #if CDS_ATTR(bitarch) == 64u
 static_assert(sizeof(BaseStringView<char>) == 16u, "invalid string view data sizes");
-#else CDS_ATTR(bitarch) == 32u
+#elif CDS_ATTR(bitarch) == 32u
 static_assert(sizeof(BaseStringView<char>) == 8u, "invalid string view data sizes");
 #endif
 } // namespace impl

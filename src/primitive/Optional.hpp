@@ -8,6 +8,10 @@
 
 #include "optional/OptionalBase.hpp"
 
+#if CDS_ATTR(spaceship)
+#include <compare>
+#endif
+
 namespace cds {
 template <typename T> class CDS_ATTR(inheritsEBOs) Optional : private impl::OptionalBase<T> {
   using Base = impl::OptionalBase<T>;
@@ -37,7 +41,302 @@ public:
       Base{} {}
 };
 
+namespace impl {
+using meta::Decay;
+using meta::ReturnIf;
+using meta::Bool;
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(
+    Optional<T> const& lhs, Optional<U> const& rhs
+) CDS_ATTR(noexcept(noexcept(*lhs == *rhs))) -> bool {
+  return !lhs
+      ? !rhs
+      : !rhs
+          ? false
+          : *lhs == *rhs;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(
+    Optional<T> const& lhs, Optional<U> const& rhs
+) CDS_ATTR(noexcept(noexcept(*lhs != *rhs))) -> bool {
+  return !lhs
+      ? static_cast<bool>(rhs)
+      : !rhs
+          ? true
+          : *lhs != *rhs;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<(
+    Optional<T> const& lhs, Optional<U> const& rhs
+) CDS_ATTR(noexcept(noexcept(*lhs < *rhs))) -> bool {
+  return !rhs
+      ? false
+      : !lhs
+          ? true
+          : *lhs < *rhs;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>(
+    Optional<T> const& lhs, Optional<U> const& rhs
+) CDS_ATTR(noexcept(noexcept(*lhs > *rhs))) -> bool {
+  return !lhs
+      ? false
+      : !rhs
+          ? true
+          : *lhs > *rhs;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=(
+    Optional<T> const& lhs, Optional<U> const& rhs
+) CDS_ATTR(noexcept(noexcept(*lhs <= *rhs))) -> bool {
+  return !lhs
+      ? true
+      : !rhs
+          ? false
+          : *lhs <= *rhs;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>=(
+    Optional<T> const& lhs, Optional<U> const& rhs
+) CDS_ATTR(noexcept(noexcept(*lhs >= *rhs))) -> bool {
+  return !rhs
+      ? true
+      : !lhs
+          ? false
+          : *lhs >= *rhs;
+}
+
+#if CDS_ATTR(spaceship)
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(20))) auto operator <=>(
+    Optional<T> const& lhs, Optional<U> const& rhs
+) CDS_ATTR(noexcept(noexcept(*lhs <=> *rhs))) -> decltype(*lhs <=> *rhs) {
+  if (lhs && rhs) {
+    return *lhs <=> *rhs;
+  }
+
+  return static_cast<bool>(lhs) <=> static_cast<bool>(rhs);
+}
+#endif
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(
+    Optional<T> const& lhs, CDS_ATTR(unused) Nullopt rhs
+) noexcept -> bool {
+  return !lhs;
+}
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(
+    CDS_ATTR(unused) Nullopt lhs, Optional<T> const& rhs
+) noexcept -> bool {
+  return !rhs;
+}
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(
+    Optional<T> const& lhs, CDS_ATTR(unused) Nullopt rhs
+) noexcept -> bool {
+  return static_cast<bool>(lhs);
+}
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(
+    CDS_ATTR(unused) Nullopt lhs, Optional<T> const& rhs
+) noexcept -> bool {
+  return static_cast<bool>(rhs);
+}
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<(
+    CDS_ATTR(unused) Optional<T> const& lhs, CDS_ATTR(unused) Nullopt rhs
+) noexcept -> bool {
+  return false;
+}
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<(
+    CDS_ATTR(unused) Nullopt lhs, Optional<T> const& rhs
+) noexcept -> bool {
+  return static_cast<bool>(rhs);
+}
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>(
+    Optional<T> const& lhs, CDS_ATTR(unused) Nullopt rhs
+) noexcept -> bool {
+  return static_cast<bool>(lhs);
+}
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>(
+    CDS_ATTR(unused) Nullopt lhs, CDS_ATTR(unused) Optional<T> const& rhs
+) noexcept -> bool {
+  return false;
+}
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=(
+    Optional<T> const& lhs, CDS_ATTR(unused) Nullopt rhs
+) noexcept -> bool {
+  return !lhs;
+}
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=(
+    CDS_ATTR(unused) Nullopt lhs, CDS_ATTR(unused) Optional<T> const& rhs
+) noexcept -> bool {
+  return true;
+}
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>=(
+    CDS_ATTR(unused) Optional<T> const& lhs, CDS_ATTR(unused) Nullopt rhs
+) noexcept -> bool {
+  return true;
+}
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>=(
+    CDS_ATTR(unused) Nullopt lhs, Optional<T> const& rhs
+) noexcept -> bool {
+  return !rhs;
+}
+
+#if CDS_ATTR(spaceship)
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=>(
+    Optional<T> const& lhs, CDS_ATTR(unused) Nullopt rhs
+) noexcept -> std::strong_ordering {
+  return static_cast<bool>(lhs) <=> false;
+}
+#endif
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(
+    Optional<T> const& lhs, U const& rhs
+) CDS_ATTR(noexcept(noexcept(*lhs == rhs))) -> bool {
+  return lhs ? *lhs == rhs : false;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(
+    T const& lhs, Optional<U> const& rhs
+) CDS_ATTR(noexcept(noexcept(lhs == *rhs))) -> bool {
+  return rhs ? lhs == *rhs : false;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(
+    Optional<T> const& lhs, U const& rhs
+) CDS_ATTR(noexcept(noexcept(*lhs != rhs))) -> bool {
+  return lhs ? *lhs != rhs : true;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(
+    T const& lhs, Optional<U> const& rhs
+) CDS_ATTR(noexcept(noexcept(lhs != *rhs))) -> bool {
+  return rhs ? lhs != *rhs : true;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<(
+    Optional<T> const& lhs, U const& rhs
+) CDS_ATTR(noexcept(noexcept(*lhs < rhs))) -> bool {
+  return lhs ? *lhs < rhs : true;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<(
+    T const& lhs, Optional<U> const& rhs
+) CDS_ATTR(noexcept(noexcept(lhs < *rhs))) -> bool {
+  return rhs ? lhs < *rhs : false;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>(
+    Optional<T> const& lhs, U const& rhs
+) CDS_ATTR(noexcept(noexcept(*lhs > rhs))) -> bool {
+  return lhs ? *lhs > rhs : false;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>(
+    T const& lhs, Optional<U> const& rhs
+) CDS_ATTR(noexcept(noexcept(lhs > *rhs))) -> bool {
+  return rhs ? lhs > *rhs : true;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=(
+    Optional<T> const& lhs, U const& rhs
+) CDS_ATTR(noexcept(noexcept(*lhs <= rhs))) -> bool {
+  return lhs ? *lhs <= rhs : true;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=(
+    T const& lhs, Optional<U> const& rhs
+) CDS_ATTR(noexcept(noexcept(lhs <= *rhs))) -> bool {
+  return rhs ? lhs <= *rhs : false;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>=(
+    Optional<T> const& lhs, U const& rhs
+) CDS_ATTR(noexcept(noexcept(*lhs >= rhs))) -> bool {
+  return lhs ? *lhs >= rhs : false;
+}
+
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>=(
+    T const& lhs, Optional<U> const& rhs
+) CDS_ATTR(noexcept(noexcept(lhs >= *rhs))) -> bool {
+  return rhs ? lhs >= *rhs : true;
+}
+
+#if CDS_ATTR(spaceship)
+template <typename T, typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=>(
+    Optional<T> const& lhs, U const& rhs
+) CDS_ATTR(noexcept(noexcept(*lhs <=> rhs))) -> decltype(*lhs <=> rhs) {
+  return lhs ? *lhs <=> rhs : std::strong_ordering::less;
+}
+#endif
+
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(CDS_ATTR(unused) Nullopt, CDS_ATTR(unused) Nullopt) noexcept
+    -> bool {
+  return true;
+}
+
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(CDS_ATTR(unused) Nullopt, CDS_ATTR(unused) Nullopt) noexcept
+    -> bool {
+  return false;
+}
+
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>(CDS_ATTR(unused) Nullopt, CDS_ATTR(unused) Nullopt) noexcept
+    -> bool {
+  return false;
+}
+
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<(CDS_ATTR(unused) Nullopt, CDS_ATTR(unused) Nullopt) noexcept
+    -> bool {
+  return false;
+}
+
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator>=(CDS_ATTR(unused) Nullopt, CDS_ATTR(unused) Nullopt) noexcept
+    -> bool {
+  return true;
+}
+
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=(CDS_ATTR(unused) Nullopt, CDS_ATTR(unused) Nullopt) noexcept
+    -> bool {
+  return true;
+}
+
+#if CDS_ATTR(spaceship)
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=>(CDS_ATTR(unused) Nullopt, CDS_ATTR(unused) Nullopt) noexcept
+    -> std::weak_ordering {
+  return std::weak_ordering::equivalent;
+}
+#endif
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto makeOptional(T&& value)
+    CDS_ATTR(noexcept(noexcept(Optional<Decay<T>>{cds::forward<T>(value)}))) -> Optional<Decay<T>> {
+  return Optional<Decay<T>>{cds::forward<T>(value)};
+}
+
+template <typename T, typename... Args> CDS_ATTR(2(nodiscard, constexpr(11)))
+auto makeOptional(Args&&... args) CDS_ATTR(noexcept(noexcept(Optional<T>{cds::forward<Args>(args)...})))
+    -> ReturnIf<Optional<T>, Bool<(sizeof... (Args) > 0)>> {
+  return Optional<T>{cds::forward<Args>(args)...};
+}
+
+auto makeOptional(Nullopt) noexcept -> void = delete;
+template <typename T> auto makeOptional(Nullopt) noexcept -> void = delete;
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto makeOptional()
+    CDS_ATTR(noexcept(meta::IsDefaultConstructible<T>::value)) -> Optional<T> {
+  return Optional<T>{InPlace{}};
+}
+} // namespace impl
+
 using impl::nullopt;
+using impl::makeOptional;
 
 #if CDS_ATTR(ctad)
 template <typename T> Optional(T) -> Optional<T>;

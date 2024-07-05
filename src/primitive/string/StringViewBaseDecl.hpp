@@ -17,7 +17,7 @@ namespace impl {
 using meta::StringTraits;
 template <typename, typename> struct StringUtils;
 
-template<typename C, typename U = StringUtils<C, StringTraits<C>>> class BaseStringView;
+template<typename C, typename = StringUtils<C, StringTraits<C>>> class BaseStringView;
 } // namespace impl
 
 namespace iterator {
