@@ -311,6 +311,37 @@ constexpr S32 s32Max = 0x7fffffffL;
 
 constexpr S64 s64Max = 0x7fffffffffffffffLL;
 constexpr S64 s64Min = -s64Max - 1;
+
+namespace odrImpl {
+template <typename T, T _value> struct LimitConstraint {
+  using Type = T;
+  static constexpr T value = _value;
+};
+
+// ODR before cpp17
+template <typename T, T value> T const LimitConstraint<T, value>::value;
+} // namespace odrImpl
+
+template <typename> struct MinOf {};
+template <typename> struct MaxOf {};
+
+template <> struct MinOf<U8> : odrImpl::LimitConstraint<U8, u8Min> {};
+template <> struct MinOf<U16> : odrImpl::LimitConstraint<U16, u16Min> {};
+template <> struct MinOf<U32> : odrImpl::LimitConstraint<U32, u32Min> {};
+template <> struct MinOf<U64> : odrImpl::LimitConstraint<U64, u64Min> {};
+template <> struct MinOf<S8> : odrImpl::LimitConstraint<S8, s8Min> {};
+template <> struct MinOf<S16> : odrImpl::LimitConstraint<S16, s16Min> {};
+template <> struct MinOf<S32> : odrImpl::LimitConstraint<S32, s32Min> {};
+template <> struct MinOf<S64> : odrImpl::LimitConstraint<S64, s64Min> {};
+
+template <> struct MaxOf<U8> : odrImpl::LimitConstraint<U8, u8Max> {};
+template <> struct MaxOf<U16> : odrImpl::LimitConstraint<U16, u16Max> {};
+template <> struct MaxOf<U32> : odrImpl::LimitConstraint<U32, u32Max> {};
+template <> struct MaxOf<U64> : odrImpl::LimitConstraint<U64, u64Max> {};
+template <> struct MaxOf<S8> : odrImpl::LimitConstraint<S8, s8Max> {};
+template <> struct MaxOf<S16> : odrImpl::LimitConstraint<S16, s16Max> {};
+template <> struct MaxOf<S32> : odrImpl::LimitConstraint<S32, s32Max> {};
+template <> struct MaxOf<S64> : odrImpl::LimitConstraint<S64, s64Max> {};
 } // namespace limits
 
 #if defined __x86_64__ && !defined __ILP32__ // native 64 bit

@@ -541,3 +541,50 @@ TEST(UnionTest, ifIs) {
 
   ASSERT_EQ(get<int>(u1), 5);
 }
+
+namespace {
+// int x;
+struct X {
+  X() = default;
+  X(X const&) {}
+  X(X&&) {}
+  auto operator=(X const&) -> X& {
+    return *this;
+  }
+  auto operator=(X&&) -> X& {
+    return *this;
+  }
+  ~X() {
+    // ++x;
+  }
+};
+struct Y {
+  ~Y() {
+    // ++x;
+  }
+};
+}
+using namespace cds::impl::unionImpl;
+
+TEST(UnionTest, removeLater) {
+  constexpr UnionMoveAssignmentBase<Pack<int>> v1 {InPlaceIndex<0>{}};
+  UnionMoveAssignmentBase<Pack<X>> v2{InPlaceIndex<0>{}};
+  UnionMoveAssignmentBase<Pack<X, Y>> v3{InPlaceIndex<0>{}};
+  UnionMoveAssignmentBase<Pack<X, Y>> v4{InPlaceIndex<1>{}};
+
+  v3.emplace<0>();
+  v3.emplace<1>();
+
+  decltype(v3) v5 {v3};
+  ASSERT_EQ(v5.index(), 1);
+  decltype(v4) v6 {cds::move(v4)};
+
+  v5 = v3;
+  v5 = cds::move(v3);
+}
+
+#ifdef DCR_SINCECPP14
+TEST(UnionTest, constexprCpp14) {
+  static_assert(cds::impl::get<int>(Union<int, long>{1}) == 1, "constexpr14 construct&get failed");
+}
+#endif

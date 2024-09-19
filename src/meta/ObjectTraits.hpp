@@ -29,6 +29,7 @@ template <typename T> struct IsDefaultConstructible : ConvertIntegral<std::is_de
 template <typename T> struct IsCopyConstructible : ConvertIntegral<std::is_copy_constructible<T>> {};
 template <typename T> struct IsMoveConstructible : ConvertIntegral<std::is_move_constructible<T>> {};
 template <typename T, typename... A> struct IsConstructible : ConvertIntegral<std::is_constructible<T, A...>> {};
+template <typename T> struct IsDestructible : ConvertIntegral<std::is_destructible<T>> {};
 
 template <typename T, typename = typename IsDefaultConstructible<T>::Type> struct IsNoexceptDefaultConstructible :
     meta::False {};
@@ -284,6 +285,7 @@ template <typename Type> struct IsCopyAssignable : impl::IsCopyAssignable<Type>:
 template <typename Type> struct IsMoveAssignable : impl::IsMoveAssignable<Type>::Type {};
 template <typename Type, typename... Arguments> struct IsConstructible :
     impl::IsConstructible<Type, Arguments...>::Type {};
+template <typename Type> struct IsDestructible : impl::IsDestructible<Type>::Type {};
 
 template <typename Type> struct IsNoexceptDefaultConstructible : impl::IsNoexceptDefaultConstructible<Type>::Type {};
 template <typename Type> struct IsNoexceptCopyConstructible : impl::IsNoexceptCopyConstructible<Type>::Type {};

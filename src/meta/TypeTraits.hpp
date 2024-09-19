@@ -240,6 +240,9 @@ template <typename Type> struct IsConstVolatile : impl::IsConstVolatile<Type>::T
 
 template <typename From, typename To> struct IsConvertible : impl::IsConvertible<From, To>::Type {};
 
+template <typename Left, typename Right> struct IsSameIgnoringCVRef :
+    impl::IsSame<RemoveCVRef<Left>, RemoveCVRef<Right>>::Type {};
+
 template <typename T> using SignedEquivalent = typename impl::SignedEquivalent<T>::Type;
 template <typename T> using UnsignedEquivalent = typename impl::UnsignedEquivalent<T>::Type;
 

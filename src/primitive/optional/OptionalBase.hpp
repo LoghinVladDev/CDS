@@ -68,7 +68,20 @@ template <typename T> struct OptionalStorageBase<T, True> {
       _object(cds::forward<A1>(_1), cds::forward<A2>(_2), cds::forward<An>(n)...), _exists{true} {}
 
   CDS_ATTR(constexpr(14)) auto reset() noexcept -> void {
-    _exists = false;
+    if (_exists) {
+      destruct(&_object);
+      _exists = false;
+    }
+  }
+
+  template <typename... A> CDS_ATTR(constexpr(14)) auto emplace(A&&... args)
+      CDS_ATTR(noexcept(noexcept(T(std::forward<A>(args)...)))) -> T& {
+    if (_exists) {
+      destruct(&_object);
+    } else {
+      _exists = true;
+    }
+    construct(&_object, cds::forward<A>(args)...);
   }
 
   ~OptionalStorageBase() noexcept = default;
@@ -98,15 +111,25 @@ template <typename T> struct OptionalStorageBase<T, False> {
 
   CDS_ATTR(constexpr(20)) ~OptionalStorageBase() noexcept {
     if (_exists) {
-      _object.~T();
+      destruct(&_object);
     }
   }
 
   CDS_ATTR(constexpr(14)) auto reset() noexcept -> void {
     if (_exists) {
-      _object.~T();
+      destruct(&_object);
       _exists = false;
     }
+  }
+
+  template <typename... A> CDS_ATTR(constexpr(14)) auto emplace(A&&... args)
+      CDS_ATTR(noexcept(noexcept(T(std::forward<A>(args)...)))) -> T& {
+    if (_exists) {
+      destruct(&_object);
+    } else {
+      _exists = true;
+    }
+    construct(&_object, cds::forward<A>(args)...);
   }
 
   union {

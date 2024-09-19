@@ -69,6 +69,7 @@ template <cds::Size idx, typename T> constexpr auto get(T const& tuple) noexcept
 
 TEST(TupleTest, constexprCpp11) {
   static_assert(cxx11::get<0>(Tuple<int, long>{1, 3L}) == 1, "constexpr11 construct&get failed");
+  static_assert(cxx11::get<0>(Tuple<int, long>{1, 3L}) == 1, "constexpr11 construct&get failed");
   static_assert(cxx11::get<1>(Tuple<int, long>{1, 3L}) == 3L, "constexpr11 construct&get failed");
   static_assert(Tuple<int, long>{1, 3L} == Tuple<int, long>{1, 3L}, "constexpr11 construct&op== failed");
   static_assert(Tuple<int, long>{1, 3L} != Tuple<int, long>{2, 3L}, "constexpr11 construct&op!= failed");
@@ -118,6 +119,6 @@ TEST(TupleTest, TupleNodeUnpackBindings) {
 
 #if DCR_SINCECPP20
 TEST(TupleTest, constexprCpp20) {
-  // static_assert(cds::makeTuple(1, "abcd").toString() == "(1, abcd)", "constexpr20 toString failed");
+  static_assert(cds::makeTuple(1, "abcd").toString() == "(1, abcd)", "constexpr20 toString failed");
 }
 #endif // DCR_SINCECPP20
