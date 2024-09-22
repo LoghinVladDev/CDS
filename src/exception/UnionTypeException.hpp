@@ -28,6 +28,10 @@ public:
         + "'";
     return UnionTypeException {cds::move(str)};
   }
+
+  static auto valuelessVisit() noexcept -> UnionTypeException {
+    return UnionTypeException {"Attempted to visit valueless union"};
+  }
 };
 } // namespace cds
 

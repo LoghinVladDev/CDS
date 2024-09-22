@@ -2,6 +2,10 @@
 #define CDS_PRIMITIVE_UNION_NODE_HPP
 #pragma once
 
+//
+// deprecated
+//
+
 #include <cds/exception/UnionTypeException>
 #include "UnionNodeV2.hpp"
 

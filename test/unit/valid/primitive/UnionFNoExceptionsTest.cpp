@@ -18,10 +18,10 @@ using cds::Union;
 
 TEST(UnionTest, constructionCheckActive) {
   Union<int, String> const a1;
-  ASSERT_EQ(a1.index(), 0u);
+  ASSERT_TRUE(a1.valueless());
 
   Union<String, int> const a2;
-  ASSERT_EQ(a2.index(), 0u);
+  ASSERT_TRUE(a2.valueless());
 
   Union<int, String> const a3 = 3;
   ASSERT_EQ(a3.index(), 0u);
@@ -48,7 +48,7 @@ TEST(UnionTest, get) {
 
 TEST(UnionTest, getMutate) {
   using cds::impl::get;
-  Union<int, String> a1;
+  Union<int, String> a1 {cds::InPlaceIndex<0>{}};
   a1.get<int>() = 5;
   ASSERT_EQ(get<int>(a1), 5);
   get<int>(a1) = 7;
@@ -188,7 +188,7 @@ TEST(UnionTest, assignThrowResultsInValueless) {
 
   struct Y {};
 
-  Union<X, Y> u1;
+  Union<X, Y> u1 {cds::InPlaceIndex<0>{}};
   ASSERT_FALSE(u1.valueless());
   u1 = X{};
   ASSERT_FALSE(u1.valueless());
@@ -265,7 +265,7 @@ TEST(UnionTest, copyAssignThrowCreatesValueless) {
 
   struct Y{};
 
-  Union <X, Y> u1;
+  Union <X, Y> u1 {cds::InPlaceIndex<0>{}};
   ASSERT_FALSE(u1.valueless());
 }
 
@@ -295,7 +295,7 @@ TEST(UnionTest, moveAssignThrowCreatesValueless) {
 
   struct Y{};
 
-  Union <X, Y> u1;
+  Union <X, Y> u1 {cds::InPlaceIndex<0>{}};
   ASSERT_FALSE(u1.valueless());
 }
 

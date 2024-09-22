@@ -6,20 +6,22 @@
 #define CDS_PRIMITIVE_UNION_HPP
 #pragma once
 
-#include "union/UnionNode.hpp"
-
-CDS_ATTR(disable_warning(gcc, "-Wterminate"))
-CDS_ATTR(disable_warning(msvc, 4297))
+#include "union/UnionNodeV2.hpp"
 
 namespace cds {
 namespace impl {
-using meta::inConstexpr;
-using meta::lvalue;
+using meta::IsSame;
+using meta::IsSameIgnoringCVRef;
+using meta::Not;
 
-template <typename... Types> class Union : private UnionStorageBase<Pack<Types...>> {
-  using Base = UnionStorageBase<Pack<Types...>>;
-  using Base::_idx;
-  using Base::_data;
+using meta::impl::Pack;
+
+using unionImpl::UnionVisitationBase;
+using unionImpl::UnionBestMatchType;
+
+template <typename... Types> class Union : private UnionVisitationBase<Pack<Types...>> {
+  using Base = UnionVisitationBase<Pack<Types...>>;
+  using Base::assign;
 
 public:
   using Base::Base;
@@ -29,76 +31,79 @@ public:
   Union(Union&&) = default;
   auto operator=(Union const&) -> Union& = default;
   auto operator=(Union&&) -> Union& = default;
-  using Base::valueless;
+
   using Base::emplace;
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto index() const noexcept -> Size {
-    return _idx;
-  }
+  using Base::ifIs;
+  using Base::visit;
 
-  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto is() const noexcept -> bool {
-    return _idx == IndexOfBestMatch<T, Types...>::Type::value;
-  }
+  using Base::get;
+  using Base::index;
+  using Base::valueless;
+  using Base::is;
 
-  template <typename T, typename C> CDS_ATTR(constexpr(14)) auto ifIs(C&& callable) const CDS_ATTR(noexcept(noexcept(
-      functional::invoke(
-          cds::forward<C>(callable), lvalue<typename UnionBestMatch<T, Types...>::Type const&>()
-      )
-  ))) -> void /* Consider Optional<meta::InvokeReturnOf<C, typename impl::UnionBestMatch<T, Types...>::Type const&>>*/ {
-    if (is<T>()) {
-      functional::invoke(cds::forward<C>(callable), get<T>());
-    }
-  }
-
-  template <typename T, typename C> CDS_ATTR(constexpr(14)) auto ifIs(C&& callable) CDS_ATTR(noexcept(noexcept(
-      functional::invoke(
-          cds::forward<C>(callable), lvalue<typename UnionBestMatch<T, Types...>::Type&>()
-      )
-  ))) -> void /* Consider Optional<meta::InvokeReturnOf<C, typename impl::UnionBestMatch<T, Types...>::Type const&>>*/ {
-    if (is<T>()) {
-      functional::invoke(cds::forward<C>(callable), get<T>());
-    }
-  }
-
-  template <typename T> CDS_ATTR(2(nodiscard, constexpr(14))) auto get() const CDS_ATTR(noexcept(false))
-      -> typename UnionBestMatch<T, Types...>::Type const& {
-    if (!inConstexpr() && IndexOfBestMatch<T, Types...>::Type::value != _idx) {
-      _data.template raise<T>(_idx);
-    }
-    return unionGet<typename UnionBestMatch<T, Types...>::Type>(_data);
-  }
-
-  template <typename T> CDS_ATTR(2(nodiscard, constexpr(14))) auto get() CDS_ATTR(noexcept(false))
-      -> typename UnionBestMatch<T, Types...>::Type& {
-    if (!inConstexpr() && IndexOfBestMatch<T, Types...>::Type::value != _idx) {
-      _data.template raise<T>(_idx);
-    }
-    return unionGet<typename UnionBestMatch<T, Types...>::Type>(_data);
+  template <typename A, EnableIf<Not<IsSameIgnoringCVRef<A, Union>>> = 0>
+  CDS_ATTR(constexpr(14)) auto operator=(A&& arg)
+      CDS_ATTR(noexcept(noexcept(assign(cds::forward<A>(arg))))) -> Union& {
+    assign(cds::forward<A>(arg));
+    return *this;
   }
 };
 
 template <typename T, typename... Ts> CDS_ATTR(2(nodiscard, constexpr(11))) auto get(Union<Ts...> const& u)
-    CDS_ATTR(noexcept(false)) -> typename UnionBestMatch<T, Ts...>::Type const& {
+    CDS_ATTR(noexcept(false)) -> UnionBestMatchType<IsSame, T, Ts...> const& {
   return u.template get<T>();
 }
 
 template <typename T, typename... Ts> CDS_ATTR(2(nodiscard, constexpr(14))) auto get(Union<Ts...>& u)
-    CDS_ATTR(noexcept(false)) -> typename UnionBestMatch<T, Ts...>::Type& {
+    CDS_ATTR(noexcept(false)) -> UnionBestMatchType<IsSame, T, Ts...>& {
   return u.template get<T>();
 }
 
 template <typename T, typename... Ts> CDS_ATTR(2(nodiscard, constexpr(14))) auto get(Union<Ts...>&& u)
-    CDS_ATTR(noexcept(false)) -> typename UnionBestMatch<T, Ts...>::Type&& {
+    CDS_ATTR(noexcept(false)) -> UnionBestMatchType<IsSame, T, Ts...>&& {
   return std::move(u.template get<T>());
 }
 } // namespace impl
-} // namespace cds
 
-namespace cds {
+namespace meta {
+namespace impl {
+template <typename...> struct UnionVisitorComposite;
+template <typename Visitor> struct UnionVisitorComposite<Visitor> : Visitor {
+  using Visitor::operator();
+
+  template <typename V> CDS_ATTR(2(explicit, constexpr(11))) UnionVisitorComposite(V&& visitor)
+      CDS_ATTR(noexcept(IsNoexceptConstructible<Visitor, V>::value)) : Visitor{cds::forward<V>(visitor)} {}
+};
+
+template <typename Visitor, typename... TailVisitors> struct UnionVisitorComposite<Visitor, TailVisitors...> :
+    UnionVisitorComposite<TailVisitors...>, Visitor {
+  using UnionVisitorComposite<TailVisitors...>::operator();
+  using Visitor::operator();
+
+  template <typename V, typename... TailVs> CDS_ATTR(2(explicit, constexpr(11)))
+  UnionVisitorComposite(V&& visitor, TailVs&&... tailVisitors)
+  CDS_ATTR(noexcept(And<
+      IsNoexceptConstructible<Visitor, V>,
+      IsNoexceptConstructible<UnionVisitorComposite<TailVisitors...>, TailVs...>
+  >::value)) :
+      UnionVisitorComposite<TailVisitors...>{cds::forward<TailVs>(tailVisitors)...}, Visitor{cds::forward<V>(visitor)} {
+
+  }
+};
+
+template <typename... Visitors> CDS_ATTR(2(nodiscard, constexpr(11))) auto visitors(
+    Visitors&&... visitors
+) CDS_ATTR(noexcept(noexcept(UnionVisitorComposite<Visitors...>{cds::forward<Visitors>(visitors)...})))
+    -> UnionVisitorComposite<Visitors...> {
+  return UnionVisitorComposite<Visitors...> {cds::forward<Visitors>(visitors)...};
+}
+} // namespace impl
+
+using impl::visitors;
+} // namespace meta
 using impl::Union;
+using impl::unionImpl::InPlaceIndex;
 } // namespace cds
-
-CDS_ATTR(enable_warning(gcc, "-Wterminate"))
-CDS_ATTR(enable_warning(msvc, 4297))
 
 #endif // #ifndef CDS_PRIMITIVE_UNION_HPP

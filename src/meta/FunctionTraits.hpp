@@ -151,11 +151,14 @@ template <typename Fn> struct FunctionRValue<Fn, meta::False> {
   using Type = Fn;
 };
 
-template <typename, typename = void> struct InvokeTraits : meta::False {};
+template <typename, typename = void> struct InvokeTraits : meta::False {
+  using Noexcept = False;
+};
 
 template <typename Fn, typename... Args>
 struct InvokeTraits<Pack<Fn, Args...>, Void<decltype(Invoke<Fn>::call(rvalue<Fn>(), rvalue<Args>()...))>> : meta::True {
   using ReturnType = decltype(Invoke<Fn>::call(rvalue<Fn>(), meta::rvalue<Args>()...));
+  using Noexcept = Bool<noexcept(Invoke<Fn>::call(rvalue<Fn>(), meta::rvalue<Args>()...))>;
 };
 } // namespace impl
 template <typename Signature> struct FunctionTraits : impl::FunctionTraits<Decay<Signature>> {};
@@ -164,6 +167,9 @@ template <typename Fn, typename... Args> using InvokeReturnOf =
     typename impl::InvokeTraits<impl::Pack<Fn, Args...>>::ReturnType;
 
 template <typename Fn, typename... Args> using IsInvocable =
+    typename impl::InvokeTraits<impl::Pack<Fn, Args...>>::Type;
+
+template <typename Fn, typename... Args> using IsNoexceptInvocable =
     typename impl::InvokeTraits<impl::Pack<Fn, Args...>>::Type;
 
 template <typename Signature> using ReturnOf = typename FunctionTraits<Signature>::Return;

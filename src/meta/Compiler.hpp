@@ -80,7 +80,7 @@
 #define CDS_ATTR_exceptions true
 #define CDS_ATTR_try try
 #define CDS_ATTR_try_list(...) try : __VA_ARGS__
-#define CDS_ATTR_catch(except, code) catch(except) code
+#define CDS_ATTR_catch(except, ...) catch(except) __VA_ARGS__
 #define CDS_ATTR_throw(...) throw __VA_ARGS__
 #endif // #ifdef CDS_OPTION_DISABLE_EXCEPTIONS #else
 

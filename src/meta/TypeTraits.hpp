@@ -154,6 +154,19 @@ struct CommonHelper {
   template <typename T, typename V> static auto firstTest(...) noexcept -> decltype(CommonHelper::secondTest<T, V>(0));
 };
 
+struct NonDecayCommonHelper {
+  template <typename T> struct Success { using Type = T; };
+  struct Failure {};
+
+  template <typename T, typename V, bool _ = true> using CommonByConditional
+      = decltype(_ ? meta::value<T>() : meta::value<V>());
+
+  template <typename T, typename V> static auto test(int) noexcept
+      -> Success<CommonByConditional<T, V>>;
+
+  template <typename T, typename V> static auto test(...) noexcept -> Failure;
+};
+
 template <typename T, typename V, typename DT = typename Decay<T>::Type, typename DV = typename Decay<V>::Type>
 struct CommonDecayed { using Type = Common<DT, DV>; };
 
@@ -169,6 +182,27 @@ template <typename C, typename R> struct Fold<C, R, void> {};
 
 template <typename T, typename V> struct Common<T, V> : CommonDecayed<T, V>::Type {};
 template <typename T, typename V, typename... R> struct Common<T, V, R...> : Fold<Common<T, V>, Pack<R...>> {};
+
+template <typename... Ts> struct NonDecayedCommon;
+
+template <typename T> struct NonDecayedCommon<T> {
+  using Type = T;
+};
+
+template <typename T> struct NonDecayedCommon<T, T> {
+  using Type = T;
+};
+
+template <typename T, typename V> struct NonDecayedCommon<T, V> {
+  using Type = typename decltype(NonDecayCommonHelper::test<T, V>(0))::Type;
+};
+
+template <typename, typename, typename = void> struct NonDecayedFold {};
+template <typename C, typename... R> struct NonDecayedFold<C, Pack<R...>, Void<typename C::Type>> :
+    NonDecayedCommon<typename C::Type, R...> {};
+
+template <typename T, typename V, typename... R> struct NonDecayedCommon<T, V, R...> :
+    NonDecayedFold<NonDecayedCommon<T, V>, Pack<R...>> {};
 
 template <typename T> struct SignedEquivalent {};
 template <> struct SignedEquivalent<char> { using Type = signed char; };

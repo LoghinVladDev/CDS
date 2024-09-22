@@ -57,9 +57,13 @@ template <typename T> struct IsNoexceptDefaultConstructible<T, meta::True> : Boo
 template <typename T> struct IsNoexceptCopyConstructible<T, meta::True> : Bool<noexcept(T(meta::lvalue<T const>()))> {};
 template <typename T> struct IsNoexceptMoveConstructible<T, meta::True> : Bool<noexcept(T(meta::rvalue<T>()))> {};
 
-template <typename T, typename = T, typename = T&, typename = void> struct IsAssignable : meta::False {};
+template <typename T, typename = T, typename = void> struct IsAssignable : meta::False {};
+template <typename T, typename P>
+struct IsAssignable<T, P, Void<decltype(meta::lvalue<T>() = meta::rvalue<P>())>> : meta::True {};
+
+template <typename T, typename = T, typename = T&, typename = void> struct IsAssignableAndReturns : meta::False {};
 template <typename T, typename P, typename R>
-struct IsAssignable<T, P, R, Void<decltype(meta::lvalue<T>() = meta::rvalue<P>())>> :
+struct IsAssignableAndReturns<T, P, R, Void<decltype(meta::lvalue<T>() = meta::rvalue<P>())>> :
     meta::IsSame<decltype(meta::lvalue<T>() = meta::rvalue<P>()), R>::Type {};
 
 template <typename T> struct IsCopyAssignable : ConvertIntegral<std::is_copy_assignable<T>> {};
@@ -79,11 +83,18 @@ template <typename T> struct IsNoexceptCopyAssignable<T, meta::True>
 template <typename T> struct IsNoexceptMoveAssignable<T, meta::True>
     : Bool<noexcept(meta::lvalue<T>() = meta::rvalue<T>())> {};
 
-template <typename T, typename A, typename R, typename = typename IsAssignable<T, A, R>::Type>
+template <typename T, typename A, typename = typename IsAssignable<T, A>::Type>
 struct IsNoexceptAssignable {};
 
-template <typename T, typename A, typename R> struct IsNoexceptAssignable<T, A, R, False> : meta::False {};
-template <typename T, typename A, typename R> struct IsNoexceptAssignable<T, A, R, True> :
+template <typename T, typename A> struct IsNoexceptAssignable<T, A, False> : meta::False {};
+template <typename T, typename A> struct IsNoexceptAssignable<T, A, True>
+    : Bool<noexcept(lvalue<T>() = meta::rvalue<A>())> {};
+
+template <typename T, typename A, typename R, typename = typename IsAssignableAndReturns<T, A, R>::Type>
+struct IsNoexceptAssignableAndReturns {};
+
+template <typename T, typename A, typename R> struct IsNoexceptAssignableAndReturns<T, A, R, False> : meta::False {};
+template <typename T, typename A, typename R> struct IsNoexceptAssignableAndReturns<T, A, R, True> :
     Bool<noexcept(lvalue<T>() = meta::rvalue<A>())> {};
 
 template <typename T, typename = T, typename = void> struct IsAddCompatible : meta::False {};
@@ -295,11 +306,17 @@ template <typename Type> struct IsNoexceptMoveAssignable : impl::IsNoexceptMoveA
 template <typename Type, typename... Arguments> struct IsNoexceptConstructible :
     impl::IsNoexceptConstructible<Type, Arguments...>::Type {};
 
-template <typename Type, typename Param = Type, typename Return = Type&> struct IsAssignable :
-    impl::IsAssignable<Type, Param, Return>::Type {};
+template <typename Type, typename Param = Type, typename Return = void> struct IsAssignable :
+    impl::IsAssignableAndReturns<Type, Param, Return>::Type {};
 
-template <typename Type, typename Param = Type, typename Return = Type&> struct IsNoexceptAssignable :
-    impl::IsNoexceptAssignable<Type, Param, Return>::Type {};
+template <typename Type, typename Param> struct IsAssignable<Type, Param, void> :
+    impl::IsAssignable<Type, Param>::Type {};
+
+template <typename Type, typename Param = Type, typename Return = void> struct IsNoexceptAssignable :
+    impl::IsNoexceptAssignableAndReturns<Type, Param, Return>::Type {};
+
+template <typename Type, typename Param> struct IsNoexceptAssignable<Type, Param, void> :
+    impl::IsNoexceptAssignable<Type, Param>::Type {};
 
 template <typename Type, typename With = Type> struct IsAddCompatible : impl::IsAddCompatible<Type, With>::Type {};
 template <typename Type, typename With = Type> struct IsSubCompatible : impl::IsSubCompatible<Type, With>::Type {};
