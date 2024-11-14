@@ -81,7 +81,7 @@ template <typename T> struct OptionalStorageBase<T, True> {
     } else {
       _exists = true;
     }
-    construct(&_object, cds::forward<A>(args)...);
+    return *construct(&_object, cds::forward<A>(args)...);
   }
 
   ~OptionalStorageBase() noexcept = default;

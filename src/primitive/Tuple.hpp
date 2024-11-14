@@ -75,6 +75,16 @@ template <Size idx, typename... Types> CDS_ATTR(2(nodiscard, constexpr(14))) aut
   return cds::move(tuple).template get<idx>();
 }
 
+template <typename... Types> CDS_ATTR(2(nodiscard, constexpr(14))) auto tie(Types&... args) noexcept
+    -> Tuple<Types&...> {
+  return Tuple<Types&...>(args...);
+}
+
+template <typename... Types> CDS_ATTR(2(nodiscard, constexpr(14))) auto forwardAsTuple(Types&&... args) noexcept
+    -> Tuple<Types&&...> {
+  return Tuple<Types&&...>{fwd<Types>(args)...};
+}
+
 namespace decayedTuple {
 using meta::impl::Pack;
 using meta::impl::PackPop;
@@ -105,6 +115,10 @@ public:
     return impl::inlayHints::Tuple<Types...>{cds::forward<Types>(values)...};
   }
 };
+
+using impl::get;
+using impl::tie;
+using impl::forwardAsTuple;
 } // namespace cds
 
 namespace std {

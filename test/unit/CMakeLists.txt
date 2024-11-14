@@ -89,6 +89,9 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/bindings/FindOfStaticBinding.cpp
       valid/bindings/GenericLoopBinding.cpp)
 
+  set(CDS_COLLECTION_UNIT_TEST_SOURCES
+      valid/collection/Vector.cpp)
+
   set(CDS_DATA_STRUCTURES_UNIT_TEST_SOURCES
       valid/ds/SingleLinkedListBase.cpp
       valid/ds/HashTableBase.cpp)
@@ -166,6 +169,7 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(CDS_DEFAULT_UNIT_TEST_SOURCES
       ${CDS_ALGORITHM_UNIT_TEST_SOURCES}
       ${CDS_BINDINGS_UNIT_TEST_SOURCES}
+      ${CDS_COLLECTION_UNIT_TEST_SOURCES}
       ${CDS_DATA_STRUCTURES_UNIT_TEST_SOURCES}
       ${CDS_EXCEPTION_UNIT_TEST_SOURCES}
       ${CDS_FUNCTIONAL_UNIT_TEST_SOURCES}

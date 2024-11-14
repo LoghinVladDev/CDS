@@ -34,10 +34,14 @@ TEST(MetaIteratorTraits, IsInputIterator) {
   static_assert(IsInputIterator<A>::value, "Failed IsInputIterator");
   static_assert(IsInputIterator<A_DerefNc>::value, "Failed IsInputIterator");
   static_assert(!IsInputIterator<A_MissingInc>::value, "Failed IsInputIterator");
-  static_assert(!IsInputIterator<A_MissingComp>::value, "Failed IsInputIterator");
+  // Invalidated, InputItertor can be unbounded
+  // static_assert(!IsInputIterator<A_MissingComp>::value, "Failed IsInputIterator");
+  static_assert(IsInputIterator<A_MissingComp>::value, "Failed IsInputIterator");
   static_assert(!IsInputIterator<A_MissingInd>::value, "Failed IsInputIterator");
   static_assert(!IsInputIterator<A_InvalidInc>::value, "Failed IsInputIterator");
-  static_assert(!IsInputIterator<A_InvalidComp>::value, "Failed IsInputIterator");
+  // Invalidated, InputItertor can be unbounded
+  // static_assert(!IsInputIterator<A_InvalidComp>::value, "Failed IsInputIterator");
+  static_assert(IsInputIterator<A_InvalidComp>::value, "Failed IsInputIterator");
 }
 
 TEST(MetaIteratorTraits, IsOutputIterator) {

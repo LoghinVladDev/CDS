@@ -405,6 +405,7 @@ using CurrentStd = StdCpp11;
 // compiler & platform specific
 #ifdef _MSC_VER
 #define CDS_ATTR_inheritsEBOs __declspec(empty_bases)
+#define CDS_ATTR_ebo __declspec(empty_bases)
 #define CDS_ATTR_ld_size 64
 
 // msvc::no_unique_address
@@ -426,6 +427,7 @@ struct CurrentCompiler {
 };
 #else // #ifdef _MSC_VER
 #define CDS_ATTR_inheritsEBOs
+#define CDS_ATTR_ebo
 #endif // #ifdef _MSC_VER #else
 
 #if defined(__clang__)

@@ -9,11 +9,8 @@
 #include <cds/exception/Exception>
 #include "../primitive/string/StringBase.hpp"
 
-namespace cds {
+namespace cds::impl::except {
 class RuntimeException : public Exception {
-  using String = impl::BaseString<char>;
-  using StringView = impl::BaseStringView<char>;
-
 public:
   using Exception::Exception;
 
@@ -33,6 +30,10 @@ public:
 private:
   String const _message;
 };
+} // namespace cds::impl::except
+
+namespace cds {
+using impl::except::RuntimeException;
 } // namespace cds
 
 #endif // #ifndef CDS_RUNTIME_EXCEPTION_HPP

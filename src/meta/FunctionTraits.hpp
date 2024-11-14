@@ -105,43 +105,69 @@ template <typename R, typename C, typename... A> struct FunctionTraits<auto(C::*
 template <typename F, typename = typename IsMember<RemoveCVRef<F>>::Type, typename = void> struct Invoke {};
 
 template <typename T> struct Invoke<T, False> {
-    template <typename F, typename... A>
-    CDS_ATTR(constexpr(11)) static auto call(F&& f, A&&... a) CDS_ATTR(noexcept(
-        noexcept(cds::forward<F>(f)(cds::forward<A>(a)...))
-    )) -> decltype(cds::forward<F>(f)(cds::forward<A>(a)...)) {
-        return cds::forward<F>(f)(cds::forward<A>(a)...);
-    }
+  template <typename F, typename... A>
+  CDS_ATTR(constexpr(11)) static auto call(F&& f, A&&... a) CDS_ATTR(noexcept(
+      noexcept(cds::forward<F>(f)(cds::forward<A>(a)...))
+  )) -> decltype(cds::forward<F>(f)(cds::forward<A>(a)...)) {
+    return cds::forward<F>(f)(cds::forward<A>(a)...);
+  }
 };
 
-template <typename T, typename = typename IsPointer<RemoveCVRef<T>>::Type> struct MemberInvoke {};
+template <
+    typename F,
+    typename T,
+    typename = typename IsPointer<RemoveCVRef<T>>::Type,
+    typename = typename IsFunction<typename Member<F>::Type>::Type
+> struct MemberInvoke {};
 
-template <typename T> struct MemberInvoke<T, False> {
-    template <typename F, typename O, typename... A>
-    CDS_ATTR(constexpr(11)) static auto call(F&& f, O&& obj, A&&... a) CDS_ATTR(noexcept(
-        noexcept((cds::forward<O>(obj).*cds::forward<F>(f))(cds::forward<A>(a)...))
-    )) -> decltype((cds::forward<O>(obj).*cds::forward<F>(f))(cds::forward<A>(a)...)) {
-        return (cds::forward<O>(obj).*cds::forward<F>(f))(cds::forward<A>(a)...);
-    }
+template <typename F, typename T> struct MemberInvoke<F, T, False, True> {
+  template <typename F0, typename O, typename... A>
+  CDS_ATTR(constexpr(11)) static auto call(F0&& f, O&& obj, A&&... a) CDS_ATTR(noexcept(
+      noexcept((cds::forward<O>(obj).*cds::forward<F0>(f))(cds::forward<A>(a)...))
+  )) -> decltype((cds::forward<O>(obj).*cds::forward<F0>(f))(cds::forward<A>(a)...)) {
+    return (cds::forward<O>(obj).*cds::forward<F0>(f))(cds::forward<A>(a)...);
+  }
 };
 
-template <typename T> struct MemberInvoke<T, True> {
-    template <typename F, typename O, typename... A>
-    CDS_ATTR(constexpr(11)) static auto call(F&& f, O&& obj, A&&... a) CDS_ATTR(noexcept(
-        noexcept((cds::forward<O>(obj)->*cds::forward<F>(f))(cds::forward<A>(a)...))
-    )) -> decltype((cds::forward<O>(obj)->*cds::forward<F>(f))(cds::forward<A>(a)...)) {
-        return (cds::forward<O>(obj)->*cds::forward<F>(f))(cds::forward<A>(a)...);
-    }
+template <typename F, typename T> struct MemberInvoke<F, T, True, True> {
+  template <typename F0, typename O, typename... A>
+  CDS_ATTR(constexpr(11)) static auto call(F0&& f, O&& obj, A&&... a) CDS_ATTR(noexcept(
+      noexcept((cds::forward<O>(obj)->*cds::forward<F0>(f))(cds::forward<A>(a)...))
+  )) -> decltype((cds::forward<O>(obj)->*cds::forward<F0>(f))(cds::forward<A>(a)...)) {
+    return (cds::forward<O>(obj)->*cds::forward<F0>(f))(cds::forward<A>(a)...);
+  }
+};
+
+template <typename F, typename T> struct MemberInvoke<F, T, False, False> {
+  template <typename F0, typename O>
+  CDS_ATTR(constexpr(11)) static auto call(F0&& f, O&& obj) CDS_ATTR(noexcept(
+      noexcept(cds::forward<O>(obj).*cds::forward<F0>(f))
+  )) -> decltype(cds::forward<O>(obj).*cds::forward<F0>(f)) {
+    return cds::forward<O>(obj).*cds::forward<F0>(f);
+  }
+};
+
+template <typename F, typename T> struct MemberInvoke<F, T, True, False> {
+  template <typename F0, typename O>
+  CDS_ATTR(constexpr(11)) static auto call(F0&& f, O&& obj) CDS_ATTR(noexcept(
+      noexcept(cds::forward<O>(obj)->*cds::forward<F0>(f))
+  )) -> decltype(cds::forward<O>(obj)->*cds::forward<F0>(f)) {
+    return cds::forward<O>(obj)->*cds::forward<F0>(f);
+  }
 };
 
 template <typename T> struct Invoke<T, True> {
-    template <typename F, typename O, typename... A>
-    CDS_ATTR(constexpr(11)) static auto call(F&& f, O&& obj, A&&... a) CDS_ATTR(noexcept(
-        noexcept(MemberInvoke<O>::call(cds::forward<F>(f), cds::forward<O>(obj), cds::forward<A>(a)...))
-    )) -> decltype(MemberInvoke<O>::call(cds::forward<F>(f), cds::forward<O>(obj), cds::forward<A>(a)...)) {
-        return MemberInvoke<O>::call(cds::forward<F>(f), cds::forward<O>(obj), cds::forward<A>(a)...);
-    }
+  template <typename F, typename O, typename... A>
+  CDS_ATTR(constexpr(11)) static auto call(F&& f, O&& obj, A&&... a) CDS_ATTR(noexcept(
+      noexcept(MemberInvoke<RemoveCVRef<F>, O>::call(cds::forward<F>(f), cds::forward<O>(obj), cds::forward<A>(a)...))
+  )) -> decltype(
+      MemberInvoke<RemoveCVRef<F>, O>::call(cds::forward<F>(f), cds::forward<O>(obj), cds::forward<A>(a)...)
+  ) {
+    return MemberInvoke<RemoveCVRef<F>, O>::call(cds::forward<F>(f), cds::forward<O>(obj), cds::forward<A>(a)...);
+  }
 };
 
+// TODO: Remove?
 template <typename Fn, typename = typename meta::IsMember<RemoveCVRef<Fn>>::Type> struct FunctionRValue {};
 template <typename Fn> struct FunctionRValue<Fn, meta::True> {
   using Type = meta::Member<Fn>;

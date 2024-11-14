@@ -56,6 +56,12 @@ public:
     return *static_cast<meta::AllocatorFor<T, Allocs...>*>(this);
   }
 };
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto addressOf(T& object) noexcept -> T* {
+  return std::addressof(object);
+}
+
+template <typename T> auto addressOf(T const&&) -> T const* = delete;
 } // namespace cds
 
 #endif // CDS_MEMORY_ALLOCATOR_HPP

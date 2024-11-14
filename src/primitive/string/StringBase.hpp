@@ -139,19 +139,19 @@ template <typename C, typename U, typename A> using Self = BaseString<C, U, A>;
 template <typename C, typename U, typename A> using Traits = IterableTraits<Self<C, U, A>>;
 
 using ContainsOpt = With<Value, Projector>;
-template <typename C, typename U, typename A> struct ContainsOf :
+template <typename C, typename U, typename A> struct CDS_ATTR(inheritsEBOs) ContainsOf :
     ContainsOfStaticBinding<Self<C, U, A>, ContainsOpt> {};
 
 using FindOpt = With<Value, Projector, Immutable, Mutable>;
-template <typename C, typename U, typename A> struct FindTr :
+template <typename C, typename U, typename A> struct CDS_ATTR(inheritsEBOs) FindTr :
     FindStringTransformer<C, U, A> {};
-template <typename C, typename U, typename A> struct Find :
+template <typename C, typename U, typename A> struct CDS_ATTR(inheritsEBOs) Find :
     FindStaticBinding<Self<C, U, A>, FindOpt, FindTr<C, U, A>, FindTr<C, U, A>> {};
-template <typename C, typename U, typename A> struct FindOf :
+template <typename C, typename U, typename A> struct CDS_ATTR(inheritsEBOs) FindOf :
     FindOfStaticBinding<Self<C, U, A>, FindOpt, FindTr<C, U, A>, FindTr<C, U, A>> {};
 
 using LoopOpt = With<Immutable, Mutable>;
-template <typename C, typename U, typename A> struct GenericLoop :
+template <typename C, typename U, typename A> struct CDS_ATTR(inheritsEBOs) GenericLoop :
     GenericLoopBinding<Self<C, U, A>, LoopOpt> {};
 } // namespace bindingsBS
 

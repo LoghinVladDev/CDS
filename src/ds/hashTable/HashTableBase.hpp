@@ -41,11 +41,6 @@ public:
   using Iterator = HashTableIterator<T>;
   using ConstIterator = HashTableIterator<T const>;
 
-  struct UninitializedGetResult {
-    Type* data;
-    bool alive;
-  };
-
   CDS_ATTR(2(explicit, constexpr(11))) HashTableBase(AllocSet const& alloc = AllocSet())
       CDS_ATTR(noexcept(noexcept(HashTableBase(H(), RP(), alloc)))) : HashTableBase(H(), RP(), alloc) {}
 

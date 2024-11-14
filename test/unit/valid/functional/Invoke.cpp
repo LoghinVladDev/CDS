@@ -71,6 +71,8 @@ TEST(Invoke, memFn) {
     int z;
   };
 
+//  std::is_function<decltype(&X::f)>::
+//  cds::meta::impl::MemberInvoke<decltype(&X::f), X&&>::call(&X::f, X{5}, 5);
   ASSERT_EQ(invoke(&X::f, X{5}), 5);
   ASSERT_EQ(invoke(&X::g, X{1}, 2, 3), 6);
 

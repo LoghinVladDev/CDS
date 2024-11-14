@@ -9,9 +9,11 @@
 #include <exception>
 #include "../primitive/string/StringViewBase.hpp"
 
-namespace cds {
+namespace cds::impl::except {
+using String = BaseString<char>;
+using StringView = BaseStringView<char>;
+
 class Exception : public std::exception {
-  using StringView = impl::BaseStringView<char>;
 public:
   using std::exception::exception;
 
@@ -27,6 +29,10 @@ protected:
     return message().data();
   }
 };
+} // namespace cds::impl::except
+
+namespace cds {
+using impl::except::Exception;
 } // namespace cds
 
 #endif // #ifndef CDS_EXCEPTION_HPP

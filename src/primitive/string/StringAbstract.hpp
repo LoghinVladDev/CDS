@@ -27,6 +27,8 @@ template <typename C, Size s> struct Array {
   template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) static auto data(T&& data) noexcept -> C const* {
     return cds::forward<T>(data);
   }
+
+  using Char = C;
 };
 
 template <typename C> struct Pointer {
@@ -43,6 +45,8 @@ template <typename C> struct Pointer {
   CDS_ATTR(2(nodiscard, constexpr(14))) static auto data(C* ptr) noexcept -> C* {
     return ptr;
   }
+
+  using Char = C;
 };
 
 template <typename C> struct StringView {
@@ -53,6 +57,8 @@ template <typename C> struct StringView {
   template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) static auto data(T&& sv) noexcept -> C const* {
     return cds::forward<T>(sv).data();
   }
+
+  using Char = C;
 };
 } // namespace stringAbstractDetail
 

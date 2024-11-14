@@ -260,6 +260,24 @@ template <typename B, typename D> struct IsBaseOf : meta::And<
     typename meta::IsConvertible<D*, B*>::Type
 > {};
 
+namespace intrusiveBaseOf {
+template <typename B> auto intrusiveBaseCast(B const volatile*) -> True;
+template <typename> auto intrusiveBaseCast(void const volatile*) -> False;
+template <typename B, typename D> auto testBaseOfIntrusively(int) ->
+    decltype(intrusiveBaseCast<B>(rvalue<D*>()));
+template <typename, typename> auto testBaseOfIntrusively(...) -> True;
+} // namespace intrusiveBaseOf
+
+template <typename B, typename D> struct IsBaseOfIntrusive : meta::And<
+    meta::All<meta::IsClass, B, D>,
+    decltype(intrusiveBaseOf::testBaseOfIntrusively<B, D>(0))
+> {};
+
+template <typename B, typename D> struct IsBaseOfIntrusiveICVR : meta::And<
+    meta::All<meta::IsClass, RemoveCVRef<B>, RemoveCVRef<D>>,
+    decltype(intrusiveBaseOf::testBaseOfIntrusively<RemoveCVRef<B>, RemoveCVRef<D>>(0))
+> {};
+
 template <typename> struct Member {};
 template <typename T, typename C> struct Member<T C::*> { using Type = T; };
 

@@ -29,6 +29,7 @@ template <typename, typename = void> struct HasIterableMemberFns : False {};
 template <typename, typename = void> struct HasConstIterableMemberFns : False {};
 template <typename, typename = void> struct HasReverseIterableMemberFns : False {};
 template <typename, typename = void> struct HasConstReverseIterableMemberFns : False {};
+template <typename, typename = void> struct HasSizeMemberFn : False {};
 
 template <typename T>
 struct HasIterableMemberFns<T, Void<decltype(meta::rvalue<T>().begin()), decltype(meta::rvalue<T>().end())>> :
@@ -58,6 +59,8 @@ template <typename T> struct HasConstReverseIterableMemberFns<
   using Sentinel = decltype(meta::rvalue<T>().crend());
 };
 
+template <typename T> struct HasSizeMemberFn<T, Void<decltype(meta::rvalue<T>().size())>> : meta::True {};
+
 template <typename> struct IsIterator : False {};
 template <typename> struct IsReverseIterator : False {};
 } // namespace impl
@@ -66,7 +69,6 @@ template <typename Sentinel, typename Iterator> struct IsSentinelFor :
     IsEqCompatible<Sentinel, Iterator>::Type {};
 
 template <typename Iterator> struct IsInputIterator : And<
-    IsSentinelFor<Iterator, Iterator>,
     impl::IteratorIsPrefixIncrementable<Iterator, Bind<IsSame, Iterator&, Ph<0>>::template Type>,
     impl::IteratorIsIndirectable<Iterator, Bind<Unless<IsSame>::Type, void, Ph<0>>::Type>
 > {};
@@ -76,19 +78,20 @@ template <typename Iterator> struct IsOutputIterator : And<
     impl::IteratorIsIndirectable<Iterator, Unless<Apply<IsConst, RemoveRef>::Type>::Type>
 > {};
 
-template <typename Iterator> struct IsForwardIterator : And<
+template <typename Iterator, typename Sentinel = Iterator> struct IsForwardIterator : And<
+    IsSentinelFor<Iterator, Sentinel>,
     IsPrefixIncrementable<Iterator>,
     IsIndirectionCompatible<Iterator>,
-    IsSentinelFor<Iterator, Iterator>
+    IsSentinelFor<Iterator, Sentinel>
 > {};
 
-template <typename Iterator> struct IsBidirectionalIterator : And<
-    IsForwardIterator<Iterator>,
+template <typename Iterator, typename Sentinel = Iterator> struct IsBidirectionalIterator : And<
+    IsForwardIterator<Iterator, Sentinel>,
     IsPrefixDecrementable<Iterator>
 > {};
 
-template <typename Iterator> struct IsRandomAccessIterator : And<
-    IsBidirectionalIterator<Iterator>,
+template <typename Iterator, typename Sentinel = Iterator> struct IsRandomAccessIterator : And<
+    IsBidirectionalIterator<Iterator, Sentinel>,
     IsSubscriptCompatible<Iterator>,
     IsAddCompatible<Iterator, int>,
     IsSubCompatible<Iterator, int>,

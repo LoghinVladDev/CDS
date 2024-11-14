@@ -24,6 +24,7 @@ template <typename T> class CDS_ATTR(inheritsEBOs) Optional : private impl::Opti
 public:
   using Base::Base;
 
+  using StorageBase::emplace;
   using StorageBase::reset;
 
   using ObservableBase::operator*;
@@ -342,5 +343,7 @@ using impl::makeOptional;
 template <typename T> Optional(T) -> Optional<T>;
 #endif // #if CDS_ATTR(ctad)
 } // namespace cds
+
+#include "../format/OptionalFormat.hpp"
 
 #endif // #ifndef CDS_PRIMITIVE_OPTIONAL_HPP
