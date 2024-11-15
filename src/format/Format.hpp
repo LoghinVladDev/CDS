@@ -299,5 +299,6 @@ using impl::Formatter;
 } // namespace cds
 
 #include "OptionalFormat.hpp"
+#include "VectorFormat.hpp"
 
 #endif // #ifndef CDS_FORMAT_FORMAT_HPP

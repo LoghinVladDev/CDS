@@ -2,6 +2,8 @@
 // Created by loghin on 10/18/24.
 //
 
+#ifndef CDS_COLLECTION_VECTOR_HPP
+#define CDS_COLLECTION_VECTOR_HPP
 #pragma once
 
 #include <cds/functional/Comparator>
@@ -65,10 +67,13 @@ public:
 };
 
 #if CDS_ATTR(ctad)
-template <typename T, typename A = Allocator<T>> Vector(std::initializer_list<T> const&, A const& = {})
--> Vector<T, A>;
+template <typename T, typename A = Allocator<T>> Vector(std::initializer_list<T> const&, A const& = {}) -> Vector<T, A>;
 #endif // #if CDS_ATTR(ctad)
 } // namespace impl
 
 using impl::Vector;
 } // namespace cds
+
+#include "../format/VectorFormat.hpp"
+
+#endif // #ifndef CDS_COLLECTION_VECTOR_HPP

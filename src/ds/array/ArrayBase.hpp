@@ -623,8 +623,8 @@ public:
     return Iterator{eraseRegion(loc(fwd<Pos>(begin)), loc(fwd<Pos>(end)))};
   }
 
-  template <typename P = Identity<>> CDS_ATTR(2(nodiscard, constexpr(14)))
-  auto contains(T const& value, P const& projector = Identity<>{}) const noexcept -> bool {
+  template <typename V, typename P = Identity<>> CDS_ATTR(2(nodiscard, constexpr(14)))
+  auto contains(V const& value, P const& projector = Identity<>{}) const noexcept -> bool {
     return impl::findFirst(*this, value, projector, E{}, FindPreserveTransformer<>{}) != end();
   }
 };
@@ -635,10 +635,12 @@ auto operator<<(std::basic_ostream<C>& out, ArrayBase<FT, FE, FA, FSB> const& ar
   out << static_cast<C>('[');
   auto it = array.begin();
   auto end = array.end();
-  if (it != end) {
-    out << *it;
+  if (it == end) {
+    out << static_cast<C>(']');
+    return out;
   }
 
+  out << *it;
   for (++it; it != end; ++it) {
     out << static_cast<C>(',');
     out << static_cast<C>(' ');
