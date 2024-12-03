@@ -45,21 +45,21 @@ template <typename C> struct FmtIt {
     return *_token;
   }
 
-  auto operator->() const noexcept -> Union<BaseStringView<C>, FmtStr> const* {
+  constexpr auto operator->() const noexcept -> Union<BaseStringView<C>, FmtStr> const* {
     assert(_token);
     return &*_token;
   }
 
-  auto operator++() noexcept -> FmtIt& {
+  constexpr auto operator++() noexcept -> FmtIt& {
     goToNext();
     return *this;
   }
 
-  auto operator==(Sentinel) const noexcept -> bool {
+  constexpr auto operator==(Sentinel) const noexcept -> bool {
     return !_token;
   }
 
-  auto operator!=(Sentinel) const noexcept -> bool {
+  constexpr auto operator!=(Sentinel) const noexcept -> bool {
     return static_cast<bool>(_token);
   }
 
@@ -71,7 +71,7 @@ template <typename C> struct FmtIt {
     ReadRb,
   };
 
-  auto goToNext() -> void {
+  constexpr auto goToNext() -> void {
     _token = nullopt;
     unsigned brCnt = 1;
     Optional<Size> explicitArgIdx;
@@ -297,13 +297,13 @@ template <typename C> struct Formatter<bool, C> {
 
 class FmtRn {
 public:
-  template <unsigned n> FmtRn(char const (&str)[n]) : _sv{str, n - 1} {}
-  FmtRn(StringView sv) : _sv{sv} {}
-  auto begin() const noexcept {
+  template <unsigned n> constexpr FmtRn(char const (&str)[n]) : _sv{str, n - 1} {}
+  constexpr FmtRn(StringView sv) : _sv{sv} {}
+  constexpr auto begin() const noexcept {
     return FmtIt<char>{_sv.begin(), _sv.end()};
   }
 
-  auto end() const noexcept {
+  constexpr auto end() const noexcept {
     return Sentinel{};
   }
   StringView _sv;
@@ -391,7 +391,7 @@ template <typename, typename> struct ValidationFormatters{};
 template <typename C, typename... A> struct ValidationFormatters<C, Tuple<A...>> :
     ValidationFormattersImpl<unionImpl::MakeIndexSequence<sizeof...(A)>, C, A...> {};
 
-template <typename A, typename C> auto formatValidate(BaseStringView<C> const& fmt) -> void {
+template <typename A, typename C> constexpr auto formatValidate(BaseStringView<C> const& fmt) -> void {
   for (auto const& e : FmtRn{fmt}) {
     e.visit(meta::visitors(
       [](StringView const& text) {

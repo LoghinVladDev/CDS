@@ -99,7 +99,7 @@ template <typename L = void, typename R = L> struct ThreeWay {
 template <> struct ThreeWay<void> {
   template <typename L, typename R>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(L&& lhs, R&& rhs) const noexcept
-      -> decltype(impl::fwd<L>(lhs), impl::fwd<R>(rhs)) {
+      -> decltype(cds::forward<L>(lhs), cds::forward<R>(rhs)) {
     return cds::forward<L>(lhs) <=> cds::forward<R>(rhs);
   }
 };

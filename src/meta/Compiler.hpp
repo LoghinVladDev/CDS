@@ -451,7 +451,11 @@ struct CurrentCompiler {
 #endif // #ifdef __clang__ #else
 
 #if defined(__GNUC__) && !defined(__clang__)
+#if defined(__APPLE__)
+#define CDS_ATTR_ld_size 64
+#else
 #define CDS_ATTR_ld_size 80
+#endif
 
 struct CurrentCompiler {
   constexpr static auto const* name = "GNU gcc";

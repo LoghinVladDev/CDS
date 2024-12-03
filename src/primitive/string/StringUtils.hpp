@@ -320,6 +320,232 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
 
     return end;
   }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) static auto readIntBase(
+      C const*& ptr,
+      Size& len,
+      U8& base
+  ) noexcept -> bool {
+    base = 10;
+    if (len == 1u) {
+      return static_cast<C>('0') <= *ptr && *ptr <= static_cast<C>('9');
+    }
+
+    if (*ptr != static_cast<C>('0')) {
+      return false;
+    }
+
+    --len;
+    ++ptr;
+
+    if (*ptr == static_cast<C>('x') || *ptr == static_cast<C>('X')) {
+      ++ptr;
+      --len;
+      base = 16;
+      return true;
+    }
+
+    if (*ptr == static_cast<C>('b') || *ptr == static_cast<C>('B')) {
+      ++ptr;
+      --len;
+      base = 2;
+      return true;
+    }
+
+    base = 8;
+    return static_cast<C>('0') <= *ptr && *ptr <= static_cast<C>('7');
+  }
+
+  template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) static auto readInt(
+      C const* ptr,
+      Size len,
+      C const** out,
+      N* num,
+      U8 base = 0u
+  ) noexcept -> bool {
+    if (len == 0u || !ptr) {
+      return false;
+    }
+
+    N sign = 1u;
+    if (*ptr == static_cast<C>('-')) {
+      if (IsUnsigned<N>::value) {
+        return false;
+      }
+      ++ptr;
+      --len;
+    }
+
+    if (len == 0u || !ptr) {
+      return false;
+    }
+
+    if (base == 0u || !readIntBase(ptr, len, base)) {
+      return false;
+    }
+    if (base == 10u) {
+      return readIntB10(ptr, len, out, num);
+    }
+    if (base == 16u) {
+      return readIntB16(ptr, len, out, num);
+    }
+    if (base == 8u) {
+      return readIntB8(ptr, len, out, num);
+    }
+    if (base == 2u) {
+      return readIntB2(ptr, len, out, num);
+    }
+    return readIntBAny(ptr, len, out, num, base);
+  }
+
+  template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) static auto readIntB10(
+      C const* ptr,
+      Size len,
+      C const** out,
+      N* num
+  ) noexcept -> bool {
+    N value = 0u;
+    auto anyFound = false;
+    while (len > 0 && static_cast<C>('0') <= *ptr && *ptr <= static_cast<C>('9')) {
+      anyFound = true;
+      value = value * 10u + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
+      ++ptr;
+      --len;
+    }
+
+    if (!anyFound) {
+      return false;
+    }
+
+    *num = value;
+    if (out) {
+      *out = ptr;
+    }
+    return true;
+  }
+
+  template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) static auto readIntB16(
+      C const* ptr,
+      Size len,
+      C const** out,
+      N* num
+  ) noexcept -> bool {
+    N value = 0u;
+    auto anyFound = false;
+    while (len > 0) {
+      if (static_cast<C>('0') <= *ptr && *ptr <= static_cast<C>('9')) {
+        value = (value << 4u) + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
+      } else if (static_cast<C>('a') <= *ptr && *ptr <= static_cast<C>('f')) {
+        value = (value << 4u) + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('a')) + 10u);
+      } else if (static_cast<C>('A') <= *ptr && *ptr <= static_cast<C>('F')) {
+        value = (value << 4u) + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('A')) + 10u);
+      } else {
+        break;
+      }
+
+      anyFound = true;
+      ++ptr;
+      --len;
+    }
+
+    if (!anyFound) {
+      return false;
+    }
+
+    *num = value;
+    if (out) {
+      *out = ptr;
+    }
+    return true;
+  }
+
+  template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) static auto readIntB8(
+      C const* ptr,
+      Size len,
+      C const** out,
+      N* num
+  ) noexcept -> bool {
+    N value = 0u;
+    auto anyFound = false;
+    while (len > 0 && static_cast<C>('0') <= *ptr && *ptr <= static_cast<C>('7')) {
+      value = (value << 3u) + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
+      anyFound = true;
+      ++ptr;
+      --len;
+    }
+
+    if (!anyFound) {
+      return false;
+    }
+
+    *num = value;
+    if (out) {
+      *out = ptr;
+    }
+    return true;
+  }
+
+  template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) static auto readIntB2(
+      C const* ptr,
+      Size len,
+      C const** out,
+      N* num
+  ) noexcept -> bool {
+    N value = 0u;
+    auto anyFound = false;
+    while (len > 0 && static_cast<C>('0') == *ptr && *ptr == static_cast<C>('1')) {
+      value = (value << 1u) + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
+      anyFound = true;
+      ++ptr;
+      --len;
+    }
+
+    if (!anyFound) {
+      return false;
+    }
+
+    *num = value;
+    if (out) {
+      *out = ptr;
+    }
+    return true;
+  }
+
+  template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) static auto readIntBAny(
+      C const* ptr,
+      Size len,
+      C const** out,
+      N* num,
+      U8 base
+  ) noexcept -> bool {
+    N value = 0u;
+    auto anyFound = false;
+    while (len > 0) {
+      if (static_cast<C>('0') <= *ptr && *ptr <= static_cast<C>('9')) {
+        value = value * base + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
+      } else if (static_cast<C>('a') <= *ptr && *ptr <= static_cast<C>('z')) {
+        value = value * base + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('a')) + 10u);
+      } else if (static_cast<C>('A') <= *ptr && *ptr <= static_cast<C>('Z')) {
+        value = value * base + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('Z')) + 10u);
+      } else {
+        break;
+      }
+
+      anyFound = true;
+      ++ptr;
+      --len;
+    }
+
+    if (!anyFound) {
+      return false;
+    }
+
+    *num = value;
+    if (out) {
+      *out = ptr;
+    }
+    return true;
+  }
 };
 } // namespace impl
 } // namespace cds

@@ -210,7 +210,7 @@ template <> struct SignedEquivalent<U8> { using Type = S8; };
 template <> struct SignedEquivalent<U16> { using Type = S16; };
 template <> struct SignedEquivalent<U32> { using Type = S32; };
 template <> struct SignedEquivalent<U64> { using Type = S64; };
-#if defined(__linux) && CDS_ATTR(bitarch) == 64
+#if (defined(__linux) || defined(__APPLE__)) && CDS_ATTR(bitarch) == 64
 template <> struct SignedEquivalent<unsigned long long> { using Type = signed long long; };
 #elif defined(WIN32) && CDS_ATTR(bitarch) == 64
 template <> struct SignedEquivalent<unsigned long> { using Type = signed long; };
@@ -222,7 +222,7 @@ template <> struct UnsignedEquivalent<S8> { using Type = U8; };
 template <> struct UnsignedEquivalent<S16> { using Type = U16; };
 template <> struct UnsignedEquivalent<S32> { using Type = U32; };
 template <> struct UnsignedEquivalent<S64> { using Type = U64; };
-#if defined(__linux) && CDS_ATTR(bitarch) == 64
+#if (defined(__linux) || defined(__APPLE__)) && CDS_ATTR(bitarch) == 64
 template <> struct UnsignedEquivalent<signed long long> { using Type = unsigned long long; };
 #elif defined(WIN32) && CDS_ATTR(bitarch) == 64
 template <> struct SignedEquivalent<signed long> { using Type = unsigned long; };

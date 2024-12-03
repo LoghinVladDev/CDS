@@ -215,7 +215,7 @@ template <typename T, typename R>
 struct IsSpaceshipCompatible<T, R, Void<decltype(meta::rvalue<T>() <=> meta::rvalue<R>())>> : meta::True {};
 
 template <typename T, typename R>
-struct IsSpaceshipCompatible<T, R, Void<decltype(meta::rvalue<T>() <=> meta::rvalue<R>())>> :
+struct IsNoexceptSpaceshipCompatible<T, R, Void<decltype(meta::rvalue<T>() <=> meta::rvalue<R>())>> :
     meta::Bool<noexcept(rvalue<T>() <=> rvalue<R>())> {};
 #endif
 

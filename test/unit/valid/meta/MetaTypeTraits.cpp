@@ -669,7 +669,7 @@ TEST(MetaBase, SignedEquivalent) {
   static_assert(IsSame<S32, SignedEquivalent<unsigned>>::value, "Failed SignedEquivalent");
   static_assert(IsSame<S32, SignedEquivalent<unsigned int>>::value, "Failed SignedEquivalent");
   
-#if defined(__linux)
+#if defined(__linux) || defined(__APPLE__)
   static_assert(IsSame<S64, SignedEquivalent<unsigned long>>::value, "Failed SignedEquivalent");
 #endif
 
