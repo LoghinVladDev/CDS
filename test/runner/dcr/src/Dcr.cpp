@@ -36,6 +36,49 @@ int execvpe(const char* name, char* const* const argv, char* const* const envv) 
 #endif
 
 namespace {
+class expanded_string : public std::string {
+public:
+  using std::string::string;
+  using std::string::operator=;
+
+  [[nodiscard]] constexpr auto starts_with(char value) const noexcept -> bool {
+    return !empty() && front() == value;
+  }
+
+  template <size_t n> [[nodiscard]] constexpr auto starts_with(char const (&str)[n]) const noexcept -> bool {
+    return size() >= n - 1 && std::char_traits<char>::compare(c_str(), str, n - 1) == 0;
+  }
+
+  [[nodiscard]] constexpr auto starts_with(std::string_view const& sv) const noexcept -> bool {
+    return size() >= sv.size() && std::char_traits<char>::compare(c_str(), sv.data(), sv.size()) == 0;
+  }
+};
+
+class expanded_string_view : public std::string_view {
+public:
+  using std::string_view::string_view;
+  using std::string_view::operator=;
+
+  constexpr expanded_string_view(expanded_string const& str) noexcept : std::string_view{str} {}
+  constexpr expanded_string_view(std::string_view const& str) noexcept : std::string_view{str} {}
+
+  template <typename... Args> [[nodiscard]] constexpr auto substr(Args&&... args) const noexcept -> expanded_string_view {
+    return expanded_string_view{std::string_view::substr(std::forward<Args>(args)...)};
+  }
+
+  [[nodiscard]] constexpr auto starts_with(char value) const noexcept -> bool {
+    return !empty() && front() == value;
+  }
+
+  template <size_t n> [[nodiscard]] constexpr auto starts_with(char const (&str)[n]) const noexcept -> bool {
+    return size() >= n - 1 && std::char_traits<char>::compare(data(), str, n - 1) == 0;
+  }
+
+  [[nodiscard]] constexpr auto starts_with(std::string_view const& sv) const noexcept -> bool {
+    return size() >= sv.size() && std::char_traits<char>::compare(data(), sv.data(), sv.size()) == 0;
+  }
+};
+
 class jthread : public std::thread {
 public:
   using std::thread::thread;
@@ -124,7 +167,13 @@ auto argParse(std::vector<std::string> const& args, std::vector<std::unique_ptr<
   auto advance = 0;
   for (auto argIdx = 0; argIdx < args.size(); argIdx += advance) {
     for (auto const& parser: argParsers) {
-      if (std::ranges::find_if(acceptedParsers, [&parser](auto const* accepted){ return accepted == parser.get(); }) != acceptedParsers.end()) {
+      if (
+        std::find_if(
+            acceptedParsers.begin(),
+            acceptedParsers.end(),
+            [&parser](auto const* accepted){ return accepted == parser.get(); }
+        ) != acceptedParsers.end()
+      ) {
         continue;
       }
 
@@ -195,13 +244,12 @@ enum class Standard {Cpp11 = 0, Cpp14 = 1, Cpp17 = 2, Cpp20 = 3, Cpp23 = 4, Cpp2
 
 auto toString(Standard const std) {
   switch(std) {
-    using enum dcr::Standard;
-    case Cpp11: return "11";
-    case Cpp14: return "14";
-    case Cpp17: return "17";
-    case Cpp20: return "20";
-    case Cpp23: return "2b";
-    case Cpp2c: return "2c";
+    case Standard::Cpp11: return "11";
+    case Standard::Cpp14: return "14";
+    case Standard::Cpp17: return "17";
+    case Standard::Cpp20: return "20";
+    case Standard::Cpp23: return "2b";
+    case Standard::Cpp2c: return "2c";
     default:
       return "";
   }
@@ -209,9 +257,8 @@ auto toString(Standard const std) {
 
 auto toString(TestStepPlatform const plat) {
   switch (plat) {
-    using enum TestStepPlatform;
-    case Linux: return "linux";
-    case All: return "all";
+    case TestStepPlatform::Linux: return "linux";
+    case TestStepPlatform::All: return "all";
     default:
       assert(false && "Undefined platform type");
       return "";
@@ -220,10 +267,9 @@ auto toString(TestStepPlatform const plat) {
 
 auto toString(TestStepCompiler const comp) {
   switch(comp) {
-    using enum TestStepCompiler;
-    case Clang: return "clang++";
-    case Gcc: return "g++";
-    case All: return "<all, undefined invocation>";
+    case TestStepCompiler::Clang: return "clang++";
+    case TestStepCompiler::Gcc: return "g++";
+    case TestStepCompiler::All: return "<all, undefined invocation>";
     default:
       assert(false && "Undefined compiler type");
       return "";
@@ -240,6 +286,11 @@ struct TestStep {
   TestStepType type;
   std::vector<TestStepEnv> enviroments;
   TestStepResult result;
+
+  template <typename A0, typename A1, typename A2> TestStep(A0&& a0, A1&& a1, A2&& a2) :
+      type{std::forward<A0>(a0)},
+      enviroments{std::forward<A1>(a1)},
+      result{std::forward<A2>(a2)} {}
 };
 
 struct StandardRange {
@@ -435,7 +486,7 @@ auto parseStandard(std::string_view const standardString) -> std::optional<Stand
 }
 
 auto parseAndAdjustSteps(std::vector<TestStep>& steps, std::string_view stepsAndExpectedString) {
-  if (!stepsAndExpectedString.starts_with('[')) {
+  if (stepsAndExpectedString.empty() || stepsAndExpectedString.front() != '[') {
     std::cout << "Expected '[' after EXPECTED\n";
     return;
   }
@@ -460,7 +511,8 @@ auto parseAndAdjustSteps(std::vector<TestStep>& steps, std::string_view stepsAnd
   }
 
   for (auto& [type, environments, stepResult]: steps) {
-    if (std::ranges::find(*stepTypes, type, [](auto const& t) { return std::get<0>(t); }) != stepTypes->end()) {
+    auto type2 = type;
+    if (std::find_if(stepTypes->begin(), stepTypes->end(), [type2](auto const& t) { return std::get<0>(t) == type2; }) != stepTypes->end()) {
       stepResult = *result;
     }
   }
@@ -545,7 +597,7 @@ auto parseAndAppendStepFlagsFor(std::vector<TestStep>& steps, std::string_view s
   }
 }
 
-auto parseAndAppendStepFlags(std::vector<TestStep>& steps, std::string_view stepsAndFlagsString) {
+auto parseAndAppendStepFlags(std::vector<TestStep>& steps, expanded_string_view stepsAndFlagsString) {
   if (!stepsAndFlagsString.starts_with('[')) {
     std::cout << "Expected '[' after FLAGS\n";
     return;
@@ -567,14 +619,14 @@ auto processTestHeader(std::string const& path) -> std::optional<TestData> {
   StandardRange standard {.begin = Standard::Cpp11};
 
   std::ifstream file(path);
-  std::string line;
+  expanded_string line;
   bool isDcrTest = false;
   while (std::getline(file, line)) {
     if (!line.starts_with("// ")) {
       break;
     }
 
-    if (auto const headerItem = std::string_view(line).substr(3); headerItem.starts_with("DCR-TEST")) {
+    if (auto const headerItem = expanded_string_view(line).substr(3); headerItem.starts_with("DCR-TEST")) {
       isDcrTest = true;
     } else if (headerItem.starts_with(headerPrefixStd)) {
       auto const standardString = headerItem.substr(headerPrefixStd.length());
@@ -588,7 +640,7 @@ auto processTestHeader(std::string const& path) -> std::optional<TestData> {
       if (auto const stepTypesAndEnvs = parseStepTypes(stepString); !stepTypesAndEnvs) {
         std::cout << "Warning in '" << path << "': Invalid Step Types '" << stepString << "'\n";
       } else {
-        std::ranges::for_each(*stepTypesAndEnvs, [&steps](auto const typeAndEnv) {
+        std::for_each(stepTypesAndEnvs->begin(), stepTypesAndEnvs->end(), [&steps](auto const typeAndEnv) {
           auto const& [type, envs] = typeAndEnv;
           steps.emplace_back(type, envs, TestStepResult::Success);
         });
@@ -627,7 +679,10 @@ auto stdRange(StandardRange range) {
     range.end = Standard::Highest;
   }
 
-  return std::vector(std::ranges::find(allStandardsArray, range.begin), std::ranges::find(allStandardsArray, range.end) + 1);
+  return std::vector(
+    std::find(allStandardsArray.begin(), allStandardsArray.end(), range.begin),
+    std::find(allStandardsArray.begin(), allStandardsArray.end(), range.end) + 1
+  );
 }
 
 auto executablePath(std::string const& src, Standard standard, TestStepEnv const& env) {
@@ -677,7 +732,7 @@ auto awaitProcess(std::optional<std::string> executable, std::vector<std::string
 
   auto toCArr = [](std::vector<char*>& dst, std::vector<std::string>& arr, std::optional<char*> first = std::nullopt) {
     if (first) { dst.emplace_back(*first); }
-    std::ranges::for_each(arr, [&dst](auto& s){ dst.emplace_back(s.data()); });
+    std::for_each(arr.begin(), arr.end(), [&dst](auto& s){ dst.emplace_back(s.data()); });
     dst.emplace_back(nullptr);
   };
 
@@ -819,6 +874,12 @@ struct Job {
   TestStepResult expected;
   std::variant<CompileData, RunData> data;
   std::unique_ptr<Job> creates;
+
+  template <typename A0, typename A1, typename A2, typename A3> Job(A0&& a0, A1&& a1, A2&& a2, A3&& a3) :
+      type{std::forward<A0>(a0)},
+      expected{std::forward<A1>(a1)},
+      data{std::forward<A2>(a2)},
+      creates{std::forward<A3>(a3)} {}
 };
 
 /**
@@ -840,7 +901,7 @@ auto acquireJobsForStandard(
     Standard standard,
     std::vector<TestStep> const& steps
 ) {
-  if (auto const it = std::ranges::find(steps, TestStepType::Compile, stepType); it != steps.end()) {
+  if (auto const it = std::find_if(steps.begin(), steps.end(), [](TestStep const& step) { return step.type == TestStepType::Compile; }); it != steps.end()) {
     for (auto const& env: it->enviroments) {
       if (!env.compiler || !env.platform) {
         ++skipped;
@@ -852,9 +913,9 @@ auto acquireJobsForStandard(
               TestStepType::Compile,
               it->result,
               CompileData {
-                  .path = path,
-                  .standard = standard,
-                  .testEnv = env
+                  /* .path = */ path,
+                  /* .standard = */ standard,
+                  /* .testEnv = */ env
               },
               nullptr
           )
@@ -863,9 +924,9 @@ auto acquireJobsForStandard(
     }
   }
 
-  if (auto const it = std::ranges::find(steps, TestStepType::Run, stepType); it != steps.end()) {
+  if (auto const it = std::find_if(steps.begin(), steps.end(), [](auto const& step) { return step.type == TestStepType::Run; }); it != steps.end()) {
     for (auto const& env: it->enviroments) {
-      if (auto compileJobIt = std::ranges::find_if(placeInto, [&env](std::unique_ptr<Job> const& j) {
+      if (auto compileJobIt = std::find_if(placeInto.begin(), placeInto.end(), [&env](std::unique_ptr<Job> const& j) {
           return j->type == TestStepType::Compile
                  && env.compiler == std::get<CompileData>(j->data).testEnv.compiler
                  && env.platform == std::get<CompileData>(j->data).testEnv.platform;
@@ -874,9 +935,9 @@ auto acquireJobsForStandard(
             TestStepType::Run,
             it->result,
             RunData {
-                .path = path,
-                .standard = standard,
-                .testEnv = env
+                /* .path = */ path,
+                /* .standard = */ standard,
+                /* .testEnv = */ env
             },
             nullptr
         );
@@ -890,10 +951,11 @@ auto acquireJobsForStandard(
 
 auto acquireJobsFromTest(int& total, std::vector<std::unique_ptr<Job>>& placeInto, TestData const& test) -> int {
   int skipped = 0;
-  for (auto const& [path, steps, standards] = test; auto const& standard: stdRange(standards)) {
+  auto const& [path, steps, standards] = test;
+  for (auto const& standard: stdRange(standards)) {
     std::vector<std::unique_ptr<Job>> jobs;
     acquireJobsForStandard(total, skipped, jobs, path, standard, steps);
-    std::ranges::for_each(jobs, [&placeInto](auto& j){ placeInto.push_back(std::move(j)); });
+    std::for_each(jobs.begin(), jobs.end(), [&placeInto](auto& j){ placeInto.push_back(std::move(j)); });
   }
   return skipped;
 }
@@ -916,7 +978,7 @@ auto addReleaseFlags(std::vector<std::string>& args, TestStepEnv const& env) {
   }
 }
 
-auto executeJob(auto const& job, std::vector<std::string> const& passToCompiler, DcrParams const& params) -> std::tuple<bool, std::string, std::string, bool> {
+template <typename J> auto executeJob(J& job, std::vector<std::string> const& passToCompiler, DcrParams const& params) -> std::tuple<bool, std::string, std::string, bool> {
 #ifdef CDS_DCR_BLOCK_MULTIACCESS_TO_PROFRAW
   static std::mutex profrawBlock;
 #endif
@@ -964,7 +1026,7 @@ auto rpad(int const size, std::string const& str) {
   return str + std::string(padLen, ' ');
 }
 
-auto toString(auto const& job) {
+template <typename J> auto toString(J const& job) {
   std::stringstream oss;
 
   if (job->type == TestStepType::Compile) {
@@ -978,9 +1040,9 @@ auto toString(auto const& job) {
   return oss.str();
 }
 
-auto buildJobQueueFunctions(
-    auto& jobs,
-    auto& jobsLock
+template <typename J, typename L> auto buildJobQueueFunctions(
+    J& jobs,
+    L& jobsLock
 ) {
   return std::make_tuple(
       [&jobs, &jobsLock]{
@@ -999,13 +1061,13 @@ auto buildJobQueueFunctions(
   );
 }
 
-auto buildJobLoggers(
-    auto& totalCount,
-    auto& runCount,
-    auto& successful,
-    auto& otherUpdatersLock,
-    auto& failedTestPaths,
-    auto& dcrParams
+template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5> auto buildJobLoggers(
+    A0& totalCount,
+    A1& runCount,
+    A2& successful,
+    A3& otherUpdatersLock,
+    A4& failedTestPaths,
+    A5& dcrParams
 ) {
   auto const statusHeader = [&totalCount, &runCount] {
     return std::to_string(runCount++ + 1) + "/" + std::to_string(totalCount);
@@ -1028,11 +1090,11 @@ auto buildJobLoggers(
   );
 }
 
-auto buildRunJob(
-    auto& logJobSuccess,
-    auto& logJobFailure,
-    auto& passToCompiler,
-    auto& dcrParams
+template <typename A0, typename A1, typename A2, typename A3> auto buildRunJob(
+    A0& logJobSuccess,
+    A1& logJobFailure,
+    A2& passToCompiler,
+    A3& dcrParams
 ) {
   return [&logJobSuccess, &logJobFailure, &passToCompiler, &dcrParams](std::unique_ptr<Job> const& job) {
     auto const [status, outputText, errorText, wasSkipped] = executeJob(job, passToCompiler, dcrParams);
@@ -1051,10 +1113,10 @@ auto buildRunJob(
   };
 }
 
-auto executeRunners(
-    auto& threadRunnerFn,
-    auto& dcrParams,
-    auto& jobs
+template <typename A0, typename A1, typename A2> auto executeRunners(
+    A0& threadRunnerFn,
+    A1& dcrParams,
+    A2& jobs
 ) {
   std::vector<std::unique_ptr<jthread>> runners;
   for (int thIdx = 0; thIdx < std::min(dcrParams.threadCount, static_cast<int>(std::size(jobs))); ++ thIdx) {
@@ -1075,7 +1137,7 @@ auto execute(std::vector<TestData> const& tests, std::vector<std::string> const&
 
   using namespace std::string_literals;
 
-  auto dcrPath = std::filesystem::path(std::source_location::current().file_name()).parent_path();
+  auto dcrPath = std::filesystem::path(__FILE__).parent_path();
   std::vector<std::string> passToCompiler = extraArgs;
   passToCompiler.emplace_back(dcrPath / "DcrMain.cpp");
   passToCompiler.emplace_back(dcrPath / "Test.cpp");
@@ -1085,11 +1147,13 @@ auto execute(std::vector<TestData> const& tests, std::vector<std::string> const&
   std::vector<std::string> failedTestPaths;
   int finished = 0;
 
-  auto [getJob, pushJob] = buildJobQueueFunctions(jobs, jobsLock);
+  // auto [getJob, pushJob] = buildJobQueueFunctions(jobs, jobsLock);
+  auto queueOps = buildJobQueueFunctions(jobs, jobsLock);
   auto [logJobSuccess, logJobFailure] = buildJobLoggers(total, finished, successful, otherUpdatersLock, failedTestPaths, dcrParams);
   auto runJob = buildRunJob(logJobSuccess, logJobFailure, passToCompiler, dcrParams);
 
-  auto threadRunnerFn = [&runJob, &getJob, &pushJob, &skipped] {
+  auto threadRunnerFn = [&runJob, &queueOps, &skipped] {
+    auto& [getJob, pushJob] = queueOps;
     bool shouldTerminate = false;
     while (!shouldTerminate) {
       auto job = getJob();
@@ -1157,7 +1221,8 @@ auto locateWildcardMatches(std::vector<std::filesystem::path>&& paths) {
     auto const startingWith = child.substr(0, wPos);
     for (auto const& file : std::filesystem::directory_iterator(parent)) {
       auto const fileAsStr = file.path().string();
-      auto const leaf = fileAsStr.substr(fileAsStr.rfind(std::filesystem::path::preferred_separator) + 1);
+      auto const leaf = expanded_string_view{
+        fileAsStr.substr(fileAsStr.rfind(std::filesystem::path::preferred_separator) + 1)};
       if (leaf.starts_with(startingWith)) {
         resolved.emplace_back(file.path());
       }
@@ -1195,7 +1260,8 @@ auto run(int const argc, char const* const* argv) -> int {
       makeParser(
           [&dcrParams](auto const& params) { dcrParams.threadCount = static_cast<int>(std::strtol(params[1].c_str(), nullptr, 10)); },
           [](auto const& arg) { return arg == "-j"; },
-          [](auto const& arg) { return std::ranges::all_of(arg, [](char const c){ return c >= '0' && c <= '9'; }); }
+          [](auto const& arg) { return std::all_of(arg.begin(), arg.end(),
+            [](char const c){ return c >= '0' && c <= '9'; }); }
       ),
       makeParser(
           [&inputFileOrDir](auto const& args) { inputFileOrDir = args[0]; },

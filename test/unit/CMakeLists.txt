@@ -102,6 +102,9 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/exception/RuntimeExceptionTest.cpp
       valid/exception/UnionTypeExceptionTest.cpp)
 
+  set(CDS_FORMAT_UNIT_TEST_SOURCES
+      valid/format/FormatTest.cpp)
+
   set(CDS_FUNCTIONAL_UNIT_TEST_SOURCES
       valid/functional/Comparator.cpp
       valid/functional/FunctionalInterface.cpp
@@ -172,6 +175,7 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       ${CDS_COLLECTION_UNIT_TEST_SOURCES}
       ${CDS_DATA_STRUCTURES_UNIT_TEST_SOURCES}
       ${CDS_EXCEPTION_UNIT_TEST_SOURCES}
+      ${CDS_FORMAT_UNIT_TEST_SOURCES}
       ${CDS_FUNCTIONAL_UNIT_TEST_SOURCES}
       ${CDS_ITERATOR_UNIT_TEST_SOURCES}
       ${CDS_MEMORY_UNIT_TEST_SOURCES}

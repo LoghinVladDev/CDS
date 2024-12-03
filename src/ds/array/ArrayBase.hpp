@@ -439,32 +439,32 @@ private:
   using ScalingBase::tail;
   using ScalingBase::eraseRegion;
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto loc(Iterator const& it) noexcept -> T* {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto loc(Iterator const& it) noexcept -> T* {
     auto offset = it - begin();
     assert(offset <= size() && "Unexpected out-of-bounds iterator");
     return head() + offset;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto loc(ConstIterator const& it) noexcept -> T* {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto loc(ConstIterator const& it) noexcept -> T* {
     auto offset = it - cbegin();
     assert(offset <= size() && "Unexpected out-of-bounds iterator");
     return head() + offset;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto loc(ReverseIterator const& it) noexcept -> T* {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto loc(ReverseIterator const& it) noexcept -> T* {
     auto offset = it - rbegin();
     assert(offset <= size() && "Unexpected out-of-bounds iterator");
     return tail() - offset;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto loc(ConstReverseIterator const& it) noexcept -> T* {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto loc(ConstReverseIterator const& it) noexcept -> T* {
     auto offset = it - crbegin();
     assert(offset <= size() && "Unexpected out-of-bounds iterator");
     return tail() - offset;
   }
 
   template <typename N, EnableIf<IsIntegral<N>> = 0>
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto loc(N index) noexcept -> T* {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto loc(N index) noexcept -> T* {
     assert(index <= size() && "Unexpected out-of-bounds index");
     return head() + index;
   }

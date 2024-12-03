@@ -7,6 +7,7 @@
 #pragma once
 
 #include <cds/String>
+#include <cds/exception/Exception>
 
 namespace cds {
 namespace experimental {

@@ -10,6 +10,13 @@
 
 namespace cds {
 namespace impl {
+using functional::Equal;
+using functional::NotEqual;
+using functional::Less;
+using functional::Greater;
+using functional::LessEqual;
+using functional::GreaterEqual;
+
 using meta::IsSame;
 using meta::IsSameIgnoringCVRef;
 using meta::Not;
@@ -22,6 +29,15 @@ using unionImpl::UnionBestMatchType;
 template <typename... Types> class Union : private UnionVisitationBase<Pack<Types...>> {
   using Base = UnionVisitationBase<Pack<Types...>>;
   using Base::assign;
+  using Base::compare;
+
+  template <typename... Types0> CDS_ATTR(constexpr(14)) friend auto operator==(
+    Union<Types0...> const& lhs, Union<Types0...> const& rhs
+  ) CDS_ATTR(noexcept(All<meta::IsNoexceptEqCompatible, Types0...>::value)) -> bool;
+
+  template <typename... Types0> CDS_ATTR(constexpr(14)) friend auto operator!=(
+    Union<Types0...> const& lhs, Union<Types0...> const& rhs
+  ) CDS_ATTR(noexcept(All<meta::IsNoexceptNeCompatible, Types0...>::value)) -> bool;
 
 public:
   using Base::Base;
@@ -63,6 +79,35 @@ template <typename T, typename... Ts> CDS_ATTR(2(nodiscard, constexpr(14))) auto
 template <typename T, typename... Ts> CDS_ATTR(2(nodiscard, constexpr(14))) auto get(Union<Ts...>&& u)
     CDS_ATTR(noexcept(false)) -> UnionBestMatchType<IsSame, T, Ts...>&& {
   return std::move(u.template get<T>());
+}
+
+template <typename...Types0> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator==(
+    Union<Types0...> const& lhs, Union<Types0...> const& rhs
+) CDS_ATTR(noexcept(All<meta::IsNoexceptEqCompatible, Types0...>::value)) -> bool {
+  static_assert(All<meta::IsEqCompatible, Types0...>::value, "All union types must be equal comparable to invoke ==");
+  if (lhs.index() != rhs.index()) {
+    return false;
+  }
+  if (lhs.valueless()) {
+    return true;
+  }
+
+  return lhs.template compare<Equal<>>(rhs);
+}
+
+template <typename...Types0> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator!=(
+    Union<Types0...> const& lhs, Union<Types0...> const& rhs
+) CDS_ATTR(noexcept(All<meta::IsNoexceptNeCompatible, Types0...>::value)) -> bool {
+  static_assert(All<meta::IsNeCompatible, Types0...>::value,
+      "All union types must be not-equal comparable to invoke ==");
+  if (lhs.index() != rhs.index()) {
+    return true;
+  }
+  if (lhs.valueless()) {
+    return false;
+  }
+
+  return lhs.template compare<NotEqual<>>(rhs);
 }
 } // namespace impl
 

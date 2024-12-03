@@ -8,6 +8,7 @@
 
 #include <cds/meta/Compiler>
 #include <cds/meta/Semantics>
+#include <cds/meta/ObjectTraits>
 
 #ifdef __GLIBCXX__
 #define CDS_ATTR_stdlibcxx true

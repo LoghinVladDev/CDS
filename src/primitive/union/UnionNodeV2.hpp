@@ -412,11 +412,10 @@ struct GetUnionData {
 };
 
 
-template<template<Size> class, typename>
-struct FunctionalVisitorTableImpl {
+template <template <Size> class, typename> struct FunctionalVisitorTableImpl {
 };
-template<template<Size> class F, Size... is>
-struct FunctionalVisitorTableImpl<F, IndexSequence<is...>> {
+
+template <template <Size> class F, Size... is> struct FunctionalVisitorTableImpl<F, IndexSequence<is...>> {
   // TODO: Check for discrepancies in arg types in All<Decay<F::visit>>
   template<typename... InvokeArgs>
   struct Table {
@@ -426,36 +425,30 @@ struct FunctionalVisitorTableImpl<F, IndexSequence<is...>> {
   };
 };
 
-template<template<Size> class F, Size size>
-struct FunctionalVisitorTable :
+template <template<Size> class F, Size size> struct FunctionalVisitorTable :
     FunctionalVisitorTableImpl<F, MakeIndexSequence<size>> {
 };
 
 // ODR before cpp17
-template<template<Size> class F, Size... is>
-template<typename... InvokeArgs>
+template <template<Size> class F, Size... is> template<typename... InvokeArgs>
 Common<Decay<decltype(F<is>::template visit<InvokeArgs...>)>...> const
     FunctionalVisitorTableImpl<F, IndexSequence<is...>>::Table<InvokeArgs...>::table[sizeof...(is)];
 
-template<Size idx>
-struct UnionDestroyVisitor {
-  template<typename Union>
-  CDS_ATTR(constexpr(14)) static auto visit(Union &storage) noexcept -> void {
+template <Size idx> struct UnionDestroyVisitor {
+  template<typename Union> CDS_ATTR(constexpr(14)) static auto visit(Union &storage) noexcept -> void {
     using Type = GetUnionType<idx, Union>;
     GetUnionData<idx>()(storage).~Type();
   }
 };
 
-template<Size idx>
-struct UnionConstructVisitor {
+template <Size idx> struct UnionConstructVisitor {
   template<typename Union, typename A>
   CDS_ATTR(constexpr(14)) static auto visit(Union &storage, A &&otherStorage) -> void {
     ignore = construct(&GetUnionData<idx>()(storage), GetUnionData<idx>()(cds::forward<A>(otherStorage)));
   }
 };
 
-template<Size idx>
-struct UnionAssignVisitor {
+template <Size idx> struct UnionAssignVisitor {
   template<typename Union, typename A>
   CDS_ATTR(constexpr(14)) static auto visit(Union &storage, A &&otherStorage) -> void {
     GetUnionData<idx>()(storage) = GetUnionData<idx>()(cds::forward<A>(otherStorage));
@@ -463,18 +456,16 @@ struct UnionAssignVisitor {
 };
 
 // Effectively visits all union members and gives them the promised raises.
-template<Size idx>
-struct UnionRaiseVisitor {
-  template<typename AccessedType, typename Union>
+template <Size idx> struct UnionRaiseVisitor {
+  template <typename AccessedType, typename Union>
   CDS_ATTR(constexpr(14)) static auto visit(CDS_ATTR(unused) Union const &) -> void {
     using StoredType = GetUnionType<idx, Union>;
     CDS_ATTR(throw (UnionTypeException::of<StoredType, AccessedType>()));
   }
 };
 
-template<Size idx>
-struct UnionGenericVisitor {
-  template<typename R, typename Union, typename Visitor>
+template <Size idx> struct UnionGenericVisitor {
+  template <typename R, typename Union, typename Visitor>
   CDS_ATTR(constexpr(14)) static auto visit(Union &&storage, Visitor &&visitor) -> R {
     return functional::invoke(
         cds::forward<Visitor>(visitor),
@@ -482,6 +473,22 @@ struct UnionGenericVisitor {
     );
   }
 };
+
+template <Size idx> struct UnionCompareVisitor {
+  template <typename C, typename Union>
+  CDS_ATTR(constexpr(14)) static auto visit(Union const& storage, Union const& otherStorage) -> bool {
+    return C{}(GetUnionData<idx>{}(storage), GetUnionData<idx>{}(otherStorage));
+  }
+};
+
+#if CDS_ATTR(spaceship)
+template <Size idx> struct UnionThreeWayVisitor {
+  template <typename Union> CDS_ATTR(constexpr(14)) static auto visit(Union const& storage, Union const& otherStorage)
+      -> decltype(GetUnionData<idx>{}(storage) <=> GetUnionData<idx>{}(otherStorage)) {
+    return GetUnionData<idx>{}(storage) <=> GetUnionData<idx>{}(otherStorage);
+  }
+};
+#endif
 
 template<typename I, UnionFunctionDetail d, typename... T>
 CDS_ATTR(constexpr(14))
@@ -504,26 +511,37 @@ auto unionAssign(I idx, UnionStorage<d, T...> &data, A &&other) -> void {
   template Table<UnionStorage<d, T...> &, A &&>::table[idx](data, cds::forward<A>(other));
 }
 
-template<typename RequestedType, typename I, UnionFunctionDetail d, typename... T>
-CDS_ATTR(constexpr(14))
+template<typename RequestedType, typename I, UnionFunctionDetail d, typename... T> CDS_ATTR(constexpr(14))
 auto unionRaise(I idx, UnionStorage<d, T...> const &data) -> void {
   return FunctionalVisitorTable<UnionRaiseVisitor, sizeof...(T)>::
       template Table<RequestedType, UnionStorage<d, T...>>::table[idx](data);
 }
 
-template<typename R, typename I, UnionFunctionDetail d, typename... T, typename Visitor>
-CDS_ATTR(constexpr(14))
+template<typename R, typename I, UnionFunctionDetail d, typename... T, typename Visitor> CDS_ATTR(constexpr(14))
 auto unionGenericVisit(I idx, UnionStorage<d, T...> &data, Visitor &&visitor) -> R {
   return FunctionalVisitorTable<UnionGenericVisitor, sizeof...(T)>::
       template Table<R, UnionStorage<d, T...> &, Visitor>::table[idx](data, cds::forward<Visitor>(visitor));
 }
 
-template<typename R, typename I, UnionFunctionDetail d, typename... T, typename Visitor>
-CDS_ATTR(constexpr(14))
+template<typename R, typename I, UnionFunctionDetail d, typename... T, typename Visitor> CDS_ATTR(constexpr(14))
 auto unionGenericVisit(I idx, UnionStorage<d, T...> const &data, Visitor &&visitor) -> R {
   return FunctionalVisitorTable<UnionGenericVisitor, sizeof...(T)>::
       template Table<R, UnionStorage<d, T...> const &, Visitor>::table[idx](data, cds::forward<Visitor>(visitor));
 }
+
+template<typename C, typename I, UnionFunctionDetail d, typename... T> CDS_ATTR(constexpr(14))
+auto unionCompare(I idx, UnionStorage<d, T...> const& data, UnionStorage<d, T...> const& otherData) -> bool {
+  return FunctionalVisitorTable<UnionCompareVisitor, sizeof...(T)>::
+      template Table<C, UnionStorage<d, T...> const&>::table[idx](data, otherData);
+}
+
+#if CDS_ATTR(spaceship)
+template<typename I, UnionFunctionDetail d, typename... T, typename Visitor> CDS_ATTR(constexpr(14))
+decltype(auto) unionThreeWay(I idx, UnionStorage<d, T...> const& data, UnionStorage<d, T...> const& otherData) {
+  return FunctionalVisitorTable<UnionThreeWayVisitor, sizeof...(T)>::
+      template Table<UnionStorage<d, T...> const&>::table[idx](data, otherData);
+}
+#endif
 
 template<UnionFunctionDetail, typename>
 struct UnionStorageBase {
@@ -1092,6 +1110,18 @@ struct UnionObservableBase<Pack<Types...>> : UnionMoveAssignmentBase<Pack<Types.
       functional::invoke(cds::forward<C>(callable), get<Type>());
     }
   }
+
+  template <typename Comparator> CDS_ATTR(2(nodiscard, constexpr(14))) auto compare(UnionObservableBase const& other)
+      const CDS_ATTR(noexcept(false)) -> bool {
+    return unionCompare<Comparator>(index(), _data, other._data);
+  }
+
+#if CDS_ATTR(spaceship)
+  CDS_ATTR(2(nodiscard, constexpr(14))) decltype(auto) compare(UnionObservableBase const& other)
+      const CDS_ATTR(noexcept(false)) {
+    return unionThreeWay(index(), *this, other);
+  }
+#endif
 };
 
 template<typename Visitor, typename... Types>

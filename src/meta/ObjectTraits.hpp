@@ -113,8 +113,16 @@ template <typename T, typename = T, typename = void> struct IsGtCompatible : met
 template <typename T, typename = T, typename = void> struct IsGeCompatible : meta::False {};
 template <typename T, typename = T, typename = void> struct IsEqCompatible : meta::False {};
 template <typename T, typename = T, typename = void> struct IsNeCompatible : meta::False {};
+
+template <typename T, typename = T, typename = void> struct IsNoexceptLtCompatible : meta::False {};
+template <typename T, typename = T, typename = void> struct IsNoexceptLeCompatible : meta::False {};
+template <typename T, typename = T, typename = void> struct IsNoexceptGtCompatible : meta::False {};
+template <typename T, typename = T, typename = void> struct IsNoexceptGeCompatible : meta::False {};
+template <typename T, typename = T, typename = void> struct IsNoexceptEqCompatible : meta::False {};
+template <typename T, typename = T, typename = void> struct IsNoexceptNeCompatible : meta::False {};
 #if CDS_ATTR(spaceship)
 template <typename T, typename = T, typename = void> struct IsSpaceshipCompatible : meta::False {};
+template <typename T, typename = T, typename = void> struct IsNoexceptSpaceshipCompatible : meta::False {};
 #endif
 
 template <typename, typename = void> struct IsNotCompatible : meta::False {};
@@ -184,9 +192,31 @@ template <typename T, typename R> struct IsEqCompatible<T, R, Void<decltype(meta
 template <typename T, typename R> struct IsNeCompatible<T, R, Void<decltype(meta::rvalue<T>() != meta::rvalue<R>())>> :
     meta::True {};
 
+template <typename L, typename R> struct IsNoexceptLtCompatible<L, R, Void<decltype(rvalue<L>() < rvalue<R>())>> :
+    meta::Bool<noexcept(rvalue<L>() < rvalue<R>())> {};
+
+template <typename L, typename R> struct IsNoexceptGtCompatible<L, R, Void<decltype(rvalue<L>() > rvalue<R>())>> :
+    meta::Bool<noexcept((rvalue<L>() > rvalue<R>()))> {};
+
+template <typename L, typename R> struct IsNoexceptLeCompatible<L, R, Void<decltype(rvalue<L>() <= rvalue<R>())>> :
+    meta::Bool<noexcept(rvalue<L>() <= rvalue<R>())> {};
+
+template <typename L, typename R> struct IsNoexceptGeCompatible<L, R, Void<decltype(rvalue<L>() >= rvalue<R>())>> :
+    meta::Bool<noexcept(rvalue<L>() >= rvalue<R>())> {};
+
+template <typename L, typename R> struct IsNoexceptEqCompatible<L, R, Void<decltype(rvalue<L>() == rvalue<R>())>> :
+    meta::Bool<noexcept(rvalue<L>() == rvalue<R>())> {};
+
+template <typename L, typename R> struct IsNoexceptNeCompatible<L, R, Void<decltype(rvalue<L>() != rvalue<R>())>> :
+    meta::Bool<noexcept(rvalue<L>() != rvalue<R>())> {};
+
 #if CDS_ATTR(spaceship)
 template <typename T, typename R>
 struct IsSpaceshipCompatible<T, R, Void<decltype(meta::rvalue<T>() <=> meta::rvalue<R>())>> : meta::True {};
+
+template <typename T, typename R>
+struct IsSpaceshipCompatible<T, R, Void<decltype(meta::rvalue<T>() <=> meta::rvalue<R>())>> :
+    meta::Bool<noexcept(rvalue<T>() <=> rvalue<R>())> {};
 #endif
 
 template <typename T> struct IsNotCompatible<T, Void<decltype(!meta::rvalue<T>())>> : meta::True {};
@@ -354,9 +384,30 @@ template <typename Type, typename With = Type> struct IsGeCompatible : impl::IsG
 template <typename Type, typename With = Type> struct IsEqCompatible : impl::IsEqCompatible<Type, With>::Type {};
 template <typename Type, typename With = Type> struct IsNeCompatible : impl::IsNeCompatible<Type, With>::Type {};
 
+template <typename Type, typename With = Type> struct IsNoexceptLtCompatible :
+    impl::IsNoexceptLtCompatible<Type, With>::Type {};
+
+template <typename Type, typename With = Type> struct IsNoexceptLeCompatible :
+    impl::IsNoexceptLeCompatible<Type, With>::Type {};
+
+template <typename Type, typename With = Type> struct IsNoexceptGtCompatible :
+    impl::IsNoexceptGtCompatible<Type, With>::Type {};
+
+template <typename Type, typename With = Type> struct IsNoexceptGeCompatible :
+    impl::IsNoexceptGeCompatible<Type, With>::Type {};
+
+template <typename Type, typename With = Type> struct IsNoexceptEqCompatible :
+    impl::IsNoexceptEqCompatible<Type, With>::Type {};
+
+template <typename Type, typename With = Type> struct IsNoexceptNeCompatible :
+    impl::IsNoexceptNeCompatible<Type, With>::Type {};
+
 #if CDS_ATTR(spaceship)
 template <typename Type, typename With = Type> struct IsSpaceshipCompatible :
     impl::IsSpaceshipCompatible<Type, With>::Type {};
+
+template <typename Type, typename With = Type> struct IsNoexceptSpaceshipCompatible :
+    impl::IsNoexceptSpaceshipCompatible<Type, With>::Type {};
 #endif
 
 template <typename Type> struct IsNotCompatible : impl::IsNotCompatible<Type>::Type {};
