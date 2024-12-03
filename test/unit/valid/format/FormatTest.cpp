@@ -20,6 +20,21 @@ using namespace cds::impl;
 template <typename T> struct TypeId { using Type = T; };
 template <typename T> using TypeIdT = typename TypeId<T>::Type;
 
+class FormatException : public Exception {
+public:
+  ~FormatException() noexcept override = default;
+  template <unsigned n> explicit FormatException(char const (&msg)[n]) : _msg{msg} {}
+  explicit FormatException(StringView msg) : _msg{msg} {}
+  explicit FormatException(String msg) : _msg{mv(msg)} {}
+
+  auto message() const noexcept -> StringView override {
+    return _msg;
+  }
+
+private:
+  String _msg;
+};
+
 struct FmtStr {
   StringView val;
   Size argIdx;
@@ -109,9 +124,13 @@ template <typename C> struct FmtIt {
 
         case ReadingFormatExplicitArgIdx:
           if (!StringTraits<C>::isDigit(v)) {
-            char* end;
-            auto argIdx = std::strtoull(&*_b, &end, 10);
-            if (&*_b != end) {
+            C const* end = nullptr;
+            // auto argIdx = std::strtoull(&*_b, &end, 10);
+            Size argIdx = 0;
+            auto r = StringUtils<C, StringTraits<C>>::readInt(&*_b, _e - _b, &end, &argIdx, 10);
+            // assert(r);
+            assert(r || &*_b == end);
+            if (r && &*_b != end) {
               explicitArgIdx = argIdx;
             }
             _b = it;
@@ -127,7 +146,7 @@ template <typename C> struct FmtIt {
             --brCnt;
             if (brCnt == 0) {
               _state = ReadingLiteral;
-              Size idx;
+              Size idx = 0;
 
               if (explicitArgIdx) {
                 idx = *explicitArgIdx;
@@ -137,7 +156,10 @@ template <typename C> struct FmtIt {
                 _implUsed = true;
               }
 
-              assert(!_explUsed || !_implUsed);
+              if (_explUsed && _implUsed) {
+                throw FormatException("Explicit argument indexing requires all arguments to be indexed");
+              }
+              // assert(!_explUsed || !_implUsed);
               _token = FmtStr{StringView{&*_b, it - _b}, idx};
               // _token = StringView{&*_b, it - _b};
               _isFmt = true;
@@ -197,15 +219,15 @@ using cds::Vector;
 
 template <typename C> class FormatParseContext {
 public:
-  explicit FormatParseContext(BaseStringView<C> const& in) : _fmtStr{in} {}
+  explicit constexpr FormatParseContext(BaseStringView<C> const& in) : _fmtStr{in} {}
 
   using Iterator = typename BaseStringView<C>::Iterator;
 
-  auto begin() const noexcept -> Iterator {
+  constexpr auto begin() const noexcept -> Iterator {
     return _fmtStr.begin();
   }
 
-  auto end() const noexcept -> Iterator {
+  constexpr auto end() const noexcept -> Iterator {
     return _fmtStr.end();
   }
 
@@ -325,7 +347,7 @@ std::ostream& operator<<(std::ostream& out, FmtRn const& rn) noexcept {
 }
 
 template <typename F, typename = void> struct FormatterParseFormatString {
-  template <typename C> static auto parse(F& formatter, C& ctx) -> typename C::Iterator {
+  template <typename C> static constexpr auto parse(F& formatter, C& ctx) -> typename C::Iterator {
     ignore = formatter;
     auto it = ctx.begin();
     if (it == ctx.end()) {
@@ -355,7 +377,7 @@ template <Size idx> struct FormatterContainer {
   }
 
   template <typename C, typename... Args>
-  static auto doValidate(BaseStringView<C> const& in) -> void {
+  static constexpr auto doValidate(BaseStringView<C> const& in) -> void {
     using T = RemoveCVRef<decltype(get<idx>(value<Tuple<Args&&...>>()))>;
     Formatter<T> formatter;
     FormatParseContext<C> fmtParCtx {in};
@@ -384,6 +406,7 @@ template <typename C, typename... Args, Size... is>
 struct ValidationFormattersImpl<unionImpl::IndexSequence<is...>, C, Args...> {
   static constexpr meta::Common<Decay<decltype(&FormatterContainer<is>::template doValidate<C, Args&&...>)>...>
       table[sizeof...(is)] = {FormatterContainer<is>::template doValidate<C, Args&&...>...};
+  static constexpr auto size = sizeof...(is);
 };
 
 template <typename, typename> struct ValidationFormatters{};
@@ -398,7 +421,12 @@ template <typename A, typename C> constexpr auto formatValidate(BaseStringView<C
         ignore = text;
       },
       [](FmtStr const& fmt) {
-        ValidationFormatters<C, A>::table[fmt.argIdx](fmt.val);
+        using VF = ValidationFormatters<C, A>;
+        if (VF::size <= fmt.argIdx) {
+          throw FormatException(
+            String{"Out of range format index. Requested: "} + fmt.argIdx + ", available: " + VF::size);
+        }
+        VF::table[fmt.argIdx](fmt.val);
       }
     ));
   }
@@ -461,6 +489,7 @@ TEST(FormatTest, init) {
   ASSERT_TRUE(citeq(FmtRn("{ 1 : }"), Vector<V>{"", FmtStr{" ", 1}}));
   ASSERT_TRUE(citeq(FmtRn("{2:}{0:}"), Vector<V>{"", FmtStr{"", 2}, "", FmtStr{"", 0}}));
   ASSERT_TRUE(citeq(FmtRn("{2}{0}"), Vector<V>{"", FmtStr{"", 2}, "", FmtStr{"", 0}}));
+  // ASSERT_TRUE(citeq(FmtRn("{2}{x}"), Vector<V>{"", FmtStr{"", 2}, "", FmtStr{"", 0}}));
   // std::cout << FmtRn("{ 1 : }{}") << '\n';
   // ASSERT_TRUE(citeq(FmtRn("{ 1 : }{}"), Vector<V>{"", FmtStr{" ", 1}}));
   // ASSERT_EQ(0, format("abc", 1, true));
@@ -469,4 +498,5 @@ TEST(FormatTest, init) {
 
   int const v = 5;
   std::cout << format("{1}{0}", v, true);
+  std::cout << format("{2}{x}", v, true);
 }

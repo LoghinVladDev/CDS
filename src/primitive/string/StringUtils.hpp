@@ -363,7 +363,21 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
       N* num,
       U8 base = 0u
   ) noexcept -> bool {
-    if (len == 0u || !ptr) {
+    if (!ptr) {
+      return false;
+    }
+
+    if (out) {
+      *out = ptr;
+    }
+
+    while (len > 0 && (*ptr == static_cast<C>(' ') || *ptr == static_cast<C>('\t')
+                       || *ptr == static_cast<C>('\r') || *ptr == static_cast<C>('\f'))) {
+      ++ptr;
+      --len;
+    }
+
+    if (len == 0u) {
       return false;
     }
 
@@ -376,32 +390,47 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
       --len;
     }
 
-    if (len == 0u || !ptr) {
+    if (len == 0u) {
       return false;
     }
 
-    if (base == 0u || !readIntBase(ptr, len, base)) {
+    if (!readIntBestFit(ptr, len, num, base)) {
+      return false;
+    }
+    *num *= sign;
+    if (out) {
+      *out = ptr;
+    }
+    return true;
+  }
+
+  template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) static auto readIntBestFit(
+      C const*& ptr,
+      Size len,
+      N* num,
+      U8 base
+  ) noexcept -> bool {
+    if (base == 0u && !readIntBase(ptr, len, base)) {
       return false;
     }
     if (base == 10u) {
-      return readIntB10(ptr, len, out, num);
+      return readIntB10(ptr, len, num);
     }
     if (base == 16u) {
-      return readIntB16(ptr, len, out, num);
+      return readIntB16(ptr, len, num);
     }
     if (base == 8u) {
-      return readIntB8(ptr, len, out, num);
+      return readIntB8(ptr, len, num);
     }
     if (base == 2u) {
-      return readIntB2(ptr, len, out, num);
+      return readIntB2(ptr, len, num);
     }
-    return readIntBAny(ptr, len, out, num, base);
+    return readIntBAny(ptr, len, num, base);
   }
 
   template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) static auto readIntB10(
-      C const* ptr,
+      C const*& ptr,
       Size len,
-      C const** out,
       N* num
   ) noexcept -> bool {
     N value = 0u;
@@ -418,16 +447,12 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
     }
 
     *num = value;
-    if (out) {
-      *out = ptr;
-    }
     return true;
   }
 
   template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) static auto readIntB16(
-      C const* ptr,
+      C const*& ptr,
       Size len,
-      C const** out,
       N* num
   ) noexcept -> bool {
     N value = 0u;
@@ -453,16 +478,12 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
     }
 
     *num = value;
-    if (out) {
-      *out = ptr;
-    }
     return true;
   }
 
   template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) static auto readIntB8(
-      C const* ptr,
+      C const*& ptr,
       Size len,
-      C const** out,
       N* num
   ) noexcept -> bool {
     N value = 0u;
@@ -479,16 +500,12 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
     }
 
     *num = value;
-    if (out) {
-      *out = ptr;
-    }
     return true;
   }
 
   template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) static auto readIntB2(
-      C const* ptr,
+      C const*& ptr,
       Size len,
-      C const** out,
       N* num
   ) noexcept -> bool {
     N value = 0u;
@@ -505,16 +522,12 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
     }
 
     *num = value;
-    if (out) {
-      *out = ptr;
-    }
     return true;
   }
 
   template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) static auto readIntBAny(
-      C const* ptr,
+      C const*& ptr,
       Size len,
-      C const** out,
       N* num,
       U8 base
   ) noexcept -> bool {
@@ -541,9 +554,6 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
     }
 
     *num = value;
-    if (out) {
-      *out = ptr;
-    }
     return true;
   }
 };
