@@ -40,7 +40,7 @@ template <Size idx, typename T, typename... R> struct TupleNode<idx, T, R...> : 
   CDS_ATTR(constexpr(11)) TupleNode() CDS_ATTR(noexcept(All<IsNoexceptDefaultConstructible, T, R...>::value)) = default;
 
   template <typename Arg, typename... Args>
-  CDS_ATTR(2(constexpr(11), explicit)) TupleNode(Arg&& param, Args&&... remaining) CDS_ATTR(noexcept(
+  CDS_ATTR(constexpr(11)) TupleNode(Arg&& param, Args&&... remaining) CDS_ATTR(noexcept(
       noexcept(NextNode(cds::forward<Args>(remaining)...))
       && noexcept(T(cds::forward<Arg>(param)))
   )) :

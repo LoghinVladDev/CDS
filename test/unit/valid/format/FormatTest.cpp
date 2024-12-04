@@ -272,51 +272,6 @@ private:
 
 template <typename T, typename C = char> struct Formatter {};
 
-template <typename C, typename I> struct IntegralFormatter {
-  using U = StringUtils<C, StringTraits<C>>;
-
-  template <typename Ctx> constexpr auto parse(Ctx& ctx) noexcept -> typename Ctx::Iterator {
-    auto it = ctx.begin();
-    if (it == ctx.end()) {
-      return it;
-    }
-
-    assert(false && "unimplemented");
-  }
-
-  template <typename Ctx> auto format(I value, Ctx& ctx) const noexcept -> typename Ctx::Iterator {
-    BaseString<C> asStr;
-    auto len = U::intLength(value, 10);
-    asStr.resize(len);
-    ignore = U::writeInt(value, len, asStr.data());
-    return impl::copy(asStr.begin(), asStr.end(), ctx.out());
-  }
-};
-
-template <typename C> struct Formatter<U16, C> : IntegralFormatter<C, U16> {};
-template <typename C> struct Formatter<U32, C> : IntegralFormatter<C, U32> {};
-template <typename C> struct Formatter<U64, C> : IntegralFormatter<C, U64> {};
-template <typename C> struct Formatter<S16, C> : IntegralFormatter<C, S16> {};
-template <typename C> struct Formatter<S32, C> : IntegralFormatter<C, S32> {};
-template <typename C> struct Formatter<S64, C> : IntegralFormatter<C, S64> {};
-
-template <typename C> struct Formatter<bool, C> {
-  template <typename Ctx> constexpr auto parse(Ctx& ctx) noexcept -> typename Ctx::Iterator {
-    auto it = ctx.begin();
-    if (it == ctx.end()) {
-      return it;
-    }
-
-    assert(false && "unimplemented");
-  }
-
-  template <typename Ctx> auto format(bool value, Ctx& ctx) const noexcept -> typename Ctx::Iterator {
-    BaseString<C> asStr;
-    asStr += value;
-    return impl::copy(asStr.begin(), asStr.end(), ctx.out());
-  }
-};
-
 class FmtRn {
 public:
   template <unsigned n> constexpr FmtRn(char const (&str)[n]) : _sv{str, n - 1} {}
@@ -365,12 +320,17 @@ template <typename F> struct FormatterParseFormatString<F, Void<decltype(&F::par
 };
 
 template <Size idx> struct FormatterContainer {
-  template <typename C, typename... Args>
-  static auto doFmt(BaseString<C>& out, BaseStringView<C> const& in, Tuple<Args&&...> const& args) -> void {
+  template <typename C, typename... Args> static auto doFmt(
+      BaseString<C>& out, BaseStringView<C> const& in, Tuple<Args&&...> const& args, bool preValidated) -> void {
     using T = RemoveCVRef<decltype(get<idx>(args))>;
     Formatter<T> formatter;
     FormatParseContext<C> fmtParCtx {in};
-    auto todo1 = FormatterParseFormatString<Formatter<T>>::parse(formatter, fmtParCtx);
+    if (!preValidated) {
+      auto todo1 = FormatterParseFormatString<Formatter<T>>::parse(formatter, fmtParCtx);
+      if (todo1 != in.end()) {
+        throw FormatException(String{"Incomplete parsing of format string '"} + in + "'");
+      }
+    }
 
     FormatContext<C> fmtCtx {&out};
     auto todo2 = formatter.format(get<idx>(args), fmtCtx);
@@ -383,7 +343,7 @@ template <Size idx> struct FormatterContainer {
     FormatParseContext<C> fmtParCtx {in};
     auto todo1 = FormatterParseFormatString<Formatter<T>>::parse(formatter, fmtParCtx);
     if (todo1 != in.end()) {
-      assert(false);
+        throw FormatException("Incomplete parsing of format string");
     }
   }
 };
@@ -423,8 +383,11 @@ template <typename A, typename C> constexpr auto formatValidate(BaseStringView<C
       [](FmtStr const& fmt) {
         using VF = ValidationFormatters<C, A>;
         if (VF::size <= fmt.argIdx) {
+          if (inConstexpr()) {
+            throw FormatException("Format index specification is out of range for given arguments");
+          }
           throw FormatException(
-            String{"Out of range format index. Requested: "} + fmt.argIdx + ", available: " + VF::size);
+              String{"Out of range format index. Requested: "} + fmt.argIdx + ", available: " + VF::size);
         }
         VF::table[fmt.argIdx](fmt.val);
       }
@@ -437,7 +400,7 @@ template <typename C, typename... Args> struct FmtS {
     if (inConstexpr()) {
       formatValidate<Tuple<Args&&...>>(_str);
       // auto it = FmtIt<C>{_str.cbegin(), _str.cend()};
-      // _preValidated = true;
+      _preValidated = true;
     }
   }
   // template <typename S> FmtS(S const& s) : _str{s} {}
@@ -450,14 +413,15 @@ template <typename C, typename... Args> struct FmtS {
   bool _preValidated {false};
 };
 
-template <typename C, typename F, typename A> auto formatTo(BaseString<C>& out, F const& fmt, A&& args) -> void {
+template <typename C, typename F, typename A> auto formatTo(
+    BaseString<C>& out, F const& fmt, A&& args, bool preValidated) -> void {
   for (auto const& e : FmtRn{fmt}) {
     e.visit(meta::visitors(
       [&out](StringView const& text) {
         out += text;
       },
-      [&out, &args](FmtStr const& fmt) {
-        Formatters<C, A>::table[fmt.argIdx](out, fmt.val, fwd<A>(args));
+      [&out, &args, preValidated](FmtStr const& fmt) {
+        Formatters<C, A>::table[fmt.argIdx](out, fmt.val, fwd<A>(args), preValidated);
       }
     ));
   }
@@ -465,9 +429,123 @@ template <typename C, typename F, typename A> auto formatTo(BaseString<C>& out, 
 
 template <typename... Args> auto format(FmtS<char, TypeIdT<Args>...> fmt, Args&&... args) -> String {
   String out;
-  formatTo(out, fmt.get(), cds::impl::forwardAsTuple(fwd<Args>(args)...));
+  formatTo(out, fmt.get(), impl::forwardAsTuple(fwd<Args>(args)...), fmt._preValidated);
   return out;
 }
+
+enum class FmtAlignType {Leading, Centre, Trailing};
+
+template <typename C> struct FmtFillAlignSpec {
+  FmtAlignType align;
+  Size size;
+  C fillChar;
+};
+
+template <typename C> constexpr auto operator==(FmtFillAlignSpec<C> const& lhs, FmtFillAlignSpec<C> const& rhs)
+    noexcept -> bool {
+  return lhs.align == rhs.align
+      && lhs.size == rhs.size
+      && lhs.fillChar == rhs.fillChar;
+}
+
+template <typename C, typename T,
+          typename = typename And<Not<IsSame<C, T>>, Not<IsSame<T, bool>>,
+                                  Or<IsSigned<T>, IsUnsigned<T>, IsFloating<T>>>::Type>
+struct FmtAlignDefault;
+
+template <typename C, typename T> struct FmtAlignDefault<C, T, True> {
+  static constexpr auto value = FmtAlignType::Trailing;
+};
+
+template <typename C, typename T> struct FmtAlignDefault<C, T, False> {
+  static constexpr auto value = FmtAlignType::Leading;
+};
+
+template <typename C> auto fillAlignSpec(C aligner) noexcept -> Optional<FmtAlignType> {
+  switch (aligner) {
+    case static_cast<C>('<'): return FmtAlignType::Leading;
+    case static_cast<C>('>'): return FmtAlignType::Trailing;
+    case static_cast<C>('^'): return FmtAlignType::Centre;
+    default:                  return nullopt;
+  }
+}
+
+template <typename C, typename T, typename I, typename S> constexpr auto fmtParseWidth(I it, S end) noexcept ->
+    Tuple<I, Optional<FmtFillAlignSpec<C>>> {
+  if (it == end) {
+    return {it, nullopt};
+  }
+
+  auto sizeIt = it;
+  auto maybeExplicitAlign = it + 1;
+  auto fillChar = static_cast<C>(' ');
+  auto align = FmtAlignDefault<C, T>::value;
+  if (maybeExplicitAlign != end) {
+    auto maybeAlign = fillAlignSpec(*maybeExplicitAlign);
+    if (maybeAlign) {
+      align = *maybeAlign;
+      fillChar = *sizeIt;
+      sizeIt = maybeExplicitAlign + 1;
+
+      if (sizeIt == end) {
+        return {it, nullopt};
+      }
+    }
+  }
+
+  Size size = 0u;
+  C const* afterRead = nullptr;
+  if (!StringUtils<C, StringTraits<C>>::readInt(&*sizeIt, end - sizeIt, &afterRead, &size, 10)) {
+    return {it, nullopt};
+  }
+  sizeIt = sizeIt + (afterRead - &*sizeIt);
+  return {sizeIt, makeOptional<FmtFillAlignSpec<C>>(align, size, fillChar)};
+}
+
+template <typename C, typename I> struct IntegralFormatter {
+  using U = StringUtils<C, StringTraits<C>>;
+
+  template <typename Ctx> constexpr auto parse(Ctx& ctx) noexcept -> typename Ctx::Iterator {
+    auto it = ctx.begin();
+    if (it == ctx.end()) {
+      return it;
+    }
+
+    assert(false && "unimplemented");
+  }
+
+  template <typename Ctx> auto format(I value, Ctx& ctx) const noexcept -> typename Ctx::Iterator {
+    BaseString<C> asStr;
+    auto len = U::intLength(value, 10);
+    asStr.resize(len);
+    ignore = U::writeInt(value, len, asStr.data());
+    return impl::copy(asStr.begin(), asStr.end(), ctx.out());
+  }
+};
+
+template <typename C> struct Formatter<U16, C> : IntegralFormatter<C, U16> {};
+template <typename C> struct Formatter<U32, C> : IntegralFormatter<C, U32> {};
+template <typename C> struct Formatter<U64, C> : IntegralFormatter<C, U64> {};
+template <typename C> struct Formatter<S16, C> : IntegralFormatter<C, S16> {};
+template <typename C> struct Formatter<S32, C> : IntegralFormatter<C, S32> {};
+template <typename C> struct Formatter<S64, C> : IntegralFormatter<C, S64> {};
+
+template <typename C> struct Formatter<bool, C> {
+  template <typename Ctx> constexpr auto parse(Ctx& ctx) noexcept -> typename Ctx::Iterator {
+    auto it = ctx.begin();
+    if (it == ctx.end()) {
+      return it;
+    }
+
+    assert(false && "unimplemented");
+  }
+
+  template <typename Ctx> auto format(bool value, Ctx& ctx) const noexcept -> typename Ctx::Iterator {
+    BaseString<C> asStr;
+    asStr += value;
+    return impl::copy(asStr.begin(), asStr.end(), ctx.out());
+  }
+};
 } // namespace
 
 TEST(FormatTest, init) {
@@ -498,5 +576,45 @@ TEST(FormatTest, init) {
 
   int const v = 5;
   std::cout << format("{1}{0}", v, true);
-  std::cout << format("{2}{x}", v, true);
+  // std::cout << format("{2}{x}", v, true);
+}
+
+TEST(FormatTest, fmtParseWidth) {
+  char const str0[] = "6";
+  ASSERT_EQ(
+      Tuple(cds::end(str0), Optional(FmtFillAlignSpec<char>(FmtAlignType::Trailing, 6, ' '))),
+      (fmtParseWidth<char, int>(cds::begin(str0), cds::end(str0)))
+  );
+  ASSERT_EQ(
+      Tuple(cds::end(str0), Optional(FmtFillAlignSpec<char>(FmtAlignType::Leading, 6, ' '))),
+      (fmtParseWidth<char, char>(cds::begin(str0), cds::end(str0)))
+  );
+  ASSERT_EQ(
+      Tuple(cds::end(str0), Optional(FmtFillAlignSpec<char>(FmtAlignType::Leading, 6, ' '))),
+      (fmtParseWidth<char, bool>(cds::begin(str0), cds::end(str0)))
+  );
+
+  char const str1[] = "6d";
+  ASSERT_EQ(
+      Tuple(cds::end(str1) - 1, Optional(FmtFillAlignSpec<char>(FmtAlignType::Trailing, 6, ' '))),
+      (fmtParseWidth<char, int>(cds::begin(str1), cds::end(str1)))
+  );
+
+  char const str2[] = "*<6";
+  ASSERT_EQ(
+      Tuple(cds::end(str2), Optional(FmtFillAlignSpec<char>(FmtAlignType::Leading, 6, '*'))),
+      (fmtParseWidth<char, int>(cds::begin(str2), cds::end(str2)))
+  );
+
+  char const str3[] = "*>6";
+  ASSERT_EQ(
+      Tuple(cds::end(str3), Optional(FmtFillAlignSpec<char>(FmtAlignType::Trailing, 6, '*'))),
+      (fmtParseWidth<char, int>(cds::begin(str3), cds::end(str3)))
+  );
+
+  char const str4[] = "*^6";
+  ASSERT_EQ(
+      Tuple(cds::end(str4), Optional(FmtFillAlignSpec<char>(FmtAlignType::Centre, 6, '*'))),
+      (fmtParseWidth<char, int>(cds::begin(str4), cds::end(str4)))
+  );
 }

@@ -119,6 +119,10 @@ public:
 using impl::get;
 using impl::tie;
 using impl::forwardAsTuple;
+
+#if CDS_ATTR(ctad)
+template <typename... Ts> Tuple(Ts...) -> Tuple<Ts...>;
+#endif // #if CDS_ATTR(ctad)
 } // namespace cds
 
 namespace std {
