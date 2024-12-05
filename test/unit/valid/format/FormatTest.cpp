@@ -39,11 +39,11 @@ struct FmtStr {
   StringView val;
   Size argIdx;
 
-  auto operator==(FmtStr const& o) const noexcept -> bool {
+  constexpr auto operator==(FmtStr const& o) const noexcept -> bool {
     return argIdx == o.argIdx && val == o.val;
   }
 
-  auto operator!=(FmtStr const& o) const noexcept -> bool {
+  constexpr auto operator!=(FmtStr const& o) const noexcept -> bool {
     return argIdx != o.argIdx || val != o.val;
   }
 };
@@ -235,42 +235,61 @@ private:
   BaseStringView<C> const& _fmtStr;
 };
 
-template <typename C> class FormatContext {
-  class FormatIterator {
-  public:
-    explicit FormatIterator(FormatContext* ctx) : _ctx{ctx} {}
-
-    auto operator=(C value) noexcept -> FormatIterator& {
-      *_ctx->_result += value;
-      return *this;
-    }
-
-    auto operator*() noexcept -> FormatIterator& {
-      return *this;
-    }
-
-    auto operator++() -> FormatIterator& {
-      return *this;
-    }
-
-  private:
-    FormatContext* _ctx;
-  };
-
+template <typename T> class BackInserterIterator {
 public:
-  using Iterator = FormatIterator;
+  CDS_ATTR(2(explicit, constexpr(11))) BackInserterIterator(T& obj) : _obj{obj} {}
+  template <typename V> CDS_ATTR(constexpr(14)) auto operator=(V&& value) noexcept -> BackInserterIterator& {
+    _obj.pushBack(fwd<V>(value));
+    return *this;
+  }
+
+  constexpr auto operator*() noexcept -> BackInserterIterator& {
+    return *this;
+  }
+
+  constexpr auto operator++() -> BackInserterIterator& {
+    return *this;
+  }
+
+private:
+  T& _obj;
+};
+
+template <typename C, typename U, typename A> class BackInserterIterator<BaseString<C, U, A>> {
+public:
+  CDS_ATTR(2(explicit, constexpr(11))) BackInserterIterator(BaseString<C, U, A>& obj) : _obj{obj} {}
+  template <typename V> CDS_ATTR(constexpr(14)) auto operator=(V&& value) noexcept -> BackInserterIterator& {
+    _obj += fwd<V>(value);
+    return *this;
+  }
+
+  constexpr auto operator*() noexcept -> BackInserterIterator& {
+    return *this;
+  }
+
+  constexpr auto operator++() -> BackInserterIterator& {
+    return *this;
+  }
+
+private:
+  BaseString<C, U, A>& _obj;
+};
+
+template <typename C> class FormatContext {
+public:
+  using Iterator = BackInserterIterator<BaseString<C>>;
 
   explicit FormatContext(BaseString<C>* result) : _result{result} {}
 
-  auto out() noexcept -> FormatIterator {
-    return FormatIterator{this};
+  auto out() noexcept -> Iterator {
+    return Iterator{*_result};
   }
 
 private:
   BaseString<C>* _result;
 };
 
-template <typename T, typename C = char> struct Formatter {};
+template <typename, typename = char> struct Formatter {};
 
 class FmtRn {
 public:
@@ -301,8 +320,8 @@ std::ostream& operator<<(std::ostream& out, FmtRn const& rn) noexcept {
   return out;
 }
 
-template <typename F, typename = void> struct FormatterParseFormatString {
-  template <typename C> static constexpr auto parse(F& formatter, C& ctx) -> typename C::Iterator {
+template <typename F, typename Ctx, typename = void> struct FormatterParseFormatString {
+  static constexpr auto parse(F& formatter, Ctx& ctx) -> typename Ctx::Iterator {
     ignore = formatter;
     auto it = ctx.begin();
     if (it == ctx.end()) {
@@ -313,20 +332,21 @@ template <typename F, typename = void> struct FormatterParseFormatString {
   }
 };
 
-template <typename F> struct FormatterParseFormatString<F, Void<decltype(&F::parse)>> {
-  template <typename C> static auto parse(F& formatter, C& ctx) -> typename C::Iterator {
+template <typename F, typename Ctx> struct FormatterParseFormatString<F, Ctx, Void<decltype(&F::template parse<Ctx>)>> {
+  static auto parse(F& formatter, Ctx& ctx) -> typename Ctx::Iterator {
     return formatter.parse(ctx);
   }
 };
 
 template <Size idx> struct FormatterContainer {
-  template <typename C, typename... Args> static auto doFmt(
-      BaseString<C>& out, BaseStringView<C> const& in, Tuple<Args&&...> const& args, bool preValidated) -> void {
+  template <typename C, typename F, typename... Args> static auto doFmt(
+      BaseString<C>& out, BaseStringView<C> const& in, Tuple<Args&&...> const& args, F& fmt) -> void {
     using T = RemoveCVRef<decltype(get<idx>(args))>;
-    Formatter<T> formatter;
+    auto& formatter = get<idx>(fmt._formatters);
+    // Formatter<T> formatter;
     FormatParseContext<C> fmtParCtx {in};
-    if (!preValidated) {
-      auto todo1 = FormatterParseFormatString<Formatter<T>>::parse(formatter, fmtParCtx);
+    if (!fmt._preValidated) {
+      auto todo1 = FormatterParseFormatString<Formatter<T, C>, FormatParseContext<C>>::parse(formatter, fmtParCtx);
       if (todo1 != in.end()) {
         throw FormatException(String{"Incomplete parsing of format string '"} + in + "'");
       }
@@ -336,52 +356,69 @@ template <Size idx> struct FormatterContainer {
     auto todo2 = formatter.format(get<idx>(args), fmtCtx);
   }
 
-  template <typename C, typename... Args>
-  static constexpr auto doValidate(BaseStringView<C> const& in) -> void {
+  template <typename C, typename F, typename... Args>
+  static constexpr auto doValidate(BaseStringView<C> const& in, F& fmt) -> void {
     using T = RemoveCVRef<decltype(get<idx>(value<Tuple<Args&&...>>()))>;
-    Formatter<T> formatter;
+    // Formatter<T> formatter;
+    auto& formatter = get<idx>(fmt._formatters);
     FormatParseContext<C> fmtParCtx {in};
-    auto todo1 = FormatterParseFormatString<Formatter<T>>::parse(formatter, fmtParCtx);
+    auto todo1 = FormatterParseFormatString<Formatter<T>, FormatParseContext<C>>::parse(formatter, fmtParCtx);
     if (todo1 != in.end()) {
         throw FormatException("Incomplete parsing of format string");
     }
   }
 };
 
-template <typename, typename...> struct FormattersImpl {};
+// template <typename, typename...> struct FormattersImpl {};
+//
+// template <typename C, typename... Args, Size... is> struct FormattersImpl<unionImpl::IndexSequence<is...>, C, Args...> {
+//   static constexpr meta::Common<Decay<decltype(&FormatterContainer<is>::template doFmt<C, Args&&...>)>...>
+//       table[sizeof...(is)] = {FormatterContainer<is>::template doFmt<C, Args&&...>...};
+// };
+//
+// template <typename, typename> struct Formatters{};
+//
+// template <typename C, typename... A> struct Formatters<C, Tuple<A...>> :
+//     FormattersImpl<unionImpl::MakeIndexSequence<sizeof...(A)>, C, A...> {};
+//
+// template <typename, typename...> struct ValidationFormattersImpl {};
+//
+// template <typename C, typename... Args, Size... is>
+// struct ValidationFormattersImpl<unionImpl::IndexSequence<is...>, C, Args...> {
+//   static constexpr meta::Common<Decay<decltype(&FormatterContainer<is>::template doValidate<C, Args&&...>)>...>
+//       table[sizeof...(is)] = {FormatterContainer<is>::template doValidate<C, Args&&...>...};
+//   static constexpr auto size = sizeof...(is);
+// };
+//
+// template <typename, typename> struct ValidationFormatters{};
+//
+// template <typename C, typename... A> struct ValidationFormatters<C, Tuple<A...>> :
+//     ValidationFormattersImpl<unionImpl::MakeIndexSequence<sizeof...(A)>, C, A...> {};
 
-template <typename C, typename... Args, Size... is> struct FormattersImpl<unionImpl::IndexSequence<is...>, C, Args...> {
-  static constexpr meta::Common<Decay<decltype(&FormatterContainer<is>::template doFmt<C, Args&&...>)>...>
-      table[sizeof...(is)] = {FormatterContainer<is>::template doFmt<C, Args&&...>...};
-};
+template <typename, typename, typename...> struct MergedValidationFormattersImpl {};
 
-template <typename, typename> struct Formatters{};
-
-template <typename C, typename... A> struct Formatters<C, Tuple<A...>> :
-FormattersImpl<unionImpl::MakeIndexSequence<sizeof...(A)>, C, A...> {};
-
-template <typename, typename...> struct ValidationFormattersImpl {};
-
-template <typename C, typename... Args, Size... is>
-struct ValidationFormattersImpl<unionImpl::IndexSequence<is...>, C, Args...> {
-  static constexpr meta::Common<Decay<decltype(&FormatterContainer<is>::template doValidate<C, Args&&...>)>...>
-      table[sizeof...(is)] = {FormatterContainer<is>::template doValidate<C, Args&&...>...};
+template <typename C, typename F, typename... Args, Size... is>
+struct MergedValidationFormattersImpl<unionImpl::IndexSequence<is...>, C, F, Args...> {
   static constexpr auto size = sizeof...(is);
+  static constexpr meta::Common<Decay<decltype(&FormatterContainer<is>::template doValidate<C, F, Args&&...>)>...>
+      parsers[size] = {FormatterContainer<is>::template doValidate<C, F, Args&&...>...};
+  static constexpr meta::Common<Decay<decltype(&FormatterContainer<is>::template doFmt<C, F, Args&&...>)>...>
+      formatters[size] = {FormatterContainer<is>::template doFmt<C, F, Args&&...>...};
 };
 
-template <typename, typename> struct ValidationFormatters{};
+template <typename, typename, typename> struct MergedValidationFormatters {};
+template <typename C, typename F, typename... A> struct MergedValidationFormatters<C, F, Tuple<A...>> :
+    MergedValidationFormattersImpl<unionImpl::MakeIndexSequence<sizeof...(A)>, C, F, A...> {};
 
-template <typename C, typename... A> struct ValidationFormatters<C, Tuple<A...>> :
-    ValidationFormattersImpl<unionImpl::MakeIndexSequence<sizeof...(A)>, C, A...> {};
-
-template <typename A, typename C> constexpr auto formatValidate(BaseStringView<C> const& fmt) -> void {
+template <typename A, typename C, typename F> constexpr auto formatValidate(
+    BaseStringView<C> const& fmt, F& fmtObj) -> void {
   for (auto const& e : FmtRn{fmt}) {
     e.visit(meta::visitors(
       [](StringView const& text) {
         ignore = text;
       },
-      [](FmtStr const& fmt) {
-        using VF = ValidationFormatters<C, A>;
+      [&fmtObj](FmtStr const& fmt) {
+        using VF = MergedValidationFormatters<C, F, A>;
         if (VF::size <= fmt.argIdx) {
           if (inConstexpr()) {
             throw FormatException("Format index specification is out of range for given arguments");
@@ -389,53 +426,57 @@ template <typename A, typename C> constexpr auto formatValidate(BaseStringView<C
           throw FormatException(
               String{"Out of range format index. Requested: "} + fmt.argIdx + ", available: " + VF::size);
         }
-        VF::table[fmt.argIdx](fmt.val);
+        VF::parsers[fmt.argIdx](fmt.val, fmtObj);
+      }
+    ));
+  }
+}
+
+template <typename C, typename F, typename A> auto formatTo(
+    BaseString<C>& out, F& fmt, A&& args) -> void {
+  for (auto const& e : FmtRn{fmt.get()}) {
+    e.visit(meta::visitors(
+      [&out](StringView const& text) {
+        out += text;
+      },
+      [&out, &args, &fmt](FmtStr const& fmtStr) {
+        MergedValidationFormatters<C, F, A>
+            ::formatters[fmtStr.argIdx](out, fmtStr.val, fwd<A>(args), fmt);
       }
     ));
   }
 }
 
 template <typename C, typename... Args> struct FmtS {
-  template <typename S> CDS_ATTR(consteval(20, constexpr(14))) FmtS(S const& s) : _str{s} {
+  using Char = C;
+  template <typename S> CDS_ATTR(2(consteval(20, constexpr(14)), implicit)) FmtS(S const& s) : _str{s} {
     if (inConstexpr()) {
-      formatValidate<Tuple<Args&&...>>(_str);
-      // auto it = FmtIt<C>{_str.cbegin(), _str.cend()};
+      formatValidate<Tuple<Args&&...>>(_str, *this);
       _preValidated = true;
     }
   }
   // template <typename S> FmtS(S const& s) : _str{s} {}
 
-  auto get() const noexcept -> BaseStringView<C> {
+  [[nodiscard]] auto get() const noexcept -> BaseStringView<C> {
     return _str;
   }
 
   BaseStringView<C> _str;
+  Tuple<Formatter<RemoveCVRef<Args>>...> _formatters;
+  // MergedValidationFormatters<C, Tuple<Args&&...>> _formatters;
   bool _preValidated {false};
 };
 
-template <typename C, typename F, typename A> auto formatTo(
-    BaseString<C>& out, F const& fmt, A&& args, bool preValidated) -> void {
-  for (auto const& e : FmtRn{fmt}) {
-    e.visit(meta::visitors(
-      [&out](StringView const& text) {
-        out += text;
-      },
-      [&out, &args, preValidated](FmtStr const& fmt) {
-        Formatters<C, A>::table[fmt.argIdx](out, fmt.val, fwd<A>(args), preValidated);
-      }
-    ));
-  }
-}
-
 template <typename... Args> auto format(FmtS<char, TypeIdT<Args>...> fmt, Args&&... args) -> String {
   String out;
-  formatTo(out, fmt.get(), impl::forwardAsTuple(fwd<Args>(args)...), fmt._preValidated);
+  formatTo(out, fmt, impl::forwardAsTuple(fwd<Args>(args)...));
   return out;
 }
 
 enum class FmtAlignType {Leading, Centre, Trailing};
 
 template <typename C> struct FmtFillAlignSpec {
+  constexpr FmtFillAlignSpec(FmtAlignType a, Size s, C fc) noexcept : align{a}, size{s}, fillChar{fc} {}
   FmtAlignType align;
   Size size;
   C fillChar;
@@ -502,24 +543,73 @@ template <typename C, typename T, typename I, typename S> constexpr auto fmtPars
   return {sizeIt, makeOptional<FmtFillAlignSpec<C>>(align, size, fillChar)};
 }
 
-template <typename C, typename I> struct IntegralFormatter {
+template <typename T, typename C> struct FmtFillAlignComponent {
+  template <typename I, typename S> constexpr auto parseFillAlign(I begin, S end) noexcept -> I {
+    cds::tie(begin, _fillAlignSpec) = fmtParseWidth<C, T>(begin, end);
+    return begin;
+  }
+
+  template <typename T0, typename I, typename F>
+  constexpr auto formatFillAlign(I out, T0&& obj, Optional<Size> estWidth, F&& fmt) const noexcept -> I {
+    if (!_fillAlignSpec) {
+      return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out);
+    }
+
+    if (estWidth) {
+      if (*estWidth >= _fillAlignSpec->size) {
+        return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out);
+      }
+      auto remaining = _fillAlignSpec->size - *estWidth;
+      if (_fillAlignSpec->align == FmtAlignType::Leading) {
+        return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), fillN(out, remaining, _fillAlignSpec->fillChar));
+      }
+
+      if (_fillAlignSpec->align == FmtAlignType::Leading) {
+        return fillN(functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out), remaining, _fillAlignSpec->fillChar);
+      }
+
+      auto firstHalf = remaining / 2;
+      auto secondHalf = remaining - firstHalf;
+      return fillN(functional::invoke(fwd<F>(fmt), fwd<T0>(obj), fillN(out, firstHalf, _fillAlignSpec->fillChar)), secondHalf, _fillAlignSpec->fillChar);
+    }
+
+    BaseString<C> asStr;
+    functional::invoke(fwd<F>(fmt), fwd<T0>(obj), BackInserterIterator<BaseString<C>>{asStr});
+    return formatFillAlign(out, asStr, asStr.size(), *this);
+  }
+
+  template <typename I> constexpr auto operator()(BaseString<C> const& obj, I out) const noexcept -> I {
+    return impl::copy(obj.begin(), obj.end(), out);
+  }
+
+  Optional<FmtFillAlignSpec<C>> _fillAlignSpec;
+};
+
+template <typename C, typename I> struct IntegralFormatter : FmtFillAlignComponent<I, C> {
+  using FmtFillAlignComponent<I, C>::parseFillAlign;
+  using FmtFillAlignComponent<I, C>::formatFillAlign;
   using U = StringUtils<C, StringTraits<C>>;
 
-  template <typename Ctx> constexpr auto parse(Ctx& ctx) noexcept -> typename Ctx::Iterator {
-    auto it = ctx.begin();
+  template <typename Ctx> constexpr auto parse(Ctx& ctx) -> typename Ctx::Iterator {
+    auto it = parseFillAlign(ctx.begin(), ctx.end());
     if (it == ctx.end()) {
       return it;
     }
 
-    assert(false && "unimplemented");
+    if (inConstexpr()) {
+      throw FormatException("Extraneous characters in format string");
+    }
+    throw FormatException(String{"Extraneous characters in format string: '"} + StringView{&*it, ctx.end() - it} + "'");
   }
 
   template <typename Ctx> auto format(I value, Ctx& ctx) const noexcept -> typename Ctx::Iterator {
-    BaseString<C> asStr;
     auto len = U::intLength(value, 10);
-    asStr.resize(len);
-    ignore = U::writeInt(value, len, asStr.data());
-    return impl::copy(asStr.begin(), asStr.end(), ctx.out());
+    return formatFillAlign(ctx.out(), value, len, [len](I lValue, BackInserterIterator<BaseString<C>> out) {
+      BaseString<C> asStr;
+      asStr.resize(len);
+      ignore = U::writeInt(lValue, len, asStr.data());
+      return impl::copy(asStr.begin(), asStr.end(), out);
+    });
   }
 };
 
@@ -530,9 +620,11 @@ template <typename C> struct Formatter<S16, C> : IntegralFormatter<C, S16> {};
 template <typename C> struct Formatter<S32, C> : IntegralFormatter<C, S32> {};
 template <typename C> struct Formatter<S64, C> : IntegralFormatter<C, S64> {};
 
-template <typename C> struct Formatter<bool, C> {
+template <typename C> struct Formatter<bool, C> : FmtFillAlignComponent<bool, C> {
+  using FmtFillAlignComponent<bool, C>::parseFillAlign;
+  using FmtFillAlignComponent<bool, C>::formatFillAlign;
   template <typename Ctx> constexpr auto parse(Ctx& ctx) noexcept -> typename Ctx::Iterator {
-    auto it = ctx.begin();
+    auto it = parseFillAlign(ctx.begin(), ctx.end());
     if (it == ctx.end()) {
       return it;
     }
@@ -574,9 +666,10 @@ TEST(FormatTest, init) {
   // format("abc"_f, 1, true);
   // std::format("abc");
 
-  int const v = 5;
-  std::cout << format("{1}{0}", v, true);
-  // std::cout << format("{2}{x}", v, true);
+  ASSERT_EQ("5true", format("{0}{1}", 5, true));
+  ASSERT_EQ("true5", format("{1}{0}", 5, true));
+  ASSERT_EQ("55", format("{0}{0}", 5, true));
+  ASSERT_EQ("truetrue", format("truetrue", 5, true));
 }
 
 TEST(FormatTest, fmtParseWidth) {
@@ -617,4 +710,26 @@ TEST(FormatTest, fmtParseWidth) {
       Tuple(cds::end(str4), Optional(FmtFillAlignSpec<char>(FmtAlignType::Centre, 6, '*'))),
       (fmtParseWidth<char, int>(cds::begin(str4), cds::end(str4)))
   );
+
+  char const str5[] = "*^";
+  ASSERT_EQ(
+      Tuple(cds::begin(str5), nullopt),
+      (fmtParseWidth<char, int>(cds::begin(str5), cds::end(str5)))
+  );
+
+  char const str6[] = "";
+  ASSERT_EQ(
+      Tuple(cds::begin(str6), nullopt),
+      (fmtParseWidth<char, int>(cds::begin(str6), cds::end(str6)))
+  );
+
+  char const str7[] = "d";
+  ASSERT_EQ(
+      Tuple(cds::begin(str7), nullopt),
+      (fmtParseWidth<char, int>(cds::begin(str7), cds::end(str7)))
+  );
+}
+
+TEST(FormatTest, fmtParseWidthInFormat) {
+  ASSERT_EQ(format("{0:6}", 42), "    42");
 }

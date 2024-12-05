@@ -7,6 +7,7 @@
 #pragma once
 
 #include <cds/meta/Semantics>
+#include <cds/Utility>
 
 namespace cds {
 namespace impl {
@@ -24,7 +25,19 @@ using meta::ReturnIf;
 using meta::All;
 using meta::IsNoexceptDefaultConstructible;
 
-template <Size, typename...> struct TupleNode {};
+template <Size idx, typename...> struct TupleNode {
+  template <typename... Types> CDS_ATTR(constexpr(14))
+  auto operator=(TupleNode<idx, Types...> const& node) noexcept -> TupleNode& {
+    ignore = node;
+    return *this;
+  }
+
+  template <typename... Types> CDS_ATTR(constexpr(14))
+  auto operator=(TupleNode<idx, Types...>&& node) noexcept -> TupleNode& {
+    ignore = node;
+    return *this;
+  }
+};
 
 template <Size idx> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(
     CDS_ATTR(unused) TupleNode<idx> const& l,
@@ -53,6 +66,26 @@ template <Size idx, typename T, typename... R> struct TupleNode<idx, T, R...> : 
     return _nodeData == other._nodeData
         && static_cast<NextNode const&>(*this)
             == static_cast<typename TupleNode<oIdx, OT, OR...>::NextNode const&>(other);
+  }
+
+  template <typename... UTypes> CDS_ATTR(constexpr(14))
+  auto operator=(TupleNode<idx, UTypes...> const& node) CDS_ATTR(noexcept(
+      noexcept(lvalue<T>() = node._nodeData)
+      && noexcept(NextNode::operator=(static_cast<typename TupleNode<idx, UTypes...>::NextNode const&>(node)))
+  )) -> TupleNode& {
+    _nodeData = node._nodeData;
+    return static_cast<TupleNode&>(NextNode::operator=(
+        static_cast<typename TupleNode<idx, UTypes...>::NextNode const&>(node)));
+  }
+
+  template <typename... UTypes> CDS_ATTR(constexpr(14))
+  auto operator=(TupleNode<idx, UTypes...>&& node) CDS_ATTR(noexcept(
+      noexcept(lvalue<T>() = mv(node._nodeData))
+      && noexcept(NextNode::operator=(static_cast<typename TupleNode<idx, UTypes...>::NextNode&&>(node)))
+  )) -> TupleNode& {
+    _nodeData = node._nodeData;
+    return static_cast<TupleNode&>(NextNode::operator=(
+        static_cast<typename TupleNode<idx, UTypes...>::NextNode&&>(node)));
   }
 
   T _nodeData;

@@ -102,7 +102,12 @@ consteval auto dynUser() -> bool {
   auto* p = a.allocate(4);
   a.deallocate(p, 4);
 
-  struct S {int x; int y;};
+  struct S {
+#ifdef __APPLE__
+    explicit constexpr S(int a, int b) : x{a}, y{b} {}
+#endif
+    int x; int y;
+  };
   auto a2 = Allocator<S>();
   auto* p1 = a2.allocate(1);
   cds::impl::construct(p1, 1, 2);

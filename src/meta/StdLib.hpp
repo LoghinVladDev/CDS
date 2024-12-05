@@ -123,9 +123,9 @@ CDS_ATTR(2(nodiscard, constexpr(11))) auto inConstexpr() noexcept -> bool {
 namespace impl {
 #if CDS_ATTR(cpp20)
 template <typename T, typename... A> CDS_ATTR(constexpr(20)) auto construct(T* location, A&&... args)
-    CDS_ATTR(noexcept(noexcept(std::construct_at(location, cds::forward<A>(args)...))))
-    -> decltype(std::construct_at(location, cds::forward<A>(args)...)) {
-  return std::construct_at(location, cds::forward<A>(args)...);
+    CDS_ATTR(noexcept(noexcept(std::construct_at(location, fwd<A>(args)...))))
+    -> decltype(std::construct_at(location, fwd<A>(args)...)) {
+  return std::construct_at(location, fwd<A>(args)...);
 }
 
 template <typename T> CDS_ATTR(constexpr(20))
