@@ -333,7 +333,7 @@ template <typename F, typename Ctx, typename = void> struct FormatterParseFormat
 };
 
 template <typename F, typename Ctx> struct FormatterParseFormatString<F, Ctx, Void<decltype(&F::template parse<Ctx>)>> {
-  static auto parse(F& formatter, Ctx& ctx) -> typename Ctx::Iterator {
+  static constexpr auto parse(F& formatter, Ctx& ctx) -> typename Ctx::Iterator {
     return formatter.parse(ctx);
   }
 };
@@ -474,19 +474,70 @@ template <typename... Args> auto format(FmtS<char, TypeIdT<Args>...> fmt, Args&&
 }
 
 enum class FmtAlignType {Leading, Centre, Trailing};
+enum class FmtNumSignType : U8 {PosNeg, Neg, SpaceNeg};
+enum class FmtTypeFlag : U16 {
+  Binary = 0x0001u,
+  Character = 0x0002u,
+  Decimal = 0x0004u,
+  Octal = 0x0008u,
+  Hex = 0x0010u,
+  Uppercase = 0x0020u,
+  Escaped = 0x0040u,
+  Floating = 0x0080u,
+  Scientific = 0x0100u,
+  Fixed = 0x0200u,
+  General = 0x0400u,
+  Pointer = 0x0800u,
+  String = 0x1000u,
+};
+
+using FmtTypeFlags = U16;
 
 template <typename C> struct FmtFillAlignSpec {
-  constexpr FmtFillAlignSpec(FmtAlignType a, Size s, C fc) noexcept : align{a}, size{s}, fillChar{fc} {}
+  constexpr FmtFillAlignSpec(FmtAlignType a, C fc) noexcept : align{a}, fillChar{fc} {}
   FmtAlignType align;
-  Size size;
   C fillChar;
+};
+
+struct FmtNumSpec {
+  FmtNumSignType sign {FmtNumSignType::Neg};
+  bool alternate {false};
+  bool leadingZeroes {false};
+};
+
+struct FmtSizeSpec {
+  Optional<Size> size{nullopt};
+  Optional<Size> explicitIdx{nullopt};
+};
+
+struct FmtWidthSpec {
+  Optional<FmtSizeSpec> width{nullopt};
+  Optional<FmtSizeSpec> precision{nullopt};
 };
 
 template <typename C> constexpr auto operator==(FmtFillAlignSpec<C> const& lhs, FmtFillAlignSpec<C> const& rhs)
     noexcept -> bool {
   return lhs.align == rhs.align
-      && lhs.size == rhs.size
       && lhs.fillChar == rhs.fillChar;
+}
+
+constexpr auto operator==(FmtNumSpec const& lhs, FmtNumSpec const& rhs)
+    noexcept -> bool {
+  return lhs.sign == rhs.sign
+      && lhs.alternate == rhs.alternate
+      && lhs.leadingZeroes == rhs.leadingZeroes;
+}
+
+constexpr auto operator==(FmtSizeSpec const& lhs, FmtSizeSpec const& rhs)
+    noexcept -> bool {
+  return lhs.size == rhs.size
+      && lhs.explicitIdx == rhs.explicitIdx;
+}
+
+constexpr auto operator==(FmtWidthSpec const& lhs, FmtWidthSpec const& rhs)
+    noexcept -> bool {
+  return lhs.width == rhs.width
+      && lhs.precision == rhs.precision;
 }
 
 template <typename C, typename T,
@@ -511,78 +562,217 @@ template <typename C> auto fillAlignSpec(C aligner) noexcept -> Optional<FmtAlig
   }
 }
 
-template <typename C, typename T, typename I, typename S> constexpr auto fmtParseWidth(I it, S end) noexcept ->
-    Tuple<I, Optional<FmtFillAlignSpec<C>>> {
-  if (it == end) {
-    return {it, nullopt};
-  }
-
-  auto sizeIt = it;
-  auto maybeExplicitAlign = it + 1;
+template <typename C, typename T, typename I, typename S> constexpr auto fmtParseFillAlign(I it, S end) noexcept
+    -> Tuple<I, FmtFillAlignSpec<C>> {
+  // auto sizeIt = it;
   auto fillChar = static_cast<C>(' ');
   auto align = FmtAlignDefault<C, T>::value;
+  if (it == end) {
+    return {it, FmtFillAlignSpec<C>{align, fillChar}};
+  }
+
+  auto maybeExplicitAlign = it + 1;
   if (maybeExplicitAlign != end) {
     auto maybeAlign = fillAlignSpec(*maybeExplicitAlign);
     if (maybeAlign) {
       align = *maybeAlign;
-      fillChar = *sizeIt;
-      sizeIt = maybeExplicitAlign + 1;
+      fillChar = /* *sizeIt; */ *it;
+      /* sizeIt */ it = maybeExplicitAlign + 1;
 
-      if (sizeIt == end) {
+      /*
+      if (it == end) {
         return {it, nullopt};
       }
+      */
     }
   }
 
-  Size size = 0u;
-  C const* afterRead = nullptr;
-  if (!StringUtils<C, StringTraits<C>>::readInt(&*sizeIt, end - sizeIt, &afterRead, &size, 10)) {
+  // Size size = 0u;
+  // C const* afterRead = nullptr;
+  // if (!StringUtils<C, StringTraits<C>>::readInt(&*sizeIt, end - sizeIt, &afterRead, &size, 10)) {
+  //   return {it, nullopt};
+  // }
+  // sizeIt = sizeIt + (afterRead - &*sizeIt);
+  return {/* sizeIt */ it, FmtFillAlignSpec<C>{align, /* size, */ fillChar}};
+}
+
+template <typename C, typename I, typename S> constexpr auto fmtParseNum(I it, S end) noexcept
+    -> Tuple<I, FmtNumSpec> {
+  if (it == end) {
+    return {it, FmtNumSpec{}};
+  }
+
+  auto sign = [](C signChar) {
+    switch (signChar) {
+      case static_cast<C>('+'): return FmtNumSignType::PosNeg;
+      case static_cast<C>(' '): return FmtNumSignType::SpaceNeg;
+      default:                  return FmtNumSignType::Neg;
+    }
+  }(*it);
+
+  if ((sign != FmtNumSignType::Neg || *it == static_cast<C>('-')) && ++it == end) {
+    return {it, FmtNumSpec{sign}};
+  }
+
+  bool alternate = *it == static_cast<C>('#');
+  if (alternate && ++it == end) {
+    return {it, FmtNumSpec{sign, alternate}};
+  }
+
+  bool leadingZeroes = *it == static_cast<C>('0');
+  return {leadingZeroes ? it + 1 : it, FmtNumSpec{sign, alternate, leadingZeroes}};
+}
+
+template <typename C, typename I, typename S> constexpr auto fmtParseWidthOrPrec(I it, S end)
+    -> Tuple<I, Optional<FmtSizeSpec>> {
+  using U = StringUtils<C, StringTraits<C>>;
+  Optional<Size> size = nullopt;
+  if (StringTraits<C>::isDigit(*it)) {
+    size.emplace(0);
+    C const* pEnd = nullptr;
+    auto res = U::readInt(&*it, end - it, &pEnd, &*size, 10);
+    assert(res && "Unexpected failure in width int parse");
+    it = it + (pEnd - &*it);
+    if (it == end) {
+      return {it, makeOptional<FmtSizeSpec>(mv(size), nullopt)};
+    }
+  }
+
+  if (!size && *it != static_cast<C>('{')) {
     return {it, nullopt};
   }
-  sizeIt = sizeIt + (afterRead - &*sizeIt);
-  return {sizeIt, makeOptional<FmtFillAlignSpec<C>>(align, size, fillChar)};
+
+  Optional<Size> sizeExplicitArgIdx = nullopt;
+  if (!size) {
+    ++it;
+    if (it != end && *it != static_cast<C>('}')) {
+      sizeExplicitArgIdx.emplace(0);
+      C const* pEnd = nullptr;
+      auto res = U::readInt(&*it, end - it, &pEnd, &*sizeExplicitArgIdx, 10);
+      if (!res) {
+        throw FormatException("Nested replacement field with invalid explicit argument index");
+      }
+      it = it + (pEnd - &*it);
+    }
+
+    if (it == end || *it++ != static_cast<C>('}')) {
+      throw FormatException("Nested replacement field in width specifier not terminated");
+    }
+  }
+
+  return {it, makeOptional<FmtSizeSpec>(mv(size), mv(sizeExplicitArgIdx))};
+}
+
+template <typename C, typename I, typename S> constexpr auto fmtParseWidth(I it, S end)
+    -> Tuple<I, FmtWidthSpec> {
+  if (it == end) {
+    return {it, FmtWidthSpec{}};
+  }
+
+  Optional<FmtSizeSpec> width{};
+  cds::tie(it, width) = fmtParseWidthOrPrec<C>(it, end);
+  if (it == end || *it != static_cast<C>('.')) {
+    return {it, FmtWidthSpec{mv(width)}};
+  }
+
+  if (++it == end) {
+    throw FormatException("Precision specification not followed by precision");
+  }
+
+  Optional<FmtSizeSpec> precision{};
+  cds::tie(it, precision) = fmtParseWidthOrPrec<C>(it, end);
+  return {it, FmtWidthSpec{mv(width), mv(precision)}};
+}
+
+template <typename C, typename T, typename I, typename S> constexpr auto fmtParseType(I it, S end)
+    -> Tuple<I, FmtTypeFlags> {
+
 }
 
 template <typename T, typename C> struct FmtFillAlignComponent {
   template <typename I, typename S> constexpr auto parseFillAlign(I begin, S end) noexcept -> I {
-    cds::tie(begin, _fillAlignSpec) = fmtParseWidth<C, T>(begin, end);
+    cds::tie(begin, _fillAlignSpec) = fmtParseFillAlign<C, T>(begin, end);
     return begin;
   }
 
-  template <typename T0, typename I, typename F>
-  constexpr auto formatFillAlign(I out, T0&& obj, Optional<Size> estWidth, F&& fmt) const noexcept -> I {
-    if (!_fillAlignSpec) {
+  template <typename T0, typename I, typename F> constexpr auto formatFillAlign(
+      Optional<Size> maybeMinWidth, I out, T0&& obj, Optional<Size> estWidth, F&& fmt) const noexcept -> I {
+    if (!maybeMinWidth) {
       return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out);
     }
 
+    auto minWidth = *maybeMinWidth;
     if (estWidth) {
-      if (*estWidth >= _fillAlignSpec->size) {
+      if (*estWidth >= minWidth) {
         return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out);
       }
-      auto remaining = _fillAlignSpec->size - *estWidth;
-      if (_fillAlignSpec->align == FmtAlignType::Leading) {
-        return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), fillN(out, remaining, _fillAlignSpec->fillChar));
+      auto remaining = minWidth - *estWidth;
+      if (_fillAlignSpec.align == FmtAlignType::Leading) {
+        return fillN(functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out), remaining, _fillAlignSpec.fillChar);
       }
 
-      if (_fillAlignSpec->align == FmtAlignType::Leading) {
-        return fillN(functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out), remaining, _fillAlignSpec->fillChar);
+      if (_fillAlignSpec.align == FmtAlignType::Trailing) {
+        return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), fillN(out, remaining, _fillAlignSpec.fillChar));
       }
 
       auto firstHalf = remaining / 2;
       auto secondHalf = remaining - firstHalf;
-      return fillN(functional::invoke(fwd<F>(fmt), fwd<T0>(obj), fillN(out, firstHalf, _fillAlignSpec->fillChar)), secondHalf, _fillAlignSpec->fillChar);
+      return fillN(functional::invoke(fwd<F>(fmt), fwd<T0>(obj), fillN(out, firstHalf, _fillAlignSpec.fillChar)), secondHalf, _fillAlignSpec.fillChar);
     }
 
     BaseString<C> asStr;
     functional::invoke(fwd<F>(fmt), fwd<T0>(obj), BackInserterIterator<BaseString<C>>{asStr});
-    return formatFillAlign(out, asStr, asStr.size(), *this);
+    return formatFillAlign(maybeMinWidth, out, asStr, asStr.size(), *this);
   }
 
   template <typename I> constexpr auto operator()(BaseString<C> const& obj, I out) const noexcept -> I {
     return impl::copy(obj.begin(), obj.end(), out);
   }
 
-  Optional<FmtFillAlignSpec<C>> _fillAlignSpec;
+  FmtFillAlignSpec<C> _fillAlignSpec {FmtAlignDefault<C, T>::value, static_cast<C>(' ')};
+};
+
+template <typename T, typename C> struct FmtNumComponent {
+  template <typename I, typename S> constexpr auto parseNum(I begin, S end) noexcept -> I {
+    cds::tie(begin, _numSpec) = fmtParseNum<C, T>(begin, end);
+    return begin;
+  }
+
+  template <typename T0, typename I, typename F>
+  constexpr auto formatNum(I out, T0&& obj, Optional<Size> estWidth, F&& fmt) const noexcept -> I {
+    // if (!_fillAlignSpec) {
+    //   return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out);
+    // }
+    //
+    // if (estWidth) {
+    //   if (*estWidth >= _fillAlignSpec->size) {
+    //     return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out);
+    //   }
+    //   auto remaining = _fillAlignSpec->size - *estWidth;
+    //   if (_fillAlignSpec->align == FmtAlignType::Leading) {
+    //     return fillN(functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out), remaining, _fillAlignSpec->fillChar);
+    //   }
+    //
+    //   if (_fillAlignSpec->align == FmtAlignType::Trailing) {
+    //     return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), fillN(out, remaining, _fillAlignSpec->fillChar));
+    //   }
+    //
+    //   auto firstHalf = remaining / 2;
+    //   auto secondHalf = remaining - firstHalf;
+    //   return fillN(functional::invoke(fwd<F>(fmt), fwd<T0>(obj), fillN(out, firstHalf, _fillAlignSpec->fillChar)), secondHalf, _fillAlignSpec->fillChar);
+    // }
+    //
+    // BaseString<C> asStr;
+    // functional::invoke(fwd<F>(fmt), fwd<T0>(obj), BackInserterIterator<BaseString<C>>{asStr});
+    // return formatFillAlign(out, asStr, asStr.size(), *this);
+    return out;
+  }
+
+  template <typename I> constexpr auto operator()(BaseString<C> const& obj, I out) const noexcept -> I {
+    return impl::copy(obj.begin(), obj.end(), out);
+  }
+
+  Optional<FmtNumSpec> _numSpec;
 };
 
 template <typename C, typename I> struct IntegralFormatter : FmtFillAlignComponent<I, C> {
@@ -604,7 +794,7 @@ template <typename C, typename I> struct IntegralFormatter : FmtFillAlignCompone
 
   template <typename Ctx> auto format(I value, Ctx& ctx) const noexcept -> typename Ctx::Iterator {
     auto len = U::intLength(value, 10);
-    return formatFillAlign(ctx.out(), value, len, [len](I lValue, BackInserterIterator<BaseString<C>> out) {
+    return formatFillAlign(/* TODO */ nullopt, ctx.out(), value, len, [len](I lValue, BackInserterIterator<BaseString<C>> out) {
       BaseString<C> asStr;
       asStr.resize(len);
       ignore = U::writeInt(lValue, len, asStr.data());
@@ -612,6 +802,32 @@ template <typename C, typename I> struct IntegralFormatter : FmtFillAlignCompone
     });
   }
 };
+
+template <typename C> struct CharFormatter : FmtFillAlignComponent<C, C> {
+  using FmtFillAlignComponent<C, C>::parseFillAlign;
+  using FmtFillAlignComponent<C, C>::formatFillAlign;
+  using U = StringUtils<C, StringTraits<C>>;
+
+  template <typename Ctx> constexpr auto parse(Ctx& ctx) -> typename Ctx::Iterator {
+    auto it = parseFillAlign(ctx.begin(), ctx.end());
+    if (it == ctx.end()) {
+      return it;
+    }
+
+    if (inConstexpr()) {
+      throw FormatException("Extraneous characters in format string");
+    }
+    throw FormatException(String{"Extraneous characters in format string: '"} + StringView{&*it, ctx.end() - it} + "'");
+  }
+
+  template <typename Ctx> auto format(C value, Ctx& ctx) const noexcept -> typename Ctx::Iterator {
+    return formatFillAlign(ctx.out(), value, 1, [](C lValue, BackInserterIterator<BaseString<C>> out) {
+      return impl::copy(&lValue, &lValue + 1, out);
+    });
+  }
+};
+
+template <typename C> struct Formatter<C, C> : CharFormatter<C> {};
 
 template <typename C> struct Formatter<U16, C> : IntegralFormatter<C, U16> {};
 template <typename C> struct Formatter<U32, C> : IntegralFormatter<C, U32> {};
@@ -633,9 +849,13 @@ template <typename C> struct Formatter<bool, C> : FmtFillAlignComponent<bool, C>
   }
 
   template <typename Ctx> auto format(bool value, Ctx& ctx) const noexcept -> typename Ctx::Iterator {
-    BaseString<C> asStr;
-    asStr += value;
-    return impl::copy(asStr.begin(), asStr.end(), ctx.out());
+    auto asStr = value
+        ? BaseStringView<C>{StringTraits<C>::Constants::_true}
+        : BaseStringView<C>{StringTraits<C>::Constants::_false};
+    return formatFillAlign(/* TODO */nullopt, ctx.out(), asStr, asStr.length(),
+      [](BaseStringView<C> const& lValue, BackInserterIterator<BaseString<C>> out) {
+          return impl::copy(lValue.begin(), lValue.end(), out);
+    });
   }
 };
 } // namespace
@@ -672,64 +892,212 @@ TEST(FormatTest, init) {
   ASSERT_EQ("truetrue", format("truetrue", 5, true));
 }
 
-TEST(FormatTest, fmtParseWidth) {
+TEST(FormatTest, fmtParseFillAlign) {
   char const str0[] = "6";
   ASSERT_EQ(
-      Tuple(cds::end(str0), Optional(FmtFillAlignSpec<char>(FmtAlignType::Trailing, 6, ' '))),
-      (fmtParseWidth<char, int>(cds::begin(str0), cds::end(str0)))
+      Tuple(cds::begin(str0), FmtFillAlignSpec<char>(FmtAlignType::Trailing, ' ')),
+      (fmtParseFillAlign<char, int>(cds::begin(str0), cds::end(str0)))
   );
   ASSERT_EQ(
-      Tuple(cds::end(str0), Optional(FmtFillAlignSpec<char>(FmtAlignType::Leading, 6, ' '))),
-      (fmtParseWidth<char, char>(cds::begin(str0), cds::end(str0)))
+      Tuple(cds::begin(str0), FmtFillAlignSpec<char>(FmtAlignType::Leading, ' ')),
+      (fmtParseFillAlign<char, char>(cds::begin(str0), cds::end(str0)))
   );
   ASSERT_EQ(
-      Tuple(cds::end(str0), Optional(FmtFillAlignSpec<char>(FmtAlignType::Leading, 6, ' '))),
-      (fmtParseWidth<char, bool>(cds::begin(str0), cds::end(str0)))
+      Tuple(cds::begin(str0), FmtFillAlignSpec<char>(FmtAlignType::Leading, ' ')),
+      (fmtParseFillAlign<char, bool>(cds::begin(str0), cds::end(str0)))
   );
 
   char const str1[] = "6d";
   ASSERT_EQ(
-      Tuple(cds::end(str1) - 1, Optional(FmtFillAlignSpec<char>(FmtAlignType::Trailing, 6, ' '))),
-      (fmtParseWidth<char, int>(cds::begin(str1), cds::end(str1)))
+      Tuple(cds::begin(str1), FmtFillAlignSpec<char>(FmtAlignType::Trailing, ' ')),
+      (fmtParseFillAlign<char, int>(cds::begin(str1), cds::end(str1)))
   );
 
   char const str2[] = "*<6";
   ASSERT_EQ(
-      Tuple(cds::end(str2), Optional(FmtFillAlignSpec<char>(FmtAlignType::Leading, 6, '*'))),
-      (fmtParseWidth<char, int>(cds::begin(str2), cds::end(str2)))
+      Tuple(cds::begin(str2) + 2, FmtFillAlignSpec<char>(FmtAlignType::Leading, '*')),
+      (fmtParseFillAlign<char, int>(cds::begin(str2), cds::end(str2)))
   );
 
   char const str3[] = "*>6";
   ASSERT_EQ(
-      Tuple(cds::end(str3), Optional(FmtFillAlignSpec<char>(FmtAlignType::Trailing, 6, '*'))),
-      (fmtParseWidth<char, int>(cds::begin(str3), cds::end(str3)))
+      Tuple(cds::begin(str3) + 2, FmtFillAlignSpec<char>(FmtAlignType::Trailing, '*')),
+      (fmtParseFillAlign<char, int>(cds::begin(str3), cds::end(str3)))
   );
 
   char const str4[] = "*^6";
   ASSERT_EQ(
-      Tuple(cds::end(str4), Optional(FmtFillAlignSpec<char>(FmtAlignType::Centre, 6, '*'))),
-      (fmtParseWidth<char, int>(cds::begin(str4), cds::end(str4)))
+      Tuple(cds::begin(str4) + 2, FmtFillAlignSpec<char>(FmtAlignType::Centre, '*')),
+      (fmtParseFillAlign<char, int>(cds::begin(str4), cds::end(str4)))
   );
 
   char const str5[] = "*^";
   ASSERT_EQ(
-      Tuple(cds::begin(str5), nullopt),
-      (fmtParseWidth<char, int>(cds::begin(str5), cds::end(str5)))
+      Tuple(cds::begin(str5) + 2, FmtFillAlignSpec<char>(FmtAlignType::Centre, '*')),
+      (fmtParseFillAlign<char, int>(cds::begin(str5), cds::end(str5)))
   );
 
   char const str6[] = "";
   ASSERT_EQ(
-      Tuple(cds::begin(str6), nullopt),
-      (fmtParseWidth<char, int>(cds::begin(str6), cds::end(str6)))
+      Tuple(cds::begin(str6), FmtFillAlignSpec<char>(FmtAlignType::Trailing, ' ')),
+      (fmtParseFillAlign<char, int>(cds::begin(str6), cds::end(str6)))
   );
 
   char const str7[] = "d";
   ASSERT_EQ(
-      Tuple(cds::begin(str7), nullopt),
-      (fmtParseWidth<char, int>(cds::begin(str7), cds::end(str7)))
+      Tuple(cds::begin(str7), FmtFillAlignSpec<char>(FmtAlignType::Trailing, ' ')),
+      (fmtParseFillAlign<char, int>(cds::begin(str7), cds::end(str7)))
   );
 }
 
+TEST(FormatTest, fmtParseNum) {
+  char const str0[] = "";
+  ASSERT_EQ(Tuple(cds::begin(str0), FmtNumSpec{FmtNumSignType::Neg, false, false}),
+            (fmtParseNum<char>(cds::begin(str0), cds::end(str0))));
+
+  char const str1[] = "+";
+  ASSERT_EQ(Tuple(cds::begin(str1) + 1, FmtNumSpec{FmtNumSignType::PosNeg, false, false}),
+            (fmtParseNum<char>(cds::begin(str1), cds::end(str1))));
+
+  char const str2[] = "-";
+  ASSERT_EQ(Tuple(cds::begin(str2) + 1, FmtNumSpec{FmtNumSignType::Neg, false, false}),
+            (fmtParseNum<char>(cds::begin(str2), cds::end(str2))));
+
+  char const str3[] = " ";
+  ASSERT_EQ(Tuple(cds::begin(str3) + 1, FmtNumSpec{FmtNumSignType::SpaceNeg, false, false}),
+            (fmtParseNum<char>(cds::begin(str3), cds::end(str3))));
+
+  char const str4[] = "#";
+  ASSERT_EQ(Tuple(cds::begin(str4) + 1, FmtNumSpec{FmtNumSignType::Neg, true, false}),
+            (fmtParseNum<char>(cds::begin(str4), cds::end(str4))));
+
+  char const str5[] = " #";
+  ASSERT_EQ(Tuple(cds::begin(str5) + 2, FmtNumSpec{FmtNumSignType::SpaceNeg, true, false}),
+            (fmtParseNum<char>(cds::begin(str5), cds::end(str5))));
+
+  char const str6[] = "0";
+  ASSERT_EQ(Tuple(cds::begin(str6) + 1, FmtNumSpec{FmtNumSignType::Neg, false, true}),
+            (fmtParseNum<char>(cds::begin(str6), cds::end(str6))));
+
+  char const str7[] = " 0";
+  ASSERT_EQ(Tuple(cds::begin(str7) + 2, FmtNumSpec{FmtNumSignType::SpaceNeg, false, true}),
+            (fmtParseNum<char>(cds::begin(str7), cds::end(str7))));
+
+  char const str8[] = "#0";
+  ASSERT_EQ(Tuple(cds::begin(str8) + 2, FmtNumSpec{FmtNumSignType::Neg, true, true}),
+            (fmtParseNum<char>(cds::begin(str8), cds::end(str8))));
+
+  char const str9[] = "+#0";
+  ASSERT_EQ(Tuple(cds::begin(str9) + 3, FmtNumSpec{FmtNumSignType::PosNeg, true, true}),
+            (fmtParseNum<char>(cds::begin(str9), cds::end(str9))));
+
+  char const str10[] = "+#1";
+  ASSERT_EQ(Tuple(cds::begin(str10) + 2, FmtNumSpec{FmtNumSignType::PosNeg, true, false}),
+            (fmtParseNum<char>(cds::begin(str10), cds::end(str10))));
+}
+
+TEST(FormatTest, fmtParseWidth) {
+  char const str0[] = "";
+  ASSERT_EQ(Tuple(cds::begin(str0), FmtWidthSpec{}),
+            (fmtParseWidth<char>(cds::begin(str0), cds::end(str0))));
+
+  char const str1[] = "5";
+  ASSERT_EQ(Tuple(cds::begin(str1) + 1, FmtWidthSpec{5}),
+            (fmtParseWidth<char>(cds::begin(str1), cds::end(str1))));
+
+  char const str2[] = "{}";
+  ASSERT_EQ(Tuple(cds::begin(str2) + 2, FmtWidthSpec{FmtSizeSpec{}}),
+            (fmtParseWidth<char>(cds::begin(str2), cds::end(str2))));
+
+  char const str3[] = "d";
+  ASSERT_EQ(Tuple(cds::begin(str3), FmtWidthSpec{}),
+            (fmtParseWidth<char>(cds::begin(str3), cds::end(str3))));
+
+  char const str4[] = "5d";
+  ASSERT_EQ(Tuple(cds::begin(str4) + 1, FmtWidthSpec{FmtSizeSpec{5}}),
+            (fmtParseWidth<char>(cds::begin(str4), cds::end(str4))));
+
+  char const str5[] = "{1}";
+  ASSERT_EQ(Tuple(cds::begin(str5) + 3, FmtWidthSpec{FmtSizeSpec{nullopt, 1}}),
+            (fmtParseWidth<char>(cds::begin(str5), cds::end(str5))));
+
+  try {
+    char const stre0[] = "{";
+    ignore = fmtParseWidth<char>(cds::begin(stre0), cds::end(stre0));
+    ASSERT_FALSE(true);
+  } catch(FormatException const& e) {
+    ASSERT_EQ(
+        "Nested replacement field in width specifier not terminated",
+        e.message()
+    );
+  }
+
+  try {
+    char const stre0[] = "{10";
+    ignore = fmtParseWidth<char>(cds::begin(stre0), cds::end(stre0));
+    ASSERT_FALSE(true);
+  } catch(FormatException const& e) {
+    ASSERT_EQ(
+        "Nested replacement field in width specifier not terminated",
+        e.message()
+    );
+  }
+
+  try {
+    char const stre0[] = "{10d";
+    ignore = fmtParseWidth<char>(cds::begin(stre0), cds::end(stre0));
+    ASSERT_FALSE(true);
+  } catch(FormatException const& e) {
+    ASSERT_EQ(
+        "Nested replacement field in width specifier not terminated",
+        e.message()
+    );
+  }
+
+  try {
+    char const stre0[] = "{n}";
+    ignore = fmtParseWidth<char>(cds::begin(stre0), cds::end(stre0));
+    ASSERT_FALSE(true);
+  } catch(FormatException const& e) {
+    ASSERT_EQ(
+        "Nested replacement field with invalid explicit argument index",
+        e.message()
+    );
+  }
+
+  char const str6[] = ".5";
+  ASSERT_EQ(Tuple(cds::begin(str6) + 2, FmtWidthSpec{nullopt, FmtSizeSpec{5}}),
+            (fmtParseWidth<char>(cds::begin(str6), cds::end(str6))));
+
+  char const str7[] = "10.5";
+  ASSERT_EQ(Tuple(cds::begin(str7) + 4, FmtWidthSpec{FmtSizeSpec{10}, FmtSizeSpec{5}}),
+            (fmtParseWidth<char>(cds::begin(str7), cds::end(str7))));
+
+  try {
+    char const stre0[] = ".";
+    ignore = fmtParseWidth<char>(cds::begin(stre0), cds::end(stre0));
+    ASSERT_FALSE(true);
+  } catch(FormatException const& e) {
+    ASSERT_EQ(
+        "Precision specification not followed by precision",
+        e.message()
+    );
+  }
+
+  char const str8[] = "10.{}";
+  ASSERT_EQ(Tuple(cds::begin(str8) + 5, FmtWidthSpec{FmtSizeSpec{10}, FmtSizeSpec{}}),
+            (fmtParseWidth<char>(cds::begin(str8), cds::end(str8))));
+
+  char const str9[] = "{}.{}";
+  ASSERT_EQ(Tuple(cds::begin(str9) + 5, FmtWidthSpec{FmtSizeSpec{}, FmtSizeSpec{}}),
+            (fmtParseWidth<char>(cds::begin(str9), cds::end(str9))));
+}
+
 TEST(FormatTest, fmtParseWidthInFormat) {
-  ASSERT_EQ(format("{0:6}", 42), "    42");
+  // ASSERT_EQ(format("{:6}", 42),    "    42");
+  // ASSERT_EQ(format("{:6}", 'x'),   "x     ");
+  // ASSERT_EQ(format("{:*<6}", 'x'), "x*****");
+  // ASSERT_EQ(format("{:*>6}", 'x'), "*****x");
+  // ASSERT_EQ(format("{:*^6}", 'x'), "**x***");
+  // ASSERT_EQ(format("{:6}", true),  "true  ");
 }
