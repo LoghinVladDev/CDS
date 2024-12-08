@@ -562,6 +562,98 @@ template <typename C> auto fillAlignSpec(C aligner) noexcept -> Optional<FmtAlig
   }
 }
 
+template <typename T, typename C,
+          typename = typename IsIntegral<T>::Type,
+          typename = typename IsFloating<T>::Type,
+          typename = typename IsString<T>::Type> struct FmtTypeSpec;
+
+template <typename T, typename C> constexpr auto typeSpec(C spec) -> FmtTypeFlags {
+  return FmtTypeSpec<T, C>{}(spec);
+}
+
+struct IntegerTypeSpec {
+  template <typename C> constexpr auto operator()(Optional<C> spec) -> FmtTypeFlags {
+    if (!spec) {
+      return static_cast<FmtTypeFlags>(FmtTypeFlag::Decimal);
+    }
+
+    switch (spec) {
+      case static_cast<C>('b'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Binary);
+      case static_cast<C>('B'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Binary)
+                                     | static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase);
+      case static_cast<C>('c'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Character);
+      case static_cast<C>('d'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Decimal);
+      case static_cast<C>('o'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Octal);
+      case static_cast<C>('x'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Hex);
+      case static_cast<C>('X'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Hex)
+                                     | static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase);
+      default:
+        throw FormatException("Presentation type specifier is invalid");
+    }
+  }
+};
+
+template <typename T, typename C, typename = typename IsIntegral<T>::Type> struct IntegralTypeSpec;
+template <typename T, typename C> struct IntegralTypeSpec<T, C, True> : IntegerTypeSpec {};
+template <typename C> struct IntegralTypeSpec<C, C, True> {
+  constexpr auto operator()(Optional<C> spec) -> FmtTypeFlags {
+    if (!spec) {
+      return static_cast<FmtTypeFlags>(FmtTypeFlag::Character);
+    }
+    return IntegerTypeSpec{}(spec);
+  }
+};
+
+template <typename C> struct IntegralTypeSpec<bool, C, True> {
+  constexpr auto operator()(Optional<C> spec) -> FmtTypeFlags {
+    if (!spec || *spec == static_cast<C>('s')) {
+      return static_cast<FmtTypeFlags>(FmtTypeFlag::String);
+    }
+    if (spec == static_cast<C>('c')) {
+      throw FormatException("Presentation type specifier is invalid");
+    }
+    return IntegerTypeSpec{}(spec);
+  }
+};
+
+template <typename T, typename C> struct FmtTypeSpec<T, C, True, False, False> : IntegralTypeSpec<T, C> {};
+template <typename T, typename C> struct FmtTypeSpec<T, C, False, True, False> : IntegralTypeSpec<T, C> {
+  constexpr auto operator()(Optional<C> spec) -> FmtTypeFlags {
+    if (!spec) {
+      return static_cast<FmtTypeFlags>(FmtTypeFlag::General);
+    }
+
+    switch (spec) {
+      case static_cast<C>('a'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Hex);
+      case static_cast<C>('A'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Hex)
+                                       | static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase);
+      case static_cast<C>('e'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Scientific);
+      case static_cast<C>('E'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Scientific)
+                                       | static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase);
+      case static_cast<C>('c'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Character);
+      case static_cast<C>('d'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Decimal);
+      case static_cast<C>('o'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Octal);
+      case static_cast<C>('x'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Hex);
+      case static_cast<C>('X'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Hex)
+                                       | static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase);
+      default:
+        throw FormatException("Presentation type specifier is invalid");
+    }
+  }
+};
+
+template <typename T, typename C> struct FmtTypeSpec<T, C, False, False, True> {
+  constexpr auto operator()(Optional<C> spec) -> FmtTypeFlags {
+    if (!spec || *spec == static_cast<C>('s')) {
+      return static_cast<FmtTypeFlags>(FmtTypeFlag::String);
+    }
+    if (*spec == static_cast<C>('?')) {
+      return static_cast<FmtTypeFlags>(FmtTypeFlag::Escaped);
+    }
+    throw FormatException("Presentation type specifier is invalid");
+  }
+};
+
 template <typename C, typename T, typename I, typename S> constexpr auto fmtParseFillAlign(I it, S end) noexcept
     -> Tuple<I, FmtFillAlignSpec<C>> {
   // auto sizeIt = it;
