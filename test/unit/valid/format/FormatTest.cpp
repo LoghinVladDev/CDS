@@ -567,7 +567,7 @@ template <typename T, typename C,
           typename = typename IsFloating<T>::Type,
           typename = typename IsString<T>::Type> struct FmtTypeSpec;
 
-template <typename T, typename C> constexpr auto typeSpec(C spec) -> FmtTypeFlags {
+template <typename T, typename C> constexpr auto fmtTypeSpec(Optional<C> spec) -> FmtTypeFlags {
   return FmtTypeSpec<T, C>{}(spec);
 }
 
@@ -577,7 +577,7 @@ struct IntegerTypeSpec {
       return static_cast<FmtTypeFlags>(FmtTypeFlag::Decimal);
     }
 
-    switch (spec) {
+    switch (*spec) {
       case static_cast<C>('b'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Binary);
       case static_cast<C>('B'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Binary)
                                      | static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase);
@@ -609,7 +609,7 @@ template <typename C> struct IntegralTypeSpec<bool, C, True> {
     if (!spec || *spec == static_cast<C>('s')) {
       return static_cast<FmtTypeFlags>(FmtTypeFlag::String);
     }
-    if (spec == static_cast<C>('c')) {
+    if (*spec == static_cast<C>('c')) {
       throw FormatException("Presentation type specifier is invalid");
     }
     return IntegerTypeSpec{}(spec);
@@ -617,38 +617,55 @@ template <typename C> struct IntegralTypeSpec<bool, C, True> {
 };
 
 template <typename T, typename C> struct FmtTypeSpec<T, C, True, False, False> : IntegralTypeSpec<T, C> {};
-template <typename T, typename C> struct FmtTypeSpec<T, C, False, True, False> : IntegralTypeSpec<T, C> {
+template <typename T, typename C> struct FmtTypeSpec<T, C, False, True, False> {
   constexpr auto operator()(Optional<C> spec) -> FmtTypeFlags {
     if (!spec) {
       return static_cast<FmtTypeFlags>(FmtTypeFlag::General);
     }
 
-    switch (spec) {
+    switch (*spec) {
       case static_cast<C>('a'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Hex);
       case static_cast<C>('A'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Hex)
-                                       | static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase);
+                                     | static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase);
       case static_cast<C>('e'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Scientific);
       case static_cast<C>('E'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Scientific)
-                                       | static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase);
-      case static_cast<C>('c'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Character);
-      case static_cast<C>('d'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Decimal);
-      case static_cast<C>('o'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Octal);
-      case static_cast<C>('x'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Hex);
-      case static_cast<C>('X'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Hex)
-                                       | static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase);
+                                     | static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase);
+      case static_cast<C>('f'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Fixed);
+      case static_cast<C>('F'): return static_cast<FmtTypeFlags>(FmtTypeFlag::Fixed)
+                                     | static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase);
+      case static_cast<C>('g'): return static_cast<FmtTypeFlags>(FmtTypeFlag::General);
+      case static_cast<C>('G'): return static_cast<FmtTypeFlags>(FmtTypeFlag::General)
+                                     | static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase);
       default:
         throw FormatException("Presentation type specifier is invalid");
     }
   }
 };
 
-template <typename T, typename C> struct FmtTypeSpec<T, C, False, False, True> {
+template <typename C> struct StringTypeSpec {
   constexpr auto operator()(Optional<C> spec) -> FmtTypeFlags {
     if (!spec || *spec == static_cast<C>('s')) {
       return static_cast<FmtTypeFlags>(FmtTypeFlag::String);
     }
     if (*spec == static_cast<C>('?')) {
       return static_cast<FmtTypeFlags>(FmtTypeFlag::Escaped);
+    }
+    throw FormatException("Presentation type specifier is invalid");
+  }
+};
+
+template <typename T, typename C> struct FmtTypeSpec<T, C, False, False, True> : StringTypeSpec<C> {};
+
+template <typename C> struct FmtTypeSpec<C*, C, False, False, True> : StringTypeSpec<C> {};
+template <typename C> struct FmtTypeSpec<C const*, C, False, False, True> : StringTypeSpec<C> {};
+
+template <typename T, typename C> struct FmtTypeSpec<T*, C, False, False, False> {
+  constexpr auto operator()(Optional<C> spec) -> FmtTypeFlags {
+    if (!spec || *spec == static_cast<C>('p')) {
+      return static_cast<FmtTypeFlags>(FmtTypeFlag::Pointer);
+    }
+    if (*spec == static_cast<C>('P')) {
+      return static_cast<FmtTypeFlags>(FmtTypeFlag::Pointer) | static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase);
     }
     throw FormatException("Presentation type specifier is invalid");
   }
@@ -778,7 +795,12 @@ template <typename C, typename I, typename S> constexpr auto fmtParseWidth(I it,
 
 template <typename C, typename T, typename I, typename S> constexpr auto fmtParseType(I it, S end)
     -> Tuple<I, FmtTypeFlags> {
+  if (it == end) {
+    return {it, fmtTypeSpec<T, C>(nullopt)};
+  }
 
+  auto type = fmtTypeSpec<T, C>(*it++);
+  return {it, type};
 }
 
 template <typename T, typename C> struct FmtFillAlignComponent {
@@ -1183,6 +1205,282 @@ TEST(FormatTest, fmtParseWidth) {
   char const str9[] = "{}.{}";
   ASSERT_EQ(Tuple(cds::begin(str9) + 5, FmtWidthSpec{FmtSizeSpec{}, FmtSizeSpec{}}),
             (fmtParseWidth<char>(cds::begin(str9), cds::end(str9))));
+}
+
+template <typename... Ts> auto tFlags(Ts... flags) -> FmtTypeFlags {
+  return (static_cast<FmtTypeFlags>(flags) | ...);
+}
+
+template <typename T> auto fmtParseStringTypeTest() -> void {
+  char const str0[] = "";
+  ASSERT_EQ(Tuple(cds::begin(str0), tFlags(FmtTypeFlag::String)),
+            (fmtParseType<char, T>(cds::begin(str0), cds::end(str0))));
+
+  char const str1[] = "s";
+  ASSERT_EQ(Tuple(cds::begin(str1) + 1, tFlags(FmtTypeFlag::String)),
+            (fmtParseType<char, T>(cds::begin(str1), cds::end(str1))));
+
+  char const str2[] = "sd";
+  ASSERT_EQ(Tuple(cds::begin(str2) + 1, tFlags(FmtTypeFlag::String)),
+            (fmtParseType<char, T>(cds::begin(str2), cds::end(str2))));
+
+  try {
+    char const stre[] = "d";
+    fmtParseType<char, T>(cds::begin(stre), cds::end(stre));
+    ASSERT_FALSE(true);
+  } catch (FormatException const& fmtE) {
+    ASSERT_EQ("Presentation type specifier is invalid", fmtE.message());
+  }
+
+  char const str3[] = "?";
+  ASSERT_EQ(Tuple(cds::begin(str3) + 1, tFlags(FmtTypeFlag::Escaped)),
+            (fmtParseType<char, T>(cds::begin(str3), cds::end(str3))));
+}
+
+TEST(FormatTest, fmtParseStringType) {
+  fmtParseStringTypeTest<char*>();
+  fmtParseStringTypeTest<char const*>();
+  fmtParseStringTypeTest<char[]>();
+  fmtParseStringTypeTest<char[20]>();
+  fmtParseStringTypeTest<std::string_view>();
+  fmtParseStringTypeTest<std::string>();
+  fmtParseStringTypeTest<cds::String>();
+  fmtParseStringTypeTest<cds::StringView>();
+}
+
+template <typename T> auto fmtParseIntegerTypeTest() -> void {
+  char const str0[] = "";
+  ASSERT_EQ(Tuple(cds::begin(str0), tFlags(FmtTypeFlag::Decimal)),
+            (fmtParseType<char, T>(cds::begin(str0), cds::end(str0))));
+
+  char const str1[] = "d";
+  ASSERT_EQ(Tuple(cds::begin(str1) + 1, tFlags(FmtTypeFlag::Decimal)),
+            (fmtParseType<char, T>(cds::begin(str1), cds::end(str1))));
+
+  char const str2[] = "ds";
+  ASSERT_EQ(Tuple(cds::begin(str2) + 1, tFlags(FmtTypeFlag::Decimal)),
+            (fmtParseType<char, T>(cds::begin(str2), cds::end(str2))));
+
+  try {
+    char const stre[] = "s";
+    fmtParseType<char, T>(cds::begin(stre), cds::end(stre));
+    ASSERT_FALSE(true);
+  } catch (FormatException const& fmtE) {
+    ASSERT_EQ("Presentation type specifier is invalid", fmtE.message());
+  }
+
+  char const str3[] = "b";
+  ASSERT_EQ(Tuple(cds::begin(str3) + 1, tFlags(FmtTypeFlag::Binary)),
+            (fmtParseType<char, T>(cds::begin(str3), cds::end(str3))));
+
+  char const str4[] = "B";
+  ASSERT_EQ(Tuple(cds::begin(str4) + 1, tFlags(FmtTypeFlag::Binary, FmtTypeFlag::Uppercase)),
+            (fmtParseType<char, T>(cds::begin(str4), cds::end(str4))));
+
+  char const str5[] = "c";
+  ASSERT_EQ(Tuple(cds::begin(str5) + 1, tFlags(FmtTypeFlag::Character)),
+            (fmtParseType<char, T>(cds::begin(str5), cds::end(str5))));
+
+  char const str6[] = "o";
+  ASSERT_EQ(Tuple(cds::begin(str6) + 1, tFlags(FmtTypeFlag::Octal)),
+            (fmtParseType<char, T>(cds::begin(str6), cds::end(str6))));
+
+  char const str7[] = "x";
+  ASSERT_EQ(Tuple(cds::begin(str7) + 1, tFlags(FmtTypeFlag::Hex)),
+            (fmtParseType<char, T>(cds::begin(str7), cds::end(str7))));
+
+  char const str8[] = "X";
+  ASSERT_EQ(Tuple(cds::begin(str8) + 1, tFlags(FmtTypeFlag::Hex, FmtTypeFlag::Uppercase)),
+            (fmtParseType<char, T>(cds::begin(str8), cds::end(str8))));
+}
+
+TEST(FormatTest, fmtParseIntegerType) {
+  fmtParseIntegerTypeTest<int>();
+  fmtParseIntegerTypeTest<S16>();
+  fmtParseIntegerTypeTest<S32>();
+  fmtParseIntegerTypeTest<S64>();
+  fmtParseIntegerTypeTest<U16>();
+  fmtParseIntegerTypeTest<U32>();
+  fmtParseIntegerTypeTest<U64>();
+}
+
+TEST(FormatTest, fmtParseCharType) {
+  char const str0[] = "";
+  ASSERT_EQ(Tuple(cds::begin(str0), tFlags(FmtTypeFlag::Character)),
+            (fmtParseType<char, char>(cds::begin(str0), cds::end(str0))));
+
+  char const str1[] = "c";
+  ASSERT_EQ(Tuple(cds::begin(str1) + 1, tFlags(FmtTypeFlag::Character)),
+            (fmtParseType<char, char>(cds::begin(str1), cds::end(str1))));
+
+  char const str2[] = "cs";
+  ASSERT_EQ(Tuple(cds::begin(str2) + 1, tFlags(FmtTypeFlag::Character)),
+            (fmtParseType<char, char>(cds::begin(str2), cds::end(str2))));
+
+  try {
+    char const stre[] = "s";
+    fmtParseType<char, char>(cds::begin(stre), cds::end(stre));
+    ASSERT_FALSE(true);
+  } catch (FormatException const& fmtE) {
+    ASSERT_EQ("Presentation type specifier is invalid", fmtE.message());
+  }
+
+  char const str3[] = "b";
+  ASSERT_EQ(Tuple(cds::begin(str3) + 1, tFlags(FmtTypeFlag::Binary)),
+            (fmtParseType<char, char>(cds::begin(str3), cds::end(str3))));
+
+  char const str4[] = "B";
+  ASSERT_EQ(Tuple(cds::begin(str4) + 1, tFlags(FmtTypeFlag::Binary, FmtTypeFlag::Uppercase)),
+            (fmtParseType<char, char>(cds::begin(str4), cds::end(str4))));
+
+  char const str5[] = "d";
+  ASSERT_EQ(Tuple(cds::begin(str5) + 1, tFlags(FmtTypeFlag::Decimal)),
+            (fmtParseType<char, char>(cds::begin(str5), cds::end(str5))));
+
+  char const str6[] = "o";
+  ASSERT_EQ(Tuple(cds::begin(str6) + 1, tFlags(FmtTypeFlag::Octal)),
+            (fmtParseType<char, char>(cds::begin(str6), cds::end(str6))));
+
+  char const str7[] = "x";
+  ASSERT_EQ(Tuple(cds::begin(str7) + 1, tFlags(FmtTypeFlag::Hex)),
+            (fmtParseType<char, char>(cds::begin(str7), cds::end(str7))));
+
+  char const str8[] = "X";
+  ASSERT_EQ(Tuple(cds::begin(str8) + 1, tFlags(FmtTypeFlag::Hex, FmtTypeFlag::Uppercase)),
+            (fmtParseType<char, char>(cds::begin(str8), cds::end(str8))));
+}
+
+TEST(FormatTest, fmtParseBoolType) {
+  char const str0[] = "";
+  ASSERT_EQ(Tuple(cds::begin(str0), tFlags(FmtTypeFlag::String)),
+            (fmtParseType<char, bool>(cds::begin(str0), cds::end(str0))));
+
+  char const str1[] = "s";
+  ASSERT_EQ(Tuple(cds::begin(str1) + 1, tFlags(FmtTypeFlag::String)),
+            (fmtParseType<char, bool>(cds::begin(str1), cds::end(str1))));
+
+  char const str2[] = "sc";
+  ASSERT_EQ(Tuple(cds::begin(str2) + 1, tFlags(FmtTypeFlag::String)),
+            (fmtParseType<char, bool>(cds::begin(str2), cds::end(str2))));
+
+  try {
+    char const stre[] = "c";
+    fmtParseType<char, bool>(cds::begin(stre), cds::end(stre));
+    ASSERT_FALSE(true);
+  } catch (FormatException const& fmtE) {
+    ASSERT_EQ("Presentation type specifier is invalid", fmtE.message());
+  }
+
+  char const str3[] = "b";
+  ASSERT_EQ(Tuple(cds::begin(str3) + 1, tFlags(FmtTypeFlag::Binary)),
+            (fmtParseType<char, bool>(cds::begin(str3), cds::end(str3))));
+
+  char const str4[] = "B";
+  ASSERT_EQ(Tuple(cds::begin(str4) + 1, tFlags(FmtTypeFlag::Binary, FmtTypeFlag::Uppercase)),
+            (fmtParseType<char, bool>(cds::begin(str4), cds::end(str4))));
+
+  char const str5[] = "d";
+  ASSERT_EQ(Tuple(cds::begin(str5) + 1, tFlags(FmtTypeFlag::Decimal)),
+            (fmtParseType<char, bool>(cds::begin(str5), cds::end(str5))));
+
+  char const str6[] = "o";
+  ASSERT_EQ(Tuple(cds::begin(str6) + 1, tFlags(FmtTypeFlag::Octal)),
+            (fmtParseType<char, bool>(cds::begin(str6), cds::end(str6))));
+
+  char const str7[] = "x";
+  ASSERT_EQ(Tuple(cds::begin(str7) + 1, tFlags(FmtTypeFlag::Hex)),
+            (fmtParseType<char, bool>(cds::begin(str7), cds::end(str7))));
+
+  char const str8[] = "X";
+  ASSERT_EQ(Tuple(cds::begin(str8) + 1, tFlags(FmtTypeFlag::Hex, FmtTypeFlag::Uppercase)),
+            (fmtParseType<char, bool>(cds::begin(str8), cds::end(str8))));
+}
+
+template <typename T> auto fmtParseFloatingTypeTest() -> void {
+  char const str0[] = "";
+  ASSERT_EQ(Tuple(cds::begin(str0), tFlags(FmtTypeFlag::General)),
+            (fmtParseType<char, T>(cds::begin(str0), cds::end(str0))));
+
+  char const str1[] = "g";
+  ASSERT_EQ(Tuple(cds::begin(str1) + 1, tFlags(FmtTypeFlag::General)),
+            (fmtParseType<char, T>(cds::begin(str1), cds::end(str1))));
+
+  char const str2[] = "gs";
+  ASSERT_EQ(Tuple(cds::begin(str2) + 1, tFlags(FmtTypeFlag::General)),
+            (fmtParseType<char, T>(cds::begin(str2), cds::end(str2))));
+
+  try {
+    char const stre[] = "s";
+    fmtParseType<char, T>(cds::begin(stre), cds::end(stre));
+    ASSERT_FALSE(true);
+  } catch (FormatException const& fmtE) {
+    ASSERT_EQ("Presentation type specifier is invalid", fmtE.message());
+  }
+
+  char const str3[] = "a";
+  ASSERT_EQ(Tuple(cds::begin(str3) + 1, tFlags(FmtTypeFlag::Hex)),
+            (fmtParseType<char, T>(cds::begin(str3), cds::end(str3))));
+
+  char const str4[] = "A";
+  ASSERT_EQ(Tuple(cds::begin(str4) + 1, tFlags(FmtTypeFlag::Hex, FmtTypeFlag::Uppercase)),
+            (fmtParseType<char, T>(cds::begin(str4), cds::end(str4))));
+
+  char const str5[] = "e";
+  ASSERT_EQ(Tuple(cds::begin(str5) + 1, tFlags(FmtTypeFlag::Scientific)),
+            (fmtParseType<char, T>(cds::begin(str5), cds::end(str5))));
+
+  char const str6[] = "E";
+  ASSERT_EQ(Tuple(cds::begin(str6) + 1, tFlags(FmtTypeFlag::Scientific, FmtTypeFlag::Uppercase)),
+            (fmtParseType<char, T>(cds::begin(str6), cds::end(str6))));
+
+  char const str7[] = "f";
+  ASSERT_EQ(Tuple(cds::begin(str7) + 1, tFlags(FmtTypeFlag::Fixed)),
+            (fmtParseType<char, T>(cds::begin(str7), cds::end(str7))));
+
+  char const str8[] = "F";
+  ASSERT_EQ(Tuple(cds::begin(str8) + 1, tFlags(FmtTypeFlag::Fixed, FmtTypeFlag::Uppercase)),
+            (fmtParseType<char, T>(cds::begin(str8), cds::end(str8))));
+
+  char const str9[] = "G";
+  ASSERT_EQ(Tuple(cds::begin(str9) + 1, tFlags(FmtTypeFlag::General, FmtTypeFlag::Uppercase)),
+            (fmtParseType<char, T>(cds::begin(str9), cds::end(str9))));
+}
+
+TEST(FormatTest, fmtParseFloatingType) {
+  fmtParseFloatingTypeTest<float>();
+  fmtParseFloatingTypeTest<double>();
+}
+
+template <typename T> auto fmtParsePointerTypeTest() -> void {
+  char const str0[] = "";
+  ASSERT_EQ(Tuple(cds::begin(str0), tFlags(FmtTypeFlag::Pointer)),
+            (fmtParseType<char, T>(cds::begin(str0), cds::end(str0))));
+
+  char const str1[] = "p";
+  ASSERT_EQ(Tuple(cds::begin(str1) + 1, tFlags(FmtTypeFlag::Pointer)),
+            (fmtParseType<char, T>(cds::begin(str1), cds::end(str1))));
+
+  char const str2[] = "ps";
+  ASSERT_EQ(Tuple(cds::begin(str2) + 1, tFlags(FmtTypeFlag::Pointer)),
+            (fmtParseType<char, T>(cds::begin(str2), cds::end(str2))));
+
+  try {
+    char const stre[] = "s";
+    fmtParseType<char, T>(cds::begin(stre), cds::end(stre));
+    ASSERT_FALSE(true);
+  } catch (FormatException const& fmtE) {
+    ASSERT_EQ("Presentation type specifier is invalid", fmtE.message());
+  }
+
+  char const str3[] = "P";
+  ASSERT_EQ(Tuple(cds::begin(str3) + 1, tFlags(FmtTypeFlag::Pointer, FmtTypeFlag::Uppercase)),
+            (fmtParseType<char, T>(cds::begin(str3), cds::end(str3))));
+}
+
+TEST(FormatTest, fmtParsePointerType) {
+  fmtParsePointerTypeTest<void*>();
+  fmtParsePointerTypeTest<void const*>();
+  fmtParsePointerTypeTest<int*>();
 }
 
 TEST(FormatTest, fmtParseWidthInFormat) {
