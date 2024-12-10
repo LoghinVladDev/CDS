@@ -342,6 +342,31 @@ template <> struct MaxOf<S8> : odrImpl::LimitConstraint<S8, s8Max> {};
 template <> struct MaxOf<S16> : odrImpl::LimitConstraint<S16, s16Max> {};
 template <> struct MaxOf<S32> : odrImpl::LimitConstraint<S32, s32Max> {};
 template <> struct MaxOf<S64> : odrImpl::LimitConstraint<S64, s64Max> {};
+
+namespace impl {
+template <bool cond, typename T1, typename T2> struct CondImpl;
+template <typename T1, typename T2> struct CondImpl<true, T1, T2> {
+  using Type = T1;
+};
+template <typename T1, typename T2> struct CondImpl<false, T1, T2> {
+  using Type = T1;
+};
+template <bool cond, typename T1, typename T2> using Cond = typename CondImpl<cond, T1, T2>::Type;
+}
+
+template <> struct MaxOf<char> : impl::Cond<static_cast<char>(-1) < static_cast<char>(0), MaxOf<S8>, MaxOf<U8>> {};
+template <> struct MaxOf<wchar_t> : impl::Cond<static_cast<wchar_t>(-1) < static_cast<wchar_t>(0),
+    impl::Cond<sizeof(wchar_t) == 2u, MaxOf<S16>, MaxOf<S32>>,
+    impl::Cond<sizeof(wchar_t) == 2u, MaxOf<U16>, MaxOf<U32>>> {};
+
+#if CDS_ATTR(cpp11)
+template <> struct MaxOf<char16_t> : MaxOf<U16> {};
+template <> struct MaxOf<char32_t> : MaxOf<U32> {};
+#endif
+
+#if CDS_ATTR(cpp20)
+template <> struct MaxOf<char8_t> : MaxOf<U8> {};
+#endif
 } // namespace limits
 
 #if defined __x86_64__ && !defined __ILP32__ // native 64 bit

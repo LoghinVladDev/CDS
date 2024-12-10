@@ -78,6 +78,10 @@ template <typename C> struct FmtIt {
     return static_cast<bool>(_token);
   }
 
+  constexpr auto explicitUsed() const noexcept -> bool {
+    return _explUsed;
+  }
+
   enum State {
     ReadingLiteral,
     ReadingFormat,
@@ -258,7 +262,14 @@ private:
 template <typename C, typename U, typename A> class BackInserterIterator<BaseString<C, U, A>> {
 public:
   CDS_ATTR(2(explicit, constexpr(11))) BackInserterIterator(BaseString<C, U, A>& obj) : _obj{obj} {}
-  template <typename V> CDS_ATTR(constexpr(14)) auto operator=(V&& value) noexcept -> BackInserterIterator& {
+
+  CDS_ATTR(constexpr(14)) auto operator=(BackInserterIterator const& it) noexcept -> BackInserterIterator& {
+    ignore = it;
+    return *this;
+  }
+
+  template <typename V, EnableIf<Not<IsSame<V, BackInserterIterator>>> = 0>
+  CDS_ATTR(constexpr(14)) auto operator=(V&& value) noexcept -> BackInserterIterator& {
     _obj += fwd<V>(value);
     return *this;
   }
@@ -345,7 +356,7 @@ template <Size idx> struct FormatterContainer {
     auto& formatter = get<idx>(fmt._formatters);
     // Formatter<T> formatter;
     FormatParseContext<C> fmtParCtx {in};
-    if (!fmt._preValidated) {
+    if (!fmt._preValidated || fmt._explicitUsed) {
       auto todo1 = FormatterParseFormatString<Formatter<T, C>, FormatParseContext<C>>::parse(formatter, fmtParCtx);
       if (todo1 != in.end()) {
         throw FormatException(String{"Incomplete parsing of format string '"} + in + "'");
@@ -411,9 +422,13 @@ template <typename C, typename F, typename... A> struct MergedValidationFormatte
     MergedValidationFormattersImpl<unionImpl::MakeIndexSequence<sizeof...(A)>, C, F, A...> {};
 
 template <typename A, typename C, typename F> constexpr auto formatValidate(
-    BaseStringView<C> const& fmt, F& fmtObj) -> void {
-  for (auto const& e : FmtRn{fmt}) {
-    e.visit(meta::visitors(
+    BaseStringView<C> const& fmt, F& fmtObj) -> bool {
+  auto const rn = FmtRn{fmt};
+  auto it = rn.begin();
+  auto end = rn.end();
+  bool explicitUsed = false;
+  for (; it != end; ++it) {
+    it->visit(meta::visitors(
       [](StringView const& text) {
         ignore = text;
       },
@@ -429,7 +444,11 @@ template <typename A, typename C, typename F> constexpr auto formatValidate(
         VF::parsers[fmt.argIdx](fmt.val, fmtObj);
       }
     ));
+    if (it.explicitUsed()) {
+      explicitUsed = true;
+    }
   }
+  return explicitUsed;
 }
 
 template <typename C, typename F, typename A> auto formatTo(
@@ -440,7 +459,7 @@ template <typename C, typename F, typename A> auto formatTo(
         out += text;
       },
       [&out, &args, &fmt](FmtStr const& fmtStr) {
-        MergedValidationFormatters<C, F, A>
+        MergedValidationFormatters<C, F, RemoveCVRef<A>>
             ::formatters[fmtStr.argIdx](out, fmtStr.val, fwd<A>(args), fmt);
       }
     ));
@@ -451,7 +470,7 @@ template <typename C, typename... Args> struct FmtS {
   using Char = C;
   template <typename S> CDS_ATTR(2(consteval(20, constexpr(14)), implicit)) FmtS(S const& s) : _str{s} {
     if (inConstexpr()) {
-      formatValidate<Tuple<Args&&...>>(_str, *this);
+      _explicitUsed = formatValidate<Tuple<Args&&...>>(_str, *this);
       _preValidated = true;
     }
   }
@@ -461,10 +480,16 @@ template <typename C, typename... Args> struct FmtS {
     return _str;
   }
 
+  [[nodiscard]] auto explicitUsed() const noexcept -> bool {
+    return _explicitUsed;
+  }
+
   BaseStringView<C> _str;
   Tuple<Formatter<RemoveCVRef<Args>>...> _formatters;
+
   // MergedValidationFormatters<C, Tuple<Args&&...>> _formatters;
   bool _preValidated {false};
+  bool _explicitUsed {false};
 };
 
 template <typename... Args> auto format(FmtS<char, TypeIdT<Args>...> fmt, Args&&... args) -> String {
@@ -483,34 +508,39 @@ enum class FmtTypeFlag : U16 {
   Hex = 0x0010u,
   Uppercase = 0x0020u,
   Escaped = 0x0040u,
-  Floating = 0x0080u,
-  Scientific = 0x0100u,
-  Fixed = 0x0200u,
-  General = 0x0400u,
-  Pointer = 0x0800u,
-  String = 0x1000u,
+  Scientific = 0x0080u,
+  Fixed = 0x0100u,
+  General = 0x0200u,
+  Pointer = 0x0400u,
+  String = 0x0800u,
 };
 
 using FmtTypeFlags = U16;
 
 template <typename C> struct FmtFillAlignSpec {
-  constexpr FmtFillAlignSpec(FmtAlignType a, C fc) noexcept : align{a}, fillChar{fc} {}
-  FmtAlignType align;
+  constexpr FmtFillAlignSpec(Optional<FmtAlignType> a, C fc) noexcept : align{a}, fillChar{fc} {}
+  Optional<FmtAlignType> align;
   C fillChar;
 };
 
 struct FmtNumSpec {
-  FmtNumSignType sign {FmtNumSignType::Neg};
-  bool alternate {false};
-  bool leadingZeroes {false};
+  explicit constexpr FmtNumSpec(FmtNumSignType s = FmtNumSignType::Neg, bool a = false, bool l = false) noexcept :
+      sign{s}, alternate{a}, leadingZeroes{l} {}
+  FmtNumSignType sign{FmtNumSignType::Neg};
+  bool alternate{false};
+  bool leadingZeroes{false};
 };
 
 struct FmtSizeSpec {
+  explicit constexpr FmtSizeSpec(Optional<Size> s = nullopt, Optional<Size> e = nullopt) noexcept :
+      size{s}, explicitIdx{e} {}
   Optional<Size> size{nullopt};
   Optional<Size> explicitIdx{nullopt};
 };
 
 struct FmtWidthSpec {
+  explicit constexpr FmtWidthSpec(Optional<FmtSizeSpec> w = nullopt, Optional<FmtSizeSpec> p = nullopt) noexcept :
+      width{w}, precision{p} {}
   Optional<FmtSizeSpec> width{nullopt};
   Optional<FmtSizeSpec> precision{nullopt};
 };
@@ -553,7 +583,7 @@ template <typename C, typename T> struct FmtAlignDefault<C, T, False> {
   static constexpr auto value = FmtAlignType::Leading;
 };
 
-template <typename C> auto fillAlignSpec(C aligner) noexcept -> Optional<FmtAlignType> {
+template <typename C> constexpr auto fillAlignSpec(C aligner) noexcept -> Optional<FmtAlignType> {
   switch (aligner) {
     case static_cast<C>('<'): return FmtAlignType::Leading;
     case static_cast<C>('>'): return FmtAlignType::Trailing;
@@ -599,6 +629,10 @@ template <typename C> struct IntegralTypeSpec<C, C, True> {
   constexpr auto operator()(Optional<C> spec) -> FmtTypeFlags {
     if (!spec) {
       return static_cast<FmtTypeFlags>(FmtTypeFlag::Character);
+    }
+    if (*spec == static_cast<C>('?')) {
+      return static_cast<FmtTypeFlags>(FmtTypeFlag::Character)
+           | static_cast<FmtTypeFlags>(FmtTypeFlag::Escaped);
     }
     return IntegerTypeSpec{}(spec);
   }
@@ -648,7 +682,8 @@ template <typename C> struct StringTypeSpec {
       return static_cast<FmtTypeFlags>(FmtTypeFlag::String);
     }
     if (*spec == static_cast<C>('?')) {
-      return static_cast<FmtTypeFlags>(FmtTypeFlag::Escaped);
+      return static_cast<FmtTypeFlags>(FmtTypeFlag::String)
+      | static_cast<FmtTypeFlags>(FmtTypeFlag::Escaped);
     }
     throw FormatException("Presentation type specifier is invalid");
   }
@@ -675,7 +710,7 @@ template <typename C, typename T, typename I, typename S> constexpr auto fmtPars
     -> Tuple<I, FmtFillAlignSpec<C>> {
   // auto sizeIt = it;
   auto fillChar = static_cast<C>(' ');
-  auto align = FmtAlignDefault<C, T>::value;
+  Optional<FmtAlignType> align = nullopt;
   if (it == end) {
     return {it, FmtFillAlignSpec<C>{align, fillChar}};
   }
@@ -693,6 +728,13 @@ template <typename C, typename T, typename I, typename S> constexpr auto fmtPars
         return {it, nullopt};
       }
       */
+    } else {
+      maybeAlign = fillAlignSpec(*it);
+      if (maybeAlign) {
+        align = *maybeAlign;
+        fillChar = static_cast<C>(' ');
+        it = it + 1;
+      }
     }
   }
 
@@ -815,17 +857,18 @@ template <typename T, typename C> struct FmtFillAlignComponent {
       return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out);
     }
 
+    auto align = _fillAlignSpec.align.getOr(FmtAlignDefault<C, RemoveCVRef<T0>>::value);
     auto minWidth = *maybeMinWidth;
     if (estWidth) {
       if (*estWidth >= minWidth) {
         return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out);
       }
       auto remaining = minWidth - *estWidth;
-      if (_fillAlignSpec.align == FmtAlignType::Leading) {
+      if (align == FmtAlignType::Leading) {
         return fillN(functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out), remaining, _fillAlignSpec.fillChar);
       }
 
-      if (_fillAlignSpec.align == FmtAlignType::Trailing) {
+      if (align == FmtAlignType::Trailing) {
         return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), fillN(out, remaining, _fillAlignSpec.fillChar));
       }
 
@@ -843,59 +886,62 @@ template <typename T, typename C> struct FmtFillAlignComponent {
     return impl::copy(obj.begin(), obj.end(), out);
   }
 
-  FmtFillAlignSpec<C> _fillAlignSpec {FmtAlignDefault<C, T>::value, static_cast<C>(' ')};
+  FmtFillAlignSpec<C> _fillAlignSpec{FmtAlignDefault<C, T>::value, static_cast<C>(' ')};
 };
 
-template <typename T, typename C> struct FmtNumComponent {
+template <typename C> struct FmtNumComponent {
   template <typename I, typename S> constexpr auto parseNum(I begin, S end) noexcept -> I {
-    cds::tie(begin, _numSpec) = fmtParseNum<C, T>(begin, end);
+    cds::tie(begin, _numSpec) = fmtParseNum<C>(begin, end);
     return begin;
   }
 
-  template <typename T0, typename I, typename F>
-  constexpr auto formatNum(I out, T0&& obj, Optional<Size> estWidth, F&& fmt) const noexcept -> I {
-    // if (!_fillAlignSpec) {
-    //   return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out);
-    // }
-    //
-    // if (estWidth) {
-    //   if (*estWidth >= _fillAlignSpec->size) {
-    //     return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out);
-    //   }
-    //   auto remaining = _fillAlignSpec->size - *estWidth;
-    //   if (_fillAlignSpec->align == FmtAlignType::Leading) {
-    //     return fillN(functional::invoke(fwd<F>(fmt), fwd<T0>(obj), out), remaining, _fillAlignSpec->fillChar);
-    //   }
-    //
-    //   if (_fillAlignSpec->align == FmtAlignType::Trailing) {
-    //     return functional::invoke(fwd<F>(fmt), fwd<T0>(obj), fillN(out, remaining, _fillAlignSpec->fillChar));
-    //   }
-    //
-    //   auto firstHalf = remaining / 2;
-    //   auto secondHalf = remaining - firstHalf;
-    //   return fillN(functional::invoke(fwd<F>(fmt), fwd<T0>(obj), fillN(out, firstHalf, _fillAlignSpec->fillChar)), secondHalf, _fillAlignSpec->fillChar);
-    // }
-    //
-    // BaseString<C> asStr;
-    // functional::invoke(fwd<F>(fmt), fwd<T0>(obj), BackInserterIterator<BaseString<C>>{asStr});
-    // return formatFillAlign(out, asStr, asStr.size(), *this);
-    return out;
-  }
-
-  template <typename I> constexpr auto operator()(BaseString<C> const& obj, I out) const noexcept -> I {
-    return impl::copy(obj.begin(), obj.end(), out);
-  }
-
-  Optional<FmtNumSpec> _numSpec;
+  FmtNumSpec _numSpec{};
 };
 
-template <typename C, typename I> struct IntegralFormatter : FmtFillAlignComponent<I, C> {
-  using FmtFillAlignComponent<I, C>::parseFillAlign;
-  using FmtFillAlignComponent<I, C>::formatFillAlign;
-  using U = StringUtils<C, StringTraits<C>>;
+template <typename C> struct FmtWidthComponent {
+  template <typename I, typename S> constexpr auto parseWidth(I begin, S end) noexcept -> I {
+    cds::tie(begin, _widthSpec) = fmtParseWidth<C>(begin, end);
+    if (_widthSpec.width && !_widthSpec.width->size && !_widthSpec.width->explicitIdx) {
+      ++_acceptedAutomaticArgCount;
+    }
+    if (_widthSpec.precision && !_widthSpec.precision->size && !_widthSpec.precision->explicitIdx) {
+      ++_acceptedAutomaticArgCount;
+    }
+    return begin;
+  }
+
+  FmtWidthSpec _widthSpec{};
+  Size _acceptedAutomaticArgCount{0u};
+};
+
+template <typename T, typename C> struct FmtTypeComponent {
+  template <typename I, typename S> constexpr auto parseType(I begin, S end) noexcept -> I {
+    cds::tie(begin, _typeFlags) = fmtParseType<C, T>(begin, end);
+    return begin;
+  }
+
+  FmtTypeFlags _typeFlags{};
+};
+
+template <typename T, typename C> struct StandardFormatter :
+    FmtFillAlignComponent<T, C>,
+    FmtNumComponent<C>,
+    FmtWidthComponent<C>,
+    FmtTypeComponent<T, C> {
+  using FmtFillAlignComponent<T, C>::parseFillAlign;
+  using FmtFillAlignComponent<T, C>::formatFillAlign;
+  using FmtFillAlignComponent<T, C>::_fillAlignSpec;
+  using FmtNumComponent<C>::parseNum;
+  using FmtNumComponent<C>::_numSpec;
+  using FmtWidthComponent<C>::parseWidth;
+  using FmtWidthComponent<C>::_widthSpec;
+  using FmtTypeComponent<T, C>::parseType;
+  using FmtTypeComponent<T, C>::_typeFlags;
+  using SU = StringUtils<C, StringTraits<C>>;
 
   template <typename Ctx> constexpr auto parse(Ctx& ctx) -> typename Ctx::Iterator {
-    auto it = parseFillAlign(ctx.begin(), ctx.end());
+    auto end = ctx.end();
+    auto it = parseType(parseWidth(parseNum(parseFillAlign(ctx.begin(), end), end), end), end);
     if (it == ctx.end()) {
       return it;
     }
@@ -906,38 +952,214 @@ template <typename C, typename I> struct IntegralFormatter : FmtFillAlignCompone
     throw FormatException(String{"Extraneous characters in format string: '"} + StringView{&*it, ctx.end() - it} + "'");
   }
 
-  template <typename Ctx> auto format(I value, Ctx& ctx) const noexcept -> typename Ctx::Iterator {
-    auto len = U::intLength(value, 10);
-    return formatFillAlign(/* TODO */ nullopt, ctx.out(), value, len, [len](I lValue, BackInserterIterator<BaseString<C>> out) {
-      BaseString<C> asStr;
-      asStr.resize(len);
-      ignore = U::writeInt(lValue, len, asStr.data());
-      return impl::copy(asStr.begin(), asStr.end(), out);
-    });
+  template <typename T0, typename Ctx> auto fmtCharFormat(T0 value, Ctx& ctx) const -> typename Ctx::Iterator {
+    auto const widthSpecSize = _widthSpec.width.transform(&FmtSizeSpec::size).getOr(nullopt);
+    if (static_cast<Size>(value) >= static_cast<Size>(limits::MaxOf<C>::value)) {
+      throw FormatException("Value not representable in current CharType");
+    }
+
+    if (0 != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Escaped))) {
+      bool escaped = true;
+      if (value == static_cast<C>('\t')) {
+        value = static_cast<C>('t');
+      } else if (value == static_cast<C>('\n')) {
+        value = static_cast<C>('n');
+      } else if (value == static_cast<C>('\r')) {
+        value = static_cast<C>('r');
+      } else if (value == static_cast<C>('\'') || value == static_cast<C>('\\')) {
+        // nothing changes
+      } else {
+        escaped = false;
+      }
+      // TODO: unicode
+      return formatFillAlign(widthSpecSize, ctx.out(), static_cast<C>(value), escaped ? 2u : 1u,
+          [escaped](C lValue, BackInserterIterator<BaseString<C>> out) {
+            if (escaped) {
+              out = impl::fillN(out, 1, static_cast<C>('\\'));
+            }
+            return impl::copy(&lValue, &lValue + 1, out);
+          });
+    }
+    return formatFillAlign(widthSpecSize, ctx.out(), static_cast<C>(value), 1u,
+        [](C lValue, BackInserterIterator<BaseString<C>> out) {
+          return impl::copy(&lValue, &lValue + 1, out);
+        });
+  }
+
+  template <typename Ctx> auto fmtStringFormat(BaseStringView<C> value, Ctx& ctx) const -> typename Ctx::Iterator {
+    auto const widthSpecSize = _widthSpec.width.transform(&FmtSizeSpec::size).getOr(nullopt);
+    if (0 != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Escaped))) {
+      String escapedValue;
+      escapedValue.reserve(value.length() + 4 /* Store later somewhere */);
+      for (auto c : value) {
+        bool escaped = true;
+        if (c == static_cast<C>('\t')) {
+          c = static_cast<C>('t');
+        } else if (c == static_cast<C>('\n')) {
+          c = static_cast<C>('n');
+        } else if (c == static_cast<C>('\r')) {
+          c = static_cast<C>('r');
+        } else if (c == static_cast<C>('"') || c == static_cast<C>('\\')) {
+          // nothing changes
+        } else {
+          escaped = false;
+        }
+        if (escaped) {
+          escapedValue += static_cast<C>('\\');
+        }
+        // TODO: unicode
+        escapedValue += c;
+      }
+      return formatFillAlign(widthSpecSize, ctx.out(), escapedValue, escapedValue.size(),
+          [](BaseString<C> const& value0, BackInserterIterator<BaseString<C>> out) {
+            return impl::copy(value0.begin(), value0.end(), out);
+          });
+    }
+    return formatFillAlign(widthSpecSize, ctx.out(), value, value.length(),
+        [](BaseStringView<C> const& value0, BackInserterIterator<BaseString<C>> out0) {
+          return impl::copy(value0.begin(), value0.end(), out0);
+        });
+  }
+
+  template <typename T0, typename Ctx, EnableIf<IsSigned<T0>> = 0>
+  auto fmtIntFormat(T0 value, Ctx& ctx) const -> typename Ctx::Iterator {
+    using U = UnsignedEquivalent<T0>;
+    auto out = ctx.out();
+    auto const widthSpecSize = _widthSpec.width.transform(&FmtSizeSpec::size).getOr(nullopt);
+    auto const neg = value < 0;
+    auto const uns = neg ? static_cast<U>(~value) : static_cast<U>(value);
+    auto const base = 0u != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Decimal))
+        ? 10u : 0u != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Hex))
+        ? 16u : 0u != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Binary))
+        ? 2u : 8u;
+    assert(base != 8u ? true : 0u != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Octal))
+           && "Undefined behavior");
+    auto ulen = StringUtils<C, StringTraits<C>>::intLength(uns, base);
+    auto len = ulen
+        + (!neg && _numSpec.sign == FmtNumSignType::Neg ? 0u : 1u)
+        + ((base == 2u || base == 16u) && _numSpec.alternate ? 2u : 0u)
+        + (base == 8u && _numSpec.alternate ? 1u : 0u);
+    auto writeIt = [this, ulen, neg, base, leadingPotential = static_cast<SSize>(*widthSpecSize) - len]
+        (T value0, BackInserterIterator<BaseString<C>> out0, bool leadingZeroes = false) {
+      if (neg) {
+        out0 = impl::fillN(out0, 1, static_cast<C>('-'));
+      } else if (_numSpec.sign == FmtNumSignType::PosNeg) {
+        out0 = impl::fillN(out0, 1, static_cast<C>('+'));
+      } else if (_numSpec.sign == FmtNumSignType::SpaceNeg) {
+        out0 = impl::fillN(out0, 1, static_cast<C>(' '));
+      }
+      auto upper = 0 != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase));
+      if (_numSpec.alternate && 0 != (_typeFlags & (static_cast<FmtTypeFlags>(FmtTypeFlag::Binary)
+                                                    | static_cast<FmtTypeFlags>(FmtTypeFlag::Octal)
+                                                    | static_cast<FmtTypeFlags>(FmtTypeFlag::Hex)))) {
+        if (0 != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Hex))) {
+          out0 = impl::fillN(
+              impl::fillN(out0, 1, static_cast<C>('0')),
+              1, upper ? static_cast<C>('X') : static_cast<C>('x')
+          );
+        } else if (0 != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Binary))) {
+          out0 = impl::fillN(
+              impl::fillN(out0, 1, static_cast<C>('0')),
+              1, upper ? static_cast<C>('B') : static_cast<C>('b')
+          );
+        } else {
+          out0 = impl::fillN(out0, 1, static_cast<C>('0'));
+        }
+      }
+      if (leadingZeroes && leadingPotential > 0) {
+        out0 = impl::fillN(out0, static_cast<Size>(leadingPotential), static_cast<C>('0'));
+      }
+      BaseString<C> asString(ulen, '\0');
+      ignore = SU::writeInt(value0, ulen, asString.data(), base, upper);
+      return impl::copy(asString.begin(), asString.end(), out0);
+    };
+    if (!_fillAlignSpec.align && widthSpecSize) {
+      if (_numSpec.leadingZeroes) {
+        return writeIt(value, out, true);
+      }
+    }
+    return formatFillAlign(widthSpecSize, ctx.out(), value, len, writeIt);
+  }
+
+  template <typename T0, typename Ctx, EnableIf<IsUnsigned<T0>> = 0>
+  auto fmtIntFormat(T0 value, Ctx& ctx) const -> typename Ctx::Iterator {
+    auto out = ctx.out();
+    auto const widthSpecSize = _widthSpec.width.transform(&FmtSizeSpec::size).getOr(nullopt);
+    auto const base = 0u != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Decimal))
+        ? 10u : 0u != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Hex))
+        ? 16u : 0u != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Binary))
+        ? 2u : 8u;
+    assert(base != 8u ? true : 0u != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Octal))
+           && "Undefined behavior");
+    auto ulen = StringUtils<C, StringTraits<C>>::intLength(value, base);
+    auto len = ulen
+        + (_numSpec.sign == FmtNumSignType::Neg ? 0u : 1u)
+        + ((base == 2u || base == 16u) && _numSpec.alternate ? 2u : 0u)
+        + (base == 8u && _numSpec.alternate ? 1u : 0u);
+    auto writeIt = [this, ulen, base, leadingPotential = static_cast<SSize>(*widthSpecSize) - len]
+        (T value0, BackInserterIterator<BaseString<C>> out0, bool leadingZeroes = false) {
+      if (_numSpec.sign == FmtNumSignType::PosNeg) {
+        out0 = impl::fillN(out0, 1, static_cast<C>('+'));
+      } else if (_numSpec.sign == FmtNumSignType::SpaceNeg) {
+        out0 = impl::fillN(out0, 1, static_cast<C>(' '));
+      }
+      auto upper = 0 != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Uppercase));
+      if (_numSpec.alternate && 0 != (_typeFlags & (static_cast<FmtTypeFlags>(FmtTypeFlag::Binary)
+                                                    | static_cast<FmtTypeFlags>(FmtTypeFlag::Octal)
+                                                    | static_cast<FmtTypeFlags>(FmtTypeFlag::Hex)))) {
+        if (0 != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Hex))) {
+          out0 = impl::fillN(
+              impl::fillN(out0, 1, static_cast<C>('0')),
+              1, upper ? static_cast<C>('X') : static_cast<C>('x')
+          );
+        } else if (0 != (_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Binary))) {
+          out0 = impl::fillN(
+              impl::fillN(out0, 1, static_cast<C>('0')),
+              1, upper ? static_cast<C>('B') : static_cast<C>('b')
+          );
+        } else {
+          out0 = impl::fillN(out0, 1, static_cast<C>('0'));
+        }
+      }
+      if (leadingZeroes && leadingPotential > 0) {
+        out0 = impl::fillN(out0, static_cast<Size>(leadingPotential), static_cast<C>('0'));
+      }
+      BaseString<C> asString(ulen, '\0');
+      ignore = SU::writeInt(value0, ulen, asString.data(), base, upper);
+      return impl::copy(asString.begin(), asString.end(), out0);
+    };
+    if (!_fillAlignSpec.align && widthSpecSize) {
+      if (_numSpec.leadingZeroes) {
+        return writeIt(value, out, true);
+      }
+    }
+    return formatFillAlign(widthSpecSize, ctx.out(), value, len, writeIt);
   }
 };
 
-template <typename C> struct CharFormatter : FmtFillAlignComponent<C, C> {
-  using FmtFillAlignComponent<C, C>::parseFillAlign;
-  using FmtFillAlignComponent<C, C>::formatFillAlign;
-  using U = StringUtils<C, StringTraits<C>>;
+template <typename C, typename I> struct IntegralFormatter : StandardFormatter<I, C> {
+  using StandardFormatter<I, C>::_typeFlags;
+  using StandardFormatter<I, C>::fmtCharFormat;
+  using StandardFormatter<I, C>::fmtIntFormat;
 
-  template <typename Ctx> constexpr auto parse(Ctx& ctx) -> typename Ctx::Iterator {
-    auto it = parseFillAlign(ctx.begin(), ctx.end());
-    if (it == ctx.end()) {
-      return it;
+  template <typename Ctx> auto format(I value, Ctx& ctx) const -> typename Ctx::Iterator {
+    if ((_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Character)) != 0u) {
+      return fmtCharFormat(value, ctx);
     }
-
-    if (inConstexpr()) {
-      throw FormatException("Extraneous characters in format string");
-    }
-    throw FormatException(String{"Extraneous characters in format string: '"} + StringView{&*it, ctx.end() - it} + "'");
+    return fmtIntFormat(value, ctx);
   }
+};
+
+template <typename C> struct CharFormatter : StandardFormatter<C, C> {
+  using StandardFormatter<C, C>::_typeFlags;
+  using StandardFormatter<C, C>::fmtCharFormat;
+  using StandardFormatter<C, C>::fmtIntFormat;
 
   template <typename Ctx> auto format(C value, Ctx& ctx) const noexcept -> typename Ctx::Iterator {
-    return formatFillAlign(ctx.out(), value, 1, [](C lValue, BackInserterIterator<BaseString<C>> out) {
-      return impl::copy(&lValue, &lValue + 1, out);
-    });
+    if ((_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::Character)) != 0u) {
+      return fmtCharFormat(value, ctx);
+    }
+    return fmtIntFormat(static_cast<unsigned>(value), ctx);
   }
 };
 
@@ -950,28 +1172,47 @@ template <typename C> struct Formatter<S16, C> : IntegralFormatter<C, S16> {};
 template <typename C> struct Formatter<S32, C> : IntegralFormatter<C, S32> {};
 template <typename C> struct Formatter<S64, C> : IntegralFormatter<C, S64> {};
 
-template <typename C> struct Formatter<bool, C> : FmtFillAlignComponent<bool, C> {
-  using FmtFillAlignComponent<bool, C>::parseFillAlign;
-  using FmtFillAlignComponent<bool, C>::formatFillAlign;
-  template <typename Ctx> constexpr auto parse(Ctx& ctx) noexcept -> typename Ctx::Iterator {
-    auto it = parseFillAlign(ctx.begin(), ctx.end());
-    if (it == ctx.end()) {
-      return it;
-    }
-
-    assert(false && "unimplemented");
-  }
+template <typename C> struct Formatter<bool, C> : StandardFormatter<bool, C> {
+  using StandardFormatter<bool, C>::_typeFlags;
+  using StandardFormatter<bool, C>::fmtStringFormat;
+  using StandardFormatter<bool, C>::fmtIntFormat;
 
   template <typename Ctx> auto format(bool value, Ctx& ctx) const noexcept -> typename Ctx::Iterator {
+    if ((_typeFlags & static_cast<FmtTypeFlags>(FmtTypeFlag::String)) == 0u) {
+      return fmtIntFormat(static_cast<unsigned>(value), ctx);
+    }
     auto asStr = value
         ? BaseStringView<C>{StringTraits<C>::Constants::_true}
         : BaseStringView<C>{StringTraits<C>::Constants::_false};
-    return formatFillAlign(/* TODO */nullopt, ctx.out(), asStr, asStr.length(),
-      [](BaseStringView<C> const& lValue, BackInserterIterator<BaseString<C>> out) {
-          return impl::copy(lValue.begin(), lValue.end(), out);
-    });
+    return fmtStringFormat(asStr, ctx);
   }
 };
+
+template <typename T, typename C> struct StringFormatter : StandardFormatter<C, C> {
+  using StandardFormatter<C, C>::_typeFlags;
+  using StandardFormatter<C, C>::fmtStringFormat;
+
+  template <typename Ctx, typename T0> auto format(T0&& value, Ctx& ctx) const noexcept -> typename Ctx::Iterator {
+    return fmtStringFormat(fwd<T0>(value), ctx);
+  }
+};
+
+template <typename C, typename U, typename A>
+struct Formatter<BaseString<C, U, A>, C> : StringFormatter<BaseString<C, U, A>, C> {};
+
+template <typename C, typename U>
+struct Formatter<BaseStringView<C, U>, C> : StringFormatter<BaseStringView<C, U>, C> {};
+
+template <typename C, typename T, typename A>
+struct Formatter<std::basic_string<C, T, A>, C> : StringFormatter<std::basic_string<C, T, A>, C> {};
+
+template <typename C, typename T>
+struct Formatter<std::basic_string_view<C, T>, C> : StringFormatter<std::basic_string_view<C, T>, C> {};
+
+template <typename C> struct Formatter<C const*, C> : StringFormatter<C const*, C> {};
+template <typename C> struct Formatter<C*, C> : StringFormatter<C*, C> {};
+template <typename C> struct Formatter<C[], C> : StringFormatter<C[], C> {};
+template <typename C, Size n> struct Formatter<C[n], C> : StringFormatter<C[n], C> {};
 } // namespace
 
 TEST(FormatTest, init) {
@@ -1003,27 +1244,27 @@ TEST(FormatTest, init) {
   ASSERT_EQ("5true", format("{0}{1}", 5, true));
   ASSERT_EQ("true5", format("{1}{0}", 5, true));
   ASSERT_EQ("55", format("{0}{0}", 5, true));
-  ASSERT_EQ("truetrue", format("truetrue", 5, true));
+  ASSERT_EQ("truetrue", format("{1}{1}", 5, true));
 }
 
 TEST(FormatTest, fmtParseFillAlign) {
   char const str0[] = "6";
   ASSERT_EQ(
-      Tuple(cds::begin(str0), FmtFillAlignSpec<char>(FmtAlignType::Trailing, ' ')),
+      Tuple(cds::begin(str0), FmtFillAlignSpec<char>(nullopt, ' ')),
       (fmtParseFillAlign<char, int>(cds::begin(str0), cds::end(str0)))
   );
   ASSERT_EQ(
-      Tuple(cds::begin(str0), FmtFillAlignSpec<char>(FmtAlignType::Leading, ' ')),
+      Tuple(cds::begin(str0), FmtFillAlignSpec<char>(nullopt, ' ')),
       (fmtParseFillAlign<char, char>(cds::begin(str0), cds::end(str0)))
   );
   ASSERT_EQ(
-      Tuple(cds::begin(str0), FmtFillAlignSpec<char>(FmtAlignType::Leading, ' ')),
+      Tuple(cds::begin(str0), FmtFillAlignSpec<char>(nullopt, ' ')),
       (fmtParseFillAlign<char, bool>(cds::begin(str0), cds::end(str0)))
   );
 
   char const str1[] = "6d";
   ASSERT_EQ(
-      Tuple(cds::begin(str1), FmtFillAlignSpec<char>(FmtAlignType::Trailing, ' ')),
+      Tuple(cds::begin(str1), FmtFillAlignSpec<char>(nullopt, ' ')),
       (fmtParseFillAlign<char, int>(cds::begin(str1), cds::end(str1)))
   );
 
@@ -1053,13 +1294,13 @@ TEST(FormatTest, fmtParseFillAlign) {
 
   char const str6[] = "";
   ASSERT_EQ(
-      Tuple(cds::begin(str6), FmtFillAlignSpec<char>(FmtAlignType::Trailing, ' ')),
+      Tuple(cds::begin(str6), FmtFillAlignSpec<char>(nullopt, ' ')),
       (fmtParseFillAlign<char, int>(cds::begin(str6), cds::end(str6)))
   );
 
   char const str7[] = "d";
   ASSERT_EQ(
-      Tuple(cds::begin(str7), FmtFillAlignSpec<char>(FmtAlignType::Trailing, ' ')),
+      Tuple(cds::begin(str7), FmtFillAlignSpec<char>(nullopt, ' ')),
       (fmtParseFillAlign<char, int>(cds::begin(str7), cds::end(str7)))
   );
 }
@@ -1233,7 +1474,7 @@ template <typename T> auto fmtParseStringTypeTest() -> void {
   }
 
   char const str3[] = "?";
-  ASSERT_EQ(Tuple(cds::begin(str3) + 1, tFlags(FmtTypeFlag::Escaped)),
+  ASSERT_EQ(Tuple(cds::begin(str3) + 1, tFlags(FmtTypeFlag::String, FmtTypeFlag::Escaped)),
             (fmtParseType<char, T>(cds::begin(str3), cds::end(str3))));
 }
 
@@ -1348,6 +1589,10 @@ TEST(FormatTest, fmtParseCharType) {
   char const str8[] = "X";
   ASSERT_EQ(Tuple(cds::begin(str8) + 1, tFlags(FmtTypeFlag::Hex, FmtTypeFlag::Uppercase)),
             (fmtParseType<char, char>(cds::begin(str8), cds::end(str8))));
+
+  char const str9[] = "?";
+  ASSERT_EQ(Tuple(cds::begin(str9) + 1, tFlags(FmtTypeFlag::Character, FmtTypeFlag::Escaped)),
+            (fmtParseType<char, char>(cds::begin(str9), cds::end(str9))));
 }
 
 TEST(FormatTest, fmtParseBoolType) {
@@ -1483,11 +1728,25 @@ TEST(FormatTest, fmtParsePointerType) {
   fmtParsePointerTypeTest<int*>();
 }
 
-TEST(FormatTest, fmtParseWidthInFormat) {
-  // ASSERT_EQ(format("{:6}", 42),    "    42");
-  // ASSERT_EQ(format("{:6}", 'x'),   "x     ");
-  // ASSERT_EQ(format("{:*<6}", 'x'), "x*****");
-  // ASSERT_EQ(format("{:*>6}", 'x'), "*****x");
-  // ASSERT_EQ(format("{:*^6}", 'x'), "**x***");
-  // ASSERT_EQ(format("{:6}", true),  "true  ");
+TEST(FormatTest, fmtStandardFormatSpecExamples) {
+  char c = 120;
+  ASSERT_EQ(format("{:6}", 42),    "    42");
+  ASSERT_EQ(format("{:6}", 'x'),   "x     ");
+  ASSERT_EQ(format("{:*<6}", 'x'), "x*****");
+  ASSERT_EQ(format("{:*>6}", 'x'), "*****x");
+  ASSERT_EQ(format("{:*^6}", 'x'), "**x***");
+  ASSERT_EQ(format("{:6d}", c),"   120");
+  ASSERT_EQ(format("{:6}", true),  "true  ");
+
+  ASSERT_EQ(format("{0:},{0:+},{0:-},{0: }", 1),  "1,+1,1, 1");
+  ASSERT_EQ(format("{0:},{0:+},{0:-},{0: }", 1u), "1,+1,1, 1");
+  ASSERT_EQ(format("{0:},{0:+},{0:-},{0: }", -1), "-1,-1,-1,-1");
+
+  ASSERT_EQ(format("{:+06d}", c), "+00120");
+  ASSERT_EQ(format("{:#06x}", 0xa),   "0x000a");
+  ASSERT_EQ(format("{:<06}", -42),    "-42   ");
+
+  ASSERT_EQ(format("[{:?}]", "h\tllo"), "[h\\tllo]");
+  ASSERT_EQ(format("[{:?}] [{:?}]", '\'', '"'), "[\\'] [\"]");
+  ASSERT_EQ(format("[{:?}] [{:?}]", "'", "\""), "['] [\\\"]");
 }
