@@ -26,7 +26,7 @@ public:
 
   template <typename V, EnableIf<Not<IsSame<RemoveCVRef<V>, BackInserterIterator>>> = 0>
   CDS_ATTR(constexpr(14)) auto operator=(V&& value) noexcept -> BackInserterIterator& {
-    _obj.pushBack(fwd<V>(value));
+    _obj.pushBack(cds::impl::fwd<V>(value));
     return *this;
   }
 
