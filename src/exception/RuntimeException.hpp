@@ -9,7 +9,9 @@
 #include <cds/exception/Exception>
 #include "../primitive/string/StringBase.hpp"
 
-namespace cds::impl::except {
+namespace cds {
+namespace impl {
+namespace except {
 class RuntimeException : public Exception {
 public:
   using Exception::Exception;
@@ -30,7 +32,9 @@ public:
 private:
   String const _message;
 };
-} // namespace cds::impl::except
+} // namespace except
+} // namespace impl
+} // namespace cds
 
 namespace cds {
 using impl::except::RuntimeException;

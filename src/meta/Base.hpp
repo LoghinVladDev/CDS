@@ -219,6 +219,15 @@ template <typename T, typename F, typename... P> struct VAContains<T, F, P...> {
 template <typename P, typename T> struct Contains;
 template <template <typename...> class P, typename... A, typename T> struct Contains<P<A...>, T> :
     VAContains<T, A...>::Type {};
+
+template <unsigned...> struct IndexSequence {};
+template <unsigned head, unsigned... tail> struct IndexSequenceImpl {
+  using Type = typename IndexSequenceImpl<head - 1, head - 1, tail...>::Type;
+};
+
+template <unsigned... indices> struct IndexSequenceImpl<0u, indices...> {
+  using Type = IndexSequence<indices...>;
+};
 } // namespace impl
 
 template <typename Type, Type value> using Integral = typename impl::Integral<Type, value>::Type;
@@ -284,6 +293,9 @@ template <template <typename...> class Formula, typename... TParams> struct Coun
     impl::Count<Formula, TParams...>::Type {};
 
 template <typename P, typename T> struct Contains : impl::Contains<P, T>::Type {};
+
+using impl::IndexSequence;
+template <unsigned size> using MakeIndexSequence = typename impl::IndexSequenceImpl<size>::Type;
 } // namespace meta
 } // namespace cds
 

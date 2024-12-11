@@ -1579,6 +1579,7 @@ auto operator ""_s(char8_t const* string, std::size_t length) noexcept -> impl::
 }
 } // namespace cds
 
+#include "../../common/StringBackInserterIterator.hpp"
 #include "../../common/StringConversion.hpp"
 #include "../../common/TupleString.hpp"
 

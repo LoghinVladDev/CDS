@@ -6,31 +6,26 @@
 #define CDS_FORMAT_VECTOR_FORMAT_HPP
 
 namespace cds {
-namespace experimental {
-namespace impl {
-template <typename T, typename A> struct Formatter<Vector<T, A>> {
-  template <typename S> CDS_ATTR(constexpr(14)) auto operator()(S& string, Vector<T> const& obj)
-      const CDS_ATTR(noexcept(false)) -> void {
-    using C = typename S::Char;
-    string += static_cast<C>('[');
+template <typename T, typename A, typename C> struct Formatter<Vector<T, A>, C> {
+  template <typename Ctx> CDS_ATTR(constexpr(20)) auto format(Vector<T, A> const& obj, Ctx& ctx)
+      const CDS_ATTR(noexcept(false)) -> typename Ctx::Iterator {
+    ignore = impl::fillN(ctx.out(), 1u, static_cast<C>('['));
     auto it = obj.begin();
     auto end = obj.end();
     if (it == end) {
-      string += static_cast<C>(']');
-      return;
+      return impl::fillN(ctx.out(), 1u, static_cast<C>(']'));
     }
 
-    Formatter<T>{}(string, *it);
+    Formatter<T, C> underylingFormatter{};
+    ignore = underlyingFormatter(*it, ctx);
     for (++it; it != end; ++it) {
-      string += static_cast<C>(',');
-      string += static_cast<C>(' ');
-      Formatter<T>{}(string, *it);
+      ignore = impl::fillN(ctx.out(), 1u, static_cast<C>(','));
+      ignore = impl::fillN(ctx.out(), 1u, static_cast<C>(' '));
+      ignore = underlyingFormatter(*it, ctx);
     }
-    string += static_cast<C>(']');
+    return impl::fillN(ctx.out(), 1u, static_cast<C>(']'));
   }
 };
-} // namespace impl
-} // namespace experimental
 } // namespace cds
 
 #endif

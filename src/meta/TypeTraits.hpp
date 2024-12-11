@@ -227,6 +227,8 @@ template <> struct UnsignedEquivalent<signed long long> { using Type = unsigned 
 #elif defined(WIN32) && CDS_ATTR(bitarch) == 64
 template <> struct SignedEquivalent<signed long> { using Type = unsigned long; };
 #endif
+
+template <typename T> struct TypeId { using Type = T; };
 } // namespace impl
 
 template <typename Type> using RemoveConst = typename impl::RemoveConst<Type>::Type;
@@ -352,6 +354,8 @@ template <> struct TypeInfo<char8_t> : impl::primitiveTypeInfoNames::Char8T<> {}
 
 template <typename Type> using Decay = typename impl::Decay<Type>::Type;
 template <typename... Types> using Common = typename impl::Common<Types...>::Type;
+
+template <typename T> using TypeId = typename impl::TypeId<T>::Type;
 } // namespace meta
 } // namespace cds
 

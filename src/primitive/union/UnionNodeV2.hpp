@@ -21,6 +21,7 @@ using meta::And;
 using meta::Conditional;
 using meta::Common;
 using meta::False;
+using meta::IndexSequence;
 using meta::Integral;
 using meta::IsAssignable;
 using meta::IsCopyAssignable;
@@ -46,26 +47,11 @@ using meta::IsTriviallyDestructible;
 using meta::IsTriviallyMoveAssignable;
 using meta::IsTriviallyMoveConstructible;
 using meta::Lt;
+using meta::MakeIndexSequence;
 using meta::True;
 
 using meta::impl::NonDecayedCommon;
 using meta::impl::Pack;
-
-template<Size...>
-struct IndexSequence {
-};
-
-template<Size h, Size... t>
-struct IndexSequenceImpl {
-  using Type = typename IndexSequenceImpl<h - 1, h - 1, t...>::Type;
-};
-
-template<Size... s>
-struct IndexSequenceImpl<0u, s...> {
-  using Type = IndexSequence<s...>;
-};
-
-template<Size size> using MakeIndexSequence = typename IndexSequenceImpl<size>::Type;
 
 template<typename Req> using UnionActiveIndex = Conditional<
     Lt<Req, limits::MaxOf<U8>>, limits::MaxOf<U8>, Conditional<

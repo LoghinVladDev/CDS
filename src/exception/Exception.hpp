@@ -9,7 +9,9 @@
 #include <exception>
 #include "../primitive/string/StringViewBase.hpp"
 
-namespace cds::impl::except {
+namespace cds {
+namespace impl {
+namespace except {
 using String = BaseString<char>;
 using StringView = BaseStringView<char>;
 
@@ -29,7 +31,9 @@ protected:
     return message().data();
   }
 };
-} // namespace cds::impl::except
+} // namespace except
+} // namespace impl
+} // namespace cds
 
 namespace cds {
 using impl::except::Exception;
