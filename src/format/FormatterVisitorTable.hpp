@@ -86,8 +86,10 @@ auto visitFormattersForParse(BaseStringView<C, U> const& formatString, Fmt& form
 template <typename A, typename C, typename U, typename Fmt> CDS_ATTR(constexpr(14))
 auto visitFormattersForFormat(BaseString<C, U>& out, Fmt& formatStringObject, A&& args)
     CDS_ATTR(noexcept(false)) -> void {
-  for (auto const& token : FormatStringTokenRange<C, U>{formatStringObject.get()}) {
-    token.visit(visitors(
+  auto const range = FormatStringTokenRange<C, U>{formatStringObject.get()};
+  auto begin = range.begin();
+  for (auto end = range.end(); begin != end; ++begin) {
+    begin->visit(visitors(
         [&out](BaseStringView<C, U> const& plainText) {
           out += plainText;
         },

@@ -10,9 +10,7 @@
 
 namespace cds {
 namespace iterator {
-class Sentinel {
-  static_assert(compiler::CurrentStd::version >= compiler::StdCpp17::version, "Sentinel requires c++17 or above");
-};
+class Sentinel {};
 } // namespace iterator
 } // namespace cds
 

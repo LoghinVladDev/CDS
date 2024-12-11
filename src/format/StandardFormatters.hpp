@@ -86,8 +86,10 @@ struct Formatter<impl::BaseStringView<C, U>, C> : impl::fmt::StringFormatter<imp
 template <typename C, typename T, typename A>
 struct Formatter<std::basic_string<C, T, A>, C> : impl::fmt::StringFormatter<std::basic_string<C, T, A>, C> {};
 
+#if CDS_ATTR(cpp17)
 template <typename C, typename T>
 struct Formatter<std::basic_string_view<C, T>, C> : impl::fmt::StringFormatter<std::basic_string_view<C, T>, C> {};
+#endif // #if CDS_ATTR(cpp17)
 
 template <typename C> struct Formatter<C const*, C> : impl::fmt::StringFormatter<C const*, C> {};
 template <typename C> struct Formatter<C*, C> : impl::fmt::StringFormatter<C*, C> {};

@@ -103,7 +103,9 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/exception/UnionTypeExceptionTest.cpp)
 
   set(CDS_FORMAT_UNIT_TEST_SOURCES
-      valid/format/FormatTest.cpp)
+      valid/format/FormatStringIteratorTest.cpp
+      valid/format/FormatTest.cpp
+      valid/format/StandardFormatSpecificationTest.cpp)
 
   set(CDS_FUNCTIONAL_UNIT_TEST_SOURCES
       valid/functional/Comparator.cpp

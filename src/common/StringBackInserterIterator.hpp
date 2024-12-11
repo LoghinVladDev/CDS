@@ -24,11 +24,11 @@ public:
     return *this;
   }
 
-  constexpr auto operator*() noexcept -> BackInserterIterator& {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto operator*() noexcept -> BackInserterIterator& {
     return *this;
   }
 
-  constexpr auto operator++() -> BackInserterIterator& {
+  CDS_ATTR(constexpr(14)) auto operator++() -> BackInserterIterator& {
     return *this;
   }
 

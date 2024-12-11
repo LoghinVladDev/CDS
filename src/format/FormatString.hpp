@@ -19,7 +19,6 @@ using meta::inConstexpr;
 
 template <typename C, typename U, typename... Args> class FormatString {
 public:
-  using Char = C;
   using View = BaseStringView<C, U>;
   using FormatterTuple = Tuple<Formatter<RemoveCVRef<Args>>...>;
 

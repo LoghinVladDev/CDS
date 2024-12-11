@@ -19,7 +19,7 @@ template <typename C, typename U> class FormatStringTokenRange {
 public:
   CDS_ATTR(2(explicit, constexpr(11))) FormatStringTokenRange(SV fmtStr) noexcept : _fmtStr{fmtStr} {}
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto begin() const noexcept -> I {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto begin() const CDS_ATTR(noexcept(false)) -> I {
     return I{_fmtStr.begin(), _fmtStr.end()};
   }
 

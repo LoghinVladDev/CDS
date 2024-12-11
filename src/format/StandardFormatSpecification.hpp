@@ -87,12 +87,16 @@ template <typename T, typename C, typename = typename And<
 >::Type> struct FormatDefaultAlign;
 
 template <typename T, typename C> struct FormatDefaultAlign<T, C, True> {
-  static constexpr auto value = FormatAlignType::Trailing;
+  static constexpr FormatAlignType value = FormatAlignType::Trailing;
 };
 
 template <typename T, typename C> struct FormatDefaultAlign<T, C, False> {
-  static constexpr auto value = FormatAlignType::Leading;
+  static constexpr FormatAlignType value = FormatAlignType::Leading;
 };
+
+// ODR before C++17
+template <typename T, typename C> FormatAlignType const FormatDefaultAlign<T, C, True>::value;
+template <typename T, typename C> FormatAlignType const FormatDefaultAlign<T, C, False>::value;
 
 struct FormatIntegerTypeSpecification {
   template <typename C> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(Optional<C> typeChar) -> FormatTypeFlags {
@@ -618,7 +622,8 @@ template <typename T, typename C> struct StandardFormatter :
                   + (!neg && numberSpecification.sign == FormatNumberSignType::Negative ? 0u : 1u)
                   + ((base == 2u || base == 16u) && numberSpecification.alternate ? 2u : 0u)
                   + (base == 8u && numberSpecification.alternate ? 1u : 0u);
-    auto writeIt = [this, ulen, neg, base, leadingPotential = static_cast<SSize>(maybeRequestedWidth.getOr(0)) - len]
+    auto const leadingPotential = static_cast<SSize>(maybeRequestedWidth.getOr(0)) - len;
+    auto writeIt = [this, ulen, neg, base, leadingPotential]
         (T value0, BackInserterIterator<BaseString<C, SU>> out0, bool leadingZeroes = false) {
       if (neg) {
         out0 = impl::fillN(out0, 1, static_cast<C>('-'));
@@ -674,7 +679,8 @@ template <typename T, typename C> struct StandardFormatter :
             + (numberSpecification.sign == FormatNumberSignType::Negative ? 0u : 1u)
             + ((base == 2u || base == 16u) && numberSpecification.alternate ? 2u : 0u)
             + (base == 8u && numberSpecification.alternate ? 1u : 0u);
-    auto writeIt = [this, ulen, base, leadingPotential = static_cast<SSize>(maybeRequestedWidth.getOr(0)) - len]
+    auto const leadingPotential = static_cast<SSize>(maybeRequestedWidth.getOr(0)) - len;
+    auto writeIt = [this, ulen, base, leadingPotential]
         (T value0, BackInserterIterator<BaseString<C, SU>> out0, bool leadingZeroes = false) {
       if (numberSpecification.sign == FormatNumberSignType::PositiveNegative) {
         out0 = impl::fillN(out0, 1, static_cast<C>('+'));

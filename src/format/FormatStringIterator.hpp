@@ -17,6 +17,8 @@
 namespace cds {
 namespace impl {
 namespace fmt {
+using iterator::Sentinel;
+
 enum class FormatStringIteratorState {
   ReadingLiteral, ReadingFormat, ReadingFormatExplicitArgumentIndex, ReadLeftBrace, ReadRightBrace
 };
@@ -139,10 +141,7 @@ private:
             break;
           }
 
-          if (bracketCount == 0) {
-            throw FormatException("Encountered right brace without opened left brace in format specification");
-          }
-
+          assert(bracketCount != 0u && "Undefined behavior.");
           --bracketCount;
           if (bracketCount != 0) {
             break;
@@ -175,7 +174,11 @@ private:
     }
 
     if (_b != _e) {
-      _token = SV{&*_b, _e - _b};
+      auto const asStr = SV{&*_b, _e - _b};
+      if (asStr.length() > 0 && _state == S::ReadRightBrace && asStr.back() == static_cast<C>('}')) {
+        throw FormatException("Right brace encountered without an open left brace");
+      }
+      _token = asStr;
       _b = _e;
     }
   }
