@@ -74,6 +74,7 @@ public:
 private:
   CDS_ATTR(constexpr(14)) auto acquireNextToken() CDS_ATTR(noexcept(false)) -> void {
     _token = nullopt;
+    bool encounteredFmtIndicator = false;
     Size bracketCount{1};
     Optional<Size> explicitArgumentIndex{nullopt};
 
@@ -132,8 +133,9 @@ private:
             break;
           }
 
-          if (value == static_cast<C>(':') && bracketCount == 1) {
+          if (!encounteredFmtIndicator && value == static_cast<C>(':') && bracketCount == 1) {
             _b = it + 1;
+            encounteredFmtIndicator = true;
             break;
           }
 

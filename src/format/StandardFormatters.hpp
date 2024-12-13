@@ -6,7 +6,7 @@
 #define CDS_FORMAT_STANDARD_FORMATTERS_HPP
 
 #include "Formatter.hpp"
-#include "StandardFormatSpecification.hpp"
+#include "StandardFormattingSpecification.hpp"
 
 namespace cds {
 namespace impl {
@@ -64,6 +64,24 @@ template <typename T, typename C> struct StringFormatter : StandardFormatter<C, 
     return formatString(value, ctx);
   }
 };
+
+template <typename T, typename C> struct PointerFormatter : impl::fmt::StandardFormatter<T, C> {
+  using StandardFormatter<T, C>::formatPointer;
+
+  template <typename Ctx> CDS_ATTR(nodiscard) auto format(T value, Ctx& ctx)
+      const CDS_ATTR(noexcept(false)) -> typename Ctx::Iterator {
+    return formatPointer(value, ctx);
+  }
+};
+
+template <typename T, typename C> struct FloatingFormatter : impl::fmt::StandardFormatter<T, C> {
+  using StandardFormatter<T, C>::formatFloating;
+
+  template <typename Ctx> CDS_ATTR(nodiscard) auto format(T value, Ctx& ctx)
+      const CDS_ATTR(noexcept(false)) -> typename Ctx::Iterator {
+    return formatFloating(value, ctx);
+  }
+};
 } // namespace fmt
 } // namespace impl
 
@@ -95,6 +113,13 @@ template <typename C> struct Formatter<C const*, C> : impl::fmt::StringFormatter
 template <typename C> struct Formatter<C*, C> : impl::fmt::StringFormatter<C*, C> {};
 template <typename C> struct Formatter<C[], C> : impl::fmt::StringFormatter<C[], C> {};
 template <typename C, Size n> struct Formatter<C[n], C> : impl::fmt::StringFormatter<C[n], C> {};
+
+template <typename T, typename C> struct Formatter<T*, C> : impl::fmt::PointerFormatter<T*, C> {};
+template <typename T, typename C> struct Formatter<T const*, C> : impl::fmt::PointerFormatter<T const*, C> {};
+
+template <typename C> struct Formatter<float, C> : impl::fmt::FloatingFormatter<float, C> {};
+template <typename C> struct Formatter<double, C> : impl::fmt::FloatingFormatter<double, C> {};
+template <typename C> struct Formatter<long double, C> : impl::fmt::FloatingFormatter<long double, C> {};
 } // namespace cds
 
 #endif // #ifndef CDS_FORMAT_STANDARD_FORMATTERS_HPP

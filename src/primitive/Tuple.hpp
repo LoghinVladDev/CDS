@@ -149,5 +149,6 @@ template <std::size_t idx, typename... Types> struct tuple_element<idx, cds::Tup
 } // namespace std
 
 #include "../common/TupleString.hpp"
+#include "../format/TupleFormatter.hpp"
 
 #endif // CDS_PRIMITIVE_TUPLE_HPP

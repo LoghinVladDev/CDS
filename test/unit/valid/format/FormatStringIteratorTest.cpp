@@ -48,6 +48,7 @@ TEST(FormatStringIteratorTest, init) {
   ASSERT_TRUE(citeq(FmtRn("{ 1 : }"), Vector<V>{"", FmtTok{" ", 1}}));
   ASSERT_TRUE(citeq(FmtRn("{2:}{0:}"), Vector<V>{"", FmtTok{"", 2}, "", FmtTok{"", 0}}));
   ASSERT_TRUE(citeq(FmtRn("{2}{0}"), Vector<V>{"", FmtTok{"", 2}, "", FmtTok{"", 0}}));
+  ASSERT_TRUE(citeq(FmtRn("{::}"), Vector<V>{"", FmtTok{":", 0}}));
 }
 
 TEST(FormatStringIteratorTest, addressAccess) {

@@ -344,6 +344,6 @@ template <typename T> Optional(T) -> Optional<T>;
 #endif // #if CDS_ATTR(ctad)
 } // namespace cds
 
-#include "../format/OptionalFormat.hpp"
+#include "../format/OptionalFormatter.hpp"
 
 #endif // #ifndef CDS_PRIMITIVE_OPTIONAL_HPP

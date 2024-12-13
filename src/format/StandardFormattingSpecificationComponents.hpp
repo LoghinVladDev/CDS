@@ -2,8 +2,9 @@
 // Created by loghin on 12/11/24.
 //
 
-#ifndef CDS_FORMAT_STANDARD_FORMAT_SPECIFICATION_HPP
-#define CDS_FORMAT_STANDARD_FORMAT_SPECIFICATION_HPP
+#ifndef CDS_FORMAT_STANDARD_FORMAT_SPECIFICATION_COMPONENTS_HPP
+#define CDS_FORMAT_STANDARD_FORMAT_SPECIFICATION_COMPONENTS_HPP
+#pragma once
 
 #include <cds/Optional>
 #include <cds/String>
@@ -71,6 +72,13 @@ struct FormatSizeSpecification {
   ) noexcept : size{size0}, explicitIdx{explicitIdx0} {}
   Optional<Size> size;
   Optional<Size> explicitIdx;
+};
+
+struct FormatWidthOnlySpecification {
+  CDS_ATTR(2(explicit, constexpr(11))) FormatWidthOnlySpecification(
+      Optional<FormatSizeSpecification> width0 = nullopt
+  ) noexcept : width{width0} {}
+  Optional<FormatSizeSpecification> width;
 };
 
 struct FormatWidthSpecification {
@@ -388,6 +396,17 @@ auto formatParseWidthOrPrecision(I it, S end) CDS_ATTR(noexcept(false)) -> Tuple
 }
 
 template <typename C, typename I, typename S> CDS_ATTR(2(nodiscard, constexpr(14))) 
+auto formatParseWidthOnly(I it, S end) CDS_ATTR(noexcept(false)) -> Tuple<I, FormatWidthOnlySpecification> {
+  if (it == end) {
+    return {it, FormatWidthOnlySpecification{}};
+  }
+
+  Optional<FormatSizeSpecification> width{};
+  cds::tie(it, width) = formatParseWidthOrPrecision<C>(it, end);
+  return {it, FormatWidthOnlySpecification{mv(width)}};
+}
+
+template <typename C, typename I, typename S> CDS_ATTR(2(nodiscard, constexpr(14)))
 auto formatParseWidth(I it, S end) CDS_ATTR(noexcept(false)) -> Tuple<I, FormatWidthSpecification> {
   if (it == end) {
     return {it, FormatWidthSpecification{}};
@@ -495,6 +514,20 @@ template <typename C> struct FormWidthComponent {
   Size acceptedAutomaticArgumentCount{0u};
 };
 
+template <typename C> struct FormWidthOnlyComponent {
+  template <typename I, typename S> CDS_ATTR(2(nodiscard, constexpr(14)))
+  auto parseWidth(I begin, S end) noexcept -> I {
+    cds::tie(begin, widthSpecification) = formatParseWidthOnly<C>(begin, end);
+    if (widthSpecification.width && !widthSpecification.width->size && !widthSpecification.width->explicitIdx) {
+      ++acceptedAutomaticArgumentCount;
+    }
+    return begin;
+  }
+
+  FormatWidthOnlySpecification widthSpecification{};
+  Size acceptedAutomaticArgumentCount{0u};
+};
+
 template <typename T, typename C> struct FormatTypeComponent {
   template <typename I, typename S> CDS_ATTR(2(nodiscard, constexpr(14)))
   auto parseType(I begin, S end) noexcept -> I {
@@ -504,224 +537,8 @@ template <typename T, typename C> struct FormatTypeComponent {
 
   FormatTypeFlags typeFlags{};
 };
-
-template <typename T, typename C> struct StandardFormatter :
-    FormatFillAlignComponent<T, C>,
-    FormatNumberComponent<C>,
-    FormWidthComponent<C>,
-    FormatTypeComponent<T, C> {
-  using FormatFillAlignComponent<T, C>::parseFillAlign;
-  using FormatFillAlignComponent<T, C>::formatFillAlign;
-  using FormatFillAlignComponent<T, C>::fillAlignSpecification;
-  using FormatNumberComponent<C>::parseNumber;
-  using FormatNumberComponent<C>::numberSpecification;
-  using FormWidthComponent<C>::parseWidth;
-  using FormWidthComponent<C>::widthSpecification;
-  using FormatTypeComponent<T, C>::parseType;
-  using FormatTypeComponent<T, C>::typeFlags;
-  using ST = StringTraits<C>;
-  using SU = StringUtils<C, ST>;
-
-  template <typename Ctx> CDS_ATTR(2(nodiscard, constexpr(14))) auto parse(Ctx& ctx) CDS_ATTR(noexcept(false)) 
-      -> typename Ctx::Iterator {
-    auto end = ctx.end();
-    auto it = parseType(parseWidth(parseNumber(parseFillAlign(ctx.begin(), end), end), end), end);
-    if (it == ctx.end()) {
-      return it;
-    }
-
-    throw FormatException("Extraneous characters in format string");
-  }
-
-  template <typename T0, typename Ctx> CDS_ATTR(2(nodiscard, constexpr(20))) 
-  auto formatChar(T0 value, Ctx& ctx) const CDS_ATTR(noexcept(false)) -> typename Ctx::Iterator {
-    auto const maybeRequestedWidth = widthSpecification.width.transform(&FormatSizeSpecification::size).getOr(nullopt);
-    if (static_cast<Size>(value) >= static_cast<Size>(limits::MaxOf<C>::value)) {
-      throw FormatException("Value not representable in current CharType");
-    }
-
-    if (0 != (typeFlags & FormatTypeFlagBits::Escaped)) {
-      bool escaped = true;
-      if (value == static_cast<C>('\t')) {
-        value = static_cast<C>('t');
-      } else if (value == static_cast<C>('\n')) {
-        value = static_cast<C>('n');
-      } else if (value == static_cast<C>('\r')) {
-        value = static_cast<C>('r');
-      } else if (value == static_cast<C>('\'') || value == static_cast<C>('\\')) {
-        // nothing changes
-      } else {
-        escaped = false;
-      }
-      // TODO: unicode
-      return formatFillAlign(maybeRequestedWidth, ctx.out(), static_cast<C>(value), escaped ? 2u : 1u,
-          [escaped](C value0, BackInserterIterator<BaseString<C, SU>> out0) {
-            if (escaped) {
-              out0 = impl::fillN(out0, 1, static_cast<C>('\\'));
-            }
-            return impl::fillN(out0, 1u, value0);
-          });
-    }
-    return formatFillAlign(maybeRequestedWidth, ctx.out(), static_cast<C>(value), 1u,
-        [](C value0, BackInserterIterator<BaseString<C, SU>> out0) {
-          return impl::fillN(out0, 1u, value0);
-        });
-  }
-
-  template <typename Ctx, typename U = SU> CDS_ATTR(2(nodiscard, constexpr(20))) 
-  auto formatString(BaseStringView<C, U> value, Ctx& ctx) const CDS_ATTR(noexcept(false)) -> typename Ctx::Iterator {
-    auto const maybeRequestedWidth = widthSpecification.width.transform(&FormatSizeSpecification::size).getOr(nullopt);
-    if (0 != (typeFlags & FormatTypeFlagBits::Escaped)) {
-      auto constexpr expectedEscapeCharsAverage = 4u;
-      BaseString<C, U> escapedValue;
-      escapedValue.reserve(value.length() + expectedEscapeCharsAverage);
-      for (auto chr : value) {
-        bool escaped = true;
-        if (chr == static_cast<C>('\t')) {
-          chr = static_cast<C>('t');
-        } else if (chr == static_cast<C>('\n')) {
-          chr = static_cast<C>('n');
-        } else if (chr == static_cast<C>('\r')) {
-          chr = static_cast<C>('r');
-        } else if (chr == static_cast<C>('"') || chr == static_cast<C>('\\')) {
-          // nothing changes
-        } else {
-          escaped = false;
-        }
-        if (escaped) {
-          escapedValue += static_cast<C>('\\');
-        }
-        // TODO: unicode
-        escapedValue += chr;
-      }
-      return formatFillAlign(maybeRequestedWidth, ctx.out(), escapedValue, escapedValue.size(),
-          [](BaseString<C, U> const& value0, BackInserterIterator<BaseString<C, SU>> out) {
-            return impl::copy(value0.begin(), value0.end(), out);
-          });
-    }
-    return formatFillAlign(maybeRequestedWidth, ctx.out(), value, value.length(),
-        [](BaseStringView<C, U> const& value0, BackInserterIterator<BaseString<C, SU>> out0) {
-          return impl::copy(value0.begin(), value0.end(), out0);
-        });
-  }
-
-  template <typename T0, typename Ctx, EnableIf<IsSigned<T0>> = 0> CDS_ATTR(2(nodiscard, constexpr(20)))
-  auto formatInteger(T0 value, Ctx& ctx) const CDS_ATTR(noexcept(false)) -> typename Ctx::Iterator {
-    using U = UnsignedEquivalent<T0>;
-    auto out = ctx.out();
-    auto const maybeRequestedWidth = widthSpecification.width.transform(&FormatSizeSpecification::size).getOr(nullopt);
-    auto const neg = value < 0;
-    auto const uns = neg ? static_cast<U>(~value) : static_cast<U>(value);
-    auto const base = 0u != (typeFlags & FormatTypeFlagBits::Decimal)
-                    ? 10u : 0u != (typeFlags & FormatTypeFlagBits::Hex)
-                    ? 16u : 0u != (typeFlags & FormatTypeFlagBits::Binary)
-                    ? 2u : 8u;
-    assert(base != 8u ? true : 0u != (typeFlags & FormatTypeFlagBits::Octal) && "Undefined behavior");
-    auto const ulen = SU::intLength(uns, base);
-    auto const len = ulen
-                  + (!neg && numberSpecification.sign == FormatNumberSignType::Negative ? 0u : 1u)
-                  + ((base == 2u || base == 16u) && numberSpecification.alternate ? 2u : 0u)
-                  + (base == 8u && numberSpecification.alternate ? 1u : 0u);
-    auto const leadingPotential = static_cast<SSize>(maybeRequestedWidth.getOr(0)) - len;
-    auto writeIt = [this, ulen, neg, base, leadingPotential]
-        (T value0, BackInserterIterator<BaseString<C, SU>> out0, bool leadingZeroes = false) {
-      if (neg) {
-        out0 = impl::fillN(out0, 1, static_cast<C>('-'));
-      } else if (numberSpecification.sign == FormatNumberSignType::PositiveNegative) {
-        out0 = impl::fillN(out0, 1, static_cast<C>('+'));
-      } else if (numberSpecification.sign == FormatNumberSignType::SpaceNegative) {
-        out0 = impl::fillN(out0, 1, static_cast<C>(' '));
-      }
-      auto upper = 0 != (typeFlags & FormatTypeFlagBits::Uppercase);
-      if (numberSpecification.alternate && 0 != (typeFlags & (FormatTypeFlagBits::Binary
-                                                            | FormatTypeFlagBits::Octal
-                                                            | FormatTypeFlagBits::Hex))) {
-        if (0 != (typeFlags & FormatTypeFlagBits::Hex)) {
-          out0 = impl::fillN(
-              impl::fillN(out0, 1, static_cast<C>('0')),
-              1, upper ? static_cast<C>('X') : static_cast<C>('x')
-          );
-        } else if (0 != (typeFlags & FormatTypeFlagBits::Binary)) {
-          out0 = impl::fillN(
-              impl::fillN(out0, 1, static_cast<C>('0')),
-              1, upper ? static_cast<C>('B') : static_cast<C>('b')
-          );
-        } else {
-          out0 = impl::fillN(out0, 1, static_cast<C>('0'));
-        }
-      }
-      if (leadingZeroes && leadingPotential > 0) {
-        out0 = impl::fillN(out0, static_cast<Size>(leadingPotential), static_cast<C>('0'));
-      }
-      BaseString<C, SU> asString(ulen, '\0');
-      ignore = SU::writeInt(value0, ulen, asString.data(), base, upper);
-      return impl::copy(asString.begin(), asString.end(), out0);
-    };
-    if (!fillAlignSpecification.align && maybeRequestedWidth) {
-      if (numberSpecification.leadingZeroes) {
-        return writeIt(value, out, true);
-      }
-    }
-    return formatFillAlign(maybeRequestedWidth, ctx.out(), value, len, writeIt);
-  }
-
-  template <typename T0, typename Ctx, EnableIf<IsUnsigned<T0>> = 0> CDS_ATTR(2(nodiscard, constexpr(20)))
-  auto formatInteger(T0 value, Ctx& ctx) const CDS_ATTR(noexcept(false)) -> typename Ctx::Iterator {
-    auto out = ctx.out();
-    auto const maybeRequestedWidth = widthSpecification.width.transform(&FormatSizeSpecification::size).getOr(nullopt);
-    auto const base = 0u != (typeFlags & FormatTypeFlagBits::Decimal)
-                    ? 10u : 0u != (typeFlags & FormatTypeFlagBits::Hex)
-                    ? 16u : 0u != (typeFlags & FormatTypeFlagBits::Binary)
-                    ? 2u : 8u;
-    assert(base != 8u ? true : 0u != (typeFlags & FormatTypeFlagBits::Octal) && "Undefined behavior");
-    auto ulen = SU::intLength(value, base);
-    auto len = ulen
-            + (numberSpecification.sign == FormatNumberSignType::Negative ? 0u : 1u)
-            + ((base == 2u || base == 16u) && numberSpecification.alternate ? 2u : 0u)
-            + (base == 8u && numberSpecification.alternate ? 1u : 0u);
-    auto const leadingPotential = static_cast<SSize>(maybeRequestedWidth.getOr(0)) - len;
-    auto writeIt = [this, ulen, base, leadingPotential]
-        (T value0, BackInserterIterator<BaseString<C, SU>> out0, bool leadingZeroes = false) {
-      if (numberSpecification.sign == FormatNumberSignType::PositiveNegative) {
-        out0 = impl::fillN(out0, 1, static_cast<C>('+'));
-      } else if (numberSpecification.sign == FormatNumberSignType::SpaceNegative) {
-        out0 = impl::fillN(out0, 1, static_cast<C>(' '));
-      }
-      auto upper = 0 != (typeFlags & FormatTypeFlagBits::Uppercase);
-      if (numberSpecification.alternate && 0 != (typeFlags & (FormatTypeFlagBits::Binary
-                                                            | FormatTypeFlagBits::Octal
-                                                            | FormatTypeFlagBits::Hex))) {
-        if (0 != (typeFlags & FormatTypeFlagBits::Hex)) {
-          out0 = impl::fillN(
-              impl::fillN(out0, 1, static_cast<C>('0')),
-              1, upper ? static_cast<C>('X') : static_cast<C>('x')
-          );
-        } else if (0 != (typeFlags & FormatTypeFlagBits::Binary)) {
-          out0 = impl::fillN(
-              impl::fillN(out0, 1, static_cast<C>('0')),
-              1, upper ? static_cast<C>('B') : static_cast<C>('b')
-          );
-        } else {
-          out0 = impl::fillN(out0, 1, static_cast<C>('0'));
-        }
-      }
-      if (leadingZeroes && leadingPotential > 0) {
-        out0 = impl::fillN(out0, static_cast<Size>(leadingPotential), static_cast<C>('0'));
-      }
-      BaseString<C, SU> asString(ulen, '\0');
-      ignore = SU::writeInt(value0, ulen, asString.data(), base, upper);
-      return impl::copy(asString.begin(), asString.end(), out0);
-    };
-    if (!fillAlignSpecification.align && maybeRequestedWidth) {
-      if (numberSpecification.leadingZeroes) {
-        return writeIt(value, out, true);
-      }
-    }
-    return formatFillAlign(maybeRequestedWidth, ctx.out(), value, len, writeIt);
-  }
-};
 } // namespace fmt
 } // namespace impl
 } // namespace cds
 
-#endif // #ifndef CDS_FORMAT_STANDARD_FORMAT_SPECIFICATION_HPP
+#endif // #ifndef CDS_FORMAT_STANDARD_FORMAT_SPECIFICATION_COMPONENTS_HPP
