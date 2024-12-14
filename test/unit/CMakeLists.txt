@@ -105,6 +105,8 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(CDS_FORMAT_UNIT_TEST_SOURCES
       valid/format/FormatStringIteratorTest.cpp
       valid/format/FormatTest.cpp
+      valid/format/RangeFormatTest.cpp
+      valid/format/StandardFormatSpecificationExtTest.cpp
       valid/format/StandardFormatSpecificationTest.cpp
       valid/format/TupleFormatTest.cpp)
 

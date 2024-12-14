@@ -514,7 +514,7 @@ template <typename C> struct FormWidthComponent {
   Size acceptedAutomaticArgumentCount{0u};
 };
 
-template <typename C> struct FormWidthOnlyComponent {
+template <typename C> struct FormatWidthOnlyComponent {
   template <typename I, typename S> CDS_ATTR(2(nodiscard, constexpr(14)))
   auto parseWidth(I begin, S end) noexcept -> I {
     cds::tie(begin, widthSpecification) = formatParseWidthOnly<C>(begin, end);

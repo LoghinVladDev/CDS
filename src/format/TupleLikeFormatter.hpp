@@ -71,9 +71,6 @@ auto formatParseTupleUnderlyingFormatters(
   ignore = it;
   ignore = end;
   ignore = underlyingFormatters;
-  if (it != end) {
-    throw FormatException("Number of format specifications exceeds tuple entry count and tuple specification");
-  }
   return it;
 }
 
@@ -87,8 +84,11 @@ auto formatParseTupleUnderlyingFormatters(
   for (auto nextSpecIt = it; nextSpecIt != end; ++nextSpecIt) {
     if (*nextSpecIt == static_cast<C>(':')) {
       FormatTupleParseContext<I, S> ctx{it, nextSpecIt};
-      if (nextSpecIt != get<idx>(underlyingFormatters).parse(ctx)) {
-        throw FormatException("Tuple underlying format parse was incomplete");
+      assert(nextSpecIt == get<idx>(underlyingFormatters).parse(ctx)
+             && "Expected complete parse of underlying type");
+
+      if (idx + 1 == sizeof...(Fs)) {
+        throw FormatException("Number of format specifications exceeds tuple entry count and tuple specification");
       }
 
       return formatParseTupleUnderlyingFormatters<C, idx + 1>(nextSpecIt + 1, end, underlyingFormatters);
@@ -173,12 +173,12 @@ auto lazyFormatFormatTupleUnderlyingFormatters(
 
 template <typename C, typename... T> struct TupleLikeFormatter :
     FormatFillAlignComponent<TupleLike<T...>, C>,
-    FormWidthOnlyComponent<C> {
+    FormatWidthOnlyComponent<C> {
   using FormatFillAlignComponent<TupleLike<T...>, C>::parseFillAlign;
   using FormatFillAlignComponent<TupleLike<T...>, C>::formatFillAlign;
   using FormatFillAlignComponent<TupleLike<T...>, C>::fillAlignSpecification;
-  using FormWidthOnlyComponent<C>::parseWidth;
-  using FormWidthOnlyComponent<C>::widthSpecification;
+  using FormatWidthOnlyComponent<C>::parseWidth;
+  using FormatWidthOnlyComponent<C>::widthSpecification;
   using ST = StringTraits<C>;
   using SU = StringUtils<C, ST>;
 
@@ -186,8 +186,8 @@ template <typename C, typename... T> struct TupleLikeFormatter :
       -> typename Ctx::Iterator {
     auto end = ctx.end();
     auto it = parseWidth(parseFillAlign(ctx.begin(), end), end);
-    if (it == ctx.end()) {
-      return formatParseTupleUnderlyingFormatters<C, 0>(it, end, underlyingFormatters);;
+    if (it == end) {
+      return formatParseTupleUnderlyingFormatters<C, 0>(it, end, underlyingFormatters);
     }
 
     if (*it == static_cast<C>('m')) {
@@ -203,10 +203,11 @@ template <typename C, typename... T> struct TupleLikeFormatter :
     }
 
     if (*it == static_cast<C>(':')) {
-      ++it;
+      it = formatParseTupleUnderlyingFormatters<C, 0>(++it, end, underlyingFormatters);
+    } else {
+      ignore = formatParseTupleUnderlyingFormatters<C, 0>(end, end, underlyingFormatters);
     }
 
-    it = formatParseTupleUnderlyingFormatters<C, 0>(it, end, underlyingFormatters);
     if (it == ctx.end()) {
       return it;
     }

@@ -53,6 +53,7 @@ template <typename T, typename C> struct StandardFormatter :
   template <typename T0, typename Ctx> CDS_ATTR(2(nodiscard, constexpr(20)))
   auto formatChar(T0 value, Ctx& ctx) const CDS_ATTR(noexcept(false)) -> typename Ctx::Iterator {
     auto const maybeRequestedWidth = widthSpecification.width.transform(&FormatSizeSpecification::size).getOr(nullopt);
+    auto const alternate = numberSpecification.alternate;
     if (static_cast<Size>(value) >= static_cast<Size>(limits::MaxOf<C>::value)) {
       throw FormatException("Value not representable in current CharType");
     }
@@ -71,26 +72,48 @@ template <typename T, typename C> struct StandardFormatter :
         escaped = false;
       }
       // TODO: unicode
-      return formatFillAlign(maybeRequestedWidth, ctx.out(), static_cast<C>(value), escaped ? 2u : 1u,
-          [escaped](C value0, BackInserterIterator<BaseString<C, SU>> out0) {
+      auto const len = 1u
+                       + (escaped ? 1u : 0u)
+                       + (alternate ? 2u : 0u);
+      return formatFillAlign(maybeRequestedWidth, ctx.out(), static_cast<C>(value), len,
+          [escaped, alternate](C value0, BackInserterIterator<BaseString<C, SU>> out0) {
+            if (alternate) {
+              out0 = impl::fillN(out0, 1, static_cast<C>('\''));
+            }
             if (escaped) {
               out0 = impl::fillN(out0, 1, static_cast<C>('\\'));
             }
-            return impl::fillN(out0, 1u, value0);
+            out0 = impl::fillN(out0, 1u, value0);
+            if (alternate) {
+              out0 = impl::fillN(out0, 1, static_cast<C>('\''));
+            }
+            return out0;
           });
     }
-    return formatFillAlign(maybeRequestedWidth, ctx.out(), static_cast<C>(value), 1u,
-        [](C value0, BackInserterIterator<BaseString<C, SU>> out0) {
-          return impl::fillN(out0, 1u, value0);
+    auto const len = 1u + (alternate ? 2u : 0u);
+    return formatFillAlign(maybeRequestedWidth, ctx.out(), static_cast<C>(value), len,
+        [alternate](C value0, BackInserterIterator<BaseString<C, SU>> out0) {
+          if (alternate) {
+            out0 = impl::fillN(out0, 1, static_cast<C>('\''));
+          }
+          out0 = impl::fillN(out0, 1u, value0);
+          if (alternate) {
+            out0 = impl::fillN(out0, 1, static_cast<C>('\''));
+          }
+          return out0;
         });
   }
 
   template <typename Ctx, typename U = SU> CDS_ATTR(2(nodiscard, constexpr(20)))
   auto formatString(BaseStringView<C, U> value, Ctx& ctx) const CDS_ATTR(noexcept(false)) -> typename Ctx::Iterator {
     auto const maybeRequestedWidth = widthSpecification.width.transform(&FormatSizeSpecification::size).getOr(nullopt);
+    auto const alternate = numberSpecification.alternate;
     if (0 != (typeFlags & FormatTypeFlagBits::Escaped)) {
       auto constexpr expectedEscapeCharsAverage = 4u;
       BaseString<C, U> escapedValue;
+      if (alternate) {
+        escapedValue += static_cast<C>('"');
+      }
       escapedValue.reserve(value.length() + expectedEscapeCharsAverage);
       for (auto chr : value) {
         bool escaped = true;
@@ -111,14 +134,24 @@ template <typename T, typename C> struct StandardFormatter :
         // TODO: unicode
         escapedValue += chr;
       }
+      if (alternate) {
+        escapedValue += static_cast<C>('"');
+      }
       return formatFillAlign(maybeRequestedWidth, ctx.out(), escapedValue, escapedValue.size(),
           [](BaseString<C, U> const& value0, BackInserterIterator<BaseString<C, SU>> out) {
             return impl::copy(value0.begin(), value0.end(), out);
           });
     }
-    return formatFillAlign(maybeRequestedWidth, ctx.out(), value, value.length(),
-        [](BaseStringView<C, U> const& value0, BackInserterIterator<BaseString<C, SU>> out0) {
-          return impl::copy(value0.begin(), value0.end(), out0);
+    return formatFillAlign(maybeRequestedWidth, ctx.out(), value, value.length() + (alternate ? 2u : 0u),
+        [alternate](BaseStringView<C, U> const& value0, BackInserterIterator<BaseString<C, SU>> out0) {
+          if (alternate) {
+            out0 = impl::fillN(out0, 1u, static_cast<C>('"'));
+          }
+          out0 = impl::copy(value0.begin(), value0.end(), out0);
+          if (alternate) {
+            out0 = impl::fillN(out0, 1u, static_cast<C>('"'));
+          }
+          return out0;
         });
   }
 
