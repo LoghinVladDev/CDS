@@ -9,6 +9,7 @@
 #include <cds/meta/Base>
 #include <cds/exception/FormatException>
 
+#include "FormatParseInvoker.hpp"
 #include "Formatter.hpp"
 #include "StandardFormattingSpecificationComponents.hpp"
 
@@ -84,8 +85,9 @@ auto formatParseTupleUnderlyingFormatters(
   for (auto nextSpecIt = it; nextSpecIt != end; ++nextSpecIt) {
     if (*nextSpecIt == static_cast<C>(':')) {
       FormatTupleParseContext<I, S> ctx{it, nextSpecIt};
-      assert(nextSpecIt == get<idx>(underlyingFormatters).parse(ctx)
-             && "Expected complete parse of underlying type");
+      auto subIt = FormatParseInvoker<RemoveCVRef<decltype(get<idx>(underlyingFormatters))>, RemoveCVRef<decltype(ctx)>>
+          ::parse(get<idx>(underlyingFormatters), ctx);
+      assert(nextSpecIt == subIt && "Expected complete parse of underlying type");
 
       if (idx + 1 == sizeof...(Fs)) {
         throw FormatException("Number of format specifications exceeds tuple entry count and tuple specification");
@@ -96,7 +98,8 @@ auto formatParseTupleUnderlyingFormatters(
   }
 
   FormatTupleParseContext<I, S> ctx{it, end};
-  it = get<idx>(underlyingFormatters).parse(ctx);
+  it = FormatParseInvoker<RemoveCVRef<decltype(get<idx>(underlyingFormatters))>, RemoveCVRef<decltype(ctx)>>
+      ::parse(get<idx>(underlyingFormatters), ctx);
   return formatParseTupleUnderlyingFormatters<C, idx + 1>(it, end, underlyingFormatters);
 }
 

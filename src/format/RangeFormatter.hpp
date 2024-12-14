@@ -10,6 +10,7 @@
 #include <cds/meta/Base>
 #include <cds/exception/FormatException>
 
+#include "FormatParseInvoker.hpp"
 #include "Formatter.hpp"
 #include "StandardFormattingSpecificationComponents.hpp"
 #include "TupleLikeFormatter.hpp"
@@ -89,7 +90,7 @@ template <template <typename...> class R, typename T, typename C> struct RangeFo
     auto it = parseWidth(parseFillAlign(ctx.begin(), end), end);
     if (it == end) {
       FormatRangeParseContext<RemoveCVRef<decltype(end)>, RemoveCVRef<decltype(end)>> subCtx{end, end};
-      ignore = underlyingFormatter.parse(subCtx);
+      ignore = FormatParseInvoker<Formatter<T>, RemoveCVRef<decltype(subCtx)>>::parse(underlyingFormatter, subCtx);
       return it;
     }
 
@@ -105,10 +106,10 @@ template <template <typename...> class R, typename T, typename C> struct RangeFo
 
     if (*it == static_cast<C>(':')) {
       FormatRangeParseContext<RemoveCVRef<decltype(it)>, RemoveCVRef<decltype(end)>> subCtx{++it, end};
-      it = underlyingFormatter.parse(subCtx);
+      it = FormatParseInvoker<Formatter<T>, RemoveCVRef<decltype(subCtx)>>::parse(underlyingFormatter, subCtx);
     } else {
       FormatRangeParseContext<RemoveCVRef<decltype(end)>, RemoveCVRef<decltype(end)>> subCtx{end, end};
-      ignore = underlyingFormatter.parse(subCtx);
+      ignore = FormatParseInvoker<Formatter<T>, RemoveCVRef<decltype(subCtx)>>::parse(underlyingFormatter, subCtx);
     }
 
     if (mapLike) {
