@@ -63,3 +63,9 @@ TEST(FormatTest, pointerTest) {
   ASSERT_EQ(format("{:^20p}", asPtr), " 0xabcdef0123456789 ");
   ASSERT_EQ(format("{:>20p}", asPtr), "  0xabcdef0123456789");
 }
+
+TEST(FormatTest, doubleBraces) {
+  ASSERT_EQ("{}", format("{{}}"));
+  ASSERT_EQ("a{}b", format("a{{}}b"));
+  ASSERT_EQ("a{c}b", format("a{{{}}}b", 'c'));
+}
