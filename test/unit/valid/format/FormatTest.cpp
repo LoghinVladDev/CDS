@@ -69,3 +69,33 @@ TEST(FormatTest, doubleBraces) {
   ASSERT_EQ("a{}b", format("a{{}}b"));
   ASSERT_EQ("a{c}b", format("a{{{}}}b", 'c'));
 }
+
+#if defined(DCR_SINCECPP20) && defined(CDS_SPEED_TEST_FORMAT)
+#include <chrono>
+#include <format>
+
+TEST(FormatTest, speed) {
+  auto measure = [](auto&& fn) {
+    using namespace std::chrono;
+    auto start = high_resolution_clock::now();
+    std::invoke(std::forward<decltype(fn)>(fn));
+    auto end = high_resolution_clock::now();
+    return duration_cast<microseconds>(end - start);
+  };
+
+  auto t1 = measure([]{
+    for (unsigned i = 0; i < 10000; ++i) {
+      std::ignore = std::format("{}{}", "abcdabcd", "efghefgh", "ijklijkl", "mmopmmop");
+    }
+  });
+
+  auto t2 = measure([]{
+    for (unsigned i = 0; i < 10000; ++i) {
+      std::ignore = cds::format("{}{}", "abcdabcd", "efghefgh", "ijklijkl", "mmopmmop");
+    }
+  });
+
+  std::cout << "STD: " << t1 << "\n";
+  std::cout << "CDS: " << t2 << "\n";
+}
+#endif

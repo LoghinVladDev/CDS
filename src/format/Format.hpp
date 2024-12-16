@@ -28,6 +28,7 @@
 #include "OptionalFormatter.hpp"
 #include "TupleFormatter.hpp"
 #include "VectorFormat.hpp"
+#include "VectorViewFormat.hpp"
 
 namespace cds {
 namespace impl {

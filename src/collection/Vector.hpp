@@ -17,11 +17,11 @@
 
 #include "../ds/array/ArrayBase.hpp"
 
+#include "vector/VectorDecl.hpp"
+
 namespace cds {
 namespace impl {
 using functional::Equal;
-
-template <typename T, typename E, typename A, typename S> class BaseVector;
 } // namespace impl
 
 namespace meta {

@@ -73,7 +73,7 @@ private:
   I _out;
 };
 
-template <template <typename...> class R, typename T, typename C> struct RangeFormatter :
+template <typename T, typename C> struct RangeFormatter :
     FormatFillAlignComponent<RangeLike<T>, C>,
     FormatWidthOnlyComponent<C>{
   using FormatFillAlignComponent<RangeLike<T>, C>::parseFillAlign;
@@ -191,7 +191,7 @@ template <template <typename...> class R, typename T, typename C> struct RangeFo
 
   bool omitOpenClose {false};
   bool mapLike {false};
-  Formatter<T> underlyingFormatter;
+  Formatter<T, C> underlyingFormatter;
 };
 } // namespace fmt
 } // namespace impl

@@ -8,7 +8,7 @@
 #include <cds/meta/Compiler>
 
 #if CDS_ATTR(std_compat_mode) == CDS_ATTR(std_compat_safe)
-#include <ostream>
+#include <iosfwd>
 #elif CDS_ATTR(std_compat_mode) == CDS_ATTR(std_compat_unsafe)
 namespace std {
 template <typename, typename> class basic_ostream;

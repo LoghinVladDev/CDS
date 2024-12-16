@@ -554,12 +554,22 @@ public:
     return *(tail() - 1u);
   }
 
-  template <typename I> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator[](I index) const noexcept -> Value const& {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto operator[](Size index) const noexcept -> Value const& {
     assert(index < size() && "Accessing invalid index of array");
     return head()[index];
   }
 
-  template <typename I> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator[](I index) noexcept -> Value& {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto operator[](Size index) noexcept -> Value& {
+    assert(index < size() && "Accessing invalid index of array");
+    return head()[index];
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto at(Size index) const noexcept -> Value const& {
+    assert(index < size() && "Accessing invalid index of array");
+    return head()[index];
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto at(Size index) noexcept -> Value& {
     assert(index < size() && "Accessing invalid index of array");
     return head()[index];
   }

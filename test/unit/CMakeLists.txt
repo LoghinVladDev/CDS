@@ -90,7 +90,8 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/bindings/GenericLoopBinding.cpp)
 
   set(CDS_COLLECTION_UNIT_TEST_SOURCES
-      valid/collection/Vector.cpp)
+      valid/collection/VectorTest.cpp
+      valid/collection/VectorViewTest.cpp)
 
   set(CDS_DATA_STRUCTURES_UNIT_TEST_SOURCES
       valid/ds/SingleLinkedListBase.cpp

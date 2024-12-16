@@ -6,6 +6,8 @@
 #define CDS_PRIMITIVE_STRING_BASE_HPP
 #pragma once
 
+#include <ostream>
+
 #include <cds/meta/IterableTraits>
 
 #include "StringBaseDecl.hpp"
@@ -19,8 +21,6 @@
 #include "../../bindings/static/FindStaticBinding.hpp"
 #include "../../bindings/static/FindOfStaticBinding.hpp"
 #include "../../bindings/static/GenericLoopBinding.hpp"
-
-#include "../../stdlib/ostream.hpp"
 
 namespace cds {
 namespace impl {

@@ -53,6 +53,10 @@ public:
     return _addr - static_cast<U8>(!fwd);
   }
 
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto address() const noexcept -> Address {
+    return _addr;
+  }
+
   template <typename N> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator[](N index) const noexcept -> Reference {
     return _addr[index];
   }
@@ -102,11 +106,6 @@ public:
 
   template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, fwd>, I>>>
   CDS_ATTR(constexpr(14)) friend auto operator--(I& iterator, int _) noexcept -> I;
-
-protected:
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto addr() const noexcept -> Address {
-    return _addr;
-  }
 
 private:
   Address _addr{nullptr};
@@ -256,36 +255,34 @@ CDS_ATTR(2(nodiscard, constexpr(14))) auto operator--(I& iterator, int) noexcept
 } // namespace impl
 
 template <typename Type> class ForwardAddressIterator : public impl::AddressIteratorBase<Type, true> {
-  using impl::AddressIteratorBase<Type, true>::addr;
-
 public:
   using impl::AddressIteratorBase<Type, true>::AddressIteratorBase;
+  using impl::AddressIteratorBase<Type, true>::address;
 
   template <typename N, meta::EnableIf<meta::IsIntegral<N>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator+(N rhs) const noexcept -> ForwardAddressIterator {
-    return ForwardAddressIterator{addr() + rhs};
+    return ForwardAddressIterator{address() + rhs};
   }
 
   template <typename N, meta::EnableIf<meta::IsIntegral<N>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator-(N rhs) const noexcept -> ForwardAddressIterator {
-    return ForwardAddressIterator{addr() - rhs};
+    return ForwardAddressIterator{address() - rhs};
   }
 };
 
 template <typename Type> class BackwardAddressIterator : public impl::AddressIteratorBase<Type, false> {
-  using impl::AddressIteratorBase<Type, false>::addr;
-
 public:
   using impl::AddressIteratorBase<Type, false>::AddressIteratorBase;
+  using impl::AddressIteratorBase<Type, false>::address;
 
   template <typename N, meta::EnableIf<meta::IsIntegral<N>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator+(N rhs) const noexcept -> BackwardAddressIterator {
-    return BackwardAddressIterator{addr() - rhs};
+    return BackwardAddressIterator{address() - rhs};
   }
 
   template <typename N, meta::EnableIf<meta::IsIntegral<N>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator-(N rhs) const noexcept -> BackwardAddressIterator {
-    return BackwardAddressIterator{addr() + rhs};
+    return BackwardAddressIterator{address() + rhs};
   }
 };
 } // namespace iterator

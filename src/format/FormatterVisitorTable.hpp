@@ -99,7 +99,7 @@ auto visitFormattersForParse(BaseStringView<C, U> const& formatString, Fmt& form
     CDS_ATTR(noexcept(false)) -> bool {
   auto const range = FormatStringTokenRange<C, U>{formatString};
   auto it = range.begin();
-  bool explicitUsed = false;
+  auto explicitUsed = false;
   for (auto end = range.end(); it != end; ++it) {
     it->visit(visitors(
         [](BaseStringView<C, U> const& plainText) {
@@ -128,7 +128,7 @@ auto visitFormattersForFormat(BaseString<C, U>& out, Fmt& formatStringObject, A&
   for (auto end = range.end(); begin != end; ++begin) {
     begin->visit(visitors(
         [&out](BaseStringView<C, U> const& plainText) {
-          bool skipNext = false;
+          auto skipNext = false;
           for (auto c : plainText) {
             if (skipNext) {
               skipNext = false;

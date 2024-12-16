@@ -8,7 +8,7 @@
 
 namespace cds {
 template <typename T, typename A, typename C> struct Formatter<Vector<T, A>, C> :
-    impl::fmt::RangeFormatter<Vector, T, C>{};
+    impl::fmt::RangeFormatter<meta::RemoveCVRef<T>, C>{};
 } // namespace cds
 
 #endif // #if defined(CDS_COLLECTION_VECTOR_HPP) && defined(CDS_FORMAT_RANGE_FORMATTER_HPP)
