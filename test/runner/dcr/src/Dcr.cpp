@@ -836,12 +836,12 @@ struct RunData {
 
 std::unordered_map<TestStepCompiler, std::string> mappedCompilers;
 std::unordered_map<TestStepCompiler, std::vector<std::string>> mappedCompilerAdditionalArgs;
-auto getCompilerName(TestStepEnv const& env) -> std::optional<std::string> {
-  if (!env.compiler) {
+auto getCompilerName(std::optional<TestStepCompiler> const& compiler) -> std::optional<std::string> {
+  if (!compiler) {
     return std::nullopt;
   }
 
-  if (auto const idIt = mappedCompilers.find(*env.compiler); idIt != mappedCompilers.end()) {
+  if (auto const idIt = mappedCompilers.find(*compiler); idIt != mappedCompilers.end()) {
     return idIt->second;
   }
 
@@ -874,7 +874,7 @@ auto executeCompile(CompileData const& data, std::vector<std::string> const& ext
   fullArgs.push_back(path);
   fullArgs.emplace_back("-o");
   fullArgs.push_back(executablePath(path, standard, testEnv));
-  auto&& compilerName = getCompilerName(data.testEnv);
+  auto&& compilerName = getCompilerName(data.testEnv.compiler);
   if (compilerName) {
     assert(data.testEnv.compiler);
     if (auto const addArgsIt = mappedCompilerAdditionalArgs.find(*data.testEnv.compiler);
@@ -936,6 +936,11 @@ auto acquireJobsForStandard(
       }
 
       if (env.platform != currentPlatform) {
+        ++skipped;
+        continue;
+      }
+
+      if (!getCompilerName(env.compiler)) {
         ++skipped;
         continue;
       }
@@ -1093,16 +1098,17 @@ template <typename J, typename L> auto buildJobQueueFunctions(
   );
 }
 
-template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5> auto buildJobLoggers(
+template <typename A0, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6> auto buildJobLoggers(
     A0& totalCount,
     A1& runCount,
     A2& successful,
     A3& otherUpdatersLock,
     A4& failedTestPaths,
-    A5& dcrParams
+    A5& dcrParams,
+    A6& skipped
 ) {
-  auto const statusHeader = [&totalCount, &runCount] {
-    return std::to_string(runCount++ + 1) + "/" + std::to_string(totalCount);
+  auto const statusHeader = [&totalCount, &runCount, &skipped] {
+    return std::to_string(runCount++ + 1) + "/" + std::to_string(totalCount - skipped);
   };
 
   return std::make_tuple(
@@ -1169,6 +1175,8 @@ auto execute(std::vector<TestData> const& tests, std::vector<std::string> const&
 
   using namespace std::string_literals;
 
+  std::cout << "[DCR] Skipping " << skipped << " incompatible tests\n"
+            << "[DCR] Starting async execution...\n";
   auto dcrPath = std::filesystem::path(__FILE__).parent_path();
   std::vector<std::string> passToCompiler = extraArgs;
   passToCompiler.emplace_back(dcrPath / "DcrMain.cpp");
@@ -1179,9 +1187,8 @@ auto execute(std::vector<TestData> const& tests, std::vector<std::string> const&
   std::vector<std::string> failedTestPaths;
   int finished = 0;
 
-  // auto [getJob, pushJob] = buildJobQueueFunctions(jobs, jobsLock);
   auto queueOps = buildJobQueueFunctions(jobs, jobsLock);
-  auto [logJobSuccess, logJobFailure] = buildJobLoggers(total, finished, successful, otherUpdatersLock, failedTestPaths, dcrParams);
+  auto [logJobSuccess, logJobFailure] = buildJobLoggers(total, finished, successful, otherUpdatersLock, failedTestPaths, dcrParams, skipped);
   auto runJob = buildRunJob(logJobSuccess, logJobFailure, passToCompiler, dcrParams);
 
   auto threadRunnerFn = [&runJob, &queueOps, &skipped] {
@@ -1408,8 +1415,7 @@ auto run(int const argc, char const* const* argv) -> int {
         }) * numStds(td.standard);
       });
     };
-    std::cout << "[DCR] Located " << testCount() << " tests in compatible files\n"
-                 "[DCR] Starting async execution...\n";
+    std::cout << "[DCR] Located " << testCount() << " tests in compatible files\n";
   }
 
   return execute(tests, passedToCompiler, dcrParams);

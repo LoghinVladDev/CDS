@@ -1,5 +1,5 @@
 // DCR-TEST
-// STEPS: compile(linux:gcc;linux:clang),run(linux:clang)
+// STEPS: compile(linux:gcc;linux:clang;apple:gcc;apple:clang),run(linux:clang;apple:clang)
 // STD: 11
 
 #include <cds/meta/Base>
