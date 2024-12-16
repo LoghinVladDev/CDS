@@ -4,25 +4,26 @@
 
 #include "Dcr.hpp"
 
+#include <algorithm>
 #include <atomic>
 #include <cassert>
+#include <charconv>
+#include <cxxabi.h>
 #include <filesystem>
 #include <fstream>
-#include <iostream>
-#include <vector>
 #include <functional>
+#include <iostream>
 #include <memory>
+#include <mutex>
 #include <optional>
+#include <source_location>
+#include <sstream>
 #include <thread>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
 #include <variant>
-#include <mutex>
-#include <thread>
-#include <algorithm>
-#include <source_location>
-#include <sstream>
+#include <vector>
 
 #include <sys/wait.h>
 #include <unistd.h>
@@ -31,6 +32,8 @@
 extern char** environ;
 
 int execvpe(const char* name, char* const* const argv, char* const* const envv) {
+  // std::ignore = envv;
+  // return execvp(name, argv);
   return execve(name, argv, envv);
 }
 #endif
@@ -238,9 +241,19 @@ auto locateTests(std::vector<std::filesystem::path>&& fileOrPaths) -> std::vecto
 
 enum class TestStepType {Compile, Run};
 enum class TestStepResult {Success, Failure};
-enum class TestStepPlatform {Linux, All};
+enum class TestStepPlatform {Linux, MacOs, All};
 enum class TestStepCompiler {Clang, Gcc, All};
 enum class Standard {Cpp11 = 0, Cpp14 = 1, Cpp17 = 2, Cpp20 = 3, Cpp23 = 4, Cpp2c = 5, Highest=Cpp23, End = 6};
+
+#if defined(__linux)
+auto constexpr currentPlatform = TestStepPlatform::Linux;
+#elif defined(__APPLE__)
+auto constexpr currentPlatform = TestStepPlatform::MacOs;
+#elif defined(WIN32)
+#error Undefined current platform
+#else
+#error Undefined current platform
+#endif
 
 auto toString(Standard const std) {
   switch(std) {
@@ -258,6 +271,7 @@ auto toString(Standard const std) {
 auto toString(TestStepPlatform const plat) {
   switch (plat) {
     case TestStepPlatform::Linux: return "linux";
+    case TestStepPlatform::MacOs: return "macos";
     case TestStepPlatform::All: return "all";
     default:
       assert(false && "Undefined platform type");
@@ -341,6 +355,8 @@ std::unordered_map<std::string_view, TestStepCompiler> const compilerMap = {
 
 std::unordered_map<std::string_view, TestStepPlatform> const platformMap = {
     {"linux", TestStepPlatform::Linux},
+    {"macos", TestStepPlatform::MacOs},
+    {"apple", TestStepPlatform::MacOs},
     {"*", TestStepPlatform::All},
 };
 
@@ -760,7 +776,9 @@ auto awaitProcess(std::optional<std::string> executable, std::vector<std::string
     close(errRedir[0]);
     close(errRedir[1]);
 
-    execvpe(executable->c_str(), cArgs.data(), cEnv.data());
+    if (0 != execvpe(executable->c_str(), cArgs.data(), cEnv.data())) {
+      std::cerr << "Execvpe run failed with error code: " << errno << '\n';
+    }
 
     exit(1);
   }
@@ -817,6 +835,7 @@ struct RunData {
 };
 
 std::unordered_map<TestStepCompiler, std::string> mappedCompilers;
+std::unordered_map<TestStepCompiler, std::vector<std::string>> mappedCompilerAdditionalArgs;
 auto getCompilerName(TestStepEnv const& env) -> std::optional<std::string> {
   if (!env.compiler) {
     return std::nullopt;
@@ -855,7 +874,15 @@ auto executeCompile(CompileData const& data, std::vector<std::string> const& ext
   fullArgs.push_back(path);
   fullArgs.emplace_back("-o");
   fullArgs.push_back(executablePath(path, standard, testEnv));
-  return awaitProcess(getCompilerName(data.testEnv), fullArgs, env);
+  auto&& compilerName = getCompilerName(data.testEnv);
+  if (compilerName) {
+    assert(data.testEnv.compiler);
+    if (auto const addArgsIt = mappedCompilerAdditionalArgs.find(*data.testEnv.compiler);
+        addArgsIt != mappedCompilerAdditionalArgs.end()) {
+      fullArgs.insert(fullArgs.begin(), addArgsIt->second.begin(), addArgsIt->second.end());
+        }
+  }
+  return awaitProcess(std::move(compilerName), fullArgs, env);
 }
 
 auto executeRun(RunData const& data) {
@@ -904,6 +931,11 @@ auto acquireJobsForStandard(
   if (auto const it = std::find_if(steps.begin(), steps.end(), [](TestStep const& step) { return step.type == TestStepType::Compile; }); it != steps.end()) {
     for (auto const& env: it->enviroments) {
       if (!env.compiler || !env.platform) {
+        ++skipped;
+        continue;
+      }
+
+      if (env.platform != currentPlatform) {
         ++skipped;
         continue;
       }
@@ -1189,9 +1221,60 @@ auto execute(std::vector<TestData> const& tests, std::vector<std::string> const&
   return total != skipped + successful;
 }
 
+auto amendCompilerBasedOnPlatform(auto cname, auto currentPlatform)
+    -> std::tuple<std::string, std::vector<std::string>> {
+  if (currentPlatform == TestStepPlatform::Linux) {
+    return {cname, {}};
+  }
+
+  if (currentPlatform == TestStepPlatform::MacOs) {
+    if (cname == "clang++") {
+      return {"/usr/bin/clang++", {}};
+      // return {"/Library/Developer/CommandLineTools/usr/bin/clang++",
+      // {"/Library/Developer/CommandLineTools/usr/share/man/man1/clang++.1"}};
+    }
+
+    if (cname == "g++") {
+      auto const hbPath = "/opt/homebrew/Cellar/gcc";
+      if (!std::filesystem::exists(hbPath)) {
+        return {cname, {}};
+      }
+
+      auto const asPath = std::filesystem::path(hbPath);
+      int maxGccVer = -1;
+      for (auto const& entry : std::filesystem::directory_iterator{asPath}) {
+        if (entry.is_directory()) {
+          auto&& asStr = entry.path().filename().generic_string();
+          auto firstDotPos = asStr.find('.');
+          assert(firstDotPos != std::string_view::npos);
+          auto const ver = expanded_string_view{asStr}.substr(0, firstDotPos);
+          int verInt{0};
+          auto const verIntRes = std::from_chars(ver.data(), ver.data() + ver.length(), verInt, 10);
+          assert(verIntRes.ec == std::errc{});
+          maxGccVer = std::max(maxGccVer, verInt);
+        }
+      }
+
+      if (maxGccVer == -1) {
+        return {cname, {}};
+      }
+
+      return {std::string{"/opt/homebrew/bin/g++-"} + std::to_string(maxGccVer), {}};
+    }
+  }
+
+  assert(false && "Unable to ascertain whether to use path relative or local translation of compiler paths");
+  return {cname, {}};
+}
+
 auto mapCompilers(std::vector<TestStepCompiler> const& compilersToMap) {
   for (auto c : compilersToMap) {
-    std::string const cname = toString(c);
+    std::string cname = toString(c);
+    std::vector<std::string> additionalArgs;
+    std::tie(cname, additionalArgs) = amendCompilerBasedOnPlatform(cname, currentPlatform);
+    if (!additionalArgs.empty()) {
+      mappedCompilerAdditionalArgs.try_emplace(c, std::move(additionalArgs));
+    }
     std::vector<std::string> args = {"--version"};
     std::vector<std::string> env;
     if (std::get<0>(awaitProcess(cname, args, env))) {

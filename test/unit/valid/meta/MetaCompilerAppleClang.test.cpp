@@ -1,5 +1,5 @@
 // DCR-TEST
-// STEPS: compile(apple:clang),run(apple:clang)
+// STEPS: compile(macos:clang),run(macos:clang)
 // STD: 11+
 
 #include "cds/meta/Compiler"
