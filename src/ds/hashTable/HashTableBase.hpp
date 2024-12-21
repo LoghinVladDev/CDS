@@ -28,7 +28,7 @@ template <typename T> struct TryEmplaceResult {
 };
 
 template <typename T, typename K, typename H, typename RP, typename KP, typename KC, typename AS>
-class CDS_ATTR(inheritsEBOs) HashTableBase : private H, private RP, private AS {
+class CDS_ATTR(ebo) HashTableBase : private H, private RP, private AS {
   using Node = FwdNode<T>;
 
 public:

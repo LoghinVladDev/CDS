@@ -775,17 +775,17 @@ template <
 };
 
 template <typename P> struct MethodSelector<P, True, False> {
-  template <typename... A> class CDS_ATTR(inheritsEBOs) Type :
+  template <typename... A> class CDS_ATTR(ebo) Type :
     public FindOfByValueStaticBinding<A...> {};
 };
 
 template <typename P> struct MethodSelector<P, False, True> {
-  template <typename... A> class CDS_ATTR(inheritsEBOs) Type :
+  template <typename... A> class CDS_ATTR(ebo) Type :
     public FindOfByProjectorStaticBinding<A...> {};
 };
 
 template <typename P> struct MethodSelector<P, True, True> {
-  template <typename... A> class CDS_ATTR(inheritsEBOs) Type :
+  template <typename... A> class CDS_ATTR(ebo) Type :
       public FindOfByValueStaticBinding<A...>,
       public FindOfByProjectorStaticBinding<A...> {
   public:
@@ -817,17 +817,17 @@ template <
 };
 
 template <typename P> struct MutationSelector<P, True, False> {
-  template <typename... A> class CDS_ATTR(inheritsEBOs) Type :
+  template <typename... A> class CDS_ATTR(ebo) Type :
       public MethodSelector<P>::template Type<A...> {};
 };
 
 template <typename P> struct MutationSelector<P, False, True> {
-  template <typename R, typename... A> class CDS_ATTR(inheritsEBOs) Type :
+  template <typename R, typename... A> class CDS_ATTR(ebo) Type :
       public MethodSelector<P>::template Type<R const, A...> {};
 };
 
 template <typename P> struct MutationSelector<P, True, True> {
-  template <typename R, typename... A> class CDS_ATTR(inheritsEBOs) Type :
+  template <typename R, typename... A> class CDS_ATTR(ebo) Type :
       public MethodSelector<P>::template Type<R, A...>,
       public MethodSelector<P>::template Type<R const, A...> {
   public:
@@ -853,7 +853,7 @@ template <
     typename R, typename P,
     typename TrAll = FindResultTransformer<>,
     typename TrOne = FindPreserveTransformer<>
-> class CDS_ATTR(inheritsEBOs) FindOfStaticBinding :
+> class CDS_ATTR(ebo) FindOfStaticBinding :
     public findOfDeriv::MutationSelector<P>::template Type<R, TrAll, TrOne> {};
 } // namespace impl
 } // namespace cds

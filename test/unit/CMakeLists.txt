@@ -172,6 +172,9 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/stdlib/StringViewStdLibCompatSafe.cpp
       valid/stdlib/StringViewStdLibCompatUnsafe.cpp)
 
+  set(CDS_THREADING_UNIT_TEST_SOURCES
+      valid/threading/AtomicTest.cpp)
+
   set(CDS_UTILS_UNIT_TEST_SOURCES
       valid/utils/TrackerAllocator.cpp)
 
@@ -188,7 +191,9 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       ${CDS_META_UNIT_TEST_SOURCES}
       ${CDS_POLICY_UNIT_TEST_SOURCES}
       ${CDS_PRIMITIVE_UNIT_TEST_SOURCES}
-      ${CDS_STDLIB_UNIT_TEST_SOURCES})
+      ${CDS_STDLIB_UNIT_TEST_SOURCES}
+      ${CDS_THREADING_UNIT_TEST_SOURCES}
+      ${CDS_UTILS_UNIT_TEST_SOURCES})
 
   set(CDS_UNIT_TEST_SOURCES
       ${CDS_DEFAULT_UNIT_TEST_SOURCES}

@@ -59,23 +59,23 @@ template <typename C, typename U> using Self = BaseStringView<C, U>;
 template <typename C, typename U> using Traits = IterableTraits<Self<C, U>>;
 
 using ContainsOpt = With<Value, Projector>;
-template <typename C, typename U> struct CDS_ATTR(inheritsEBOs) ContainsOf :
+template <typename C, typename U> struct CDS_ATTR(ebo) ContainsOf :
     ContainsOfStaticBinding<Self<C, U>, ContainsOpt> {};
 
 using FindOpt = With<Value, Projector, Immutable>;
-template <typename C, typename U> struct CDS_ATTR(inheritsEBOs) FindTr :
+template <typename C, typename U> struct CDS_ATTR(ebo) FindTr :
     FindStringViewTransformer<C, U> {};
-template <typename C, typename U> struct CDS_ATTR(inheritsEBOs) Find :
+template <typename C, typename U> struct CDS_ATTR(ebo) Find :
     FindStaticBinding<Self<C, U>, FindOpt, FindTr<C, U>, FindTr<C, U>> {};
-template <typename C, typename U> struct CDS_ATTR(inheritsEBOs) FindOf :
+template <typename C, typename U> struct CDS_ATTR(ebo) FindOf :
     FindOfStaticBinding<Self<C, U>, FindOpt, FindTr<C, U>, FindTr<C, U>> {};
 
 using LoopOpt = With<Immutable>;
-template <typename C, typename U> struct CDS_ATTR(inheritsEBOs) GenericLoop :
+template <typename C, typename U> struct CDS_ATTR(ebo) GenericLoop :
     GenericLoopBinding<Self<C, U>, LoopOpt> {};
 } // namespace bindingsBSV
 
-template <typename C, typename U> class CDS_ATTR(inheritsEBOs) BaseStringView :
+template <typename C, typename U> class CDS_ATTR(ebo) BaseStringView :
     public bindingsBSV::Traits<C, U>,
     public bindingsBSV::ContainsOf<C, U>,
     public bindingsBSV::Find<C, U>,

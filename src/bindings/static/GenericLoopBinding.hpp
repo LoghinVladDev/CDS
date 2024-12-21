@@ -227,16 +227,16 @@ template <
 };
 
 template <typename P> struct MutationSelector<P, True, False> {
-  template <typename... A> class CDS_ATTR(inheritsEBOs) Type : public GenericLoopStaticBinding<A...> {};
+  template <typename... A> class CDS_ATTR(ebo) Type : public GenericLoopStaticBinding<A...> {};
 };
 
 template <typename P> struct MutationSelector<P, False, True> {
-  template <typename I, typename... A> class CDS_ATTR(inheritsEBOs) Type :
+  template <typename I, typename... A> class CDS_ATTR(ebo) Type :
       public GenericLoopStaticBinding<I const, A...> {};
 };
 
 template <typename P> struct MutationSelector<P, True, True> {
-  template <typename I, typename... A> class CDS_ATTR(inheritsEBOs) Type :
+  template <typename I, typename... A> class CDS_ATTR(ebo) Type :
       public GenericLoopStaticBinding<I, A...>,
       public GenericLoopStaticBinding<I const, A...> {
   public:
@@ -265,7 +265,7 @@ template <typename P> struct MutationSelector<P, True, True> {
 };
 } // namespace genericLoopDeriv
 
-template <typename I, typename P> class CDS_ATTR(inheritsEBOs) GenericLoopBinding :
+template <typename I, typename P> class CDS_ATTR(ebo) GenericLoopBinding :
     public genericLoopDeriv::MutationSelector<P>::template Type<I> {};
 } // namespace impl
 } // namespace cds

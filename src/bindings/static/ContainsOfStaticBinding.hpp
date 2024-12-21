@@ -165,15 +165,15 @@ template <
 };
 
 template <typename P> struct MethodSelector<P, True, False> {
-  template <typename... A> class CDS_ATTR(inheritsEBOs) Type : public ContainsByValueOfStaticBinding<A...> {};
+  template <typename... A> class CDS_ATTR(ebo) Type : public ContainsByValueOfStaticBinding<A...> {};
 };
 
 template <typename P> struct MethodSelector<P, False, True> {
-  template <typename... A> class CDS_ATTR(inheritsEBOs) Type : public ContainsByProjectorOfStaticBinding<A...> {};
+  template <typename... A> class CDS_ATTR(ebo) Type : public ContainsByProjectorOfStaticBinding<A...> {};
 };
 
 template <typename P> struct MethodSelector<P, True, True> {
-  template <typename... A> class CDS_ATTR(inheritsEBOs) Type :
+  template <typename... A> class CDS_ATTR(ebo) Type :
       public ContainsByValueOfStaticBinding<A...>,
       public ContainsByProjectorOfStaticBinding<A...> {
   public:
@@ -190,7 +190,7 @@ template <typename P> struct MethodSelector<P, True, True> {
 };
 } // namespace deriv
 
-template <typename R, typename P> class CDS_ATTR(inheritsEBOs) ContainsOfStaticBinding :
+template <typename R, typename P> class CDS_ATTR(ebo) ContainsOfStaticBinding :
     public containsOfDeriv::MethodSelector<P>::template Type<R> {};
 } // namespace impl
 } // namespace cds

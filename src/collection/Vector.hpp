@@ -43,13 +43,13 @@ using FindOpt = With<Value, Projector, Immutable, Mutable>;
 using LoopOpt = With<Immutable, Mutable>;
 
 template <typename... A> using Self = BaseVector<A...>;
-template <typename... A> struct CDS_ATTR(inheritsEBOs) ContainsOf : ContainsOfStaticBinding<Self<A...>, ContainsOpt> {};
-template <typename... A> struct CDS_ATTR(inheritsEBOs) Find : FindStaticBinding<Self<A...>, FindOpt> {};
-template <typename... A> struct CDS_ATTR(inheritsEBOs) FindOf : FindOfStaticBinding<Self<A...>, FindOpt> {};
-template <typename... A> struct CDS_ATTR(inheritsEBOs) GenericLoop : GenericLoopBinding<Self<A...>, LoopOpt> {};
+template <typename... A> struct CDS_ATTR(ebo) ContainsOf : ContainsOfStaticBinding<Self<A...>, ContainsOpt> {};
+template <typename... A> struct CDS_ATTR(ebo) Find : FindStaticBinding<Self<A...>, FindOpt> {};
+template <typename... A> struct CDS_ATTR(ebo) FindOf : FindOfStaticBinding<Self<A...>, FindOpt> {};
+template <typename... A> struct CDS_ATTR(ebo) GenericLoop : GenericLoopBinding<Self<A...>, LoopOpt> {};
 } // namespace bindingsBV
 
-template <typename T, typename E, typename A, typename S> class CDS_ATTR(inheritsEBOs) BaseVector :
+template <typename T, typename E, typename A, typename S> class CDS_ATTR(ebo) BaseVector :
     public ArrayBase<T, E, A, S>,
     public bindingsBV::ContainsOf<T, E, A, S>,
     public bindingsBV::Find<T, E, A, S>,

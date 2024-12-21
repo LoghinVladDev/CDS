@@ -170,7 +170,7 @@ template <
   return false;
 }
 
-template <typename E> class CDS_ATTR(inheritsEBOs) Contains : private E {
+template <typename E> class CDS_ATTR(ebo) Contains : private E {
 public:
   CDS_ATTR(2(explicit, constexpr(11))) Contains() noexcept : E() {}
   CDS_ATTR(2(explicit, constexpr(11))) Contains(E const& equal) noexcept : E(equal) {}
@@ -192,7 +192,7 @@ public:
   }
 };
 
-template <typename E> class CDS_ATTR(inheritsEBOs) NotContains : private E {
+template <typename E> class CDS_ATTR(ebo) NotContains : private E {
 public:
   CDS_ATTR(2(explicit, constexpr(11))) NotContains() noexcept : E() {}
   CDS_ATTR(2(explicit, constexpr(11))) NotContains(E const& equal) noexcept : E(equal) {}

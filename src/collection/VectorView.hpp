@@ -43,13 +43,13 @@ using FindOpt = With<Value, Projector, Immutable, Mutable>;
 using LoopOpt = With<Immutable, Mutable>;
 
 template <typename T, Size extent> using Self = VectorView<T, extent>;
-template <typename T, Size extent> struct CDS_ATTR(inheritsEBOs) ContainsOf :
+template <typename T, Size extent> struct CDS_ATTR(ebo) ContainsOf :
     ContainsOfStaticBinding<Self<T, extent>, ContainsOpt> {};
-template <typename T, Size extent> struct CDS_ATTR(inheritsEBOs) Find :
+template <typename T, Size extent> struct CDS_ATTR(ebo) Find :
     FindStaticBinding<Self<T, extent>, FindOpt> {};
-template <typename T, Size extent> struct CDS_ATTR(inheritsEBOs) FindOf :
+template <typename T, Size extent> struct CDS_ATTR(ebo) FindOf :
     FindOfStaticBinding<Self<T, extent>, FindOpt> {};
-template <typename T, Size extent> struct CDS_ATTR(inheritsEBOs) GenericLoop :
+template <typename T, Size extent> struct CDS_ATTR(ebo) GenericLoop :
     GenericLoopBinding<Self<T, extent>, LoopOpt> {};
 } // namespace bindingsVV
 

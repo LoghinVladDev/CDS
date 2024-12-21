@@ -415,17 +415,17 @@ template <
 };
 
 template <typename P> struct MethodSelector<P, True, False> {
-  template <typename... A> class CDS_ATTR(inheritsEBOs) Type :
+  template <typename... A> class CDS_ATTR(ebo) Type :
       public FindByValueStaticBinding<A...> {};
 };
 
 template <typename P> struct MethodSelector<P, False, True> {
-  template <typename... A> class CDS_ATTR(inheritsEBOs) Type :
+  template <typename... A> class CDS_ATTR(ebo) Type :
       public FindByProjectorStaticBinding<A...> {};
 };
 
 template <typename P> struct MethodSelector<P, True, True> {
-  template <typename... A> class CDS_ATTR(inheritsEBOs) Type :
+  template <typename... A> class CDS_ATTR(ebo) Type :
       public FindByValueStaticBinding<A...>,
       public FindByProjectorStaticBinding<A...> {
   public:
@@ -451,17 +451,17 @@ template <
 };
 
 template <typename P> struct MutationSelector<P, True, False> {
-  template <typename... A> class CDS_ATTR(inheritsEBOs) Type :
+  template <typename... A> class CDS_ATTR(ebo) Type :
       public MethodSelector<P>::template Type<A...> {};
 };
 
 template <typename P> struct MutationSelector<P, False, True> {
-  template <typename R, typename... A> class CDS_ATTR(inheritsEBOs) Type :
+  template <typename R, typename... A> class CDS_ATTR(ebo) Type :
       public MethodSelector<P>::template Type<R const, A...> {};
 };
 
 template <typename P> struct MutationSelector<P, True, True> {
-  template <typename R, typename... A> class CDS_ATTR(inheritsEBOs) Type :
+  template <typename R, typename... A> class CDS_ATTR(ebo) Type :
       public MethodSelector<P>::template Type<R, A...>,
       public MethodSelector<P>::template Type<R const, A...> {
   public:
@@ -480,7 +480,7 @@ template <
     typename R, typename P,
     typename TrAll = FindResultTransformer<>,
     typename TrOne = FindPreserveTransformer<>
-> class CDS_ATTR(inheritsEBOs) FindStaticBinding :
+> class CDS_ATTR(ebo) FindStaticBinding :
     public findDeriv::MutationSelector<P>::template Type<R, TrAll, TrOne> {};
 } // namespace impl
 } // namespace cds

@@ -55,10 +55,10 @@ template <typename T> struct ArrayTraits {
 template <typename T> Size const ArrayTraits<T>::minCapacity;
 template <typename T> Size const ArrayTraits<T>::scalingMultiplier;
 
-template <typename T, typename E, typename A, typename Traits> class CDS_ATTR(inheritsEBOs) NonScalingBase :
+template <typename T, typename E, typename A, typename Traits> class CDS_ATTR(ebo) NonScalingBase :
     private A, private Traits {};
 
-template <typename T, typename E, typename A, typename Traits> class CDS_ATTR(inheritsEBOs) DynamicBackScalingBase :
+template <typename T, typename E, typename A, typename Traits> class CDS_ATTR(ebo) DynamicBackScalingBase :
     private A, private Traits {
   using Traits::minCapacity;
   using Traits::scalingMultiplier;
@@ -421,10 +421,10 @@ private:
 };
 
 template <typename, typename, typename A, typename Traits>
-class CDS_ATTR(inheritsEBOs) DynamicBidirectionalScalingBase : private A, private Traits {};
+class CDS_ATTR(ebo) DynamicBidirectionalScalingBase : private A, private Traits {};
 
 template <typename T, typename E, typename, typename ScalingBase>
-class CDS_ATTR(inheritsEBOs) ArrayBase : protected ScalingBase {
+class CDS_ATTR(ebo) ArrayBase : protected ScalingBase {
 public:
   using Value = T;
   using Iterator = ForwardAddressIterator<Value>;
