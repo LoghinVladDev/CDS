@@ -22,34 +22,34 @@ using meta::IsBaseOf;
 using iterator::ForwardAddressIterator;
 using iterator::BackwardAddressIterator;
 
-template <typename, Size> class StaticVectorViewBaseDefaultConstructorConstraint {
+template <typename, Size> class BaseStaticVectorViewDefaultConstructorConstraint {
 public:
-  StaticVectorViewBaseDefaultConstructorConstraint() = delete;
-  CDS_ATTR(2(explicit, constexpr(11))) StaticVectorViewBaseDefaultConstructorConstraint(int) noexcept {}
-  StaticVectorViewBaseDefaultConstructorConstraint(StaticVectorViewBaseDefaultConstructorConstraint const&) = default;
-  StaticVectorViewBaseDefaultConstructorConstraint(StaticVectorViewBaseDefaultConstructorConstraint&&) = default;
-  auto operator=(StaticVectorViewBaseDefaultConstructorConstraint const&)
-      -> StaticVectorViewBaseDefaultConstructorConstraint& = default;
-  auto operator=(StaticVectorViewBaseDefaultConstructorConstraint&&)
-      -> StaticVectorViewBaseDefaultConstructorConstraint& = default;
-  ~StaticVectorViewBaseDefaultConstructorConstraint() = default;
+  BaseStaticVectorViewDefaultConstructorConstraint() = delete;
+  CDS_ATTR(2(explicit, constexpr(11))) BaseStaticVectorViewDefaultConstructorConstraint(int) noexcept {}
+  BaseStaticVectorViewDefaultConstructorConstraint(BaseStaticVectorViewDefaultConstructorConstraint const&) = default;
+  BaseStaticVectorViewDefaultConstructorConstraint(BaseStaticVectorViewDefaultConstructorConstraint&&) = default;
+  auto operator=(BaseStaticVectorViewDefaultConstructorConstraint const&)
+      -> BaseStaticVectorViewDefaultConstructorConstraint& = default;
+  auto operator=(BaseStaticVectorViewDefaultConstructorConstraint&&)
+      -> BaseStaticVectorViewDefaultConstructorConstraint& = default;
+  ~BaseStaticVectorViewDefaultConstructorConstraint() = default;
 };
 
-template <typename T> class StaticVectorViewBaseDefaultConstructorConstraint<T, 0u> {
+template <typename T> class BaseStaticVectorViewDefaultConstructorConstraint<T, 0u> {
 public:
-  StaticVectorViewBaseDefaultConstructorConstraint() = default;
-  CDS_ATTR(2(explicit, constexpr(11))) StaticVectorViewBaseDefaultConstructorConstraint(int) noexcept {}
-  StaticVectorViewBaseDefaultConstructorConstraint(StaticVectorViewBaseDefaultConstructorConstraint const&) = default;
-  StaticVectorViewBaseDefaultConstructorConstraint(StaticVectorViewBaseDefaultConstructorConstraint&&) = default;
-  auto operator=(StaticVectorViewBaseDefaultConstructorConstraint const&)
-      -> StaticVectorViewBaseDefaultConstructorConstraint& = default;
-  auto operator=(StaticVectorViewBaseDefaultConstructorConstraint&&)
-      -> StaticVectorViewBaseDefaultConstructorConstraint& = default;
-  ~StaticVectorViewBaseDefaultConstructorConstraint() = default;
+  BaseStaticVectorViewDefaultConstructorConstraint() = default;
+  CDS_ATTR(2(explicit, constexpr(11))) BaseStaticVectorViewDefaultConstructorConstraint(int) noexcept {}
+  BaseStaticVectorViewDefaultConstructorConstraint(BaseStaticVectorViewDefaultConstructorConstraint const&) = default;
+  BaseStaticVectorViewDefaultConstructorConstraint(BaseStaticVectorViewDefaultConstructorConstraint&&) = default;
+  auto operator=(BaseStaticVectorViewDefaultConstructorConstraint const&)
+      -> BaseStaticVectorViewDefaultConstructorConstraint& = default;
+  auto operator=(BaseStaticVectorViewDefaultConstructorConstraint&&)
+      -> BaseStaticVectorViewDefaultConstructorConstraint& = default;
+  ~BaseStaticVectorViewDefaultConstructorConstraint() = default;
 };
 
-template <typename T, Size extent> class StaticVectorViewBase :
-    public StaticVectorViewBaseDefaultConstructorConstraint<T, extent> {
+template <typename T, Size extent> class BaseStaticVectorView :
+    public BaseStaticVectorViewDefaultConstructorConstraint<T, extent> {
 public:
   using Iterator = ForwardAddressIterator<T>;
   using ConstIterator = ForwardAddressIterator<T const>;
@@ -57,21 +57,21 @@ public:
   using ConstReverseIterator = BackwardAddressIterator<T const>;
 
   template <typename It, EnableIf<IsRandomAccessIterator<It>> = 0> CDS_ATTR(2(explicit, constexpr(11)))
-  StaticVectorViewBase(It first, Size count) noexcept :
-      StaticVectorViewBaseDefaultConstructorConstraint<T, extent>{0}, _addr{&*first} {
+  BaseStaticVectorView(It first, Size count) noexcept :
+      BaseStaticVectorViewDefaultConstructorConstraint<T, extent>{0}, _addr{&*first} {
 #if CDS_ATTR(cpp14)
     assert(count >= extent && "Static Vector View used on iterator count smaller than requested extent");
 #endif
   }
 
   template <typename It, typename S, EnableIf<IsRandomAccessIterator<It, S>> = 0> CDS_ATTR(2(explicit, constexpr(11)))
-  StaticVectorViewBase(It first, S end) noexcept : StaticVectorViewBase(first, end - first) {}
+  BaseStaticVectorView(It first, S end) noexcept : BaseStaticVectorView(first, end - first) {}
 
   template <typename C, EnableIf<And<
       VectorViewConversion<C>,
-      Not<IsSame<RemoveCVRef<C>, StaticVectorViewBase>>,
-      Not<IsBaseOf<StaticVectorViewBase, RemoveCVRef<C>>>
-  >> = 0> CDS_ATTR(2(implicit, constexpr(11))) StaticVectorViewBase(C&& range) noexcept : StaticVectorViewBase{
+      Not<IsSame<RemoveCVRef<C>, BaseStaticVectorView>>,
+      Not<IsBaseOf<BaseStaticVectorView, RemoveCVRef<C>>>
+  >> = 0> CDS_ATTR(2(implicit, constexpr(11))) BaseStaticVectorView(C&& range) noexcept : BaseStaticVectorView{
       VectorViewConversion<C>::begin(fwd<C>(range)),
       VectorViewConversion<C>::end(fwd<C>(range))
   } {
@@ -84,18 +84,18 @@ public:
   }
 
   template <typename E0, typename A0, typename S0> CDS_ATTR(2(explicit, constexpr(11)))
-  StaticVectorViewBase(BaseVector<T, E0, A0, S0>& vec) noexcept : StaticVectorViewBase{vec.begin(), vec.end()} {}
+  BaseStaticVectorView(BaseVector<T, E0, A0, S0>& vec) noexcept : BaseStaticVectorView{vec.begin(), vec.end()} {}
 
   template <typename E0, typename A0, typename S0, typename T0 = T, EnableIf<IsConst<T0>>>
-  CDS_ATTR(2(explicit, constexpr(11))) StaticVectorViewBase(BaseVector<T, E0, A0, S0> const& vec) noexcept :
-      StaticVectorViewBase{vec.begin(), vec.end()} {}
+  CDS_ATTR(2(explicit, constexpr(11))) BaseStaticVectorView(BaseVector<T, E0, A0, S0> const& vec) noexcept :
+      BaseStaticVectorView{vec.begin(), vec.end()} {}
 
-  StaticVectorViewBase() = default;
-  StaticVectorViewBase(StaticVectorViewBase const&) = default;
-  StaticVectorViewBase(StaticVectorViewBase&&) = default;
-  auto operator=(StaticVectorViewBase const&) -> StaticVectorViewBase& = default;
-  auto operator=(StaticVectorViewBase&&) -> StaticVectorViewBase& = default;
-  ~StaticVectorViewBase() = default;
+  BaseStaticVectorView() = default;
+  BaseStaticVectorView(BaseStaticVectorView const&) = default;
+  BaseStaticVectorView(BaseStaticVectorView&&) = default;
+  auto operator=(BaseStaticVectorView const&) -> BaseStaticVectorView& = default;
+  auto operator=(BaseStaticVectorView&&) -> BaseStaticVectorView& = default;
+  ~BaseStaticVectorView() = default;
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto begin() const noexcept -> Iterator {
     return _addr;

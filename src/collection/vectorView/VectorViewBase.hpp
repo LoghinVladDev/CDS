@@ -10,7 +10,7 @@
 
 namespace cds {
 namespace impl {
-template <typename T, typename B> class VectorViewBase : public B {
+template <typename T, typename B> class BaseVectorView : public B {
   using Base = B;
 
 public:

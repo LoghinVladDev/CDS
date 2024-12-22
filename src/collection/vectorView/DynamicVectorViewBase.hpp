@@ -22,7 +22,7 @@ using meta::IsBaseOf;
 using iterator::ForwardAddressIterator;
 using iterator::BackwardAddressIterator;
 
-template <typename T> class DynamicVectorViewBase {
+template <typename T> class BaseDynamicVectorView {
 public:
   using Iterator = ForwardAddressIterator<T>;
   using ConstIterator = ForwardAddressIterator<T const>;
@@ -30,33 +30,33 @@ public:
   using ConstReverseIterator = BackwardAddressIterator<T const>;
 
   template <typename It, EnableIf<IsRandomAccessIterator<It>> = 0> CDS_ATTR(2(explicit, constexpr(11)))
-  DynamicVectorViewBase(It first, Size count) noexcept : _begin{&*first}, _end{_begin + count} {}
+  BaseDynamicVectorView(It first, Size count) noexcept : _begin{&*first}, _end{_begin + count} {}
 
   template <typename It, typename S, EnableIf<IsRandomAccessIterator<It, S>> = 0> CDS_ATTR(2(explicit, constexpr(11)))
-  DynamicVectorViewBase(It first, S end) noexcept : DynamicVectorViewBase(first, end - first) {}
+  BaseDynamicVectorView(It first, S end) noexcept : BaseDynamicVectorView(first, end - first) {}
 
   template <typename C, EnableIf<And<
       VectorViewConversion<C>,
-      Not<IsSame<RemoveCVRef<C>, DynamicVectorViewBase>>,
-      Not<IsBaseOf<DynamicVectorViewBase, RemoveCVRef<C>>>
-  >> = 0> CDS_ATTR(2(implicit, constexpr(11))) DynamicVectorViewBase(C&& range) noexcept : DynamicVectorViewBase{
+      Not<IsSame<RemoveCVRef<C>, BaseDynamicVectorView>>,
+      Not<IsBaseOf<BaseDynamicVectorView, RemoveCVRef<C>>>
+  >> = 0> CDS_ATTR(2(implicit, constexpr(11))) BaseDynamicVectorView(C&& range) noexcept : BaseDynamicVectorView{
       VectorViewConversion<C>::begin(fwd<C>(range)),
       VectorViewConversion<C>::end(fwd<C>(range))
   } {}
 
   template <typename E0, typename A0, typename S0> CDS_ATTR(2(implicit, constexpr(11)))
-  DynamicVectorViewBase(BaseVector<T, E0, A0, S0>& vec) noexcept : DynamicVectorViewBase{vec.begin(), vec.end()} {}
+  BaseDynamicVectorView(BaseVector<T, E0, A0, S0>& vec) noexcept : BaseDynamicVectorView{vec.begin(), vec.end()} {}
 
   template <typename E0, typename A0, typename S0, typename T0 = T, EnableIf<IsConst<T0>>>
-  CDS_ATTR(2(implicit, constexpr(11))) DynamicVectorViewBase(BaseVector<T, E0, A0, S0> const& vec) noexcept :
-      DynamicVectorViewBase{vec.begin(), vec.end()} {}
+  CDS_ATTR(2(implicit, constexpr(11))) BaseDynamicVectorView(BaseVector<T, E0, A0, S0> const& vec) noexcept :
+      BaseDynamicVectorView{vec.begin(), vec.end()} {}
 
-  DynamicVectorViewBase() = default;
-  DynamicVectorViewBase(DynamicVectorViewBase const&) = default;
-  DynamicVectorViewBase(DynamicVectorViewBase&&) = default;
-  auto operator=(DynamicVectorViewBase const&) -> DynamicVectorViewBase& = default;
-  auto operator=(DynamicVectorViewBase&&) -> DynamicVectorViewBase& = default;
-  ~DynamicVectorViewBase() = default;
+  BaseDynamicVectorView() = default;
+  BaseDynamicVectorView(BaseDynamicVectorView const&) = default;
+  BaseDynamicVectorView(BaseDynamicVectorView&&) = default;
+  auto operator=(BaseDynamicVectorView const&) -> BaseDynamicVectorView& = default;
+  auto operator=(BaseDynamicVectorView&&) -> BaseDynamicVectorView& = default;
+  ~BaseDynamicVectorView() = default;
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto begin() const noexcept -> Iterator {
     return _begin;

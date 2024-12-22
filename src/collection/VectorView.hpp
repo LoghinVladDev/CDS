@@ -54,19 +54,19 @@ template <typename T, Size extent> struct CDS_ATTR(ebo) GenericLoop :
 } // namespace bindingsVV
 
 template <typename T, Size extent> class VectorView :
-    public VectorViewBase<T, Conditional<
+    public BaseVectorView<T, Conditional<
         Bool<extent == limits::sizeMax>,
-        DynamicVectorViewBase<T>,
-        StaticVectorViewBase<T, extent>>
+        BaseDynamicVectorView<T>,
+        BaseStaticVectorView<T, extent>>
     >,
     public bindingsVV::ContainsOf<T, extent>,
     public bindingsVV::Find<T, extent>,
     public bindingsVV::FindOf<T, extent>,
     public bindingsVV::GenericLoop<T, extent> {
-  using Base = VectorViewBase<T, Conditional<
+  using Base = BaseVectorView<T, Conditional<
       Bool<extent == limits::sizeMax>,
-      DynamicVectorViewBase<T>,
-      StaticVectorViewBase<T, extent>>
+      BaseDynamicVectorView<T>,
+      BaseStaticVectorView<T, extent>>
   >;
 public:
   using Base::Base;

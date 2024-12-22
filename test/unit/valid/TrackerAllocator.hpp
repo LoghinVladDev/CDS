@@ -9,6 +9,7 @@
 #include <cds/meta/Semantics>
 #include <cds/memory/Allocator>
 #include <cassert>
+#include <exception>
 #include <unordered_set>
 
 #if defined(NDEBUG) && CDS_ATTR(libcxx)
