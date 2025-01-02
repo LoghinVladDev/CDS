@@ -2,6 +2,8 @@
 // Created by loghin on 11/9/24.
 //
 
+#ifndef CDS_MEMORY_UNIQUE_PTR_HPP
+#define CDS_MEMORY_UNIQUE_PTR_HPP
 #pragma once
 
 #include <cds/memory/Allocator>
@@ -60,7 +62,6 @@ public:
 };
 
 template <typename T> class DefaultDeleter<T[]> {
-public:
 public:
   DefaultDeleter() = default;
   DefaultDeleter(DefaultDeleter const&) = default;
@@ -336,7 +337,7 @@ public:
 template <typename T, typename D, typename = typename Or<
     And<Not<IsLValRef<D>>, IsNoexceptMoveAssignable<D>>,
     And<IsLValRef<D>, IsNoexceptCopyAssignable<RemoveRef<D>>>
->::Type>class UniquePtrDeleterMoveAssignableBase;
+>::Type> class UniquePtrDeleterMoveAssignableBase;
 
 template <typename T, typename D> class CDS_ATTR(ebo) UniquePtrDeleterMoveAssignableBase<T, D, True> :
     public UniquePtrDeleterMoveConstructibleBase<T, D> {
@@ -759,3 +760,5 @@ using impl::makeUnique;
 using impl::makeUniqueForOverwrite;
 using impl::makeUniqueUninitialized;
 } // namespace cds
+
+#endif // #ifndef CDS_MEMORY_UNIQUE_PTR_HPP

@@ -230,6 +230,14 @@ template <> struct SignedEquivalent<signed long> { using Type = unsigned long; }
 
 template <typename T> struct TypeId { using Type = T; };
 template <typename T> struct UnderlyingType { using Type = typename std::underlying_type<T>::type; };
+template <typename T> struct IsEmpty : ConvertIntegral<std::is_empty<T>> {};
+
+#if CDS_ATTR(clang) || CDS_ATTR(gcc)
+template <typename T> struct IsFinal : Bool<__is_final(T)>::Type {};
+#else
+#error Define specifically for compiler intrinsic for C++11.
+template <typename T> struct IsFinal : False {};
+#endif // #if CDS_ATTR(clang) || CDS_ATTR(gcc)
 } // namespace impl
 
 template <typename Type> using RemoveConst = typename impl::RemoveConst<Type>::Type;
@@ -359,6 +367,8 @@ template <typename... Types> using Common = typename impl::Common<Types...>::Typ
 template <typename T> using TypeId = typename impl::TypeId<T>::Type;
 
 template <typename T> using UnderlyingType = typename impl::UnderlyingType<T>::Type;
+template <typename T> struct IsEmpty : impl::IsEmpty<T>::Type {};
+template <typename T> struct IsFinal : impl::IsFinal<T>::Type {};
 } // namespace meta
 } // namespace cds
 

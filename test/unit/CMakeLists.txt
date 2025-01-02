@@ -126,7 +126,9 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
 
   set(CDS_MEMORY_UNIT_TEST_SOURCES
       valid/memory/Allocator.cpp
-      valid/memory/ByteStorage.cpp)
+      valid/memory/ByteStorage.cpp
+      valid/memory/SharedPtrTest.cpp
+      valid/memory/UniquePtrTest.cpp)
 
   set(CDS_META_UNIT_TEST_SOURCES
       valid/meta/MetaBase.cpp

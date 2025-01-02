@@ -4,7 +4,10 @@ list(TRANSFORM CDS_UNIT_TEST_SOURCES
 set(DCR_COVERAGE_TEST_SOURCES ${CDS_UNIT_TEST_SOURCES}
         ../../unit/valid/threading/AtomicTest.cpp
         ../../../src/threading/Atomic.hpp
-        ../../../src/threading/atomic/AtomicC11.hpp)
+        ../../../src/threading/atomic/AtomicC11.hpp
+        ../../../src/memory/SharedPtr.hpp
+        ../../../src/memory/sharedPtr/SharedPtrControlBlock.hpp
+        ../../../src/memory/CompressedTuple.hpp)
 
 set(DCR_MACRO_HELPERS)
 if(CDS_STANDARD STREQUAL "11")
