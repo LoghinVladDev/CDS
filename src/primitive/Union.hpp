@@ -6,6 +6,7 @@
 #define CDS_PRIMITIVE_UNION_HPP
 #pragma once
 
+#include "union/UnionDecl.hpp"
 #include "union/UnionNodeV2.hpp"
 
 namespace cds {

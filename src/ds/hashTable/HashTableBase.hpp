@@ -6,15 +6,20 @@
 #define CDS_DS_HASH_TABLE_BASE_HPP
 #pragma once
 
+#include <cds/iterator/Iterator>
 #include <cds/iterator/HashTableIterator>
 #include <cds/Utility>
 
 #include "../node/FwdNode.hpp"
 
 #include <cassert>
+#include <initializer_list>
 
 namespace cds {
 namespace impl {
+using meta::EnableIf;
+using meta::IsForwardIterator;
+using meta::IsIterable;
 using meta::RemoveCVRef;
 
 using meta::rvalue;
@@ -65,6 +70,16 @@ public:
 
   CDS_ATTR(constexpr(20)) ~HashTableBase() noexcept {
     clear();
+  }
+
+  CDS_ATTR(constexpr(20)) auto operator=(HashTableBase const& table) noexcept -> HashTableBase& {
+    copy(table);
+    return *this;
+  }
+
+  CDS_ATTR(constexpr(20)) auto operator=(HashTableBase&& table) noexcept -> HashTableBase& {
+    move(table);
+    return *this;
   }
 
 protected:

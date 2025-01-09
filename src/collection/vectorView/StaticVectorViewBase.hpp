@@ -17,7 +17,7 @@ using meta::Not;
 using meta::IsConst;
 using meta::IsRandomAccessIterator;
 using meta::IsSame;
-using meta::IsBaseOf;
+using meta::impl::IsBaseOfIntrusiveICVR;
 
 using iterator::ForwardAddressIterator;
 using iterator::BackwardAddressIterator;
@@ -70,7 +70,7 @@ public:
   template <typename C, EnableIf<And<
       VectorViewConversion<C>,
       Not<IsSame<RemoveCVRef<C>, BaseStaticVectorView>>,
-      Not<IsBaseOf<BaseStaticVectorView, RemoveCVRef<C>>>
+      Not<IsBaseOfIntrusiveICVR<BaseStaticVectorView, C>>
   >> = 0> CDS_ATTR(2(implicit, constexpr(11))) BaseStaticVectorView(C&& range) noexcept : BaseStaticVectorView{
       VectorViewConversion<C>::begin(fwd<C>(range)),
       VectorViewConversion<C>::end(fwd<C>(range))

@@ -7,6 +7,8 @@
 #include <cds/StringView>
 #include <cds/String>
 
+#include <format>
+
 namespace {
 using cds::Exception;
 using cds::StringView;
