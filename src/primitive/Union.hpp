@@ -6,6 +6,8 @@
 #define CDS_PRIMITIVE_UNION_HPP
 #pragma once
 
+#include "../common/SpecialMemberFunctionHelper.hpp"
+
 #include "union/UnionDecl.hpp"
 #include "union/UnionNodeV2.hpp"
 
@@ -18,6 +20,11 @@ using functional::Greater;
 using functional::LessEqual;
 using functional::GreaterEqual;
 
+using meta::All;
+using meta::IsCopyAssignable;
+using meta::IsMoveAssignable;
+using meta::IsCopyConstructible;
+using meta::IsMoveConstructible;
 using meta::IsSame;
 using meta::IsSameIgnoringCVRef;
 using meta::Not;
@@ -27,7 +34,18 @@ using meta::impl::Pack;
 using unionImpl::UnionVisitationBase;
 using unionImpl::UnionBestMatchType;
 
-template <typename... Types> class Union : private UnionVisitationBase<Pack<Types...>> {
+template <typename T> struct IsCopyConstructibleAndAssignable : And<IsCopyConstructible<T>, IsCopyAssignable<T>> {};
+template <typename T> struct IsMoveConstructibleAndAssignable : And<IsMoveConstructible<T>, IsMoveAssignable<T>> {};
+
+template <typename... Types> class Union :
+    private UnionVisitationBase<Pack<Types...>>,
+    private meta::impl::SfinaeCtorBase<
+        typename All<IsCopyConstructible, Types...>::Type,
+        typename All<IsMoveConstructible, Types...>::Type
+    >, private meta::impl::SfinaeAssignBase<
+        typename All<IsCopyConstructibleAndAssignable, Types...>::Type,
+        typename All<IsMoveConstructibleAndAssignable, Types...>::Type
+    > {
   using Base = UnionVisitationBase<Pack<Types...>>;
   using Base::assign;
   using Base::compare;

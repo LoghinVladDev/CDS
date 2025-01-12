@@ -5,6 +5,7 @@
 #include "UnitTest.hpp"
 #include <cds/collection/Vector>
 #include <cds/threading/Atomic>
+#include <cstring>
 #include <thread>
 
 namespace {

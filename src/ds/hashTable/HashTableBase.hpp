@@ -28,8 +28,13 @@ using meta::inConstexpr;
 using iterator::HashTableIterator;
 
 template <typename T> struct TryEmplaceResult {
+  HashTableIterator<T> iter;
   bool inserted;
-  T* elem;
+};
+
+template <typename T> struct RehashNodeLocation {
+  FwdNode<T>* current;
+  FwdNode<T>* previous;
 };
 
 template <typename T, typename K, typename H, typename RP, typename KP, typename KC, typename AS>
@@ -202,10 +207,12 @@ public:
     auto*& buck = bucket(hash);
     auto head = buck;
     auto size = 0;
+    decltype(head) prev = nullptr;
     while (head) {
       if (comp(proj(head->data), cds::forward<KF>(key))) {
-        return {false, &head->data};
+        return {{_bArr, _bCnt, head, prev, static_cast<Size>(&buck - _bArr)}, false};
       }
+      prev = head;
       head = head->next;
       ++size;
     }
@@ -214,14 +221,17 @@ public:
     buck = head;
     ++_eCnt;
 
-    if (size >= RP::load()) {
-      auto const rh = RP::balance(_bCnt, _eCnt, 1);
-      if (rh.type == RP::BalanceType::Required) {
-        rehash(rh.size, hash, head);
-      }
+    if (size < RP::load()) {
+      return {{_bArr, _bCnt, head, nullptr, static_cast<Size>(&buck - _bArr)}, true};
     }
 
-    return {true, &head->data};
+    auto const rh = RP::balance(_bCnt, _eCnt, 1);
+    if (rh.type != RP::BalanceType::Required) {
+      return {{_bArr, _bCnt, head, nullptr, static_cast<Size>(&buck - _bArr)}, true};
+    }
+
+    auto loc = rehash(rh.size, hash, head);
+    return {{_bArr, _bCnt, loc.current, loc.previous, static_cast<Size>(&bucket(hash) - _bArr)}, true};
   }
 
   CDS_ATTR(constexpr(20)) auto clear() noexcept -> void {
@@ -280,12 +290,13 @@ public:
   }
 
 private:
-  CDS_ATTR(constexpr(20)) auto rehash(Size const bCnt, Size const hashNN, Node const* const NN) CDS_ATTR(noexcept(
+  CDS_ATTR(constexpr(20)) auto rehash(Size const bCnt, Size const hashNN, Node* const NN) CDS_ATTR(noexcept(
     noexcept(alloc(bCnt)) && noexcept(rvalue<H>()(rvalue<KP>()(rvalue<T>())))
-  )) -> void {
+  )) -> RehashNodeLocation<T> {
     KP const proj;
     auto const oBCnt = _bCnt;
     alloc(bCnt);
+    RehashNodeLocation<T> loc{NN, nullptr};
 
     for (decltype(_bCnt) idx = 0; idx < oBCnt; ++idx) {
       auto*& ob = bucket(idx);
@@ -298,6 +309,9 @@ private:
 
         auto* mb = ob;
         ob = ob->next;
+        if (nb == NN) {
+          loc.previous = mb;
+        }
         rehashEmplace(nb, mb);
       }
 
@@ -312,9 +326,14 @@ private:
 
         auto* mb = obh->next;
         obh->next = obh->next->next;
+        if (nb == NN) {
+          loc.previous = mb;
+        }
         rehashEmplace(nb, mb);
       }
     }
+
+    return loc;
   }
 
   CDS_ATTR(constexpr(14)) static auto rehashEmplace(Node*& into, Node* const node) noexcept -> void {
@@ -374,15 +393,15 @@ template <Size, typename> struct Get {};
 
 template <typename T> struct Get<0, TryEmplaceResult<T>> {
   using P = TryEmplaceResult<T>;
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(P const& pack) const noexcept -> bool {
-    return pack.inserted;
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(P const& pack) const noexcept -> HashTableIterator<T> {
+    return pack.iter;
   }
 };
 
 template <typename T> struct Get<1, TryEmplaceResult<T>> {
   using P = TryEmplaceResult<T>;
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(P const& pack) const noexcept -> T* {
-    return pack.elem;
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(P const& pack) const noexcept -> bool {
+    return pack.inserted;
   }
 };
 

@@ -282,10 +282,10 @@ public:
       for (Size idx = 0, len = U::length(str); idx < len; ++idx) {
         auto const* pat = U::data(str);
         auto r = v->children.tryEmplace(pat[idx], _size);
-        if (get<0>(r)) {
+        if (get<1>(r)) {
           addVertex(ParentLink(pat[idx], vId));
         }
-        vId = get<1>(r)->id;
+        vId = get<0>(r)->id;
         v = _vertices + vId;
       }
       v->setId(wId);

@@ -394,7 +394,7 @@ template <typename T> struct CDS_ATTR(ebo) OptionalMonadicBase : OptionalObserva
   using LocalBase::uncheckedGet;
 
   template <typename F, EnableIf<IsOptional<InvokeReturnOf<F, T const&>>> = 0> CDS_ATTR(2(nodiscard, constexpr(11)))
-  auto andThen(F&& function)
+  auto then(F&& function)
       const& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function), lvalue<T const>()))))
       -> InvokeReturnOf<F, T const&> {
     return _exists
@@ -403,7 +403,7 @@ template <typename T> struct CDS_ATTR(ebo) OptionalMonadicBase : OptionalObserva
   }
 
   template <typename F, EnableIf<IsOptional<InvokeReturnOf<F, T&>>> = 0> CDS_ATTR(2(nodiscard, constexpr(14)))
-  auto andThen(F&& function)& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function), lvalue<T>()))))
+  auto then(F&& function)& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function), lvalue<T>()))))
       -> InvokeReturnOf<F, T&> {
     return _exists
         ? f::invoke(cds::forward<F>(function), uncheckedGet())
@@ -411,7 +411,7 @@ template <typename T> struct CDS_ATTR(ebo) OptionalMonadicBase : OptionalObserva
   }
 
   template <typename F, EnableIf<IsOptional<InvokeReturnOf<F, T const&&>>> = 0> CDS_ATTR(2(nodiscard, constexpr(11)))
-  auto andThen(F&& function)
+  auto then(F&& function)
       const&& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function), rvalue<T const>()))))
       -> InvokeReturnOf<F, T const&&> {
     return _exists
@@ -420,7 +420,7 @@ template <typename T> struct CDS_ATTR(ebo) OptionalMonadicBase : OptionalObserva
   }
 
   template <typename F, EnableIf<IsOptional<InvokeReturnOf<F, T&&>>> = 0> CDS_ATTR(2(nodiscard, constexpr(14)))
-  auto andThen(F&& function)&& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function), rvalue<T>()))))
+  auto then(F&& function)&& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function), rvalue<T>()))))
       -> InvokeReturnOf<F, T&&> {
     return _exists
         ? f::invoke(cds::forward<F>(function), cds::move(uncheckedGet()))

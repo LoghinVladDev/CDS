@@ -224,6 +224,11 @@ template <UnionFunctionDetail detail> union UnionStorage<detail> {};
 template <typename H, typename... T> union UnionStorage<UnionFunctionDetail::Trivial, H, T...> {
   using Tail = UnionStorage<UnionFunctionDetail::Trivial, T...>;
 
+  UnionStorage(UnionStorage const&) = default;
+  UnionStorage(UnionStorage&&) = default;
+  auto operator=(UnionStorage const&) -> UnionStorage& = default;
+  auto operator=(UnionStorage&&) -> UnionStorage& = default;
+
   CDS_ATTR(2(explicit, constexpr(11))) UnionStorage(CDS_ATTR(unused) Valueless) noexcept: _valueless{} {}
 
   // Use brackets instead of braces, arrows implicit conversions
@@ -248,6 +253,11 @@ template <typename H, typename... T> union UnionStorage<UnionFunctionDetail::Non
 
   CDS_ATTR(2(explicit, constexpr(11))) UnionStorage(CDS_ATTR(unused) Valueless) noexcept: _valueless{} {}
 
+  UnionStorage(UnionStorage const&) = default;
+  UnionStorage(UnionStorage&&) = default;
+  auto operator=(UnionStorage const&) -> UnionStorage& = default;
+  auto operator=(UnionStorage&&) -> UnionStorage& = default;
+
   // Use brackets instead of braces, arrows implicit conversions
   template <typename... A> CDS_ATTR(2(explicit, constexpr(11)))
   UnionStorage(CDS_ATTR(unused) InPlaceIndex<0>, A &&... args)
@@ -269,6 +279,11 @@ template <typename H, typename... T> union UnionStorage<UnionFunctionDetail::Del
   using Tail = UnionStorage<UnionFunctionDetail::Deleted, T...>;
 
   CDS_ATTR(2(explicit, constexpr(11))) UnionStorage(CDS_ATTR(unused) Valueless) noexcept: _valueless{} {}
+
+  UnionStorage(UnionStorage const&) = default;
+  UnionStorage(UnionStorage&&) = default;
+  auto operator=(UnionStorage const&) -> UnionStorage& = default;
+  auto operator=(UnionStorage&&) -> UnionStorage& = default;
 
   // Use brackets instead of braces, arrows implicit conversions
   template <typename... A> CDS_ATTR(2(explicit, constexpr(11)))
@@ -473,6 +488,11 @@ template <UnionFunctionDetail detail, typename... Types> struct UnionStorageBase
   using Index = UnionActiveIndex<Int<sizeof...(Types)>>;
   using Data = UnionStorage<detail, Types...>;
 
+  UnionStorageBase(UnionStorageBase const&) = default;
+  UnionStorageBase(UnionStorageBase&&) = default;
+  auto operator=(UnionStorageBase const&) -> UnionStorageBase& = default;
+  auto operator=(UnionStorageBase&&) -> UnionStorageBase& = default;
+
   CDS_ATTR(2(implicit, constexpr(11))) UnionStorageBase(Valueless tag = {}) noexcept:
       _data{tag}, _index{Index::value} {}
 
@@ -525,6 +545,11 @@ template <typename PackedTypes> struct UnionDestructionBase<PackedTypes, UnionFu
   using Base::_index;
   using Base::Base;
 
+  UnionDestructionBase(UnionDestructionBase const&) = default;
+  UnionDestructionBase(UnionDestructionBase&&) = default;
+  auto operator=(UnionDestructionBase const&) -> UnionDestructionBase& = default;
+  auto operator=(UnionDestructionBase&&) -> UnionDestructionBase& = default;
+
   ~UnionDestructionBase() noexcept = default;
   CDS_ATTR(constexpr(14)) auto destroy() noexcept -> void {
     _index = Index::value;
@@ -535,6 +560,11 @@ template <typename PackedTypes> struct UnionDestructionBase<PackedTypes, UnionFu
     UnionStorageBase<UnionFunctionDetail::Deleted, PackedTypes> {
   using Base = UnionStorageBase<UnionFunctionDetail::Deleted, PackedTypes>;
   using Base::Base;
+
+  UnionDestructionBase(UnionDestructionBase const&) = default;
+  UnionDestructionBase(UnionDestructionBase&&) = default;
+  auto operator=(UnionDestructionBase const&) -> UnionDestructionBase& = default;
+  auto operator=(UnionDestructionBase&&) -> UnionDestructionBase& = default;
 
   ~UnionDestructionBase() = delete;
   auto destroy() noexcept -> void = delete;
@@ -548,6 +578,11 @@ template <typename PackedTypes> struct UnionDestructionBase<PackedTypes, UnionFu
   using Base::_data;
   using Base::valueless;
   using Base::Base;
+
+  UnionDestructionBase(UnionDestructionBase const&) = default;
+  UnionDestructionBase(UnionDestructionBase&&) = default;
+  auto operator=(UnionDestructionBase const&) -> UnionDestructionBase& = default;
+  auto operator=(UnionDestructionBase&&) -> UnionDestructionBase& = default;
 
   CDS_ATTR(constexpr(20)) ~UnionDestructionBase() noexcept {
     destroy();
@@ -572,6 +607,12 @@ template <typename... Types> struct UnionConstructionBase<Pack<Types...>> : Unio
   using Base::valueless;
   using Base::_data;
   using Base::_index;
+
+  UnionConstructionBase(UnionConstructionBase const&) = default;
+  UnionConstructionBase(UnionConstructionBase&&) = default;
+  auto operator=(UnionConstructionBase const&) -> UnionConstructionBase& = default;
+  auto operator=(UnionConstructionBase&&) -> UnionConstructionBase& = default;
+  ~UnionConstructionBase() = default;
 
   template <typename A> CDS_ATTR(constexpr(14)) auto constructFromUnion(A &&otherUnion)
       /* CDS_ATTR(noexcept(noexcept(unionConstruct(this->_index, this->_data, cds::forward<A>(otherUnion))))) */
@@ -612,6 +653,12 @@ template <typename... Types> struct UnionAssignmentBase<Pack<Types...>> : UnionC
   using Base::emplace;
   using Base::_data;
   using Base::_index;
+
+  UnionAssignmentBase(UnionAssignmentBase const&) = default;
+  UnionAssignmentBase(UnionAssignmentBase&&) = default;
+  auto operator=(UnionAssignmentBase const&) -> UnionAssignmentBase& = default;
+  auto operator=(UnionAssignmentBase&&) -> UnionAssignmentBase& = default;
+  ~UnionAssignmentBase() = default;
 
   template <typename A> CDS_ATTR(constexpr(14)) auto assignFromUnion(A &&otherUnion) -> void {
     if (valueless() && otherUnion.valueless()) {
@@ -654,12 +701,60 @@ template <typename... Types> struct UnionAssignmentBase<Pack<Types...>> : UnionC
   }
 };
 
+template <typename PackedTypes, UnionFunctionDetail = UnionDetails<PackedTypes>::moveCtr>
+struct UnionMoveConstructionBase;
+
+template <typename PackedTypes> struct UnionMoveConstructionBase<PackedTypes, UnionFunctionDetail::Trivial> :
+    UnionAssignmentBase<PackedTypes> {
+  using Base = UnionAssignmentBase<PackedTypes>;
+  using Base::Base;
+  using Base::operator=;
+
+  UnionMoveConstructionBase(UnionMoveConstructionBase const &) = default;
+  UnionMoveConstructionBase(UnionMoveConstructionBase &&) = default;
+  auto operator=(UnionMoveConstructionBase const &) -> UnionMoveConstructionBase & = default;
+  auto operator=(UnionMoveConstructionBase &&) -> UnionMoveConstructionBase & = default;
+  ~UnionMoveConstructionBase() = default;
+};
+
+template <typename PackedTypes> struct UnionMoveConstructionBase<PackedTypes, UnionFunctionDetail::Deleted> :
+    UnionAssignmentBase<PackedTypes> {
+  using Base = UnionAssignmentBase<PackedTypes>;
+  using Base::Base;
+  using Base::operator=;
+
+  UnionMoveConstructionBase(UnionMoveConstructionBase const &) = default;
+  UnionMoveConstructionBase(UnionMoveConstructionBase &&) = delete;
+  auto operator=(UnionMoveConstructionBase const &) -> UnionMoveConstructionBase & = default;
+  auto operator=(UnionMoveConstructionBase &&) -> UnionMoveConstructionBase & = default;
+  ~UnionMoveConstructionBase() = default;
+};
+
+template <typename... Types> struct UnionMoveConstructionBase<Pack<Types...>, UnionFunctionDetail::NonTrivial> :
+    UnionAssignmentBase<Pack<Types...>> {
+  using Base = UnionAssignmentBase<Pack<Types...>>;
+  using Base::Base;
+  using Base::constructFromUnion;
+  using Base::operator=;
+
+  UnionMoveConstructionBase(UnionMoveConstructionBase const &) = default;
+
+  CDS_ATTR(constexpr(14)) UnionMoveConstructionBase(UnionMoveConstructionBase &&other)
+      CDS_ATTR(noexcept(All<IsNoexceptMoveConstructible, Types...>::value)): Base{Valueless{}} {
+    constructFromUnion(cds::move(other));
+  }
+
+  auto operator=(UnionMoveConstructionBase const &) -> UnionMoveConstructionBase & = default;
+  auto operator=(UnionMoveConstructionBase &&) -> UnionMoveConstructionBase & = default;
+  ~UnionMoveConstructionBase() = default;
+};
+
 template <typename PackedTypes, UnionFunctionDetail = UnionDetails<PackedTypes>::copyCtr>
 struct UnionCopyConstructionBase;
 
 template <typename PackedTypes> struct UnionCopyConstructionBase <PackedTypes, UnionFunctionDetail::Trivial> :
-    UnionAssignmentBase<PackedTypes> {
-  using Base = UnionAssignmentBase<PackedTypes>;
+    UnionMoveConstructionBase<PackedTypes> {
+  using Base = UnionMoveConstructionBase<PackedTypes>;
   using Base::Base;
   using Base::operator=;
 
@@ -671,8 +766,8 @@ template <typename PackedTypes> struct UnionCopyConstructionBase <PackedTypes, U
 };
 
 template <typename PackedTypes> struct UnionCopyConstructionBase<PackedTypes, UnionFunctionDetail::Deleted> :
-    UnionAssignmentBase<PackedTypes> {
-  using Base = UnionAssignmentBase<PackedTypes>;
+    UnionMoveConstructionBase<PackedTypes> {
+  using Base = UnionMoveConstructionBase<PackedTypes>;
   using Base::Base;
   using Base::operator=;
 
@@ -684,8 +779,8 @@ template <typename PackedTypes> struct UnionCopyConstructionBase<PackedTypes, Un
 };
 
 template <typename... Types> struct UnionCopyConstructionBase<Pack<Types...>, UnionFunctionDetail::NonTrivial> :
-    UnionAssignmentBase<Pack<Types...>> {
-  using Base = UnionAssignmentBase<Pack<Types...>>;
+    UnionMoveConstructionBase<Pack<Types...>> {
+  using Base = UnionMoveConstructionBase<Pack<Types...>>;
   using Base::Base;
   using Base::constructFromUnion;
   using Base::operator=;
@@ -699,54 +794,6 @@ template <typename... Types> struct UnionCopyConstructionBase<Pack<Types...>, Un
   auto operator=(UnionCopyConstructionBase const &) -> UnionCopyConstructionBase & = default;
   auto operator=(UnionCopyConstructionBase &&) -> UnionCopyConstructionBase & = default;
   ~UnionCopyConstructionBase() = default;
-};
-
-template <typename PackedTypes, UnionFunctionDetail = UnionDetails<PackedTypes>::moveCtr>
-struct UnionMoveConstructionBase;
-
-template <typename PackedTypes> struct UnionMoveConstructionBase<PackedTypes, UnionFunctionDetail::Trivial> :
-    UnionCopyConstructionBase<PackedTypes> {
-  using Base = UnionCopyConstructionBase<PackedTypes>;
-  using Base::Base;
-  using Base::operator=;
-
-  UnionMoveConstructionBase(UnionMoveConstructionBase const &) = default;
-  UnionMoveConstructionBase(UnionMoveConstructionBase &&) = default;
-  auto operator=(UnionMoveConstructionBase const &) -> UnionMoveConstructionBase & = default;
-  auto operator=(UnionMoveConstructionBase &&) -> UnionMoveConstructionBase & = default;
-  ~UnionMoveConstructionBase() = default;
-};
-
-template <typename PackedTypes> struct UnionMoveConstructionBase<PackedTypes, UnionFunctionDetail::Deleted> :
-    UnionCopyConstructionBase<PackedTypes> {
-  using Base = UnionCopyConstructionBase<PackedTypes>;
-  using Base::Base;
-  using Base::operator=;
-
-  UnionMoveConstructionBase(UnionMoveConstructionBase const &) = default;
-  UnionMoveConstructionBase(UnionMoveConstructionBase &&) = delete;
-  auto operator=(UnionMoveConstructionBase const &) -> UnionMoveConstructionBase & = default;
-  auto operator=(UnionMoveConstructionBase &&) -> UnionMoveConstructionBase & = default;
-  ~UnionMoveConstructionBase() = default;
-};
-
-template <typename... Types> struct UnionMoveConstructionBase<Pack<Types...>, UnionFunctionDetail::NonTrivial> :
-    UnionCopyConstructionBase<Pack<Types...>> {
-  using Base = UnionCopyConstructionBase<Pack<Types...>>;
-  using Base::Base;
-  using Base::constructFromUnion;
-  using Base::operator=;
-
-  UnionMoveConstructionBase(UnionMoveConstructionBase const &) = default;
-
-  CDS_ATTR(constexpr(14)) UnionMoveConstructionBase(UnionMoveConstructionBase &&other)
-  CDS_ATTR(noexcept(All<IsNoexceptMoveConstructible, Types...>::value)): Base{Valueless{}} {
-    constructFromUnion(cds::move(other));
-  }
-
-  auto operator=(UnionMoveConstructionBase const &) -> UnionMoveConstructionBase & = default;
-  auto operator=(UnionMoveConstructionBase &&) -> UnionMoveConstructionBase & = default;
-  ~UnionMoveConstructionBase() = default;
 };
 
 template <typename PackedTypes, UnionFunctionDetail = UnionDetails<PackedTypes>::copyAssign>

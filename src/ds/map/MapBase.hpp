@@ -26,6 +26,7 @@ public:
   using B::empty;
   using B::end;
   using B::size;
+  using B::operator[];
 
   template <typename It, typename S, EnableIf<IsForwardIterator<It, S>> = 0> CDS_ATTR(constexpr(20))
   BaseMap(It first, S last) CDS_ATTR(noexcept(noexcept(emplace(get<0>(*first), get<1>(*first))))) {

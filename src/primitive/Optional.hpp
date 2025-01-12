@@ -34,7 +34,7 @@ public:
   using ObservableBase::get;
   using ObservableBase::getOr;
 
-  using MonadicBase::andThen;
+  using MonadicBase::then;
   using MonadicBase::transform;
   using MonadicBase::orElse;
 

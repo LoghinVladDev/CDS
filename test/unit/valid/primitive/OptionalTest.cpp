@@ -121,10 +121,10 @@ TEST(OptionalTest, monadicAndThenCL) {
   Optional<int> const o3 {};
   Optional<String> const o4 {};
 
-  auto const o5 = o1.andThen([](int v) { return Optional<int>{v}; });
-  auto const o6 = o2.andThen([](StringView sv){ return Optional<StringView>{sv}; });
-  auto const o7 = o3.andThen([](long v) { return Optional<long>{v}; });
-  auto const o8 = o4.andThen([](String const& v) { return Optional<String>{v}; });
+  auto const o5 = o1.then([](int v) { return Optional<int>{v}; });
+  auto const o6 = o2.then([](StringView sv){ return Optional<StringView>{sv}; });
+  auto const o7 = o3.then([](long v) { return Optional<long>{v}; });
+  auto const o8 = o4.then([](String const& v) { return Optional<String>{v}; });
 
   ASSERT_TRUE(o5.hasValue());
   ASSERT_TRUE(o6.hasValue());
@@ -141,10 +141,10 @@ TEST(OptionalTest, monadicAndThenL) {
   Optional<int> o3 {};
   Optional<String> o4 {};
 
-  auto const o5 = o1.andThen([](int& v) { v = 3; return Optional<int>{v}; });
-  auto const o6 = o2.andThen([](String& sv){ sv = "a"; return Optional<StringView>{sv}; });
-  auto const o7 = o3.andThen([](long v) { return Optional<long>{v}; });
-  auto const o8 = o4.andThen([](StringView v) { return Optional<String>{v}; });
+  auto const o5 = o1.then([](int& v) { v = 3; return Optional<int>{v}; });
+  auto const o6 = o2.then([](String& sv){ sv = "a"; return Optional<StringView>{sv}; });
+  auto const o7 = o3.then([](long v) { return Optional<long>{v}; });
+  auto const o8 = o4.then([](StringView v) { return Optional<String>{v}; });
 
   ASSERT_TRUE(o5.hasValue());
   ASSERT_TRUE(o6.hasValue());
@@ -163,10 +163,10 @@ TEST(OptionalTest, monadicAndThenCR) {
   Optional<int> const o3 {};
   Optional<String> const o4 {};
 
-  auto const o5 = cds::move(o1).andThen([](int v) { return Optional<int>{v}; });
-  auto const o6 = cds::move(o2).andThen([](StringView sv){ return Optional<StringView>{sv}; });
-  auto const o7 = cds::move(o3).andThen([](long v) { return Optional<long>{v}; });
-  auto const o8 = cds::move(o4).andThen([](String const& v) { return Optional<String>{v}; });
+  auto const o5 = cds::move(o1).then([](int v) { return Optional<int>{v}; });
+  auto const o6 = cds::move(o2).then([](StringView sv){ return Optional<StringView>{sv}; });
+  auto const o7 = cds::move(o3).then([](long v) { return Optional<long>{v}; });
+  auto const o8 = cds::move(o4).then([](String const& v) { return Optional<String>{v}; });
 
   ASSERT_TRUE(o5.hasValue());
   ASSERT_TRUE(o6.hasValue());
@@ -183,10 +183,10 @@ TEST(OptionalTest, monadicAndThenR) {
   Optional<int> o3 {};
   Optional<String> o4 {};
 
-  auto const o5 = cds::move(o1).andThen([](int v) { return Optional<int>{v}; });
-  auto const o6 = cds::move(o2).andThen([](StringView sv){ return Optional<StringView>{sv}; });
-  auto const o7 = cds::move(o3).andThen([](long v) { return Optional<long>{v}; });
-  auto const o8 = cds::move(o4).andThen([](String const& v) { return Optional<String>{v}; });
+  auto const o5 = cds::move(o1).then([](int v) { return Optional<int>{v}; });
+  auto const o6 = cds::move(o2).then([](StringView sv){ return Optional<StringView>{sv}; });
+  auto const o7 = cds::move(o3).then([](long v) { return Optional<long>{v}; });
+  auto const o8 = cds::move(o4).then([](String const& v) { return Optional<String>{v}; });
 
   ASSERT_TRUE(o5.hasValue());
   ASSERT_TRUE(o6.hasValue());
@@ -217,9 +217,9 @@ TEST(OptionalTest, monadicAndThenXVal) {
   };
 
   auto x = Optional<X>{X{defCtr, cpyCtr, movCtr, cpyAss, movAss}}
-      .andThen([](X&& v) { return Optional<X>{cds::move(v)}; })
-      .andThen([](X&& v) { return Optional<X>{cds::move(v)}; })
-      .andThen([](X&& v) { return Optional<X>{cds::move(v)}; });
+      .then([](X&& v) { return Optional<X>{cds::move(v)}; })
+      .then([](X&& v) { return Optional<X>{cds::move(v)}; })
+      .then([](X&& v) { return Optional<X>{cds::move(v)}; });
   ASSERT_TRUE(x.hasValue());
 
   ASSERT_EQ(defCtr, 1);

@@ -40,7 +40,7 @@ template <typename T, typename C> struct StandardFormatter :
   using SU = StringUtils<C, ST>;
 
   template <typename Ctx> CDS_ATTR(2(nodiscard, constexpr(14))) auto parse(Ctx& ctx) CDS_ATTR(noexcept(false))
-  -> typename Ctx::Iterator {
+      -> typename Ctx::Iterator {
     auto end = ctx.end();
     auto it = parseType(parseWidth(parseNumber(parseFillAlign(ctx.begin(), end), end), end), end);
     if (it == ctx.end()) {
