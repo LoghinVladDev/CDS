@@ -152,7 +152,6 @@ template <typename Visitor, typename... TailVisitors> struct UnionVisitorComposi
       IsNoexceptConstructible<UnionVisitorComposite<TailVisitors...>, TailVs...>
   >::value)) :
       UnionVisitorComposite<TailVisitors...>{cds::forward<TailVs>(tailVisitors)...}, Visitor{cds::forward<V>(visitor)} {
-
   }
 };
 

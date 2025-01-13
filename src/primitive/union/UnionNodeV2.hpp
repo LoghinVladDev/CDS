@@ -800,8 +800,8 @@ template <typename PackedTypes, UnionFunctionDetail = UnionDetails<PackedTypes>:
 struct UnionCopyAssignmentBase;
 
 template <typename PackedTypes> struct UnionCopyAssignmentBase<PackedTypes, UnionFunctionDetail::Trivial> :
-    UnionMoveConstructionBase<PackedTypes> {
-  using Base = UnionMoveConstructionBase<PackedTypes>;
+    UnionCopyConstructionBase<PackedTypes> {
+  using Base = UnionCopyConstructionBase<PackedTypes>;
   using Base::Base;
   using Base::operator=;
 
@@ -813,8 +813,8 @@ template <typename PackedTypes> struct UnionCopyAssignmentBase<PackedTypes, Unio
 };
 
 template <typename PackedTypes> struct UnionCopyAssignmentBase<PackedTypes, UnionFunctionDetail::Deleted> :
-    UnionMoveConstructionBase<PackedTypes> {
-  using Base = UnionMoveConstructionBase<PackedTypes>;
+    UnionCopyConstructionBase<PackedTypes> {
+  using Base = UnionCopyConstructionBase<PackedTypes>;
   using Base::Base;
   using Base::operator=;
 
@@ -826,8 +826,8 @@ template <typename PackedTypes> struct UnionCopyAssignmentBase<PackedTypes, Unio
 };
 
 template <typename... Types> struct UnionCopyAssignmentBase<Pack<Types...>, UnionFunctionDetail::NonTrivial> :
-    UnionMoveConstructionBase<Pack<Types...>> {
-  using Base = UnionMoveConstructionBase<Pack<Types...>>;
+    UnionCopyConstructionBase<Pack<Types...>> {
+  using Base = UnionCopyConstructionBase<Pack<Types...>>;
   using Base::Base;
   using Base::assignFromUnion;
   using Base::operator=;

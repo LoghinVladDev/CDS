@@ -621,10 +621,6 @@ public:
     return emplace(end(), fwd<Args>(args)...);
   }
 
-  template <typename C, typename FT, typename FE, typename FA, typename FSB>
-  friend auto operator<<(std::basic_ostream<C>& out, ArrayBase<FT, FE, FA, FSB> const& array)
-      CDS_ATTR(noexcept(noexcept(out << rvalue<FT>()))) -> std::basic_ostream<C>&;
-
   template <typename Pos> CDS_ATTR(constexpr(20)) auto remove(Pos&& pos) noexcept -> Iterator {
     return Iterator{eraseRegion(loc(fwd<Pos>(pos)), loc(fwd<Pos>(pos)) + 1)};
   }
