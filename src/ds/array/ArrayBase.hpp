@@ -621,6 +621,15 @@ public:
     return emplace(end(), fwd<Args>(args)...);
   }
 
+  CDS_ATTR(constexpr(20)) auto pushBack(T&& object) CDS_ATTR(noexcept(noexcept(emplace(end(), mv(object))))) -> T& {
+    return emplace(end(), mv(object));
+  }
+
+  CDS_ATTR(constexpr(20)) auto pushBack(T const& object) CDS_ATTR(noexcept(noexcept(emplace(end(), mv(object)))))
+      -> T& {
+    return emplace(end(), mv(object));
+  }
+
   template <typename Pos> CDS_ATTR(constexpr(20)) auto remove(Pos&& pos) noexcept -> Iterator {
     return Iterator{eraseRegion(loc(fwd<Pos>(pos)), loc(fwd<Pos>(pos)) + 1)};
   }
