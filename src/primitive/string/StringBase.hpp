@@ -24,11 +24,14 @@
 
 namespace cds {
 namespace impl {
+using meta::And;
 using meta::EnableIf;
 using meta::Int;
 using meta::IsIntegral;
 using meta::IsFloating;
+using meta::IsForwardIterator;
 using meta::IsIterableOfThat;
+using meta::IsSentinelFor;
 
 using sel::With;
 using sel::Value;
@@ -260,6 +263,14 @@ public:
     auto const len = U::floatingLength(floating);
     init(len);
     *U::writeFloating(floating, len, data()) = STraits::nullChar;
+  }
+
+  template <typename I, typename S, EnableIf<And<IsForwardIterator<I>, IsSentinelFor<I, S>>> = 0>
+  CDS_ATTR(constexpr(20)) BaseString(I begin, S end, A const& alloc = A()) noexcept :
+      A(alloc) {
+    auto const len = dist(begin, end);
+    init(len);
+    construct(impl::copyInitialize(begin, end, data()), STraits::nullChar);
   }
 
   CDS_ATTR(constexpr(20)) ~BaseString() noexcept {

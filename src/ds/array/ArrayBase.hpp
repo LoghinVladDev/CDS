@@ -121,18 +121,18 @@ public:
 
   template <typename I, typename S, EnableIf<IsForwardIterator<I, S>> = 0>
   CDS_ATTR(constexpr(20)) DynamicBackScalingBase(I begin, S end, A const& alloc = {}) CDS_ATTR(noexcept(
-      noexcept(DynamicBackScalingBase{begin, dist(begin, end), alloc})
-  )) : DynamicBackScalingBase{begin, dist(begin, end), alloc} {}
+      noexcept(DynamicBackScalingBase(begin, dist(begin, end), alloc))
+  )) : DynamicBackScalingBase(begin, dist(begin, end), alloc) {}
 
   template <typename R, EnableIf<IsSizedRange<R>> = 0>
   CDS_ATTR(2(explicit, constexpr(20))) DynamicBackScalingBase(R&& iterable, A const& alloc = {}) CDS_ATTR(noexcept(
-      noexcept(DynamicBackScalingBase{begin(fwd<R>(iterable)), len(fwd<R>(iterable)), alloc})
-  )) : DynamicBackScalingBase{begin(fwd<R>(iterable)), len(fwd<R>(iterable)), alloc} {}
+      noexcept(DynamicBackScalingBase(begin(fwd<R>(iterable)), len(fwd<R>(iterable)), alloc))
+  )) : DynamicBackScalingBase(begin(fwd<R>(iterable)), len(fwd<R>(iterable)), alloc) {}
 
   template <typename R, EnableIf<IsNonSizedRange<R>> = 0>
   CDS_ATTR(2(explicit, constexpr(20))) DynamicBackScalingBase(R&& iterable, A const& alloc = {}) CDS_ATTR(noexcept(
-      noexcept(DynamicBackScalingBase{begin(fwd<R>(iterable)), end(fwd<R>(iterable)), alloc})
-  )) : DynamicBackScalingBase{begin(fwd<R>(iterable)), end(fwd<R>(iterable)), alloc} {}
+      noexcept(DynamicBackScalingBase(begin(fwd<R>(iterable)), end(fwd<R>(iterable)), alloc))
+  )) : DynamicBackScalingBase(begin(fwd<R>(iterable)), end(fwd<R>(iterable)), alloc) {}
 
   template <typename T0 = T, EnableIf<IsCopyConstructible<T0>> = 0>
   CDS_ATTR(2(implicit, constexpr(20))) DynamicBackScalingBase(std::initializer_list<T> const& list, A const& alloc = {})

@@ -1,5 +1,5 @@
 //
-// Created by vloghin on 19.12.2024.
+// Created by loghin on 19.12.2024.
 //
 
 #ifndef CDS_THREADING_ATOMIC_HPP

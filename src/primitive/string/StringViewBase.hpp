@@ -137,6 +137,7 @@ public:
   }
 
   CDS_ATTR(constexpr(14)) auto clear() noexcept -> void {
+    _data = nullptr;
     _length = 0u;
   }
 
