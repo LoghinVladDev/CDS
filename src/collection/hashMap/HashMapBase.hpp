@@ -45,6 +45,8 @@ public:
   using Base::clear;
   using Base::empty;
   using Base::end;
+  using Base::find;
+  using Base::remove;
   using Base::size;
 
   template <typename... Args> CDS_ATTR(constexpr(20)) auto emplace(Args&&... args)

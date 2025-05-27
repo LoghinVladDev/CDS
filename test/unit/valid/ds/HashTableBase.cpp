@@ -11,6 +11,8 @@
 #include "UnitTest.hpp"
 #include "../Shared.hpp"
 
+#include <random>
+
 namespace {
 using cds::Size;
 using cds::Allocator;
@@ -245,6 +247,19 @@ TEST(HashTableBase, move) {
   ASSERT_TRUE(ihs.empty());
   ASSERT_EQ(ihs.size(), 0);
   ASSERT_EQ(ihs.bucketCount(), 0);
+}
+
+TEST(HashTableBase, largeSize) {
+  auto ihs = DefaultHashTable<int, int, Identity<>>();
+  int n = 1000000;
+  std::random_device r;
+  std::seed_seq s {r(), r(), r()};
+  std::mt19937 e(s);
+  std::uniform_int_distribution<int> u{};
+  while (n > 0) {
+    ihs.tryEmplace(u(e));
+    n--;
+  }
 }
 
 #ifdef DCR_SINCECPP20

@@ -1,5 +1,5 @@
 //
-// Created by vloghin on 19.04.2025.
+// Created by loghin on 19.04.2025.
 //
 
 #ifndef CDS_FILESYSTEM_PATH_HPP
@@ -558,7 +558,7 @@ public:
   auto canonical() const noexcept -> Path;
   auto weaklyCanonical() const noexcept -> Path;
   auto normalized() const noexcept -> Path {
-    return normalized(*this);
+    return normalize(*this);
   }
 
   [[nodiscard]] auto begin() const noexcept -> PathIterator;

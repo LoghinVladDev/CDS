@@ -26,6 +26,11 @@ public:
     return Iterator{_out};
   }
 
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto from(Iterator& iterator) const noexcept -> FormatContext {
+    ignore = iterator;
+    return FormatContext{_out};
+  }
+
 private:
   S& _out;
 };

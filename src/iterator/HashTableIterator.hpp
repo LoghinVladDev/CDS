@@ -14,8 +14,14 @@
 #include <cassert>
 
 namespace cds {
+namespace impl {
+template <typename, typename, typename, typename, typename, typename, typename> class HashTableBase;
+}
+
 namespace iterator {
 template <typename T> class HashTableIterator {
+  template <typename, typename, typename, typename, typename, typename, typename> friend class cds::impl::HashTableBase;
+
 public:
   using Traits = meta::NodeIteratorTraits<cds::impl::FwdNode, T>;
   using Node = typename Traits::Node;

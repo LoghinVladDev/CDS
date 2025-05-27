@@ -27,8 +27,8 @@ template <typename K, typename V> using HashMapAllocator =
     AllocatorSet<HashMapNodeAllocator<K, V>, HashMapBucketAllocator<K, V>>;
 
 template <typename K, typename V, typename H = Hash<>, typename E = Equal<>, typename A = HashMapAllocator<K, V>>
-class HashMap : public BaseMap <K, V, BaseHashMap<K, V, H, E, A>> {
-  using Base = BaseMap <K, V, BaseHashMap<K, V, H, E, A>>;
+class HashMap : public BaseMap<K, V, BaseHashMap<K, V, H, E, A>> {
+  using Base = BaseMap<K, V, BaseHashMap<K, V, H, E, A>>;
 public:
   using Base::Base;
   using Base::operator=;

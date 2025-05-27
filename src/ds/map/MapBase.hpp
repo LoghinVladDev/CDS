@@ -25,6 +25,8 @@ public:
   using B::emplace;
   using B::empty;
   using B::end;
+  using B::find;
+  using B::remove;
   using B::size;
   using B::operator[];
 
@@ -67,6 +69,15 @@ public:
       ignore = emplace(get<0>(entry), get<1>(entry));
     }
     return *this;
+  }
+
+  CDS_ATTR(2(explicit, constexpr(20))) operator bool() const noexcept {
+    return !empty();
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(K const& key)
+      const CDS_ATTR(noexcept(noexcept(find(key)))) -> bool {
+    return find(key) != end();
   }
 };
 } // namespace impl

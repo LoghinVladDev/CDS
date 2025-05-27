@@ -189,6 +189,26 @@ protected:
     AS::operator=(cds::move(table));
   }
 
+  CDS_ATTR(constexpr(14)) auto removeNode(Node* prev, Node* curr, Size const bIdx) noexcept -> bool {
+    if (empty() || bIdx >= bucketCount()) {
+      return false;
+    }
+
+    auto*& buck = bucket(bIdx);
+    if (prev == nullptr && curr == buck) {
+      buck = buck->next;
+      freeNode(curr);
+    } else if (curr != nullptr && prev != nullptr) {
+      prev->next = curr->next;
+      freeNode(curr);
+    } else {
+      return false;
+    }
+
+    --_eCnt;
+    return true;
+  }
+
 public:
   template <typename KF, typename... A> CDS_ATTR(constexpr(20)) auto tryEmplace(KF&& key, A&&... args)
       CDS_ATTR(noexcept(
@@ -244,7 +264,7 @@ public:
       while (head != nullptr) {
         auto copy = head;
         head = head->next;
-        free(copy);
+        freeNode(copy);
       }
     }
 
@@ -287,6 +307,113 @@ public:
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto cend() const noexcept -> ConstIterator {
     return ConstIterator{nullptr, 0};
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto find(K const& key) CDS_ATTR(noexcept(
+      noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>().data), key))
+      && noexcept(rvalue<H>()(key))
+  )) -> Iterator {
+    KC const comp;
+    KP const proj;
+    if (empty()) {
+      return end();
+    }
+
+    auto const hash = (*this)(key);
+    auto* buck = bucket(hash);
+    auto* head = buck;
+    decltype(head) prev = nullptr;
+    while (head) {
+      if (comp(proj(head->data), key)) {
+        return {_bArr, _bCnt, head, prev, hash % _bCnt};
+      }
+      prev = head;
+      head = head->next;
+    }
+
+    return end();
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto find(K const& key) const CDS_ATTR(noexcept(
+      noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>().data), key))
+      && noexcept(rvalue<H>()(key))
+  )) -> ConstIterator {
+    KC const comp;
+    KP const proj;
+    if (empty()) {
+      return end();
+    }
+
+    auto const hash = (*this)(key);
+    auto* buck = bucket(hash);
+    auto* head = buck;
+    decltype(head) prev = nullptr;
+    while (head) {
+      if (comp(proj(head->data), key)) {
+        return {_bArr, _bCnt, head, prev, hash % _bCnt};
+      }
+      prev = head;
+      head = head->next;
+    }
+
+    return end();
+  }
+
+  CDS_ATTR(constexpr(14)) auto remove(Iterator const& iterator) CDS_ATTR(noexcept(
+      noexcept(removeNode(iterator._prev, iterator._curr, iterator._bIdx))
+  )) -> bool {
+    if (iterator._bArr != _bArr || iterator._bCnt != _bCnt || (iterator._curr == nullptr && iterator._prev == nullptr)) {
+      return false;
+    }
+    return removeNode(iterator._prev, iterator._curr, iterator._bIdx);
+  }
+
+  CDS_ATTR(constexpr(14)) auto remove(ConstIterator const& iterator) CDS_ATTR(noexcept(
+      noexcept(removeNode(iterator._prev, iterator._curr, iterator._bIdx))
+  )) -> bool {
+    if (iterator._bArr != _bArr || iterator._bCnt != _bCnt || (iterator._curr == nullptr && iterator._prev == nullptr)) {
+      return false;
+    }
+    return removeNode(iterator._prev, iterator._curr, iterator._bIdx);
+  }
+
+  CDS_ATTR(constexpr(14)) auto remove(Key const& key) CDS_ATTR(noexcept(
+      noexcept(rvalue<KC>()(rvalue<KP>()(rvalue<Node>().data), key))
+      && noexcept(rvalue<H>()(key))
+  )) -> bool {
+    if (empty()) {
+      return false;
+    }
+
+    auto *& buck = bucket((*this)(key));
+    if (buck == nullptr) {
+      return false;
+    }
+
+    KC const comp;
+    KP const proj;
+    if (comp(proj(buck->data), key)) {
+      auto* copy = buck;
+      buck = buck->next;
+      freeNode(copy);
+      --_eCnt;
+      return true;
+    }
+
+    auto* head = buck;
+    while (head->next != nullptr) {
+      if (comp(proj(head->next->data), key)) {
+        auto* copy = head->next;
+        head->next = head->next->next;
+        freeNode(copy);
+        --_eCnt;
+        return true;
+      }
+
+      head = head->next;
+    }
+
+    return false;
   }
 
 private:
@@ -345,7 +472,7 @@ private:
     return _bArr[hash % _bCnt];
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto bucket(Size const hash) const noexcept -> Node const* {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto bucket(Size const hash) const noexcept -> Node* {
     return _bArr[hash % _bCnt];
   }
 
@@ -379,7 +506,7 @@ private:
     AS::template get<Node*>().deallocate(_bArr, _bCnt);
   }
 
-  CDS_ATTR(constexpr(20)) auto free(Node* node) noexcept -> void {
+  CDS_ATTR(constexpr(20)) auto freeNode(Node* node) noexcept -> void {
     destruct(node);
     AS::template get<Node>().deallocate(node, 1);
   }

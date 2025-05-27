@@ -1,5 +1,5 @@
 //
-// Created by vloghin on 24.12.2024.
+// Created by loghin on 24.12.2024.
 //
 
 #include "UnitTest.hpp"

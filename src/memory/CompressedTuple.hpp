@@ -1,5 +1,5 @@
 //
-// Created by vloghin on 26.12.2024.
+// Created by loghin on 26.12.2024.
 //
 
 #ifndef CDS_MEMORY_COMPRESSED_PAIR_HPP

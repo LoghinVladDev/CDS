@@ -50,11 +50,27 @@ template <typename... Args> CDS_ATTR(2(nodiscard, constexpr(20))) auto vformat(
   visitFormattersForFormat(out, fmt, forwardAsTuple(fwd<Args>(args)...));
   return out;
 }
+
+template <typename... Args> CDS_ATTR(2(nodiscard, constexpr(20))) auto formatTo(
+    String& out, FormatString<char, StringUtils<char, StringTraits<char>>, TypeId<Args>...> fmt, Args&&... args
+) CDS_ATTR(noexcept(false)) -> String& {
+  visitFormattersForFormat(out, fmt, forwardAsTuple(fwd<Args>(args)...));
+  return out;
+}
+
+template <typename... Args> CDS_ATTR(2(nodiscard, constexpr(20))) auto vformatTo(
+    String& out, DynamicFormatString<char, StringUtils<char, StringTraits<char>>, TypeId<Args>...> fmt, Args&&... args
+) CDS_ATTR(noexcept(false)) -> String& {
+  visitFormattersForFormat(out, fmt, forwardAsTuple(fwd<Args>(args)...));
+  return out;
+}
 } // namespace fmt
 } // namespace impl
 
 using impl::fmt::format;
+using impl::fmt::formatTo;
 using impl::fmt::vformat;
+using impl::fmt::vformatTo;
 
 inline namespace literals {
 CDS_ATTR(2(nodiscard, consteval(20, constexpr(14))))
