@@ -528,6 +528,23 @@ template <typename C> struct FormatWidthOnlyComponent {
   Size acceptedAutomaticArgumentCount{0u};
 };
 
+template <typename = void> struct DefaultTypeFormatFlagsUnspecified {
+  static FormatTypeFlags constexpr value = 0u;
+};
+
+template <typename = void> struct DefaultTypeFormatFlagsIntegral {
+  static FormatTypeFlags constexpr value = static_cast<FormatTypeFlags>(FormatTypeFlagBits::Decimal);
+};
+
+// ODR before C++17
+template <typename T> FormatTypeFlags const DefaultTypeFormatFlagsUnspecified<T>::value;
+template <typename T> FormatTypeFlags const DefaultTypeFormatFlagsIntegral<T>::value;
+
+template <typename T, typename = typename IsIntegral<T>::Type>
+struct DefaultTypeFormatFlags : DefaultTypeFormatFlagsUnspecified<>{};
+
+template <typename T> struct DefaultTypeFormatFlags<T, typename True::Type> : DefaultTypeFormatFlagsIntegral<>{};
+
 template <typename T, typename C> struct FormatTypeComponent {
   template <typename I, typename S> CDS_ATTR(2(nodiscard, constexpr(14)))
   auto parseType(I begin, S end) noexcept -> I {
@@ -535,7 +552,7 @@ template <typename T, typename C> struct FormatTypeComponent {
     return begin;
   }
 
-  FormatTypeFlags typeFlags{};
+  FormatTypeFlags typeFlags{DefaultTypeFormatFlags<T>::value};
 };
 } // namespace fmt
 } // namespace impl
