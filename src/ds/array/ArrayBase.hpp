@@ -642,6 +642,10 @@ public:
   auto contains(V const& value, P const& projector = Identity<>{}) const noexcept -> bool {
     return impl::findFirst(*this, value, projector, E{}, FindPreserveTransformer<>{}) != end();
   }
+
+  CDS_ATTR(3(nodiscard, explicit, constexpr(11))) operator bool() const noexcept {
+    return !empty();
+  }
 };
 
 template <typename C, typename FT, typename FE, typename FA, typename FSB>
