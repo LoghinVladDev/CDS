@@ -17,6 +17,7 @@ using meta::Not;
 using meta::IsConst;
 using meta::IsRandomAccessIterator;
 using meta::IsSame;
+using meta::RemoveConst;
 using meta::impl::IsBaseOfIntrusiveICVR;
 
 using iterator::ForwardAddressIterator;
@@ -86,8 +87,10 @@ public:
   template <typename E0, typename A0, typename S0> CDS_ATTR(2(explicit, constexpr(11)))
   BaseStaticVectorView(BaseVector<T, E0, A0, S0>& vec) noexcept : BaseStaticVectorView{vec.begin(), vec.end()} {}
 
-  template <typename E0, typename A0, typename S0, typename T0 = T, EnableIf<IsConst<T0>>>
-  CDS_ATTR(2(explicit, constexpr(11))) BaseStaticVectorView(BaseVector<T, E0, A0, S0> const& vec) noexcept :
+  template <
+      typename E0, typename A0, typename S0, typename T0, typename T1 = T,
+      EnableIf<And<IsConst<T1>, IsSame<RemoveConst<T1>, T0>>> = 0
+  > CDS_ATTR(2(explicit, constexpr(11))) BaseStaticVectorView(BaseVector<T0, E0, A0, S0> const& vec) noexcept :
       BaseStaticVectorView{vec.begin(), vec.end()} {}
 
   BaseStaticVectorView() = default;
