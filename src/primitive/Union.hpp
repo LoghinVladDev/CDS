@@ -52,11 +52,11 @@ template <typename... Types> class Union :
 
   template <typename... Types0> CDS_ATTR(constexpr(14)) friend auto operator==(
     Union<Types0...> const& lhs, Union<Types0...> const& rhs
-  ) CDS_ATTR(noexcept(All<meta::IsNoexceptEqCompatible, Types0...>::value)) -> bool;
+  ) CDS_ATTR(friend_noexcept(All<meta::IsNoexceptEqCompatible, Types0...>::value)) -> bool;
 
   template <typename... Types0> CDS_ATTR(constexpr(14)) friend auto operator!=(
     Union<Types0...> const& lhs, Union<Types0...> const& rhs
-  ) CDS_ATTR(noexcept(All<meta::IsNoexceptNeCompatible, Types0...>::value)) -> bool;
+  ) CDS_ATTR(friend_noexcept(All<meta::IsNoexceptNeCompatible, Types0...>::value)) -> bool;
 
 public:
   using Base::Base;
@@ -102,7 +102,7 @@ template <typename T, typename... Ts> CDS_ATTR(2(nodiscard, constexpr(14))) auto
 
 template <typename...Types0> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator==(
     Union<Types0...> const& lhs, Union<Types0...> const& rhs
-) CDS_ATTR(noexcept(All<meta::IsNoexceptEqCompatible, Types0...>::value)) -> bool {
+) CDS_ATTR(friend_noexcept(All<meta::IsNoexceptEqCompatible, Types0...>::value)) -> bool {
   static_assert(All<meta::IsEqCompatible, Types0...>::value, "All union types must be equal comparable to invoke ==");
   if (lhs.index() != rhs.index()) {
     return false;
@@ -116,7 +116,7 @@ template <typename...Types0> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator
 
 template <typename...Types0> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator!=(
     Union<Types0...> const& lhs, Union<Types0...> const& rhs
-) CDS_ATTR(noexcept(All<meta::IsNoexceptNeCompatible, Types0...>::value)) -> bool {
+) CDS_ATTR(friend_noexcept(All<meta::IsNoexceptNeCompatible, Types0...>::value)) -> bool {
   static_assert(All<meta::IsNeCompatible, Types0...>::value,
       "All union types must be not-equal comparable to invoke ==");
   if (lhs.index() != rhs.index()) {

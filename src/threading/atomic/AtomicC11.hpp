@@ -45,7 +45,11 @@ public:
 #if CDS_ATTR(libcxx)
   CDS_ATTR(inline) BaseAtomicFlag() noexcept : _flag ATOMIC_FLAG_INIT {}
 #else
+#ifndef WIN32
   CDS_ATTR(inline) BaseAtomicFlag() noexcept : _flag{ATOMIC_FLAG_INIT} {}
+#else
+  CDS_ATTR(inline) BaseAtomicFlag() noexcept : _flag ATOMIC_FLAG_INIT {}
+#endif
 #endif
   ~BaseAtomicFlag() = default;
 

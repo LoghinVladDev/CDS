@@ -306,7 +306,7 @@ constexpr S8 s8Max = 0x7f;
 constexpr S16 s16Min = -0x8000;
 constexpr S16 s16Max = 0x7fff;
 
-constexpr S32 s32Min = -0x80000000L;
+constexpr S32 s32Min = -static_cast<S32>(0x80000000L);
 constexpr S32 s32Max = 0x7fffffffL;
 
 constexpr S64 s64Max = 0x7fffffffffffffffLL;

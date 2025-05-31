@@ -234,6 +234,8 @@ template <typename T> struct IsEmpty : ConvertIntegral<std::is_empty<T>> {};
 
 #if CDS_ATTR(clang) || CDS_ATTR(gcc)
 template <typename T> struct IsFinal : Bool<__is_final(T)>::Type {};
+#elif CDS_ATTR(msvc)
+template <typename T> struct IsFinal : Bool<__is_final(T)>::Type {};
 #else
 #error Define specifically for compiler intrinsic for C++11.
 template <typename T> struct IsFinal : False {};

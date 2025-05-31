@@ -483,7 +483,7 @@ public:
       return false;
     }
 
-    Vector<wchar_t> resolvingBuffer{static_cast<Size>(actualLength)};
+    Vector<wchar_t> resolvingBuffer(actualLength);
     if (0 == GetFullPathNameW(
         _base.data(),
         actualLength,
@@ -585,7 +585,7 @@ private:
 
   static auto normalize(Path const& src) noexcept -> Path;
 
-  String _base;
+  NativeString _base;
 };
 
 [[nodiscard]] inline auto operator/(Path const& lhs, Path const& rhs) noexcept -> Path {
@@ -630,7 +630,7 @@ public:
     auto const firstSep = str.findFirst(Constants::nativeSeparator);
     auto firstAfter = firstSep + 1;
     if (firstSep != NativeStringView::npos) {
-      while (firstAfter < str.length() && str[firstAfter] == Constants::nativeSeparator) {
+      while (firstAfter < static_cast<Idx>(str.length()) && str[firstAfter] == Constants::nativeSeparator) {
         ++firstAfter;
       }
     }
@@ -662,7 +662,7 @@ public:
     auto const firstSep = _rest.findFirst(Constants::nativeSeparator);
     auto firstAfter = firstSep + 1;
     if (firstSep != NativeStringView::npos) {
-      while (firstAfter < _rest.length() && _rest[firstAfter] == Constants::nativeSeparator) {
+      while (firstAfter < static_cast<Idx>(_rest.length()) && _rest[firstAfter] == Constants::nativeSeparator) {
         ++firstAfter;
       }
     }

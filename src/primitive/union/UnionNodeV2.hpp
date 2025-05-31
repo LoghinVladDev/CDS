@@ -259,12 +259,14 @@ template <typename H, typename... T> union UnionStorage<UnionFunctionDetail::Non
   auto operator=(UnionStorage&&) -> UnionStorage& = default;
 
   // Use brackets instead of braces, arrows implicit conversions
-  template <typename... A> CDS_ATTR(2(explicit, constexpr(11)))
+  template <typename... A, typename = EnableIf<IsConstructible<H, A...>>> CDS_ATTR(2(explicit, constexpr(11)))
   UnionStorage(CDS_ATTR(unused) InPlaceIndex<0>, A &&... args)
       CDS_ATTR(noexcept(noexcept(H(cds::forward<A>(args)...)))) : _head(cds::forward<A>(args)...) {}
 
-  template <Size inPlaceIndex, typename... A> CDS_ATTR(2(explicit, constexpr(11)))
-  UnionStorage(CDS_ATTR(unused) InPlaceIndex<inPlaceIndex>, A &&... args)
+  template <
+      Size inPlaceIndex, typename... A,
+      typename = EnableIf<IsConstructible<Tail, InPlaceIndex<inPlaceIndex - 1>, A>>
+  > CDS_ATTR(2(explicit, constexpr(11))) UnionStorage(CDS_ATTR(unused) InPlaceIndex<inPlaceIndex>, A &&... args)
       CDS_ATTR(noexcept(noexcept(Tail{InPlaceIndex<inPlaceIndex - 1>{}, cds::forward<A>(args)...}))) :
       _tail{InPlaceIndex<inPlaceIndex - 1>{}, cds::forward<A>(args)...} {}
 
@@ -378,8 +380,7 @@ Common<Decay<decltype(F<is>::template visit<InvokeArgs...>)>...> const
 
 template <unsigned idx> struct UnionDestroyVisitor {
   template <typename Union> CDS_ATTR(constexpr(14)) static auto visit(Union &storage) noexcept -> void {
-    using Type = GetUnionType<idx, Union>;
-    GetUnionData<idx>()(storage).~Type();
+    destruct(&GetUnionData<idx>()(storage));
   }
 };
 
@@ -496,8 +497,8 @@ template <UnionFunctionDetail detail, typename... Types> struct UnionStorageBase
   CDS_ATTR(2(implicit, constexpr(11))) UnionStorageBase(Valueless tag = {}) noexcept:
       _data{tag}, _index{Index::value} {}
 
-  template <Size index, typename... A> CDS_ATTR(2(implicit, constexpr(11)))
-  UnionStorageBase(InPlaceIndex<index> inPlaceIndex, A &&... args)
+  template <Size index, typename... A, typename = EnableIf<IsConstructible<Data, InPlaceIndex<index>, A...>>>
+  CDS_ATTR(2(implicit, constexpr(11))) UnionStorageBase(InPlaceIndex<index> inPlaceIndex, A &&... args)
       CDS_ATTR(noexcept(noexcept(Data{inPlaceIndex, cds::forward<A>(args)...}))) :
       _data{inPlaceIndex, cds::forward<A>(args)...}, _index{index} {}
 

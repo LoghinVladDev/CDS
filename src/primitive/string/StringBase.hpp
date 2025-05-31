@@ -25,7 +25,9 @@
 namespace cds {
 namespace impl {
 using meta::And;
+using meta::Conditional;
 using meta::EnableIf;
+using meta::Gt;
 using meta::Int;
 using meta::IsIntegral;
 using meta::IsFloating;
@@ -1038,29 +1040,35 @@ public:
   auto removeSuffix(Char value) const&& noexcept -> void = delete;
   auto removeSuffix(View const& view) const&& noexcept -> void = delete;
 
-  template <typename N1, typename N2> CDS_ATTR(2(nodiscard, constexpr(20)))
-  auto replace(N1 from, N2 to, View const& repl) const& CDS_ATTR(noexcept(false)) -> BaseString {
-    if (from > to) {
+  template <typename N1, typename N2, typename N = Conditional<Gt<Int<sizeof(N1)>, Int<sizeof(N2)>>, N1, N2>>
+  CDS_ATTR(2(nodiscard, constexpr(20))) auto replace(N1 from, N2 to, View const& repl) const& CDS_ATTR(noexcept(false))
+      -> BaseString {
+    auto const cFrom = static_cast<N>(from);
+    auto const cTo = static_cast<N>(to);
+    if (cFrom > cTo) {
       return *this;
     }
 
-    auto const seqLen = to - from;
+    auto const seqLen = cTo - cFrom;
     BaseString res;
     res.init(length() - seqLen + repl.length());
-    auto o = impl::copy(begin(), begin() + from, res.begin());
+    auto o = impl::copy(begin(), begin() + cFrom, res.begin());
     o = impl::copy(repl.begin(), repl.end(), o);
-    *impl::copy(begin() + to, end(), o) = STraits::nullChar;
+    *impl::copy(begin() + cTo, end(), o) = STraits::nullChar;
     return res;
   }
 
-  template <typename N1, typename N2> CDS_ATTR(2(nodiscard, constexpr(20)))
-  auto replace(N1 from, N2 to, View const& repl)&& CDS_ATTR(noexcept(false)) -> BaseString {
+  template <typename N1, typename N2, typename N = Conditional<Gt<Int<sizeof(N1)>, Int<sizeof(N2)>>, N1, N2>>
+  CDS_ATTR(2(nodiscard, constexpr(20))) auto replace(N1 from, N2 to, View const& repl)&& CDS_ATTR(noexcept(false))
+      -> BaseString {
+    auto const cFrom = static_cast<N>(from);
+    auto const cTo = static_cast<N>(to);
     auto res = cds::move(*this);
-    if (from > to) {
+    if (cFrom > cTo) {
       return res;
     }
 
-    auto const seqLen = to - from;
+    auto const seqLen = cTo - cFrom;
     auto const len = res.length() - seqLen + repl.length();
     auto const oLen = res.length();
     res.reserve(len);
@@ -1072,18 +1080,18 @@ public:
 
     if (seqLen > repl.length()) {
       auto const offset = seqLen - repl.length();
-      for (auto it = res.begin() + (from + repl.length()), e = it + (oLen - to); it != e; ++it) {
+      for (auto it = res.begin() + (cFrom + repl.length()), e = it + (oLen - cTo); it != e; ++it) {
         *it = *(it + offset);
       }
     } else if (seqLen < repl.length()) {
       auto const offset = repl.length() - seqLen;
-      for (auto it = res.rbegin(), e = res.rbegin() + (oLen - to); it != e; ++it) {
+      for (auto it = res.rbegin(), e = res.rbegin() + (oLen - cTo); it != e; ++it) {
         *it = *(it + offset);
       }
     }
     *(res.rbegin() - 1) = STraits::nullChar;
 
-    impl::copy(repl.begin(), repl.end(), res.begin() + from);
+    impl::copy(repl.begin(), repl.end(), res.begin() + cFrom);
     return res;
   }
 

@@ -17,7 +17,7 @@ public:
   using Exception::Exception;
 
 #if CDS_ATTR(msvc)
-  explicit FormatException(char const* message) noexcept : RuntimeException{String{message}} {}
+  explicit FormatException(char const* message) noexcept : Exception{}, _message{message} {}
 #endif
 
   FormatException() noexcept : _message{""} {}

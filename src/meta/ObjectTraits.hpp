@@ -358,7 +358,7 @@ template <typename Type, typename Param = Type, typename Return = void> struct I
     impl::IsAssignableAndReturns<Type, Param, Return>::Type {};
 
 template <typename Type, typename Param> struct IsAssignable<Type, Param, void> :
-    impl::IsAssignable<Type, Param>::Type {};
+    impl::IsAssignable<Type, Param, Type&>::Type {};
 
 template <typename Type, typename Param = Type, typename Return = void> struct IsNoexceptAssignable :
     impl::IsNoexceptAssignableAndReturns<Type, Param, Return>::Type {};

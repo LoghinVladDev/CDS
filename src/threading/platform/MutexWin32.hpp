@@ -15,7 +15,7 @@ namespace impl {
 using MutexPlatformHandle = CRITICAL_SECTION;
 
 inline auto mutexPlatformInit(MutexPlatformHandle* pHandle) noexcept -> void {
-  InitializeCriticalSection(pHandle, nullptr);
+  InitializeCriticalSection(pHandle);
 }
 
 inline auto mutexPlatformDestroy(MutexPlatformHandle* pHandle) noexcept -> void {

@@ -2,8 +2,8 @@
 // Created by loghin on 2/26/24.
 //
 
-#ifndef CDS_STDLIB_VECTOR_HPP
-#define CDS_STDLIB_VECTOR_HPP
+#ifndef CDS_STDLIB_ARRAY_HPP
+#define CDS_STDLIB_ARRAY_HPP
 #pragma once
 
 #include <cds/meta/Compiler>
@@ -25,4 +25,4 @@ template <typename, std::size_t> class array;
 } // namespace std
 #endif
 
-#endif // CDS_STDLIB_VECTOR_HPP
+#endif // CDS_STDLIB_ARRAY_HPP

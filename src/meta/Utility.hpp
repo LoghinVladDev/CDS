@@ -61,7 +61,7 @@ CDS_ATTR(constexpr(14)) auto copyN(I sFirst, S count, O dFirst)
 
 template <typename I, typename S, typename O>
 CDS_ATTR(constexpr(20)) auto copyInitialize(I sFirst, S sLast, O dFirst) CDS_ATTR(noexcept(
-    noexcept(construct(dFirst, *sFirst)) && noexcept(sFirst != sLast)
+    noexcept(impl::construct(dFirst, *sFirst)) && noexcept(sFirst != sLast)
     && noexcept(++lvalue<I>()) && noexcept(++lvalue<O>())
 )) -> O {
   for (; sFirst != sLast; ++sFirst, ++dFirst) {
