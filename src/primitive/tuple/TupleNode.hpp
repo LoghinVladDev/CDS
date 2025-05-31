@@ -15,6 +15,7 @@ using meta::EnableIf;
 using meta::Conditional;
 using meta::RemoveRef;
 using meta::RemoveCVRef;
+using meta::IsAssignable;
 using meta::IsConst;
 using meta::AddConst;
 using meta::AddLValRef;
@@ -52,8 +53,8 @@ template <Size idx, typename T, typename... R> struct TupleNode<idx, T, R...> : 
 
   CDS_ATTR(constexpr(11)) TupleNode() CDS_ATTR(noexcept(All<IsNoexceptDefaultConstructible, T, R...>::value)) = default;
 
-  template <typename Arg, typename... Args>
-  CDS_ATTR(constexpr(11)) TupleNode(Arg&& param, Args&&... remaining) CDS_ATTR(noexcept(
+  template <typename Arg, typename... Args, EnableIf<IsConstructible<NextNode, Args...>> = 0>
+  CDS_ATTR(2(implicit, constexpr(11))) TupleNode(Arg&& param, Args&&... remaining) CDS_ATTR(noexcept(
       noexcept(NextNode(cds::forward<Args>(remaining)...))
       && noexcept(T(cds::forward<Arg>(param)))
   )) :
@@ -78,8 +79,12 @@ template <Size idx, typename T, typename... R> struct TupleNode<idx, T, R...> : 
         static_cast<typename TupleNode<idx, UTypes...>::NextNode const&>(node)));
   }
 
-  template <typename... UTypes> CDS_ATTR(constexpr(14))
-  auto operator=(TupleNode<idx, UTypes...>&& node) CDS_ATTR(noexcept(
+  template <
+      typename... UTypes, EnableIf<And<
+          IsAssignable<TupleNode, TupleNode<idx, UTypes...>>,
+          IsAssignable<NextNode, typename TupleNode<idx, UTypes...>::NextNode>>
+      > = 0
+  > CDS_ATTR(constexpr(14)) auto operator=(TupleNode<idx, UTypes...>&& node) CDS_ATTR(noexcept(
       noexcept(lvalue<T>() = mv(node._nodeData))
       && noexcept(NextNode::operator=(static_cast<typename TupleNode<idx, UTypes...>::NextNode&&>(node)))
   )) -> TupleNode& {

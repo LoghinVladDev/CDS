@@ -56,8 +56,8 @@ public:
     return static_cast<Tuple&>(BaseNode::operator=(static_cast<typename Tuple<UTypes...>::BaseNode const&>(tuple)));
   }
 
-  template <typename... UTypes> CDS_ATTR(constexpr(14))
-  auto operator=(Tuple<UTypes...>&& tuple) CDS_ATTR(noexcept(noexcept(
+  template <typename... UTypes, meta::EnableIf<meta::IsAssignable<BaseNode, Tuple<UTypes...>>> = 0>
+  CDS_ATTR(constexpr(14)) auto operator=(Tuple<UTypes...>&& tuple) CDS_ATTR(noexcept(noexcept(
       BaseNode::operator=(static_cast<typename Tuple<UTypes...>::BaseNode&&>(tuple))
   ))) -> Tuple& {
     return static_cast<Tuple&>(BaseNode::operator=(static_cast<typename Tuple<UTypes...>::BaseNode&&>(tuple)));
