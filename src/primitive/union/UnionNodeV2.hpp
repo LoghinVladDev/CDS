@@ -232,12 +232,14 @@ template <typename H, typename... T> union UnionStorage<UnionFunctionDetail::Tri
   CDS_ATTR(2(explicit, constexpr(11))) UnionStorage(CDS_ATTR(unused) Valueless) noexcept: _valueless{} {}
 
   // Use brackets instead of braces, arrows implicit conversions
-  template <typename... A> CDS_ATTR(2(explicit, constexpr(11)))
-  UnionStorage(CDS_ATTR(unused) InPlaceIndex<0>, A &&... args)
+  template <typename... A, typename = EnableIf<IsConstructible<H, A&&...>>> CDS_ATTR(2(explicit, constexpr(11)))
+  UnionStorage(CDS_ATTR(unused) InPlaceIndex<0>, A&&... args)
       CDS_ATTR(noexcept(noexcept(H(cds::forward<A>(args)...)))) : _head(cds::forward<A>(args)...) {}
 
-  template <Size inPlaceIndex, typename... A> CDS_ATTR(2(explicit, constexpr(11)))
-  UnionStorage(CDS_ATTR(unused) InPlaceIndex<inPlaceIndex>, A &&... args)
+  template <
+      Size inPlaceIndex, typename... A,
+      typename = EnableIf<IsConstructible<Tail, InPlaceIndex<inPlaceIndex - 1>, A&&...>>
+  > CDS_ATTR(2(explicit, constexpr(11))) UnionStorage(CDS_ATTR(unused) InPlaceIndex<inPlaceIndex>, A&&... args)
       CDS_ATTR(noexcept(noexcept(Tail{InPlaceIndex<inPlaceIndex - 1>{}, cds::forward<A>(args)...}))) :
       _tail{InPlaceIndex<inPlaceIndex - 1>{}, cds::forward<A>(args)...} {}
 
@@ -259,14 +261,14 @@ template <typename H, typename... T> union UnionStorage<UnionFunctionDetail::Non
   auto operator=(UnionStorage&&) -> UnionStorage& = default;
 
   // Use brackets instead of braces, arrows implicit conversions
-  template <typename... A, typename = EnableIf<IsConstructible<H, A...>>> CDS_ATTR(2(explicit, constexpr(11)))
-  UnionStorage(CDS_ATTR(unused) InPlaceIndex<0>, A &&... args)
+  template <typename... A, typename = EnableIf<IsConstructible<H, A&&...>>> CDS_ATTR(2(explicit, constexpr(11)))
+  UnionStorage(CDS_ATTR(unused) InPlaceIndex<0>, A&&... args)
       CDS_ATTR(noexcept(noexcept(H(cds::forward<A>(args)...)))) : _head(cds::forward<A>(args)...) {}
 
   template <
       Size inPlaceIndex, typename... A,
-      typename = EnableIf<IsConstructible<Tail, InPlaceIndex<inPlaceIndex - 1>, A>>
-  > CDS_ATTR(2(explicit, constexpr(11))) UnionStorage(CDS_ATTR(unused) InPlaceIndex<inPlaceIndex>, A &&... args)
+      typename = EnableIf<IsConstructible<Tail, InPlaceIndex<inPlaceIndex - 1>, A&&...>>
+  > CDS_ATTR(2(explicit, constexpr(11))) UnionStorage(CDS_ATTR(unused) InPlaceIndex<inPlaceIndex>,A &&... args)
       CDS_ATTR(noexcept(noexcept(Tail{InPlaceIndex<inPlaceIndex - 1>{}, cds::forward<A>(args)...}))) :
       _tail{InPlaceIndex<inPlaceIndex - 1>{}, cds::forward<A>(args)...} {}
 
@@ -288,12 +290,14 @@ template <typename H, typename... T> union UnionStorage<UnionFunctionDetail::Del
   auto operator=(UnionStorage&&) -> UnionStorage& = default;
 
   // Use brackets instead of braces, arrows implicit conversions
-  template <typename... A> CDS_ATTR(2(explicit, constexpr(11)))
+  template <typename... A, typename = EnableIf<IsConstructible<H, A&&...>>> CDS_ATTR(2(explicit, constexpr(11)))
   UnionStorage(CDS_ATTR(unused) InPlaceIndex<0>, A &&... args)
       CDS_ATTR(noexcept(noexcept(H(cds::forward<A>(args)...)))) : _head(cds::forward<A>(args)...) {}
 
-  template <Size inPlaceIndex, typename... A> CDS_ATTR(2(explicit, constexpr(11)))
-  UnionStorage(CDS_ATTR(unused) InPlaceIndex<inPlaceIndex>, A &&... args)
+  template <
+      Size inPlaceIndex, typename... A,
+      typename = EnableIf<IsConstructible<Tail, InPlaceIndex<inPlaceIndex - 1>, A&&...>>
+  > CDS_ATTR(2(explicit, constexpr(11))) UnionStorage(CDS_ATTR(unused) InPlaceIndex<inPlaceIndex>, A &&... args)
       CDS_ATTR(noexcept(noexcept(Tail{InPlaceIndex<inPlaceIndex - 1>{}, cds::forward<A>(args)...}))) :
       _tail{InPlaceIndex<inPlaceIndex - 1>{}, cds::forward<A>(args)...} {}
 
@@ -497,18 +501,19 @@ template <UnionFunctionDetail detail, typename... Types> struct UnionStorageBase
   CDS_ATTR(2(implicit, constexpr(11))) UnionStorageBase(Valueless tag = {}) noexcept:
       _data{tag}, _index{Index::value} {}
 
-  template <Size index, typename... A, typename = EnableIf<IsConstructible<Data, InPlaceIndex<index>, A...>>>
-  CDS_ATTR(2(implicit, constexpr(11))) UnionStorageBase(InPlaceIndex<index> inPlaceIndex, A &&... args)
+  template <Size index, typename... A, typename = EnableIf<IsConstructible<Data, InPlaceIndex<index>, A&&...>>>
+  CDS_ATTR(2(implicit, constexpr(11))) UnionStorageBase(InPlaceIndex<index> inPlaceIndex, A&&... args)
       CDS_ATTR(noexcept(noexcept(Data{inPlaceIndex, cds::forward<A>(args)...}))) :
       _data{inPlaceIndex, cds::forward<A>(args)...}, _index{index} {}
 
-  template <typename A, typename M = UnionBestMatchType<IsConstructibleSingleArg, A, Types...>, EnableIf<And<
+  template <typename A, typename = EnableIf<And<
       Not<IsSameIgnoringCVRef<A, UnionStorageBase>>,
       Not<IsBaseOfIntrusiveICVR<UnionStorageBase, A>>,
       IsNotInPlaceIndex<RemoveCVRef<A>>,
       Not<IsSameIgnoringCVRef<A, Valueless>>
-  >> = 0> CDS_ATTR(2(implicit, constexpr(11))) UnionStorageBase(A &&arg)
-      CDS_ATTR(noexcept(IsNoexceptConstructible<M, A>::value)) :
+  >>> CDS_ATTR(2(implicit, constexpr(11))) UnionStorageBase(A&& arg) CDS_ATTR(noexcept(
+      IsNoexceptConstructible<UnionBestMatchType<IsConstructibleSingleArg, A, Types...>, A&&>::value
+  )) :
       UnionStorageBase{
           InPlaceIndex<UnionBestMatchIndex<IsConstructibleSingleArg, A, Types...>::value>{},
           cds::forward<A>(arg)
@@ -517,7 +522,7 @@ template <UnionFunctionDetail detail, typename... Types> struct UnionStorageBase
   template <
       typename A0, typename A1, typename... An,
       typename M = UnionBestConstructibleType<Pack<A0, A1, An...>, Types...>,
-      EnableIf<IsNotInPlaceIndex<A0>> = 0
+      typename = EnableIf<IsNotInPlaceIndex<A0>>
   > CDS_ATTR(constexpr(14)) UnionStorageBase(A0 &&arg0, A1 &&arg1, An &&... argn)
       CDS_ATTR(noexcept(IsNoexceptConstructible<M, A0, A1, An...>::value)) :
       UnionStorageBase{
@@ -637,7 +642,7 @@ template <typename... Types> struct UnionConstructionBase<Pack<Types...>> : Unio
   }
 
   template <typename Type, typename... A, typename M = UnionBestMatchType<IsConstructibleSingleArg, Type, Types...>>
-  CDS_ATTR(constexpr(14)) auto emplace(A &&... args) CDS_ATTR(noexcept(IsNoexceptConstructible<M, A...>::value))
+  CDS_ATTR(constexpr(14)) auto emplace(A&&... args) CDS_ATTR(noexcept(IsNoexceptConstructible<M, A&&...>::value))
       -> M& {
     return emplace<UnionBestMatchIndex<IsConstructibleSingleArg, Type, Types...>::value>(cds::forward<A>(args)...);
   }
@@ -686,8 +691,8 @@ template <typename... Types> struct UnionAssignmentBase<Pack<Types...>> : UnionC
   }
 
   template <typename A, typename M = UnionBestMatchType<IsConstructibleAndAssignable, A, Types...>>
-  CDS_ATTR(constexpr(14)) auto assign(A &&value) CDS_ATTR(noexcept(And<
-      IsNoexceptConstructible<M, A &&>, IsNoexceptAssignable<M, A>
+  CDS_ATTR(constexpr(14)) auto assign(A&& value) CDS_ATTR(noexcept(And<
+      IsNoexceptConstructible<M, A&&>, IsNoexceptAssignable<M, A>
   >::value)) -> void {
     constexpr auto bestMatchIndex = UnionBestMatchIndex<IsConstructibleAndAssignable, A, Types...>::value;
     if (bestMatchIndex == index()) {

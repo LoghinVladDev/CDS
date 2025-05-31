@@ -37,7 +37,7 @@ using unionImpl::UnionBestMatchType;
 template <typename T> struct IsCopyConstructibleAndAssignable : And<IsCopyConstructible<T>, IsCopyAssignable<T>> {};
 template <typename T> struct IsMoveConstructibleAndAssignable : And<IsMoveConstructible<T>, IsMoveAssignable<T>> {};
 
-template <typename... Types> class Union :
+template <typename... Types> class CDS_ATTR(ebo) Union :
     private UnionVisitationBase<Pack<Types...>>,
     private meta::impl::SfinaeCtorBase<
         typename All<IsCopyConstructible, Types...>::Type,

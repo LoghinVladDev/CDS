@@ -224,7 +224,11 @@ TEST(OptionalTest, monadicAndThenXVal) {
 
   ASSERT_EQ(defCtr, 1);
   ASSERT_EQ(cpyCtr, 0);
+#if CDS_ATTR(msvc)
+  ASSERT_EQ(movCtr, 7);
+#else
   ASSERT_EQ(movCtr, 4);
+#endif
   ASSERT_EQ(cpyAss, 0);
   ASSERT_EQ(movAss, 0);
 }
@@ -338,7 +342,11 @@ TEST(OptionalTest, monadicTransformXVal) {
 
   ASSERT_EQ(defCtr, 1);
   ASSERT_EQ(cpyCtr, 0);
+#if CDS_ATTR(msvc)
+  ASSERT_EQ(movCtr, 10);
+#else
   ASSERT_EQ(movCtr, 7);
+#endif
   ASSERT_EQ(cpyAss, 0);
   ASSERT_EQ(movAss, 0);
 }

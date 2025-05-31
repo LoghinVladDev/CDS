@@ -57,7 +57,7 @@ template <typename T> struct OptionalStorageBase<T, True> {
       CDS_ATTR(noexcept(IsNoexceptDefaultConstructible<T>::value)) : _object{}, _exists{true} {}
 
   template <typename A, EnableIf<And<
-      Not<IsSame<OptionalStorageBase, RemoveCVRef<A>>>,
+      Not<IsBaseOf<OptionalStorageBase, RemoveCVRef<A>>>,
       Not<IsSame<InPlace, RemoveCVRef<A>>>
   >> = 0> CDS_ATTR(2(implicit, constexpr(11))) OptionalStorageBase(A&& arg)
       CDS_ATTR(noexcept(IsNoexceptConstructible<T, A>::value)) : _object(cds::forward<A>(arg)), _exists{true} {}
