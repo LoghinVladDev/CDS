@@ -16,6 +16,7 @@ using meta::Conditional;
 using meta::RemoveRef;
 using meta::RemoveCVRef;
 using meta::IsAssignable;
+using meta::IsConstructible;
 using meta::IsConst;
 using meta::AddConst;
 using meta::AddLValRef;

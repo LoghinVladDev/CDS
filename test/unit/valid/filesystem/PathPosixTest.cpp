@@ -394,16 +394,16 @@ TEST(PathPosixTest, hasExtension) {
 }
 
 TEST(PathPosixTest, iter) {
-  ASSERT_TRUE(citeq(Path{"a/b"}, std::initializer_list{"a", "b"}));
-  ASSERT_TRUE(citeq(Path{"a/b/c/d"}, std::initializer_list{"a", "b", "c", "d"}));
-  ASSERT_TRUE(citeq(Path{"/a/b"}, std::initializer_list{"/", "a", "b"}));
-  ASSERT_TRUE(citeq(Path{"/"}, std::initializer_list{"/"}));
-  ASSERT_TRUE(citeq(Path{"//"}, std::initializer_list{"/"}));
-  ASSERT_TRUE(citeq(Path{"////"}, std::initializer_list{"/"}));
-  ASSERT_TRUE(citeq(Path{"/a//b"}, std::initializer_list{"/", "a", "b"}));
-  ASSERT_TRUE(citeq(Path{"a/////b////c/d////e"}, std::initializer_list{"a", "b", "c", "d", "e"}));
-  ASSERT_TRUE(citeq(Path{"a/b/"}, std::initializer_list{"a", "b"}));
-  ASSERT_TRUE(citeq(Path{"a/b/////"}, std::initializer_list{"a", "b"}));
+  ASSERT_TRUE(citeq(Path{"a/b"}, std::initializer_list<char const*>{"a", "b"}));
+  ASSERT_TRUE(citeq(Path{"a/b/c/d"}, std::initializer_list<char const*>{"a", "b", "c", "d"}));
+  ASSERT_TRUE(citeq(Path{"/a/b"}, std::initializer_list<char const*>{"/", "a", "b"}));
+  ASSERT_TRUE(citeq(Path{"/"}, std::initializer_list<char const*>{"/"}));
+  ASSERT_TRUE(citeq(Path{"//"}, std::initializer_list<char const*>{"/"}));
+  ASSERT_TRUE(citeq(Path{"////"}, std::initializer_list<char const*>{"/"}));
+  ASSERT_TRUE(citeq(Path{"/a//b"}, std::initializer_list<char const*>{"/", "a", "b"}));
+  ASSERT_TRUE(citeq(Path{"a/////b////c/d////e"}, std::initializer_list<char const*>{"a", "b", "c", "d", "e"}));
+  ASSERT_TRUE(citeq(Path{"a/b/"}, std::initializer_list<char const*>{"a", "b"}));
+  ASSERT_TRUE(citeq(Path{"a/b/////"}, std::initializer_list<char const*>{"a", "b"}));
 }
 
 TEST(PathPosixTest, normalizedCurrentDir) {
