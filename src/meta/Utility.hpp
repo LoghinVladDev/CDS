@@ -45,14 +45,14 @@ template <typename T1, typename T2, typename T3, typename... R> CDS_ATTR(2(nodis
   return maxOf(fwd<T1>(v1), maxOf(fwd<T2>(v2), fwd<T3>(v3), fwd<R>(r)...));
 }
 
-template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto clamp(T const& v, T const& lo, T const& hi) noexcept
-    -> T const& {
-  return clamp(v, lo, hi, Less<>{});
-}
-
 template <typename T, typename C> CDS_ATTR(2(nodiscard, constexpr(11)))
 auto clamp(T const& v, T const& lo, T const& hi, C const& comp) noexcept -> T const& {
   return comp(v, lo) ? lo : comp(hi, v) ? hi : v;
+}
+
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto clamp(T const& v, T const& lo, T const& hi) noexcept
+    -> T const& {
+  return clamp(v, lo, hi, Less<>{});
 }
 
 template <typename I, typename S, typename O>
