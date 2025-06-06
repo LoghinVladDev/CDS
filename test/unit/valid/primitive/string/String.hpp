@@ -36,6 +36,9 @@ using oss = std::basic_stringstream<CHAR_TYPE>;
 using stdsv = std::basic_string_view<CHAR_TYPE>;
 #endif
 using T = cds::meta::StringTraits<CHAR_TYPE>;
+using cds::fwd;
+using cds::mv;
+using cds::xch;
 } // namespace
 
 TEST(STRING_TEST_GROUP, construction) {
@@ -46,7 +49,7 @@ TEST(STRING_TEST_GROUP, construction) {
   S const d = SV(LITERAL("abc"));
 
   S const e = d;
-  S const f = cds::move(c);
+  S const f = mv(c);
   ASSERT_EQ(a, LITERAL("abc"));
   ASSERT_EQ(b, LITERAL("abc"));
   ASSERT_EQ(d, LITERAL("abc"));
@@ -57,7 +60,7 @@ TEST(STRING_TEST_GROUP, construction) {
 TEST(STRING_TEST_GROUP, nonSbo) {
   S a = LITERAL("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
   S b = a;
-  S c = cds::move(b);
+  S c = mv(b);
 
   ASSERT_EQ(a, LITERAL("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
   ASSERT_EQ(c, LITERAL("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
@@ -429,7 +432,7 @@ TEST(STRING_TEST_GROUP, find) {
 namespace {
 template <typename Range, typename P> auto count(Range&& rng, P const& pred) -> int {
   int count = 0;
-  for (auto e : cds::forward<Range>(rng)) {
+  for (auto e : fwd<Range>(rng)) {
     if (pred(e)) {
       ++count;
     }
@@ -1073,7 +1076,7 @@ TEST(STRING_TEST_GROUP, largerAssignments) {
   S s2 = bigData;
   ASSERT_EQ(s2, bigData);
 
-  s = cds::move(s2);
+  s = mv(s2);
   ASSERT_EQ(s, bigData);
 
   S s3;
@@ -1084,7 +1087,7 @@ TEST(STRING_TEST_GROUP, largerAssignments) {
   s = s;
   ASSERT_EQ(s, bigData);
 
-  s = cds::move(s3);
+  s = mv(s3);
   ASSERT_EQ(s, bigData);
 
   s = bigData;
@@ -1505,11 +1508,11 @@ TEST(STRING_TEST_GROUP, operatorPlusStr) {
   ASSERT_EQ(LITERAL("abcd") + a4, LITERAL("abcdaaaabbbbccccddddeeeeffff"));
   ASSERT_EQ(LITERAL("abcd") + a5, LITERAL("abcdaaaabbbbccccddddeeeeffffgggghhhhh"));
 
-  ASSERT_EQ(cds::move(a1) + LITERAL("abcd"), LITERAL("abcd"));
-  ASSERT_EQ(cds::move(a2) + LITERAL("abcd"), LITERAL("abcdabcd"));
-  ASSERT_EQ(cds::move(a3) + LITERAL("abcd"), LITERAL("aaaabbbbccccddddeeeeabcd"));
-  ASSERT_EQ(cds::move(a4) + LITERAL("abcd"), LITERAL("aaaabbbbccccddddeeeeffffabcd"));
-  ASSERT_EQ(cds::move(a5) + LITERAL("abcd"), LITERAL("aaaabbbbccccddddeeeeffffgggghhhhhabcd"));
+  ASSERT_EQ(mv(a1) + LITERAL("abcd"), LITERAL("abcd"));
+  ASSERT_EQ(mv(a2) + LITERAL("abcd"), LITERAL("abcdabcd"));
+  ASSERT_EQ(mv(a3) + LITERAL("abcd"), LITERAL("aaaabbbbccccddddeeeeabcd"));
+  ASSERT_EQ(mv(a4) + LITERAL("abcd"), LITERAL("aaaabbbbccccddddeeeeffffabcd"));
+  ASSERT_EQ(mv(a5) + LITERAL("abcd"), LITERAL("aaaabbbbccccddddeeeeffffgggghhhhhabcd"));
 
   ASSERT_EQ(S{} + LITERAL("abcd"), LITERAL("abcd"));
   ASSERT_EQ(S{LITERAL("abcd")} + LITERAL("abcd"), LITERAL("abcdabcd"));
@@ -1537,11 +1540,11 @@ TEST(STRING_TEST_GROUP, operatorPlusChar) {
   ASSERT_EQ(LITERAL('e') + a4, LITERAL("eabcdabcdabcdabcdabcdabcd"));
   ASSERT_EQ(LITERAL('e') + a5, LITERAL("eabcdabcdabcdabcdabcdabcdabcdabcdabcd"));
 
-  ASSERT_EQ(cds::move(a1) + LITERAL('e'), LITERAL("e"));
-  ASSERT_EQ(cds::move(a2) + LITERAL('e'), LITERAL("abcde"));
-  ASSERT_EQ(cds::move(a3) + LITERAL('e'), LITERAL("abcdabcdabcdabcdabcdabe"));
-  ASSERT_EQ(cds::move(a4) + LITERAL('e'), LITERAL("abcdabcdabcdabcdabcdabcde"));
-  ASSERT_EQ(cds::move(a5) + LITERAL('e'), LITERAL("abcdabcdabcdabcdabcdabcdabcdabcdabcde"));
+  ASSERT_EQ(mv(a1) + LITERAL('e'), LITERAL("e"));
+  ASSERT_EQ(mv(a2) + LITERAL('e'), LITERAL("abcde"));
+  ASSERT_EQ(mv(a3) + LITERAL('e'), LITERAL("abcdabcdabcdabcdabcdabe"));
+  ASSERT_EQ(mv(a4) + LITERAL('e'), LITERAL("abcdabcdabcdabcdabcdabcde"));
+  ASSERT_EQ(mv(a5) + LITERAL('e'), LITERAL("abcdabcdabcdabcdabcdabcdabcdabcdabcde"));
 
   ASSERT_EQ(S{} + LITERAL('e'), LITERAL("e"));
   ASSERT_EQ(S{LITERAL("abcd")} + LITERAL('e'), LITERAL("abcde"));
@@ -1581,11 +1584,11 @@ TEST(STRING_TEST_GROUP, operatorPlusBool) {
   ASSERT_EQ(false + a4, LITERAL("falseabcdabcdabcdabcdabcdabcd"));
   ASSERT_EQ(false + a5, LITERAL("falseabcdabcdabcdabcdabcdabcdabcdabcdabcd"));
 
-  ASSERT_EQ(cds::move(a1) + true, LITERAL("true"));
-  ASSERT_EQ(cds::move(a2) + true, LITERAL("abcdtrue"));
-  ASSERT_EQ(cds::move(a3) + true, LITERAL("abcdabcdabcdabcdabcdabtrue"));
-  ASSERT_EQ(cds::move(a4) + true, LITERAL("abcdabcdabcdabcdabcdabcdtrue"));
-  ASSERT_EQ(cds::move(a5) + true, LITERAL("abcdabcdabcdabcdabcdabcdabcdabcdabcdtrue"));
+  ASSERT_EQ(mv(a1) + true, LITERAL("true"));
+  ASSERT_EQ(mv(a2) + true, LITERAL("abcdtrue"));
+  ASSERT_EQ(mv(a3) + true, LITERAL("abcdabcdabcdabcdabcdabtrue"));
+  ASSERT_EQ(mv(a4) + true, LITERAL("abcdabcdabcdabcdabcdabcdtrue"));
+  ASSERT_EQ(mv(a5) + true, LITERAL("abcdabcdabcdabcdabcdabcdabcdabcdabcdtrue"));
 
   a1 = LITERAL("");
   a2 = LITERAL("abcd");
@@ -1593,11 +1596,11 @@ TEST(STRING_TEST_GROUP, operatorPlusBool) {
   a4 = LITERAL("abcdabcdabcdabcdabcdabcd");
   a5 = LITERAL("abcdabcdabcdabcdabcdabcdabcdabcdabcd");
 
-  ASSERT_EQ(cds::move(a1) + false, LITERAL("false"));
-  ASSERT_EQ(cds::move(a2) + false, LITERAL("abcdfalse"));
-  ASSERT_EQ(cds::move(a3) + false, LITERAL("abcdabcdabcdabcdabcdabfalse"));
-  ASSERT_EQ(cds::move(a4) + false, LITERAL("abcdabcdabcdabcdabcdabcdfalse"));
-  ASSERT_EQ(cds::move(a5) + false, LITERAL("abcdabcdabcdabcdabcdabcdabcdabcdabcdfalse"));
+  ASSERT_EQ(mv(a1) + false, LITERAL("false"));
+  ASSERT_EQ(mv(a2) + false, LITERAL("abcdfalse"));
+  ASSERT_EQ(mv(a3) + false, LITERAL("abcdabcdabcdabcdabcdabfalse"));
+  ASSERT_EQ(mv(a4) + false, LITERAL("abcdabcdabcdabcdabcdabcdfalse"));
+  ASSERT_EQ(mv(a5) + false, LITERAL("abcdabcdabcdabcdabcdabcdabcdabcdabcdfalse"));
 
   ASSERT_EQ(S{} + true, LITERAL("true"));
   ASSERT_EQ(S{LITERAL("abcd")} + true, LITERAL("abcdtrue"));
@@ -1631,11 +1634,11 @@ TEST(STRING_TEST_GROUP, operatorPlusInt) {
   ASSERT_EQ(1234 + a4, LITERAL("1234abcdabcdabcdabcdabcdabcd"));
   ASSERT_EQ(1234 + a5, LITERAL("1234abcdabcdabcdabcdabcdabcdabcdabcdabcd"));
 
-  ASSERT_EQ(cds::move(a1) + 1234, LITERAL("1234"));
-  ASSERT_EQ(cds::move(a2) + 1234, LITERAL("abcd1234"));
-  ASSERT_EQ(cds::move(a3) + 1234, LITERAL("abcdabcdabcdabcdabcdab1234"));
-  ASSERT_EQ(cds::move(a4) + 1234, LITERAL("abcdabcdabcdabcdabcdabcd1234"));
-  ASSERT_EQ(cds::move(a5) + 1234, LITERAL("abcdabcdabcdabcdabcdabcdabcdabcdabcd1234"));
+  ASSERT_EQ(mv(a1) + 1234, LITERAL("1234"));
+  ASSERT_EQ(mv(a2) + 1234, LITERAL("abcd1234"));
+  ASSERT_EQ(mv(a3) + 1234, LITERAL("abcdabcdabcdabcdabcdab1234"));
+  ASSERT_EQ(mv(a4) + 1234, LITERAL("abcdabcdabcdabcdabcdabcd1234"));
+  ASSERT_EQ(mv(a5) + 1234, LITERAL("abcdabcdabcdabcdabcdabcdabcdabcdabcd1234"));
 
   ASSERT_EQ(S{} + 1234, LITERAL("1234"));
   ASSERT_EQ(S{LITERAL("abcd")} + 1234, LITERAL("abcd1234"));
@@ -1663,11 +1666,11 @@ TEST(STRING_TEST_GROUP, operatorPlusFloating) {
   ASSERT_EQ(1.5 + a4, LITERAL("1.500000abcdabcdabcdabcdabcdabcd"));
   ASSERT_EQ(1.5 + a5, LITERAL("1.500000abcdabcdabcdabcdabcdabcdabcdabcdabcd"));
 
-  ASSERT_EQ(cds::move(a1) + 1.5, LITERAL("1.500000"));
-  ASSERT_EQ(cds::move(a2) + 1.5, LITERAL("abcd1.500000"));
-  ASSERT_EQ(cds::move(a3) + 1.5, LITERAL("abcdabcdabcdabcdabcdab1.500000"));
-  ASSERT_EQ(cds::move(a4) + 1.5, LITERAL("abcdabcdabcdabcdabcdabcd1.500000"));
-  ASSERT_EQ(cds::move(a5) + 1.5, LITERAL("abcdabcdabcdabcdabcdabcdabcdabcdabcd1.500000"));
+  ASSERT_EQ(mv(a1) + 1.5, LITERAL("1.500000"));
+  ASSERT_EQ(mv(a2) + 1.5, LITERAL("abcd1.500000"));
+  ASSERT_EQ(mv(a3) + 1.5, LITERAL("abcdabcdabcdabcdabcdab1.500000"));
+  ASSERT_EQ(mv(a4) + 1.5, LITERAL("abcdabcdabcdabcdabcdabcd1.500000"));
+  ASSERT_EQ(mv(a5) + 1.5, LITERAL("abcdabcdabcdabcdabcdabcdabcdabcdabcd1.500000"));
 
   ASSERT_EQ(S{} + 1.5, LITERAL("1.500000"));
   ASSERT_EQ(S{LITERAL("abcd")} + 1.5, LITERAL("abcd1.500000"));
@@ -1841,11 +1844,11 @@ consteval auto cxx20_copy_ctr(auto p, CS const& s) {
 }
 
 consteval auto cxx20_move_ctr(auto p, CS&& s) {
-  return f::invoke(p, CS{cds::move(s)});
+  return f::invoke(p, CS{mv(s)});
 }
 
 consteval auto cxx20_conv_ctr(auto p, auto&& conv) {
-  return f::invoke(p, CS{cds::forward<decltype(conv)>(conv)});
+  return f::invoke(p, CS{fwd<decltype(conv)>(conv)});
 }
 
 consteval auto cxx20_sized_ctr(auto p, cds::Size l, CHAR_TYPE f) {
@@ -1881,10 +1884,10 @@ consteval auto cxx20_move_assign(CS const& s, auto compare) {
   CS m2 = s;
   CS m3 = s;
   CS m4 = s;
-  orig1 = cds::move(m1);
-  orig2 = cds::move(m2);
-  orig3 = cds::move(m3);
-  orig4 = cds::move(m4);
+  orig1 = mv(m1);
+  orig2 = mv(m2);
+  orig3 = mv(m3);
+  orig4 = mv(m4);
   return orig1 == compare && orig2 == compare && orig3 == compare && orig4 == compare;
 }
 
@@ -1893,10 +1896,10 @@ consteval auto cxx20_conv_assign(auto&& conv, auto compare) {
   CS orig2 = LITERAL("ab");
   CS orig3 = LITERAL("abcdabcdabcdabcd");
   CS orig4 = LITERAL("abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd");
-  orig1 = cds::forward<decltype(conv)>(conv);
-  orig2 = cds::forward<decltype(conv)>(conv);
-  orig3 = cds::forward<decltype(conv)>(conv);
-  orig4 = cds::forward<decltype(conv)>(conv);
+  orig1 = fwd<decltype(conv)>(conv);
+  orig2 = fwd<decltype(conv)>(conv);
+  orig3 = fwd<decltype(conv)>(conv);
+  orig4 = fwd<decltype(conv)>(conv);
   return orig1 == compare && orig2 == compare && orig3 == compare && orig4 == compare;
 }
 
@@ -2377,23 +2380,23 @@ consteval auto cxx20_append3_int() {
 }
 
 template <typename N> constexpr auto cxx14_elevated_cxx20_ltrim(CS sv, N&& n) {
-  return CS{sv.ltrim(cds::forward<N>(n))};
+  return CS{sv.ltrim(fwd<N>(n))};
 }
 
 template <typename N> constexpr auto cxx14_elevated_cxx20_rtrim(CS sv, N&& n) {
-  return CS{sv.rtrim(cds::forward<N>(n))};
+  return CS{sv.rtrim(fwd<N>(n))};
 }
 
 template <typename N> constexpr auto cxx14_elevated_cxx20_trim(CS sv, N&& n) {
-  return CS{sv.trim(cds::forward<N>(n))};
+  return CS{sv.trim(fwd<N>(n))};
 }
 
 template <typename N> constexpr auto cxx14_elevated_cxx20_removePrefix(CS sv, N&& n) {
-  return CS{sv.removePrefix(cds::forward<N>(n))};
+  return CS{sv.removePrefix(fwd<N>(n))};
 }
 
 template <typename N> constexpr auto cxx14_elevated_cxx20_removeSuffix(CS sv, N&& n) {
-  return CS{sv.removeSuffix(cds::forward<N>(n))};
+  return CS{sv.removeSuffix(fwd<N>(n))};
 }
 } // namespace
 } // namespace cexpr

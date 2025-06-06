@@ -12,13 +12,28 @@
 #include "tuple/TupleNode.hpp"
 
 namespace cds {
-template <typename... Types> class Tuple : private impl::TupleNode<0U, Types...> {
+namespace impl {
+using meta::EnableIf;
+using meta::IsAssignable;
+using meta::StringTraits;
+
+template <typename... Types> class Tuple : private TupleNode<0U, Types...> {
   template <typename, typename> friend struct functional::Hash;
   template <typename...> friend class Tuple;
 
 public:
-  using BaseNode = impl::TupleNode<0U, Types...>;
+  using BaseNode = TupleNode<0U, Types...>;
   using BaseNode::BaseNode;
+
+  template <typename... OtherTypes, typename = EnableIf<Not<IsSame<Tuple, Tuple<OtherTypes...>>>>>
+  CDS_ATTR(2(explicit, constexpr(11))) Tuple(Tuple<OtherTypes...> const& other)
+      CDS_ATTR(noexcept(meta::IsNoexceptConstructible<BaseNode, typename Tuple<OtherTypes...>::BaseNode const&>::value))
+      : BaseNode{other} {}
+
+  template <typename... OtherTypes, typename = EnableIf<Not<IsSame<Tuple, Tuple<OtherTypes...>>>>>
+  CDS_ATTR(2(explicit, constexpr(11))) Tuple(Tuple<OtherTypes...>&& other)
+      CDS_ATTR(noexcept(meta::IsNoexceptConstructible<BaseNode, typename Tuple<OtherTypes...>::BaseNode&&>::value))
+      : BaseNode{mv(other)} {}
 
   template <Size index> CDS_ATTR(2(nodiscard, constexpr(11))) auto get() const& noexcept
       -> decltype(impl::tupleNodeGet<index>(meta::lvalue<BaseNode const>())) {
@@ -32,22 +47,22 @@ public:
 
   template <Size index> CDS_ATTR(2(nodiscard, constexpr(14))) auto get()&& noexcept
       -> decltype(impl::tupleNodeGet<index>(meta::rvalue<BaseNode>())) {
-    return impl::tupleNodeGet<index>(static_cast<BaseNode&&>(cds::move(*this)));
+    return impl::tupleNodeGet<index>(static_cast<BaseNode&&>(mv(*this)));
   }
 
   template <typename... OtherTypes>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(Tuple<OtherTypes...> const& tuple) const noexcept -> bool {
-    return static_cast<BaseNode const&>(*this) == static_cast<impl::TupleNode<0U, OtherTypes...> const&>(tuple);
+    return static_cast<BaseNode const&>(*this) == static_cast<TupleNode<0U, OtherTypes...> const&>(tuple);
   }
 
   template <typename... OtherTypes>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(Tuple<OtherTypes...> const& tuple) const noexcept -> bool {
-    return !(static_cast<BaseNode const&>(*this) == static_cast<impl::TupleNode<0U, OtherTypes...> const&>(tuple));
+    return !(static_cast<BaseNode const&>(*this) == static_cast<TupleNode<0U, OtherTypes...> const&>(tuple));
   }
 
-  template <typename C = char, typename U = impl::StringUtils<C, meta::StringTraits<C>>, typename A = Allocator<C>>
+  template <typename C = char, typename U = StringUtils<C, StringTraits<C>>, typename A = Allocator<C>>
   CDS_ATTR(2(nodiscard, constexpr(20))) auto toString(A&& alloc = A()) const CDS_ATTR(noexcept(false)) ->
-      impl::BaseString<C, U, A>;
+      BaseString<C, U, A>;
 
   template <typename... UTypes> CDS_ATTR(constexpr(14))
   auto operator=(Tuple<UTypes...> const& tuple) CDS_ATTR(noexcept(noexcept(
@@ -56,17 +71,21 @@ public:
     return static_cast<Tuple&>(BaseNode::operator=(static_cast<typename Tuple<UTypes...>::BaseNode const&>(tuple)));
   }
 
-  template <typename... UTypes, typename = meta::EnableIf<meta::IsAssignable<BaseNode, Tuple<UTypes...>&&>>>
+  template <typename... UTypes, typename = EnableIf<IsAssignable<BaseNode, Tuple<UTypes...>&&>>>
   CDS_ATTR(constexpr(14)) auto operator=(Tuple<UTypes...>&& tuple) CDS_ATTR(noexcept(noexcept(
       BaseNode::operator=(static_cast<typename Tuple<UTypes...>::BaseNode&&>(tuple))
   ))) -> Tuple& {
     return static_cast<Tuple&>(BaseNode::operator=(static_cast<typename Tuple<UTypes...>::BaseNode&&>(tuple)));
   }
 };
+} // namespace impl
+
+using impl::Tuple;
 
 namespace functional {
 template <typename... Types> struct Hash<Tuple<Types...>, void> {
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(Tuple<Types...> const& tuple) const noexcept -> Size {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(Tuple<Types...> const& tuple) const noexcept
+      -> Size {
     using BaseType = cds::impl::TupleNode<0U, Types...>;
     return cds::impl::tupleHash(static_cast<BaseType const&>(tuple));
   }
@@ -85,8 +104,8 @@ template <Size idx, typename... Types> CDS_ATTR(2(nodiscard, constexpr(14))) aut
 }
 
 template <Size idx, typename... Types> CDS_ATTR(2(nodiscard, constexpr(14))) auto get(Tuple<Types...>&& tuple)
-    noexcept -> decltype(cds::move(tuple).template get<idx>()) {
-  return cds::move(tuple).template get<idx>();
+    noexcept -> decltype(mv(tuple).template get<idx>()) {
+  return mv(tuple).template get<idx>();
 }
 
 template <typename... Types> CDS_ATTR(2(nodiscard, constexpr(14))) auto tie(Types&... args) noexcept
@@ -115,28 +134,31 @@ template <typename... Types> using Tuple = typename decayedTuple::DecayedTuple<T
 } // namespace inlayHints
 } // namespace impl
 
-template <typename... Types> CDS_ATTR(2(nodiscard, constexpr(11))) auto makeTuple(Types&&... values)
-    CDS_ATTR(noexcept(noexcept(impl::inlayHints::Tuple<Types...>(cds::forward<Types>(values)...))))
-    -> impl::inlayHints::Tuple<Types...> {
-  return impl::inlayHints::Tuple<Types...>{cds::forward<Types>(values)...};
+namespace impl {
+template <typename... Types> CDS_ATTR(2(nodiscard, constexpr(11))) auto tupleOf(Types&&... values)
+    CDS_ATTR(noexcept(noexcept(inlayHints::Tuple<Types...>(fwd<Types>(values)...))))
+    -> inlayHints::Tuple<Types...> {
+  return inlayHints::Tuple<Types...>{fwd<Types>(values)...};
 }
 
 template <> class Tuple<> {
 public:
   template <typename... Types> CDS_ATTR(2(nodiscard, constexpr(11))) static auto of(Types&&... values)
-      CDS_ATTR(noexcept(noexcept(impl::inlayHints::Tuple<Types...>(cds::forward<Types>(values)...))))
-      -> impl::inlayHints::Tuple<Types...> {
-    return impl::inlayHints::Tuple<Types...>{cds::forward<Types>(values)...};
+      CDS_ATTR(noexcept(noexcept(inlayHints::Tuple<Types...>(fwd<Types>(values)...))))
+      -> inlayHints::Tuple<Types...> {
+    return inlayHints::Tuple<Types...>{fwd<Types>(values)...};
   }
 };
-
-using impl::get;
-using impl::tie;
-using impl::forwardAsTuple;
 
 #if CDS_ATTR(ctad)
 template <typename... Ts> Tuple(Ts...) -> Tuple<Ts...>;
 #endif // #if CDS_ATTR(ctad)
+} // namespace impl
+
+using impl::get;
+using impl::tie;
+using impl::forwardAsTuple;
+using impl::tupleOf;
 } // namespace cds
 
 namespace std {

@@ -9,7 +9,7 @@ namespace impl {
 template <typename C, typename U> template <typename A>
 CDS_ATTR(2(nodiscard, constexpr(20))) auto BaseStringView<C, U>::str(A&& alloc) const CDS_ATTR(noexcept(false))
     -> BaseString<C, U, A> {
-  return {_data, _length, cds::forward<A>(alloc)};
+  return {_data, _length, fwd<A>(alloc)};
 }
 } // namespace impl
 } // namespace cds

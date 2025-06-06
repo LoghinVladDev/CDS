@@ -34,7 +34,7 @@ TEST(TrackerAllocator, Move) {
   testing::TrackerAllocator<int> ta(false);
 
   auto p = ta.allocate(64);
-  auto cta = cds::move(ta);
+  auto cta = mv(ta);
   auto p2 = cta.allocate(32);
 
   ASSERT_EQ(ta.committed(), 0 * sizeof(int));

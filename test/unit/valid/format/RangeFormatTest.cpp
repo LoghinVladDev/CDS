@@ -13,7 +13,7 @@ using cds::FormatException;
 using cds::Vector;
 
 using cds::ignore;
-using cds::makeTuple;
+using cds::tupleOf;
 using cds::impl::fwd;
 
 template <typename... Ts> auto makeVector(Ts&&... values) -> Vector<Common<Ts...>> {
@@ -30,7 +30,7 @@ TEST(RangeFormatTest, vectorFormat) {
   ASSERT_EQ("[C, A, F, E]", cds::format("{::X}", ints));
   ASSERT_EQ("_12_, _10_, _15_, _14_", cds::format("{:n:_^4}", ints));
 
-  auto charTuples = makeVector(makeTuple('A', 5), makeTuple('B', 10), makeTuple('C', 12));
+  auto charTuples = makeVector(tupleOf('A', 5), tupleOf('B', 10), tupleOf('C', 12));
   ASSERT_EQ("[(A, 5), (B, 10), (C, 12)]", cds::format("{}", charTuples));
   ASSERT_EQ("{A: 5, B: 10, C: 12}", cds::format("{:m}", charTuples));
 }

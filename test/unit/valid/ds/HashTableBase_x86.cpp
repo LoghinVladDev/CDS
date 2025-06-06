@@ -216,7 +216,7 @@ TEST(HashTableBase, moveCtr) {
   ihs.tryEmplace(59);
   ihs.tryEmplace(59*2);
 
-  auto ihsCopy = cds::move(ihs);
+  auto ihsCopy = mv(ihs);
   ASSERT_TRUE(citeq(ihsCopy, equiv));
   ASSERT_EQ(ihsCopy.bucketCount(), 59);
   ASSERT_TRUE(ihs.empty());
@@ -239,8 +239,8 @@ TEST(HashTableBase, move) {
   ihs.tryEmplace(59*2);
 
   auto ihsCopy = DefaultHashTable<int, int, Identity<>>();
-  ihsCopy.move(cds::move(ihs));
-  ihsCopy.move(cds::move(ihsCopy));
+  ihsCopy.move(mv(ihs));
+  ihsCopy.move(mv(ihsCopy));
   ASSERT_TRUE(citeq(ihsCopy, equiv));
   ASSERT_EQ(ihsCopy.bucketCount(), 59);
   ASSERT_TRUE(ihs.empty());

@@ -20,188 +20,141 @@ using meta::SentinelFor;
 template <typename, typename = void> class GenericLoopStaticBinding {};
 
 template <typename I> class GenericLoopStaticBinding<I> {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto refl() noexcept -> I& {
+    return *static_cast<I*>(this);
+  }
+  
   using Iterator = typename IterableTraits<I>::Iterator;
   using Sentinel = SentinelFor<Iterator>;
+
 public:
-  template <typename C> CDS_ATTR(2(nodiscard, constexpr(14))) auto forEach(C&& consumer) CDS_ATTR(noexcept(
-      noexcept(impl::forEach(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<C>(consumer)))
-  )) -> decltype(impl::forEach(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<C>(consumer))) {
-    return impl::forEach(
-        cds::begin(*static_cast<I*>(this)), cds::end(*static_cast<I*>(this)), cds::forward<C>(consumer)
-    );
+  template <typename C> CDS_ATTR(2(nodiscard, constexpr(14))) auto forEach(C&& consumer)
+      CDS_ATTR(noexcept(noexcept(impl::forEach(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<C>(consumer)))))
+      -> decltype(impl::forEach(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<C>(consumer))) {
+    return impl::forEach(cds::begin(refl()), cds::end(refl()), fwd<C>(consumer));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto some(Size count, P&& predicate) CDS_ATTR(noexcept(
-      noexcept(impl::some(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate)))
-  )) -> decltype(impl::some(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))) {
-    return impl::some(
-        cds::begin(*static_cast<I*>(this)), cds::end(*static_cast<I*>(this)), count, cds::forward<P>(predicate)
-    );
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto some(Size count, P&& predicate)
+      CDS_ATTR(noexcept(noexcept(impl::some(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate)))))
+      -> decltype(impl::some(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate))) {
+    return impl::some(cds::begin(refl()), cds::end(refl()), count, fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto atLeast(Size count, P&& predicate) CDS_ATTR(noexcept(
-      noexcept(impl::atLeast(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate)))
-  )) -> decltype(impl::atLeast(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))) {
-    return impl::atLeast(
-        cds::begin(*static_cast<I*>(this)), cds::end(*static_cast<I*>(this)), count, cds::forward<P>(predicate)
-    );
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto atLeast(Size count, P&& predicate)
+      CDS_ATTR(noexcept(noexcept(impl::atLeast(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate)))))
+      -> decltype(impl::atLeast(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate))) {
+    return impl::atLeast(cds::begin(refl()), cds::end(refl()), count, fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto atMost(Size count, P&& predicate) CDS_ATTR(noexcept(
-      noexcept(impl::atMost(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate)))
-  )) -> decltype(impl::atMost(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))) {
-    return impl::atMost(
-        cds::begin(*static_cast<I*>(this)), cds::end(*static_cast<I*>(this)), count, cds::forward<P>(predicate)
-    );
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto atMost(Size count, P&& predicate)
+      CDS_ATTR(noexcept(noexcept(impl::atMost(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate)))))
+      -> decltype(impl::atMost(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate))) {
+    return impl::atMost(cds::begin(refl()), cds::end(refl()), count, fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto moreThan(Size count, P&& predicate) CDS_ATTR(
-      noexcept(noexcept(impl::moreThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))))
-  ) -> decltype(impl::moreThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))) {
-    return impl::moreThan(
-        cds::begin(*static_cast<I*>(this)), cds::end(*static_cast<I*>(this)), count, cds::forward<P>(predicate)
-    );
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto moreThan(Size count, P&& predicate)
+      CDS_ATTR(noexcept(noexcept(impl::moreThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate)))))
+      -> decltype(impl::moreThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate))) {
+    return impl::moreThan(cds::begin(refl()), cds::end(refl()), count, fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto lessThan(Size count, P&& predicate) CDS_ATTR(
-      noexcept(noexcept(impl::lessThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))))
-  ) -> decltype(impl::lessThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))) {
-    return impl::lessThan(
-        cds::begin(*static_cast<I*>(this)), cds::end(*static_cast<I*>(this)), count, cds::forward<P>(predicate)
-    );
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto lessThan(Size count, P&& predicate)
+      CDS_ATTR(noexcept(noexcept(impl::lessThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate)))))
+      -> decltype(impl::lessThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate))) {
+    return impl::lessThan(cds::begin(refl()), cds::end(refl()), count, fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto count(P&& predicate) CDS_ATTR(noexcept(
-      noexcept(impl::count(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate)))
-  )) -> decltype(impl::count(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate))) {
-    return impl::count(
-        cds::begin(*static_cast<I*>(this)), cds::end(*static_cast<I*>(this)), cds::forward<P>(predicate)
-    );
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto count(P&& predicate)
+      CDS_ATTR(noexcept(noexcept(impl::count(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate)))))
+      -> decltype(impl::count(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate))) {
+    return impl::count(cds::begin(refl()), cds::end(refl()), fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto any(P&& predicate) CDS_ATTR(noexcept(
-      noexcept(impl::any(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate)))
-  )) -> decltype(impl::any(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate))) {
-    return impl::any(cds::begin(*static_cast<I*>(this)), cds::end(*static_cast<I*>(this)), cds::forward<P>(predicate));
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto any(P&& predicate)
+      CDS_ATTR(noexcept(noexcept(impl::any(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate)))))
+      -> decltype(impl::any(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate))) {
+    return impl::any(cds::begin(refl()), cds::end(refl()), fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto all(P&& predicate) CDS_ATTR(noexcept(
-      noexcept(impl::all(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate)))
-  )) -> decltype(impl::all(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate))) {
-    return impl::all(cds::begin(*static_cast<I*>(this)), cds::end(*static_cast<I*>(this)), cds::forward<P>(predicate));
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto all(P&& predicate)
+      CDS_ATTR(noexcept(noexcept(impl::all(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate)))))
+      -> decltype(impl::all(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate))) {
+    return impl::all(cds::begin(refl()), cds::end(refl()), fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto none(P&& predicate) CDS_ATTR(noexcept(
-      noexcept(impl::none(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate)))
-  )) -> decltype(impl::none(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate))) {
-    return impl::none(cds::begin(*static_cast<I*>(this)), cds::end(*static_cast<I*>(this)), cds::forward<P>(predicate));
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto none(P&& predicate)
+      CDS_ATTR(noexcept(noexcept(impl::none(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate)))))
+      -> decltype(impl::none(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate))) {
+    return impl::none(cds::begin(refl()), cds::end(refl()), fwd<P>(predicate));
   }
 };
 
 template <typename I> class GenericLoopStaticBinding<I const> {
-    using Iterator = typename IterableTraits<I>::ConstIterator;
-    using Sentinel = SentinelFor<Iterator>;
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto refl() const noexcept -> I const& {
+    return *static_cast<I const*>(this);
+  }
+
+  using Iterator = typename IterableTraits<I>::ConstIterator;
+  using Sentinel = SentinelFor<Iterator>;
 public:
-  template <typename C> CDS_ATTR(2(nodiscard, constexpr(14))) auto forEach(C&& consumer) const CDS_ATTR(noexcept(
-      noexcept(impl::forEach(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<C>(consumer)))
-  )) -> decltype(impl::forEach(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<C>(consumer))) {
-    return impl::forEach(
-        cds::begin(*static_cast<I const*>(this)), cds::end(*static_cast<I const*>(this)), cds::forward<C>(consumer)
-    );
+  template <typename C> CDS_ATTR(2(nodiscard, constexpr(14))) auto forEach(C&& consumer) const
+      CDS_ATTR(noexcept(noexcept(impl::forEach(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<C>(consumer)))))
+      -> decltype(impl::forEach(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<C>(consumer))) {
+    return impl::forEach(cds::begin(refl()), cds::end(refl()), fwd<C>(consumer));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14)))
-  auto some(Size count, P&& predicate) const CDS_ATTR(noexcept(noexcept(
-      impl::some(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))
-  ))) -> decltype(impl::some(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))) {
-    return impl::some(
-        cds::begin(*static_cast<I const*>(this)), cds::end(*static_cast<I const*>(this)),
-        count, cds::forward<P>(predicate)
-    );
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto some(Size count, P&& predicate) const
+      CDS_ATTR(noexcept(noexcept(impl::some(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate)))))
+      -> decltype(impl::some(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate))) {
+    return impl::some(cds::begin(refl()), cds::end(refl()), count, fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14)))
-  auto atLeast(Size count, P&& predicate) const CDS_ATTR(noexcept(noexcept(
-      impl::atLeast(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))
-  ))) -> decltype(
-      impl::atLeast(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))
-  ) {
-    return impl::atLeast(
-        cds::begin(*static_cast<I const*>(this)), cds::end(*static_cast<I const*>(this)),
-        count, cds::forward<P>(predicate)
-    );
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto atLeast(Size count, P&& predicate) const
+      CDS_ATTR(noexcept(noexcept(impl::atLeast(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate)))))
+      -> decltype(impl::atLeast(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate))) {
+    return impl::atLeast(cds::begin(refl()), cds::end(refl()), count, fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14)))
-  auto atMost(Size count, P&& predicate) const CDS_ATTR(noexcept(noexcept(
-      impl::atMost(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))
-  ))) -> decltype(
-      impl::atMost(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))
-  ) {
-    return impl::atMost(
-        cds::begin(*static_cast<I const*>(this)), cds::end(*static_cast<I const*>(this)),
-        count, cds::forward<P>(predicate)
-    );
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto atMost(Size count, P&& predicate) const
+      CDS_ATTR(noexcept(noexcept(impl::atMost(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate)))))
+      -> decltype(impl::atMost(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate))) {
+    return impl::atMost(cds::begin(refl()), cds::end(refl()), count, fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14)))
-  auto moreThan(Size count, P&& predicate) const CDS_ATTR(noexcept(noexcept(
-      impl::moreThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))
-  ))) -> decltype(
-      impl::moreThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))
-  ) {
-    return impl::moreThan(
-        cds::begin(*static_cast<I const*>(this)), cds::end(*static_cast<I const*>(this)),
-        count, cds::forward<P>(predicate)
-    );
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto moreThan(Size count, P&& predicate) const
+      CDS_ATTR(noexcept(noexcept(impl::moreThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate)))))
+      -> decltype(impl::moreThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate))) {
+    return impl::moreThan(cds::begin(refl()), cds::end(refl()), count, fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14)))
-  auto lessThan(Size count, P&& predicate) const CDS_ATTR(noexcept(noexcept(
-      impl::lessThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))
-  ))) -> decltype(
-      impl::lessThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, cds::forward<P>(predicate))
-  ) {
-    return impl::lessThan(
-        cds::begin(*static_cast<I const*>(this)), cds::end(*static_cast<I const*>(this)),
-        count, cds::forward<P>(predicate)
-    );
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto lessThan(Size count, P&& predicate) const
+      CDS_ATTR(noexcept(noexcept(impl::lessThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate)))))
+      -> decltype(impl::lessThan(rvalue<Iterator>(), rvalue<Sentinel>(), count, fwd<P>(predicate))) {
+    return impl::lessThan(cds::begin(refl()), cds::end(refl()), count, fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto count(P&& predicate) const CDS_ATTR(noexcept(
-      noexcept(impl::count(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate)))
-  )) -> decltype(impl::count(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate))) {
-    return impl::count(
-        cds::begin(*static_cast<I const*>(this)), cds::end(*static_cast<I const*>(this)),
-        cds::forward<P>(predicate)
-    );
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto count(P&& predicate) const
+      CDS_ATTR(noexcept(noexcept(impl::count(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate)))))
+      -> decltype(impl::count(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate))) {
+    return impl::count(cds::begin(refl()), cds::end(refl()), fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto any(P&& predicate) const CDS_ATTR(noexcept(
-      noexcept(impl::any(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate)))
-  )) -> decltype(impl::any(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate))) {
-    return impl::any(
-        cds::begin(*static_cast<I const*>(this)),
-        cds::end(*static_cast<I const*>(this)), cds::forward<P>(predicate)
-    );
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto any(P&& predicate) const
+      CDS_ATTR(noexcept(noexcept(impl::any(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate)))))
+      -> decltype(impl::any(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate))) {
+    return impl::any(cds::begin(refl()), cds::end(refl()), fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto all(P&& predicate) const CDS_ATTR(noexcept(
-      noexcept(impl::all(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate)))
-  )) -> decltype(impl::all(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate))) {
-    return impl::all(
-        cds::begin(*static_cast<I const*>(this)), cds::end(*static_cast<I const*>(this)),
-        cds::forward<P>(predicate)
-    );
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto all(P&& predicate) const
+      CDS_ATTR(noexcept(noexcept(impl::all(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate)))))
+      -> decltype(impl::all(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate))) {
+    return impl::all(cds::begin(refl()), cds::end(refl()), fwd<P>(predicate));
   }
 
-  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto none(P&& predicate) const CDS_ATTR(noexcept(
-      noexcept(impl::none(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate)))
-  )) -> decltype(impl::none(rvalue<Iterator>(), rvalue<Sentinel>(), cds::forward<P>(predicate))) {
-    return impl::none(
-        cds::begin(*static_cast<I const*>(this)), cds::end(*static_cast<I const*>(this)),
-        cds::forward<P>(predicate)
-    );
+  template <typename P> CDS_ATTR(2(nodiscard, constexpr(14))) auto none(P&& predicate) const
+      CDS_ATTR(noexcept(noexcept(impl::none(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate)))))
+      -> decltype(impl::none(rvalue<Iterator>(), rvalue<Sentinel>(), fwd<P>(predicate))) {
+    return impl::none(cds::begin(refl()), cds::end(refl()), fwd<P>(predicate));
   }
 };
 

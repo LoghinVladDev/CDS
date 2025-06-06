@@ -11,7 +11,7 @@
 namespace cds {
 namespace meta {
 namespace impl {
-template <typename CanCopy, typename CanMove> struct SfinaeCtorBase {};
+template <typename /* CanCopy */, typename /* CanMove */> struct SfinaeCtorBase {};
 
 template <> struct SfinaeCtorBase<False::Type, False::Type> {
   SfinaeCtorBase() = default;
@@ -45,7 +45,7 @@ template <> struct SfinaeCtorBase<True::Type, True::Type> {
   auto operator=(SfinaeCtorBase&&) -> SfinaeCtorBase& = default;
 };
 
-template <typename CanCopy, typename CanMove> struct SfinaeAssignBase {};
+template <typename /* CanCopy */, typename /* CanMove */> struct SfinaeAssignBase {};
 
 template <> struct SfinaeAssignBase<False::Type, False::Type> {
   SfinaeAssignBase() = default;

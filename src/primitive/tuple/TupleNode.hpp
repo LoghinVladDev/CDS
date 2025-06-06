@@ -7,7 +7,8 @@
 #pragma once
 
 #include <cds/meta/Semantics>
-#include <cds/Utility>
+
+#include "../../meta/Ignore.hpp"
 
 namespace cds {
 namespace impl {
@@ -22,10 +23,14 @@ using meta::AddConst;
 using meta::AddLValRef;
 using meta::Bool;
 using meta::And;
+using meta::Not;
+using meta::IsSame;
 using meta::IsEqCompatible;
+using meta::IsNoexceptConstructible;
 using meta::ReturnIf;
 using meta::All;
 using meta::IsNoexceptDefaultConstructible;
+using meta::lvalue;
 
 template <Size idx, typename...> struct TupleNode {
   template <typename... Types> CDS_ATTR(constexpr(14))
@@ -52,23 +57,46 @@ template <Size idx, typename T, typename... R> struct TupleNode<idx, T, R...> : 
   using Data = T;
   using NextNode = TupleNode<idx + 1u, R...>;
 
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto upper() const noexcept -> NextNode const& {
+    return *static_cast<NextNode const*>(this);
+  }
+
   CDS_ATTR(constexpr(11)) TupleNode() CDS_ATTR(noexcept(All<IsNoexceptDefaultConstructible, T, R...>::value)) = default;
 
   template <typename Arg, typename... Args, typename = EnableIf<Bool<
       IsConstructible<T, Arg>::value && IsConstructible<NextNode, Args...>::value
   >>> CDS_ATTR(2(implicit, constexpr(11))) TupleNode(Arg&& param, Args&&... remaining) CDS_ATTR(noexcept(
-      noexcept(NextNode(cds::forward<Args>(remaining)...))
-      && noexcept(T(cds::forward<Arg>(param)))
+      noexcept(NextNode(fwd<Args>(remaining)...))
+      && noexcept(T(fwd<Arg>(param)))
   )) :
-      NextNode(cds::forward<Args>(remaining)...),
-      _nodeData(cds::forward<Arg>(param)) {}
+      NextNode(fwd<Args>(remaining)...),
+      _nodeData(fwd<Arg>(param)) {}
+
+  template <typename OT, typename... OR, typename = EnableIf<Not<IsSame<TupleNode, TupleNode<idx, OT, OR...>>>>>
+  CDS_ATTR(2(explicit, constexpr(11))) TupleNode(
+      TupleNode<idx, OT, OR...> const& other
+  ) CDS_ATTR(noexcept(
+      IsNoexceptConstructible<Data, OT const&>::value
+      && IsNoexceptConstructible<NextNode, typename TupleNode<idx, OT, OR...>::NextNode const&>::value
+  )) :
+      NextNode{static_cast<typename TupleNode<idx, OT, OR...>::NextNode const&>(other)},
+      _nodeData{other._nodeData} {}
+
+  template <typename OT, typename... OR, typename = EnableIf<Not<IsSame<TupleNode, TupleNode<idx, OT, OR...>>>>>
+  CDS_ATTR(2(explicit, constexpr(11))) TupleNode(
+      TupleNode<idx, OT, OR...>&& other
+  ) CDS_ATTR(noexcept(
+      IsNoexceptConstructible<Data, OT&&>::value
+      && IsNoexceptConstructible<NextNode, typename TupleNode<idx, OT, OR...>::NextNode&&>::value
+  )) :
+      NextNode{static_cast<typename TupleNode<idx, OT, OR...>::NextNode&&>(other)},
+      _nodeData{mv(other._nodeData)} {}
 
   template <Size oIdx, typename OT, typename... OR> CDS_ATTR(2(nodiscard, constexpr(11)))
   auto operator==(TupleNode<oIdx, OT, OR...> const& other) const noexcept
       -> ReturnIf<bool, And<Bool<oIdx == idx>, IsEqCompatible<T, OT>, Bool<sizeof...(R) == sizeof...(OR)>>> {
     return _nodeData == other._nodeData
-        && static_cast<NextNode const&>(*this)
-            == static_cast<typename TupleNode<oIdx, OT, OR...>::NextNode const&>(other);
+        && upper() == other.upper();
   }
 
   template <typename... UTypes> CDS_ATTR(constexpr(14))
@@ -144,7 +172,7 @@ template <Size requestedIndex, Size nodeIdx, typename... Types> CDS_ATTR(2(nodis
 template <Size requestedIndex, Size nodeIdx, typename... Types> CDS_ATTR(2(nodiscard, constexpr(11))) auto tupleNodeGet(
     TupleNode<nodeIdx, Types...>&& node
 ) noexcept -> TargetData<requestedIndex, TupleNode<nodeIdx, Types...>> {
-  return static_cast<TargetNode<requestedIndex, TupleNode<nodeIdx, Types...>>&&>(cds::move(node))._nodeData;
+  return static_cast<TargetNode<requestedIndex, TupleNode<nodeIdx, Types...>>&&>(mv(node))._nodeData;
 }
 
 template <Size idx> CDS_ATTR(2(nodiscard, constexpr(11)))

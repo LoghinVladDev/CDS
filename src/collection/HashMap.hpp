@@ -13,18 +13,13 @@
 #include "../ds/hashTable/HashTableBase.hpp"
 #include "../ds/map/MapBase.hpp"
 #include "../ds/map/MapEntry.hpp"
+#include "hashMap/HashMapAllocator.hpp"
 #include "hashMap/HashMapBase.hpp"
 
 namespace cds {
 namespace impl {
 using functional::Equal;
 using functional::Hash;
-
-template <typename K, typename V> using HashMapNode = FwdNode<MapEntry<K, V>>;
-template <typename K, typename V> using HashMapNodeAllocator = Allocator<HashMapNode<K, V>>;
-template <typename K, typename V> using HashMapBucketAllocator = Allocator<HashMapNode<K, V>*>;
-template <typename K, typename V> using HashMapAllocator =
-    AllocatorSet<HashMapNodeAllocator<K, V>, HashMapBucketAllocator<K, V>>;
 
 template <typename K, typename V, typename H = Hash<>, typename E = Equal<>, typename A = HashMapAllocator<K, V>>
 class HashMap : public BaseMap<K, V, BaseHashMap<K, V, H, E, A>> {
@@ -37,5 +32,7 @@ public:
 
 using impl::HashMap;
 } // namespace cds
+
+#include "../format/HashMapFormatter.hpp"
 
 #endif // CDS_COLLECTION_HASH_MAP_HPP

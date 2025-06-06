@@ -7,7 +7,11 @@
 #pragma once
 
 #include "../meta/Extension.hpp"
+#include "../meta/Ignore.hpp"
+
 #include "../iterator/Iterator.hpp"
+
+#include <cds/functional/Invoke>
 
 #if CDS_ATTR(sentinel)
 #include <cds/iterator/Sentinel>
@@ -23,24 +27,11 @@ namespace impl {
 using meta::lvalue;
 using meta::rvalue;
 
+namespace fn = cds::functional;
+
 #if CDS_ATTR(sentinel)
 using iterator::Sentinel;
 #endif // CDS_ATTR(sentinel)
-
-template <typename = void> struct FindResultTransformer {
-  template <typename IB, typename IE, typename I> CDS_ATTR(2(nodiscard, constexpr(11)))
-  auto operator()(CDS_ATTR(unused) IB&& b, CDS_ATTR(unused) IE&& e, I&& i) const noexcept
-      -> decltype(*rvalue<I>()) {
-    return *cds::forward<I>(i);
-  }
-};
-
-template <typename = void> struct FindPreserveTransformer {
-  template <typename IB, typename IE, typename I> CDS_ATTR(2(nodiscard, constexpr(11)))
-  auto operator()(CDS_ATTR(unused) IB&& b, CDS_ATTR(unused) IE&& e, I&& i) const noexcept -> I {
-    return cds::forward<I>(i);
-  }
-};
 
 template <typename I, typename V, typename E, typename T> class FindIterator {
 public:
@@ -51,7 +42,7 @@ public:
 
   template <typename RI, typename RSI> CDS_ATTR(constexpr(14)) FindIterator(RI&& b, RSI&& e, V const& v)
       CDS_ATTR(noexcept(noexcept(filter()))) :
-      _i(cds::forward<RI>(b)), _b(cds::forward<RI>(b)), _e(cds::forward<RSI>(e)), _v(v) {
+      _i(fwd<RI>(b)), _b(fwd<RI>(b)), _e(fwd<RSI>(e)), _v(v) {
     filter();
   }
 
@@ -59,38 +50,20 @@ public:
       _i(it._i), _b(it._b), _e(it._e), _v(it._v) {}
 
   CDS_ATTR(constexpr(14)) FindIterator(FindIterator&& it) noexcept :
-      _i(cds::move(it._i)), _b(it._b), _e(it._e), _v(it._v) {}
+      _i(mv(it._i)), _b(it._b), _e(it._e), _v(it._v) {}
 
   CDS_ATTR(constexpr(20)) ~FindIterator() noexcept = default;
 
   CDS_ATTR(constexpr(14)) auto operator++() CDS_ATTR(noexcept(noexcept(filter()))) -> FindIterator& {
-    (void) ++_i;
+    ignore = ++_i;
     filter();
     return *this;
   }
 
-#if CDS_ATTR(sentinel)
-  template <typename FI, typename FV, typename FE, typename FT>
-  CDS_ATTR(constexpr(11)) friend auto operator==(FindIterator<FI, FV, FE, FT> const& obj, Sentinel)
-      CDS_ATTR(friend_noexcept(noexcept(rvalue<FI>() == rvalue<FI>()))) -> bool;
-
-  template <typename FI, typename FV, typename FE, typename FT>
-  CDS_ATTR(constexpr(11)) friend auto operator!=(FindIterator<FI, FV, FE, FT> const& obj, Sentinel)
-      CDS_ATTR(friend_noexcept(noexcept(rvalue<FI>() != rvalue<FI>()))) -> bool;
-#endif // #if CDS_ATTR(sentinel)
-
-  template <typename FI, typename FV, typename FE, typename FT> CDS_ATTR(constexpr(11))
-  friend auto operator==(FindIterator<FI, FV, FE, FT> const& lhs, FindIterator<FI, FV, FE, FT> const& rhs)
-      CDS_ATTR(friend_noexcept(noexcept(rvalue<FI>() == rvalue<FI>()))) -> bool;
-
-  template <typename FI, typename FV, typename FE, typename FT> CDS_ATTR(constexpr(11))
-  friend auto operator!=(FindIterator<FI, FV, FE, FT> const& lhs, FindIterator<FI, FV, FE, FT> const& rhs)
-      CDS_ATTR(friend_noexcept(noexcept(rvalue<FI>() != rvalue<FI>()))) -> bool;
-
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator*() const
-      CDS_ATTR(noexcept(noexcept(rvalue<T>()(rvalue<I>(), rvalue<I>(), rvalue<I>()))))
-      -> decltype(rvalue<T>()(rvalue<I>(), rvalue<I>(), rvalue<I>())) {
-    return T()(_b, _e, _i);
+      CDS_ATTR(noexcept(noexcept(fn::invoke(T{}, rvalue<I>(), rvalue<I>(), rvalue<I>()))))
+      -> decltype(fn::invoke(T{}, rvalue<I>(), rvalue<I>(), rvalue<I>())) {
+    return fn::invoke(T{}, _b, _e, _i);
   }
 
   CDS_ATTR(constexpr(14)) auto operator=(FindIterator const& iterator)
@@ -108,15 +81,26 @@ public:
       return *this;
     }
 
-    _i = cds::move(iterator._i);
+    _i = mv(iterator._i);
     return *this;
   }
 
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto iterator() const noexcept -> I const& {
+    return _i;
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto end() const noexcept -> I const& {
+    return _e;
+  }
+
 private:
-  CDS_ATTR(constexpr(14)) auto filter()
-      CDS_ATTR(noexcept(noexcept(++lvalue<I>()) && noexcept(_i != _e) && noexcept(rvalue<E>()(_v, *_i)))) -> void {
+  CDS_ATTR(constexpr(14)) auto filter() CDS_ATTR(noexcept(
+      noexcept(++lvalue<I>())
+      && noexcept(_i != _e)
+      && noexcept(fn::invoke(E{}, _v, *_i))
+  )) -> void {
     E const equal;
-    while (_i != _e && !equal(_v, *_i)) {
+    while (_i != _e && !fn::invoke(equal, _v, *_i)) {
       ++_i;
     }
   }
@@ -130,27 +114,27 @@ private:
 #if CDS_ATTR(sentinel)
 template <typename I, typename V, typename E, typename T>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(FindIterator<I, V, E, T> const& obj, Sentinel)
-    CDS_ATTR(friend_noexcept(noexcept(rvalue<I>() == rvalue<I>()))) -> bool {
-  return obj._i == obj._e;
+    CDS_ATTR(noexcept(noexcept(rvalue<I>() == rvalue<I>()))) -> bool {
+  return obj.iterator() == obj.end();
 }
 
 template <typename I, typename V, typename E, typename T>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(FindIterator<I, V, E, T> const& obj, Sentinel)
-    CDS_ATTR(friend_noexcept(noexcept(rvalue<I>() != rvalue<I>()))) -> bool {
-  return obj._i != obj._e;
+    CDS_ATTR(noexcept(noexcept(rvalue<I>() != rvalue<I>()))) -> bool {
+  return obj.iterator() != obj.end();
 }
 #endif // #if CDS_ATTR(sentinel)
 
 template <typename FI, typename FV, typename FE, typename FT> CDS_ATTR(constexpr(11))
 auto operator==(FindIterator<FI, FV, FE, FT> const& lhs, FindIterator<FI, FV, FE, FT> const& rhs)
-    CDS_ATTR(friend_noexcept(noexcept(rvalue<FI>() == rvalue<FI>()))) -> bool {
-  return lhs._i == rhs._i;
+    CDS_ATTR(noexcept(noexcept(rvalue<FI>() == rvalue<FI>()))) -> bool {
+  return lhs.iterator() == rhs.iterator();
 }
 
 template <typename FI, typename FV, typename FE, typename FT> CDS_ATTR(constexpr(11))
 auto operator!=(FindIterator<FI, FV, FE, FT> const& lhs, FindIterator<FI, FV, FE, FT> const& rhs)
-    CDS_ATTR(friend_noexcept(noexcept(rvalue<FI>() != rvalue<FI>()))) -> bool {
-  return lhs._i != rhs._i;
+    CDS_ATTR(noexcept(noexcept(rvalue<FI>() != rvalue<FI>()))) -> bool {
+  return lhs.iterator() != rhs.iterator();
 }
 
 template <typename I, typename V, typename P, typename E, typename T> class FindProjectIterator {
@@ -163,12 +147,12 @@ public:
   template <typename RI, typename RSI> CDS_ATTR(constexpr(14))
   FindProjectIterator(RI&& b, RSI&& e, V const& v, P const& s)
       CDS_ATTR(noexcept(noexcept(filter()))) :
-      _i(cds::forward<RI>(b)), _b(cds::forward<RI>(b)), _e(cds::forward<RSI>(e)), _p(s), _v(v) {
+      _i(fwd<RI>(b)), _b(fwd<RI>(b)), _e(fwd<RSI>(e)), _p(s), _v(v) {
     filter();
   }
 
   CDS_ATTR(constexpr(14)) auto operator++() CDS_ATTR(noexcept(noexcept(filter()))) -> FindProjectIterator& {
-    (void) ++_i;
+    ignore = ++_i;
     filter();
     return *this;
   }
@@ -177,34 +161,14 @@ public:
       _i(it._i), _b(it._b), _e(it._e), _p(it._p), _v(it._v) {}
 
   CDS_ATTR(constexpr(14)) FindProjectIterator(FindProjectIterator&& it)
-      noexcept : _i(cds::move(it._i)), _b(it._b), _e(it._e), _p(it._p), _v(it._v) {}
+      noexcept : _i(mv(it._i)), _b(it._b), _e(it._e), _p(it._p), _v(it._v) {}
 
   CDS_ATTR(constexpr(20)) ~FindProjectIterator() noexcept = default;
 
-#if CDS_ATTR(sentinel)
-  template <typename FI, typename FV, typename FP, typename FE, typename FT>
-  CDS_ATTR(constexpr(11)) friend auto operator==(FindProjectIterator<FI, FV, FP, FE, FT> const& obj, Sentinel)
-    CDS_ATTR(friend_noexcept(noexcept(rvalue<FI>() == rvalue<FI>()))) -> bool;
-
-  template <typename FI, typename FV, typename FP, typename FE, typename FT>
-  CDS_ATTR(constexpr(11)) friend auto operator!=(FindProjectIterator<FI, FV, FP, FE, FT> const& obj, Sentinel)
-    CDS_ATTR(friend_noexcept(noexcept(rvalue<FI>() != rvalue<FI>()))) -> bool;
-#endif // #if CDS_ATTR(sentinel)
-
-  template <typename FI, typename FV, typename FP, typename FE, typename FT> CDS_ATTR(constexpr(11))
-  friend auto operator==(
-      FindProjectIterator<FI, FV, FP, FE, FT> const& lhs, FindProjectIterator<FI, FV, FP, FE, FT> const& rhs
-  ) CDS_ATTR(friend_noexcept(noexcept(rvalue<FI>() == rvalue<FI>()))) -> bool;
-
-  template <typename FI, typename FV, typename FP, typename FE, typename FT> CDS_ATTR(constexpr(11))
-  friend auto operator!=(
-      FindProjectIterator<FI, FV, FP, FE, FT> const& lhs, FindProjectIterator<FI, FV, FP, FE, FT> const& rhs
-  ) CDS_ATTR(friend_noexcept(noexcept(rvalue<FI>() == rvalue<FI>()))) -> bool;
-
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator*() const
-      CDS_ATTR(noexcept(noexcept(rvalue<T>()(rvalue<I>(), rvalue<I>(), rvalue<I>()))))
-      -> decltype(rvalue<T>()(rvalue<I>(), rvalue<I>(), rvalue<I>())) {
-    return T()(_b, _e, _i);
+      CDS_ATTR(noexcept(noexcept(fn::invoke(T{}, rvalue<I>(), rvalue<I>(), rvalue<I>()))))
+      -> decltype(fn::invoke(T{}, rvalue<I>(), rvalue<I>(), rvalue<I>())) {
+    return fn::invoke(T{}, _b, _e, _i);
   }
 
   CDS_ATTR(constexpr(14)) auto operator=(FindProjectIterator const& iterator)
@@ -222,15 +186,26 @@ public:
       return *this;
     }
 
-    _i = cds::move(iterator._i);
+    _i = mv(iterator._i);
     return *this;
   }
 
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto iterator() const noexcept -> I const& {
+    return _i;
+  }
+
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto end() const noexcept -> I const& {
+    return _e;
+  }
+
 private:
-  CDS_ATTR(constexpr(14)) auto filter()
-      CDS_ATTR(noexcept(noexcept(++lvalue<I>()) && noexcept(_i != _e) && noexcept(rvalue<E>()(_v, _p(*_i))))) -> void {
+  CDS_ATTR(constexpr(14)) auto filter() CDS_ATTR(noexcept(
+      noexcept(++lvalue<I>())
+      && noexcept(_i != _e)
+      && noexcept(fn::invoke(E{}, _v, _p(*_i)))
+  )) -> void {
     E const equal;
-    while (_i != _e && !equal(_v, _p(*_i))) {
+    while (_i != _e && !fn::invoke(equal, _v, _p(*_i))) {
       ++_i;
     }
   }
@@ -245,27 +220,27 @@ private:
 #if CDS_ATTR(sentinel)
 template <typename I, typename V, typename P, typename E, typename T>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(FindProjectIterator<I, V, P, E, T> const& obj, Sentinel)
-    CDS_ATTR(friend_noexcept(noexcept(rvalue<I>() == rvalue<I>()))) -> bool {
-  return obj._i == obj._e;
+    CDS_ATTR(noexcept(noexcept(rvalue<I>() == rvalue<I>()))) -> bool {
+  return obj.iterator() == obj.end();
 }
 
 template <typename I, typename V, typename P, typename E, typename T>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(FindProjectIterator<I, V, P, E, T> const& obj, Sentinel)
-    CDS_ATTR(friend_noexcept(noexcept(rvalue<I>() != rvalue<I>()))) -> bool {
-  return obj._i != obj._e;
+    CDS_ATTR(noexcept(noexcept(rvalue<I>() != rvalue<I>()))) -> bool {
+  return obj.iterator() != obj.end();
 }
 #endif // #if CDS_ATTR(sentinel)
 
 template <typename I, typename V, typename P, typename E, typename T> CDS_ATTR(2(nodiscard, constexpr(11)))
 auto operator==(FindProjectIterator<I, V, P, E, T> const& lhs, FindProjectIterator<I, V, P, E, T> const& rhs)
-    CDS_ATTR(friend_noexcept(noexcept(rvalue<I>() == rvalue<I>()))) -> bool {
-  return lhs._i == rhs._i;
+    CDS_ATTR(noexcept(noexcept(rvalue<I>() == rvalue<I>()))) -> bool {
+  return lhs.iterator() == rhs.iterator();
 }
 
 template <typename I, typename V, typename P, typename E, typename T> CDS_ATTR(2(nodiscard, constexpr(11)))
 auto operator!=(FindProjectIterator<I, V, P, E, T> const& lhs, FindProjectIterator<I, V, P, E, T> const& rhs)
-    CDS_ATTR(friend_noexcept(noexcept(rvalue<I>() == rvalue<I>()))) -> bool {
-  return lhs._i != rhs._i;
+    CDS_ATTR(noexcept(noexcept(rvalue<I>() == rvalue<I>()))) -> bool {
+  return lhs.iterator() != rhs.iterator();
 }
 } // namespace impl
 } // namespace iterator
@@ -290,6 +265,8 @@ using iterator::Sentinel;
 #endif // #if CDS_ATTR(sentinel)
 using extension::Extend;
 
+namespace fn = cds::functional;
+
 template <typename TAttr, typename VAttr, typename E, typename Tr> class FindIterableRange {
 public:
   using Iterable = TAttr;
@@ -302,8 +279,8 @@ public:
   using ConstIterator = FindIterator<UnderlyingConstIterator, RemoveRef<VAttr>, E, Tr>;
 
   template <typename T, typename V> CDS_ATTR(constexpr(11)) FindIterableRange(T&& obj, V&& v)
-      CDS_ATTR(noexcept(noexcept(TAttr(cds::forward<T>(obj))) && noexcept(VAttr(cds::forward<V>(v))))) :
-      _o(cds::forward<T>(obj)), _v(cds::forward<V>(v)) {}
+      CDS_ATTR(noexcept(noexcept(TAttr(fwd<T>(obj))) && noexcept(VAttr(fwd<V>(v))))) :
+      _o(fwd<T>(obj)), _v(fwd<V>(v)) {}
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto begin()
       CDS_ATTR(noexcept(noexcept(Iterator(cds::begin(_o), cds::end(_o), _v)))) -> Iterator {
@@ -317,7 +294,7 @@ public:
 
 #if CDS_ATTR(sentinel)
   CDS_ATTR(2(nodiscard, constexpr(14))) auto end() const noexcept -> Sentinel {
-    (void) this;
+    ignore = this;
     return {};
   }
 #else // #if CDS_ATTR(sentinel)
@@ -350,10 +327,10 @@ public:
 
   template <typename T, typename V, typename P>
   CDS_ATTR(constexpr(11)) FindSelectIterableRange(T&& obj, V&& v, P&& p) CDS_ATTR(noexcept(
-      noexcept(TAttr(cds::forward<T>(obj)))
-      && noexcept(VAttr(cds::forward<V>(v)))
-      && noexcept(PAttr(cds::forward<P>(p)))
-  )) : _o(cds::forward<T>(obj)), _v(cds::forward<V>(v)), _p(cds::forward<P>(p)) {}
+      noexcept(TAttr(fwd<T>(obj)))
+      && noexcept(VAttr(fwd<V>(v)))
+      && noexcept(PAttr(fwd<P>(p)))
+  )) : _o(fwd<T>(obj)), _v(fwd<V>(v)), _p(fwd<P>(p)) {}
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto begin()
       CDS_ATTR(noexcept(noexcept(Iterator(cds::begin(_o), cds::end(_o), _v, _p)))) -> Iterator {
@@ -367,7 +344,7 @@ public:
 
 #if CDS_ATTR(sentinel)
   CDS_ATTR(2(nodiscard, constexpr(14))) auto end() const noexcept -> Sentinel {
-    (void) this;
+    ignore = this;
     return {};
   }
 #else // #if CDS_ATTR(sentinel)
@@ -399,14 +376,15 @@ template <
     EnableIf<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto find(
     I&& iterable, V&& value, CDS_ATTR(unused) E const& equal, CDS_ATTR(unused) T const& transform
-) CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(iterable), cds::forward<V>(value))))) -> R {
-  return R(cds::forward<I>(iterable), cds::forward<V>(value));
+) CDS_ATTR(noexcept(noexcept(R(fwd<I>(iterable), fwd<V>(value))))) -> R {
+  return R(fwd<I>(iterable), fwd<V>(value));
 }
 
 namespace isProjector {
-template <typename, typename, typename = void> struct IsProjector : False {};
-template <typename T, typename P>
-struct IsProjector<T, P, meta::Void<decltype(rvalue<P>()(*cds::begin(rvalue<T>())))>> : True {};
+namespace fn = cds::functional;
+using meta::IsInvocable;
+
+template <typename T, typename P> struct IsProjector : IsInvocable<P, decltype(*cds::begin(rvalue<T>()))> {};
 } // namespace isProjector
 
 template <typename T, typename P> struct IsProjector : isProjector::IsProjector<RemoveCVRef<T>, RemoveCVRef<P>> {};
@@ -417,8 +395,8 @@ template <
     EnableIf<And<GenericFindEnabledFor<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>, IsProjector<I, P>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto find(
     I&& iterable, V&& value, P&& projector, CDS_ATTR(unused) E const& equal, CDS_ATTR(unused) T const& transform
-) CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector))))) -> R {
-  return R(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector));
+) CDS_ATTR(noexcept(noexcept(R(fwd<I>(iterable), fwd<V>(value), fwd<P>(projector))))) -> R {
+  return R(fwd<I>(iterable), fwd<V>(value), fwd<P>(projector));
 }
 
 template <
@@ -427,27 +405,29 @@ template <
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
     I&& iterable, V&& value, E const& equal, T const& transform
 ) CDS_ATTR(noexcept(
-    noexcept(cds::begin(cds::forward<I>(iterable)) != cds::end(cds::forward<I>(iterable)))
-    && noexcept(++lvalue<decltype(cds::begin(cds::forward<I>(iterable)))>())
-    && noexcept(equal(*cds::begin(cds::forward<I>(iterable)), cds::forward<V>(value)))
-    && noexcept(transform(
-        cds::begin(cds::forward<I>(iterable)),
-        cds::end(cds::forward<I>(iterable)),
-        cds::begin(cds::forward<I>(iterable))
+    noexcept(cds::begin(fwd<I>(iterable)) != cds::end(fwd<I>(iterable)))
+    && noexcept(++lvalue<decltype(cds::begin(fwd<I>(iterable)))>())
+    && noexcept(fn::invoke(equal, *cds::begin(fwd<I>(iterable)), fwd<V>(value)))
+    && noexcept(fn::invoke(
+        transform,
+        cds::begin(fwd<I>(iterable)),
+        cds::end(fwd<I>(iterable)),
+        cds::begin(fwd<I>(iterable))
     ))
-)) -> decltype(transform(
-    cds::begin(cds::forward<I>(iterable)),
-    cds::end(cds::forward<I>(iterable)),
-    cds::begin(cds::forward<I>(iterable))
+)) -> decltype(fn::invoke(
+    transform,
+    cds::begin(fwd<I>(iterable)),
+    cds::end(fwd<I>(iterable)),
+    cds::begin(fwd<I>(iterable))
 )) {
-  auto const b = cds::begin(cds::forward<I>(iterable));
-  auto const e = cds::end(cds::forward<I>(iterable));
+  auto const b = cds::begin(fwd<I>(iterable));
+  auto const e = cds::end(fwd<I>(iterable));
   for (auto i = b; i != e; ++i) {
-    if (equal(cds::forward<V>(value), *i)) {
-      return transform(b, e, i);
+    if (fn::invoke(equal, fwd<V>(value), *i)) {
+      return fn::invoke(transform, b, e, i);
     }
   }
-  return transform(b, e, e);
+  return fn::invoke(transform, b, e, e);
 }
 
 template <
@@ -458,16 +438,16 @@ template <
     >> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
     I&& iterable, V&& value, E const& equal, T const& transform
-) CDS_ATTR(noexcept(noexcept(*find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform).begin())))
-    -> decltype(*find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform).begin()) {
-  auto const r = find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform);
+) CDS_ATTR(noexcept(noexcept(*find(fwd<I>(iterable), fwd<V>(value), equal, transform).begin())))
+    -> decltype(*find(fwd<I>(iterable), fwd<V>(value), equal, transform).begin()) {
+  auto const r = find(fwd<I>(iterable), fwd<V>(value), equal, transform);
   auto const i = r.begin();
   if (i != r.end()) {
     return *i;
   }
 
-  auto const e = cds::end(cds::forward<I>(iterable));
-  return transform(cds::begin(cds::forward<I>(iterable)), e, e);
+  auto const e = cds::end(fwd<I>(iterable));
+  return fn::invoke(transform, cds::begin(fwd<I>(iterable)), e, e);
 }
 
 template <
@@ -477,19 +457,16 @@ template <
     typename A = typename U::Alloc
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
     I&& iterable, V&& value, E const& equal, T const& transform, A&& alloc
-) CDS_ATTR(noexcept(noexcept(
-    *find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform, cds::forward<A>(alloc)).begin()
-))) -> decltype(
-    *find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform, cds::forward<A>(alloc)).begin()
-) {
-  auto const r = find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform, cds::forward<A>(alloc));
+) CDS_ATTR(noexcept(noexcept(*find(fwd<I>(iterable), fwd<V>(value), equal, transform, fwd<A>(alloc)).begin())))
+    -> decltype(*find(fwd<I>(iterable), fwd<V>(value), equal, transform, fwd<A>(alloc)).begin()) {
+  auto const r = find(fwd<I>(iterable), fwd<V>(value), equal, transform, fwd<A>(alloc));
   auto const i = r.begin();
   if (i != r.end()) {
     return *i;
   }
 
-  auto const e = cds::end(cds::forward<I>(iterable));
-  return transform(cds::begin(cds::forward<I>(iterable)), e, e);
+  auto const e = cds::end(fwd<I>(iterable));
+  return fn::invoke(transform, cds::begin(fwd<I>(iterable)), e, e);
 }
 
 template <
@@ -498,27 +475,29 @@ template <
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
     I&& iterable, V&& value, P&& projector, E const& equal, T const& transform
 ) CDS_ATTR(noexcept(
-    noexcept(cds::begin(cds::forward<I>(iterable)) != cds::end(cds::forward<I>(iterable)))
-    && noexcept(++lvalue<decltype(cds::begin(cds::forward<I>(iterable)))>())
-    && noexcept(equal(cds::forward<P>(projector)(*cds::begin(cds::forward<I>(iterable))), cds::forward<V>(value)))
-    && noexcept(transform(
-        cds::begin(cds::forward<I>(iterable)),
-        cds::end(cds::forward<I>(iterable)),
-        cds::begin(cds::forward<I>(iterable))
+    noexcept(cds::begin(fwd<I>(iterable)) != cds::end(fwd<I>(iterable)))
+    && noexcept(++lvalue<decltype(cds::begin(fwd<I>(iterable)))>())
+    && noexcept(fn::invoke(equal, fn::invoke(fwd<P>(projector), *cds::begin(fwd<I>(iterable))), fwd<V>(value)))
+    && noexcept(fn::invoke(
+        transform,
+        cds::begin(fwd<I>(iterable)),
+        cds::end(fwd<I>(iterable)),
+        cds::begin(fwd<I>(iterable))
     ))
-)) -> decltype(transform(
-    cds::begin(cds::forward<I>(iterable)),
-    cds::end(cds::forward<I>(iterable)),
-    cds::begin(cds::forward<I>(iterable))
+)) -> decltype(fn::invoke(
+    transform,
+    cds::begin(fwd<I>(iterable)),
+    cds::end(fwd<I>(iterable)),
+    cds::begin(fwd<I>(iterable))
 )) {
-  auto const b = cds::begin(cds::forward<I>(iterable));
-  auto const e = cds::end(cds::forward<I>(iterable));
+  auto const b = cds::begin(fwd<I>(iterable));
+  auto const e = cds::end(fwd<I>(iterable));
   for (auto i = b; i != e; ++i) {
-    if (equal(cds::forward<V>(value), cds::forward<P>(projector)(*i))) {
-      return transform(b, e, i);
+    if (fn::invoke(equal, fwd<V>(value), fn::invoke(fwd<P>(projector), *i))) {
+      return fn::invoke(transform, b, e, i);
     }
   }
-  return transform(b, e, e);
+  return fn::invoke(transform, b, e, e);
 }
 
 template <
@@ -529,20 +508,16 @@ template <
     >> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
     I&& iterable, V&& value, P&& projector, E const& equal, T const& transform
-) CDS_ATTR(noexcept(noexcept(
-    *find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform).begin()
-))) -> decltype(
-    *find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform).begin()
-) {
-  auto const r =
-      find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform);
+) CDS_ATTR(noexcept(noexcept(*find(fwd<I>(iterable), fwd<V>(value), fwd<P>(projector), equal, transform).begin())))
+    -> decltype(*find(fwd<I>(iterable), fwd<V>(value), fwd<P>(projector), equal, transform).begin()) {
+  auto const r = find(fwd<I>(iterable), fwd<V>(value), fwd<P>(projector), equal, transform);
   auto const i = r.begin();
   if (i != r.end()) {
     return *i;
   }
 
-  auto const e = cds::end(cds::forward<I>(iterable));
-  return transform(cds::begin(cds::forward<I>(iterable)), e, e);
+  auto const e = cds::end(fwd<I>(iterable));
+  return fn::invoke(transform, cds::begin(fwd<I>(iterable)), e, e);
 }
 
 template <
@@ -553,27 +528,16 @@ template <
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findFirst(
     I&& iterable, V&& value, P&& projector, E const& equal, T const& transform, A&& alloc
 ) CDS_ATTR(noexcept(noexcept(
-    *find(
-        cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector),
-        equal, transform, cds::forward<A>(alloc)
-    ).begin()
-))) -> decltype(
-    *find(
-        cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector),
-        equal, transform, cds::forward<A>(alloc)
-    ).begin()
-) {
-  auto const r = find(
-      cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector),
-      equal, transform, cds::forward<A>(alloc)
-  );
+    *find(fwd<I>(iterable), fwd<V>(value), fwd<P>(projector), equal, transform, fwd<A>(alloc)).begin()
+))) -> decltype(*find(fwd<I>(iterable), fwd<V>(value), fwd<P>(projector), equal, transform, fwd<A>(alloc)).begin()) {
+  auto const r = find(fwd<I>(iterable), fwd<V>(value), fwd<P>(projector), equal, transform, fwd<A>(alloc));
   auto const i = r.begin();
   if (i != r.end()) {
     return *i;
   }
 
-  auto const e = cds::end(cds::forward<I>(iterable));
-  return transform(cds::begin(cds::forward<I>(iterable)), e, e);
+  auto const e = cds::end(fwd<I>(iterable));
+  return fn::invoke(transform, cds::begin(fwd<I>(iterable)), e, e);
 }
 
 template <
@@ -582,28 +546,30 @@ template <
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
     I&& iterable, V&& value, E const& equal, T const& transform
 ) CDS_ATTR(noexcept(
-    noexcept(cds::begin(cds::forward<I>(iterable)) != cds::end(cds::forward<I>(iterable)))
-    && noexcept(++lvalue<decltype(cds::begin(cds::forward<I>(iterable)))>())
-    && noexcept(equal(*cds::begin(cds::forward<I>(iterable)), cds::forward<V>(value)))
-    && noexcept(transform(
-        cds::begin(cds::forward<I>(iterable)),
-        cds::end(cds::forward<I>(iterable)),
-        cds::begin(cds::forward<I>(iterable))
+    noexcept(cds::begin(fwd<I>(iterable)) != cds::end(fwd<I>(iterable)))
+    && noexcept(++lvalue<decltype(cds::begin(fwd<I>(iterable)))>())
+    && noexcept(fn::invoke(equal, *cds::begin(fwd<I>(iterable)), fwd<V>(value)))
+    && noexcept(fn::invoke(
+        transform,
+        cds::begin(fwd<I>(iterable)),
+        cds::end(fwd<I>(iterable)),
+        cds::begin(fwd<I>(iterable))
     ))
-)) -> decltype(transform(
-    cds::begin(cds::forward<I>(iterable)),
-    cds::end(cds::forward<I>(iterable)),
-    cds::begin(cds::forward<I>(iterable))
+)) -> decltype(fn::invoke(
+    transform,
+    cds::begin(fwd<I>(iterable)),
+    cds::end(fwd<I>(iterable)),
+    cds::begin(fwd<I>(iterable))
 )) {
-  auto const b = cds::begin(cds::forward<I>(iterable));
-  auto const e = cds::end(cds::forward<I>(iterable));
+  auto const b = cds::begin(fwd<I>(iterable));
+  auto const e = cds::end(fwd<I>(iterable));
   auto l = e;
   for (auto i = b; i != e; ++i) {
-    if (equal(cds::forward<V>(value), *i)) {
+    if (fn::invoke(equal, fwd<V>(value), *i)) {
       l = i;
     }
   }
-  return transform(b, e, l);
+  return fn::invoke(transform, b, e, l);
 }
 
 template <
@@ -614,10 +580,9 @@ template <
     >> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
     I&& iterable, V&& value, E const& equal, T const& transform
-) CDS_ATTR(noexcept(noexcept(*find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform).begin())))
-    -> decltype(*find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform).begin()) {
-  auto const r =
-      find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform);
+) CDS_ATTR(noexcept(noexcept(*find(fwd<I>(iterable), fwd<V>(value), equal, transform).begin())))
+    -> decltype(*find(fwd<I>(iterable), fwd<V>(value), equal, transform).begin()) {
+  auto const r = find(fwd<I>(iterable), fwd<V>(value), equal, transform);
   auto i = r.begin();
   auto p = i;
   while (i != r.end()) {
@@ -626,8 +591,8 @@ template <
   }
 
   if (p == r.end()) {
-    auto const e = cds::end(cds::forward<I>(iterable));
-    return transform(cds::begin(cds::forward<I>(iterable)), e, e);
+    auto const e = cds::end(fwd<I>(iterable));
+    return fn::invoke(transform, cds::begin(fwd<I>(iterable)), e, e);
   }
 
   return *p;
@@ -640,12 +605,9 @@ template <
     typename A = typename U::Alloc
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
     I&& iterable, V&& value, E const& equal, T const& transform, A&& alloc
-) CDS_ATTR(noexcept(noexcept(
-    *find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform, cds::forward<A>(alloc)).begin()
-))) -> decltype(
-    *find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform, cds::forward<A>(alloc)).begin()
-) {
-  auto const r = find(cds::forward<I>(iterable), cds::forward<V>(value), equal, transform, cds::forward<A>(alloc));
+) CDS_ATTR(noexcept(noexcept(*find(fwd<I>(iterable), fwd<V>(value), equal, transform, fwd<A>(alloc)).begin())))
+    -> decltype(*find(fwd<I>(iterable), fwd<V>(value), equal, transform, fwd<A>(alloc)).begin()) {
+  auto const r = find(fwd<I>(iterable), fwd<V>(value), equal, transform, fwd<A>(alloc));
   auto i = r.begin();
   auto p = i;
   while (i != r.end()) {
@@ -654,8 +616,8 @@ template <
   }
 
   if (p == r.end()) {
-    auto const e = cds::end(cds::forward<I>(iterable));
-    return transform(cds::begin(cds::forward<I>(iterable)), e, e);
+    auto const e = cds::end(fwd<I>(iterable));
+    return fn::invoke(transform, cds::begin(fwd<I>(iterable)), e, e);
   }
 
   return *p;
@@ -667,28 +629,30 @@ template <
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
     I&& iterable, V&& value, P&& projector, E const& equal, T const& transform
 ) CDS_ATTR(noexcept(
-    noexcept(cds::begin(cds::forward<I>(iterable)) != cds::end(cds::forward<I>(iterable)))
-    && noexcept(++lvalue<decltype(cds::begin(cds::forward<I>(iterable)))>())
-    && noexcept(equal(cds::forward<P>(projector)(*cds::begin(cds::forward<I>(iterable))), cds::forward<V>(value)))
-    && noexcept(transform(
-        cds::begin(cds::forward<I>(iterable)),
-        cds::end(cds::forward<I>(iterable)),
-        cds::begin(cds::forward<I>(iterable))
+    noexcept(cds::begin(fwd<I>(iterable)) != cds::end(fwd<I>(iterable)))
+    && noexcept(++lvalue<decltype(cds::begin(fwd<I>(iterable)))>())
+    && noexcept(fn::invoke(equal, fn::invoke(fwd<P>(projector), *cds::begin(fwd<I>(iterable))), fwd<V>(value)))
+    && noexcept(fn::invoke(
+        transform,
+        cds::begin(fwd<I>(iterable)),
+        cds::end(fwd<I>(iterable)),
+        cds::begin(fwd<I>(iterable))
     ))
-)) -> decltype(transform(
-    cds::begin(cds::forward<I>(iterable)),
-    cds::end(cds::forward<I>(iterable)),
-    cds::begin(cds::forward<I>(iterable))
+)) -> decltype(fn::invoke(
+    transform,
+    cds::begin(fwd<I>(iterable)),
+    cds::end(fwd<I>(iterable)),
+    cds::begin(fwd<I>(iterable))
 )) {
-  auto const b = cds::begin(cds::forward<I>(iterable));
-  auto const e = cds::end(cds::forward<I>(iterable));
+  auto const b = cds::begin(fwd<I>(iterable));
+  auto const e = cds::end(fwd<I>(iterable));
   auto l = e;
   for (auto i = b; i != e; ++i) {
-    if (equal(cds::forward<V>(value), cds::forward<P>(projector)(*i))) {
+    if (fn::invoke(equal, fwd<V>(value), fn::invoke(fwd<P>(projector), *i))) {
       l = i;
     }
   }
-  return transform(b, e, l);
+  return fn::invoke(transform, b, e, l);
 }
 
 template <
@@ -699,13 +663,9 @@ template <
     >> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
     I&& iterable, V&& value, P&& projector, E const& equal, T const& transform
-) CDS_ATTR(noexcept(noexcept(
-      *find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform).begin()
-))) -> decltype(
-      *find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform).begin()
-) {
-  auto const r =
-      find(cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector), equal, transform);
+) CDS_ATTR(noexcept(noexcept(*find(fwd<I>(iterable), fwd<V>(value), fwd<P>(projector), equal, transform).begin())))
+    -> decltype(*find(fwd<I>(iterable), fwd<V>(value), fwd<P>(projector), equal, transform).begin()) {
+  auto const r = find(fwd<I>(iterable), fwd<V>(value), fwd<P>(projector), equal, transform);
   auto i = r.begin();
   auto p = i;
   while (i != r.end()) {
@@ -714,8 +674,8 @@ template <
   }
 
   if (p == r.end()) {
-    auto const e = cds::end(cds::forward<I>(iterable));
-    return transform(cds::begin(cds::forward<I>(iterable)), e, e);
+    auto const e = cds::end(fwd<I>(iterable));
+    return fn::invoke(transform, cds::begin(fwd<I>(iterable)), e, e);
   }
 
   return *p;
@@ -729,20 +689,9 @@ template <
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto findLast(
     I&& iterable, V&& value, P&& projector, E const& equal, T const& transform, A&& alloc
 ) CDS_ATTR(noexcept(noexcept(
-    *find(
-        cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector),
-        equal, transform, cds::forward<A>(alloc)
-    ).begin()
-))) -> decltype(
-    *find(
-        cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector),
-        equal, transform, cds::forward<A>(alloc)
-    ).begin()
-) {
-  auto const r = find(
-      cds::forward<I>(iterable), cds::forward<V>(value), cds::forward<P>(projector),
-      equal, transform, cds::forward<A>(alloc)
-  );
+    *find(fwd<I>(iterable), fwd<V>(value), fwd<P>(projector), equal, transform, fwd<A>(alloc)).begin()
+))) -> decltype(*find(fwd<I>(iterable), fwd<V>(value), fwd<P>(projector), equal, transform, fwd<A>(alloc)).begin()) {
+  auto const r = find(fwd<I>(iterable), fwd<V>(value), fwd<P>(projector), equal, transform, fwd<A>(alloc));
   auto i = r.begin();
   auto p = i;
   while (i != r.end()) {
@@ -751,8 +700,8 @@ template <
   }
 
   if (p == r.end()) {
-    auto const e = cds::end(cds::forward<I>(iterable));
-    return transform(cds::begin(cds::forward<I>(iterable)), e, e);
+    auto const e = cds::end(fwd<I>(iterable));
+    return fn::invoke(transform, cds::begin(fwd<I>(iterable)), e, e);
   }
 
   return *p;

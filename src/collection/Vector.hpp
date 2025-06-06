@@ -16,6 +16,8 @@
 #include "../bindings/static/GenericLoopBinding.hpp"
 
 #include "../ds/array/ArrayBase.hpp"
+#include "../ds/array/ArrayDynamicBackScalingBase.hpp"
+#include "../ds/array/ArrayTraits.hpp"
 
 #include "vector/VectorDecl.hpp"
 
@@ -61,10 +63,10 @@ public:
 };
 
 template <typename T, typename A = Allocator<T>> class Vector :
-    public BaseVector<T, Equal<>, A, DynamicBackScalingBase<T, Equal<>, A, ArrayTraits<T>>> {
+    public BaseVector<T, Equal<>, A, ArrayDynamicBackScalingBase<T, Equal<>, A, ArrayTraits<T>>> {
 public:
-  using BaseVector<T, Equal<>, A, DynamicBackScalingBase<T, Equal<>, A, ArrayTraits<T>>>::BaseVector;
-  using BaseVector<T, Equal<>, A, DynamicBackScalingBase<T, Equal<>, A, ArrayTraits<T>>>::operator=;
+  using BaseVector<T, Equal<>, A, ArrayDynamicBackScalingBase<T, Equal<>, A, ArrayTraits<T>>>::BaseVector;
+  using BaseVector<T, Equal<>, A, ArrayDynamicBackScalingBase<T, Equal<>, A, ArrayTraits<T>>>::operator=;
 };
 
 #if CDS_ATTR(ctad)

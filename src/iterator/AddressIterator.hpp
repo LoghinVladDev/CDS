@@ -30,7 +30,7 @@ public:
   using Value = T;
   using Address = T*;
   using Reference = T&;
-  static constexpr bool forward = fwd;
+  static constexpr auto forward = fwd;
 
   CDS_ATTR(constexpr(11)) AddressIteratorBase() noexcept = default;
   CDS_ATTR(constexpr(11)) AddressIteratorBase(AddressIteratorBase const&) noexcept = default;
@@ -203,7 +203,7 @@ template <typename Lhs, typename Rhs, bool fwd> CDS_ATTR(2(nodiscard, constexpr(
 
 template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>> = 0>
 CDS_ATTR(constexpr(14)) auto operator++(I& iterator) noexcept -> I& {
-  ++(static_cast<AddressIteratorBase<typename I::Value, true>&>(iterator)._addr);
+  ++static_cast<AddressIteratorBase<typename I::Value, true>&>(iterator)._addr;
   return iterator;
 }
 

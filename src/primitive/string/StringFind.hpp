@@ -113,8 +113,8 @@ public:
 
   template <typename FS, typename FAS> CDS_ATTR(2(explicit, constexpr(20)))
   StringFindAhoCorasickPredicate(FS&& separator, FAS&& allocatorSet) CDS_ATTR(noexcept(noexcept(
-      AhoCorasick(cds::forward<FS>(separator), 16, cds::forward<FAS>(allocatorSet))
-  ))) : AhoCorasick(cds::forward<FS>(separator), 16, cds::forward<FAS>(allocatorSet)) {}
+      AhoCorasick(fwd<FS>(separator), 16, fwd<FAS>(allocatorSet))
+  ))) : AhoCorasick(fwd<FS>(separator), 16, fwd<FAS>(allocatorSet)) {}
 };
 
 namespace stringFind {
@@ -209,7 +209,7 @@ template <typename I, typename P, typename T> class StringFindIterator : private
 public:
   template <typename RI, typename RSI> CDS_ATTR(constexpr(14)) StringFindIterator(RI&& b, RSI&& e, P const& p)
       CDS_ATTR(noexcept(noexcept(filter()))) :
-      StateContainer<P>(p), _i(cds::forward<RI>(b)), _b(cds::forward<RI>(b)), _e(cds::forward<RSI>(e)), _p(p) {
+      StateContainer<P>(p), _i(fwd<RI>(b)), _b(fwd<RI>(b)), _e(fwd<RSI>(e)), _p(p) {
     filter();
   }
 
@@ -217,8 +217,8 @@ public:
       StateContainer<P>(it), _i(it._i), _b(it._b), _e(it._e), _p(it._p), _m(it._m) {}
 
   CDS_ATTR(constexpr(14)) StringFindIterator(StringFindIterator&& it) noexcept :
-      StateContainer<P>(cds::move(it)), _i(cds::move(it._i)), _b(it._b), _e(it._e),
-      _p(it._p), _m(cds::exchange(it._m, 0)) {}
+      StateContainer<P>(mv(it)), _i(mv(it._i)), _b(it._b), _e(it._e),
+      _p(it._p), _m(xch(it._m, 0)) {}
 
   CDS_ATTR(constexpr(20)) ~StringFindIterator() noexcept = default;
 
@@ -266,8 +266,8 @@ public:
       return *this;
     }
 
-    _i = cds::move(iterator._i);
-    _m = cds::exchange(iterator._m, 0);
+    _i = mv(iterator._i);
+    _m = xch(iterator._m, 0);
     return *this;
   }
 
@@ -354,8 +354,8 @@ public:
   template <typename RI, typename RSI, typename FP> CDS_ATTR(constexpr(14))
   StringProjectFindIterator(RI&& b, RSI&& e, P const& p, FP&& projector)
       CDS_ATTR(noexcept(noexcept(filter()))) :
-      StateContainer<P>(p), _i(cds::forward<RI>(b)), _b(cds::forward<RI>(b)), _e(cds::forward<RSI>(e)),
-      _p(p), _proj(cds::forward<FP>(projector)) {
+      StateContainer<P>(p), _i(fwd<RI>(b)), _b(fwd<RI>(b)), _e(fwd<RSI>(e)),
+      _p(p), _proj(fwd<FP>(projector)) {
     filter();
   }
 
@@ -364,8 +364,8 @@ public:
       StateContainer<P>(it), _i(it._i), _b(it._b), _e(it._e), _p(it._p), _proj(it._proj), _m(it._m) {}
 
   CDS_ATTR(constexpr(14)) StringProjectFindIterator(StringProjectFindIterator&& it) noexcept :
-      StateContainer<P>(cds::move(it)), _i(cds::move(it._i)), _b(it._b), _e(it._e), _p(it._p),
-      _proj(it._proj), _m(cds::exchange(it._m, 0)) {}
+      StateContainer<P>(mv(it)), _i(mv(it._i)), _b(it._b), _e(it._e), _p(it._p),
+      _proj(it._proj), _m(xch(it._m, 0)) {}
 
   CDS_ATTR(constexpr(20)) ~StringProjectFindIterator() noexcept = default;
 
@@ -413,8 +413,8 @@ public:
       return *this;
     }
 
-    _i = cds::move(iterator._i);
-    _m = cds::exchange(iterator._m, 0);
+    _i = mv(iterator._i);
+    _m = xch(iterator._m, 0);
     return *this;
   }
 
@@ -507,8 +507,8 @@ public:
 
   template <typename FR, typename V, typename A> CDS_ATTR(constexpr(20))
   StringFindIterableRange(FR&& view, V&& value, A&& alloc) CDS_ATTR(noexcept(
-      noexcept(R(cds::forward<FR>(view))) && noexcept(P(cds::forward<V>(value), cds::forward<A>(alloc)))
-  )) : P(cds::forward<V>(value), cds::forward<A>(alloc)), _r(cds::forward<FR>(view)) {}
+      noexcept(R(fwd<FR>(view))) && noexcept(P(fwd<V>(value), fwd<A>(alloc)))
+  )) : P(fwd<V>(value), fwd<A>(alloc)), _r(fwd<FR>(view)) {}
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto begin()
       CDS_ATTR(noexcept(noexcept(Iterator(cds::begin(_r), cds::end(_r), value<P>())))) -> Iterator {
@@ -551,11 +551,11 @@ public:
 
   template <typename FR, typename V, typename FP, typename A> CDS_ATTR(constexpr(20))
   StringProjectedFindIterableRange(FR&& view, V&& value, FP&& projector, A&& alloc) CDS_ATTR(noexcept(
-      noexcept(R(cds::forward<FR>(view))) && noexcept(P(cds::forward<V>(value), cds::forward<A>(alloc)))
-      && noexcept(Proj(cds::forward<FP>(projector)))
+      noexcept(R(fwd<FR>(view))) && noexcept(P(fwd<V>(value), fwd<A>(alloc)))
+      && noexcept(Proj(fwd<FP>(projector)))
   )) :
-      P(cds::forward<V>(value), cds::forward<A>(alloc)), _r(cds::forward<FR>(view)),
-      _p(cds::forward<FP>(projector)) {}
+      P(fwd<V>(value), fwd<A>(alloc)), _r(fwd<FR>(view)),
+      _p(fwd<FP>(projector)) {}
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto begin()
       CDS_ATTR(noexcept(noexcept(Iterator(cds::begin(_r), cds::end(_r), value<P>(), _p)))) -> Iterator {
@@ -594,9 +594,9 @@ template <
     EnableIf<stringFind::UsesStringFind<RemoveCVRef<I>, RemoveCVRef<V>, RemoveCVRef<E>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(20))) auto find(
     I&& view, V&& value, CDS_ATTR(unused) E const& equal, CDS_ATTR(unused) T const& transform, A&& alloc
-) CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(view), cds::forward<V>(value), cds::forward<A>(alloc))))) -> R {
+) CDS_ATTR(noexcept(noexcept(R(fwd<I>(view), fwd<V>(value), fwd<A>(alloc))))) -> R {
   static_assert(Not<IsSame<E, NotContains<Equal<>>>>::value, "Usage of `findNot*` is ambiguous with multiple strings");
-  return R(cds::forward<I>(view), cds::forward<V>(value), cds::forward<A>(alloc));
+  return R(fwd<I>(view), fwd<V>(value), fwd<A>(alloc));
 }
 
 template <
@@ -612,10 +612,10 @@ template <
 > CDS_ATTR(2(nodiscard, constexpr(20))) auto find(
     I&& view, V&& value, P&& projector, CDS_ATTR(unused) E const& equal, CDS_ATTR(unused) T const& transform, A&& alloc
 ) CDS_ATTR(noexcept(noexcept(
-    R(cds::forward<I>(view), cds::forward<V>(value), cds::forward<P>(projector), cds::forward<A>(alloc))
+    R(fwd<I>(view), fwd<V>(value), fwd<P>(projector), fwd<A>(alloc))
 ))) -> R {
   static_assert(Not<IsSame<E, NotContains<Equal<>>>>::value, "Usage of `findNot*` is ambiguous with multiple strings");
-  return R(cds::forward<I>(view), cds::forward<V>(value), cds::forward<P>(projector), cds::forward<A>(alloc));
+  return R(fwd<I>(view), fwd<V>(value), fwd<P>(projector), fwd<A>(alloc));
 }
 } // namespace impl
 } // namespace cds

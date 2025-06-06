@@ -15,8 +15,7 @@ template <typename T> struct FwdNode {
   T data;
 
   template <typename... A> CDS_ATTR(2(explicit, constexpr(11))) FwdNode(FwdNode* n, A&&... args)
-      CDS_ATTR(noexcept(noexcept(T(cds::forward<A>(args)...)))) :
-      next{n}, data{cds::forward<A>(args)...} {}
+      CDS_ATTR(noexcept(noexcept(T(fwd<A>(args)...)))) : next{n}, data{fwd<A>(args)...} {}
 };
 } // namespace impl
 } // namespace cds

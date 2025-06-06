@@ -74,7 +74,7 @@ public:
 private:
   CDS_ATTR(constexpr(14)) auto acquireNextToken() CDS_ATTR(noexcept(false)) -> void {
     _token = nullopt;
-    bool encounteredFmtIndicator = false;
+    auto encounteredFmtIndicator = false;
     Size bracketCount{1};
     Optional<Size> explicitArgumentIndex{nullopt};
 

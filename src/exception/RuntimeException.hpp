@@ -21,7 +21,7 @@ public:
 #endif
 
   RuntimeException() noexcept : _message("") {}
-  explicit RuntimeException(String message) noexcept : _message{cds::move(message)} {}
+  explicit RuntimeException(String message) noexcept : _message{mv(message)} {}
   explicit RuntimeException(std::exception const& exception) noexcept : _message{exception.what()} {}
   ~RuntimeException() noexcept override = default;
 

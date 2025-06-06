@@ -13,9 +13,9 @@ using namespace cds;
 
 namespace {
 template <typename I, typename V> CDS_ATTR(constexpr(14)) auto contains(I&& obj, V&& val) noexcept(noexcept(
-    impl::contains(cds::forward<I>(obj), cds::forward<V>(val), functional::Equal<>())
-)) -> decltype(impl::contains(cds::forward<I>(obj), cds::forward<V>(val), functional::Equal<>())) {
-  return impl::contains(cds::forward<I>(obj), cds::forward<V>(val), functional::Equal<>());
+    impl::contains(fwd<I>(obj), fwd<V>(val), functional::Equal<>())
+)) -> decltype(impl::contains(fwd<I>(obj), fwd<V>(val), functional::Equal<>())) {
+  return impl::contains(fwd<I>(obj), fwd<V>(val), functional::Equal<>());
 }
 } // namespace
 
@@ -50,9 +50,9 @@ TEST(GenericContains, contains) {
 struct A_eximpl_sel {
   template <typename P>
   bool contains(int x, P&& projector) {
-    if (cds::forward<P>(projector)(data[0]) == x) { return true; }
-    if (cds::forward<P>(projector)(data[1]) == x) { return true; }
-    if (cds::forward<P>(projector)(data[2]) == x) { return true; }
+    if (fwd<P>(projector)(data[0]) == x) { return true; }
+    if (fwd<P>(projector)(data[1]) == x) { return true; }
+    if (fwd<P>(projector)(data[2]) == x) { return true; }
     return false;
   }
 
@@ -61,11 +61,11 @@ struct A_eximpl_sel {
 
 namespace {
 template <typename I, typename V, typename P> CDS_ATTR(constexpr(14)) auto contains(I&& obj, V&& val, P&& sel) noexcept(noexcept(
-    impl::contains(cds::forward<I>(obj), cds::forward<V>(val), cds::forward<P>(sel), functional::Equal<>())
+    impl::contains(fwd<I>(obj), fwd<V>(val), fwd<P>(sel), functional::Equal<>())
 )) -> decltype(
-    impl::contains(cds::forward<I>(obj), cds::forward<V>(val), cds::forward<P>(sel), functional::Equal<>())
+    impl::contains(fwd<I>(obj), fwd<V>(val), fwd<P>(sel), functional::Equal<>())
 ) {
-  return impl::contains(cds::forward<I>(obj), cds::forward<V>(val), cds::forward<P>(sel), functional::Equal<>());
+  return impl::contains(fwd<I>(obj), fwd<V>(val), fwd<P>(sel), functional::Equal<>());
 }
 } // namespace
 
@@ -176,9 +176,9 @@ TEST(GenericContains, FunctionalSelected) {
 struct A_eximpl_sel_c {
   template <typename P>
   constexpr bool contains(int x, P&& projector) {
-    if (cds::forward<P>(projector)(data[0]) == x) { return true; }
-    if (cds::forward<P>(projector)(data[1]) == x) { return true; }
-    if (cds::forward<P>(projector)(data[2]) == x) { return true; }
+    if (fwd<P>(projector)(data[0]) == x) { return true; }
+    if (fwd<P>(projector)(data[1]) == x) { return true; }
+    if (fwd<P>(projector)(data[2]) == x) { return true; }
     return false;
   }
 

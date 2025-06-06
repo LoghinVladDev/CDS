@@ -10,13 +10,15 @@
 #include <cds/meta/Semantics>
 
 namespace cds {
+namespace impl {
 template <typename...> class Tuple;
+} // namespace impl
 namespace meta {
 namespace impl {
 template <typename R, typename C, typename... A> struct MakeMemberFunctionTraits {
     using Return = R;
     using Class = C;
-    using Args = Tuple<A...>;
+    using Args = cds::impl::Tuple<A...>;
 };
 
 template <typename R, typename... A> struct MakeFunctionTraits : MakeMemberFunctionTraits<R, void, A...> {};
@@ -107,9 +109,9 @@ template <typename F, typename = typename IsMember<RemoveCVRef<F>>::Type, typena
 template <typename T> struct Invoke<T, False> {
   template <typename F, typename... A>
   CDS_ATTR(constexpr(11)) static auto call(F&& f, A&&... a) CDS_ATTR(noexcept(
-      noexcept(cds::forward<F>(f)(cds::forward<A>(a)...))
-  )) -> decltype(cds::forward<F>(f)(cds::forward<A>(a)...)) {
-    return cds::forward<F>(f)(cds::forward<A>(a)...);
+      noexcept(fwd<F>(f)(fwd<A>(a)...))
+  )) -> decltype(fwd<F>(f)(fwd<A>(a)...)) {
+    return fwd<F>(f)(fwd<A>(a)...);
   }
 };
 
@@ -123,47 +125,47 @@ template <
 template <typename F, typename T> struct MemberInvoke<F, T, False, True> {
   template <typename F0, typename O, typename... A>
   CDS_ATTR(constexpr(11)) static auto call(F0&& f, O&& obj, A&&... a) CDS_ATTR(noexcept(
-      noexcept((cds::forward<O>(obj).*cds::forward<F0>(f))(cds::forward<A>(a)...))
-  )) -> decltype((cds::forward<O>(obj).*cds::forward<F0>(f))(cds::forward<A>(a)...)) {
-    return (cds::forward<O>(obj).*cds::forward<F0>(f))(cds::forward<A>(a)...);
+      noexcept((fwd<O>(obj).*fwd<F0>(f))(fwd<A>(a)...))
+  )) -> decltype((fwd<O>(obj).*fwd<F0>(f))(fwd<A>(a)...)) {
+    return (fwd<O>(obj).*fwd<F0>(f))(fwd<A>(a)...);
   }
 };
 
 template <typename F, typename T> struct MemberInvoke<F, T, True, True> {
   template <typename F0, typename O, typename... A>
   CDS_ATTR(constexpr(11)) static auto call(F0&& f, O&& obj, A&&... a) CDS_ATTR(noexcept(
-      noexcept((cds::forward<O>(obj)->*cds::forward<F0>(f))(cds::forward<A>(a)...))
-  )) -> decltype((cds::forward<O>(obj)->*cds::forward<F0>(f))(cds::forward<A>(a)...)) {
-    return (cds::forward<O>(obj)->*cds::forward<F0>(f))(cds::forward<A>(a)...);
+      noexcept((fwd<O>(obj)->*fwd<F0>(f))(fwd<A>(a)...))
+  )) -> decltype((fwd<O>(obj)->*fwd<F0>(f))(fwd<A>(a)...)) {
+    return (fwd<O>(obj)->*fwd<F0>(f))(fwd<A>(a)...);
   }
 };
 
 template <typename F, typename T> struct MemberInvoke<F, T, False, False> {
   template <typename F0, typename O>
   CDS_ATTR(constexpr(11)) static auto call(F0&& f, O&& obj) CDS_ATTR(noexcept(
-      noexcept(cds::forward<O>(obj).*cds::forward<F0>(f))
-  )) -> decltype(cds::forward<O>(obj).*cds::forward<F0>(f)) {
-    return cds::forward<O>(obj).*cds::forward<F0>(f);
+      noexcept(fwd<O>(obj).*fwd<F0>(f))
+  )) -> decltype(fwd<O>(obj).*fwd<F0>(f)) {
+    return fwd<O>(obj).*fwd<F0>(f);
   }
 };
 
 template <typename F, typename T> struct MemberInvoke<F, T, True, False> {
   template <typename F0, typename O>
   CDS_ATTR(constexpr(11)) static auto call(F0&& f, O&& obj) CDS_ATTR(noexcept(
-      noexcept(cds::forward<O>(obj)->*cds::forward<F0>(f))
-  )) -> decltype(cds::forward<O>(obj)->*cds::forward<F0>(f)) {
-    return cds::forward<O>(obj)->*cds::forward<F0>(f);
+      noexcept(fwd<O>(obj)->*fwd<F0>(f))
+  )) -> decltype(fwd<O>(obj)->*fwd<F0>(f)) {
+    return fwd<O>(obj)->*fwd<F0>(f);
   }
 };
 
 template <typename T> struct Invoke<T, True> {
   template <typename F, typename O, typename... A>
   CDS_ATTR(constexpr(11)) static auto call(F&& f, O&& obj, A&&... a) CDS_ATTR(noexcept(
-      noexcept(MemberInvoke<RemoveCVRef<F>, O>::call(cds::forward<F>(f), cds::forward<O>(obj), cds::forward<A>(a)...))
+      noexcept(MemberInvoke<RemoveCVRef<F>, O>::call(fwd<F>(f), fwd<O>(obj), fwd<A>(a)...))
   )) -> decltype(
-      MemberInvoke<RemoveCVRef<F>, O>::call(cds::forward<F>(f), cds::forward<O>(obj), cds::forward<A>(a)...)
+      MemberInvoke<RemoveCVRef<F>, O>::call(fwd<F>(f), fwd<O>(obj), fwd<A>(a)...)
   ) {
-    return MemberInvoke<RemoveCVRef<F>, O>::call(cds::forward<F>(f), cds::forward<O>(obj), cds::forward<A>(a)...);
+    return MemberInvoke<RemoveCVRef<F>, O>::call(fwd<F>(f), fwd<O>(obj), fwd<A>(a)...);
   }
 };
 

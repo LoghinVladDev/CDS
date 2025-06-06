@@ -55,7 +55,7 @@ template <typename T> struct VectorViewVectorConversion : True {
     return extent <= (end(fwd<T0>(data)) - begin(fwd<T0>(data)));
   }
 
-  template <Size extent> CDS_ATTR(2(nodiscard, constexpr(11))) static auto ctAccepts() noexcept -> bool {
+  template <Size /* extent */> CDS_ATTR(2(nodiscard, constexpr(11))) static auto ctAccepts() noexcept -> bool {
     return true;
   }
 };
@@ -75,7 +75,7 @@ template <typename T> struct VectorViewIListConversion : True {
     return extent <= (end(fwd<T0>(data)) - begin(fwd<T0>(data)));
   }
 
-  template <Size extent> CDS_ATTR(2(nodiscard, constexpr(11))) static auto ctAccepts() noexcept -> bool {
+  template <Size /* extent */> CDS_ATTR(2(nodiscard, constexpr(11))) static auto ctAccepts() noexcept -> bool {
     return true;
   }
 };

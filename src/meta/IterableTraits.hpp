@@ -11,11 +11,11 @@
 namespace cds {
 namespace meta {
 namespace impl {
-template <typename T, template <typename> class P, typename = typename meta::IsIterable<T>::Type>
-struct IsIterableOfThat : meta::False {};
+template <typename T, template <typename> class /* P */, typename = typename IsIterable<T>::Type>
+struct IsIterableOfThat : False {};
 
-template <typename T, template <typename> class P> struct IsIterableOfThat<T, P, meta::False> : meta::False {};
-template <typename T, template <typename> class P> struct IsIterableOfThat<T, P, meta::True> :
+template <typename T, template <typename> class P> struct IsIterableOfThat<T, P, False> : False {};
+template <typename T, template <typename> class P> struct IsIterableOfThat<T, P, True> :
     P<decltype(*cds::begin(rvalue<T>()))> {};
 } // namespace impl
 

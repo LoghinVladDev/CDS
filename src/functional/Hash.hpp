@@ -14,9 +14,9 @@ template <typename = void, typename = void> struct Hash {};
 template <> struct Hash <void, void> {
   template <typename T, typename D = meta::RemoveCVRef<T>>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(T&& object) const
-      CDS_ATTR(noexcept(noexcept(meta::rvalue<Hash<D>>()(cds::forward<T>(object)))))
-      -> decltype(meta::rvalue<Hash<D>>()(cds::forward<T>(object))) {
-    return Hash<D>()(cds::forward<T>(object));
+      CDS_ATTR(noexcept(noexcept(meta::rvalue<Hash<D>>()(fwd<T>(object)))))
+      -> decltype(meta::rvalue<Hash<D>>()(fwd<T>(object))) {
+    return Hash<D>()(fwd<T>(object));
   }
 };
 

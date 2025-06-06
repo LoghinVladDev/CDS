@@ -35,9 +35,9 @@ public:
   using Utils = StringAbstract<S>;
 
   template <typename FS, typename FA> CDS_ATTR(constexpr(20)) KMPBase(FS&& needle, FA&& alloc)
-      CDS_ATTR(noexcept(noexcept(A(cds::forward<FA>(alloc)).allocate(0)))) :
-      A{cds::forward<FA>(alloc)},
-      _pat{cds::forward<FS>(needle)},
+      CDS_ATTR(noexcept(noexcept(A(fwd<FA>(alloc)).allocate(0)))) :
+      A{fwd<FA>(alloc)},
+      _pat{fwd<FS>(needle)},
       _lps{A::allocate(len())} {
     construct(_lps, 0);
     Size idx = 1u;
@@ -56,12 +56,12 @@ public:
 
   template <typename Ref = IsRef<S>, EnableIf<Ref> = 0>
   CDS_ATTR(2(explicit, constexpr(14))) KMPBase(KMPBase&& pred) noexcept :
-      A{cds::move(pred)}, _pat{pred._pat}, _lps{cds::exchange(pred._lps, nullptr)} {}
+      A{mv(pred)}, _pat{pred._pat}, _lps{xch(pred._lps, nullptr)} {}
 
   template <typename Ref = IsRef<S>, EnableIf<Not<Ref>> = 0>
   CDS_ATTR(2(explicit, constexpr(14))) KMPBase(KMPBase&& pred)
-      CDS_ATTR(noexcept(noexcept(S(cds::move(pred._pat))))) :
-      A{cds::move(pred)}, _pat{cds::move(pred._pat)}, _lps{cds::exchange(pred._lps, nullptr)} {}
+      CDS_ATTR(noexcept(noexcept(S(mv(pred._pat))))) :
+      A{mv(pred)}, _pat{mv(pred._pat)}, _lps{xch(pred._lps, nullptr)} {}
 
   KMPBase(KMPBase const&) noexcept = delete;
   auto operator=(KMPBase const&) noexcept -> KMPBase& = delete;
@@ -245,7 +245,7 @@ template <
   Link<C> parent;
 
   CDS_ATTR(2(explicit, constexpr(11))) Vertex(Link<C> parentLink, AS const& allocatorSet) noexcept :
-      parent{parentLink}, children{allocatorSet} {}
+      children{allocatorSet}, parent{parentLink} {}
 };
 
 enum class PredResultKind : U8 { PRK_feed, PRK_accept };
@@ -266,15 +266,15 @@ public:
   template <typename I, typename FAS, EnableIf<Not<IsSame<RemoveCVRef<I>, AhoCorasick>>> = 0>
   CDS_ATTR(2(explicit, constexpr(20)))
   AhoCorasick(I&& stringSet, Size startingSize = 16, FAS&& alloc = FAS()) noexcept(false) :
-      AS(cds::forward<FAS>(alloc)),
+      AS(fwd<FAS>(alloc)),
       _vertices(AS::template get<V>().allocate(startingSize)),
-      _lengths(AS::template get<int>().allocate(cds::forward<I>(stringSet).size())),
-      _lSize(cds::forward<I>(stringSet).size()),
+      _lengths(AS::template get<int>().allocate(fwd<I>(stringSet).size())),
+      _lSize(fwd<I>(stringSet).size()),
       _cap(startingSize) {
     construct(&_vertices[0], ParentLink{0, 0}, static_cast<AS const&>(*this));
 
     U32 wId = 0;
-    for (auto i = cds::begin(cds::forward<I>(stringSet)), e = cds::end(cds::forward<I>(stringSet)); i != e; ++i) {
+    for (auto i = cds::begin(fwd<I>(stringSet)), e = cds::end(fwd<I>(stringSet)); i != e; ++i) {
       auto vId = _r;
       auto* v = _vertices + vId;
       auto const& str = *i;
@@ -296,13 +296,13 @@ public:
   }
 
   CDS_ATTR(constexpr(14)) AhoCorasick(AhoCorasick&& aho) noexcept :
-      AS(cds::move(aho)),
-      _vertices(cds::exchange(aho._vertices, nullptr)),
-      _lengths(cds::exchange(aho._lengths, nullptr)),
-      _lSize(cds::exchange(aho._lSize, 0)),
-      _cap(cds::exchange(aho._cap, 0)),
-      _size(cds::exchange(aho._size, 0)),
-      _r(cds::exchange(aho._r, 0)) {}
+      AS(mv(aho)),
+      _vertices(xch(aho._vertices, nullptr)),
+      _lengths(xch(aho._lengths, nullptr)),
+      _lSize(xch(aho._lSize, 0)),
+      _cap(xch(aho._cap, 0)),
+      _size(xch(aho._size, 0)),
+      _r(xch(aho._r, 0)) {}
 
   AhoCorasick(AhoCorasick const&) = delete;
   auto operator=(AhoCorasick const&) -> AhoCorasick& = delete;
@@ -421,8 +421,8 @@ private:
       moveInitialize(_vertices, _vertices + _cap, nb);
       destruct(_vertices, _vertices + _cap);
       AS::template get<V>().deallocate(
-          cds::exchange(_vertices, nb),
-          cds::exchange(_cap, nc)
+          xch(_vertices, nb),
+          xch(_cap, nc)
       );
     }
 

@@ -60,12 +60,12 @@ template <typename T> struct OptionalStorageBase<T, True> {
       Not<IsBaseOf<OptionalStorageBase, RemoveCVRef<A>>>,
       Not<IsSame<InPlace, RemoveCVRef<A>>>
   >> = 0> CDS_ATTR(2(implicit, constexpr(11))) OptionalStorageBase(A&& arg)
-      CDS_ATTR(noexcept(IsNoexceptConstructible<T, A>::value)) : _object(cds::forward<A>(arg)), _exists{true} {}
+      CDS_ATTR(noexcept(IsNoexceptConstructible<T, A>::value)) : _object(fwd<A>(arg)), _exists{true} {}
 
   template <typename A1, typename A2, typename... An> CDS_ATTR(constexpr(11))
   OptionalStorageBase(A1&& _1, A2&& _2, An&&... n)
       CDS_ATTR(noexcept(IsNoexceptConstructible<T, A1, A2, An...>::value)) :
-      _object(cds::forward<A1>(_1), cds::forward<A2>(_2), cds::forward<An>(n)...), _exists{true} {}
+      _object(fwd<A1>(_1), fwd<A2>(_2), fwd<An>(n)...), _exists{true} {}
 
   CDS_ATTR(constexpr(14)) auto reset() noexcept -> void {
     if (_exists) {
@@ -81,7 +81,7 @@ template <typename T> struct OptionalStorageBase<T, True> {
     } else {
       _exists = true;
     }
-    return *construct(&_object, cds::forward<A>(args)...);
+    return *construct(&_object, fwd<A>(args)...);
   }
 
   ~OptionalStorageBase() noexcept = default;
@@ -102,12 +102,12 @@ template <typename T> struct OptionalStorageBase<T, False> {
       Not<IsSame<OptionalStorageBase, RemoveCVRef<A>>>,
       Not<IsSame<InPlace, RemoveCVRef<A>>>
   >> = 0> CDS_ATTR(2(implicit, constexpr(11))) OptionalStorageBase(A&& arg)
-      CDS_ATTR(noexcept(IsNoexceptConstructible<T, A>::value)) : _object(cds::forward<A>(arg)), _exists{true} {}
+      CDS_ATTR(noexcept(IsNoexceptConstructible<T, A>::value)) : _object(fwd<A>(arg)), _exists{true} {}
 
   template <typename A1, typename A2, typename... An> CDS_ATTR(constexpr(11))
   OptionalStorageBase(A1&& _1, A2&& _2, An&&... n)
       CDS_ATTR(noexcept(IsNoexceptConstructible<T, A1, A2, An...>::value)) :
-      _object(cds::forward<A1>(_1), cds::forward<A2>(_2), cds::forward<An>(n)...), _exists{true} {}
+      _object(fwd<A1>(_1), fwd<A2>(_2), fwd<An>(n)...), _exists{true} {}
 
   CDS_ATTR(constexpr(20)) ~OptionalStorageBase() noexcept {
     if (_exists) {
@@ -129,7 +129,7 @@ template <typename T> struct OptionalStorageBase<T, False> {
     } else {
       _exists = true;
     }
-    return *construct(&_object, cds::forward<A>(args)...);
+    return *construct(&_object, fwd<A>(args)...);
   }
 
   union {
@@ -171,18 +171,18 @@ template <typename T> struct CDS_ATTR(ebo) OptionalLogicalBase : OptionalStorage
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto uncheckedGet() const&& noexcept -> T const&& {
-    return cds::move(_object);
+    return mv(_object);
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto uncheckedGet()&& noexcept -> T&& {
-    return cds::move(_object);
+    return mv(_object);
   }
 
   template <typename A> CDS_ATTR(constexpr(20)) auto constructFrom(A&& arg)
       CDS_ATTR(noexcept(OptionalLogicalBaseIsNoexceptConstructible<T, A>::value)) -> void {
     if (arg._exists) {
 			_exists = true;
-      construct(&_object, cds::forward<A>(arg).uncheckedGet());
+      construct(&_object, fwd<A>(arg).uncheckedGet());
     }
   }
 
@@ -190,12 +190,12 @@ template <typename T> struct CDS_ATTR(ebo) OptionalLogicalBase : OptionalStorage
       CDS_ATTR(noexcept(OptionalLogicalBaseIsNoexceptAssignable<T, A>::value)) -> void {
     if (_exists == arg._exists) {
       if (_exists) {
-        _object = cds::forward<A>(arg).uncheckedGet();
+        _object = fwd<A>(arg).uncheckedGet();
       }
     } else if (_exists) {
       reset();
     } else {
-      construct(&_object, cds::forward<A>(arg).uncheckedGet());
+      construct(&_object, fwd<A>(arg).uncheckedGet());
       _exists = true;
     }
   }
@@ -242,8 +242,8 @@ template <typename T> struct CDS_ATTR(ebo) OptionalMoveConstructBase<T, False> :
   OptionalMoveConstructBase(OptionalMoveConstructBase const&) = default;
 
   CDS_ATTR(constexpr(20)) OptionalMoveConstructBase(OptionalMoveConstructBase&& object)
-      CDS_ATTR(noexcept(noexcept(constructFrom(cds::move(object))))) {
-    constructFrom(cds::move(object));
+      CDS_ATTR(noexcept(noexcept(constructFrom(mv(object))))) {
+    constructFrom(mv(object));
   }
 
   auto operator=(OptionalMoveConstructBase const&) -> OptionalMoveConstructBase& = default;
@@ -295,8 +295,8 @@ template <typename T> struct CDS_ATTR(ebo) OptionalMoveAssignBase<T, False> : Op
   auto operator=(OptionalMoveAssignBase const&) -> OptionalMoveAssignBase& = default;
 
   CDS_ATTR(constexpr(20)) auto operator=(OptionalMoveAssignBase&& object)
-      CDS_ATTR(noexcept(noexcept(assignFrom(cds::move(object))))) -> OptionalMoveAssignBase& {
-    assignFrom(cds::move(object));
+      CDS_ATTR(noexcept(noexcept(assignFrom(mv(object))))) -> OptionalMoveAssignBase& {
+    assignFrom(mv(object));
     return *this;
   }
 
@@ -318,11 +318,11 @@ template <typename T> struct CDS_ATTR(ebo) OptionalObservableBase : OptionalMove
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator*() const&& noexcept -> T const&& {
-    return cds::move(uncheckedGet());
+    return mv(uncheckedGet());
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto operator*()&& noexcept -> T&& {
-    return cds::move(uncheckedGet());
+    return mv(uncheckedGet());
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator->() const noexcept -> T const* {
@@ -359,28 +359,28 @@ template <typename T> struct CDS_ATTR(ebo) OptionalObservableBase : OptionalMove
     if (!_exists) {
       CDS_ATTR(throw(NoSuchElementException("Optional does not contain any value")));
     }
-    return cds::move(uncheckedGet());
+    return mv(uncheckedGet());
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto get()&& CDS_ATTR(noexcept(false)) -> T&& {
     if (!_exists) {
       CDS_ATTR(throw(NoSuchElementException("Optional does not contain any value")));
     }
-    return cds::move(uncheckedGet());
+    return mv(uncheckedGet());
   }
 
   template <typename U> CDS_ATTR(2(nodiscard, constexpr(11))) auto getOr(U&& value) const&
   CDS_ATTR(noexcept(meta::IsNoexceptConstructible<T, U>::value))-> T {
     return _exists
         ? uncheckedGet()
-        : static_cast<T>(cds::forward<U>(value));
+        : static_cast<T>(fwd<U>(value));
   }
 
   template <typename U> CDS_ATTR(2(nodiscard, constexpr(14))) auto getOr(U&& value)&&
   CDS_ATTR(noexcept(meta::IsNoexceptConstructible<T, U>::value)) -> T {
     return _exists
-        ? cds::move(uncheckedGet())
-        : static_cast<T>(cds::forward<U>(value));
+        ? mv(uncheckedGet())
+        : static_cast<T>(fwd<U>(value));
   }
 };
 
@@ -395,90 +395,90 @@ template <typename T> struct CDS_ATTR(ebo) OptionalMonadicBase : OptionalObserva
 
   template <typename F, EnableIf<IsOptional<InvokeReturnOf<F, T const&>>> = 0> CDS_ATTR(2(nodiscard, constexpr(11)))
   auto then(F&& function)
-      const& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function), lvalue<T const>()))))
+      const& CDS_ATTR(noexcept(noexcept(f::invoke(fwd<F>(function), lvalue<T const>()))))
       -> InvokeReturnOf<F, T const&> {
     return _exists
-        ? f::invoke(cds::forward<F>(function), uncheckedGet())
+        ? f::invoke(fwd<F>(function), uncheckedGet())
         : nullopt;
   }
 
   template <typename F, EnableIf<IsOptional<InvokeReturnOf<F, T&>>> = 0> CDS_ATTR(2(nodiscard, constexpr(14)))
-  auto then(F&& function)& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function), lvalue<T>()))))
+  auto then(F&& function)& CDS_ATTR(noexcept(noexcept(f::invoke(fwd<F>(function), lvalue<T>()))))
       -> InvokeReturnOf<F, T&> {
     return _exists
-        ? f::invoke(cds::forward<F>(function), uncheckedGet())
+        ? f::invoke(fwd<F>(function), uncheckedGet())
         : nullopt;
   }
 
   template <typename F, EnableIf<IsOptional<InvokeReturnOf<F, T const&&>>> = 0> CDS_ATTR(2(nodiscard, constexpr(11)))
   auto then(F&& function)
-      const&& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function), rvalue<T const>()))))
+      const&& CDS_ATTR(noexcept(noexcept(f::invoke(fwd<F>(function), rvalue<T const>()))))
       -> InvokeReturnOf<F, T const&&> {
     return _exists
-        ? f::invoke(cds::forward<F>(function), cds::move(uncheckedGet()))
+        ? f::invoke(fwd<F>(function), mv(uncheckedGet()))
         : nullopt;
   }
 
   template <typename F, EnableIf<IsOptional<InvokeReturnOf<F, T&&>>> = 0> CDS_ATTR(2(nodiscard, constexpr(14)))
-  auto then(F&& function)&& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function), rvalue<T>()))))
+  auto then(F&& function)&& CDS_ATTR(noexcept(noexcept(f::invoke(fwd<F>(function), rvalue<T>()))))
       -> InvokeReturnOf<F, T&&> {
     return _exists
-        ? f::invoke(cds::forward<F>(function), cds::move(uncheckedGet()))
+        ? f::invoke(fwd<F>(function), mv(uncheckedGet()))
         : nullopt;
   }
 
   template <typename F, EnableIf<IsInvocable<F, T const&>> = 0> CDS_ATTR(2(nodiscard, constexpr(11)))
   auto transform(F&& function)
-      const& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function), lvalue<T const>()))))
+      const& CDS_ATTR(noexcept(noexcept(f::invoke(fwd<F>(function), lvalue<T const>()))))
       -> Optional<RemoveRef<InvokeReturnOf<F, T const&>>> {
     return _exists
         ? Optional<RemoveRef<InvokeReturnOf<F, T const&>>>{
-            f::invoke(cds::forward<F>(function), uncheckedGet())}
+            f::invoke(fwd<F>(function), uncheckedGet())}
         : nullopt;
   }
 
   template <typename F, EnableIf<IsInvocable<F, T&>> = 0> CDS_ATTR(2(nodiscard, constexpr(14)))
-  auto transform(F&& function)& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function), lvalue<T>()))))
+  auto transform(F&& function)& CDS_ATTR(noexcept(noexcept(f::invoke(fwd<F>(function), lvalue<T>()))))
       -> Optional<RemoveRef<InvokeReturnOf<F, T&>>> {
     return _exists
         ? Optional<RemoveRef<InvokeReturnOf<F, T&>>>{
-            f::invoke(cds::forward<F>(function), uncheckedGet())}
+            f::invoke(fwd<F>(function), uncheckedGet())}
         : nullopt;
   }
 
   template <typename F, EnableIf<IsInvocable<F, T const&&>> = 0> CDS_ATTR(2(nodiscard, constexpr(11)))
   auto transform(F&& function)
-      const&& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function), rvalue<T const>()))))
+      const&& CDS_ATTR(noexcept(noexcept(f::invoke(fwd<F>(function), rvalue<T const>()))))
       -> Optional<RemoveRef<InvokeReturnOf<F, T const&&>>> {
     return _exists
         ? Optional<RemoveRef<InvokeReturnOf<F, T const&&>>>{
-            f::invoke(cds::forward<F>(function), cds::move(uncheckedGet()))}
+            f::invoke(fwd<F>(function), mv(uncheckedGet()))}
         : nullopt;
   }
 
   template <typename F, EnableIf<IsInvocable<F, T&&>> = 0> CDS_ATTR(2(nodiscard, constexpr(14)))
-  auto transform(F&& function)&& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function), rvalue<T>()))))
+  auto transform(F&& function)&& CDS_ATTR(noexcept(noexcept(f::invoke(fwd<F>(function), rvalue<T>()))))
       -> Optional<RemoveRef<InvokeReturnOf<F, T&&>>> {
     return _exists
         ? Optional<RemoveRef<InvokeReturnOf<F, T&&>>>{
-            f::invoke(cds::forward<F>(function), cds::move(uncheckedGet()))}
+            f::invoke(fwd<F>(function), mv(uncheckedGet()))}
         : nullopt;
   }
 
   template <typename F, EnableIf<Or<IsSame<Optional<T>, InvokeReturnOf<F>>, IsSame<Nullopt, InvokeReturnOf<F>>>> = 0>
-  auto orElse(F&& function) const& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function)))))
+  auto orElse(F&& function) const& CDS_ATTR(noexcept(noexcept(f::invoke(fwd<F>(function)))))
       -> Optional<T> {
     return _exists
         ? static_cast<Optional<T> const&>(*this)
-        : f::invoke(cds::forward<F>(function));
+        : f::invoke(fwd<F>(function));
   }
 
   template <typename F, EnableIf<Or<IsSame<Optional<T>, InvokeReturnOf<F>>, IsSame<Nullopt, InvokeReturnOf<F>>>> = 0>
-  auto orElse(F&& function)&& CDS_ATTR(noexcept(noexcept(f::invoke(cds::forward<F>(function)))))
+  auto orElse(F&& function)&& CDS_ATTR(noexcept(noexcept(f::invoke(fwd<F>(function)))))
       -> Optional<T> {
     return _exists
-        ? static_cast<Optional<T>&&>(cds::move(*this))
-        : f::invoke(cds::forward<F>(function));
+        ? static_cast<Optional<T>&&>(mv(*this))
+        : f::invoke(fwd<F>(function));
   }
 };
 

@@ -21,16 +21,18 @@ using testing::iteq;
 using testing::citeq;
 using testing::TrackerAllocator;
 
+using cds::Size;
+
 using cds::functional::Equal;
 
 using cds::impl::ArrayTraits;
-using cds::impl::DynamicBackScalingBase;
+using cds::impl::ArrayDynamicBackScalingBase;
 using cds::impl::Vector;
 using cds::impl::BaseVector;
 
 template <typename T> using TestVector = BaseVector<
     T, Equal<>, TrackerAllocator<T>,
-    DynamicBackScalingBase<T, Equal<>, TrackerAllocator<T>, ArrayTraits<T>>
+    ArrayDynamicBackScalingBase<T, Equal<>, TrackerAllocator<T>, ArrayTraits<T>>
 >;
 
 template <typename T> class NonSizedVector : private std::vector<T> {
@@ -46,6 +48,9 @@ public:
   using std::list<T>::begin;
   using std::list<T>::end;
 };
+
+// head + tail + capacity
+static_assert(sizeof(Vector<int>) == 2 * sizeof(void*) + sizeof(Size), "unexpected Vector size");
 } // namespace
 
 TEST(VectorTest, DefCtr) {

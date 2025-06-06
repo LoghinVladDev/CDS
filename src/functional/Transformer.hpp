@@ -40,7 +40,7 @@ struct Identity<T, EnableIf<And<Le<Int<sizeof(T)>, Int<sizeof(Size)>>, IsTrivial
 
 template <> struct Identity<void, void> {
   template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(T&& v) const noexcept -> T&& {
-    return cds::forward<T>(v);
+    return fwd<T>(v);
   }
 };
 } // namespace impl

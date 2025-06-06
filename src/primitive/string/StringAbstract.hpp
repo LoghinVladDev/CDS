@@ -25,7 +25,7 @@ template <typename C, Size s> struct Array {
   }
 
   template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) static auto data(T&& data) noexcept -> C const* {
-    return cds::forward<T>(data);
+    return fwd<T>(data);
   }
 
   using Char = C;
@@ -51,11 +51,11 @@ template <typename C> struct Pointer {
 
 template <typename C> struct StringView {
   template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) static auto length(T&& sv) noexcept -> Size {
-    return cds::forward<T>(sv).length();
+    return fwd<T>(sv).length();
   }
 
   template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) static auto data(T&& sv) noexcept -> C const* {
-    return cds::forward<T>(sv).data();
+    return fwd<T>(sv).data();
   }
 
   using Char = C;
@@ -66,13 +66,13 @@ template <typename = void> struct StringAbstract : False {};
 
 template <> struct StringAbstract<void> {
   template <typename T, typename A = StringAbstract<T>>
-  CDS_ATTR(2(nodiscard, constexpr(11))) static auto length(T&& s) noexcept -> decltype(A::length(cds::forward<T>(s))) {
-    return A::length(cds::forward<T>(s));
+  CDS_ATTR(2(nodiscard, constexpr(11))) static auto length(T&& s) noexcept -> decltype(A::length(fwd<T>(s))) {
+    return A::length(fwd<T>(s));
   }
 
   template <typename T, typename A = StringAbstract<T>>
-  CDS_ATTR(2(nodiscard, constexpr(11))) static auto data(T&& s) noexcept -> decltype(A::data(cds::forward<T>(s))) {
-    return A::data(cds::forward<T>(s));
+  CDS_ATTR(2(nodiscard, constexpr(11))) static auto data(T&& s) noexcept -> decltype(A::data(fwd<T>(s))) {
+    return A::data(fwd<T>(s));
   }
 };
 

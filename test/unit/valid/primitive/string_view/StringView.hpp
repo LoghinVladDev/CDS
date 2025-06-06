@@ -389,7 +389,7 @@ TEST(STRING_VIEW_TEST_GROUP, find) {
 namespace {
 template <typename Range, typename P> auto count(Range&& rng, P const& pred) -> int {
   int count = 0;
-  for (auto e : cds::forward<Range>(rng)) {
+  for (auto e : fwd<Range>(rng)) {
     if (pred(e)) {
       ++count;
     }
@@ -1094,11 +1094,11 @@ constexpr SV cxx11_copy_ctr(SV const& sv) {
 }
 
 constexpr SV cxx11_move_ctr(SV&& sv) {
-  return SV{cds::move(sv)};
+  return SV{mv(sv)};
 }
 
 template <typename C> constexpr SV cxx11_convertible_ctr(C&& convertible) {
-  return SV{cds::forward<C>(convertible)};
+  return SV{fwd<C>(convertible)};
 }
 
 constexpr CHAR_TYPE const* cxx11_data(SV const& sv) {
@@ -1218,7 +1218,7 @@ constexpr auto cxx14_copy_assign(SV const& data) {
 
 constexpr auto cxx14_move_assign(SV data) {
   SV sv;
-  sv = cds::move(data);
+  sv = mv(data);
   return sv == data;
 }
 
@@ -1244,19 +1244,19 @@ constexpr auto cxx14_operator_rnb(SV const& sv, int idx1, int idx2) {
 }
 
 template <typename N> constexpr auto cxx14_contains(SV sv, N&& needle) {
-  return sv.contains(cds::forward<N>(needle));
+  return sv.contains(fwd<N>(needle));
 }
 
 template <typename N> constexpr auto cxx14_startsWith(SV sv, N&& needle) {
-  return sv.startsWith(cds::forward<N>(needle));
+  return sv.startsWith(fwd<N>(needle));
 }
 
 template <typename N> constexpr auto cxx14_endsWith(SV sv, N&& needle) {
-  return sv.endsWith(cds::forward<N>(needle));
+  return sv.endsWith(fwd<N>(needle));
 }
 
 template <typename N> constexpr auto cxx14_split(SV sv, N&& n, int cnt) {
-  auto r = sv.split(cds::forward<N>(n));
+  auto r = sv.split(fwd<N>(n));
   int i = 0;
   for (auto b = r.begin(); b != r.end(); ++b, ++i) {
     // nothing
@@ -1265,23 +1265,23 @@ template <typename N> constexpr auto cxx14_split(SV sv, N&& n, int cnt) {
 }
 
 template <typename N> constexpr auto cxx14_ltrim(SV sv, N&& n) {
-  return sv.ltrim(cds::forward<N>(n));
+  return sv.ltrim(fwd<N>(n));
 }
 
 template <typename N> constexpr auto cxx14_rtrim(SV sv, N&& n) {
-  return sv.rtrim(cds::forward<N>(n));
+  return sv.rtrim(fwd<N>(n));
 }
 
 template <typename N> constexpr auto cxx14_trim(SV sv, N&& n) {
-  return sv.trim(cds::forward<N>(n));
+  return sv.trim(fwd<N>(n));
 }
 
 template <typename N> constexpr auto cxx14_removePrefix(SV sv, N&& n) {
-  return sv.removePrefix(cds::forward<N>(n));
+  return sv.removePrefix(fwd<N>(n));
 }
 
 template <typename N> constexpr auto cxx14_removeSuffix(SV sv, N&& n) {
-  return sv.removeSuffix(cds::forward<N>(n));
+  return sv.removeSuffix(fwd<N>(n));
 }
 } // namespace
 } // namespace cexpr

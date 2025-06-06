@@ -8,9 +8,9 @@
 
 #include <cds/memory/Allocator>
 
-#include <cds/meta/TypeTraits>
 #include <cds/meta/ObjectTraits>
 #include <cds/meta/Semantics>
+#include <cds/meta/TypeTraits>
 
 #include <cds/functional/Invoke>
 
@@ -56,7 +56,7 @@ public:
   template <typename U, EnableIf<And<IsConvertible<U*, T*>, Eq<IsArray<T>, IsArray<U>>>> = 0>
   CDS_ATTR(2(explicit, constexpr(14))) DefaultDeleter(DefaultDeleter<U>) noexcept {}
 
-  CDS_ATTR(constexpr(20)) auto operator()(T* p) const noexcept -> void {
+  CDS_ATTR(constexpr(20)) auto operator()(T const* const p) const noexcept -> void {
     delete p;
   }
 };
@@ -72,7 +72,7 @@ public:
   template <typename U, EnableIf<And<IsConvertible<U*, T*>, Eq<IsArray<T>, IsArray<U>>>> = 0>
   CDS_ATTR(2(explicit, constexpr(14))) DefaultDeleter(DefaultDeleter<U>) noexcept {}
 
-  CDS_ATTR(constexpr(20)) auto operator()(T* p) const noexcept -> void {
+  CDS_ATTR(constexpr(20)) auto operator()(T const* const p) const noexcept -> void {
     delete[] p;
   }
 };
@@ -461,8 +461,8 @@ public:
   auto operator=(UniquePtrDereferencingBase&&) -> UniquePtrDereferencingBase& = default;
 
   template <typename I> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator[](I idx) const
-      CDS_ATTR(noexcept(noexcept(*get()))) -> T& {
-    return *get();
+      CDS_ATTR(noexcept(noexcept(get()[idx]))) -> T& {
+    return get()[idx];
   }
 };
 
@@ -504,7 +504,7 @@ template <typename T, typename...A> CDS_ATTR(constexpr(20)) auto makeUnique(A&&.
   return UniquePtr<T>{new T(fwd<A>(args)...)};
 }
 
-template <typename T> CDS_ATTR(constexpr(20)) auto makeUnique(Size size)
+template <typename T> CDS_ATTR(constexpr(20)) auto makeUnique(Size const size)
     -> ReturnIf<UniquePtr<T>, IsUnboundedArray<T>> {
   return UniquePtr<T>{new RemoveExtent<T>[size]()};
 }
@@ -515,7 +515,7 @@ template <typename T> CDS_ATTR(constexpr(20)) auto makeUniqueForOverwrite() -> R
   return UniquePtr<T>{new T};
 }
 
-template <typename T> CDS_ATTR(constexpr(20)) auto makeUniqueForOverwrite(Size size)
+template <typename T> CDS_ATTR(constexpr(20)) auto makeUniqueForOverwrite(Size const size)
     -> ReturnIf<UniquePtr<T>, IsUnboundedArray<T>> {
   return UniquePtr<T>{new RemoveExtent<T>[size]};
 }

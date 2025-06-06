@@ -27,12 +27,12 @@ using meta::impl::HasSizeMemberFn;
 
 template <typename T, typename D = RemoveRef<T>, typename E = HasIterableMemberFns<D>, EnableIf<E> = 0>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto begin(T&& range) noexcept -> typename E::Iterator {
-  return cds::forward<T>(range).begin();
+  return fwd<T>(range).begin();
 }
 
 template <typename T, typename D = RemoveRef<T>, typename E = HasIterableMemberFns<D>, EnableIf<E> = 0>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto end(T&& range) noexcept -> typename E::Sentinel {
-  return cds::forward<T>(range).end();
+  return fwd<T>(range).end();
 }
 
 template <
@@ -40,7 +40,7 @@ template <
     typename E = HasIterableMemberFns<D>, typename CE = HasConstIterableMemberFns<D>,
     EnableIf<And<Not<E>, CE>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto begin(T&& range) noexcept -> typename CE::ConstIterator {
-  return cds::forward<T>(range).cbegin();
+  return fwd<T>(range).cbegin();
 }
 
 template <
@@ -48,27 +48,27 @@ template <
     typename E = HasIterableMemberFns<D>, typename CE = HasConstIterableMemberFns<D>,
     EnableIf<And<Not<E>, CE>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto end(T&& range) noexcept -> typename CE::Sentinel {
-  return cds::forward<T>(range).cend();
+  return fwd<T>(range).cend();
 }
 
 template <typename T, typename D = RemoveRef<T>, typename E = HasConstIterableMemberFns<D>, EnableIf<E> = 0>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto cbegin(T&& range) noexcept -> typename E::ConstIterator {
-  return cds::forward<T>(range).cbegin();
+  return fwd<T>(range).cbegin();
 }
 
 template <typename T, typename D = RemoveRef<T>, typename E = HasConstIterableMemberFns<D>, EnableIf<E> = 0>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto cend(T&& range) noexcept -> typename E::Sentinel {
-  return cds::forward<T>(range).cend();
+  return fwd<T>(range).cend();
 }
 
 template <typename T, typename D = RemoveRef<T>, typename E = HasReverseIterableMemberFns<D>, EnableIf<E> = 0>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin(T&& range) noexcept -> typename E::ReverseIterator {
-  return cds::forward<T>(range).rbegin();
+  return fwd<T>(range).rbegin();
 }
 
 template <typename T, typename D = RemoveRef<T>, typename E = HasReverseIterableMemberFns<D>, EnableIf<E> = 0>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto rend(T&& range) noexcept -> typename E::Sentinel {
-  return cds::forward<T>(range).rend();
+  return fwd<T>(range).rend();
 }
 
 template <
@@ -76,7 +76,7 @@ template <
     typename E = HasReverseIterableMemberFns<D>, typename CE = HasConstReverseIterableMemberFns<D>,
     EnableIf<And<Not<E>, CE>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto rbegin(T&& range) noexcept -> typename CE::ConstReverseIterator {
-  return cds::forward<T>(range).crbegin();
+  return fwd<T>(range).crbegin();
 }
 
 template <
@@ -84,17 +84,17 @@ template <
     typename E = HasReverseIterableMemberFns<D>, typename CE = HasConstReverseIterableMemberFns<D>,
     EnableIf<And<Not<E>, CE>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(11))) auto rend(T&& range) noexcept -> typename CE::Sentinel {
-  return cds::forward<T>(range).crend();
+  return fwd<T>(range).crend();
 }
 
 template <typename T, typename D = RemoveRef<T>, typename E = HasConstReverseIterableMemberFns<D>, EnableIf<E> = 0>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto crbegin(T&& range) noexcept -> typename E::ConstReverseIterator {
-  return cds::forward<T>(range).crbegin();
+  return fwd<T>(range).crbegin();
 }
 
 template <typename T, typename D = RemoveRef<T>, typename E = HasConstReverseIterableMemberFns<D>, EnableIf<E> = 0>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto crend(T&& range) noexcept -> typename E::Sentinel {
-  return cds::forward<T>(range).crend();
+  return fwd<T>(range).crend();
 }
 
 template <typename I, typename S, EnableIf<IsRandomAccessIterator<I, S>> = 0>

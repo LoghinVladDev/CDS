@@ -26,17 +26,20 @@ using meta::rvalue;
 using functional::Equal;
 
 template <typename R> class ContainsByValueOfStaticBinding {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto refl() const noexcept -> R const& {
+    return *static_cast<R const*>(this);
+  }
+
 protected:
   using Value = typename IterableTraits<R>::Value;
   using E = Equal<>;
 
 public:
   template <typename F = initializer_list<Value>> CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyOf(F&& from)
-      const CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), E())))) -> bool {
+      const CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), E{})))) -> bool {
     E const equal;
-    auto const* iterable = static_cast<R const*>(this);
-    for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
-      if (contains(*iterable, *i, equal)) {
+    for (auto i = cds::begin(fwd<F>(from)), e = cds::end(fwd<F>(from)); i != e; ++i) {
+      if (contains(refl(), *i, equal)) {
         return true;
       }
     }
@@ -45,11 +48,11 @@ public:
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyNotOf(F&& from)
-      const CDS_ATTR(noexcept(noexcept(contains(rvalue<F>(), rvalue<Value>(), E())))) -> bool {
+      const CDS_ATTR(noexcept(noexcept(contains(rvalue<F>(), rvalue<Value>(), E{})))) -> bool {
     E const equal;
-    auto const* iterable = static_cast<R const*>(this);
-    for (auto i = cds::begin(*iterable), e = cds::end(*iterable); i != e; ++i) {
-      if (!contains(cds::forward<F>(from), *i, equal)) {
+    auto const& iterable = refl();
+    for (auto i = cds::begin(iterable), e = cds::end(iterable); i != e; ++i) {
+      if (!contains(fwd<F>(from), *i, equal)) {
         return true;
       }
     }
@@ -58,11 +61,10 @@ public:
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAllOf(F&& from)
-      const CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), E())))) -> bool {
+      const CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), E{})))) -> bool {
     E const equal;
-    auto const* iterable = static_cast<R const*>(this);
-    for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
-      if (!contains(*iterable, *i, equal)) {
+    for (auto i = cds::begin(fwd<F>(from)), e = cds::end(fwd<F>(from)); i != e; ++i) {
+      if (!contains(refl(), *i, equal)) {
         return false;
       }
     }
@@ -71,11 +73,10 @@ public:
 
   template <typename F = initializer_list<Value>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto containsNoneOf(F&& from)
-      const CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), E())))) -> bool {
+      const CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), E{})))) -> bool {
     E const equal;
-    auto const* iterable = static_cast<R const*>(this);
-    for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
-      if (contains(*iterable, *i, equal)) {
+    for (auto i = cds::begin(fwd<F>(from)), e = cds::end(fwd<F>(from)); i != e; ++i) {
+      if (contains(refl(), *i, equal)) {
         return false;
       }
     }
@@ -84,6 +85,10 @@ public:
 };
 
 template <typename R> class ContainsByProjectorOfStaticBinding {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto refl() const noexcept -> R const& {
+    return *static_cast<R const*>(this);
+  }
+
 protected:
   using Value = typename IterableTraits<R>::Value;
   using E = Equal<>;
@@ -91,11 +96,10 @@ protected:
 public:
   template <typename P, typename F = initializer_list<ReturnOf<P>>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyOf(F&& from, P&& projector) const
-      CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), cds::forward<P>(projector), E())))) -> bool {
+      CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), fwd<P>(projector), E())))) -> bool {
     E const equal;
-    auto const* iterable = static_cast<R const*>(this);
-    for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
-      if (contains(*iterable, *i, cds::forward<P>(projector), equal)) {
+    for (auto i = cds::begin(fwd<F>(from)), e = cds::end(fwd<F>(from)); i != e; ++i) {
+      if (contains(refl(), *i, fwd<P>(projector), equal)) {
         return true;
       }
     }
@@ -104,11 +108,11 @@ public:
 
   template <typename P, typename F = initializer_list<ReturnOf<P>>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAnyNotOf(F&& from, P&& projector)
-      const CDS_ATTR(noexcept(noexcept(contains(cds::forward<F>(from), rvalue<Value>(), E())))) -> bool {
+      const CDS_ATTR(noexcept(noexcept(contains(fwd<F>(from), rvalue<Value>(), E())))) -> bool {
     E const equal;
-    auto const* iterable = static_cast<R const*>(this);
-    for (auto i = cds::begin(*iterable), e = cds::end(*iterable); i != e; ++i) {
-      if (!contains(cds::forward<F>(from), cds::forward<P>(projector)(*i), equal)) {
+    auto const& iterable = refl();
+    for (auto i = cds::begin(iterable), e = cds::end(iterable); i != e; ++i) {
+      if (!contains(fwd<F>(from), fwd<P>(projector)(*i), equal)) {
         return true;
       }
     }
@@ -117,11 +121,10 @@ public:
 
   template <typename P, typename F = initializer_list<ReturnOf<P>>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto containsAllOf(F&& from, P&& projector) const
-      CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), cds::forward<P>(projector), E())))) -> bool {
+      CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), fwd<P>(projector), E())))) -> bool {
     E const equal;
-    auto const* iterable = static_cast<R const*>(this);
-    for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
-      if (!contains(*iterable, *i, cds::forward<P>(projector), equal)) {
+    for (auto i = cds::begin(fwd<F>(from)), e = cds::end(fwd<F>(from)); i != e; ++i) {
+      if (!contains(refl(), *i, fwd<P>(projector), equal)) {
         return false;
       }
     }
@@ -130,11 +133,10 @@ public:
 
   template <typename P, typename F = initializer_list<ReturnOf<P>>>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto containsNoneOf(F&& from, P&& projector) const
-      CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), cds::forward<P>(projector), E())))) -> bool {
+      CDS_ATTR(noexcept(noexcept(contains(rvalue<R>(), rvalue<Value>(), fwd<P>(projector), E())))) -> bool {
     E const equal;
-    auto const* iterable = static_cast<R const*>(this);
-    for (auto i = cds::begin(cds::forward<F>(from)), e = cds::end(cds::forward<F>(from)); i != e; ++i) {
-      if (contains(*iterable, *i, cds::forward<P>(projector), equal)) {
+    for (auto i = cds::begin(fwd<F>(from)), e = cds::end(fwd<F>(from)); i != e; ++i) {
+      if (contains(refl(), *i, fwd<P>(projector), equal)) {
         return false;
       }
     }

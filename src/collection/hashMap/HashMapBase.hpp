@@ -14,20 +14,14 @@ namespace cds {
 namespace impl {
 using meta::IsDefaultConstructible;
 
-template <typename K, typename V> struct MapEntryKeyProjector {
-  [[nodiscard]] constexpr auto operator()(MapEntry<K, V> const& entry) const noexcept -> K const& {
-    return entry.key();
-  }
-};
-
 template <typename K, typename V, typename H, typename E, typename A> class BaseHashMap :
     private HashTableBase<
         MapEntry<K, V>, K, H, TableRehashPolicy<PrimeRehashTable<>>,
-        MapEntryKeyProjector<K, V>, E, A
+        MapEntryKeyProjection, E, A
     > {
   using Base = HashTableBase<
       MapEntry<K, V>, K, H, TableRehashPolicy<PrimeRehashTable<>>,
-      MapEntryKeyProjector<K, V>, E, A
+      MapEntryKeyProjection, E, A
   >;
 
   using Base::tryEmplace;

@@ -17,7 +17,7 @@ using meta::rvalue;
 
 using iterator::FwdNodeIterator;
 
-template <typename T, typename C, typename A> class CDS_ATTR(ebo) SingleLinkedListBase : private A {
+template <typename T, typename /* C */, typename A> class CDS_ATTR(ebo) SingleLinkedListBase : private A {
   using Node = FwdNode<T>;
 
 public:
@@ -36,7 +36,7 @@ public:
   }
 
   CDS_ATTR(constexpr(14)) SingleLinkedListBase(SingleLinkedListBase&& list) noexcept :
-      _f{cds::exchange(list._f, nullptr)}, _b{cds::exchange(list._b, nullptr)} {}
+      _f{xch(list._f, nullptr)}, _b{xch(list._b, nullptr)} {}
 
   CDS_ATTR(constexpr(20)) ~SingleLinkedListBase() noexcept {
     clear();
@@ -71,7 +71,7 @@ public:
 
   template <typename... Args> CDS_ATTR(constexpr(20)) auto emplaceFront(Args&&... args)
       CDS_ATTR(noexcept(noexcept(false))) -> Type& {
-    _f = construct(alloc(), _f, cds::forward<Args>(args)...);
+    _f = construct(alloc(), _f, fwd<Args>(args)...);
     if (!_b) {
       _b = _f;
     }
@@ -81,10 +81,10 @@ public:
   template <typename... Args> CDS_ATTR(constexpr(20)) auto emplaceBack(Args&&... args)
       CDS_ATTR(noexcept(noexcept(false))) -> Type& {
     if (empty()) {
-      return emplaceFront(cds::forward<Args>(args)...);
+      return emplaceFront(fwd<Args>(args)...);
     }
 
-    _b->next = construct(alloc(), nullptr, cds::forward<Args>(args)...);
+    _b->next = construct(alloc(), nullptr, fwd<Args>(args)...);
     _b = _b->next;
     return _b->data;
   }
@@ -156,19 +156,19 @@ protected:
   }
 
   CDS_ATTR(constexpr(20)) auto move(SingleLinkedListBase&& list)
-      CDS_ATTR(noexcept(noexcept(moveOnceCleared(cds::move(list))))) -> void {
+      CDS_ATTR(noexcept(noexcept(moveOnceCleared(mv(list))))) -> void {
     if (&list == this) {
       return;
     }
 
     clear();
-    moveOnceCleared(cds::move(list));
+    moveOnceCleared(mv(list));
   }
 
   CDS_ATTR(constexpr(14)) auto moveOnceCleared(SingleLinkedListBase&& list) noexcept -> void {
-    _f = cds::exchange(list._f, nullptr);
-    _b = cds::exchange(list._b, nullptr);
-    A::operator=(cds::move(list));
+    _f = xch(list._f, nullptr);
+    _b = xch(list._b, nullptr);
+    A::operator=(mv(list));
   }
 
   CDS_ATTR(constexpr(20)) auto alloc() CDS_ATTR(noexcept(noexcept(rvalue<A>().allocate(1)))) -> Node* {

@@ -11,8 +11,8 @@ struct Hash <T, meta::EnableIf<meta::And<cds::impl::StringAbstract<T>, meta::Not
   template <typename S> CDS_ATTR(2(nodiscard, constexpr(14)))
   auto operator()(S&& value) const noexcept -> Size {
     using A = cds::impl::StringAbstract<S>;
-    auto const len = A::length(cds::forward<S>(value));
-    auto const str = A::data(cds::forward<S>(value));
+    auto const len = A::length(fwd<S>(value));
+    auto const str = A::data(fwd<S>(value));
     if (len == 0u) {
       return 0u;
     }

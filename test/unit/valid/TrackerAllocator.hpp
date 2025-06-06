@@ -17,6 +17,8 @@
 #endif
 
 namespace testing {
+using cds::xch;
+
 template <typename T> class TrackerAllocator : public cds::Allocator<T> {
 public:
   TrackerAllocator() noexcept = default;
@@ -26,11 +28,11 @@ public:
       _assertOnDestruct(ta._assertOnDestruct) {}
 
   TrackerAllocator(TrackerAllocator&& ta) noexcept :
-      cds::Allocator<T>(cds::move(ta)),
-      _allocated(cds::exchange(ta._allocated, 0u)),
+      cds::Allocator<T>(mv(ta)),
+      _allocated(xch(ta._allocated, 0u)),
       _tracked(std::move(ta._tracked)),
       _freed(std::move(ta._freed)),
-      _assertOnDestruct(cds::exchange(ta._assertOnDestruct, false)) {}
+      _assertOnDestruct(xch(ta._assertOnDestruct, false)) {}
 
   TrackerAllocator& operator=(TrackerAllocator const&) noexcept = delete;
   TrackerAllocator& operator=(TrackerAllocator&& ta) noexcept {
@@ -39,8 +41,8 @@ public:
     }
 
     validate();
-    cds::Allocator<T>::operator=(cds::move(ta));
-    _allocated = cds::exchange(ta._allocated, 0);
+    cds::Allocator<T>::operator=(mv(ta));
+    _allocated = xch(ta._allocated, 0);
     _tracked = std::move(ta._tracked);
     _freed = std::move(ta._freed);
     return *this;

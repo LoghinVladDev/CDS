@@ -32,7 +32,7 @@ struct A_ContainsMember : public impl::ContainsOfStaticBinding<A_ContainsMember,
 struct A_ContainsSelectedMember : public impl::ContainsOfStaticBinding<A_ContainsSelectedMember, With<Projector>> {
   template <typename S> bool contains(int a, S&& s) const {
     for (int v : data) {
-      if (a == cds::forward<S>(s)(v)) {
+      if (a == fwd<S>(s)(v)) {
         return true;
       }
     }
@@ -49,7 +49,7 @@ struct A_ContainsContainsSelectedMember :
   CDS_ATTR(nodiscard) bool contains(int a) const { return std::find(data.begin(), data.end(), a) != data.end(); }
   template <typename S> bool contains(int a, S&& s) const {
     for (int v : data) {
-      if (a == cds::forward<S>(s)(v)) {
+      if (a == fwd<S>(s)(v)) {
         return true;
       }
     }

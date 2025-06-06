@@ -41,13 +41,13 @@ using meta::rvalue;
 template <typename MFn> class MemberFunctionWrapper {
 public:
   template <typename RMFn, EnableIf<Not<IsSame<Decay<RMFn>, MemberFunctionWrapper>>> = 0>
-  CDS_ATTR(2(explicit, constexpr(11))) MemberFunctionWrapper(RMFn&& fn) noexcept : _fn(cds::forward<RMFn>(fn)) {}
+  CDS_ATTR(2(explicit, constexpr(11))) MemberFunctionWrapper(RMFn&& fn) noexcept : _fn(fwd<RMFn>(fn)) {}
 
   template <typename O, typename... Args> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(
       O&& obj, Args&&... args
-  ) const CDS_ATTR(noexcept(noexcept((cds::forward<O>(obj).*_fn)(cds::forward<Args>(args)...))))
+  ) const CDS_ATTR(noexcept(noexcept((fwd<O>(obj).*_fn)(fwd<Args>(args)...))))
       -> EnableIf<IsClass<Decay<O>>, ReturnOf<MFn>> {
-    return (cds::forward<O>(obj).*_fn)(cds::forward<Args>(args)...);
+    return (fwd<O>(obj).*_fn)(fwd<Args>(args)...);
   }
 
 private:
@@ -59,12 +59,12 @@ template <typename Fn, typename = typename IsCallable<Fn>::Type> class NotFuncti
 template <typename Fn> class NotFunctionWrapper<Fn, True> {
 public:
   template <typename RFn, EnableIf<Not<IsSame<Decay<RFn>, NotFunctionWrapper>>> = 0>
-  CDS_ATTR(2(explicit, constexpr(11))) NotFunctionWrapper(RFn&& fn) noexcept : _fn(cds::forward<RFn>(fn)) {}
+  CDS_ATTR(2(explicit, constexpr(11))) NotFunctionWrapper(RFn&& fn) noexcept : _fn(fwd<RFn>(fn)) {}
 
   template <typename... Args> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(Args&&... args) const
-      CDS_ATTR(noexcept(noexcept(_fn(cds::forward<Args>(args)...))))
+      CDS_ATTR(noexcept(noexcept(_fn(fwd<Args>(args)...))))
       -> decltype(!rvalue<InvokeReturnOf<Fn, Args...>>()) {
-    return !_fn(cds::forward<Args>(args)...);
+    return !_fn(fwd<Args>(args)...);
   }
 
 private:
@@ -74,13 +74,13 @@ private:
 template <typename MFn> class NotFunctionWrapper<MFn, False> {
 public:
   template <typename RMFn, EnableIf<Not<IsSame<Decay<RMFn>, NotFunctionWrapper>>> = 0>
-  CDS_ATTR(2(explicit, constexpr(11))) NotFunctionWrapper(RMFn&& fn) noexcept : _fn(cds::forward<RMFn>(fn)) {}
+  CDS_ATTR(2(explicit, constexpr(11))) NotFunctionWrapper(RMFn&& fn) noexcept : _fn(fwd<RMFn>(fn)) {}
 
   template <typename O, typename... Args> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(
       O&& obj, Args&&... args
-  ) const CDS_ATTR(noexcept(noexcept((cds::forward<O>(obj).*_fn)(cds::forward<Args>(args)...))))
-      -> EnableIf<IsClass<Decay<O>>, decltype(!(obj.*rvalue<MFn>())(cds::forward<Args>(args)...))> {
-    return !(cds::forward<O>(obj).*_fn)(cds::forward<Args>(args)...);
+  ) const CDS_ATTR(noexcept(noexcept((fwd<O>(obj).*_fn)(fwd<Args>(args)...))))
+      -> EnableIf<IsClass<Decay<O>>, decltype(!(obj.*rvalue<MFn>())(fwd<Args>(args)...))> {
+    return !(fwd<O>(obj).*_fn)(fwd<Args>(args)...);
   }
 
 private:
@@ -90,12 +90,12 @@ private:
 
 template <typename MemberFn> CDS_ATTR(2(nodiscard, constexpr(11))) auto memFn(MemberFn&& memberFn) noexcept
     -> impl::MemberFunctionWrapper<MemberFn> {
-  return impl::MemberFunctionWrapper<MemberFn>(cds::forward<MemberFn>(memberFn));
+  return impl::MemberFunctionWrapper<MemberFn>(fwd<MemberFn>(memberFn));
 }
 
 template <typename Fn> CDS_ATTR(2(nodiscard, constexpr(11))) auto notFn(Fn&& fn) noexcept
     -> impl::NotFunctionWrapper<meta::Decay<Fn>> {
-  return impl::NotFunctionWrapper<meta::Decay<Fn>>(cds::forward<Fn>(fn));
+  return impl::NotFunctionWrapper<meta::Decay<Fn>>(fwd<Fn>(fn));
 }
 } // namespace functional
 } // namespace cds

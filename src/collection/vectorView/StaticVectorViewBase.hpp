@@ -58,7 +58,7 @@ public:
   using ConstReverseIterator = BackwardAddressIterator<T const>;
 
   template <typename It, EnableIf<IsRandomAccessIterator<It>> = 0> CDS_ATTR(2(explicit, constexpr(11)))
-  BaseStaticVectorView(It first, Size count) noexcept :
+  BaseStaticVectorView(It first, Size const count) noexcept :
       BaseStaticVectorViewDefaultConstructorConstraint<T, extent>{0}, _addr{&*first} {
 #if CDS_ATTR(cpp14)
     assert(count >= extent && "Static Vector View used on iterator count smaller than requested extent");

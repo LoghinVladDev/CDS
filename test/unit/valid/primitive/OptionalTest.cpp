@@ -36,7 +36,7 @@ TEST(OptionalTest, ctrCopy) {
 
 TEST(OptionalTest, ctrMove) {
   String s1 = "abc";
-  Optional<String> const o1 {cds::move(s1)};
+  Optional<String> const o1 {mv(s1)};
   ASSERT_TRUE(o1.hasValue());
   ASSERT_EQ(*o1, "abc");
 }
@@ -73,10 +73,10 @@ TEST(OptionalTest, ctrOptMove) {
   Optional<int> o3 {};
   Optional<String> o4 {nullopt};
 
-  Optional<int> const o5 {cds::move(o1)};
-  Optional<String> const o6 {cds::move(o2)};
-  Optional<int> const o7 {cds::move(o3)};
-  Optional<String> const o8 {cds::move(o4)};
+  Optional<int> const o5 {mv(o1)};
+  Optional<String> const o6 {mv(o2)};
+  Optional<int> const o7 {mv(o3)};
+  Optional<String> const o8 {mv(o4)};
 
   ASSERT_TRUE(o5.hasValue());
   ASSERT_TRUE(o6.hasValue());
@@ -163,10 +163,10 @@ TEST(OptionalTest, monadicAndThenCR) {
   Optional<int> const o3 {};
   Optional<String> const o4 {};
 
-  auto const o5 = cds::move(o1).then([](int v) { return Optional<int>{v}; });
-  auto const o6 = cds::move(o2).then([](StringView sv){ return Optional<StringView>{sv}; });
-  auto const o7 = cds::move(o3).then([](long v) { return Optional<long>{v}; });
-  auto const o8 = cds::move(o4).then([](String const& v) { return Optional<String>{v}; });
+  auto const o5 = mv(o1).then([](int v) { return Optional<int>{v}; });
+  auto const o6 = mv(o2).then([](StringView sv){ return Optional<StringView>{sv}; });
+  auto const o7 = mv(o3).then([](long v) { return Optional<long>{v}; });
+  auto const o8 = mv(o4).then([](String const& v) { return Optional<String>{v}; });
 
   ASSERT_TRUE(o5.hasValue());
   ASSERT_TRUE(o6.hasValue());
@@ -183,10 +183,10 @@ TEST(OptionalTest, monadicAndThenR) {
   Optional<int> o3 {};
   Optional<String> o4 {};
 
-  auto const o5 = cds::move(o1).then([](int v) { return Optional<int>{v}; });
-  auto const o6 = cds::move(o2).then([](StringView sv){ return Optional<StringView>{sv}; });
-  auto const o7 = cds::move(o3).then([](long v) { return Optional<long>{v}; });
-  auto const o8 = cds::move(o4).then([](String const& v) { return Optional<String>{v}; });
+  auto const o5 = mv(o1).then([](int v) { return Optional<int>{v}; });
+  auto const o6 = mv(o2).then([](StringView sv){ return Optional<StringView>{sv}; });
+  auto const o7 = mv(o3).then([](long v) { return Optional<long>{v}; });
+  auto const o8 = mv(o4).then([](String const& v) { return Optional<String>{v}; });
 
   ASSERT_TRUE(o5.hasValue());
   ASSERT_TRUE(o6.hasValue());
@@ -217,9 +217,9 @@ TEST(OptionalTest, monadicAndThenXVal) {
   };
 
   auto x = Optional<X>{X{defCtr, cpyCtr, movCtr, cpyAss, movAss}}
-      .then([](X&& v) { return Optional<X>{cds::move(v)}; })
-      .then([](X&& v) { return Optional<X>{cds::move(v)}; })
-      .then([](X&& v) { return Optional<X>{cds::move(v)}; });
+      .then([](X&& v) { return Optional<X>{cds::mv(v)}; })
+      .then([](X&& v) { return Optional<X>{cds::mv(v)}; })
+      .then([](X&& v) { return Optional<X>{cds::mv(v)}; });
   ASSERT_TRUE(x.hasValue());
 
   ASSERT_EQ(defCtr, 1);
@@ -281,10 +281,10 @@ TEST(OptionalTest, monadicTransformCR) {
   Optional<int> const o3 {};
   Optional<String> const o4 {};
 
-  auto const o5 = cds::move(o1).transform([](int v) { return v + 1; });
-  auto const o6 = cds::move(o2).transform([](StringView sv){ return sv.length(); });
-  auto const o7 = cds::move(o3).transform([](long v) { return v - 1; });
-  auto const o8 = cds::move(o4).transform([](String const& v) { return v.length(); });
+  auto const o5 = mv(o1).transform([](int v) { return v + 1; });
+  auto const o6 = mv(o2).transform([](StringView sv){ return sv.length(); });
+  auto const o7 = mv(o3).transform([](long v) { return v - 1; });
+  auto const o8 = mv(o4).transform([](String const& v) { return v.length(); });
 
   ASSERT_TRUE(o5.hasValue());
   ASSERT_TRUE(o6.hasValue());
@@ -301,10 +301,10 @@ TEST(OptionalTest, monadicTransformR) {
   Optional<int> o3 {};
   Optional<String> o4 {};
 
-  auto const o5 = cds::move(o1).transform([](int v) { return v + 1; });
-  auto const o6 = cds::move(o2).transform([](StringView sv){ return sv.length(); });
-  auto const o7 = cds::move(o3).transform([](long v) { return v - 1; });
-  auto const o8 = cds::move(o4).transform([](String const& v) { return v.length(); });
+  auto const o5 = mv(o1).transform([](int v) { return v + 1; });
+  auto const o6 = mv(o2).transform([](StringView sv){ return sv.length(); });
+  auto const o7 = mv(o3).transform([](long v) { return v - 1; });
+  auto const o8 = mv(o4).transform([](String const& v) { return v.length(); });
 
   ASSERT_TRUE(o5.hasValue());
   ASSERT_TRUE(o6.hasValue());
@@ -335,9 +335,9 @@ TEST(OptionalTest, monadicTransformXVal) {
   };
 
   auto x = Optional<X>{X{defCtr, cpyCtr, movCtr, cpyAss, movAss}}
-      .transform([](X&& v) { return cds::move(v); })
-      .transform([](X&& v) { return cds::move(v); })
-      .transform([](X&& v) { return cds::move(v); });
+      .transform([](X&& v) { return cds::mv(v); })
+      .transform([](X&& v) { return cds::mv(v); })
+      .transform([](X&& v) { return cds::mv(v); });
   ASSERT_TRUE(x.hasValue());
 
   ASSERT_EQ(defCtr, 1);
@@ -392,10 +392,10 @@ TEST(OptionalTest, monadicOrElseR) {
   Optional<int> o3 {};
   Optional<String> o4 {};
 
-  auto const o5 = cds::move(o1).orElse([](){ return Optional<int>{2}; });
-  auto const o6 = cds::move(o2).orElse([]() { return Optional<String> {"bcd"}; });
-  auto const o7 = cds::move(o3).orElse([](){ return Optional<int>{2}; });
-  auto const o8 = cds::move(o4).orElse([]() { return Optional<String> {"bcd"}; });
+  auto const o5 = mv(o1).orElse([](){ return Optional<int>{2}; });
+  auto const o6 = mv(o2).orElse([]() { return Optional<String> {"bcd"}; });
+  auto const o7 = mv(o3).orElse([](){ return Optional<int>{2}; });
+  auto const o8 = mv(o4).orElse([]() { return Optional<String> {"bcd"}; });
 
   ASSERT_TRUE(o5.hasValue());
   ASSERT_TRUE(o6.hasValue());
@@ -409,10 +409,10 @@ TEST(OptionalTest, monadicOrElseR) {
 }
 
 TEST(OptionalTest, makeOptTest) {
-  auto const o1 = cds::makeOptional(1);
-  auto const o2 = cds::makeOptional<int>(2);
-  auto const o4 = cds::makeOptional(String{"abcd"});
-  auto const o5 = cds::makeOptional<String>(4, 'a');
+  auto const o1 = cds::optionalOf(1);
+  auto const o2 = cds::optionalOf<int>(2);
+  auto const o4 = cds::optionalOf(String{"abcd"});
+  auto const o5 = cds::optionalOf<String>(4, 'a');
 
   ASSERT_TRUE(o1);
   ASSERT_TRUE(o2);
@@ -426,135 +426,135 @@ TEST(OptionalTest, makeOptTest) {
 }
 
 TEST(OptionalTest, arrowOp) {
-  auto const o1 = cds::makeOptional<String>("abcd");
+  auto const o1 = cds::optionalOf<String>("abcd");
   ASSERT_TRUE(o1);
   ASSERT_FALSE(o1->empty());
 }
 
 TEST(OptionalTest, compBothPresent) {
-  using cds::makeOptional;
+  using cds::optionalOf;
 
-  ASSERT_TRUE(makeOptional(3) == makeOptional(3));
-  ASSERT_FALSE(makeOptional(3) == makeOptional(4));
+  ASSERT_TRUE(optionalOf(3) == optionalOf(3));
+  ASSERT_FALSE(optionalOf(3) == optionalOf(4));
 
-  ASSERT_TRUE(makeOptional(3) != makeOptional(4));
-  ASSERT_FALSE(makeOptional(3) != makeOptional(3));
+  ASSERT_TRUE(optionalOf(3) != optionalOf(4));
+  ASSERT_FALSE(optionalOf(3) != optionalOf(3));
 
-  ASSERT_TRUE(makeOptional(3) < makeOptional(4));
-  ASSERT_FALSE(makeOptional(3) < makeOptional(3));
-  ASSERT_FALSE(makeOptional(4) < makeOptional(3));
+  ASSERT_TRUE(optionalOf(3) < optionalOf(4));
+  ASSERT_FALSE(optionalOf(3) < optionalOf(3));
+  ASSERT_FALSE(optionalOf(4) < optionalOf(3));
 
-  ASSERT_TRUE(makeOptional(4) > makeOptional(3));
-  ASSERT_FALSE(makeOptional(3) > makeOptional(3));
-  ASSERT_FALSE(makeOptional(3) > makeOptional(4));
+  ASSERT_TRUE(optionalOf(4) > optionalOf(3));
+  ASSERT_FALSE(optionalOf(3) > optionalOf(3));
+  ASSERT_FALSE(optionalOf(3) > optionalOf(4));
 
-  ASSERT_TRUE(makeOptional(3) <= makeOptional(4));
-  ASSERT_TRUE(makeOptional(3) <= makeOptional(3));
-  ASSERT_FALSE(makeOptional(4) <= makeOptional(3));
+  ASSERT_TRUE(optionalOf(3) <= optionalOf(4));
+  ASSERT_TRUE(optionalOf(3) <= optionalOf(3));
+  ASSERT_FALSE(optionalOf(4) <= optionalOf(3));
 
-  ASSERT_TRUE(makeOptional(4) >= makeOptional(3));
-  ASSERT_TRUE(makeOptional(3) >= makeOptional(3));
-  ASSERT_FALSE(makeOptional(3) >= makeOptional(4));
+  ASSERT_TRUE(optionalOf(4) >= optionalOf(3));
+  ASSERT_TRUE(optionalOf(3) >= optionalOf(3));
+  ASSERT_FALSE(optionalOf(3) >= optionalOf(4));
 }
 
 TEST(OptionalTest, compBothPresentDValLeft) {
-  using cds::makeOptional;
+  using cds::optionalOf;
 
-  ASSERT_TRUE(3 == makeOptional(3));
-  ASSERT_FALSE(3 == makeOptional(4));
+  ASSERT_TRUE(3 == optionalOf(3));
+  ASSERT_FALSE(3 == optionalOf(4));
 
-  ASSERT_TRUE(3 != makeOptional(4));
-  ASSERT_FALSE(3 != makeOptional(3));
+  ASSERT_TRUE(3 != optionalOf(4));
+  ASSERT_FALSE(3 != optionalOf(3));
 
-  ASSERT_TRUE(3 < makeOptional(4));
-  ASSERT_FALSE(3 < makeOptional(3));
-  ASSERT_FALSE(4 < makeOptional(3));
+  ASSERT_TRUE(3 < optionalOf(4));
+  ASSERT_FALSE(3 < optionalOf(3));
+  ASSERT_FALSE(4 < optionalOf(3));
 
-  ASSERT_TRUE(4 > makeOptional(3));
-  ASSERT_FALSE(3 > makeOptional(3));
-  ASSERT_FALSE(3 > makeOptional(4));
+  ASSERT_TRUE(4 > optionalOf(3));
+  ASSERT_FALSE(3 > optionalOf(3));
+  ASSERT_FALSE(3 > optionalOf(4));
 
-  ASSERT_TRUE(3 <= makeOptional(4));
-  ASSERT_TRUE(3 <= makeOptional(3));
-  ASSERT_FALSE(4 <= makeOptional(3));
+  ASSERT_TRUE(3 <= optionalOf(4));
+  ASSERT_TRUE(3 <= optionalOf(3));
+  ASSERT_FALSE(4 <= optionalOf(3));
 
-  ASSERT_TRUE(4 >= makeOptional(3));
-  ASSERT_TRUE(3 >= makeOptional(3));
-  ASSERT_FALSE(3 >= makeOptional(4));
+  ASSERT_TRUE(4 >= optionalOf(3));
+  ASSERT_TRUE(3 >= optionalOf(3));
+  ASSERT_FALSE(3 >= optionalOf(4));
 }
 
 TEST(OptionalTest, compBothPresentDValRight) {
-  using cds::makeOptional;
+  using cds::optionalOf;
 
-  ASSERT_TRUE(makeOptional(3) == 3);
-  ASSERT_FALSE(makeOptional(3) == 4);
+  ASSERT_TRUE(optionalOf(3) == 3);
+  ASSERT_FALSE(optionalOf(3) == 4);
 
-  ASSERT_TRUE(makeOptional(3) != 4);
-  ASSERT_FALSE(makeOptional(3) != 3);
+  ASSERT_TRUE(optionalOf(3) != 4);
+  ASSERT_FALSE(optionalOf(3) != 3);
 
-  ASSERT_TRUE(makeOptional(3) < 4);
-  ASSERT_FALSE(makeOptional(3) < 3);
-  ASSERT_FALSE(makeOptional(4) < 3);
+  ASSERT_TRUE(optionalOf(3) < 4);
+  ASSERT_FALSE(optionalOf(3) < 3);
+  ASSERT_FALSE(optionalOf(4) < 3);
 
-  ASSERT_TRUE(makeOptional(4) > 3);
-  ASSERT_FALSE(makeOptional(3) > 3);
-  ASSERT_FALSE(makeOptional(3) > 4);
+  ASSERT_TRUE(optionalOf(4) > 3);
+  ASSERT_FALSE(optionalOf(3) > 3);
+  ASSERT_FALSE(optionalOf(3) > 4);
 
-  ASSERT_TRUE(makeOptional(3) <= 4);
-  ASSERT_TRUE(makeOptional(3) <= 3);
-  ASSERT_FALSE(makeOptional(4) <= 3);
+  ASSERT_TRUE(optionalOf(3) <= 4);
+  ASSERT_TRUE(optionalOf(3) <= 3);
+  ASSERT_FALSE(optionalOf(4) <= 3);
 
-  ASSERT_TRUE(makeOptional(4) >= 3);
-  ASSERT_TRUE(makeOptional(3) >= 3);
-  ASSERT_FALSE(makeOptional(3) >= 4);
+  ASSERT_TRUE(optionalOf(4) >= 3);
+  ASSERT_TRUE(optionalOf(3) >= 3);
+  ASSERT_FALSE(optionalOf(3) >= 4);
 }
 
 TEST(OptionalTest, compFirstAbsent) {
-  using cds::makeOptional;
+  using cds::optionalOf;
 
-  ASSERT_FALSE(nullopt == makeOptional(3));
-  ASSERT_TRUE(nullopt != makeOptional(4));
-  ASSERT_TRUE(nullopt < makeOptional(4));
-  ASSERT_FALSE(nullopt > makeOptional(3));
-  ASSERT_TRUE(nullopt <= makeOptional(4));
-  ASSERT_FALSE(nullopt >= makeOptional(4));
+  ASSERT_FALSE(nullopt == optionalOf(3));
+  ASSERT_TRUE(nullopt != optionalOf(4));
+  ASSERT_TRUE(nullopt < optionalOf(4));
+  ASSERT_FALSE(nullopt > optionalOf(3));
+  ASSERT_TRUE(nullopt <= optionalOf(4));
+  ASSERT_FALSE(nullopt >= optionalOf(4));
 }
 
 TEST(OptionalTest, compSecondAbsent) {
-  using cds::makeOptional;
+  using cds::optionalOf;
 
-  ASSERT_FALSE(makeOptional(3) == nullopt);
-  ASSERT_TRUE(makeOptional(4) != nullopt);
-  ASSERT_FALSE(makeOptional(4) < nullopt);
-  ASSERT_TRUE(makeOptional(3) > nullopt);
-  ASSERT_FALSE(makeOptional(4) <= nullopt);
-  ASSERT_TRUE(makeOptional(4) >= nullopt);
+  ASSERT_FALSE(optionalOf(3) == nullopt);
+  ASSERT_TRUE(optionalOf(4) != nullopt);
+  ASSERT_FALSE(optionalOf(4) < nullopt);
+  ASSERT_TRUE(optionalOf(3) > nullopt);
+  ASSERT_FALSE(optionalOf(4) <= nullopt);
+  ASSERT_TRUE(optionalOf(4) >= nullopt);
 }
 
 TEST(OptionalTest, compFirstAbsent2) {
-  using cds::makeOptional;
+  using cds::optionalOf;
 
-  ASSERT_FALSE(Optional<int>{} == makeOptional(3));
-  ASSERT_TRUE(Optional<int>{} != makeOptional(4));
-  ASSERT_TRUE(Optional<int>{} < makeOptional(4));
-  ASSERT_FALSE(Optional<int>{} > makeOptional(3));
-  ASSERT_TRUE(Optional<int>{} <= makeOptional(4));
-  ASSERT_FALSE(Optional<int>{} >= makeOptional(4));
+  ASSERT_FALSE(Optional<int>{} == optionalOf(3));
+  ASSERT_TRUE(Optional<int>{} != optionalOf(4));
+  ASSERT_TRUE(Optional<int>{} < optionalOf(4));
+  ASSERT_FALSE(Optional<int>{} > optionalOf(3));
+  ASSERT_TRUE(Optional<int>{} <= optionalOf(4));
+  ASSERT_FALSE(Optional<int>{} >= optionalOf(4));
 }
 
 TEST(OptionalTest, compSecondAbsent2) {
-  using cds::makeOptional;
+  using cds::optionalOf;
 
-  ASSERT_FALSE(makeOptional(3) == Optional<int>{});
-  ASSERT_TRUE(makeOptional(4) != Optional<int>{});
-  ASSERT_FALSE(makeOptional(4) < Optional<int>{});
-  ASSERT_TRUE(makeOptional(3) > Optional<int>{});
-  ASSERT_FALSE(makeOptional(4) <= Optional<int>{});
-  ASSERT_TRUE(makeOptional(4) >= Optional<int>{});
+  ASSERT_FALSE(optionalOf(3) == Optional<int>{});
+  ASSERT_TRUE(optionalOf(4) != Optional<int>{});
+  ASSERT_FALSE(optionalOf(4) < Optional<int>{});
+  ASSERT_TRUE(optionalOf(3) > Optional<int>{});
+  ASSERT_FALSE(optionalOf(4) <= Optional<int>{});
+  ASSERT_TRUE(optionalOf(4) >= Optional<int>{});
 }
 
 TEST(OptionalTest, compFirstAbsent3) {
-  using cds::makeOptional;
+  using cds::optionalOf;
 
   ASSERT_FALSE(Optional<int>{} == 3);
   ASSERT_TRUE(Optional<int>{} != 4);
@@ -565,7 +565,7 @@ TEST(OptionalTest, compFirstAbsent3) {
 }
 
 TEST(OptionalTest, compSecondAbsent3) {
-  using cds::makeOptional;
+  using cds::optionalOf;
 
   ASSERT_FALSE(3 == Optional<int>{});
   ASSERT_TRUE(4 != Optional<int>{});
@@ -594,8 +594,8 @@ TEST(OptionalTest, compBothAbsent2) {
 }
 
 TEST(OptionalTest, observabilityGetOr) {
-  using cds::makeOptional;
-  ASSERT_EQ(makeOptional(3).getOr(4), 3);
+  using cds::optionalOf;
+  ASSERT_EQ(optionalOf(3).getOr(4), 3);
   ASSERT_EQ(Optional<int>{}.getOr(4), 4);
 
   Optional<int> const o1 = 3;
@@ -615,8 +615,8 @@ TEST(OptionalTest, observabilityGetThrowing) {
 
   ASSERT_THROW(ignore = o1.get(), NoSuchElementException);
   ASSERT_THROW(ignore = o2.get(), NoSuchElementException);
-  ASSERT_THROW(ignore = cds::move(o3).get(), NoSuchElementException);
-  ASSERT_THROW(ignore = cds::move(o4).get(), NoSuchElementException);
+  ASSERT_THROW(ignore = mv(o3).get(), NoSuchElementException);
+  ASSERT_THROW(ignore = mv(o4).get(), NoSuchElementException);
 }
 
 TEST(OptionalTest, observabilityGetNonThrowing) {
@@ -627,8 +627,8 @@ TEST(OptionalTest, observabilityGetNonThrowing) {
 
   ASSERT_EQ(o1.get(), 3);
   ASSERT_EQ(o2.get(), 4);
-  ASSERT_EQ(cds::move(o3).get(), 5);
-  ASSERT_EQ(cds::move(o4).get(), 6);
+  ASSERT_EQ(mv(o3).get(), 5);
+  ASSERT_EQ(mv(o4).get(), 6);
 }
 
 TEST(OptionalTest, observabilityArrow) {
@@ -655,23 +655,23 @@ TEST(OptionalTest, observabilityIndirect) {
   ASSERT_EQ(*o2, 4);
   *o1 = 2;
   ASSERT_EQ(*o1, 2);
-  ASSERT_EQ(*cds::move(o3), 5);
-  ASSERT_EQ(*cds::move(o4), 6);
+  ASSERT_EQ(*mv(o3), 5);
+  ASSERT_EQ(*mv(o4), 6);
 }
 
 TEST(OptionalTest, moveAssignNonTrivial) {
   Optional<String> o1;
   String s1 = "abc";
 
-  o1 = cds::move(s1);
+  o1 = mv(s1);
   ASSERT_EQ(o1, "abc");
   o1 = nullopt;
   ASSERT_FALSE(o1);
   Optional<String> o2 = "abc";
-  o1 = cds::move(o2);
+  o1 = mv(o2);
   ASSERT_EQ(o1, "abc");
   Optional<String> o3 = "def";
-  o1 = cds::move(o3);
+  o1 = mv(o3);
   ASSERT_EQ(o1, "def");
   o1 = nullopt;
   ASSERT_FALSE(o1);
@@ -683,7 +683,7 @@ TEST(OptionalTest, copyAssignNonTrivial) {
   Optional<String> o1;
   String s1 = "abc";
 
-  o1 = cds::move(s1);
+  o1 = mv(s1);
   ASSERT_EQ(o1, "abc");
   o1 = nullopt;
   ASSERT_FALSE(o1);
@@ -702,17 +702,17 @@ TEST(OptionalTest, copyAssignNonTrivial) {
 
 #ifdef DCR_SINCECPP11
 namespace cxx11 {
-using cds::makeOptional;
+using cds::optionalOf;
 
 constexpr int deref(Optional<int> const& o) {
   return *o;
 }
 
 static_assert(!Optional<int> {}, "Failed TrvialDefaultConstruct & bool convert constexpr");
-static_assert(makeOptional(0), "Failed TrivialArgConstruct & bool convert constexpr");
-static_assert(Optional<int>{static_cast<Optional<int> const&>(makeOptional(0))}, "Failed TrivialCopyConstruct & bool convert constexpr");
-static_assert(Optional<int>{cds::move(makeOptional(0))}, "Failed TrivialMoveConstruct & bool convert constexpr");
-static_assert(deref(makeOptional(0)) == 0, "Failed deref constexpr");
+static_assert(optionalOf(0), "Failed TrivialArgConstruct & bool convert constexpr");
+static_assert(Optional<int>{static_cast<Optional<int> const&>(optionalOf(0))}, "Failed TrivialCopyConstruct & bool convert constexpr");
+static_assert(Optional<int>{mv(optionalOf(0))}, "Failed TrivialMoveConstruct & bool convert constexpr");
+static_assert(deref(optionalOf(0)) == 0, "Failed deref constexpr");
 
 struct X {
   constexpr int get() const { return 0; }
@@ -722,34 +722,34 @@ constexpr int xarrowget(Optional<X> const& o) {
   return o->get();
 }
 
-static_assert(xarrowget(makeOptional<X>()) == 0, "Failed arrow constexpr");
-static_assert(makeOptional(3).hasValue(), "Failed hasValue constexpr");
+static_assert(xarrowget(optionalOf<X>()) == 0, "Failed arrow constexpr");
+static_assert(optionalOf(3).hasValue(), "Failed hasValue constexpr");
 static_assert(static_cast<Optional<int> const&>(Optional<int>{}).getOr(3) == 3, "Failed getOr constexpr");
 } // namespace cxx11
 #endif
 
 #if CDS_ATTR(spaceship)
 TEST(OptionalTest, spaceshipComp) {
-  using cds::makeOptional;
-  ASSERT_EQ(std::weak_ordering::equivalent, makeOptional(3) <=> makeOptional(3));
-  ASSERT_EQ(std::weak_ordering::less, makeOptional(3) <=> makeOptional(4));
-  ASSERT_EQ(std::weak_ordering::greater, makeOptional(4) <=> makeOptional(3));
+  using cds::optionalOf;
+  ASSERT_EQ(std::weak_ordering::equivalent, optionalOf(3) <=> optionalOf(3));
+  ASSERT_EQ(std::weak_ordering::less, optionalOf(3) <=> optionalOf(4));
+  ASSERT_EQ(std::weak_ordering::greater, optionalOf(4) <=> optionalOf(3));
 
-  ASSERT_EQ(std::weak_ordering::equivalent, 3 <=> makeOptional(3));
-  ASSERT_EQ(std::weak_ordering::less, 3 <=> makeOptional(4));
-  ASSERT_EQ(std::weak_ordering::greater, 4 <=> makeOptional(3));
+  ASSERT_EQ(std::weak_ordering::equivalent, 3 <=> optionalOf(3));
+  ASSERT_EQ(std::weak_ordering::less, 3 <=> optionalOf(4));
+  ASSERT_EQ(std::weak_ordering::greater, 4 <=> optionalOf(3));
 
-  ASSERT_EQ(std::weak_ordering::equivalent, makeOptional(3) <=> 3);
-  ASSERT_EQ(std::weak_ordering::less, makeOptional(3) <=> 4);
-  ASSERT_EQ(std::weak_ordering::greater, makeOptional(4) <=> 3);
+  ASSERT_EQ(std::weak_ordering::equivalent, optionalOf(3) <=> 3);
+  ASSERT_EQ(std::weak_ordering::less, optionalOf(3) <=> 4);
+  ASSERT_EQ(std::weak_ordering::greater, optionalOf(4) <=> 3);
 
   ASSERT_EQ(std::weak_ordering::less, Optional<int>{} <=> 0);
   ASSERT_EQ(std::weak_ordering::greater, 0 <=> Optional<int>{});
 
-  ASSERT_EQ(std::weak_ordering::less, nullopt <=> makeOptional(0));
-  ASSERT_EQ(std::weak_ordering::greater, makeOptional(0) <=> nullopt);
-  ASSERT_EQ(std::weak_ordering::less, Optional<int>{} <=> makeOptional(0));
-  ASSERT_EQ(std::weak_ordering::greater, makeOptional(0) <=> Optional<int>{});
+  ASSERT_EQ(std::weak_ordering::less, nullopt <=> optionalOf(0));
+  ASSERT_EQ(std::weak_ordering::greater, optionalOf(0) <=> nullopt);
+  ASSERT_EQ(std::weak_ordering::less, Optional<int>{} <=> optionalOf(0));
+  ASSERT_EQ(std::weak_ordering::greater, optionalOf(0) <=> Optional<int>{});
 
   ASSERT_EQ(std::weak_ordering::equivalent, nullopt <=> nullopt);
   ASSERT_EQ(std::weak_ordering::equivalent, nullopt <=> Optional<int>{});

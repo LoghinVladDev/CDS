@@ -24,6 +24,7 @@ public:
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto end() const noexcept -> Sentinel {
+    ignore = this;
     return Sentinel{};
   }
 

@@ -25,7 +25,10 @@
 #include "StandardFormatters.hpp"
 #include "TupleLikeFormatter.hpp"
 
+#include "HashMapFormatter.hpp"
+#include "MapEntryFormatter.hpp"
 #include "OptionalFormatter.hpp"
+#include "SetProjectionFormat.hpp"
 #include "TupleFormatter.hpp"
 #include "VectorFormat.hpp"
 #include "VectorViewFormat.hpp"
@@ -74,7 +77,7 @@ using impl::fmt::vformatTo;
 
 inline namespace literals {
 CDS_ATTR(2(nodiscard, consteval(20, constexpr(14))))
-auto operator ""_f(char const *fmt, std::size_t len) noexcept
+auto operator ""_f(char const *fmt, std::size_t const len) noexcept
     -> impl::fmt::CallableFormatString<char, impl::StringUtils<char, impl::StringTraits<char>>> {
   return {impl::BaseStringView<char>{fmt, len}};
 }

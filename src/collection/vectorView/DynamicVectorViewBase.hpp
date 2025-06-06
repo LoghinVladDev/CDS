@@ -31,7 +31,7 @@ public:
   using ConstReverseIterator = BackwardAddressIterator<T const>;
 
   template <typename It, EnableIf<IsRandomAccessIterator<It>> = 0> CDS_ATTR(2(explicit, constexpr(11)))
-  BaseDynamicVectorView(It first, Size count) noexcept : _begin{&*first}, _end{_begin + count} {}
+  BaseDynamicVectorView(It first, Size const count) noexcept : _begin{&*first}, _end{_begin + count} {}
 
   template <typename It, typename S, EnableIf<IsRandomAccessIterator<It, S>> = 0> CDS_ATTR(2(explicit, constexpr(11)))
   BaseDynamicVectorView(It first, S end) noexcept : BaseDynamicVectorView(first, end - first) {}
@@ -102,12 +102,16 @@ public:
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto front() const noexcept -> T& {
+#if CDS_ATTR(cpp14)
     assert(!empty() && "Accessing front of empty view");
+#endif
     return *begin();
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto back() const noexcept -> T& {
+#if CDS_ATTR(cpp14)
     assert(!empty() && "Accessing back of empty view");
+#endif
     return *(end() - 1);
   }
 

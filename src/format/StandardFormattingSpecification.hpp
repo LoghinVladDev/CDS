@@ -59,7 +59,7 @@ template <typename T, typename C> struct StandardFormatter :
     }
 
     if (0 != (typeFlags & FormatTypeFlagBits::Escaped)) {
-      bool escaped = true;
+      auto escaped = true;
       if (value == static_cast<C>('\t')) {
         value = static_cast<C>('t');
       } else if (value == static_cast<C>('\n')) {
@@ -116,7 +116,7 @@ template <typename T, typename C> struct StandardFormatter :
       }
       escapedValue.reserve(value.length() + expectedEscapeCharsAverage);
       for (auto chr : value) {
-        bool escaped = true;
+        auto escaped = true;
         if (chr == static_cast<C>('\t')) {
           chr = static_cast<C>('t');
         } else if (chr == static_cast<C>('\n')) {

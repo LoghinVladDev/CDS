@@ -42,8 +42,8 @@ TEST(TupleTest, toString) {
   ASSERT_EQ("(3, abcd)", t.toString());
 }
 
-TEST(TupleTest, makeTuple) {
-  auto t = cds::makeTuple(2, "abcd", 4, "def", 3);
+TEST(TupleTest, tupleOf) {
+  auto t = cds::tupleOf(2, "abcd", 4, "def", 3);
   ASSERT_EQ(2, get<0>(t));
   ASSERT_EQ(StringView{"abcd"}, get<1>(t));
   ASSERT_EQ(4, get<2>(t));
@@ -75,9 +75,9 @@ TEST(TupleTest, constexprCpp11) {
   static_assert(Tuple<int, long>{1, 3L} != Tuple<int, long>{2, 3L}, "constexpr11 construct&op!= failed");
   static_assert(Tuple<int, long>{1, 3L} != Tuple<int, long>{1, 2L}, "constexpr11 construct&op!= failed");
   static_assert(cds::functional::Hash<>()(Tuple<int, int>{1, 1}) == 32, "constexpr11 hash failed");
-  static_assert(cds::makeTuple(1, 3L) == Tuple<int, long>{1, 3L}, "constexpr11 makeTuple failed");
-  static_assert(cds::makeTuple(1, 3) == Tuple<int, long>{1, 3L}, "constexpr11 makeTuple failed");
-  static_assert(cds::makeTuple(1, 3) != Tuple<int, long>{1, 2L}, "constexpr11 makeTuple failed");
+  static_assert(cds::tupleOf(1, 3L) == Tuple<int, long>{1, 3L}, "constexpr11 makeTuple failed");
+  static_assert(cds::tupleOf(1, 3) == Tuple<int, long>{1, 3L}, "constexpr11 makeTuple failed");
+  static_assert(cds::tupleOf(1, 3) != Tuple<int, long>{1, 2L}, "constexpr11 makeTuple failed");
 }
 #endif
 
@@ -119,6 +119,6 @@ TEST(TupleTest, TupleNodeUnpackBindings) {
 
 #if DCR_SINCECPP20
 TEST(TupleTest, constexprCpp20) {
-  static_assert(cds::makeTuple(1, "abcd").toString() == "(1, abcd)", "constexpr20 toString failed");
+  static_assert(cds::tupleOf(1, "abcd").toString() == "(1, abcd)", "constexpr20 toString failed");
 }
 #endif // DCR_SINCECPP20

@@ -8,6 +8,9 @@
 
 #include <cds/iterator/AddressIterator>
 #include <cds/functional/Comparator>
+#include <cds/functional/Invoke>
+
+#include "../meta/Ignore.hpp"
 
 namespace cds {
 namespace meta {
@@ -46,6 +49,8 @@ using meta::And;
 using meta::impl::HasContains;
 using meta::impl::HasProjectorContains;
 
+namespace fn = cds::functional;
+
 template <
     typename T, typename V, typename E,
     typename C = HasContains<T, V>,
@@ -53,9 +58,9 @@ template <
     typename RI = IsReverseIterable<T>,
     EnableIf<Not<Or<C, I, RI>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what, E const& equal) noexcept -> bool {
-  (void) where;
-  (void) what;
-  (void) equal;
+  ignore = where;
+  ignore = what;
+  ignore = equal;
   static_assert(
       C::value || I::value || RI::value,
       "Given type does not provide a 'contains' function for target parameter"
@@ -71,10 +76,10 @@ template <
     EnableIf<Not<Or<C, I, RI>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what, P&& projector, E const& equal)
     noexcept -> bool {
-  (void) where;
-  (void) what;
-  (void) projector;
-  (void) equal;
+  ignore = where;
+  ignore = what;
+  ignore = projector;
+  ignore = equal;
   static_assert(
       C::value || I::value || RI::value,
       "Given type does not provide a 'contains' function with projector for target parameter"
@@ -88,8 +93,8 @@ template <
     EnableIf<C> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what, E const& equal)
     CDS_ATTR(noexcept(C::exceptSpec)) -> bool {
-  (void) equal;
-  return cds::forward<T>(where).contains(cds::forward<V>(what));
+  ignore = equal;
+  return fwd<T>(where).contains(fwd<V>(what));
 }
 
 template <
@@ -98,9 +103,9 @@ template <
     typename I = IsIterable<T>,
     EnableIf<And<I, Not<C>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what, E const& equal)
-    CDS_ATTR(noexcept(noexcept(equal(cds::forward<V>(what), *cds::begin(cds::forward<T>(where)))))) -> bool {
-  for (auto it = cds::begin(cds::forward<T>(where)), end = cds::end(cds::forward<T>(where)); it != end; ++it) {
-    if (equal(cds::forward<V>(what), *it)) {
+    CDS_ATTR(noexcept(noexcept(fn::invoke(equal, fwd<V>(what), *cds::begin(fwd<T>(where)))))) -> bool {
+  for (auto it = cds::begin(fwd<T>(where)), end = cds::end(fwd<T>(where)); it != end; ++it) {
+    if (fn::invoke(equal, fwd<V>(what), *it)) {
       return true;
     }
   }
@@ -114,9 +119,9 @@ template <
     typename RI = IsReverseIterable<T>,
     EnableIf<And<RI, Not<C>, Not<I>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what, E const& equal)
-    CDS_ATTR(noexcept(noexcept(equal(cds::forward<V>(what), *cds::rbegin(cds::forward<T>(where)))))) -> bool {
-  for (auto it = cds::rbegin(cds::forward<T>(where)), end = cds::rend(cds::forward<T>(where)); it != end; ++it) {
-    if (equal(cds::forward<V>(what), *it)) {
+    CDS_ATTR(noexcept(noexcept(fn::invoke(equal, fwd<V>(what), *cds::rbegin(fwd<T>(where)))))) -> bool {
+  for (auto it = cds::rbegin(fwd<T>(where)), end = cds::rend(fwd<T>(where)); it != end; ++it) {
+    if (fn::invoke(equal, fwd<V>(what), *it)) {
       return true;
     }
   }
@@ -129,8 +134,8 @@ template <
     EnableIf<C> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what, P&& projector, E const& equal)
     CDS_ATTR(noexcept(C::exceptSpec)) -> bool {
-  (void) equal;
-  return cds::forward<T>(where).contains(cds::forward<V>(what), cds::forward<P>(projector));
+  ignore = equal;
+  return fwd<T>(where).contains(fwd<V>(what), fwd<P>(projector));
 }
 
 template <
@@ -139,11 +144,10 @@ template <
     typename I = IsIterable<T>,
     EnableIf<And<I, Not<C>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what, P&& projector, E const& equal)
-    CDS_ATTR(noexcept(noexcept(
-        equal(cds::forward<V>(what), cds::forward<P>(projector)(*cds::begin(cds::forward<T>(where))))
-    ))) -> bool {
-  for (auto it = cds::begin(cds::forward<T>(where)), end = cds::end(cds::forward<T>(where)); it != end; ++it) {
-    if (equal(cds::forward<V>(what), cds::forward<P>(projector)(*it))) {
+    CDS_ATTR(noexcept(noexcept(fn::invoke(equal, fwd<V>(what), fwd<P>(projector)(*cds::begin(fwd<T>(where)))))))
+    -> bool {
+  for (auto it = cds::begin(fwd<T>(where)), end = cds::end(fwd<T>(where)); it != end; ++it) {
+    if (fn::invoke(equal, fwd<V>(what), fwd<P>(projector)(*it))) {
       return true;
     }
   }
@@ -158,11 +162,10 @@ template <
     typename RI = IsReverseIterable<T>,
     EnableIf<And<RI, Not<C>, Not<I>>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(T&& where, V&& what, P&& projector, E const& equal)
-    CDS_ATTR(noexcept(noexcept(
-        equal(cds::forward<V>(what), cds::forward<P>(projector)(*cds::rbegin(cds::forward<T>(where))))
-    ))) -> bool {
-  for (auto it = cds::rbegin(cds::forward<T>(where)), end = cds::rend(cds::forward<T>(where)); it != end; ++it) {
-    if (equal(cds::forward<V>(what), cds::forward<P>(projector)(*it))) {
+    CDS_ATTR(noexcept(noexcept(fn::invoke(equal, fwd<V>(what), fwd<P>(projector)(*cds::rbegin(fwd<T>(where)))))))
+    -> bool {
+  for (auto it = cds::rbegin(fwd<T>(where)), end = cds::rend(fwd<T>(where)); it != end; ++it) {
+    if (fn::invoke(equal, fwd<V>(what), fwd<P>(projector)(*it))) {
       return true;
     }
   }
@@ -177,18 +180,18 @@ public:
 
   template <typename L, typename R>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto operator()(L&& lhs, R&& rhs) const
-      CDS_ATTR(noexcept(noexcept(contains(cds::forward<L>(lhs), cds::forward<R>(rhs), static_cast<E const&>(*this)))))
+      CDS_ATTR(noexcept(noexcept(contains(fwd<L>(lhs), fwd<R>(rhs), static_cast<E const&>(*this)))))
       -> bool {
-    return contains(cds::forward<L>(lhs), cds::forward<R>(rhs), static_cast<E const&>(*this));
+    return contains(fwd<L>(lhs), fwd<R>(rhs), static_cast<E const&>(*this));
   }
 
   template <typename L, typename R, typename P>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto operator()(L&& lhs, R&& rhs, P&& projector)
       const CDS_ATTR(noexcept(noexcept(contains(
-          cds::forward<L>(lhs), cds::forward<R>(rhs), cds::forward<P>(projector), static_cast<E const&>(*this)
+          fwd<L>(lhs), fwd<R>(rhs), fwd<P>(projector), static_cast<E const&>(*this)
       )))) -> bool {
     return
-        contains(cds::forward<L>(lhs), cds::forward<R>(rhs), cds::forward<P>(projector), static_cast<E const&>(*this));
+        contains(fwd<L>(lhs), fwd<R>(rhs), fwd<P>(projector), static_cast<E const&>(*this));
   }
 };
 
@@ -199,18 +202,18 @@ public:
 
   template <typename L, typename R>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto operator()(L&& lhs, R&& rhs) const
-      CDS_ATTR(noexcept(noexcept(!contains(cds::forward<L>(lhs), cds::forward<R>(rhs), static_cast<E const&>(*this)))))
+      CDS_ATTR(noexcept(noexcept(!contains(fwd<L>(lhs), fwd<R>(rhs), static_cast<E const&>(*this)))))
       -> bool {
-    return !contains(cds::forward<L>(lhs), cds::forward<R>(rhs), static_cast<E const&>(*this));
+    return !contains(fwd<L>(lhs), fwd<R>(rhs), static_cast<E const&>(*this));
   }
 
   template <typename L, typename R, typename P>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto operator()(L&& lhs, R&& rhs, P&& projector)
       const CDS_ATTR(noexcept(noexcept(!contains(
-          cds::forward<L>(lhs), cds::forward<R>(rhs), cds::forward<P>(projector), static_cast<E const&>(*this)))
+          fwd<L>(lhs), fwd<R>(rhs), fwd<P>(projector), static_cast<E const&>(*this)))
       )) -> bool {
     return
-        !contains(cds::forward<L>(lhs), cds::forward<R>(rhs), cds::forward<P>(projector), static_cast<E const&>(*this));
+        !contains(fwd<L>(lhs), fwd<R>(rhs), fwd<P>(projector), static_cast<E const&>(*this));
   }
 };
 } // namespace impl

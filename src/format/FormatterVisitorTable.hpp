@@ -65,12 +65,12 @@ Size const FormatterVisitorTableImpl<IndexSequence<indices...>, C, U, Fmt, Args.
 template <typename C, typename U, typename Fmt, typename... Args, unsigned... indices>
 Common<Decay<decltype(&FormatterVisitor<indices>::template doParse<C, U, Fmt, Args&&...>)>...> const
     FormatterVisitorTableImpl<IndexSequence<indices...>, C, U, Fmt, Args...>
-    ::parsers[FormatterVisitorTableImpl<IndexSequence<indices...>, C, U, Fmt, Args...>::size];
+    ::parsers[size];
 
 template <typename C, typename U, typename Fmt, typename... Args, unsigned... indices>
 Common<Decay<decltype(&FormatterVisitor<indices>::template doFormat<C, U, Fmt, Args&&...>)>...> const
     FormatterVisitorTableImpl<IndexSequence<indices...>, C, U, Fmt, Args...>
-    ::formatters[FormatterVisitorTableImpl<IndexSequence<indices...>, C, U, Fmt, Args...>::size];
+    ::formatters[size];
 
 template <typename C, typename U, typename Fmt>
 Size const FormatterVisitorTableImpl<IndexSequence<>, C, U, Fmt>::size;

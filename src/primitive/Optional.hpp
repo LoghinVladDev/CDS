@@ -316,28 +316,28 @@ CDS_ATTR(2(nodiscard, constexpr(11))) auto operator<=>(CDS_ATTR(unused) Nullopt,
 }
 #endif
 
-template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto makeOptional(T&& value)
-    CDS_ATTR(noexcept(noexcept(Optional<Decay<T>>{cds::forward<T>(value)}))) -> Optional<Decay<T>> {
-  return Optional<Decay<T>>{cds::forward<T>(value)};
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto optionalOf(T&& value)
+    CDS_ATTR(noexcept(noexcept(Optional<Decay<T>>{fwd<T>(value)}))) -> Optional<Decay<T>> {
+  return Optional<Decay<T>>{fwd<T>(value)};
 }
 
 template <typename T, typename... Args> CDS_ATTR(2(nodiscard, constexpr(11)))
-auto makeOptional(Args&&... args) CDS_ATTR(noexcept(noexcept(Optional<T>{cds::forward<Args>(args)...})))
+auto optionalOf(Args&&... args) CDS_ATTR(noexcept(noexcept(Optional<T>{fwd<Args>(args)...})))
     -> ReturnIf<Optional<T>, Bool<(sizeof... (Args) > 0)>> {
-  return Optional<T>{cds::forward<Args>(args)...};
+  return Optional<T>{fwd<Args>(args)...};
 }
 
-auto makeOptional(Nullopt) noexcept -> void = delete;
-template <typename T> auto makeOptional(Nullopt) noexcept -> void = delete;
+auto optionalOf(Nullopt) noexcept -> void = delete;
+template <typename T> auto optionalOf(Nullopt) noexcept -> void = delete;
 
-template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto makeOptional()
+template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto optionalOf()
     CDS_ATTR(noexcept(meta::IsDefaultConstructible<T>::value)) -> Optional<T> {
   return Optional<T>{InPlace{}};
 }
 } // namespace impl
 
 using impl::nullopt;
-using impl::makeOptional;
+using impl::optionalOf;
 
 #if CDS_ATTR(ctad)
 template <typename T> Optional(T) -> Optional<T>;

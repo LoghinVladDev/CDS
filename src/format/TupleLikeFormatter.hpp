@@ -63,7 +63,7 @@ private:
 };
 
 template <
-    typename C, unsigned idx, typename I, typename S, typename... Fs,
+    typename /* C */, unsigned idx, typename I, typename S, typename... Fs,
     EnableIf<Bool<idx == sizeof...(Fs)>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14)))
 auto formatParseTupleUnderlyingFormatters(

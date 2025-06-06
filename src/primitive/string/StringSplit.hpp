@@ -142,7 +142,7 @@ public:
 
   template <typename FS>
   CDS_ATTR(2(explicit, constexpr(11))) SplitPredicate(FS&& separator, CDS_ATTR(unused) A const& alloc)
-      CDS_ATTR(noexcept(noexcept(S(cds::forward<FS>(separator))))) : _s(cds::forward<FS>(separator)) {}
+      CDS_ATTR(noexcept(noexcept(S(fwd<FS>(separator))))) : _s(fwd<FS>(separator)) {}
 
   template <typename C> CDS_ATTR(2(nodiscard, constexpr(11)))
   auto operator()(C chr) const CDS_ATTR(noexcept(noexcept(chr == _s))) -> bool {
@@ -161,7 +161,7 @@ public:
 
   template <typename FS>
   CDS_ATTR(2(explicit, constexpr(11))) SplitPredicate(FS&& separator, CDS_ATTR(unused) A const& alloc)
-      CDS_ATTR(noexcept(noexcept(S(cds::forward<FS>(separator))))) : _s(cds::forward<FS>(separator)) {}
+      CDS_ATTR(noexcept(noexcept(S(fwd<FS>(separator))))) : _s(fwd<FS>(separator)) {}
 
   template <typename C> CDS_ATTR(2(nodiscard, constexpr(11)))
   auto operator()(C chr) const CDS_ATTR(noexcept(noexcept(impl::contains(value<S>(), chr, Equal<>())))) -> bool {
@@ -191,8 +191,8 @@ public:
 
   template <typename FS, typename FAS> CDS_ATTR(2(explicit, constexpr(20)))
   SplitPredicate(FS&& separator, FAS&& allocatorSet) CDS_ATTR(noexcept(noexcept(
-      AhoCorasick(cds::forward<FS>(separator), 16, cds::forward<FAS>(allocatorSet))
-  ))) : AhoCorasick(cds::forward<FS>(separator), 16, cds::forward<FAS>(allocatorSet)) {}
+      AhoCorasick(fwd<FS>(separator), 16, fwd<FAS>(allocatorSet))
+  ))) : AhoCorasick(fwd<FS>(separator), 16, fwd<FAS>(allocatorSet)) {}
 };
 
 template <typename R, typename P> class SplitIterator : private StateContainer<P> {
@@ -373,14 +373,14 @@ public:
   using Iterator = SplitIterator<Decay<R>, Decay<P>>;
 
   template <typename FR, typename S, typename A, typename DA = typename P::Allocates, EnableIf<DA> = 0>
-  CDS_ATTR(constexpr(20)) SplitRange(FR&& view, S&& separator, Size limit, A&& alloc) CDS_ATTR(noexcept(
-        noexcept(R(cds::forward<FR>(view))) && noexcept(P(cds::forward<S>(separator), cds::forward<A>(alloc)))
-  )) : P(cds::forward<S>(separator), cds::forward<A>(alloc)), _r(cds::forward<FR>(view)), _l(limit) {}
+  CDS_ATTR(constexpr(20)) SplitRange(FR&& view, S&& separator, Size const limit, A&& alloc) CDS_ATTR(noexcept(
+        noexcept(R(fwd<FR>(view))) && noexcept(P(fwd<S>(separator), fwd<A>(alloc)))
+  )) : P(fwd<S>(separator), fwd<A>(alloc)), _r(fwd<FR>(view)), _l(limit) {}
 
   template <typename FR, typename S, typename A, typename DA = typename P::Allocates, EnableIf<Not<DA>> = 0>
-  CDS_ATTR(constexpr(11)) SplitRange(FR&& view, S&& separator, Size limit, A&& alloc) CDS_ATTR(noexcept(
-        noexcept(R(cds::forward<FR>(view))) && noexcept(P(cds::forward<S>(separator), cds::forward<A>(alloc)))
-  )) : P(cds::forward<S>(separator), cds::forward<A>(alloc)), _r(cds::forward<FR>(view)), _l(limit) {}
+  CDS_ATTR(constexpr(11)) SplitRange(FR&& view, S&& separator, Size const limit, A&& alloc) CDS_ATTR(noexcept(
+        noexcept(R(fwd<FR>(view))) && noexcept(P(fwd<S>(separator), fwd<A>(alloc)))
+  )) : P(fwd<S>(separator), fwd<A>(alloc)), _r(fwd<FR>(view)), _l(limit) {}
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto begin() const
       CDS_ATTR(noexcept(noexcept(Iterator(nullptr, value<P>(), 0)))) -> Iterator {
@@ -408,16 +408,16 @@ template <
     typename I, typename S, typename R = SplitRange<Extend<I>, SplitPredicate<Extend<S>, Null>>,
     EnableIf<Not<typename SplitAllocationTraits<S>::Required>> = 0
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto split(I&& range, S&& sep, Size limit)
-    CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(range), cds::forward<S>(sep), limit, nullptr)))) -> R {
-  return R(cds::forward<I>(range), cds::forward<S>(sep), limit, nullptr);
+    CDS_ATTR(noexcept(noexcept(R(fwd<I>(range), fwd<S>(sep), limit, nullptr)))) -> R {
+  return R(fwd<I>(range), fwd<S>(sep), limit, nullptr);
 }
 
 template <
     typename I, typename S, typename A, typename R = SplitRange<Extend<I>, SplitPredicate<Extend<S>, RemoveCVRef<A>>>,
     EnableIf<typename SplitAllocationTraits<S>::Required> = 0
 > CDS_ATTR(2(nodiscard, constexpr(20))) auto split(I&& range, S&& sep, Size limit, A&& alloc)
-    CDS_ATTR(noexcept(noexcept(R(cds::forward<I>(range), cds::forward<S>(sep), limit, cds::forward<A>(alloc))))) -> R {
-  return R(cds::forward<I>(range), cds::forward<S>(sep), limit, cds::forward<A>(alloc));
+    CDS_ATTR(noexcept(noexcept(R(fwd<I>(range), fwd<S>(sep), limit, fwd<A>(alloc))))) -> R {
+  return R(fwd<I>(range), fwd<S>(sep), limit, fwd<A>(alloc));
 }
 } // namespace impl
 } // namespace cds

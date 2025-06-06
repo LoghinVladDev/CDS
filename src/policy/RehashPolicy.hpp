@@ -6,8 +6,8 @@
 #define CDS_POLICY_REHASH_POLICY_HPP
 #pragma once
 
-#include <cds/meta/Compiler>
 #include <cds/meta/Base>
+#include <cds/meta/Compiler>
 
 namespace cds {
 namespace impl {

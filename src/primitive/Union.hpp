@@ -24,7 +24,9 @@ using meta::All;
 using meta::IsCopyAssignable;
 using meta::IsMoveAssignable;
 using meta::IsCopyConstructible;
+using meta::IsEqCompatible;
 using meta::IsMoveConstructible;
+using meta::IsNoexceptEqCompatible;
 using meta::IsSame;
 using meta::IsSameIgnoringCVRef;
 using meta::Not;
@@ -79,8 +81,8 @@ public:
 
   template <typename A, EnableIf<Not<IsSameIgnoringCVRef<A, Union>>> = 0>
   CDS_ATTR(constexpr(14)) auto operator=(A&& arg)
-      CDS_ATTR(noexcept(noexcept(assign(cds::forward<A>(arg))))) -> Union& {
-    assign(cds::forward<A>(arg));
+      CDS_ATTR(noexcept(noexcept(assign(fwd<A>(arg))))) -> Union& {
+    assign(fwd<A>(arg));
     return *this;
   }
 };
@@ -102,8 +104,8 @@ template <typename T, typename... Ts> CDS_ATTR(2(nodiscard, constexpr(14))) auto
 
 template <typename...Types0> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator==(
     Union<Types0...> const& lhs, Union<Types0...> const& rhs
-) CDS_ATTR(friend_noexcept(All<meta::IsNoexceptEqCompatible, Types0...>::value)) -> bool {
-  static_assert(All<meta::IsEqCompatible, Types0...>::value, "All union types must be equal comparable to invoke ==");
+) CDS_ATTR(friend_noexcept(All<IsNoexceptEqCompatible, Types0...>::value)) -> bool {
+  static_assert(All<IsEqCompatible, Types0...>::value, "All union types must be equal comparable to invoke ==");
   if (lhs.index() != rhs.index()) {
     return false;
   }
@@ -137,7 +139,7 @@ template <typename Visitor> struct UnionVisitorComposite<Visitor> : Visitor {
   using Visitor::operator();
 
   template <typename V> CDS_ATTR(2(explicit, constexpr(11))) UnionVisitorComposite(V&& visitor)
-      CDS_ATTR(noexcept(IsNoexceptConstructible<Visitor, V>::value)) : Visitor{cds::forward<V>(visitor)} {}
+      CDS_ATTR(noexcept(IsNoexceptConstructible<Visitor, V>::value)) : Visitor{fwd<V>(visitor)} {}
 };
 
 template <typename Visitor, typename... TailVisitors> struct UnionVisitorComposite<Visitor, TailVisitors...> :
@@ -151,15 +153,15 @@ template <typename Visitor, typename... TailVisitors> struct UnionVisitorComposi
       IsNoexceptConstructible<Visitor, V>,
       IsNoexceptConstructible<UnionVisitorComposite<TailVisitors...>, TailVs...>
   >::value)) :
-      UnionVisitorComposite<TailVisitors...>{cds::forward<TailVs>(tailVisitors)...}, Visitor{cds::forward<V>(visitor)} {
+      UnionVisitorComposite<TailVisitors...>{fwd<TailVs>(tailVisitors)...}, Visitor{fwd<V>(visitor)} {
   }
 };
 
 template <typename... Visitors> CDS_ATTR(2(nodiscard, constexpr(11))) auto visitors(
     Visitors&&... visitors
-) CDS_ATTR(noexcept(noexcept(UnionVisitorComposite<Visitors...>{cds::forward<Visitors>(visitors)...})))
+) CDS_ATTR(noexcept(noexcept(UnionVisitorComposite<Visitors...>{fwd<Visitors>(visitors)...})))
     -> UnionVisitorComposite<Visitors...> {
-  return UnionVisitorComposite<Visitors...> {cds::forward<Visitors>(visitors)...};
+  return UnionVisitorComposite<Visitors...> {fwd<Visitors>(visitors)...};
 }
 } // namespace impl
 

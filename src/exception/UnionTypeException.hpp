@@ -15,18 +15,18 @@ class UnionTypeException : public RuntimeException {
 public:
   using RuntimeException::RuntimeException;
   UnionTypeException() noexcept = delete;
-  explicit UnionTypeException(String message) noexcept : RuntimeException{cds::move(message)} {}
+  explicit UnionTypeException(String message) noexcept : RuntimeException{mv(message)} {}
   template <typename From, typename To> static auto of() noexcept -> UnionTypeException {
     auto message = impl::BaseString<char>();
     message.reserve(128u);
     auto str =
-        cds::move(message)
+        mv(message)
         + "Union Type Exception: '"
         + StringView{meta::TypeInfo<To>::name}
         + "' is not the active Union member. Actual: '"
         + StringView{meta::TypeInfo<From>::name}
         + "'";
-    return UnionTypeException {cds::move(str)};
+    return UnionTypeException {mv(str)};
   }
 
   static auto valuelessVisit() noexcept -> UnionTypeException {

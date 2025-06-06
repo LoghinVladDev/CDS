@@ -1,5 +1,5 @@
 // DCR-TEST
-// STEPS: compile(linux:gcc;linux:clang),run(linux:clang)
+// STEPS: compile(linux:gcc;linux:clang;apple:clang;apple:gcc),run(linux:gcc;linux:clang;apple:clang;apple:gcc)
 // STD: 11+
 
 #include <cds/functional/Invoke>
@@ -7,6 +7,7 @@
 
 namespace {
 using cds::functional::invoke;
+using cds::fwd;
 } // namespace
 
 namespace {
@@ -52,7 +53,7 @@ namespace {
 struct XGen {
   int operator()() const { return 0; }
   template <typename F, typename... T> int operator()(F&& f, T&&... args) const {
-    return cds::forward<F>(f) + (*this)(cds::forward<T>(args)...);
+    return fwd<F>(f) + (*this)(fwd<T>(args)...);
   }
 };
 }

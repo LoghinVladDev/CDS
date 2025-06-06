@@ -17,9 +17,9 @@ template <typename T, Size s = sizeof(T)> struct ByteStorage {
   using Type = T;
 
   template <typename... A> auto construct(A&&... args)
-      CDS_ATTR(noexcept(noexcept(impl::construct(meta::address<T>(), cds::forward<A>(args)...))))
-      -> decltype(impl::construct(address<T>(), cds::forward<A>(args)...)) {
-    return impl::construct(static_cast<T*>(static_cast<void*>(byteData)), cds::forward<A>(args)...);
+      CDS_ATTR(noexcept(noexcept(impl::construct(meta::address<T>(), fwd<A>(args)...))))
+      -> decltype(impl::construct(address<T>(), fwd<A>(args)...)) {
+    return impl::construct(static_cast<T*>(static_cast<void*>(byteData)), fwd<A>(args)...);
   }
 
   auto destruct() noexcept -> void {

@@ -10,11 +10,17 @@
 
 namespace cds {
 namespace functional {
+namespace impl {
+using meta::impl::Invoke;
+
 template <typename F, typename... A> CDS_ATTR(constexpr(11)) auto invoke(F&& function, A&&... arguments)
-    CDS_ATTR(noexcept(noexcept(meta::impl::Invoke<F>::call(cds::forward<F>(function), cds::forward<A>(arguments)...))))
-    -> decltype(meta::impl::Invoke<F>::call(cds::forward<F>(function), cds::forward<A>(arguments)...)) {
-  return meta::impl::Invoke<F>::call(cds::forward<F>(function), cds::forward<A>(arguments)...);
+    CDS_ATTR(noexcept(noexcept(Invoke<F>::call(fwd<F>(function), fwd<A>(arguments)...))))
+    -> decltype(Invoke<F>::call(fwd<F>(function), fwd<A>(arguments)...)) {
+  return Invoke<F>::call(fwd<F>(function), fwd<A>(arguments)...);
 }
+} // namespace impl
+
+using impl::invoke;
 } // namespace functional
 } // namespace cds
 

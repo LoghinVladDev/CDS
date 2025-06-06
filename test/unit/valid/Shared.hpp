@@ -24,8 +24,26 @@ auto iteq(I1 b1, S1 e1, I2 b2, S2 e2) noexcept -> bool {
 
 template <typename L, typename R> CDS_ATTR(2(nodiscard, constexpr(14)))
 auto citeq(L&& lhs, R&& rhs) noexcept -> bool {
-  return iteq(cds::begin(cds::forward<L>(lhs)), cds::end(cds::forward<L>(lhs)),
-              cds::begin(cds::forward<R>(rhs)), cds::end(cds::forward<R>(rhs)));
+  return iteq(cds::begin(cds::fwd<L>(lhs)), cds::end(cds::fwd<L>(lhs)),
+              cds::begin(cds::fwd<R>(rhs)), cds::end(cds::fwd<R>(rhs)));
+}
+
+template <typename L, typename R> CDS_ATTR(2(nodiscard, constexpr(14)))
+auto riteq(L&& lhs, R&& rhs) noexcept -> bool {
+  return iteq(cds::rbegin(cds::fwd<L>(lhs)), cds::rend(cds::fwd<L>(lhs)),
+              cds::rbegin(cds::fwd<R>(rhs)), cds::rend(cds::fwd<R>(rhs)));
+}
+
+template <typename L, typename R> CDS_ATTR(2(nodiscard, constexpr(14)))
+auto rciteq(L&& lhs, R&& rhs) noexcept -> bool {
+  return iteq(cds::rbegin(cds::fwd<L>(lhs)), cds::rend(cds::fwd<L>(lhs)),
+              cds::begin(cds::fwd<R>(rhs)), cds::end(cds::fwd<R>(rhs)));
+}
+
+template <typename L, typename R> CDS_ATTR(2(nodiscard, constexpr(14)))
+auto criteq(L&& lhs, R&& rhs) noexcept -> bool {
+  return iteq(cds::begin(cds::fwd<L>(lhs)), cds::end(cds::fwd<L>(lhs)),
+              cds::rbegin(cds::fwd<R>(rhs)), cds::rend(cds::fwd<R>(rhs)));
 }
 } // namespace testing
 

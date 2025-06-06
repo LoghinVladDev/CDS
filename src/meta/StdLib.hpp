@@ -63,9 +63,9 @@ CDS_ATTR(2(nodiscard, constexpr(11))) auto inConstexpr() noexcept -> bool {
 namespace impl {
 #if CDS_ATTR(cpp20)
 template <typename T, typename... A> CDS_ATTR(constexpr(20)) auto construct(T* location, A&&... args)
-    CDS_ATTR(noexcept(noexcept(std::construct_at(location, cds::forward<A>(args)...))))
-    -> decltype(std::construct_at(location, cds::forward<A>(args)...)) {
-  return std::construct_at(location, cds::forward<A>(args)...);
+    CDS_ATTR(noexcept(noexcept(std::construct_at(location, fwd<A>(args)...))))
+    -> decltype(std::construct_at(location, fwd<A>(args)...)) {
+  return std::construct_at(location, fwd<A>(args)...);
 }
 
 template <typename T> CDS_ATTR(constexpr(20))
@@ -74,9 +74,9 @@ auto destruct(T* location) noexcept -> void {
 }
 #else // #if CDS_ATTR(cpp20)
 template <typename T, typename... A> inline auto construct(T* location, A&&... args)
-    CDS_ATTR(noexcept(noexcept(::new(static_cast<void*>(location)) T(cds::forward<A>(args)...))))
-    -> decltype(::new(static_cast<void*>(location)) T(cds::forward<A>(args)...)) {
-  return ::new(static_cast<void*>(location)) T(cds::forward<A>(args)...);
+    CDS_ATTR(noexcept(noexcept(::new(static_cast<void*>(location)) T(fwd<A>(args)...))))
+    -> decltype(::new(static_cast<void*>(location)) T(fwd<A>(args)...)) {
+  return ::new(static_cast<void*>(location)) T(fwd<A>(args)...);
 }
 
 template <typename T> inline auto destruct(T* location) noexcept -> void {
@@ -134,9 +134,9 @@ auto destruct(T* location) noexcept -> void {
 }
 #else // #if CDS_ATTR(cpp20)
 template <typename T, typename... A> inline auto construct(T* location, A&&... args)
-    CDS_ATTR(noexcept(noexcept(::new(static_cast<void*>(location)) T(cds::forward<A>(args)...))))
-    -> decltype(::new(static_cast<void*>(location)) T(cds::forward<A>(args)...)) {
-  return ::new(static_cast<void*>(location)) T(cds::forward<A>(args)...);
+    CDS_ATTR(noexcept(noexcept(::new(static_cast<void*>(location)) T(fwd<A>(args)...))))
+    -> decltype(::new(static_cast<void*>(location)) T(fwd<A>(args)...)) {
+  return ::new(static_cast<void*>(location)) T(fwd<A>(args)...);
 }
 
 template <typename T> inline auto destruct(T* location) noexcept -> void {
@@ -184,7 +184,7 @@ namespace impl {
 #if CDS_ATTR(cpp20)
 template <typename T, typename... A> CDS_ATTR(constexpr(20)) auto construct(T* location, A&&... args)
     CDS_ATTR(noexcept(meta::IsNoexceptConstructible<T, A&&...>::value)) -> T* {
-  return std::construct_at(location, cds::forward<A>(args)...);
+  return std::construct_at(location, fwd<A>(args)...);
 }
 
 template <typename T> CDS_ATTR(constexpr(20))
@@ -193,9 +193,9 @@ auto destruct(T* location) noexcept -> void {
 }
 #else // #if CDS_ATTR(cpp20)
 template <typename T, typename... A> inline auto construct(T* location, A&&... args)
-    CDS_ATTR(noexcept(noexcept(::new(static_cast<void*>(location)) T(cds::forward<A>(args)...))))
-    -> decltype(::new(static_cast<void*>(location)) T(cds::forward<A>(args)...)) {
-  return ::new(static_cast<void*>(location)) T(cds::forward<A>(args)...);
+    CDS_ATTR(noexcept(noexcept(::new(static_cast<void*>(location)) T(fwd<A>(args)...))))
+    -> decltype(::new(static_cast<void*>(location)) T(fwd<A>(args)...)) {
+  return ::new(static_cast<void*>(location)) T(fwd<A>(args)...);
 }
 
 template <typename T> inline auto destruct(T* location) noexcept -> void {

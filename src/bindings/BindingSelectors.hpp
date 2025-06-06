@@ -16,6 +16,7 @@ struct Projector {};
 struct Immutable {};
 struct Mutable {};
 
+using meta::All;
 using meta::IsSame;
 using meta::True;
 using meta::False;
@@ -42,7 +43,7 @@ template <typename, typename> struct ContainsSelector : False {};
 template <typename... Pack, typename S> struct ContainsSelector<With<Pack...>, S> : AppearsIn<S, Pack...> {};
 
 template <typename W, typename... S> struct ContainsAllSelectors :
-    meta::All<meta::Bind<ContainsSelector, W, meta::Ph<0>>::template Type, S...> {};
+    All<meta::Bind<ContainsSelector, W, meta::Ph<0>>::template Type, S...> {};
 
 template <typename, template <typename...> class> struct TContainsSelector : False {};
 template <typename... Pack, template <typename...> class S>

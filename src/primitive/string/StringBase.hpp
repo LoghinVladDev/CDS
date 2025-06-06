@@ -133,9 +133,9 @@ using meta::IterableTraits;
 template <typename C, typename U, typename A> struct FindStringTransformer {
   template <typename IB, typename IE, typename I>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(IB&& b, IE&& e, I&& i) const noexcept -> Idx {
-    return cds::forward<IE>(e) == cds::forward<I>(i)
+    return fwd<IE>(e) == fwd<I>(i)
         ? BaseString<C, U, A>::npos
-        : cds::forward<I>(i) - cds::forward<IB>(b);
+        : fwd<I>(i) - fwd<IB>(b);
   }
 };
 
@@ -214,8 +214,8 @@ public:
   CDS_ATTR(constexpr(20)) BaseString(BaseString const& str, A const& alloc = A{}) CDS_ATTR(noexcept(false)) :
       BaseString(str.data(), str.length(), alloc) {}
 
-  CDS_ATTR(constexpr(20)) BaseString(BaseString&& str) noexcept : A(cds::move(str)) {
-    transfer(cds::move(str));
+  CDS_ATTR(constexpr(20)) BaseString(BaseString&& str) noexcept : A(mv(str)) {
+    transfer(mv(str));
   }
 
   template <
@@ -226,8 +226,8 @@ public:
   > CDS_ATTR(2(implicit, constexpr(20)))
   BaseString(Convertible&& string, A const& alloc = A()) CDS_ATTR(noexcept(false)) :
       BaseString(
-          StringAbstract<Convertible>::data(cds::forward<Convertible>(string)),
-          StringAbstract<Convertible>::length(cds::forward<Convertible>(string)),
+          StringAbstract<Convertible>::data(fwd<Convertible>(string)),
+          StringAbstract<Convertible>::length(fwd<Convertible>(string)),
           alloc
       ) {}
 
@@ -294,8 +294,8 @@ public:
     }
 
     clear();
-    A::operator=(cds::move(str));
-    transfer(cds::move(str));
+    A::operator=(mv(str));
+    transfer(mv(str));
     return *this;
   }
 
@@ -305,7 +305,7 @@ public:
       >> = 0
   > CDS_ATTR(constexpr(20)) auto operator=(Convertible&& str) CDS_ATTR(noexcept(false)) -> BaseString& {
     using Ab = StringAbstract<>;
-    copy(Ab::data(cds::forward<Convertible>(str)), Ab::length(cds::forward<Convertible>(str)));
+    copy(Ab::data(fwd<Convertible>(str)), Ab::length(fwd<Convertible>(str)));
     return *this;
   }
 
@@ -486,37 +486,37 @@ public:
   }
 
   template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(N&& needle) const
-      CDS_ATTR(noexcept(noexcept(findFirst(cds::forward<N>(needle))))) -> bool {
-    return findFirst(cds::forward<N>(needle)) != npos;
+      CDS_ATTR(noexcept(noexcept(findFirst(fwd<N>(needle))))) -> bool {
+    return findFirst(fwd<N>(needle)) != npos;
   }
 
   template <typename N, typename S, EnableIf<Not<IsAllocatorOrAllocatorSet<S>>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(
       N&& needle, S&& selector
-  ) const CDS_ATTR(noexcept(noexcept(findFirst(cds::forward<N>(needle), cds::forward<S>(selector))))) -> bool {
-    return findFirst(cds::forward<N>(needle), cds::forward<S>(selector)) != npos;
+  ) const CDS_ATTR(noexcept(noexcept(findFirst(fwd<N>(needle), fwd<S>(selector))))) -> bool {
+    return findFirst(fwd<N>(needle), fwd<S>(selector)) != npos;
   }
 
   template <typename N, typename CA, EnableIf<IsAllocatorOrAllocatorSet<CA>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(N&& needle, CA&& alloc) const
-      CDS_ATTR(noexcept(noexcept(findFirst(cds::forward<N>(needle), cds::forward<CA>(alloc))))) -> bool {
-    return findFirst(cds::forward<N>(needle), cds::forward<CA>(alloc)) != npos;
+      CDS_ATTR(noexcept(noexcept(findFirst(fwd<N>(needle), fwd<CA>(alloc))))) -> bool {
+    return findFirst(fwd<N>(needle), fwd<CA>(alloc)) != npos;
   }
 
   template <typename N, typename S, typename CA> CDS_ATTR(2(nodiscard, constexpr(14))) auto contains(
       N&& needle, S&& selector, CA&& alloc
   ) const CDS_ATTR(noexcept(noexcept(
-      findFirst(cds::forward<N>(needle), cds::forward<S>(selector), cds::forward<CA>(alloc))
+      findFirst(fwd<N>(needle), fwd<S>(selector), fwd<CA>(alloc))
   ))) -> bool {
-    return findFirst(cds::forward<N>(needle), cds::forward<S>(selector), cds::forward<CA>(alloc)) != npos;
+    return findFirst(fwd<N>(needle), fwd<S>(selector), fwd<CA>(alloc)) != npos;
   }
 
   template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) auto startsWith(N&& needle) const noexcept -> bool {
-    return U::startsWith(data(), size(), cds::forward<N>(needle));
+    return U::startsWith(data(), size(), fwd<N>(needle));
   }
 
   template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) auto endsWith(N&& needle) const noexcept -> bool {
-    return U::endsWith(data(), size(), cds::forward<N>(needle));
+    return U::endsWith(data(), size(), fwd<N>(needle));
   }
 
   template <typename FC, typename FU, typename FA>
@@ -525,48 +525,48 @@ public:
 
   template <typename S, typename T = SplitAllocationTraits<S>, EnableIf<Not<typename T::Required>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto split(S&& separator) const&
-      CDS_ATTR(noexcept(noexcept(impl::split(lvalue<BaseString const>(), cds::forward<S>(separator), 0))))
-      -> decltype(impl::split(lvalue<BaseString const>(), cds::forward<S>(separator), 0)) {
-    return impl::split(*this, cds::forward<S>(separator), limits::sizeMax);
+      CDS_ATTR(noexcept(noexcept(impl::split(lvalue<BaseString const>(), fwd<S>(separator), 0))))
+      -> decltype(impl::split(lvalue<BaseString const>(), fwd<S>(separator), 0)) {
+    return impl::split(*this, fwd<S>(separator), limits::sizeMax);
   }
 
   template <typename S, typename T = SplitAllocationTraits<S>, EnableIf<Not<typename T::Required>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto split(S&& separator) const&&
-      CDS_ATTR(noexcept(noexcept(impl::split(rvalue<BaseString const>(), cds::forward<S>(separator), 0))))
-      -> decltype(impl::split(rvalue<BaseString const>(), cds::forward<S>(separator), 0)) {
-    return impl::split(cds::move(*this), cds::forward<S>(separator), limits::sizeMax);
+      CDS_ATTR(noexcept(noexcept(impl::split(rvalue<BaseString const>(), fwd<S>(separator), 0))))
+      -> decltype(impl::split(rvalue<BaseString const>(), fwd<S>(separator), 0)) {
+    return impl::split(mv(*this), fwd<S>(separator), limits::sizeMax);
   }
 
   template <typename S, typename T = SplitAllocationTraits<S>, EnableIf<Not<typename T::Required>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto split(S&& separator, Size limit) const& CDS_ATTR(noexcept(noexcept(
-      impl::split(lvalue<BaseString const>(), cds::forward<S>(separator), limit)
-  ))) -> decltype(impl::split(lvalue<BaseString const>(), cds::forward<S>(separator), limit)) {
-    return impl::split(*this, cds::forward<S>(separator), limit);
+      impl::split(lvalue<BaseString const>(), fwd<S>(separator), limit)
+  ))) -> decltype(impl::split(lvalue<BaseString const>(), fwd<S>(separator), limit)) {
+    return impl::split(*this, fwd<S>(separator), limit);
   }
 
   template <typename S, typename T = SplitAllocationTraits<S>, EnableIf<Not<typename T::Required>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto split(S&& separator, Size limit) const&& CDS_ATTR(noexcept(noexcept(
-      impl::split(rvalue<BaseString const>(), cds::forward<S>(separator), limit)
-  ))) -> decltype(impl::split(rvalue<BaseString const>(), cds::forward<S>(separator), limit)) {
-    return impl::split(cds::move(*this), cds::forward<S>(separator), limit);
+      impl::split(rvalue<BaseString const>(), fwd<S>(separator), limit)
+  ))) -> decltype(impl::split(rvalue<BaseString const>(), fwd<S>(separator), limit)) {
+    return impl::split(mv(*this), fwd<S>(separator), limit);
   }
 
   template <
       typename S, typename T = SplitAllocationTraits<S>, typename SA = typename T::Alloc,
       EnableIf<And<typename T::Required, IsAllocatorOrAllocatorSet<RemoveCVRef<SA>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(20))) auto split(S&& separator, SA&& alloc = SA()) const& CDS_ATTR(noexcept(
-      noexcept(impl::split(lvalue<BaseString const>(), cds::forward<S>(separator), 0, cds::forward<SA>(alloc)))
-  )) -> decltype(impl::split(lvalue<BaseString const>(), cds::forward<S>(separator), 0, cds::forward<SA>(alloc))) {
-    return impl::split(*this, cds::forward<S>(separator), limits::sizeMax, cds::forward<SA>(alloc));
+      noexcept(impl::split(lvalue<BaseString const>(), fwd<S>(separator), 0, fwd<SA>(alloc)))
+  )) -> decltype(impl::split(lvalue<BaseString const>(), fwd<S>(separator), 0, fwd<SA>(alloc))) {
+    return impl::split(*this, fwd<S>(separator), limits::sizeMax, fwd<SA>(alloc));
   }
 
   template <
       typename S, typename T = SplitAllocationTraits<S>, typename SA = typename T::Alloc,
       EnableIf<And<typename T::Required, IsAllocatorOrAllocatorSet<RemoveCVRef<SA>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(20))) auto split(S&& separator, SA&& alloc = SA()) const&& CDS_ATTR(noexcept(
-      noexcept(impl::split(rvalue<BaseString const>(), cds::forward<S>(separator), 0, cds::forward<SA>(alloc)))
-  )) -> decltype(impl::split(rvalue<BaseString const>(), cds::forward<S>(separator), 0, cds::forward<SA>(alloc))) {
-    return impl::split(cds::move(*this), cds::forward<S>(separator), limits::sizeMax, cds::forward<SA>(alloc));
+      noexcept(impl::split(rvalue<BaseString const>(), fwd<S>(separator), 0, fwd<SA>(alloc)))
+  )) -> decltype(impl::split(rvalue<BaseString const>(), fwd<S>(separator), 0, fwd<SA>(alloc))) {
+    return impl::split(mv(*this), fwd<S>(separator), limits::sizeMax, fwd<SA>(alloc));
   }
 
   template <
@@ -574,10 +574,10 @@ public:
       EnableIf<And<typename T::Required, IsAllocatorOrAllocatorSet<RemoveCVRef<SA>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(20))) auto split(S&& separator, Size limit, SA&& alloc = SA()) const&
       CDS_ATTR(noexcept(noexcept(
-          impl::split(lvalue<BaseString const>(), cds::forward<S>(separator), limit, cds::forward<SA>(alloc))
+          impl::split(lvalue<BaseString const>(), fwd<S>(separator), limit, fwd<SA>(alloc))
       ))) ->
-      decltype(impl::split(lvalue<BaseString const>(), cds::forward<S>(separator), limit, cds::forward<SA>(alloc))) {
-    return impl::split(*this, cds::forward<S>(separator), limit, cds::forward<SA>(alloc));
+      decltype(impl::split(lvalue<BaseString const>(), fwd<S>(separator), limit, fwd<SA>(alloc))) {
+    return impl::split(*this, fwd<S>(separator), limit, fwd<SA>(alloc));
   }
 
   template <
@@ -585,10 +585,10 @@ public:
       EnableIf<And<typename T::Required, IsAllocatorOrAllocatorSet<RemoveCVRef<SA>>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(20))) auto split(S&& separator, Size limit, SA&& alloc = SA()) const&&
       CDS_ATTR(noexcept(noexcept(
-          impl::split(rvalue<BaseString const>(), cds::forward<S>(separator), limit, cds::forward<SA>(alloc))
+          impl::split(rvalue<BaseString const>(), fwd<S>(separator), limit, fwd<SA>(alloc))
       ))) ->
-      decltype(impl::split(rvalue<BaseString const>(), cds::forward<S>(separator), limit, cds::forward<SA>(alloc))) {
-    return impl::split(cds::move(*this), cds::forward<S>(separator), limit, cds::forward<SA>(alloc));
+      decltype(impl::split(rvalue<BaseString const>(), fwd<S>(separator), limit, fwd<SA>(alloc))) {
+    return impl::split(mv(*this), fwd<S>(separator), limit, fwd<SA>(alloc));
   }
 
   CDS_ATTR(constexpr(20)) auto resize(Size size, Char character = STraits::nullChar) CDS_ATTR(noexcept(false)) -> void {
@@ -751,8 +751,8 @@ public:
   template <typename Str, typename D = RemoveCVRef<Str>, EnableIf<And<Not<IsIntegral<D>>, Not<IsFloating<D>>>> = 0>
   CDS_ATTR(constexpr(20)) auto operator+=(Str&& string) CDS_ATTR(noexcept(false)) -> BaseString& {
     using SA = StringAbstract<>;
-    auto const buf = SA::data(cds::forward<Str>(string));
-    auto const len = SA::length(cds::forward<Str>(string));
+    auto const buf = SA::data(fwd<Str>(string));
+    auto const len = SA::length(fwd<Str>(string));
     return append(buf, buf + len);
   }
 
@@ -939,7 +939,7 @@ public:
   }
 
   CDS_ATTR(2(nodiscard, constexpr(20))) auto ljust(Size size, Char with = ' ')&& noexcept -> BaseString {
-    auto res = cds::move(*this);
+    auto res = mv(*this);
     if (size <= res.length()) {
       return res;
     }
@@ -982,7 +982,7 @@ public:
   }
 
   CDS_ATTR(2(nodiscard, constexpr(20))) auto rjust(Size size, Char with = ' ')&& noexcept -> BaseString {
-    auto res = cds::move(*this);
+    auto res = mv(*this);
     if (size <= res.length()) {
       return res;
     }
@@ -1063,7 +1063,7 @@ public:
       -> BaseString {
     auto const cFrom = static_cast<N>(from);
     auto const cTo = static_cast<N>(to);
-    auto res = cds::move(*this);
+    auto res = mv(*this);
     if (cFrom > cTo) {
       return res;
     }
@@ -1099,8 +1099,8 @@ public:
   static auto join(View const& separator, Strings&&... strings) CDS_ATTR(noexcept(false)) -> BaseString {
     static_assert(sizeof...(Strings) > 0, "Calling join without providing strings to join");
     BaseString res;
-    res.init(joinLengths(separator, cds::forward<Strings>(strings)...));
-    *joinImpl(res.begin(), separator, cds::forward<Strings>(strings)...) = STraits::nullChar;
+    res.init(joinLengths(separator, fwd<Strings>(strings)...));
+    *joinImpl(res.begin(), separator, fwd<Strings>(strings)...) = STraits::nullChar;
     return res;
   }
 
@@ -1114,8 +1114,8 @@ private:
   static auto eJoinLength(View const& v, T&& e) noexcept -> Size {
     using SA = StringAbstract<>;
     Size l = 0;
-    auto ib = cds::begin(cds::forward<T>(e));
-    auto const ie = cds::end(cds::forward<T>(e));
+    auto ib = cds::begin(fwd<T>(e));
+    auto const ie = cds::end(fwd<T>(e));
     if (ib != ie) {
       l += SA::length(*ib);
       for (++ib; ib != ie; ++ib) {
@@ -1128,27 +1128,27 @@ private:
 
   template <typename F> CDS_ATTR(2(nodiscard, constexpr(14)))
   static auto joinLengths(CDS_ATTR(unused) View const& v, F&& f) noexcept -> Size {
-    return eJoinLength(v, cds::forward<F>(f));
+    return eJoinLength(v, fwd<F>(f));
   }
 
   template <typename F, typename... R> CDS_ATTR(2(nodiscard, constexpr(14)))
   static auto joinLengths(View const& v, F&& f, R&&... r) noexcept -> Size {
-    return joinLengths(v, cds::forward<R>(r)...) + eJoinLength(v, cds::forward<F>(f)) + v.length();
+    return joinLengths(v, fwd<R>(r)...) + eJoinLength(v, fwd<F>(f)) + v.length();
   }
 
   template <typename O, typename T, EnableIf<Not<IsIterableOfThat<T, IsString>>> = 0> CDS_ATTR(2(nodiscard, constexpr(14)))
   static auto eJoinImpl(O o, CDS_ATTR(unused) View const& v, T&& e) noexcept -> O {
     using SA = StringAbstract<>;
-    auto const* buf = SA::data(cds::forward<T>(e));
-    auto const len = SA::length(cds::forward<T>(e));
+    auto const* buf = SA::data(fwd<T>(e));
+    auto const len = SA::length(fwd<T>(e));
     return impl::copy(buf, buf + len, o);
   }
 
   template <typename O, typename T, EnableIf<IsIterableOfThat<T, IsString>> = 0> CDS_ATTR(2(nodiscard, constexpr(14)))
   static auto eJoinImpl(O o, View const& v, T&& e) noexcept -> O {
     using SA = StringAbstract<>;
-    auto ib = cds::begin(cds::forward<T>(e));
-    auto const ie = cds::end(cds::forward<T>(e));
+    auto ib = cds::begin(fwd<T>(e));
+    auto const ie = cds::end(fwd<T>(e));
     if (ib != ie) {
       auto const* fBuf = SA::data(*ib);
       auto const fLen = SA::length(*ib);
@@ -1164,12 +1164,12 @@ private:
 
   template <typename O, typename F, typename... R> CDS_ATTR(2(nodiscard, constexpr(14)))
   static auto joinImpl(O o, View const& v, F&& f, R&&... r) noexcept -> O {
-    return joinImpl(impl::copy(v.begin(), v.end(), eJoinImpl(o, v, cds::forward<F>(f))), v, cds::forward<R>(r)...);
+    return joinImpl(impl::copy(v.begin(), v.end(), eJoinImpl(o, v, fwd<F>(f))), v, fwd<R>(r)...);
   }
 
   template <typename O, typename F> CDS_ATTR(2(nodiscard, constexpr(11)))
   static auto joinImpl(O o, CDS_ATTR(unused) View const& v, F&& f) noexcept -> O {
-    return eJoinImpl(o, v, cds::forward<F>(f));
+    return eJoinImpl(o, v, fwd<F>(f));
   }
 
   CDS_ATTR(constexpr(14)) auto init(Size const len) CDS_ATTR(noexcept(false)) -> void {
@@ -1278,7 +1278,7 @@ private:
   }
 
   CDS_ATTR(constexpr(20)) auto transfer(BaseString&& str) noexcept -> void {
-    sbo::StringData<C>::operator=(cds::move(str));
+    sbo::StringData<C>::operator=(mv(str));
 #if CDS_ATTR(cpp20)
     if (inConstexpr()) {
       str._nrm.lenSbo = 0u;
@@ -1357,8 +1357,8 @@ template <
 auto operator+(BaseString<FC, FU, FA> const& lhs, Str&& rhs) CDS_ATTR(noexcept(false)) -> BaseString<FC, FU, FA> {
   using SA = StringAbstract<>;
   BaseString<FC, FU, FA> res;
-  auto const buf = SA::data(cds::forward<Str>(rhs));
-  auto const len = SA::length(cds::forward<Str>(rhs));
+  auto const buf = SA::data(fwd<Str>(rhs));
+  auto const len = SA::length(fwd<Str>(rhs));
   auto const reqLen = lhs.size() + len;
   res.reserve(reqLen);
   res.uncheckedAppend(lhs.begin(), lhs.end()).uncheckedAppend(buf, buf + len);
@@ -1372,8 +1372,8 @@ template <
 auto operator+(Str&& lhs, BaseString<FC, FU, FA> const& rhs) CDS_ATTR(noexcept(false)) -> BaseString<FC, FU, FA> {
   using SA = StringAbstract<>;
   BaseString<FC, FU, FA> res;
-  auto const buf = SA::data(cds::forward<Str>(lhs));
-  auto const len = SA::length(cds::forward<Str>(lhs));
+  auto const buf = SA::data(fwd<Str>(lhs));
+  auto const len = SA::length(fwd<Str>(lhs));
   auto const reqLen = len + rhs.size();
   res.reserve(reqLen);
   res.uncheckedAppend(buf, buf + len).uncheckedAppend(rhs.begin(), rhs.end());
@@ -1386,9 +1386,9 @@ template <
 > CDS_ATTR(2(nodiscard, constexpr(20)))
 auto operator+(BaseString<FC, FU, FA>&& lhs, Str&& rhs) CDS_ATTR(noexcept(false)) -> BaseString<FC, FU, FA> {
   using SA = StringAbstract<>;
-  auto res = cds::move(lhs);
-  auto const buf = SA::data(cds::forward<Str>(rhs));
-  auto const len = SA::length(cds::forward<Str>(rhs));
+  auto res = mv(lhs);
+  auto const buf = SA::data(fwd<Str>(rhs));
+  auto const len = SA::length(fwd<Str>(rhs));
   auto const reqLen = len + res.size();
   res.reserve(reqLen);
   res.uncheckedAppend(buf, buf + len);
@@ -1416,7 +1416,7 @@ template <typename FC, typename FU, typename FA> CDS_ATTR(2(nodiscard, constexpr
 template <typename FC, typename FU, typename FA> CDS_ATTR(2(nodiscard, constexpr(20)))
     auto operator+(BaseString<FC, FU, FA>&& lhs, FC rhs)
     CDS_ATTR(noexcept(false)) -> BaseString<FC, FU, FA> {
-  auto res = cds::move(lhs);
+  auto res = mv(lhs);
   res.reserve(res.size() + 1);
   res.uncheckedAppend(&rhs, &rhs + 1);
   return res;
@@ -1447,7 +1447,7 @@ template <typename FC, typename FU, typename FA> CDS_ATTR(2(nodiscard, constexpr
 template <typename FC, typename FU, typename FA> CDS_ATTR(2(nodiscard, constexpr(20)))
     auto operator+(BaseString<FC, FU, FA>&& lhs, bool rhs) CDS_ATTR(noexcept(false)) -> BaseString<FC, FU, FA> {
   using Constants = meta::impl::StringTraitsPrivateConstants<FC>;
-  auto res = cds::move(lhs);
+  auto res = mv(lhs);
   auto const* buf = rhs ? Constants::_true : Constants::_false;
   auto const len = rhs ? 4 : 5;
   res.reserve(res.size() + len);
@@ -1502,7 +1502,7 @@ template <typename FC, typename FU, typename FA, typename N, EnableIf<IsIntegral
 template <typename FC, typename FU, typename FA, typename N, EnableIf<IsIntegral<N>> = 0> CDS_ATTR(2(nodiscard, constexpr(20)))
     auto operator+(BaseString<FC, FU, FA>&& lhs, N rhs) CDS_ATTR(noexcept(false)) -> BaseString<FC, FU, FA> {
   using Tr = typename BaseString<FC, FU, FA>::STraits;
-  auto res = cds::move(lhs);
+  auto res = mv(lhs);
   auto const len = FU::intLength(rhs, 10);
   res.reserve(res.size() + len);
 #if CDS_ATTR(cpp20)
@@ -1554,7 +1554,7 @@ template <typename FC, typename FU, typename FA, typename F, EnableIf<IsFloating
 
 template <typename FC, typename FU, typename FA, typename F, EnableIf<IsFloating<F>> = 0> CDS_ATTR(nodiscard)
     auto operator+(BaseString<FC, FU, FA>&& lhs, F rhs) CDS_ATTR(noexcept(false)) -> BaseString<FC, FU, FA> {
-  auto res = cds::move(lhs);
+  auto res = mv(lhs);
   auto const len = FU::floatingLength(rhs);
   res.reserve(res.size() + len);
   *FU::writeFloating(rhs, len, res.data() + res.length()) = BaseString<FC, FU, FA>::STraits::nullChar;

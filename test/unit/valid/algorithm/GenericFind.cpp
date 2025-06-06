@@ -2,7 +2,10 @@
 // STEPS: compile(linux:gcc;linux:clang;apple:clang;apple:gcc),run(linux:gcc;linux:clang;apple:clang;apple:gcc)
 // STD: 11+
 
+#include "../../../../src/algorithm/FindPreserveTransformer.hpp"
+#include "../../../../src/algorithm/FindResultTransformer.hpp"
 #include "../../../../src/algorithm/GenericFind.hpp"
+
 #include "UnitTest.hpp"
 #include <cds/meta/Semantics>
 #include <cds/functional/Comparator>
@@ -11,33 +14,33 @@
 namespace {
 using namespace cds;
 using namespace cds::impl;
-using namespace cds::functional;
-using iterator::impl::FindResultTransformer;
-using iterator::impl::FindPreserveTransformer;
+using cds::impl::FindResultTransformer;
+using cds::impl::FindPreserveTransformer;
+using cds::functional::Equal;
 } // namespace
 
 namespace {
 template <typename I, typename V> CDS_ATTR(constexpr(14)) auto find(I&& iter, V&& val) noexcept(noexcept(
-    impl::find(cds::forward<I>(iter), cds::forward<V>(val), functional::Equal<>(), FindResultTransformer<>())
+    impl::find(fwd<I>(iter), fwd<V>(val), functional::Equal<>(), FindResultTransformer<>())
 )) -> decltype(
-    impl::find(cds::forward<I>(iter), cds::forward<V>(val), functional::Equal<>(), FindResultTransformer<>())
+    impl::find(fwd<I>(iter), fwd<V>(val), functional::Equal<>(), FindResultTransformer<>())
 ) {
   return
-      impl::find(cds::forward<I>(iter), cds::forward<V>(val), functional::Equal<>(), FindResultTransformer<>());
+      impl::find(fwd<I>(iter), fwd<V>(val), functional::Equal<>(), FindResultTransformer<>());
 }
 } // namespace
 
 namespace {
 template <typename I, typename V, typename P> CDS_ATTR(constexpr(14)) auto find(I&& iter, V&& val, P&& projector)
     noexcept(noexcept(impl::find(
-        cds::forward<I>(iter), cds::forward<V>(val), cds::forward<P>(projector),
+        fwd<I>(iter), fwd<V>(val), fwd<P>(projector),
         functional::Equal<>(), FindResultTransformer<>()
     ))) -> decltype(impl::find(
-        cds::forward<I>(iter), cds::forward<V>(val), cds::forward<P>(projector),
+        fwd<I>(iter), fwd<V>(val), fwd<P>(projector),
         functional::Equal<>(), FindResultTransformer<>()
     )) {
   return impl::find(
-      cds::forward<I>(iter), cds::forward<V>(val), cds::forward<P>(projector),
+      fwd<I>(iter), fwd<V>(val), fwd<P>(projector),
       functional::Equal<>(), FindResultTransformer<>()
   );
 }
@@ -191,6 +194,8 @@ TEST(GenericFind, constant) {
   ASSERT_EQ(it, r1.end());
 
   auto const r2 = find(v, 4, doubled);
+  And<GenericFindEnabledFor<decltype(v), int, functional::Equal<>>,
+  IsProjector<decltype(v), decltype(doubled)>>::value;
   auto it1 = r2.begin();
   ASSERT_NE(it1, r2.end());
   ASSERT_EQ(*it1, 2);
@@ -218,8 +223,8 @@ template <
     typename R = FindIterableRange<X const&, Extend<V>, E, T>
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto find(
     X const& iterable, V&& value, CDS_ATTR(unused) E const& equal, CDS_ATTR(unused) T const& transform
-) CDS_ATTR(noexcept(noexcept(R(iterable, cds::forward<V>(value))))) -> R {
-  return R(iterable, cds::forward<V>(value));
+) CDS_ATTR(noexcept(noexcept(R(iterable, fwd<V>(value))))) -> R {
+  return R(iterable, fwd<V>(value));
 }
 
 template <
@@ -227,8 +232,8 @@ template <
     typename R = FindSelectIterableRange<X const&, Extend<V>, Extend<P>, E, T>
 > CDS_ATTR(2(nodiscard, constexpr(14))) auto find(
     X const& iterable, V&& value, P&& projector, CDS_ATTR(unused) E const& equal, CDS_ATTR(unused) T const& transform
-) CDS_ATTR(noexcept(noexcept(R(iterable, cds::forward<V>(value), cds::forward<P>(projector))))) -> R {
-  return R(iterable, cds::forward<V>(value), cds::forward<P>(projector));
+) CDS_ATTR(noexcept(noexcept(R(iterable, fwd<V>(value), fwd<P>(projector))))) -> R {
+  return R(iterable, fwd<V>(value), fwd<P>(projector));
 }
 
 TEST(GenericFind, genericFirstFromSpecialized) {

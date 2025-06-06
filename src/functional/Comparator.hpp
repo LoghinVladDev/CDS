@@ -19,7 +19,9 @@ template <typename L = void, typename R = L> struct Equal {
 template <> struct Equal<void> {
   template <typename L, typename R>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(L&& lhs, R&& rhs) const noexcept -> bool {
-    return cds::forward<L>(lhs) == cds::forward<R>(rhs);
+    return Equal<meta::RemoveCVRef<L>, meta::RemoveCVRef<R>>{}(
+        cds::impl::fwd<L>(lhs), cds::impl::fwd<R>(rhs)
+    );
   }
 };
 
@@ -32,7 +34,7 @@ template <typename L = void, typename R = L> struct NotEqual {
 template <> struct NotEqual<void> {
   template <typename L, typename R>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(L&& lhs, R&& rhs) const noexcept -> bool {
-    return cds::forward<L>(lhs) != cds::forward<R>(rhs);
+    return fwd<L>(lhs) != fwd<R>(rhs);
   }
 };
 
@@ -45,7 +47,7 @@ template <typename L = void, typename R = L> struct Less {
 template <> struct Less<void> {
   template <typename L, typename R>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(L&& lhs, R&& rhs) const noexcept -> bool {
-    return cds::forward<L>(lhs) < cds::forward<R>(rhs);
+    return fwd<L>(lhs) < fwd<R>(rhs);
   }
 };
 
@@ -58,7 +60,7 @@ template <typename L = void, typename R = L> struct Greater {
 template <> struct Greater<void> {
   template <typename L, typename R>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(L&& lhs, R&& rhs) const noexcept -> bool {
-    return cds::forward<L>(lhs) > cds::forward<R>(rhs);
+    return fwd<L>(lhs) > fwd<R>(rhs);
   }
 };
 
@@ -71,7 +73,7 @@ template <typename L = void, typename R = L> struct LessEqual {
 template <> struct LessEqual<void> {
   template <typename L, typename R>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(L&& lhs, R&& rhs) const noexcept -> bool {
-    return cds::forward<L>(lhs) <= cds::forward<R>(rhs);
+    return fwd<L>(lhs) <= fwd<R>(rhs);
   }
 };
 
@@ -84,7 +86,7 @@ template <typename L = void, typename R = L> struct GreaterEqual {
 template <> struct GreaterEqual<void> {
   template <typename L, typename R>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(L&& lhs, R&& rhs) const noexcept -> bool {
-    return cds::forward<L>(lhs) >= cds::forward<R>(rhs);
+    return fwd<L>(lhs) >= fwd<R>(rhs);
   }
 };
 
@@ -99,8 +101,8 @@ template <typename L = void, typename R = L> struct ThreeWay {
 template <> struct ThreeWay<void> {
   template <typename L, typename R>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(L&& lhs, R&& rhs) const noexcept
-      -> decltype(cds::forward<L>(lhs), cds::forward<R>(rhs)) {
-    return cds::forward<L>(lhs) <=> cds::forward<R>(rhs);
+      -> decltype(fwd<L>(lhs), fwd<R>(rhs)) {
+    return fwd<L>(lhs) <=> fwd<R>(rhs);
   }
 };
 #endif

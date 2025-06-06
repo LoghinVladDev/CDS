@@ -23,7 +23,7 @@ struct IteratorIsPrefixIncrementable<I, P, Void<decltype(++lvalue<I>())>> : P<de
 template <typename, template <typename...> class, typename = void> struct IteratorIsIndirectable : False {};
 
 template <typename I, template <typename...> class P>
-struct IteratorIsIndirectable<I, P, Void<decltype(*meta::rvalue<I>())>> : P<decltype(*rvalue<I>())> {};
+struct IteratorIsIndirectable<I, P, Void<decltype(*rvalue<I>())>> : P<decltype(*rvalue<I>())> {};
 
 template <typename, typename = void> struct HasIterableMemberFns : False {};
 template <typename, typename = void> struct HasConstIterableMemberFns : False {};
@@ -32,34 +32,31 @@ template <typename, typename = void> struct HasConstReverseIterableMemberFns : F
 template <typename, typename = void> struct HasSizeMemberFn : False {};
 
 template <typename T>
-struct HasIterableMemberFns<T, Void<decltype(meta::rvalue<T>().begin()), decltype(meta::rvalue<T>().end())>> :
-    meta::True {
-  using Iterator = decltype(meta::rvalue<T>().begin());
-  using Sentinel = decltype(meta::rvalue<T>().end());
+struct HasIterableMemberFns<T, Void<decltype(rvalue<T>().begin()), decltype(rvalue<T>().end())>> : True {
+  using Iterator = decltype(rvalue<T>().begin());
+  using Sentinel = decltype(rvalue<T>().end());
 };
 
-template <typename T> struct HasConstIterableMemberFns<
-    T, Void<decltype(meta::rvalue<T>().cbegin()), decltype(meta::rvalue<T>().cend())>
-> : meta::True {
-  using ConstIterator = decltype(meta::rvalue<T>().cbegin());
-  using Sentinel = decltype(meta::rvalue<T>().cend());
+template <typename T>
+struct HasConstIterableMemberFns<T, Void<decltype(rvalue<T>().cbegin()), decltype(rvalue<T>().cend())>> : True {
+  using ConstIterator = decltype(rvalue<T>().cbegin());
+  using Sentinel = decltype(rvalue<T>().cend());
 };
 
-template <typename T> struct HasReverseIterableMemberFns<
-    T, Void<decltype(meta::rvalue<T>().rbegin()), decltype(meta::rvalue<T>().rend())>
-> : meta::True {
-  using ReverseIterator = decltype(meta::rvalue<T>().rbegin());
-  using Sentinel = decltype(meta::rvalue<T>().rend());
+template <typename T>
+struct HasReverseIterableMemberFns<T, Void<decltype(rvalue<T>().rbegin()), decltype(rvalue<T>().rend())>> : True {
+  using ReverseIterator = decltype(rvalue<T>().rbegin());
+  using Sentinel = decltype(rvalue<T>().rend());
 };
 
-template <typename T> struct HasConstReverseIterableMemberFns<
-    T, Void<decltype(meta::rvalue<T>().crbegin()), decltype(meta::rvalue<T>().crend())>
-> : meta::True {
-  using ConstReverseIterator = decltype(meta::rvalue<T>().crbegin());
-  using Sentinel = decltype(meta::rvalue<T>().crend());
+template <typename T>
+struct HasConstReverseIterableMemberFns<T, Void<decltype(rvalue<T>().crbegin()), decltype(rvalue<T>().crend())>> :
+    True {
+  using ConstReverseIterator = decltype(rvalue<T>().crbegin());
+  using Sentinel = decltype(rvalue<T>().crend());
 };
 
-template <typename T> struct HasSizeMemberFn<T, Void<decltype(meta::rvalue<T>().size())>> : meta::True {};
+template <typename T> struct HasSizeMemberFn<T, Void<decltype(rvalue<T>().size())>> : True {};
 
 template <typename> struct IsIterator : False {};
 template <typename> struct IsReverseIterator : False {};
@@ -81,8 +78,7 @@ template <typename Iterator> struct IsOutputIterator : And<
 template <typename Iterator, typename Sentinel = Iterator> struct IsForwardIterator : And<
     IsSentinelFor<Iterator, Sentinel>,
     IsPrefixIncrementable<Iterator>,
-    IsIndirectionCompatible<Iterator>,
-    IsSentinelFor<Iterator, Sentinel>
+    IsIndirectionCompatible<Iterator>
 > {};
 
 template <typename Iterator, typename Sentinel = Iterator> struct IsBidirectionalIterator : And<
@@ -100,8 +96,26 @@ template <typename Iterator, typename Sentinel = Iterator> struct IsRandomAccess
 
 template <typename> struct IterableTraits {};
 
+enum class IteratorType {UnknownOrSentinel, Input, Output, Forward, Bidirectional, RandomAccess};
 
-template <template <typename...> class N, typename T, typename = typename IsConst<T>::Type>
+template <typename I, typename S = I> struct IteratorTypeOf {
+  static constexpr IteratorType value = IsRandomAccessIterator<I, S>::value
+      ? IteratorType::RandomAccess
+      : IsBidirectionalIterator<I, S>::value
+      ? IteratorType::Bidirectional
+      : IsForwardIterator<I, S>::value
+      ? IteratorType::Forward
+      : IsOutputIterator<I>::value
+      ? IteratorType::Output
+      : IsInputIterator<I>::value
+      ? IteratorType::Input
+      : IteratorType::UnknownOrSentinel;
+};
+
+// ODR before C++17
+template <typename I, typename S> IteratorType const IteratorTypeOf<I, S>::value;
+
+template <template <typename...> class, typename T, typename = typename IsConst<T>::Type>
 struct NodeIteratorTraits {};
 
 template <template <typename...> class N, typename T> struct NodeIteratorTraits<N, T, True> {

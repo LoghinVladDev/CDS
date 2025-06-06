@@ -44,8 +44,8 @@ TEST(FormatTest, fmtStandardFormatSpecExamples) {
 }
 
 TEST(FormatTest, dynamicFormat) {
-  String fmt = "ab{:#06x}cd";
-  ASSERT_EQ(vformat(fmt, 255), "ab0x00ffcd");
+  String const fmt = "ab{:#06x}cd";
+  ASSERT_EQ(cds::vformat(fmt, 255), "ab0x00ffcd");
 }
 
 TEST(FormatTest, callableString) {

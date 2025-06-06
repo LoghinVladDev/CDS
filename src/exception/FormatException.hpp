@@ -21,7 +21,7 @@ public:
 #endif
 
   FormatException() noexcept : _message{""} {}
-  explicit FormatException(String message) noexcept : _message{cds::move(message)} {}
+  explicit FormatException(String message) noexcept : _message{mv(message)} {}
   explicit FormatException(std::exception const& exception) noexcept : _message{exception.what()} {}
   ~FormatException() noexcept override = default;
 

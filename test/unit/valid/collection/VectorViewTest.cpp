@@ -10,19 +10,56 @@
 namespace {
 using testing::iteq;
 using testing::citeq;
+using cds::Size;
 using cds::Vector;
 using cds::VectorView;
 using cds::makeView;
 using cds::asConst;
+using cds::ignore;
 
 using cds::meta::IsSame;
 using cds::meta::RemoveCVRef;
+
+// head
+static_assert(sizeof(VectorView<int, 10>) == sizeof(void*), "unexpected bounded VectorView size");
+
+// head, tail
+static_assert(sizeof(VectorView<int>) == sizeof(void*) * 2, "unexpected unbounded VectorView size");
 } // namespace
 
 TEST(VectorView, ctFromArray) {
   int nums[5] = {1, 2, 3, 4, 5};
   auto view = makeView(nums);
+  ASSERT_TRUE(citeq(nums, view));
   static_assert(IsSame<RemoveCVRef<decltype(view)>, VectorView<int, 5>>::value, "Expected bounded");
+}
+
+TEST(VectorView, ctFromArrayConst) {
+  int const nums[5] = {1, 2, 3, 4, 5};
+  auto view = makeView(nums);
+  ASSERT_TRUE(citeq(nums, view));
+  static_assert(IsSame<RemoveCVRef<decltype(view)>, VectorView<int const, 5>>::value, "Expected bounded const");
+}
+
+TEST(VectorView, ctFromVector) {
+  Vector<int> nums = {1, 2, 3, 4, 5};
+  auto view = makeView(nums);
+  ASSERT_TRUE(citeq(nums, view));
+  static_assert(IsSame<RemoveCVRef<decltype(view)>, VectorView<int>>::value, "Expected unbounded");
+}
+
+TEST(VectorView, ctFromVectorConst) {
+  Vector<int> const nums = {1, 2, 3, 4, 5};
+  auto view = makeView(nums);
+  ASSERT_TRUE(citeq(nums, view));
+  static_assert(IsSame<RemoveCVRef<decltype(view)>, VectorView<int const>>::value, "Expected unbounded const");
+}
+
+TEST(VectorView, ctFromIList) {
+  auto const list = {1, 2, 3, 4, 5};
+  auto view = makeView(list);
+  ASSERT_TRUE(citeq(list, view));
+  static_assert(IsSame<RemoveCVRef<decltype(view)>, VectorView<int const>>::value, "Expected unbounded const");
 }
 
 TEST(VectorView, staticVecViewIterFns) {

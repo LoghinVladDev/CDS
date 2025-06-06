@@ -15,7 +15,7 @@ template <typename C, typename U> class FormatStringToken {
   using SV = BaseStringView<C, U>;
 
 public:
-  CDS_ATTR(constexpr(11)) FormatStringToken(SV tok, Size idx) noexcept : _tok{tok}, _idx{idx} {}
+  CDS_ATTR(constexpr(11)) FormatStringToken(SV tok, Size const idx) noexcept : _tok{tok}, _idx{idx} {}
   ~FormatStringToken() noexcept = default;
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto token() const noexcept -> SV const& {

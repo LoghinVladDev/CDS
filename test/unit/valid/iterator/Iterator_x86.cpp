@@ -107,7 +107,7 @@ TEST(Iterable, reverseConstButNotConst) {
 
 #ifdef DCR_SINCECPP11
 template <typename T, typename V> constexpr auto sum(T&& lhs, V&& rhs) -> decltype(meta::rvalue<T>() + meta::rvalue<V>()) {
-  return cds::forward<T>(lhs) + cds::forward<V>(rhs);
+  return fwd<T>(lhs) + fwd<V>(rhs);
 }
 
 TEST(Iterator, cpp11Constexpr) {

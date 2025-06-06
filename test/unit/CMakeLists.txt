@@ -90,13 +90,19 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/bindings/GenericLoopBinding.cpp)
 
   set(CDS_COLLECTION_UNIT_TEST_SOURCES
+      valid/collection/HashMapBaseTest.cpp
       valid/collection/HashMapTest.cpp
       valid/collection/VectorTest.cpp
       valid/collection/VectorViewTest.cpp)
 
   set(CDS_DATA_STRUCTURES_UNIT_TEST_SOURCES
+      valid/ds/ArrayBaseTest.cpp
+      valid/ds/ArrayDynamicBackScalingBaseTest.cpp
+      valid/ds/ArrayTraitsTest.cpp
       valid/ds/SingleLinkedListBase.cpp
-      valid/ds/HashTableBase.cpp)
+      valid/ds/HashTableBase.cpp
+      valid/ds/MapBaseTest.cpp
+      valid/ds/MapEntryTest.cpp)
 
   set(CDS_EXCEPTION_UNIT_TEST_SOURCES
       valid/exception/ExceptionTest.cpp

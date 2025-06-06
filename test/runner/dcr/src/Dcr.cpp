@@ -188,7 +188,7 @@ auto argParse(std::vector<std::string> const& args, std::vector<std::unique_ptr<
       }
 
       if (filterIdx == parser->filterCount() || (parser->isSink() && filterIdx > 0)) {
-        parser->accept({&args[argIdx], &args[lookaheadArgIdx]});
+        parser->accept({args.begin() + argIdx, args.end()});
         advance = filterIdx;
         acceptedParsers.push_back(parser.get());
         break;
@@ -1358,7 +1358,7 @@ auto run(int const argc, char const* const* argv) -> int {
           [](auto const&) { return true; }
       ),
       makeParserWithSink(
-          [&passedToCompiler](auto const& args) { passedToCompiler = {&args[1], &args[args.size()]}; },
+          [&passedToCompiler](auto const& args) { passedToCompiler = {args.begin() + 1, args.end()}; },
           alwaysAccept,
           [](auto const& arg) { return arg == "--"; }
       )

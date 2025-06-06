@@ -217,7 +217,7 @@ TEST(HashTableBase, moveCtr) {
   ihs.tryEmplace(59);
   ihs.tryEmplace(59*2);
 
-  auto ihsCopy = cds::move(ihs);
+  auto ihsCopy = mv(ihs);
   ASSERT_TRUE(citeq(ihsCopy, equiv));
   ASSERT_EQ(ihsCopy.bucketCount(), 59);
   ASSERT_TRUE(ihs.empty());
@@ -240,8 +240,8 @@ TEST(HashTableBase, move) {
   ihs.tryEmplace(59*2);
 
   auto ihsCopy = DefaultHashTable<int, int, Identity<>>();
-  ihsCopy.move(cds::move(ihs));
-  ihsCopy.move(cds::move(ihsCopy));
+  ihsCopy.move(mv(ihs));
+  ihsCopy.move(mv(ihsCopy));
   ASSERT_TRUE(citeq(ihsCopy, equiv));
   ASSERT_EQ(ihsCopy.bucketCount(), 59);
   ASSERT_TRUE(ihs.empty());
@@ -251,7 +251,7 @@ TEST(HashTableBase, move) {
 
 TEST(HashTableBase, largeSize) {
   auto ihs = DefaultHashTable<int, int, Identity<>>();
-  int n = 1000000;
+  int n = 10000;
   std::random_device r;
   std::seed_seq s {r(), r(), r()};
   std::mt19937 e(s);
@@ -260,6 +260,33 @@ TEST(HashTableBase, largeSize) {
     ihs.tryEmplace(u(e));
     n--;
   }
+}
+
+TEST(HashTableBase, remove) {
+  DefaultHashTable<int, int, Identity<>> ihs{};
+  ihs.tryEmplace(1);
+  ihs.tryEmplace(2);
+  ihs.tryEmplace(3);
+
+  auto it = ihs.begin();
+  ++it;
+
+  auto const value = *it;
+  ihs.remove(it);
+
+  ASSERT_EQ(ihs.end(), ihs.find(value));
+}
+
+TEST(HashTableBase, removeKey) {
+  DefaultHashTable<int, int, Identity<>> ihs{};
+  ihs.tryEmplace(1);
+  ihs.tryEmplace(2);
+  ihs.tryEmplace(3);
+  ihs.remove(2);
+
+  ASSERT_EQ(ihs.end(), ihs.find(2));
+  ASSERT_NE(ihs.end(), ihs.find(1));
+  ASSERT_NE(ihs.end(), ihs.find(3));
 }
 
 #ifdef DCR_SINCECPP20

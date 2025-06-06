@@ -124,8 +124,8 @@ TEST(UnionTest, copy) {
 TEST(UnionTest, move) {
   Union <int, String> u1 = 3;
   Union <int, String> u2 = "abc";
-  auto const u3 {cds::move(u1)};
-  auto const u4 {cds::move(u2)};
+  auto const u3 {mv(u1)};
+  auto const u4 {mv(u2)};
   ASSERT_TRUE(u3.is<int>());
   ASSERT_TRUE(u4.is<String>());
 
@@ -147,7 +147,7 @@ TEST(UnionTest, move) {
     Union <int, X> u6 {X{aliveCtr, movedCtr}};
     ASSERT_EQ(aliveCtr, 1);
     ASSERT_EQ(movedCtr, 1);
-    auto const u7 {cds::move(u6)};
+    auto const u7 {mv(u6)};
     ASSERT_EQ(aliveCtr, 2);
     ASSERT_EQ(movedCtr, 2);
   }
@@ -274,10 +274,10 @@ TEST(UnionTest, moveAssign) {
   Union<int, String> u1;
   Union<int, String> u2 = 3;
   Union<int, String> u3 = "abc";
-  u1 = cds::move(u2);
+  u1 = mv(u2);
   ASSERT_TRUE(u1.is<int>());
   ASSERT_EQ(get<int>(u1), 3);
-  u1 = cds::move(u3);
+  u1 = mv(u3);
   ASSERT_TRUE(u1.is<String>());
   ASSERT_EQ(get<String>(u1), "abc");
 }

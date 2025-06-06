@@ -234,14 +234,14 @@ template <typename H, typename... T> union UnionStorage<UnionFunctionDetail::Tri
   // Use brackets instead of braces, arrows implicit conversions
   template <typename... A, typename = EnableIf<IsConstructible<H, A&&...>>> CDS_ATTR(2(explicit, constexpr(11)))
   UnionStorage(CDS_ATTR(unused) InPlaceIndex<0>, A&&... args)
-      CDS_ATTR(noexcept(noexcept(H(cds::forward<A>(args)...)))) : _head(cds::forward<A>(args)...) {}
+      CDS_ATTR(noexcept(noexcept(H(fwd<A>(args)...)))) : _head(fwd<A>(args)...) {}
 
   template <
       Size inPlaceIndex, typename... A,
       typename = EnableIf<IsConstructible<Tail, InPlaceIndex<inPlaceIndex - 1>, A&&...>>
   > CDS_ATTR(2(explicit, constexpr(11))) UnionStorage(CDS_ATTR(unused) InPlaceIndex<inPlaceIndex>, A&&... args)
-      CDS_ATTR(noexcept(noexcept(Tail{InPlaceIndex<inPlaceIndex - 1>{}, cds::forward<A>(args)...}))) :
-      _tail{InPlaceIndex<inPlaceIndex - 1>{}, cds::forward<A>(args)...} {}
+      CDS_ATTR(noexcept(noexcept(Tail{InPlaceIndex<inPlaceIndex - 1>{}, fwd<A>(args)...}))) :
+      _tail{InPlaceIndex<inPlaceIndex - 1>{}, fwd<A>(args)...} {}
 
   ~UnionStorage() noexcept = default;
 
@@ -263,14 +263,14 @@ template <typename H, typename... T> union UnionStorage<UnionFunctionDetail::Non
   // Use brackets instead of braces, arrows implicit conversions
   template <typename... A, typename = EnableIf<IsConstructible<H, A&&...>>> CDS_ATTR(2(explicit, constexpr(11)))
   UnionStorage(CDS_ATTR(unused) InPlaceIndex<0>, A&&... args)
-      CDS_ATTR(noexcept(noexcept(H(cds::forward<A>(args)...)))) : _head(cds::forward<A>(args)...) {}
+      CDS_ATTR(noexcept(noexcept(H(fwd<A>(args)...)))) : _head(fwd<A>(args)...) {}
 
   template <
       Size inPlaceIndex, typename... A,
       typename = EnableIf<IsConstructible<Tail, InPlaceIndex<inPlaceIndex - 1>, A&&...>>
   > CDS_ATTR(2(explicit, constexpr(11))) UnionStorage(CDS_ATTR(unused) InPlaceIndex<inPlaceIndex>,A &&... args)
-      CDS_ATTR(noexcept(noexcept(Tail{InPlaceIndex<inPlaceIndex - 1>{}, cds::forward<A>(args)...}))) :
-      _tail{InPlaceIndex<inPlaceIndex - 1>{}, cds::forward<A>(args)...} {}
+      CDS_ATTR(noexcept(noexcept(Tail{InPlaceIndex<inPlaceIndex - 1>{}, fwd<A>(args)...}))) :
+      _tail{InPlaceIndex<inPlaceIndex - 1>{}, fwd<A>(args)...} {}
 
   CDS_ATTR(constexpr(20)) ~UnionStorage() noexcept {}
 
@@ -292,14 +292,14 @@ template <typename H, typename... T> union UnionStorage<UnionFunctionDetail::Del
   // Use brackets instead of braces, arrows implicit conversions
   template <typename... A, typename = EnableIf<IsConstructible<H, A&&...>>> CDS_ATTR(2(explicit, constexpr(11)))
   UnionStorage(CDS_ATTR(unused) InPlaceIndex<0>, A &&... args)
-      CDS_ATTR(noexcept(noexcept(H(cds::forward<A>(args)...)))) : _head(cds::forward<A>(args)...) {}
+      CDS_ATTR(noexcept(noexcept(H(fwd<A>(args)...)))) : _head(fwd<A>(args)...) {}
 
   template <
       Size inPlaceIndex, typename... A,
       typename = EnableIf<IsConstructible<Tail, InPlaceIndex<inPlaceIndex - 1>, A&&...>>
   > CDS_ATTR(2(explicit, constexpr(11))) UnionStorage(CDS_ATTR(unused) InPlaceIndex<inPlaceIndex>, A &&... args)
-      CDS_ATTR(noexcept(noexcept(Tail{InPlaceIndex<inPlaceIndex - 1>{}, cds::forward<A>(args)...}))) :
-      _tail{InPlaceIndex<inPlaceIndex - 1>{}, cds::forward<A>(args)...} {}
+      CDS_ATTR(noexcept(noexcept(Tail{InPlaceIndex<inPlaceIndex - 1>{}, fwd<A>(args)...}))) :
+      _tail{InPlaceIndex<inPlaceIndex - 1>{}, fwd<A>(args)...} {}
 
   CDS_ATTR(constexpr(20)) ~UnionStorage() noexcept = delete;
 
@@ -340,7 +340,7 @@ template <> struct GetUnionData<0> {
 
   template <UnionFunctionDetail d, typename H, typename... T> CDS_ATTR(2(nodiscard, constexpr(11)))
   auto operator()(UnionStorage<d, H, T...> &&data) const noexcept -> H && {
-    return cds::move(data._head);
+    return mv(data._head);
   }
 };
 
@@ -358,8 +358,8 @@ template <unsigned idx> struct GetUnionData {
 
   template <UnionFunctionDetail d, typename H, typename... T>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(UnionStorage<d, H, T...> &&data) const noexcept
-  -> decltype(GetUnionData<idx - 1>()(cds::move(data._tail))) {
-    return GetUnionData<idx - 1>()(cds::move(data._tail));
+  -> decltype(GetUnionData<idx - 1>()(mv(data._tail))) {
+    return GetUnionData<idx - 1>()(mv(data._tail));
   }
 };
 
@@ -391,14 +391,14 @@ template <unsigned idx> struct UnionDestroyVisitor {
 template <unsigned idx> struct UnionConstructVisitor {
   template<typename Union, typename A>
   CDS_ATTR(constexpr(14)) static auto visit(Union &storage, A &&otherStorage) -> void {
-    ignore = construct(&GetUnionData<idx>()(storage), GetUnionData<idx>()(cds::forward<A>(otherStorage)));
+    ignore = construct(&GetUnionData<idx>()(storage), GetUnionData<idx>()(fwd<A>(otherStorage)));
   }
 };
 
 template <unsigned idx> struct UnionAssignVisitor {
   template <typename Union, typename A>
   CDS_ATTR(constexpr(14)) static auto visit(Union &storage, A &&otherStorage) -> void {
-    GetUnionData<idx>()(storage) = GetUnionData<idx>()(cds::forward<A>(otherStorage));
+    GetUnionData<idx>()(storage) = GetUnionData<idx>()(fwd<A>(otherStorage));
   }
 };
 
@@ -415,8 +415,8 @@ template <unsigned idx> struct UnionGenericVisitor {
   template <typename R, typename Union, typename Visitor>
   CDS_ATTR(constexpr(14)) static auto visit(Union &&storage, Visitor &&visitor) -> R {
     return functional::invoke(
-        cds::forward<Visitor>(visitor),
-        GetUnionData<idx>()(cds::forward<Union>(storage))
+        fwd<Visitor>(visitor),
+        GetUnionData<idx>()(fwd<Union>(storage))
     );
   }
 };
@@ -446,13 +446,13 @@ auto unionDestroy(I idx, UnionStorage<d, T...> &data) noexcept -> void {
 template <typename I, UnionFunctionDetail d, typename... T, typename A> CDS_ATTR(constexpr(14))
 auto unionConstruct(I idx, UnionStorage<d, T...> &data, A &&other) -> void {
   return FunctionalVisitorTable<UnionConstructVisitor, sizeof...(T)>::
-  template Table<UnionStorage<d, T...> &, A &&>::table[idx](data, cds::forward<A>(other));
+  template Table<UnionStorage<d, T...> &, A &&>::table[idx](data, fwd<A>(other));
 }
 
 template <typename I, UnionFunctionDetail d, typename... T, typename A> CDS_ATTR(constexpr(14))
 auto unionAssign(I idx, UnionStorage<d, T...> &data, A &&other) -> void {
   return FunctionalVisitorTable<UnionAssignVisitor, sizeof...(T)>::
-  template Table<UnionStorage<d, T...> &, A &&>::table[idx](data, cds::forward<A>(other));
+  template Table<UnionStorage<d, T...> &, A &&>::table[idx](data, fwd<A>(other));
 }
 
 template <typename RequestedType, typename I, UnionFunctionDetail d, typename... T> CDS_ATTR(constexpr(14))
@@ -464,13 +464,13 @@ auto unionRaise(I idx, UnionStorage<d, T...> const &data) -> void {
 template <typename R, typename I, UnionFunctionDetail d, typename... T, typename Visitor> CDS_ATTR(constexpr(14))
 auto unionGenericVisit(I idx, UnionStorage<d, T...> &data, Visitor &&visitor) -> R {
   return FunctionalVisitorTable<UnionGenericVisitor, sizeof...(T)>::
-      template Table<R, UnionStorage<d, T...> &, Visitor>::table[idx](data, cds::forward<Visitor>(visitor));
+      template Table<R, UnionStorage<d, T...> &, Visitor>::table[idx](data, fwd<Visitor>(visitor));
 }
 
 template <typename R, typename I, UnionFunctionDetail d, typename... T, typename Visitor> CDS_ATTR(constexpr(14))
 auto unionGenericVisit(I idx, UnionStorage<d, T...> const &data, Visitor &&visitor) -> R {
   return FunctionalVisitorTable<UnionGenericVisitor, sizeof...(T)>::
-      template Table<R, UnionStorage<d, T...> const &, Visitor>::table[idx](data, cds::forward<Visitor>(visitor));
+      template Table<R, UnionStorage<d, T...> const &, Visitor>::table[idx](data, fwd<Visitor>(visitor));
 }
 
 template <typename C, typename I, UnionFunctionDetail d, typename... T> CDS_ATTR(constexpr(14))
@@ -503,8 +503,8 @@ template <UnionFunctionDetail detail, typename... Types> struct UnionStorageBase
 
   template <Size index, typename... A, typename = EnableIf<IsConstructible<Data, InPlaceIndex<index>, A&&...>>>
   CDS_ATTR(2(implicit, constexpr(11))) UnionStorageBase(InPlaceIndex<index> inPlaceIndex, A&&... args)
-      CDS_ATTR(noexcept(noexcept(Data{inPlaceIndex, cds::forward<A>(args)...}))) :
-      _data{inPlaceIndex, cds::forward<A>(args)...}, _index{index} {}
+      CDS_ATTR(noexcept(noexcept(Data{inPlaceIndex, fwd<A>(args)...}))) :
+      _data{inPlaceIndex, fwd<A>(args)...}, _index{index} {}
 
   template <typename A, typename = EnableIf<And<
       Not<IsSameIgnoringCVRef<A, UnionStorageBase>>,
@@ -516,7 +516,7 @@ template <UnionFunctionDetail detail, typename... Types> struct UnionStorageBase
   )) :
       UnionStorageBase{
           InPlaceIndex<UnionBestMatchIndex<IsConstructibleSingleArg, A, Types...>::value>{},
-          cds::forward<A>(arg)
+          fwd<A>(arg)
       } {}
 
   template <
@@ -527,7 +527,7 @@ template <UnionFunctionDetail detail, typename... Types> struct UnionStorageBase
       CDS_ATTR(noexcept(IsNoexceptConstructible<M, A0, A1, An...>::value)) :
       UnionStorageBase{
           InPlaceIndex<UnionBestConstructibleIndex<Pack<A0, A1, An...>, Types...>::value>{},
-          cds::forward<A0>(arg0), cds::forward<A1>(arg1), cds::forward<An>(argn)...
+          fwd<A0>(arg0), fwd<A1>(arg1), fwd<An>(argn)...
       } {}
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto index() const noexcept -> Size {
@@ -599,7 +599,7 @@ template <typename PackedTypes> struct UnionDestructionBase<PackedTypes, UnionFu
       return;
     }
 
-    unionDestroy(cds::exchange(_index, Index::value), _data);
+    unionDestroy(xch(_index, Index::value), _data);
   }
 };
 
@@ -621,14 +621,14 @@ template <typename... Types> struct UnionConstructionBase<Pack<Types...>> : Unio
   ~UnionConstructionBase() = default;
 
   template <typename A> CDS_ATTR(constexpr(14)) auto constructFromUnion(A &&otherUnion)
-      /* CDS_ATTR(noexcept(noexcept(unionConstruct(this->_index, this->_data, cds::forward<A>(otherUnion))))) */
+      /* CDS_ATTR(noexcept(noexcept(unionConstruct(this->_index, this->_data, fwd<A>(otherUnion))))) */
       -> void {
     destroy();
     if (otherUnion.valueless()) {
       return;
     }
 
-    unionConstruct(otherUnion.index(), _data, cds::forward<A>(otherUnion)._data);
+    unionConstruct(otherUnion.index(), _data, fwd<A>(otherUnion)._data);
     _index = otherUnion.index();
   }
 
@@ -636,7 +636,7 @@ template <typename... Types> struct UnionConstructionBase<Pack<Types...>> : Unio
       CDS_ATTR(noexcept(IsNoexceptConstructible<typename GetUnionTypeImpl<idx, Types...>::Type, A...>::value))
       -> typename GetUnionTypeImpl<idx, Types...>::Type& {
     destroy();
-    auto &data = *construct(&GetUnionData<idx>()(_data), cds::forward<A>(args)...);
+    auto &data = *construct(&GetUnionData<idx>()(_data), fwd<A>(args)...);
     _index = idx;
     return data;
   }
@@ -644,7 +644,7 @@ template <typename... Types> struct UnionConstructionBase<Pack<Types...>> : Unio
   template <typename Type, typename... A, typename M = UnionBestMatchType<IsConstructibleSingleArg, Type, Types...>>
   CDS_ATTR(constexpr(14)) auto emplace(A&&... args) CDS_ATTR(noexcept(IsNoexceptConstructible<M, A&&...>::value))
       -> M& {
-    return emplace<UnionBestMatchIndex<IsConstructibleSingleArg, Type, Types...>::value>(cds::forward<A>(args)...);
+    return emplace<UnionBestMatchIndex<IsConstructibleSingleArg, Type, Types...>::value>(fwd<A>(args)...);
   }
 };
 
@@ -677,7 +677,7 @@ template <typename... Types> struct UnionAssignmentBase<Pack<Types...>> : UnionC
 
     if (index() == otherUnion.index()) {
       _index = UnionActiveIndex<Integral<Size, sizeof...(Types)>>::value;
-      unionAssign(otherUnion.index(), _data, cds::forward<A>(otherUnion)._data);
+      unionAssign(otherUnion.index(), _data, fwd<A>(otherUnion)._data);
       _index = otherUnion.index();
       return;
     }
@@ -686,7 +686,7 @@ template <typename... Types> struct UnionAssignmentBase<Pack<Types...>> : UnionC
       destroy();
     }
 
-    unionConstruct(otherUnion.index(), _data, cds::forward<A>(otherUnion)._data);
+    unionConstruct(otherUnion.index(), _data, fwd<A>(otherUnion)._data);
     _index = otherUnion.index();
   }
 
@@ -697,13 +697,13 @@ template <typename... Types> struct UnionAssignmentBase<Pack<Types...>> : UnionC
     constexpr auto bestMatchIndex = UnionBestMatchIndex<IsConstructibleAndAssignable, A, Types...>::value;
     if (bestMatchIndex == index()) {
       _index = UnionActiveIndex<Integral<Size, sizeof...(Types)>>::value;
-      GetUnionData<bestMatchIndex>()(_data) = cds::forward<A>(value);
+      GetUnionData<bestMatchIndex>()(_data) = fwd<A>(value);
       _index = bestMatchIndex;
       return;
     }
 
     destroy();
-    Base::template emplace<bestMatchIndex>(cds::forward<A>(value));
+    Base::template emplace<bestMatchIndex>(fwd<A>(value));
   }
 };
 
@@ -747,7 +747,7 @@ template <typename... Types> struct UnionMoveConstructionBase<Pack<Types...>, Un
 
   CDS_ATTR(constexpr(14)) UnionMoveConstructionBase(UnionMoveConstructionBase &&other)
       CDS_ATTR(noexcept(All<IsNoexceptMoveConstructible, Types...>::value)): Base{Valueless{}} {
-    constructFromUnion(cds::move(other));
+    constructFromUnion(mv(other));
   }
 
   auto operator=(UnionMoveConstructionBase const &) -> UnionMoveConstructionBase & = default;
@@ -905,7 +905,7 @@ template <typename... Types> struct UnionMoveAssignmentBase<Pack<Types...>, Unio
       return *this;
     }
 
-    assignFromUnion(cds::move(other));
+    assignFromUnion(mv(other));
     return *this;
   }
 
@@ -964,10 +964,10 @@ template <typename... Types> struct UnionObservableBase<Pack<Types...>> : UnionM
       typename Type, typename C, typename Match = UnionBestMatchType<IsSame, Type, Types...>,
       typename R = InvokeReturnOf<C, Match const &>, EnableIf<Not<IsSame<void, R>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto ifIs(C &&callable) const CDS_ATTR(noexcept(noexcept(
-      functional::invoke(cds::forward<C>(callable), lvalue<Match const>())
+      functional::invoke(fwd<C>(callable), lvalue<Match const>())
   ))) -> R {
     if (is<Type>()) {
-      return functional::invoke(cds::forward<C>(callable), get<Type>());
+      return functional::invoke(fwd<C>(callable), get<Type>());
     }
     return nullopt;
   }
@@ -976,10 +976,10 @@ template <typename... Types> struct UnionObservableBase<Pack<Types...>> : UnionM
       typename Type, typename C, typename Match = UnionBestMatchType<IsSame, Type, Types...>,
       typename R = InvokeReturnOf<C, Match &>, EnableIf<Not<IsSame<void, R>>> = 0
   > CDS_ATTR(2(nodiscard, constexpr(14))) auto ifIs(C &&callable) CDS_ATTR(noexcept(noexcept(
-      functional::invoke(cds::forward<C>(callable), lvalue<Match>())
+      functional::invoke(fwd<C>(callable), lvalue<Match>())
   ))) -> R {
     if (is<Type>()) {
-      return functional::invoke(cds::forward<C>(callable), get<Type>());
+      return functional::invoke(fwd<C>(callable), get<Type>());
     }
     return nullopt;
   }
@@ -988,10 +988,10 @@ template <typename... Types> struct UnionObservableBase<Pack<Types...>> : UnionM
       typename Type, typename C, typename Match = UnionBestMatchType<IsSame, Type, Types...>,
       typename R = InvokeReturnOf<C, Match const &>, EnableIf<IsSame<void, R>> = 0
   > CDS_ATTR(constexpr(14)) auto ifIs(C &&callable) const CDS_ATTR(noexcept(noexcept(
-      functional::invoke(cds::forward<C>(callable), lvalue<Match const>())
+      functional::invoke(fwd<C>(callable), lvalue<Match const>())
   ))) -> void {
     if (is<Type>()) {
-      functional::invoke(cds::forward<C>(callable), get<Type>());
+      functional::invoke(fwd<C>(callable), get<Type>());
     }
   }
 
@@ -999,10 +999,10 @@ template <typename... Types> struct UnionObservableBase<Pack<Types...>> : UnionM
       typename Type, typename C, typename Match = UnionBestMatchType<IsSame, Type, Types...>,
       typename R = InvokeReturnOf<C, Match &>, EnableIf<IsSame<void, R>> = 0
   > CDS_ATTR(constexpr(14)) auto ifIs(C &&callable) CDS_ATTR(noexcept(noexcept(
-      functional::invoke(cds::forward<C>(callable), lvalue<Match>())
+      functional::invoke(fwd<C>(callable), lvalue<Match>())
   ))) -> void {
     if (is<Type>()) {
-      functional::invoke(cds::forward<C>(callable), get<Type>());
+      functional::invoke(fwd<C>(callable), get<Type>());
     }
   }
 
@@ -1125,7 +1125,7 @@ template <typename... Types> struct UnionVisitationBase<Pack<Types...>> : UnionO
     if (valueless()) {
       CDS_ATTR(throw(UnionTypeException::valuelessVisit()));
     }
-    return unionGenericVisit<typename Detail::Return::Type>(index(), _data, cds::forward<Visitor>(visitor));
+    return unionGenericVisit<typename Detail::Return::Type>(index(), _data, fwd<Visitor>(visitor));
   }
 
   template <
@@ -1138,7 +1138,7 @@ template <typename... Types> struct UnionVisitationBase<Pack<Types...>> : UnionO
     if (valueless()) {
       CDS_ATTR(throw(UnionTypeException::valuelessVisit()));
     }
-    return unionGenericVisit<typename Detail::Return::Type>(index(), _data, cds::forward<Visitor>(visitor));
+    return unionGenericVisit<typename Detail::Return::Type>(index(), _data, fwd<Visitor>(visitor));
   }
 };
 

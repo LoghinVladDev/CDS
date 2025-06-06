@@ -68,7 +68,7 @@ struct FormatNumberSpecification {
 
 struct FormatSizeSpecification {
   CDS_ATTR(2(explicit, constexpr(11))) FormatSizeSpecification(
-      Optional<Size> size0 = nullopt, Optional<Size> explicitIdx0 = nullopt
+      Optional<Size> const& size0 = nullopt, Optional<Size> const& explicitIdx0 = nullopt
   ) noexcept : size{size0}, explicitIdx{explicitIdx0} {}
   Optional<Size> size;
   Optional<Size> explicitIdx;
@@ -76,14 +76,15 @@ struct FormatSizeSpecification {
 
 struct FormatWidthOnlySpecification {
   CDS_ATTR(2(explicit, constexpr(11))) FormatWidthOnlySpecification(
-      Optional<FormatSizeSpecification> width0 = nullopt
+      Optional<FormatSizeSpecification> const& width0 = nullopt
   ) noexcept : width{width0} {}
   Optional<FormatSizeSpecification> width;
 };
 
 struct FormatWidthSpecification {
   CDS_ATTR(2(explicit, constexpr(11))) FormatWidthSpecification(
-      Optional<FormatSizeSpecification> width0 = nullopt, Optional<FormatSizeSpecification> precision0 = nullopt
+      Optional<FormatSizeSpecification> const& width0 = nullopt,
+      Optional<FormatSizeSpecification> const& precision0 = nullopt
   ) noexcept : width{width0}, precision{precision0} {}
   Optional<FormatSizeSpecification> width;
   Optional<FormatSizeSpecification> precision;
@@ -225,32 +226,32 @@ template <typename T, typename C> struct FormatTypeSpecification<T*, C, False, F
   }
 };
 
-CDS_ATTR(2(nodiscard, constexpr(11))) auto operator|(FormatTypeFlagBits l, FormatTypeFlagBits r) noexcept
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator|(FormatTypeFlagBits const l, FormatTypeFlagBits const r) noexcept
     -> FormatTypeFlags {
   return static_cast<FormatTypeFlags>(l) | static_cast<FormatTypeFlags>(r);
 }
 
-CDS_ATTR(2(nodiscard, constexpr(11))) auto operator|(FormatTypeFlags l, FormatTypeFlagBits r) noexcept
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator|(FormatTypeFlags const l, FormatTypeFlagBits const r) noexcept
     -> FormatTypeFlags {
   return l | static_cast<FormatTypeFlags>(r);
 }
 
-CDS_ATTR(2(nodiscard, constexpr(11))) auto operator|(FormatTypeFlagBits l, FormatTypeFlags r) noexcept
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator|(FormatTypeFlagBits const l, FormatTypeFlags const r) noexcept
     -> FormatTypeFlags {
   return static_cast<FormatTypeFlags>(l) | r;
 }
 
-CDS_ATTR(2(nodiscard, constexpr(11))) auto operator&(FormatTypeFlagBits l, FormatTypeFlagBits r) noexcept
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator&(FormatTypeFlagBits const l, FormatTypeFlagBits const r) noexcept
     -> FormatTypeFlags {
   return static_cast<FormatTypeFlags>(l) & static_cast<FormatTypeFlags>(r);
 }
 
-CDS_ATTR(2(nodiscard, constexpr(11))) auto operator&(FormatTypeFlags l, FormatTypeFlagBits r) noexcept
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator&(FormatTypeFlags const l, FormatTypeFlagBits const r) noexcept
     -> FormatTypeFlags {
   return l & static_cast<FormatTypeFlags>(r);
 }
 
-CDS_ATTR(2(nodiscard, constexpr(11))) auto operator&(FormatTypeFlagBits l, FormatTypeFlags r) noexcept
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator&(FormatTypeFlagBits const l, FormatTypeFlags const r) noexcept
     -> FormatTypeFlags {
   return static_cast<FormatTypeFlags>(l) & r;
 }
@@ -299,7 +300,7 @@ auto formatTypeSpecification(Optional<C> typeChar) CDS_ATTR(noexcept(false)) -> 
   return FormatTypeSpecification<T, C>{}(typeChar);
 }
 
-template <typename T, typename C, typename I, typename S> CDS_ATTR(2(nodiscard, constexpr(14)))
+template <typename /* T */, typename C, typename I, typename S> CDS_ATTR(2(nodiscard, constexpr(14)))
 auto formatParseFillAlign(I it, S end) noexcept -> Tuple<I, FormatFillAlignSpecification<C>> {
   auto fillChar{static_cast<C>(' ')};
   Optional<FormatAlignType> align{nullopt};
@@ -366,7 +367,7 @@ auto formatParseWidthOrPrecision(I it, S end) CDS_ATTR(noexcept(false)) -> Tuple
     assert(res && "Unexpected failure in width int parse");
     it = it + (afterNumber - &*it);
     if (it == end) {
-      return {it, makeOptional<FormatSizeSpecification>(mv(size), nullopt)};
+      return {it, optionalOf<FormatSizeSpecification>(mv(size), nullopt)};
     }
   }
 
@@ -392,7 +393,7 @@ auto formatParseWidthOrPrecision(I it, S end) CDS_ATTR(noexcept(false)) -> Tuple
     }
   }
 
-  return {it, makeOptional<FormatSizeSpecification>(mv(size), mv(sizeExplicitArgIdx))};
+  return {it, optionalOf<FormatSizeSpecification>(mv(size), mv(sizeExplicitArgIdx))};
 }
 
 template <typename C, typename I, typename S> CDS_ATTR(2(nodiscard, constexpr(14))) 

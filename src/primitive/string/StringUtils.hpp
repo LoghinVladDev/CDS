@@ -513,8 +513,8 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
   template <typename N> CDS_ATTR(2(nodiscard, constexpr(14)))
   static auto startsWith(C const* str, Size len, N&& needle) noexcept -> bool {
     using Abs = StringAbstract<N>;
-    auto nbeg = Abs::data(cds::forward<N>(needle));
-    auto const nend = nbeg + Abs::length(cds::forward<N>(needle));
+    auto nbeg = Abs::data(fwd<N>(needle));
+    auto const nend = nbeg + Abs::length(fwd<N>(needle));
     for (auto const end = str + len; str != end && nbeg != nend; ++str, ++nbeg) {
       if (*str != *nbeg) {
         return false;
@@ -526,8 +526,8 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
   template <typename N> CDS_ATTR(2(nodiscard, constexpr(14)))
   static auto endsWith(C const* str, Size len, N&& needle) noexcept -> bool {
     using Abs = StringAbstract<N>;
-    auto const nlen = Abs::length(cds::forward<N>(needle));
-    auto nbeg = Abs::data(cds::forward<N>(needle)) + nlen;
+    auto const nlen = Abs::length(fwd<N>(needle));
+    auto nbeg = Abs::data(fwd<N>(needle)) + nlen;
     auto beg = str + len;
     auto const nend = nbeg - nlen;
     for (auto const end = beg - len; beg != end && nbeg != nend; --beg, --nbeg) {

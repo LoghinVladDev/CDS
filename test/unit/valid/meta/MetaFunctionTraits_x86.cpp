@@ -4,10 +4,16 @@
 // FLAGS[compile(linux:*)]: -m32
 
 #include <cds/meta/FunctionTraits>
+
 #include "UnitTest.hpp"
+
+#include <cds/Tuple>
 
 using namespace cds;
 using namespace cds::meta;
+
+namespace {
+using cds::Tuple;
 
 int f1();
 long f2(int, long);
@@ -50,6 +56,7 @@ public:
   int f13_n() noexcept;
   long f14_n(int, long) noexcept;
 };
+} // namespace
 
 TEST(FunctionTraits, ReturnOf) {
   static_assert(IsSame<typename FunctionTraits<decltype(f1)>::Return, int>::value, "Failed ReturnOf");

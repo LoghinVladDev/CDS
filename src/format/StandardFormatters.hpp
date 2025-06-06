@@ -56,7 +56,7 @@ template <typename C> struct BoolFormatter : StandardFormatter<bool, C> {
   }
 };
 
-template <typename T, typename C> struct StringFormatter : StandardFormatter<C, C> {
+template <typename /* T */, typename C> struct StringFormatter : StandardFormatter<C, C> {
   using StandardFormatter<C, C>::formatString;
 
   template <typename Ctx> CDS_ATTR(2(nodiscard, constexpr(20)))
@@ -65,7 +65,7 @@ template <typename T, typename C> struct StringFormatter : StandardFormatter<C, 
   }
 };
 
-template <typename T, typename C> struct PointerFormatter : impl::fmt::StandardFormatter<T, C> {
+template <typename T, typename C> struct PointerFormatter : StandardFormatter<T, C> {
   using StandardFormatter<T, C>::formatPointer;
 
   template <typename Ctx> CDS_ATTR(nodiscard) auto format(T value, Ctx& ctx)
@@ -74,7 +74,7 @@ template <typename T, typename C> struct PointerFormatter : impl::fmt::StandardF
   }
 };
 
-template <typename T, typename C> struct FloatingFormatter : impl::fmt::StandardFormatter<T, C> {
+template <typename T, typename C> struct FloatingFormatter : StandardFormatter<T, C> {
   using StandardFormatter<T, C>::formatFloating;
 
   template <typename Ctx> CDS_ATTR(nodiscard) auto format(T value, Ctx& ctx)
