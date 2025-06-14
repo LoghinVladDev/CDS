@@ -20,6 +20,8 @@ namespace impl {
 using functional::Less;
 using meta::lvalue;
 using meta::Common;
+using meta::IsNoexceptConstructible;
+using meta::RemoveCVRef;
 
 enum class Ordering : U8 { Less, Equal, Greater };
 
@@ -82,7 +84,7 @@ CDS_ATTR(constexpr(14)) auto copyN(I sFirst, S count, O dFirst) CDS_ATTR(noexcep
 
 template <typename I, typename S, typename O>
 CDS_ATTR(constexpr(20)) auto copyInitialize(I sFirst, S sLast, O dFirst) CDS_ATTR(noexcept(
-    noexcept(impl::construct(dFirst, *sFirst))
+    IsNoexceptConstructible<RemoveCVRef<decltype(*dFirst)>, decltype(sFirst)>::value
     && noexcept(sFirst != sLast)
     && noexcept(++lvalue<I>())
     && noexcept(++lvalue<O>())
