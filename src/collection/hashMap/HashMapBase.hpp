@@ -43,16 +43,16 @@ public:
   using Base::remove;
   using Base::size;
 
-  template <typename... Args> CDS_ATTR(constexpr(20)) auto emplace(Args&&... args)
-      CDS_ATTR(noexcept(noexcept(tryEmplace(fwd<Args>(args)...))))
+  template <typename... Args> CDS_ATTR(constexpr(20)) auto emplace(K const& key, Args&&... args)
+      CDS_ATTR(noexcept(noexcept(tryEmplace(key, key, fwd<Args>(args)...))))
       -> Tuple<Iterator, bool> {
-    auto const res = tryEmplace(fwd<Args>(args)...);
+    auto const res = tryEmplace(key, key, fwd<Args>(args)...);
     return {res.iter, res.inserted};
   }
 
   template <typename = void, EnableIf<IsDefaultConstructible<V>> = 0> CDS_ATTR(2(nodiscard, constexpr(20)))
-  auto operator[](K const& key) CDS_ATTR(noexcept(noexcept(tryEmplace(key)))) -> V& {
-    return tryEmplace(key).iter->value();
+  auto operator[](K const& key) CDS_ATTR(noexcept(noexcept(tryEmplace(key, key)))) -> V& {
+    return tryEmplace(key, key).iter->value();
   }
 };
 } // namespace impl

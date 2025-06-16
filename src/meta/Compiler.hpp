@@ -306,7 +306,7 @@ constexpr S8 s8Max = 0x7f;
 constexpr S16 s16Min = -0x8000;
 constexpr S16 s16Max = 0x7fff;
 
-#if CDS_ATTR(win32)
+#if CDS_ATTR(os_win32)
 constexpr S32 s32Min = -static_cast<S32>(0x80000000L);
 #else
 constexpr S32 s32Min = -0x80000000L;

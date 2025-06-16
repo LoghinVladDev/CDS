@@ -6,21 +6,21 @@
 #define CDS_META_PLATFORM_HPP
 
 #ifdef WIN32
-#define CDS_ATTR_win32 true
+#define CDS_ATTR_os_win32 true
 #else
-#define CDS_ATTR_win32 false
+#define CDS_ATTR_os_win32 false
 #endif
 
 #ifdef __linux
-#define CDS_ATTR_linux true
+#define CDS_ATTR_os_linux true
 #else
-#define CDS_ATTR_linux false
+#define CDS_ATTR_os_linux false
 #endif
 
 #ifdef __APPLE__
-#define CDS_ATTR_apple true
+#define CDS_ATTR_os_apple true
 #else
-#define CDS_ATTR_appl false
+#define CDS_ATTR_os_apple false
 #endif
 
 #endif // CDS_META_PLATFORM_HPP

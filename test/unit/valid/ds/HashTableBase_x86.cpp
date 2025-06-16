@@ -74,10 +74,10 @@ TEST(HashTableBase, emplaceAndGet) {
   ASSERT_EQ(ihs.at(2), nullptr);
   ASSERT_EQ(asConst(ihs).at(1), nullptr);
   ASSERT_EQ(asConst(ihs).at(2), nullptr);
-  ASSERT_TRUE(tes(true, 1)(ihs.tryEmplace(1)));
+  ASSERT_TRUE(tes(true, 1)(ihs.tryEmplace(1, 1)));
   ASSERT_EQ(ihs.bucketCount(), 13);
   ASSERT_EQ(ihs.size(), 1);
-  ASSERT_TRUE(tes(false, 1)(ihs.tryEmplace(1)));
+  ASSERT_TRUE(tes(false, 1)(ihs.tryEmplace(1, 1)));
   ASSERT_EQ(ihs.size(), 1);
   ASSERT_NE(ihs.at(1), nullptr);
   ASSERT_EQ(ihs.at(2), nullptr);
@@ -86,16 +86,16 @@ TEST(HashTableBase, emplaceAndGet) {
   ASSERT_EQ(asConst(ihs).at(2), nullptr);
   ASSERT_EQ(*asConst(ihs).at(1), 1);
 
-  ASSERT_TRUE(tes(true, 5)(ihs.tryEmplace(5)));
+  ASSERT_TRUE(tes(true, 5)(ihs.tryEmplace(5, 5)));
   ASSERT_EQ(ihs.size(), 2);
 
-  ASSERT_TRUE(tes(true, 14)(ihs.tryEmplace(14)));
-  ASSERT_TRUE(tes(true, 27)(ihs.tryEmplace(27)));
+  ASSERT_TRUE(tes(true, 14)(ihs.tryEmplace(14, 14)));
+  ASSERT_TRUE(tes(true, 27)(ihs.tryEmplace(27, 27)));
   ASSERT_EQ(ihs.size(), 4);
   ASSERT_EQ(ihs.bucketCount(), 13);
 
   for (int i = 50; i < 70; ++i) {
-    ASSERT_TRUE(tes(true, i)(ihs.tryEmplace(i)));
+    ASSERT_TRUE(tes(true, i)(ihs.tryEmplace(i, i)));
   }
 
   ASSERT_EQ(ihs.bucketCount(), 29);
@@ -126,7 +126,7 @@ TEST(HashTableBase, emplaceAndGet) {
   }
 
   for (int i = 29; i <= 29 * 6; i += 29) {
-    ASSERT_TRUE(tes(i != 58, i)(ihs.tryEmplace(i)));
+    ASSERT_TRUE(tes(i != 58, i)(ihs.tryEmplace(i, i)));
   }
 
   ASSERT_EQ(ihs.size(), 29);
@@ -137,7 +137,7 @@ TEST(HashTableBase, Iteration) {
   auto ihs = DefaultHashTable<int, int, Identity<>>();
   std::vector<int> equiv;
   for (int i = 0; i < 10; ++i) {
-    ihs.tryEmplace(i);
+    ihs.tryEmplace(i, i);
     equiv.emplace_back(i);
   }
 
@@ -156,12 +156,12 @@ TEST(HashTableBase, copyCtr) {
   equiv.emplace_back(59);
   equiv.emplace_back(0);
   for (int i = 1; i < 50; ++i) {
-    ihs.tryEmplace(i);
+    ihs.tryEmplace(i, i);
     equiv.emplace_back(i);
   }
-  ihs.tryEmplace(0);
-  ihs.tryEmplace(59);
-  ihs.tryEmplace(59*2);
+  ihs.tryEmplace(0, 0);
+  ihs.tryEmplace(59, 59);
+  ihs.tryEmplace(59*2, 59*2);
 
   auto ihsCopy = ihs;
   ASSERT_TRUE(citeq(ihsCopy, equiv));
@@ -181,12 +181,12 @@ TEST(HashTableBase, copy) {
   equiv.emplace_back(59);
   equiv.emplace_back(0);
   for (int i = 1; i < 50; ++i) {
-    ihs.tryEmplace(i);
+    ihs.tryEmplace(i, i);
     equiv.emplace_back(i);
   }
-  ihs.tryEmplace(0);
-  ihs.tryEmplace(59);
-  ihs.tryEmplace(59*2);
+  ihs.tryEmplace(0, 0);
+  ihs.tryEmplace(59, 59);
+  ihs.tryEmplace(59*2, 59*2);
 
   auto ihsCopy = DefaultHashTable<int, int, Identity<>>();
   ihsCopy.copy(ihs);
@@ -209,12 +209,12 @@ TEST(HashTableBase, moveCtr) {
   equiv.emplace_back(59);
   equiv.emplace_back(0);
   for (int i = 1; i < 50; ++i) {
-    ihs.tryEmplace(i);
+    ihs.tryEmplace(i, i);
     equiv.emplace_back(i);
   }
-  ihs.tryEmplace(0);
-  ihs.tryEmplace(59);
-  ihs.tryEmplace(59*2);
+  ihs.tryEmplace(0, 0);
+  ihs.tryEmplace(59, 59);
+  ihs.tryEmplace(59*2, 59*2);
 
   auto ihsCopy = mv(ihs);
   ASSERT_TRUE(citeq(ihsCopy, equiv));
@@ -231,12 +231,12 @@ TEST(HashTableBase, move) {
   equiv.emplace_back(59);
   equiv.emplace_back(0);
   for (int i = 1; i < 50; ++i) {
-    ihs.tryEmplace(i);
+    ihs.tryEmplace(i, i);
     equiv.emplace_back(i);
   }
-  ihs.tryEmplace(0);
-  ihs.tryEmplace(59);
-  ihs.tryEmplace(59*2);
+  ihs.tryEmplace(0, 0);
+  ihs.tryEmplace(59, 59);
+  ihs.tryEmplace(59*2, 59*2);
 
   auto ihsCopy = DefaultHashTable<int, int, Identity<>>();
   ihsCopy.move(mv(ihs));
@@ -253,9 +253,9 @@ consteval auto evalConstexpr20() {
   auto ihs1 = DefaultHashTable<int, int, Identity<>>();
   auto ihs2 = DefaultHashTable<int, int, Identity<>>(Hash<>());
 
-  ihs1.tryEmplace(1);
-  ihs1.tryEmplace(2);
-  ihs1.tryEmplace(3);
+  ihs1.tryEmplace(1, 1);
+  ihs1.tryEmplace(2, 2);
+  ihs1.tryEmplace(3, 3);
 
   bool const e = ihs1.at(2) != nullptr;
   bool const ev = *ihs1.at(2) == 2;

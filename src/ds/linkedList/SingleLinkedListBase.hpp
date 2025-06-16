@@ -16,6 +16,7 @@ namespace impl {
 using meta::rvalue;
 
 using iterator::FwdNodeIterator;
+using iterator::impl::FwdNodeIteratorNodeExtractor;
 
 template <typename T, typename /* C */, typename A> class CDS_ATTR(ebo) SingleLinkedListBase : private A {
   using Node = FwdNode<T>;
@@ -71,22 +72,12 @@ public:
 
   template <typename... Args> CDS_ATTR(constexpr(20)) auto emplaceFront(Args&&... args)
       CDS_ATTR(noexcept(noexcept(false))) -> Type& {
-    _f = construct(alloc(), _f, fwd<Args>(args)...);
-    if (!_b) {
-      _b = _f;
-    }
-    return _f->data;
+    return emplaceFrontRetNode(fwd<Args>(args)...)->data;
   }
 
   template <typename... Args> CDS_ATTR(constexpr(20)) auto emplaceBack(Args&&... args)
       CDS_ATTR(noexcept(noexcept(false))) -> Type& {
-    if (empty()) {
-      return emplaceFront(fwd<Args>(args)...);
-    }
-
-    _b->next = construct(alloc(), nullptr, fwd<Args>(args)...);
-    _b = _b->next;
-    return _b->data;
+    return emplaceBackRetNode(fwd<Args>(args)...)->data;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto begin() noexcept -> Iterator {
@@ -113,7 +104,48 @@ public:
     return {nullptr};
   }
 
+  CDS_ATTR(constexpr(20)) auto remove(Iterator const& iterator) noexcept -> void {
+    FwdNodeIteratorNodeExtractor const extractor{};
+    return removeNode(extractor(iterator));
+  }
+
+  CDS_ATTR(constexpr(20)) auto remove(ConstIterator const& iterator) noexcept -> void {
+    FwdNodeIteratorNodeExtractor const extractor{};
+    return removeNode(extractor(iterator));
+  }
+
 protected:
+  CDS_ATTR(constexpr(20)) auto removeNode(Node* pNode) noexcept -> void {
+    if (empty()) {
+      return;
+    }
+
+    if (pNode == _f) {
+      _f = _f->next;
+      if (!_f) {
+        _b = nullptr;
+      }
+
+      free(pNode);
+      return;
+    }
+
+    auto head = _f;
+    while (head->next) {
+      if (head->next == pNode) {
+        head->next = head->next->next;
+        if (!head->next) {
+          _b = head;
+        }
+
+        free(pNode);
+        return;
+      }
+
+      head = head->next;
+    }
+  }
+
   CDS_ATTR(2(nodiscard, constexpr(11))) auto front() const noexcept -> Type const* {
     return empty() ? nullptr : &_f->data;
   }
@@ -178,6 +210,26 @@ protected:
   CDS_ATTR(constexpr(20)) auto free(Node* node) noexcept -> void {
     destruct(node);
     A::deallocate(node, 1);
+  }
+
+  template <typename... Args> CDS_ATTR(constexpr(20)) auto emplaceFrontRetNode(Args&&... args)
+      CDS_ATTR(noexcept(noexcept(false))) -> Node* {
+    _f = construct(alloc(), _f, fwd<Args>(args)...);
+    if (!_b) {
+      _b = _f;
+    }
+    return _f;
+  }
+
+  template <typename... Args> CDS_ATTR(constexpr(20)) auto emplaceBackRetNode(Args&&... args)
+      CDS_ATTR(noexcept(noexcept(false))) -> Node* {
+    if (empty()) {
+      return emplaceFrontRetNode(fwd<Args>(args)...);
+    }
+
+    _b->next = construct(alloc(), nullptr, fwd<Args>(args)...);
+    _b = _b->next;
+    return _b;
   }
 
 private:

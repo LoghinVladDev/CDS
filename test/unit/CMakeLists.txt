@@ -92,6 +92,7 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(CDS_COLLECTION_UNIT_TEST_SOURCES
       valid/collection/HashMapBaseTest.cpp
       valid/collection/HashMapTest.cpp
+      valid/collection/LinkedHashMapTest.cpp
       valid/collection/VectorTest.cpp
       valid/collection/VectorViewTest.cpp)
 

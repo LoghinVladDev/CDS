@@ -194,8 +194,6 @@ TEST(GenericFind, constant) {
   ASSERT_EQ(it, r1.end());
 
   auto const r2 = find(v, 4, doubled);
-  And<GenericFindEnabledFor<decltype(v), int, functional::Equal<>>,
-  IsProjector<decltype(v), decltype(doubled)>>::value;
   auto it1 = r2.begin();
   ASSERT_NE(it1, r2.end());
   ASSERT_EQ(*it1, 2);

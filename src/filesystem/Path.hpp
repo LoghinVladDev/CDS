@@ -13,7 +13,7 @@
 #include <cds/String>
 #include <cds/StringView>
 
-#if CDS_ATTR(win32)
+#if CDS_ATTR(os_win32)
 #include <windows.h>
 #include <cds/collection/Vector>
 #else
@@ -32,7 +32,7 @@ template <typename = void> struct PathUtilsCharConstants {
   static char constexpr win32Separator = '\\';
   static char constexpr dot = '.';
 
-#if CDS_ATTR(win32)
+#if CDS_ATTR(os_win32)
   static char constexpr nativeSeparator = win32Separator;
   static char constexpr nonNativeSeparator = portableSeparator;
 #else
@@ -46,7 +46,7 @@ template <typename = void> struct PathUtilsWCharConstants {
   static wchar_t constexpr win32Separator = L'\\';
   static wchar_t constexpr dot = L'.';
 
-#if CDS_ATTR(win32)
+#if CDS_ATTR(os_win32)
   static wchar_t constexpr nativeSeparator = win32Separator;
   static wchar_t constexpr nonNativeSeparator = portableSeparator;
 #else
@@ -60,7 +60,7 @@ template <typename = void> struct PathUtilsChar16Constants {
   static char16_t constexpr win32Separator = u'\\';
   static char16_t constexpr dot = u'.';
 
-#if CDS_ATTR(win32)
+#if CDS_ATTR(os_win32)
   static char16_t constexpr nativeSeparator = win32Separator;
   static char16_t constexpr nonNativeSeparator = portableSeparator;
 #else
@@ -74,7 +74,7 @@ template <typename = void> struct PathUtilsChar32Constants {
   static char32_t constexpr win32Separator = U'\\';
   static char32_t constexpr dot = U'.';
 
-#if CDS_ATTR(win32)
+#if CDS_ATTR(os_win32)
   static char32_t constexpr nativeSeparator = win32Separator;
   static char32_t constexpr nonNativeSeparator = portableSeparator;
 #else
@@ -89,7 +89,7 @@ template <typename = void> struct PathUtilsChar8Constants {
   static char8_t constexpr win32Separator = u8'\\';
   static char8_t constexpr dot = u8'.';
 
-#if CDS_ATTR(win32)
+#if CDS_ATTR(os_win32)
   static char8_t constexpr nativeSeparator = win32Separator;
   static char8_t constexpr nonNativeSeparator = portableSeparator;
 #else
@@ -139,7 +139,7 @@ template <> struct PathUtilsConstants<char32_t> : PathUtilsChar32Constants<> {};
 template <> struct PathUtilsConstants<char8_t> : PathUtilsChar8Constants<> {};
 #endif
 
-#if CDS_ATTR(win32)
+#if CDS_ATTR(os_win32)
 using PathNativeType = cds::impl::BaseString<wchar_t>;
 using PathNativeViewType = cds::impl::BaseStringView<wchar_t>;
 using PathNativeConstants = PathUtilsConstants<wchar_t>;
@@ -327,7 +327,7 @@ public:
   auto removeFilename() noexcept -> Path& {
     auto pos = _base.findLast(Constants::nativeSeparator);
     if (pos != NativeString::npos) {
-#if CDS_ATTR(linux) || CDS_ATTR(apple)
+#if CDS_ATTR(os_linux) || CDS_ATTR(os_apple)
       if (pos == 0) {
         pos = 1;
       }
@@ -387,12 +387,12 @@ public:
   }
 
   [[nodiscard]] auto root() const noexcept -> Path {
-#if CDS_ATTR(linux) || CDS_ATTR(apple)
+#if CDS_ATTR(os_linux) || CDS_ATTR(os_apple)
     if (_base.startsWith(Constants::nativeSeparator)) {
       return Path{_base.sub(0, 1)};
     }
     return Path{};
-#elif CDS_ATTR(win32)
+#elif CDS_ATTR(os_win32)
     if (_base.length() > 1 && _base[0] == Constants::nativeSeparator && _base[1] == Constants::nativeSeparator) {
       auto const mountPoint = _base.sub(2);
       auto const nextSep = mountPoint.findFirst(Constants::nativeSeparator);
@@ -421,7 +421,7 @@ public:
   }
 
   [[nodiscard]] auto parent() const noexcept -> Path {
-#if !CDS_ATTR(win32)
+#if !CDS_ATTR(os_win32)
     if (_base == "/") {
       return *this;
     }
@@ -430,7 +430,7 @@ public:
     if (pos == NativeString::npos) {
       return Path{};
     }
-#if !CDS_ATTR(win32)
+#if !CDS_ATTR(os_win32)
     if (pos == 0) {
       return Path{_base.sub(0, 1)};
     }
@@ -469,7 +469,7 @@ public:
   }
 
   [[nodiscard]] auto exists() const noexcept -> bool {
-#if CDS_ATTR(win32)
+#if CDS_ATTR(os_win32)
     constexpr static auto initialResolvingBufferLength = 512u;
     wchar_t initialResolvingBuffer[initialResolvingBufferLength];
     auto const actualLength = GetFullPathNameW(
@@ -492,12 +492,12 @@ public:
     )) {
       return false;
     }
-#elif CDS_ATTR(linux)
+#elif CDS_ATTR(os_linux)
     struct stat64 fileStat{};
     if (0 != stat64(_base.data(), &fileStat)) {
       return false;
     }
-#elif CDS_ATTR(apple)
+#elif CDS_ATTR(os_apple)
     struct stat fileStat{};
     if (0 != stat(_base.data(), &fileStat)) {
       return false;
@@ -635,7 +635,7 @@ public:
       }
     }
 
-#if CDS_ATTR(linux) || CDS_ATTR(apple)
+#if CDS_ATTR(os_linux) || CDS_ATTR(os_apple)
     if (firstSep == 0) {
       _current = str.sub(0, 1);
       _rest = str.sub(firstAfter);

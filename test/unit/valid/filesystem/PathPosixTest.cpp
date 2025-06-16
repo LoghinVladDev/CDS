@@ -18,7 +18,7 @@ using cds::filesystem::Path;
 using testing::citeq;
 } // namespace
 
-#if CDS_ATTR(linux) || CDS_ATTR(apple)
+#if CDS_ATTR(os_linux) || CDS_ATTR(os_apple)
 TEST(PathPosixTest, nativeConv) {
   ASSERT_EQ("a/b", Path("a\\b", Path::Format::Native).str());
   ASSERT_EQ("a/b/c/d", Path("a/b\\c/d", Path::Format::Native).str());

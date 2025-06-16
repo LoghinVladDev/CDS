@@ -12,7 +12,13 @@
 
 namespace cds {
 namespace iterator {
+namespace impl {
+struct FwdNodeIteratorNodeExtractor;
+} // namespace impl
+
 template <typename T> class FwdNodeIterator {
+  friend struct impl::FwdNodeIteratorNodeExtractor;
+
 public:
   using Traits = meta::NodeIteratorTraits<cds::impl::FwdNode, T>;
   using Node = typename Traits::Node;
@@ -70,6 +76,15 @@ template <typename FT> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(
 ) noexcept -> bool {
   return lhs._n != rhs._n;
 }
+
+namespace impl {
+struct FwdNodeIteratorNodeExtractor {
+  template <typename T> auto operator()(FwdNodeIterator<T> const& iterator) const noexcept
+      -> meta::NodeIteratorTraits<cds::impl::FwdNode, T>::Node* {
+    return iterator._n;
+  }
+};
+} // namespace impl
 } // namespace iterator
 } // namespace cds
 

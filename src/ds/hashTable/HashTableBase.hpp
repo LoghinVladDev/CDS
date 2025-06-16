@@ -79,9 +79,7 @@ public:
   ) CDS_ATTR(noexcept(noexcept(H(hasher)) && noexcept(RP(rehashPolicy)) && noexcept(AS(alloc)))) :
       H{hasher}, RP{rehashPolicy}, AS{alloc} {}
 
-  CDS_ATTR(2(implicit, constexpr(20)))
-  HashTableBase(HashTableBase const& table)
-      CDS_ATTR(noexcept(noexcept(copyOnceClean(table)))) {
+  CDS_ATTR(constexpr(20)) HashTableBase(HashTableBase const& table) CDS_ATTR(noexcept(noexcept(copyOnceClean(table)))) {
     copyOnceClean(table);
   }
 
@@ -223,24 +221,24 @@ protected:
   }
 
 public:
-  template <typename KF, typename... A> CDS_ATTR(constexpr(20)) auto tryEmplace(KF&& key, A&&... args)
+  template <typename... A> CDS_ATTR(constexpr(20)) auto tryEmplace(K const& key, A&&... args)
       CDS_ATTR(noexcept(
-          noexcept(construct(alloc(), nullptr, fwd<KF>(key), fwd<A>(args)...))
-          && noexcept(fn::invoke(rvalue<KC>(), fn::invoke(rvalue<KP>(), rvalue<Node>().data), fwd<KF>(key)))
+          noexcept(construct(alloc(), nullptr, fwd<A>(args)...))
+          && noexcept(fn::invoke(rvalue<KC>(), fn::invoke(rvalue<KP>(), rvalue<Node>().data), key))
           && noexcept(alloc(0))
-          && noexcept(fn::invoke(rvalue<H>(), fwd<KF>(key)))
+          && noexcept(fn::invoke(rvalue<H>(), key))
       )) -> TryEmplaceResult<T> {
     if (!_bArr) {
       alloc(RP::current());
     }
 
-    auto const hash = fn::invoke(hasher(), fwd<KF>(key));
+    auto const hash = fn::invoke(hasher(), key);
     auto*& buck = bucket(hash);
     auto head = buck;
     auto size = 0;
     decltype(head) prev = nullptr;
     while (head) {
-      if (fn::invoke(comparator(), fn::invoke(projector(), head->data), fwd<KF>(key))) {
+      if (fn::invoke(comparator(), fn::invoke(projector(), head->data), key)) {
         return {{_bArr, _bCnt, head, prev, static_cast<Size>(&buck - _bArr)}, false};
       }
       prev = head;
@@ -248,7 +246,7 @@ public:
       ++size;
     }
 
-    head = construct(alloc(), buck, fwd<KF>(key), fwd<A>(args)...);
+    head = construct(alloc(), buck, fwd<A>(args)...);
     buck = head;
     ++_eCnt;
 
@@ -514,7 +512,7 @@ private:
 
   CDS_ATTR(constexpr(20)) auto free() noexcept -> void {
     destruct(_bArr, _bArr + _bCnt);
-    AS::template get<Node*>().deallocate(_bArr, _bCnt);
+    AS::template get<Node*>().deallocate(xch(_bArr, nullptr), xch(_bCnt, 0u));
   }
 
   CDS_ATTR(constexpr(20)) auto freeNode(Node* node) noexcept -> void {

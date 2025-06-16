@@ -21,7 +21,7 @@ using meta::Not;
 using meta::And;
 using meta::IsTriviallyConstructible;
 
-template<typename = void, typename = void> struct Identity {};
+template <typename = void, typename = void> struct Identity {};
 
 template <typename T>
 struct Identity<T, EnableIf<Or<Gt<Int<sizeof(T)>, Int<sizeof(Size)>>, Not<IsTriviallyConstructible<T>>>, void>> {
@@ -43,7 +43,23 @@ template <> struct Identity<void, void> {
     return fwd<T>(v);
   }
 };
+
+template <typename P = void> struct Indirection : P {
+  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(T* obj) const noexcept ->
+      decltype(P{}(*obj)) {
+    return static_cast<P const&>(*this)(*obj);
+  }
+};
+
+template <> struct Indirection<void> {
+  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(T* obj) const noexcept -> T& {
+    return *obj;
+  }
+};
 } // namespace impl
+
+using impl::Identity;
+using impl::Indirection;
 } // namespace functional
 } // namespace cds
 

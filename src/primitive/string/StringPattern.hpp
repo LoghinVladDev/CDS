@@ -281,7 +281,7 @@ public:
       using U = StringAbstract<RemoveCVRef<decltype(str)>>;
       for (Size idx = 0, len = U::length(str); idx < len; ++idx) {
         auto const* pat = U::data(str);
-        auto r = v->children.tryEmplace(pat[idx], _size);
+        auto r = v->children.tryEmplace(pat[idx], pat[idx], _size);
         if (get<1>(r)) {
           addVertex(ParentLink(pat[idx], vId));
         }
