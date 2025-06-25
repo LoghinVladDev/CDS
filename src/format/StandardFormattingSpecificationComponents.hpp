@@ -300,7 +300,7 @@ auto formatTypeSpecification(Optional<C> typeChar) CDS_ATTR(noexcept(false)) -> 
   return FormatTypeSpecification<T, C>{}(typeChar);
 }
 
-template <typename /* T */, typename C, typename I, typename S> CDS_ATTR(2(nodiscard, constexpr(14)))
+template <typename C, typename I, typename S> CDS_ATTR(2(nodiscard, constexpr(14)))
 auto formatParseFillAlign(I it, S end) noexcept -> Tuple<I, FormatFillAlignSpecification<C>> {
   auto fillChar{static_cast<C>(' ')};
   Optional<FormatAlignType> align{nullopt};
@@ -438,10 +438,10 @@ auto formatParseType(I it, S end) CDS_ATTR(noexcept(false)) -> Tuple<I, FormatTy
   return {it, type};
 }
 
-template <typename T, typename C> struct FormatFillAlignComponent {
+template <typename C> struct FormatFillAlignComponent {
   template <typename I, typename S> CDS_ATTR(2(nodiscard, constexpr(14))) 
   auto parseFillAlign(I begin, S end) noexcept -> I {
-    cds::tie(begin, fillAlignSpecification) = formatParseFillAlign<T, C>(begin, end);
+    cds::tie(begin, fillAlignSpecification) = formatParseFillAlign<C>(begin, end);
     return begin;
   }
 
@@ -484,7 +484,7 @@ template <typename T, typename C> struct FormatFillAlignComponent {
     return impl::copy(obj.begin(), obj.end(), out);
   }
 
-  FormatFillAlignSpecification<C> fillAlignSpecification{FormatDefaultAlign<T, C>::value, static_cast<C>(' ')};
+  FormatFillAlignSpecification<C> fillAlignSpecification{nullopt, static_cast<C>(' ')};
 };
 
 template <typename C> struct FormatNumberComponent {
@@ -497,7 +497,7 @@ template <typename C> struct FormatNumberComponent {
   FormatNumberSpecification numberSpecification{};
 };
 
-template <typename C> struct FormWidthComponent {
+template <typename C> struct FormatWidthComponent {
   template <typename I, typename S> CDS_ATTR(2(nodiscard, constexpr(14))) 
   auto parseWidth(I begin, S end) noexcept -> I {
     cds::tie(begin, widthSpecification) = formatParseWidth<C>(begin, end);
@@ -553,7 +553,7 @@ template <typename T, typename C> struct FormatTypeComponent {
     return begin;
   }
 
-  FormatTypeFlags typeFlags{DefaultTypeFormatFlags<T>::value};
+  FormatTypeFlags typeFlags;
 };
 } // namespace fmt
 } // namespace impl

@@ -205,63 +205,63 @@ TEST(StandardFormatSpecificationTest, formatParseFillAlign) {
   char const str0[] = "6";
   ASSERT_EQ(
       Tuple<>::of(cds::begin(str0), FormatFillAlignSpecification<char>(nullopt, ' ')),
-      (formatParseFillAlign<int, char>(cds::begin(str0), cds::end(str0)))
+      (formatParseFillAlign<char>(cds::begin(str0), cds::end(str0)))
   );
   ASSERT_EQ(
       Tuple<>::of(cds::begin(str0), FormatFillAlignSpecification<char>(nullopt, ' ')),
-      (formatParseFillAlign<char, char>(cds::begin(str0), cds::end(str0)))
+      (formatParseFillAlign<char>(cds::begin(str0), cds::end(str0)))
   );
   ASSERT_EQ(
       Tuple<>::of(cds::begin(str0), FormatFillAlignSpecification<char>(nullopt, ' ')),
-      (formatParseFillAlign<bool, char>(cds::begin(str0), cds::end(str0)))
+      (formatParseFillAlign<char>(cds::begin(str0), cds::end(str0)))
   );
 
   char const str1[] = "6d";
   ASSERT_EQ(
       Tuple<>::of(cds::begin(str1), FormatFillAlignSpecification<char>(nullopt, ' ')),
-      (formatParseFillAlign<int, char>(cds::begin(str1), cds::end(str1)))
+      (formatParseFillAlign<char>(cds::begin(str1), cds::end(str1)))
   );
 
   char const str2[] = "*<6";
   ASSERT_EQ(
       Tuple<>::of(cds::begin(str2) + 2, FormatFillAlignSpecification<char>(FormatAlignType::Leading, '*')),
-      (formatParseFillAlign<int, char>(cds::begin(str2), cds::end(str2)))
+      (formatParseFillAlign<char>(cds::begin(str2), cds::end(str2)))
   );
 
   char const str3[] = "*>6";
   ASSERT_EQ(
       Tuple<>::of(cds::begin(str3) + 2, FormatFillAlignSpecification<char>(FormatAlignType::Trailing, '*')),
-      (formatParseFillAlign<int, char>(cds::begin(str3), cds::end(str3)))
+      (formatParseFillAlign<char>(cds::begin(str3), cds::end(str3)))
   );
 
   char const str4[] = "*^6";
   ASSERT_EQ(
       Tuple<>::of(cds::begin(str4) + 2, FormatFillAlignSpecification<char>(FormatAlignType::Centre, '*')),
-      (formatParseFillAlign<int, char>(cds::begin(str4), cds::end(str4)))
+      (formatParseFillAlign<char>(cds::begin(str4), cds::end(str4)))
   );
 
   char const str5[] = "*^";
   ASSERT_EQ(
       Tuple<>::of(cds::begin(str5) + 2, FormatFillAlignSpecification<char>(FormatAlignType::Centre, '*')),
-      (formatParseFillAlign<int, char>(cds::begin(str5), cds::end(str5)))
+      (formatParseFillAlign<char>(cds::begin(str5), cds::end(str5)))
   );
 
   char const str6[] = "";
   ASSERT_EQ(
       Tuple<>::of(cds::begin(str6), FormatFillAlignSpecification<char>(nullopt, ' ')),
-      (formatParseFillAlign<int, char>(cds::begin(str6), cds::end(str6)))
+      (formatParseFillAlign<char>(cds::begin(str6), cds::end(str6)))
   );
 
   char const str7[] = "d";
   ASSERT_EQ(
       Tuple<>::of(cds::begin(str7), FormatFillAlignSpecification<char>(nullopt, ' ')),
-      (formatParseFillAlign<int, char>(cds::begin(str7), cds::end(str7)))
+      (formatParseFillAlign<char>(cds::begin(str7), cds::end(str7)))
   );
 
   char const str8[] = "^8";
   ASSERT_EQ(
       Tuple<>::of(cds::begin(str8) + 1, FormatFillAlignSpecification<char>(FormatAlignType::Centre, ' ')),
-      (formatParseFillAlign<int, char>(cds::begin(str8), cds::end(str8)))
+      (formatParseFillAlign<char>(cds::begin(str8), cds::end(str8)))
   );
 }
 

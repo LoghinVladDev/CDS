@@ -79,11 +79,11 @@ private:
 };
 
 template <typename T, typename C> struct RangeFormatter :
-    FormatFillAlignComponent<RangeLike<T>, C>,
+    FormatFillAlignComponent<C>,
     FormatWidthOnlyComponent<C>{
-  using FormatFillAlignComponent<RangeLike<T>, C>::parseFillAlign;
-  using FormatFillAlignComponent<RangeLike<T>, C>::formatFillAlign;
-  using FormatFillAlignComponent<RangeLike<T>, C>::fillAlignSpecification;
+  using FormatFillAlignComponent<C>::parseFillAlign;
+  using FormatFillAlignComponent<C>::formatFillAlign;
+  using FormatFillAlignComponent<C>::fillAlignSpecification;
   using FormatWidthOnlyComponent<C>::parseWidth;
   using FormatWidthOnlyComponent<C>::widthSpecification;
   using ST = StringTraits<C>;

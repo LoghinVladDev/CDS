@@ -23,21 +23,24 @@ using meta::IsUnsigned;
 namespace fn = functional;
 
 template <typename T, typename C> struct StandardFormatter :
-    FormatFillAlignComponent<T, C>,
+    FormatFillAlignComponent<C>,
     FormatNumberComponent<C>,
-    FormWidthComponent<C>,
+    FormatWidthComponent<C>,
     FormatTypeComponent<T, C> {
-  using FormatFillAlignComponent<T, C>::parseFillAlign;
-  using FormatFillAlignComponent<T, C>::formatFillAlign;
-  using FormatFillAlignComponent<T, C>::fillAlignSpecification;
+  using FormatFillAlignComponent<C>::parseFillAlign;
+  using FormatFillAlignComponent<C>::formatFillAlign;
+  using FormatFillAlignComponent<C>::fillAlignSpecification;
   using FormatNumberComponent<C>::parseNumber;
   using FormatNumberComponent<C>::numberSpecification;
-  using FormWidthComponent<C>::parseWidth;
-  using FormWidthComponent<C>::widthSpecification;
+  using FormatWidthComponent<C>::parseWidth;
+  using FormatWidthComponent<C>::widthSpecification;
   using FormatTypeComponent<T, C>::parseType;
   using FormatTypeComponent<T, C>::typeFlags;
   using ST = StringTraits<C>;
   using SU = StringUtils<C, ST>;
+
+  CDS_ATTR(constexpr(11)) StandardFormatter() noexcept :
+      FormatTypeComponent<T, C>{DefaultTypeFormatFlags<T>::value} {}
 
   template <typename Ctx> CDS_ATTR(2(nodiscard, constexpr(14))) auto parse(Ctx& ctx) CDS_ATTR(noexcept(false))
       -> typename Ctx::Iterator {

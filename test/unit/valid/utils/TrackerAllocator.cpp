@@ -15,7 +15,9 @@ TEST(TrackerAllocator, Allocation) {
   auto p = ta.allocate(64);
 
   ASSERT_EQ(ta.committed(), 64 * sizeof(int));
-  ignore = p;
+
+  ta.deallocate(p, 64);
+  // comment the above to check if memcheck tools detect leaks
 }
 
 TEST(TrackerAllocator, Copy) {
@@ -26,8 +28,10 @@ TEST(TrackerAllocator, Copy) {
 
   ASSERT_EQ(ta.committed(), 64 * sizeof(int));
   ASSERT_EQ(cta.committed(), 32 * sizeof(int));
-  ignore = p;
-  ignore = p2;
+
+  ta.deallocate(p, 64);
+  cta.deallocate(p2, 32);
+  // comment the above to check if memcheck tools detect leaks
 }
 
 TEST(TrackerAllocator, Move) {
@@ -39,6 +43,8 @@ TEST(TrackerAllocator, Move) {
 
   ASSERT_EQ(ta.committed(), 0 * sizeof(int));
   ASSERT_EQ(cta.committed(), 96 * sizeof(int));
-  ignore = p;
-  ignore = p2;
+
+  cta.deallocate(p, 64);
+  cta.deallocate(p2, 32);
+  // comment the above to check if memcheck tools detect leaks
 }

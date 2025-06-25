@@ -175,11 +175,11 @@ auto lazyFormatFormatTupleUnderlyingFormatters(
 }
 
 template <typename C, typename... T> struct TupleLikeFormatter :
-    FormatFillAlignComponent<TupleLike<T...>, C>,
+    FormatFillAlignComponent<C>,
     FormatWidthOnlyComponent<C> {
-  using FormatFillAlignComponent<TupleLike<T...>, C>::parseFillAlign;
-  using FormatFillAlignComponent<TupleLike<T...>, C>::formatFillAlign;
-  using FormatFillAlignComponent<TupleLike<T...>, C>::fillAlignSpecification;
+  using FormatFillAlignComponent<C>::parseFillAlign;
+  using FormatFillAlignComponent<C>::formatFillAlign;
+  using FormatFillAlignComponent<C>::fillAlignSpecification;
   using FormatWidthOnlyComponent<C>::parseWidth;
   using FormatWidthOnlyComponent<C>::widthSpecification;
   using ST = StringTraits<C>;

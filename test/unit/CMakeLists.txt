@@ -103,7 +103,8 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/ds/SingleLinkedListBase.cpp
       valid/ds/HashTableBase.cpp
       valid/ds/MapBaseTest.cpp
-      valid/ds/MapEntryTest.cpp)
+      valid/ds/MapEntryTest.cpp
+      valid/ds/JsonNodeTest.cpp)
 
   set(CDS_EXCEPTION_UNIT_TEST_SOURCES
       valid/exception/ExceptionTest.cpp

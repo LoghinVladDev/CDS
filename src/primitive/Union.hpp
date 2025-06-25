@@ -32,6 +32,7 @@ using meta::IsSameIgnoringCVRef;
 using meta::Not;
 
 using meta::impl::Pack;
+using meta::impl::IsBaseOfIntrusiveICVR;
 
 using unionImpl::UnionVisitationBase;
 using unionImpl::UnionBestMatchType;
@@ -79,7 +80,7 @@ public:
   using Base::valueless;
   using Base::is;
 
-  template <typename A, EnableIf<Not<IsSameIgnoringCVRef<A, Union>>> = 0>
+  template <typename A, EnableIf<Not<IsBaseOfIntrusiveICVR<Union, RemoveCVRef<A>>>> = 0>
   CDS_ATTR(constexpr(14)) auto operator=(A&& arg)
       CDS_ATTR(noexcept(noexcept(assign(fwd<A>(arg))))) -> Union& {
     assign(fwd<A>(arg));

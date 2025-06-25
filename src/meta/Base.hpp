@@ -228,6 +228,9 @@ template <unsigned head, unsigned... tail> struct IndexSequenceImpl {
 template <unsigned... indices> struct IndexSequenceImpl<0u, indices...> {
   using Type = IndexSequence<indices...>;
 };
+
+template <typename T, typename = void> struct IsComplete : False {};
+template <typename T> struct IsComplete<T, Void<decltype(sizeof(T))>> : True {};
 } // namespace impl
 
 template <typename Type, Type value> using Integral = typename impl::Integral<Type, value>::Type;
@@ -296,6 +299,8 @@ template <typename P, typename T> struct Contains : impl::Contains<P, T>::Type {
 
 using impl::IndexSequence;
 template <unsigned size> using MakeIndexSequence = typename impl::IndexSequenceImpl<size>::Type;
+
+template <typename T> using IsComplete = impl::IsComplete<T>;
 } // namespace meta
 } // namespace cds
 

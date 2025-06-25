@@ -11,6 +11,12 @@
 namespace cds {
 namespace meta {
 namespace impl {
+template <typename T, template <typename> class, typename, typename = typename IsComplete<T>::Type>
+struct IfCompleteCheckIf : False {};
+
+template <typename T, template <typename> class P, typename... A> struct IfCompleteCheckIf<T, P, Pack<A...>, True> :
+    P<A...> {};
+
 template <typename T> struct IsTriviallyCopyable : ConvertIntegral<std::is_trivially_copyable<T>> {};
 template <typename T, typename... A> struct IsTriviallyConstructible :
     ConvertIntegral<std::is_trivially_constructible<T, A...>> {};
@@ -25,10 +31,18 @@ template <typename T> struct IsTriviallyDefaultConstructible :
 
 template <typename T> struct IsTriviallyCopyConstructible : ConvertIntegral<std::is_trivially_copy_constructible<T>> {};
 template <typename T> struct IsTriviallyMoveConstructible : ConvertIntegral<std::is_trivially_move_constructible<T>> {};
-template <typename T> struct IsDefaultConstructible : ConvertIntegral<std::is_default_constructible<T>> {};
-template <typename T> struct IsCopyConstructible : ConvertIntegral<std::is_copy_constructible<T>> {};
+
+template <typename T> struct IsDefaultConstructible :
+    ConvertIntegral<IfCompleteCheckIf<T, std::is_default_constructible, Pack<T>>> {};
+
+template <typename T> struct IsCopyConstructible :
+    ConvertIntegral<IfCompleteCheckIf<T, std::is_copy_constructible, Pack<T>>> {};
+
 template <typename T> struct IsMoveConstructible : ConvertIntegral<std::is_move_constructible<T>> {};
-template <typename T, typename... A> struct IsConstructible : ConvertIntegral<std::is_constructible<T, A...>> {};
+
+template <typename T, typename... A> struct IsConstructible :
+    ConvertIntegral<IfCompleteCheckIf<T, std::is_constructible, Pack<T, A...>>> {};
+
 template <typename T> struct IsDestructible : ConvertIntegral<std::is_destructible<T>> {};
 
 template <typename T, typename = typename IsDefaultConstructible<T>::Type> struct IsNoexceptDefaultConstructible :
