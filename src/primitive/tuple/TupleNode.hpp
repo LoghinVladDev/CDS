@@ -63,16 +63,16 @@ template <Size idx, typename T, typename... R> struct TupleNode<idx, T, R...> : 
 
   CDS_ATTR(constexpr(11)) TupleNode() CDS_ATTR(noexcept(All<IsNoexceptDefaultConstructible, T, R...>::value)) = default;
 
-  template <typename Arg, typename... Args, typename = EnableIf<Bool<
-      IsConstructible<T, Arg>::value && IsConstructible<NextNode, Args...>::value
-  >>> CDS_ATTR(2(implicit, constexpr(11))) TupleNode(Arg&& param, Args&&... remaining) CDS_ATTR(noexcept(
+  template <typename Arg, typename... Args, EnableIf<And<
+      IsConstructible<T, Arg>, IsConstructible<NextNode, Args...>
+  >> = 0> CDS_ATTR(2(implicit, constexpr(11))) TupleNode(Arg&& param, Args&&... remaining) CDS_ATTR(noexcept(
       noexcept(NextNode(fwd<Args>(remaining)...))
       && noexcept(T(fwd<Arg>(param)))
   )) :
       NextNode(fwd<Args>(remaining)...),
       _nodeData(fwd<Arg>(param)) {}
 
-  template <typename OT, typename... OR, typename = EnableIf<Not<IsSame<TupleNode, TupleNode<idx, OT, OR...>>>>>
+  template <typename OT, typename... OR, EnableIf<Not<IsSame<TupleNode, TupleNode<idx, OT, OR...>>>> = 0>
   CDS_ATTR(2(explicit, constexpr(11))) TupleNode(
       TupleNode<idx, OT, OR...> const& other
   ) CDS_ATTR(noexcept(
@@ -82,7 +82,7 @@ template <Size idx, typename T, typename... R> struct TupleNode<idx, T, R...> : 
       NextNode{static_cast<typename TupleNode<idx, OT, OR...>::NextNode const&>(other)},
       _nodeData{other._nodeData} {}
 
-  template <typename OT, typename... OR, typename = EnableIf<Not<IsSame<TupleNode, TupleNode<idx, OT, OR...>>>>>
+  template <typename OT, typename... OR, EnableIf<Not<IsSame<TupleNode, TupleNode<idx, OT, OR...>>>> = 0>
   CDS_ATTR(2(explicit, constexpr(11))) TupleNode(
       TupleNode<idx, OT, OR...>&& other
   ) CDS_ATTR(noexcept(
@@ -110,10 +110,10 @@ template <Size idx, typename T, typename... R> struct TupleNode<idx, T, R...> : 
   }
 
   template <
-      typename... UTypes, typename = EnableIf<Bool<
+      typename... UTypes, EnableIf<Bool<
           IsAssignable<TupleNode, TupleNode<idx, UTypes...>&&>::value &&
           IsAssignable<NextNode, typename TupleNode<idx, UTypes...>::NextNode&&>::value
-      >>
+      >> = 0
   > CDS_ATTR(constexpr(14)) auto operator=(TupleNode<idx, UTypes...>&& node) CDS_ATTR(noexcept(
       noexcept(lvalue<T>() = mv(node._nodeData))
       && noexcept(NextNode::operator=(static_cast<typename TupleNode<idx, UTypes...>::NextNode&&>(node)))

@@ -10,8 +10,10 @@
 #include "JsonObjectDecl.hpp"
 #include "JsonNodeDecl.hpp"
 
-#include "JsonArray.hpp"
-#include "JsonObject.hpp"
-#include "JsonNode.hpp"
+#include "JsonNodeDef.hpp"
+#include "JsonArrayDef.hpp"
+#include "JsonObjectDef.hpp"
+
+#include "JsonNodeImpl.hpp"
 
 #endif // #ifndef CDS_DS_JSON_HPP

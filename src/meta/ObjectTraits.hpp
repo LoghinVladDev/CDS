@@ -11,7 +11,7 @@
 namespace cds {
 namespace meta {
 namespace impl {
-template <typename T, template <typename> class, typename, typename = typename IsComplete<T>::Type>
+template <typename T, template <typename...> class, typename, typename = typename IsComplete<T>::Type>
 struct IfCompleteCheckIf : False {};
 
 template <typename T, template <typename> class P, typename... A> struct IfCompleteCheckIf<T, P, Pack<A...>, True> :
@@ -33,15 +33,15 @@ template <typename T> struct IsTriviallyCopyConstructible : ConvertIntegral<std:
 template <typename T> struct IsTriviallyMoveConstructible : ConvertIntegral<std::is_trivially_move_constructible<T>> {};
 
 template <typename T> struct IsDefaultConstructible :
-    ConvertIntegral<IfCompleteCheckIf<T, std::is_default_constructible, Pack<T>>> {};
+    ConvertIntegral<std::is_default_constructible<T>> {};
 
 template <typename T> struct IsCopyConstructible :
-    ConvertIntegral<IfCompleteCheckIf<T, std::is_copy_constructible, Pack<T>>> {};
+    ConvertIntegral<std::is_copy_constructible<T>> {};
 
 template <typename T> struct IsMoveConstructible : ConvertIntegral<std::is_move_constructible<T>> {};
 
 template <typename T, typename... A> struct IsConstructible :
-    ConvertIntegral<IfCompleteCheckIf<T, std::is_constructible, Pack<T, A...>>> {};
+    ConvertIntegral<std::is_constructible<T, A...>> {};
 
 template <typename T> struct IsDestructible : ConvertIntegral<std::is_destructible<T>> {};
 

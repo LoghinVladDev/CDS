@@ -2,11 +2,11 @@
 // Created by loghin on 6/17/25.
 //
 
-#ifndef CDS_DS_JSON_ARRAY_HPP
-#define CDS_DS_JSON_ARRAY_HPP
+#ifndef CDS_DS_JSON_ARRAY_DEF_HPP
+#define CDS_DS_JSON_ARRAY_DEF_HPP
 
 #include "JsonArrayDecl.hpp"
-#include "JsonNodeDecl.hpp"
+#include "JsonNodeDef.hpp"
 
 #include <cds/collection/Vector>
 
@@ -31,4 +31,4 @@ using JsonArray = impl::JsonArrayBase<>;
 } // namespace json
 } // namespace cds
 
-#endif // #ifndef CDS_DS_JSON_ARRAY_HPP
+#endif // #ifndef CDS_DS_JSON_ARRAY_DEF_HPP
