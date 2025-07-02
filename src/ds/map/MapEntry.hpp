@@ -13,6 +13,8 @@ namespace cds {
 namespace impl {
 using meta::And;
 using meta::IsNoexceptConstructible;
+using meta::IsNoexceptCopyConstructible;
+using meta::IsNoexceptMoveConstructible;
 
 struct MapEntryKeyProjection {
   template <typename E> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(E&& entry) const noexcept
@@ -36,6 +38,22 @@ public:
   CDS_ATTR(2(implicit, constexpr(11))) MapEntry(RK&& key, RV0&& v0, RV1&& v1, RVn&&... vn)
       CDS_ATTR(noexcept(And<IsNoexceptConstructible<K, RK>, IsNoexceptConstructible<V, RV0&&, RV1&&, RVn&&...>>::value))
       : Tuple<K const, V>{fwd<RK>(key), V{fwd<RV0>(v0), fwd<RV1>(v1), fwd<RVn>(vn)...}} {}
+
+  CDS_ATTR(constexpr(11)) MapEntry(K const& key, V const& value)
+      CDS_ATTR(noexcept(And<IsNoexceptCopyConstructible<K>, IsNoexceptCopyConstructible<V>>::value))
+      : Tuple<K const, V>{key, value} {}
+
+  CDS_ATTR(constexpr(11)) MapEntry(K const& key, V&& value)
+      CDS_ATTR(noexcept(And<IsNoexceptCopyConstructible<K>, IsNoexceptMoveConstructible<V>>::value))
+      : Tuple<K const, V>{key, mv(value)} {}
+
+  CDS_ATTR(constexpr(11)) MapEntry(K&& key, V const& value)
+      CDS_ATTR(noexcept(And<IsNoexceptMoveConstructible<K>, IsNoexceptCopyConstructible<V>>::value))
+      : Tuple<K const, V>{mv(key), value} {}
+
+  CDS_ATTR(constexpr(11)) MapEntry(K&& key, V&& value)
+      CDS_ATTR(noexcept(And<IsNoexceptMoveConstructible<K>, IsNoexceptMoveConstructible<V>>::value))
+      : Tuple<K const, V>{mv(key), mv(value)} {}
 
   CDS_ATTR(2(implicit, constexpr(11))) MapEntry(Tuple<K, V> const& tuple) CDS_ATTR(noexcept(noexcept(
       Tuple<K const, V>{tuple}

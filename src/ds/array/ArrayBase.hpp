@@ -300,7 +300,7 @@ CDS_ATTR(2(nodiscard, constexpr(14))) auto operator==(
     return false;
   }
 
-  return equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(), E{});
+  return cds::impl::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(), E{});
 }
 
 template <typename T, typename E, typename A0, typename A1, typename S0, typename S1>
@@ -316,7 +316,7 @@ CDS_ATTR(2(nodiscard, constexpr(14))) auto operator!=(
     return true;
   }
 
-  return !equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(), E{});
+  return !cds::impl::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(), E{});
 }
 
 template <typename T, typename E, typename A, typename SB>

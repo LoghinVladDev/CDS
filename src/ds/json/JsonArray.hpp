@@ -13,29 +13,18 @@
 namespace cds {
 namespace json {
 namespace impl {
-template <typename A> using JsonArrayBaseImpl = Vector<JsonNodeBase<A>>;
+using meta::DefaultOr;
 
-template <typename A> class JsonArrayBase : private JsonArrayBaseImpl<A> {
+using JsonArrayBaseImpl = Vector<JsonNodeBase<>>;
+
+template <typename TBase> class JsonArrayBase : public DefaultOr<TBase, JsonArrayBaseImpl> {
+  using Base = DefaultOr<TBase, JsonArrayBaseImpl>;
+
 public:
-  JsonArrayBase() = default;
-  JsonArrayBase(JsonArrayBase const&) = default;
-  JsonArrayBase(JsonArrayBase&&) = default;
-  auto operator=(JsonArrayBase const&) -> JsonArrayBase& = default;
-  auto operator=(JsonArrayBase&&) -> JsonArrayBase& = default;
+  using Base::Base;
+  using Base::operator=;
   ~JsonArrayBase() = default;
 };
-
-template <typename A0, typename A1> CDS_ATTR(2(nodiscard, constexpr(14)))
-auto operator==(JsonArrayBase<A0> const& lhs, JsonArrayBase<A1> const& rhs) noexcept -> bool {
-  assert(false && "unimplemented");
-  return true;
-}
-
-template <typename A0, typename A1> CDS_ATTR(2(nodiscard, constexpr(14)))
-auto operator!=(JsonArrayBase<A0> const& lhs, JsonArrayBase<A1> const& rhs) noexcept -> bool {
-  assert(false && "unimplemented");
-  return true;
-}
 } // namespace impl
 
 using JsonArray = impl::JsonArrayBase<>;

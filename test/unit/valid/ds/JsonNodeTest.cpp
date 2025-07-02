@@ -45,85 +45,93 @@ void copyOverTest(JsonNode& dst) {
 } // namespace
 
 TEST(JsonNodeTest, ctrFromNull) {
-  JsonNode node{nullptr};
+  JsonNode node = nullptr;
   ASSERT_TRUE(node.isNull());
 }
 
 TEST(JsonNodeTest, ctrFromBool) {
-  JsonNode node{true};
+  JsonNode node = true;
   ASSERT_TRUE(node.isBool());
   ASSERT_TRUE(node.getBool());
 }
 
 TEST(JsonNodeTest, ctrFromInt) {
-  JsonNode node{4};
+  JsonNode node = 4;
   ASSERT_TRUE(node.isIntegral());
   ASSERT_EQ(4, node.getInt());
 }
 
 TEST(JsonNodeTest, ctrFromFloating) {
-  JsonNode node{4.5};
+  JsonNode node = 4.5;
   ASSERT_TRUE(node.isFloating());
   ASSERT_LT(4.0, node.getDouble());
   ASSERT_GT(5.0, node.getDouble());
 }
 
 TEST(JsonNodeTest, ctrFromString) {
-  JsonNode node{"abcd"};
+  JsonNode node = "abcd";
   ASSERT_TRUE(node.isString());
   ASSERT_EQ("abcd", node.getString());
 }
 
+TEST(JsonNodeTest, ctrFromArray) {
+  JsonNode node = JsonArray{1, false, "abc"};
+  ASSERT_TRUE(node.isArray());
+  ASSERT_EQ(node.getArray()[0], 1);
+  ASSERT_EQ(node.getArray()[1], false);
+  ASSERT_EQ(node.getArray()[2], "abc");
+}
+
 TEST(JsonNodeTest, copyCtr) {
-  JsonNode nullNode{nullptr};
-  JsonNode const nullCopy{nullNode};
+  JsonNode nullNode = nullptr;
+  JsonNode const nullCopy = nullNode;
   ASSERT_TRUE(nullCopy.isNull());
 
-  JsonNode boolNode{true};
-  JsonNode const boolCopy{boolNode};
+  JsonNode boolNode = true;
+  JsonNode const boolCopy = boolNode;
   ASSERT_TRUE(boolCopy.isBool());
   ASSERT_TRUE(boolCopy.getBool());
 
-  JsonNode intNode{4};
-  JsonNode const intCopy{intNode};
+  JsonNode intNode = 4;
+  JsonNode const intCopy = intNode;
   ASSERT_TRUE(intCopy.isIntegral());
   ASSERT_EQ(4, intCopy.getInt());
 
-  JsonNode floatNode{4.5};
-  JsonNode const floatCopy{floatNode};
+  JsonNode floatNode = 4.5;
+  JsonNode const floatCopy = floatNode;
   ASSERT_TRUE(floatCopy.isFloating());
   ASSERT_LT(4.0, floatCopy.getDouble());
   ASSERT_GT(5.0, floatCopy.getDouble());
 
-  JsonNode stringNode{"abcd"};
-  JsonNode const stringCopy{stringNode};
+  JsonNode stringNode = "abcd";
+  JsonNode const stringCopy = stringNode;
   ASSERT_TRUE(stringCopy.isString());
   ASSERT_EQ("abcd", stringCopy.getString());
 }
 
 TEST(JsonNodeTest, moveCtr) {
-  JsonNode nullNode{nullptr};
-  JsonNode nullCopy{mv(nullNode)};
+  JsonNode nullNode = nullptr;
+  JsonNode nullCopy = mv(nullNode);
   ASSERT_TRUE(nullCopy.isNull());
 
-  JsonNode boolNode{true};
-  JsonNode boolCopy{mv(boolNode)};
+  JsonNode boolNode = true;
+  JsonNode boolCopy = mv(boolNode);
   ASSERT_TRUE(boolCopy.isBool());
   ASSERT_TRUE(boolCopy.getBool());
 
-  JsonNode intNode{4};
-  JsonNode intCopy{mv(intNode)};
+  JsonNode intNode = 4;
+  JsonNode intCopy = mv(intNode);
   ASSERT_TRUE(intCopy.isIntegral());
   ASSERT_EQ(4, intCopy.getInt());
 
-  JsonNode floatNode{4.5};
-  JsonNode floatCopy{mv(floatNode)};
+  JsonNode floatNode = 4.5;
+  JsonNode floatCopy = mv(floatNode);
   ASSERT_TRUE(floatCopy.isFloating());
   ASSERT_LT(4.0, floatCopy.getDouble());
   ASSERT_GT(5.0, floatCopy.getDouble());
 
-  JsonNode stringNode{"abcd"};
-  JsonNode stringCopy{mv(stringNode)};
+  JsonNode stringNode = "abcd";
+  JsonNode stringCopy = mv(stringNode);
   ASSERT_TRUE(stringCopy.isString());
   ASSERT_EQ("abcd", stringCopy.getString());
 }
@@ -419,11 +427,11 @@ TEST(JsonNodeTest, eqStrNode) {
 }
 
 TEST(JsonNodeTest, directNullComp) {
-  JsonNode nullNode{nullptr};
-  JsonNode boolNode{true};
-  JsonNode intNode{4};
-  JsonNode floatNode{3.4};
-  JsonNode strNode{"abc"};
+  JsonNode nullNode = nullptr;
+  JsonNode boolNode = true;
+  JsonNode intNode = 4;
+  JsonNode floatNode = 3.4;
+  JsonNode strNode = "abc";
 
   ASSERT_TRUE(nullNode == nullptr);
   ASSERT_FALSE(boolNode == nullptr);
@@ -451,12 +459,12 @@ TEST(JsonNodeTest, directNullComp) {
 }
 
 TEST(JsonNodeTest, directBoolComp) {
-  JsonNode nullNode{nullptr};
-  JsonNode boolNode0{false};
-  JsonNode boolNode1{true};
-  JsonNode intNode{4};
-  JsonNode floatNode{3.4};
-  JsonNode strNode{"abc"};
+  JsonNode nullNode = nullptr;
+  JsonNode boolNode0 = false;
+  JsonNode boolNode1 = true;
+  JsonNode intNode = 4;
+  JsonNode floatNode = 3.4;
+  JsonNode strNode = "abc";
 
   ASSERT_FALSE(nullNode == false);
   ASSERT_FALSE(nullNode == true);
@@ -512,11 +520,11 @@ TEST(JsonNodeTest, directBoolComp) {
 }
 
 TEST(JsonNodeTest, directIntComp) {
-  JsonNode nullNode{nullptr};
-  JsonNode boolNode{true};
-  JsonNode intNode{4};
-  JsonNode floatNode{3.4};
-  JsonNode strNode{"abc"};
+  JsonNode nullNode = nullptr;
+  JsonNode boolNode = true;
+  JsonNode intNode = 4;
+  JsonNode floatNode = 3.4;
+  JsonNode strNode = "abc";
 
   ASSERT_FALSE(nullNode == 4);
   ASSERT_FALSE(boolNode == 4);
@@ -548,11 +556,11 @@ TEST(JsonNodeTest, directIntComp) {
 }
 
 TEST(JsonNodeTest, directFloatComp) {
-  JsonNode nullNode{nullptr};
-  JsonNode boolNode{true};
-  JsonNode intNode{4};
-  JsonNode floatNode{3.4};
-  JsonNode strNode{"abc"};
+  JsonNode nullNode = nullptr;
+  JsonNode boolNode = true;
+  JsonNode intNode = 4;
+  JsonNode floatNode = 3.4;
+  JsonNode strNode = "abc";
 
   ASSERT_FALSE(nullNode == 3.4);
   ASSERT_FALSE(boolNode == 3.4);
@@ -584,11 +592,11 @@ TEST(JsonNodeTest, directFloatComp) {
 }
 
 TEST(JsonNodeTest, directStrComp) {
-  JsonNode nullNode{nullptr};
-  JsonNode boolNode{true};
-  JsonNode intNode{4};
-  JsonNode floatNode{3.4};
-  JsonNode strNode{"abc"};
+  JsonNode nullNode = nullptr;
+  JsonNode boolNode = true;
+  JsonNode intNode = 4;
+  JsonNode floatNode = 3.4;
+  JsonNode strNode = "abc";
 
   ASSERT_FALSE(nullNode == "abc");
   ASSERT_FALSE(boolNode == "abc");
@@ -620,35 +628,35 @@ TEST(JsonNodeTest, directStrComp) {
 }
 
 TEST(JsonNodeTest, formatNull) {
-  ASSERT_EQ("null", cds::format("{}", JsonNode{nullptr}));
-  ASSERT_EQ("null", cds::format("{:p}", JsonNode{nullptr}));
-  ASSERT_EQ("NULL", cds::format("{:P}", JsonNode{nullptr}));
+  ASSERT_EQ("null", cds::format("{}", JsonNode(nullptr)));
+  ASSERT_EQ("null", cds::format("{:p}", JsonNode(nullptr)));
+  ASSERT_EQ("NULL", cds::format("{:P}", JsonNode(nullptr)));
 }
 
 TEST(JsonNodeTest, formatBool) {
-  ASSERT_EQ("false", cds::format("{}", JsonNode{false}));
-  ASSERT_EQ("true", cds::format("{}", JsonNode{true}));
-  ASSERT_EQ("false", cds::format("{:s}", JsonNode{false}));
-  ASSERT_EQ("true", cds::format("{:s}", JsonNode{true}));
+  ASSERT_EQ("false", cds::format("{}", JsonNode(false)));
+  ASSERT_EQ("true", cds::format("{}", JsonNode(true)));
+  ASSERT_EQ("false", cds::format("{:s}", JsonNode(false)));
+  ASSERT_EQ("true", cds::format("{:s}", JsonNode(true)));
 }
 
 TEST(JsonNodeTest, formatInt) {
-  ASSERT_EQ("20", cds::format("{}", JsonNode{20}));
-  ASSERT_EQ("20", cds::format("{}", JsonNode{20}));
-  ASSERT_EQ("0x14", cds::format("{:#x}", JsonNode{20}));
-  ASSERT_EQ("0X14", cds::format("{:#X}", JsonNode{20}));
+  ASSERT_EQ("20", cds::format("{}", JsonNode(20)));
+  ASSERT_EQ("20", cds::format("{}", JsonNode(20)));
+  ASSERT_EQ("0x14", cds::format("{:#x}", JsonNode(20)));
+  ASSERT_EQ("0X14", cds::format("{:#X}", JsonNode(20)));
 }
 
 TEST(JsonNodeTest, formatFloating) {
-  ASSERT_EQ("3.4", cds::format("{}", JsonNode{3.4}));
-  ASSERT_EQ("3.4", cds::format("{}", JsonNode{3.4}));
-  ASSERT_EQ("3.400000e+00", cds::format("{:e}", JsonNode{3.4}));
-  ASSERT_EQ("3.400000E+00", cds::format("{:E}", JsonNode{3.4}));
+  ASSERT_EQ("3.4", cds::format("{}", JsonNode(3.4)));
+  ASSERT_EQ("3.4", cds::format("{}", JsonNode(3.4)));
+  ASSERT_EQ("3.400000e+00", cds::format("{:e}", JsonNode(3.4)));
+  ASSERT_EQ("3.400000E+00", cds::format("{:E}", JsonNode(3.4)));
 }
 
 TEST(JsonNodeTest, formatString) {
-  ASSERT_EQ("abc", cds::format("{}", JsonNode{"abc"}));
-  ASSERT_EQ("a\tbc", cds::format("{}", JsonNode{"a\tbc"}));
-  ASSERT_EQ("abc", cds::format("{:?}", JsonNode{"abc"}));
-  ASSERT_EQ("a\\tbc", cds::format("{:?}", JsonNode{"a\tbc"}));
+  ASSERT_EQ("abc", cds::format("{}", JsonNode("abc")));
+  ASSERT_EQ("a\tbc", cds::format("{}", JsonNode("a\tbc")));
+  ASSERT_EQ("abc", cds::format("{:?}", JsonNode("abc")));
+  ASSERT_EQ("a\\tbc", cds::format("{:?}", JsonNode("a\tbc")));
 }

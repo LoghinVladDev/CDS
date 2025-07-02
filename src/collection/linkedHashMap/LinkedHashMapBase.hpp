@@ -88,9 +88,10 @@ public:
 
   CDS_ATTR(constexpr(20)) BaseLinkedHashMap(BaseLinkedHashMap const& map) CDS_ATTR(noexcept(And<
       IsNoexceptCopyConstructible<ListBase>, IsNoexceptCopyConstructible<TableBase>
-  >::value)) : ListBase{map} {
-    for (auto it = begin(); it != end(); ++it) {
-      tryEmplace(it->key(), &*it);
+  >::value)) {
+    for (auto it = map.begin(); it != map.end(); ++it) {
+      auto node = emplaceBackRetNode(it->key(), it->value());
+      tryEmplace(it->key(), node);
     }
   }
 

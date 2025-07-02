@@ -5,22 +5,26 @@
 #ifndef CDS_DS_JSON_OBJECT_HPP
 #define CDS_DS_JSON_OBJECT_HPP
 
+#include "JsonNodeDecl.hpp"
+
+#include <cds/String>
+#include <cds/collection/LinkedHashMap>
+
 namespace cds {
 namespace json {
 namespace impl {
-template <typename A> class JsonObjectBase {};
+using meta::DefaultOr;
 
-template <typename A0, typename A1> CDS_ATTR(2(nodiscard, constexpr(14)))
-auto operator==(JsonObjectBase<A0> const& lhs, JsonObjectBase<A1> const& rhs) noexcept -> bool {
-  assert(false && "unimplemented");
-  return true;
-}
+using JsonObjectBaseImpl = LinkedHashMap<String, JsonNodeBase<>>;
 
-template <typename A0, typename A1> CDS_ATTR(2(nodiscard, constexpr(14)))
-auto operator!=(JsonObjectBase<A0> const& lhs, JsonObjectBase<A1> const& rhs) noexcept -> bool {
-  assert(false && "unimplemented");
-  return true;
-}
+template <typename TBase> class JsonObjectBase : public DefaultOr<TBase, JsonObjectBaseImpl> {
+  using Base = DefaultOr<TBase, JsonObjectBaseImpl>;
+
+public:
+  using Base::Base;
+  using Base::operator=;
+  ~JsonObjectBase() = default;
+};
 } // namespace impl
 
 using JsonObject = impl::JsonObjectBase<>;

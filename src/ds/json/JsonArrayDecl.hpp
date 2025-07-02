@@ -12,7 +12,7 @@ namespace json {
 namespace impl {
 using meta::Default;
 
-template <typename A = Default> class JsonArrayBase;
+template <typename B = Default> class JsonArrayBase;
 } // namespace impl
 } // namespace json
 } // namespace cds

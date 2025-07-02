@@ -12,6 +12,9 @@
 
 #include <cds/Union>
 #include <cds/String>
+#include <cds/StringView>
+
+#include "../../stdlib/ostream.hpp"
 
 namespace cds {
 namespace json {
@@ -93,16 +96,14 @@ template <typename T> struct JsonNodeAdapt<T, False, False, True, True> {
   using AdaptedAs = JsonObjectBase<>;
 };
 
-template <typename A, typename B0, typename B1, typename B2, typename B3>
-struct JsonNodeAdapt<JsonArrayBase<A>, B0, B1, B2, B3> {
+template <typename B> struct JsonNodeAdapt<JsonArrayBase<B>, False, False, True, False> {
   static constexpr auto value = JsonNodeAdaptType::Array;
-  using AdaptedAs = JsonArrayBase<A>;
+  using AdaptedAs = JsonArrayBase<B>;
 };
 
-template <typename A, typename B0, typename B1, typename B2, typename B3>
-struct JsonNodeAdapt<JsonObjectBase<A>, B0, B1, B2, B3> {
+template <typename B> struct JsonNodeAdapt<JsonObjectBase<B>, False, False, True, True> {
   static constexpr auto value = JsonNodeAdaptType::Object;
-  using AdaptedAs = JsonObjectBase<A>;
+  using AdaptedAs = JsonObjectBase<B>;
 };
 
 template <typename T> using AdaptsAsPrimitive =
@@ -179,18 +180,39 @@ public:
     static_cast<Base&>(node) = nullptr;
   }
 
-  CDS_ATTR(2(explicit, constexpr(11))) JsonNodeBase(JsonNull) : JsonNodeBase{} {}
-  CDS_ATTR(2(explicit, constexpr(11))) JsonNodeBase(JsonBool value) : Base{InPlaceIndex<1>{}, value} {}
+  CDS_ATTR(2(implicit, constexpr(11))) JsonNodeBase(JsonNull) : JsonNodeBase{} {}
+  CDS_ATTR(2(implicit, constexpr(11))) JsonNodeBase(JsonBool value) : Base{InPlaceIndex<1>{}, value} {}
 
-  template <typename N, EnableIf<IsIntegral<N>> = 0> CDS_ATTR(2(explicit, constexpr(11)))
+  template <typename N, EnableIf<IsIntegral<N>> = 0> CDS_ATTR(2(implicit, constexpr(11)))
   JsonNodeBase(N value) : Base{InPlaceIndex<2>{}, value} {}
 
-  template <typename N, EnableIf<IsFloating<N>> = 0> CDS_ATTR(2(explicit, constexpr(11)))
+  template <typename N, EnableIf<IsFloating<N>> = 0> CDS_ATTR(2(implicit, constexpr(11)))
   JsonNodeBase(N value) : Base{InPlaceIndex<3>{}, value} {}
 
   template <typename T, EnableIf<AdaptsAsAllocated<T>> = 0>
-  CDS_ATTR(2(explicit, constexpr(11))) JsonNodeBase(T&& value) noexcept :
+  CDS_ATTR(2(implicit, constexpr(20))) JsonNodeBase(T&& value) noexcept :
       Base{construct(Alloc::template get<typename JsonNodeAdapt<T>::AdaptedAs>().allocate(1), fwd<T>(value))} {}
+
+  CDS_ATTR(2(implicit, constexpr(20))) JsonNodeBase(std::initializer_list<JsonNodeBase> const& list) noexcept
+      /* : Base{construct(Alloc::template get<JsonArray>().allocate(1), list)} */
+      : Base{} {
+    auto const isThisAnObject = cds::impl::all(list.begin(), list.end(), [](JsonNodeBase const& node) {
+      return node.isArray() && node.getArray().size() == 2 && node.getArray()[0].isString();
+    });
+
+    if (!isThisAnObject) {
+      Base::operator=(construct(Alloc::template get<JsonArray>().allocate(1), list));
+      return;
+    }
+
+    Base::operator=(construct(Alloc::template get<JsonObject>().allocate(1)));
+    auto& object = getObject();
+    for (auto const& entry : list) {
+      auto const& key = entry.getArray()[0].getString();
+      auto const& value = entry.getArray()[1];
+      object.emplace(key, value);
+    }
+  }
 
   CDS_ATTR(constexpr(20)) ~JsonNodeBase() noexcept {
     if (!isPrimitive()) {
@@ -642,6 +664,36 @@ CDS_ATTR(2(nodiscard, constexpr(14))) auto operator!=(
     JsonNodeBase<B, A> const& rhs
 ) noexcept -> bool {
   return !rhs.isObject() || rhs.getObject() != value;
+}
+
+template <typename C, typename B, typename A> CDS_ATTR(inline)
+auto operator<<(std::basic_ostream<C>& out, JsonNodeBase<B, A> const& value) noexcept -> std::basic_ostream<C>& {
+  if (value.isNull()) {
+    return (out << "null");
+  }
+
+  if (value.isBool()) {
+    return (out << std::boolalpha << value.getBool());
+  }
+
+  if (value.isIntegral()) {
+    return (out << value.getInt());
+  }
+
+  if (value.isFloating()) {
+    return (out << value.getDouble());
+  }
+
+  if (value.isString()) {
+    return (out << value.getString());
+  }
+
+  if (value.isArray()) {
+    return (out << value.getArray());
+  }
+
+  assert(value.isObject() && "undefined behavior");
+  return (out << value.getObject());
 }
 } // namespace impl
 

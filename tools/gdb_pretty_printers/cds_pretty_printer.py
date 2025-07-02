@@ -5,12 +5,13 @@ try:
     import gdb
 
     if hasattr(gdb, 'default_visualizer') and hasattr(gdb, 'write') and hasattr(gdb, 'pretty_printers')\
-            and hasattr(gdb, 'TYPE_CODE_REF') and hasattr(gdb, 'TYPE_CODE_PTR'):
+            and hasattr(gdb, 'TYPE_CODE_REF') and hasattr(gdb, 'TYPE_CODE_PTR') and hasattr(gdb, 'parse_and_eval'):
         default_visualizer = gdb.default_visualizer
         write = gdb.write
         pretty_printers = gdb.pretty_printers
         TYPE_CODE_REF = gdb.TYPE_CODE_REF
         TYPE_CODE_PTR = gdb.TYPE_CODE_PTR
+        parse_and_eval = gdb.parse_and_eval
     else:
         raise ImportError()
 except ImportError:
@@ -19,10 +20,25 @@ except ImportError:
     pretty_printers = []
     TYPE_CODE_REF = 1
     TYPE_CODE_PTR = 2
+    parse_and_eval = lambda x: x
 
 display_names = {
     'BaseString': 'String'
 }
+
+nullptr = None
+pvoid = None
+
+def type_of(val):
+    t = val.type
+    if t.code == TYPE_CODE_REF:
+        t = t.target()
+    return t
+
+def is_null(ptr):
+    global nullptr
+    global pvoid
+    return ptr.cast(pvoid) == nullptr
 
 def get_template_arg_list(type):
     n = 0
@@ -71,7 +87,7 @@ class SingleObjectContainerPrinter(TypePrinter):
 printer_registry = None
 
 split_by = re.compile(r'::')
-type_matcher = re.compile('^(?P<qual_name>cds::[^<]*)(?P<type_params><.*>)?(?P<ptr_quals>[^>]+)?$')
+type_matcher = re.compile('^(?P<qual_name>cds::[^<]*)(?P<type_params><.*>)?(?P<ptr_quals>.+)?$')
 
 class PrinterRegistry:
     def __init__(self):
@@ -171,15 +187,19 @@ class OptionalPrinter(SingleObjectContainerPrinter):
 
 class UnionPrinter(SingleObjectContainerPrinter):
     def __init__(self, quals, type_name, type_params, val):
-        possible_types = get_template_arg_list(val.type)
+        possible_types = get_template_arg_list(type_of(val))
         self.index = int(val['_index'])
+        self.size = len(possible_types)
         contained_value = None
         visualizer = None
         self._contained_type = None
-        if self.index < len(possible_types):
+        if self.index < self.size:
             self.contained_type = possible_types[int(self.index)]
-            addr = val['_data']['_head'].address
-            contained_value = addr.cast(self.contained_type.pointer()).dereference()
+            if self.contained_type == gdb.lookup_type('std::nullptr_t'):
+                contained_value = parse_and_eval('static_cast<std::nullptr_t>(0)')
+            else:
+                addr = val['_data']['_head'].address
+                contained_value = addr.cast(self.contained_type.pointer()).dereference()
             visualizer = default_visualizer(contained_value)
         super(UnionPrinter, self).__init__(quals, type_name, type_params, contained_value, visualizer)
 
@@ -198,7 +218,7 @@ class TuplePrinter(TypePrinter):
 
         def __init__(self, head):
             self.head = head
-            nodes = self.head.type.fields()
+            nodes = type_of(self.head).fields()
             if self.is_nonempty(nodes):
                 self.head = self.head.cast(nodes[0].type)
             self.index = 0
@@ -221,7 +241,7 @@ class TuplePrinter(TypePrinter):
             return f'[{self.index - 1}]', value
 
     def __init__(self, quals, type_name, type_params, val):
-        types = get_template_arg_list(val.type)
+        types = get_template_arg_list(type_of(val))
         self.size = len(types)
         self.val = val
         super(TuplePrinter, self).__init__(quals, type_name, type_params)
@@ -234,9 +254,256 @@ class TuplePrinter(TypePrinter):
             return '[empty tuple]'
         return f'[tuple of {self.size} values]'
 
+class MapEntryPrinter(TuplePrinter):
+    def __init__(self, quals, type_name, type_params, val):
+        base_class_type = type_of(val).fields()[0].type
+        as_tuple = val.cast(base_class_type)
+        super(MapEntryPrinter, self).__init__(quals, type_name, type_params, as_tuple)
+
+    def to_string(self):
+        return f'[map entry]'
+
+class ContiguousRangePrinter(TypePrinter):
+    class ContiguousRangeIterator(Iterator):
+        def __init__(self, head, tail):
+            self.current = head
+            self.tail = tail
+            self.index = 0
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            index = self.index
+            self.index += 1
+
+            if self.current == self.tail:
+                raise StopIteration
+            value = self.current.dereference()
+            self.current = self.current + 1
+            return f'[{index}]', value
+
+    def __init__(self, quals, type_name, type_params, head, tail):
+        super(ContiguousRangePrinter, self).__init__(quals, type_name, type_params)
+        self.head = head
+        self.tail = tail
+
+    def children(self):
+        return self.ContiguousRangeIterator(self.head, self.tail)
+
+class VectorPrinter(ContiguousRangePrinter):
+    def __init__(self, quals, type_name, type_params, val):
+        head = val['_head']
+        tail = val['_tail']
+        self.capacity = val['_cap']
+        super(VectorPrinter, self).__init__(quals, type_name, type_params, head, tail)
+
+    def to_string(self):
+        return f'[length {int(self.tail - self.head)}, capacity {int(self.capacity)}]'
+
+class VectorViewPrinter(ContiguousRangePrinter):
+    def __init__(self, quals, type_name, type_params, val):
+        size_max = parse_and_eval('static_cast<std::size_t>(-1)')
+        if val.type.template_argument(1) == size_max:
+            begin = val['_begin']
+            end = val['_end']
+        else:
+            begin = val['_addr']
+            end = begin + int(val.type.template_argument(1))
+        super(VectorViewPrinter, self).__init__(quals, type_name, type_params, begin, end)
+
+    def to_string(self):
+        return f'[length {int(self.tail - self.head)}]'
+
+class HashTablePrinter(TypePrinter):
+    class HashTableIterator(Iterator):
+        def __init__(self, head, tail):
+            self.head = head
+            self.tail = tail
+            self.current = self.head.dereference()
+            self.index = 0
+            self.locate_next()
+
+        def locate_next(self):
+            if not is_null(self.current):
+                self.current = self.current['next']
+
+            if not is_null(self.current):
+                return
+
+            while self.head != self.tail:
+                self.head += 1
+                if self.head != self.tail:
+                    self.current = self.head.dereference()
+                    if not is_null(self.current):
+                        return
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            if self.head == self.tail:
+                raise StopIteration
+
+            value = self.current['data']
+            index = self.index
+            self.index += 1
+            self.locate_next()
+            return f'[{index}]', value
+
+    def __init__(self, quals, type_name, type_params, val):
+        super(HashTablePrinter, self).__init__(quals, type_name, type_params)
+        self.table = val['_bArr']
+        self.bucket_count = val['_bCnt']
+        self.size = val['_eCnt']
+
+    def children(self):
+        return self.HashTableIterator(self.table, self.table + self.bucket_count)
+
+    def to_string(self):
+        return f'[size {self.size}, bucket count {self.bucket_count}]'
+
+class LinkedListPrinter(TypePrinter):
+    class LinkedListIterator(Iterator):
+        def __init__(self, current):
+            self.current = current
+            self.index = 0
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            if is_null(self.current):
+                raise StopIteration
+
+            index = self.index
+            self.index += 1
+            value = self.current['data']
+            self.current = self.current['next']
+            return f'[{index}]', value
+
+    def __init__(self, quals, type_name, type_params, head):
+        super(LinkedListPrinter, self).__init__(quals, type_name, type_params)
+        self.head = head
+
+    def children(self):
+        return self.LinkedListIterator(self.head)
+
+class LinkedHashTablePrinter(LinkedListPrinter):
+    def __init__(self, quals, type_name, type_params, val):
+        self.table = val['_bArr']
+        self.bucket_count = val['_bCnt']
+        self.size = val['_eCnt']
+        head = val['_f']
+        super(LinkedHashTablePrinter, self).__init__(quals, type_name, type_params, head)
+
+    def to_string(self):
+        return f'[size {self.size}, bucket count {self.bucket_count}]'
+
+json_type_names = [
+    "null",
+    "bool",
+    "long",
+    "double",
+    "string",
+    "array",
+    "object"
+]
+
+class JsonNodePrinter(UnionPrinter):
+    def __init__(self, quals, type_name, type_params, val):
+        fields = type_of(val).fields()
+        if not fields:
+            raise ValueError(f'Unexpected empty fields for value {val}, type {val.type}')
+
+        node_impl_base_type = fields[0].type.strip_typedefs()
+        # TODO check for JsonNodeBaseImpl base
+        as_impl_base = val.cast(node_impl_base_type.strip_typedefs())
+
+        union_base_type = as_impl_base.type.fields()[0].type.strip_typedefs()
+        as_union_base = as_impl_base.cast(union_base_type)
+
+        super(JsonNodePrinter, self).__init__(quals, type_name, type_params, as_union_base)
+
+    def children(self):
+        if self.index < 5:
+            return [].__iter__()
+        return super(JsonNodePrinter, self).children()
+
+    def to_string(self):
+        if self.index == 0 or self.index >= self.size:
+            return 'null'
+
+        type_name = json_type_names[self.index]
+        if self.index < 4:
+            return f'{self.contained_value}'
+        elif self.index == 4:
+            return f'{self.contained_value.dereference()}'
+        elif self.index == 5:
+            val = self.contained_value.dereference()
+            length = int(val['_tail'] - val['_head'])
+            cap = val['_cap']
+            additional = f', length {length}, capacity {cap}'
+        elif self.index == 6:
+            val = self.contained_value.dereference()
+            size = val['_eCnt']
+            bucket_count = val['_bCnt']
+            additional = f', size {size}, bucket count {bucket_count}'
+        else:
+            raise ValueError()
+        return f'[{type_name}{additional}]'
+
+def extract_map_entry(val):
+    base_tuple_type = val.type.fields()[0].type
+    as_base_tuple = val.cast(base_tuple_type)
+    base_node_type = as_base_tuple.type.fields()[0].type
+    as_base_node = as_base_tuple.cast(base_node_type)
+    key = as_base_node['_nodeData']
+    next_node_type = as_base_node.type.fields()[0].type
+    as_next_node = as_base_node.cast(next_node_type)
+    value = as_next_node['_nodeData']
+    return key, value
+
+class JsonPrinter(TypePrinter):
+    class JsonIterator(Iterator):
+        def __init__(self, current):
+            self.current = current
+            self.index = 0
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            if is_null(self.current):
+                raise StopIteration
+
+            index = self.index
+            self.index += 1
+            key, value = extract_map_entry(self.current['data'])
+            self.current = self.current['next']
+            return f'[{key}]', value
+
+    def __init__(self, quals, type_name, type_params, val):
+        super(JsonPrinter, self).__init__(quals, type_name, type_params)
+        self.table = val['_bArr']
+        self.bucket_count = val['_bCnt']
+        self.size = val['_eCnt']
+        self.head = val['_f']
+
+    def children(self):
+        return self.JsonIterator(self.head)
+
+    def to_string(self):
+        return f'[size {self.size}, bucket count {self.bucket_count}]'
+
 def register_pretty_printers():
     global printer_registry
+    global nullptr
+    global pvoid
+
     printer_registry = PrinterRegistry()
+    nullptr = parse_and_eval('(void*)0')
+    pvoid = gdb.lookup_type('void').const().pointer()
 
     printer_registry.register('cds::impl', 'BaseString', StringPrinter)
     printer_registry.register('cds::impl', 'BaseStringView', StringViewPrinter)
@@ -244,6 +511,20 @@ def register_pretty_printers():
     printer_registry.register('cds', 'Optional', OptionalPrinter)
     printer_registry.register('cds::impl', 'Union', UnionPrinter)
     printer_registry.register('cds::impl', 'Tuple', TuplePrinter)
+
+    printer_registry.register('cds::impl', 'Vector', VectorPrinter)
+    printer_registry.register('cds::impl', 'BaseVector', VectorPrinter)
+    printer_registry.register('cds::impl', 'VectorView', VectorViewPrinter)
+
+    printer_registry.register('cds::impl', 'MapEntry', MapEntryPrinter)
+    printer_registry.register('cds::impl', 'BaseHashMap', HashTablePrinter)
+    printer_registry.register('cds::impl', 'HashMap', HashTablePrinter)
+    printer_registry.register('cds::impl', 'BaseLinkedHashMap', LinkedHashTablePrinter)
+    printer_registry.register('cds::impl', 'LinkedHashMap', LinkedHashTablePrinter)
+
+    printer_registry.register('cds::json::impl', 'JsonNodeBase', JsonNodePrinter)
+    printer_registry.register('cds::json::impl', 'JsonArrayBase', VectorPrinter)
+    printer_registry.register('cds::json::impl', 'JsonObjectBase', JsonPrinter)
 
 register_pretty_printers()
 pretty_printers.append(printer_registry)

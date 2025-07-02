@@ -18,6 +18,8 @@
 
 #include <initializer_list>
 
+#include "../../stdlib/ostream.hpp"
+
 namespace cds {
 namespace impl {
 using functional::impl::Identity;
@@ -27,6 +29,7 @@ using iterator::ProjectionIterator;
 using meta::IsIterable;
 using meta::IsForwardIterator;
 using meta::impl::IsBaseOfIntrusiveICVR;
+using meta::rvalue;
 
 template <typename K, typename V, typename B> class BaseMap;
 
@@ -122,7 +125,7 @@ public:
   BaseMap{cds::begin(fwd<R>(range)), cds::end(fwd<R>(range))} {}
 
   CDS_ATTR(constexpr(20)) BaseMap(std::initializer_list<MapEntry<K, V>> const& list)
-      CDS_ATTR(noexcept(noexcept(BaseMap{list.begin(), list.end()}))) : BaseMap{list.begin(), list.end()} {}
+      CDS_ATTR(noexcept(noexcept(BaseMap(list.begin(), list.end())))) : BaseMap(list.begin(), list.end()) {}
 
   template <typename R, EnableIf<And<
       IsIterable<R>,
@@ -195,7 +198,7 @@ auto operator==(BaseMap<K, V, B> const& lhs, BaseMap<K, V, B> const& rhs) noexce
     return false;
   }
 
-  return equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+  return cds::impl::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
 
 template <typename K, typename V, typename B> CDS_ATTR(2(nodiscard, constexpr(14)))
@@ -208,7 +211,27 @@ auto operator!=(BaseMap<K, V, B> const& lhs, BaseMap<K, V, B> const& rhs) noexce
     return true;
   }
 
-  return !equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+  return !cds::impl::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+template <typename C, typename K, typename V, typename B> CDS_ATTR(inline)
+auto operator<<(std::basic_ostream<C>& out, BaseMap<K, V, B> const& map)
+    CDS_ATTR(noexcept(noexcept(out << rvalue<K>()) && noexcept(out << rvalue<V>()))) -> std::basic_ostream<C>& {
+  out << static_cast<C>('{');
+  auto it = map.begin();
+  auto end = map.end();
+  if (it == end) {
+    out << static_cast<C>('}');
+    return out;
+  }
+
+  out << it->key() << static_cast<C>(':') << static_cast<C>(' ');
+  for (++it; it != end; ++it) {
+    out << static_cast<C>(',') << static_cast<C>(' ') << it->key()
+        << static_cast<C>(':') << static_cast<C>(' ') << it->value();
+  }
+  out << static_cast<C>('}');
+  return out;
 }
 } // namespace impl
 } // namespace cds
