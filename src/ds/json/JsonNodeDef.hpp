@@ -30,7 +30,6 @@ using meta::False;
 using meta::True;
 using meta::RemoveCVRef;
 using meta::Void;
-using meta::DefaultOr;
 using meta::rvalue;
 
 using cds::impl::StringAbstract;
@@ -51,7 +50,7 @@ class JsonNodeAllocator : public AllocatorSet<
 };
 
 enum class JsonNodeAdaptType {
-  Primitive, String, Array, Object,
+  Primitive, String, Array, Object, None,
 };
 
 template <typename T, typename = void> struct IsMapPairLike : False {};
@@ -75,7 +74,9 @@ template <
     typename = typename StringAbstract<T>::Type,
     typename = typename IsIterable<T>::Type,
     typename = typename IsIterableOfTupleLikes<T>::Type
-> struct JsonNodeAdapt;
+> struct JsonNodeAdapt {
+  static constexpr auto value = JsonNodeAdaptType::None;
+};
 
 template <typename T> struct JsonNodeAdapt<T, True, False, False, False> {
   static constexpr auto value = JsonNodeAdaptType::Primitive;
@@ -116,18 +117,21 @@ template <typename T> using AdaptsAsObject = Bool<JsonNodeAdapt<RemoveCVRef<T>>:
 template <typename T> using AdaptsAsAllocated = Or<AdaptsAsString<T>, AdaptsAsArray<T>, AdaptsAsObject<T>>;
 
 // Keep these in this order, otherwise change bitwise check for first 4.
-template <typename JsonArrayPtr = JsonArrayBase<>*, typename JsonObjectPtr = JsonObjectBase<>*>
+template <typename TJsonArray = JsonArrayBase<>, typename TJsonObject = JsonObjectBase<>>
 struct JsonNodeBaseImpl : Union<
     JsonNull, JsonBool, JsonNumberIntegral, JsonNumberFloating,
-    JsonString*, JsonArrayPtr, JsonObjectPtr
+    JsonString*, TJsonArray*, TJsonObject*
 > {
-  using JsonArray = void /*TJsonArray*/;
-  using JsonObject = void /*TJsonObject*/;
-
-  using Union<
+  using UnionBase = Union<
       JsonNull, JsonBool, JsonNumberIntegral, JsonNumberFloating,
-      JsonString*, JsonArrayPtr, JsonObjectPtr
-  >::Union;
+      JsonString*, TJsonArray*, TJsonObject*
+  >;
+
+  using JsonArray = TJsonArray;
+  using JsonObject = TJsonObject;
+
+  using UnionBase::UnionBase;
+  using UnionBase::operator=;
 };
 
 struct JsonNodeBasePeeker {
@@ -142,17 +146,37 @@ struct JsonNodeBasePeeker {
   }
 
   template <typename TBase, typename A> CDS_ATTR(2(nodiscard, constexpr(11)))
-  auto base(JsonNodeBase<TBase, A> const& node) const noexcept -> DefaultOr<TBase, JsonNodeBaseImpl<>> const& {
+  auto base(JsonNodeBase<TBase, A> const& node) const noexcept -> typename JsonNodeBase<TBase, A>::Base const& {
     return node;
   }
 };
 
+template <typename TBase> struct JsonNodeBaseSelector : TBase {
+  using TBase::TBase;
+  using TBase::operator=;
+};
+
+template <typename TAlloc> struct JsonNodeAllocSelector : TAlloc {
+  using TAlloc::TAlloc;
+  using TAlloc::operator=;
+};
+
+template <> struct JsonNodeBaseSelector<Default> : JsonNodeBaseSelector<JsonNodeBaseImpl<>> {
+  using JsonNodeBaseSelector<JsonNodeBaseImpl<>>::JsonNodeBaseSelector;
+  using JsonNodeBaseSelector<JsonNodeBaseImpl<>>::operator=;
+};
+
+template <> struct JsonNodeAllocSelector<Default> : JsonNodeAllocSelector<JsonNodeAllocator> {
+  using JsonNodeAllocSelector<JsonNodeAllocator>::JsonNodeAllocSelector;
+  using JsonNodeAllocSelector<JsonNodeAllocator>::operator=;
+};
+
 template <typename TBase, typename TAlloc> class JsonNodeBase :
-    private DefaultOr<TBase, JsonNodeBaseImpl<>>, private DefaultOr<TAlloc, JsonNodeAllocator> {
+    private JsonNodeBaseSelector<TBase>, private JsonNodeAllocSelector<TAlloc> {
   friend struct JsonNodeBasePeeker;
 
-  using Base = DefaultOr<TBase, JsonNodeBaseImpl<>>;
-  using Alloc = DefaultOr<TAlloc, JsonNodeAllocator>;
+  using Base = JsonNodeBaseSelector<TBase>;
+  using Alloc = JsonNodeAllocSelector<TAlloc>;
 
   using typename Base::JsonArray;
   using typename Base::JsonObject;

@@ -4,6 +4,7 @@
 
 #ifndef CDS_TAGS_HPP
 #define CDS_TAGS_HPP
+#pragma once
 
 #include <cds/meta/Base>
 

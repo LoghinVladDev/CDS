@@ -50,6 +50,16 @@ def get_template_arg_list(type):
             return template_args
         n += 1
 
+def upcast_to_base(val, base_idx = 0):
+    base_type = type_of(val).fields()[base_idx].type.strip_typedefs()
+    return val.cast(base_type)
+
+def strip_ns(name: str):
+    return name.rsplit(':', 2)[-1]
+
+def strip_targs(name: str):
+    return name.split('<', 2)[0]
+
 class TypePrinter(object):
     def __init__(self, quals, type_name: str, type_params):
         self.quals = quals
@@ -416,14 +426,10 @@ class JsonNodePrinter(UnionPrinter):
         if not fields:
             raise ValueError(f'Unexpected empty fields for value {val}, type {val.type}')
 
-        node_impl_base_type = fields[0].type.strip_typedefs()
-        # TODO check for JsonNodeBaseImpl base
-        as_impl_base = val.cast(node_impl_base_type.strip_typedefs())
+        while strip_ns(strip_targs(val.type.name)) != 'Union':
+            val = upcast_to_base(val)
 
-        union_base_type = as_impl_base.type.fields()[0].type.strip_typedefs()
-        as_union_base = as_impl_base.cast(union_base_type)
-
-        super(JsonNodePrinter, self).__init__(quals, type_name, type_params, as_union_base)
+        super(JsonNodePrinter, self).__init__(quals, type_name, type_params, val)
 
     def children(self):
         if self.index < 5:

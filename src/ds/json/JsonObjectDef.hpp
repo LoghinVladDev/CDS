@@ -14,12 +14,20 @@
 namespace cds {
 namespace json {
 namespace impl {
-using meta::DefaultOr;
-
 using JsonObjectBaseImpl = LinkedHashMap<String, JsonNodeBase<>>;
 
-template <typename TBase> class JsonObjectBase : public DefaultOr<TBase, JsonObjectBaseImpl> {
-  using Base = DefaultOr<TBase, JsonObjectBaseImpl>;
+template <typename Base> struct JsonObjectBaseSelector : Base {
+  using Base::Base;
+  using Base::operator=;
+};
+
+template <> struct JsonObjectBaseSelector<Default> : JsonObjectBaseSelector<JsonObjectBaseImpl> {
+  using JsonObjectBaseSelector<JsonObjectBaseImpl>::JsonObjectBaseSelector;
+  using JsonObjectBaseSelector<JsonObjectBaseImpl>::operator=;
+};
+
+template <typename TBase> class JsonObjectBase : public JsonObjectBaseSelector<TBase> {
+  using Base = JsonObjectBaseSelector<TBase>;
 
 public:
   using Base::Base;

@@ -13,12 +13,20 @@
 namespace cds {
 namespace json {
 namespace impl {
-using meta::DefaultOr;
-
 using JsonArrayBaseImpl = Vector<JsonNodeBase<>>;
 
-template <typename TBase> class JsonArrayBase : public DefaultOr<TBase, JsonArrayBaseImpl> {
-  using Base = DefaultOr<TBase, JsonArrayBaseImpl>;
+template <typename Base> struct JsonArrayBaseSelector : Base {
+  using Base::Base;
+  using Base::operator=;
+};
+
+template <> struct JsonArrayBaseSelector<Default> : JsonArrayBaseSelector<JsonArrayBaseImpl> {
+  using JsonArrayBaseSelector<JsonArrayBaseImpl>::JsonArrayBaseSelector;
+  using JsonArrayBaseSelector<JsonArrayBaseImpl>::operator=;
+};
+
+template <typename TBase> class JsonArrayBase : public JsonArrayBaseSelector<TBase> {
+  using Base = JsonArrayBaseSelector<TBase>;
 
 public:
   using Base::Base;
