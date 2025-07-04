@@ -5,6 +5,15 @@ class SBValue:
         self.addr: addr_t = addr_t()
         self.address_of: addr_t = addr_t()
 
+    def CreateValueFromData(self, name: str, data: 'SBData', t: 'SBType') -> 'SBValue':
+        ...
+
+    def AddressOf(self) -> 'SBValue':
+        ...
+
+    def Clone(self, new_name: str) -> 'SBValue':
+        ...
+
     def GetName(self) -> str:
         ...
 
@@ -35,7 +44,7 @@ class SBValue:
     def GetValueAsUnsigned(self) -> int:
         ...
 
-    def GetPointeeData(self, offset: int, length: int) -> 'SBData':
+    def GetPointeeData(self, offset: int = 0, length: int = 1) -> 'SBData':
         ...
 
     def IsValid(self) -> bool:
@@ -68,6 +77,18 @@ class SBType:
     def __init__(self):
         self.name: str = ''
 
+    def GetName(self) -> str:
+        ...
+
+    def GetPointeeType(self) -> 'SBType':
+        ...
+
+    def GetNumberOfTemplateArguments(self) -> int:
+        ...
+
+    def GetTemplateArgumentType(self, index: int) -> 'SBType':
+        ...
+
     def IsPointerType(self) -> bool:
         ...
 
@@ -81,6 +102,9 @@ class SBType:
         ...
 
     def IsValid(self) -> bool:
+        ...
+
+    def GetPointerType(self) -> 'SBType':
         ...
 
 class SBTypeMember:

@@ -89,7 +89,7 @@ class SingleObjectContainerPrinter(TypePrinter):
                 raise StopIteration
             r = self.val
             self.val = None
-            return '[contained_value]', r
+            return '[contained value]', r
 
     def children(self):
         if self.contained_value is None:
