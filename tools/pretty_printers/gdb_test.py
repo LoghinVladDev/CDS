@@ -1,4 +1,4 @@
-from tools.gdb_pretty_printers import cds_pretty_printer as pp
+from tools.pretty_printers import gdb as pp
 import unittest
 
 def write(str):

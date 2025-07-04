@@ -1,3 +1,7 @@
+# Installation:
+#   - Via init file
+#   - echo 'source /path/to/cds/gdb/pretty/printer/cds_gdb.py'
+
 import re
 from typing import Iterator
 
@@ -164,9 +168,7 @@ class StringPrinter(StringValuePrinter):
     def __init__(self, quals, type_name, type_params, val):
         sbo = val['_sbo']
         nrm = val['_nrm']
-        is_sbo = (sbo['lenSbo'] & 1) != 0
-
-        self.is_sbo = is_sbo
+        self.is_sbo = (sbo['lenSbo'] & 1) != 0
         ptr = sbo['buf'] if self.is_sbo else nrm['buf']
         length = int(sbo['lenSbo'] if self.is_sbo else nrm['lenSbo']) >> 1
         super(StringPrinter, self).__init__(quals, type_name, type_params, ptr, length)
