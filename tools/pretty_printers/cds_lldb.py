@@ -25,11 +25,21 @@ def strip_targs(name: str):
     return name.split('<', 2)[0]
 
 def upcast(val: lldb.SBValue, base_idx = 0):
-    the_type = val.GetType()
-    base_type = the_type.GetDirectBaseClassAtIndex(base_idx).GetType()
-    return val.Cast(base_type)
+    the_type = remove_reference(val.GetType())
+    base_cnt = the_type.GetNumberOfDirectBaseClasses()
+    if base_idx >= base_cnt:
+        raise IndexError()
+    return val.GetChildAtIndex(base_idx)
+
+def remove_reference(t: lldb.SBType) -> lldb.SBType:
+    if t.IsReferenceType():
+        return t.GetDereferencedType()
+    return t
 
 def upcast_until(val: lldb.SBValue, pred: typing.Callable[[lldb.SBValue], bool]) -> lldb.SBValue:
+    if val.IsSynthetic():
+        val = val.GetNonSyntheticValue()
+
     if pred(val):
         return val
 
@@ -38,7 +48,7 @@ def upcast_until(val: lldb.SBValue, pred: typing.Callable[[lldb.SBValue], bool])
         current = val_queue[0]
         val_queue = val_queue[1:]
 
-        for class_idx in range(current.GetType().GetNumberOfDirectBaseClasses()):
+        for class_idx in range(remove_reference(current.GetType()).GetNumberOfDirectBaseClasses()):
             as_base = upcast(current, class_idx)
             if as_base.IsValid():
                 if pred(as_base):
@@ -46,26 +56,45 @@ def upcast_until(val: lldb.SBValue, pred: typing.Callable[[lldb.SBValue], bool])
                 val_queue.append(as_base)
     raise ValueError()
 
+def value_type_name_checker(pred: typing.Callable[[str], bool]) -> typing.Callable[[lldb.SBValue], bool]:
+    return lambda value: pred(strip_ns(strip_targs(remove_reference(value.GetType()).GetUnqualifiedType().GetName())))
+
+def is_type_dereferenceable(t: lldb.SBType) -> bool:
+    return t.IsPointerType() or t.IsReferenceType()
+
+def is_value_dereferenceable(val: lldb.SBValue) -> bool:
+    return is_type_dereferenceable(val.GetType())
+
+def locate_value(val: lldb.SBValue) -> typing.Union[lldb.SBValue, None]:
+    if val.IsSynthetic():
+        val = val.GetNonSyntheticValue()
+
+    if not val.IsValid():
+        return None
+
+    if is_value_dereferenceable(val):
+        val = val.Dereference()
+
+    return val
+
+clone_cnt = 0
+def clone(val: lldb.SBValue, name: str = '') -> lldb.SBValue:
+    global clone_cnt
+    print(clone_cnt)
+    clone_cnt += 1
+    return val.CreateValueFromData(name, val.GetData(), val.GetType())
+
 class ValuePrinter(ABC):
     def __init__(self, val: lldb.SBValue):
-        self.val = val
-        if self.val.IsSynthetic():
-            self.val = self.val.GetNonSyntheticValue()
-
-        if not self.val.IsValid():
-            self.val = None
-            return
-
-        if self.val.GetType().IsPointerType():
-            self.val = self.val.Dereference()
+        self.val = locate_value(val)
 
     @abstractmethod
-    def to_string(self):
+    def summary(self):
         ...
 
     def out(self):
         if self.val is not None:
-            return self.to_string()
+            return self.summary()
         return 'summary unavailable'
 
 class StringValuePrinter:
@@ -79,7 +108,7 @@ class StringValuePrinter:
             else:
                 self.data += chr(b)
 
-    def to_string(self):
+    def summary(self):
         return f'"{self.data}"'
 
 class StringPrinter(ValuePrinter, StringValuePrinter):
@@ -88,18 +117,18 @@ class StringPrinter(ValuePrinter, StringValuePrinter):
         if self.val is None:
             return
 
-        string_data = upcast_until(self.val, lambda value: strip_ns(strip_targs(value.GetType().GetName())) == 'StringData')
-        sbo = string_data.GetValueForExpressionPath('._sbo')
-        nrm = string_data.GetValueForExpressionPath('._nrm')
-        self.is_sbo = sbo.GetValueForExpressionPath('.lenSbo').GetData().uint8[0] & 1 != 0
+        string_data = upcast_until(self.val, value_type_name_checker(lambda name: name == 'StringData'))
+        sbo = string_data.GetChildMemberWithName('_sbo')
+        nrm = string_data.GetChildMemberWithName('_nrm')
+        self.is_sbo = sbo.GetChildMemberWithName('lenSbo').GetData().uint8[0] & 1 != 0
         control = sbo if self.is_sbo else nrm
-        buf = control.GetValueForExpressionPath('.buf')
-        length = control.GetValueForExpressionPath('.lenSbo').GetValueAsUnsigned() >> 1
+        buf = control.GetChildMemberWithName('buf')
+        length = control.GetChildMemberWithName('lenSbo').GetValueAsUnsigned() >> 1
         ptr = buf.GetPointeeData(0, length)
         StringValuePrinter.__init__(self, ptr, length)
 
-    def to_string(self):
-        return StringValuePrinter.to_string(self)
+    def summary(self):
+        return StringValuePrinter.summary(self)
 
 class StringViewPrinter(ValuePrinter, StringValuePrinter):
     def __init__(self, val: lldb.SBValue):
@@ -107,12 +136,12 @@ class StringViewPrinter(ValuePrinter, StringValuePrinter):
         if self.val is None:
             return
 
-        length = self.val.GetValueForExpressionPath('._length').GetValueAsUnsigned()
-        ptr = self.val.GetValueForExpressionPath('._data').GetPointeeData(0, length)
+        length = self.val.GetChildMemberWithName('_length').GetValueAsUnsigned()
+        ptr = self.val.GetChildMemberWithName('_data').GetPointeeData(0, length)
         StringValuePrinter.__init__(self, ptr, length)
 
-    def to_string(self):
-        return StringValuePrinter.to_string(self)
+    def summary(self):
+        return StringValuePrinter.summary(self)
 
 class SingleObjectContainerPrinter(ValuePrinter, ABC):
     def __init__(self, val: lldb.SBValue):
@@ -122,9 +151,10 @@ class SingleObjectContainerPrinter(ValuePrinter, ABC):
         self.contained_value = None
 
     def update(self):
-        new_value = self.get_contained_value()
-        self.contained_value = new_value.Clone('[contained value]') if new_value else new_value
-        return self
+        self.contained_value = self.get_contained_value()
+        # new_value = self.get_contained_value()
+        # self.contained_value = clone(new_value, '[contained value]') if new_value else new_value
+        return False
 
     def has_children(self):
         return self.contained_value is not None
@@ -138,13 +168,16 @@ class SingleObjectContainerPrinter(ValuePrinter, ABC):
     def get_child_at_index(self, index):
         return self.contained_value if self.contained_value is not None and index == 0 else None
 
-    def to_string(self):
+    def summary(self):
         if self.contained_value:
-            return f'[{self.summary_containing_value()}]'
-        return '[no contained value]'
+            return self.summary_containing_value()
+        return self.summary_without_value()
 
     def summary_containing_value(self):
-        return 'containing value'
+        return '[containing value]'
+
+    def summary_without_value(self):
+        return '[no contained value]'
 
     @abstractmethod
     def get_contained_value(self) -> typing.Union[lldb.SBValue, None]:
@@ -155,13 +188,17 @@ class OptionalPrinter(SingleObjectContainerPrinter):
         super(OptionalPrinter, self).__init__(val)
         if self.val is None:
             return
+        self.old_value = None
 
     def get_contained_value(self):
-        opt_value = upcast_until(self.val, lambda value: strip_ns(strip_targs(value.GetType().GetName())) == 'OptionalStorageBase')
-        initialized = bool(opt_value.GetValueForExpressionPath('._exists').GetValueAsUnsigned())
+        if self.old_value is not None and not self.val.changed and not self.old_value.changed:
+            return self.old_value
+        opt_value = upcast_until(self.val, value_type_name_checker(lambda name: name == 'OptionalStorageBase'))
+        initialized = bool(opt_value.GetChildMemberWithName('_exists').GetValueAsUnsigned())
         if not initialized:
             return None
-        return opt_value.GetValueForExpressionPath('._object')
+        self.old_value = opt_value.GetChildMemberWithName('_object')
+        return self.old_value.CreateChildAtOffset('[contained value]', 0, self.old_value.GetType())
 
 class UnionPrinter(SingleObjectContainerPrinter):
     def __init__(self, val: lldb.SBValue, _dict = None):
@@ -171,32 +208,41 @@ class UnionPrinter(SingleObjectContainerPrinter):
         self.size = self.val.GetType().GetNumberOfTemplateArguments()
         self.index = self.size
 
-    def get_contained_value(self):
-        self.index = self.val.GetValueForExpressionPath('._index').GetValueAsUnsigned()
+    def obtain_current_value(self):
+        if self.val is None:
+            return None
+        self.index = self.val.GetChildMemberWithName('_index').GetValueAsUnsigned()
         current_type = self.val.GetType().GetTemplateArgumentType(self.index)
         if self.index >= self.size:
             return None
-        addr_of_object = self.val.GetValueForExpressionPath('._data._head').AddressOf()
-        current_type_ptr = current_type.GetPointerType()
-        addr_casted = addr_of_object.Cast(current_type_ptr)
-        return addr_casted.Dereference()
+        # addr_of_object = self.val.GetValueForExpressionPath('._data._head').AddressOf()
+        # current_type_ptr = current_type.GetPointerType()
+        # addr_casted = addr_of_object.Cast(current_type_ptr)
+        # return addr_casted.Dereference()
+        return (self.val.GetChildMemberWithName('_data').GetChildMemberWithName('_head')
+                .CreateChildAtOffset('[contained value]', 0, current_type))
+
+    def get_contained_value(self):
+        return self.obtain_current_value()
 
     def summary_containing_value(self):
-        return f'index {self.index}'
+        return f'[index {self.index}]'
 
 class TuplePrinter(ValuePrinter):
     def __init__(self, val: lldb.SBValue, _dict = None):
         super(TuplePrinter, self).__init__(val)
         if self.val is None:
             return
-        self.size = self.val.GetType().GetNumberOfTemplateArguments()
-        self.root_node = upcast_until(self.val, lambda value: strip_ns(strip_targs(value.GetType().GetName())) == 'TupleNode')
+        self.tuple_val = upcast_until(self.val, value_type_name_checker(lambda name: name == 'Tuple'))
+        self.size = remove_reference(self.tuple_val.GetType()).GetNumberOfTemplateArguments()
+        self.types = self.tuple_val.GetType().template_args
+        self.root_node = upcast_until(self.tuple_val, value_type_name_checker(lambda name: name == 'TupleNode'))
 
     def has_children(self):
         return self.size != 0
 
     def update(self):
-        return self
+        return False
 
     def num_children(self, _max_children):
         return self.size
@@ -210,9 +256,9 @@ class TuplePrinter(ValuePrinter):
         current = self.root_node
         for i in range(0, index):
             current = upcast(current, 0)
-        return current.GetValueForExpressionPath('._nodeData').Clone(f'[{index}]')
+        return clone(current.GetChildMemberWithName('_nodeData'), f'[{index}]')
 
-    def to_string(self):
+    def summary(self):
         if self.size == 0:
             return '[empty tuple]'
         return f'[tuple of {self.size} values]'
@@ -229,8 +275,13 @@ class ContiguousRangePrinter(ValuePrinter, ABC):
         ...
 
     def update(self):
+        if self.val is None:
+            return False
+        if self.head is not None and not self.val.changed:
+            return False
+
         (self.head, self.tail, self.element_size) = self.get_head_tail_element_size()
-        return self
+        return False
 
     def num_children(self, max_children = None):
         current = (self.tail.GetValueAsUnsigned() - self.head.GetValueAsUnsigned()) // self.element_size
@@ -238,7 +289,7 @@ class ContiguousRangePrinter(ValuePrinter, ABC):
             return current
         return min(current, max_children)
 
-    def has_children(self):
+    def has_children(self) -> bool:
         return self.head.GetValueAsUnsigned() != self.tail.GetValueAsUnsigned()
 
     def get_child_index(self, name: str):
@@ -255,27 +306,31 @@ class VectorPrinter(ContiguousRangePrinter):
     ]
 
     def as_base(self) -> lldb.SBValue:
-        return upcast_until(self.val, lambda val: strip_ns(strip_targs(val.GetType().GetName())) in
-                                                  VectorPrinter.possible_base_classes)
+        return upcast_until(self.val, value_type_name_checker(lambda name: name in VectorPrinter.possible_base_classes))
 
     def __init__(self, val: lldb.SBValue, _dict = None):
         super(VectorPrinter, self).__init__(val)
+        self.initialized = False
         self.capacity = 0
 
     def get_head_tail_element_size(self) -> typing.Tuple[lldb.SBValue, lldb.SBValue, int]:
         as_base = self.as_base()
-        head = as_base.GetValueForExpressionPath('._head')
-        tail = as_base.GetValueForExpressionPath('._tail')
-        element_size = as_base.EvaluateExpression('_head + 1').GetValueAsUnsigned() - \
-                       as_base.EvaluateExpression('_head').GetValueAsUnsigned()
+        head = as_base.GetChildMemberWithName('_head')
+        tail = as_base.GetChildMemberWithName('_tail')
+        element_size = head.GetType().GetPointeeType().GetByteSize()
         return head, tail, element_size
 
     def update(self):
         super().update()
-        self.capacity = self.as_base().GetValueForExpressionPath('._cap').GetValueAsUnsigned()
-        return self
+        if not self.val:
+            return False
 
-    def to_string(self):
+        if self.val.changed or not self.initialized:
+            self.capacity = self.as_base().GetChildMemberWithName('_cap').GetValueAsUnsigned()
+            self.initialized = True
+        return False
+
+    def summary(self):
         return f'[length {self.num_children()}, capacity {self.capacity}]'
 
 class VectorViewPrinter(ContiguousRangePrinter):
@@ -285,8 +340,8 @@ class VectorViewPrinter(ContiguousRangePrinter):
     ]
 
     def as_base(self) -> lldb.SBValue:
-        return upcast_until(self.val, lambda val: strip_ns(strip_targs(val.GetType().GetName())) in
-                                                  VectorViewPrinter.possible_base_classes)
+        return upcast_until(self.val, value_type_name_checker(
+            lambda name: name in VectorViewPrinter.possible_base_classes))
 
     def __init__(self, val: lldb.SBValue, _dict = None):
         super(VectorViewPrinter, self).__init__(val)
@@ -295,24 +350,205 @@ class VectorViewPrinter(ContiguousRangePrinter):
         as_base = self.as_base()
         full_type_name = as_base.GetType().GetName()
         if strip_ns(strip_targs(full_type_name)) == 'BaseStaticVectorView':
-            head = as_base.GetValueForExpressionPath('._addr')
+            head = as_base.GetChildMemberWithName('_addr')
             length = int(full_type_name.rsplit(',', 2)[-1].strip()[:-1].strip())
-            tail = as_base.EvaluateExpression(f'_addr + {length}')
-            element_size = as_base.EvaluateExpression('_addr + 1').GetValueAsUnsigned() - \
-                           as_base.EvaluateExpression('_addr').GetValueAsUnsigned()
+            element_size = head.GetType().GetPointeeType().GetByteSize()
+            tail = as_base.CreateValueFromData('_tail', lldb.SBData.CreateDataFromUInt64Array(
+                head.GetData().GetByteOrder(),
+                head.GetType().GetByteSize(),
+                [head.GetValueAsUnsigned() + length * element_size]
+            ), head.GetType())
         else:
-            head = as_base.GetValueForExpressionPath('._begin')
-            tail = as_base.GetValueForExpressionPath('._end')
-            element_size = as_base.EvaluateExpression('_begin + 1').GetValueAsUnsigned() - \
-                           as_base.EvaluateExpression('_begin').GetValueAsUnsigned()
+            head = as_base.GetChildMemberWithName('_begin')
+            tail = as_base.GetChildMemberWithName('_end')
+            element_size = head.GetType().GetPointeeType().GetByteSize()
         return head, tail, element_size
 
-    def to_string(self):
+    def summary(self):
         return f'[length {self.num_children()}]'
 
     def update(self):
         super().update()
-        return self
+        return False
+
+class MapEntryPrinter(TuplePrinter):
+    def __init__(self, val: lldb.SBValue, _dict = None):
+        super(MapEntryPrinter, self).__init__(val)
+
+    def summary(self):
+        return '[map entry]'
+
+class HashTablePrinter(ValuePrinter):
+    def __init__(self, val: lldb.SBValue, _dict = None):
+        super(HashTablePrinter, self).__init__(val)
+        self.nodes = []
+        self.element_count = 0
+        self.bucket_count = 0
+        self.initialized = False
+
+    def update(self):
+        if self.val is None:
+            return False
+
+        if self.initialized and not self.val.changed:
+            return False
+
+        self.initialized = True
+        val = upcast_until(self.val, value_type_name_checker(lambda name: name == 'HashTableBase'))
+        table = val.GetChildMemberWithName('_bArr')
+        self.element_count = val.GetChildMemberWithName('_eCnt').GetValueAsUnsigned()
+        self.bucket_count = val.GetChildMemberWithName('_bCnt').GetValueAsUnsigned()
+        self.nodes = []
+        for b_idx in range(self.bucket_count):
+            buck_data = table.GetPointeeData(b_idx)
+            head_ptr = table.CreateValueFromData(f'bucket {b_idx}', buck_data, table.GetType().GetPointeeType())
+            while head_ptr.GetValueAsUnsigned() != 0:
+                head = head_ptr.Dereference()
+                self.nodes.append(clone(head.GetChildMemberWithName('data'), f'[{len(self.nodes)}]'))
+                head_ptr = head.GetChildMemberWithName('next')
+
+        return False
+
+    def summary(self):
+        return f'[size {self.element_count}, bucket count {self.bucket_count}]'
+
+    def has_children(self):
+        return self.num_children() != 0
+
+    def num_children(self, max_children = None):
+        if max_children is None:
+            return self.element_count
+        return min(self.element_count, max_children)
+
+    def get_child_index(self, name: str):
+        if name[0] != '[' or name[-1] != ']':
+            return -1
+        return int(name[1:-1])
+
+    def get_child_at_index(self, index):
+        return self.nodes[index]
+
+class LinkedHashTablePrinter(ValuePrinter):
+    def __init__(self, val: lldb.SBValue, _dict = None):
+        super(LinkedHashTablePrinter, self).__init__(val)
+        self.nodes = []
+        self.element_count = 0
+        self.bucket_count = 0
+        self.initialized = False
+
+    def update(self):
+        if self.val is None:
+            return False
+
+        if self.initialized and not self.val.changed:
+            return False
+
+        self.initialized = True
+        sll_base = upcast_until(self.val, value_type_name_checker(lambda name: name == 'SingleLinkedListBase'))
+        table_base = upcast_until(self.val, value_type_name_checker(lambda name: name == 'HashTableBase'))
+        head_ptr = sll_base.GetChildMemberWithName('_f')
+        self.element_count = table_base.GetChildMemberWithName('_eCnt').GetValueAsUnsigned()
+        self.bucket_count = table_base.GetChildMemberWithName('_bCnt').GetValueAsUnsigned()
+        self.nodes = []
+        while head_ptr.GetValueAsUnsigned() != 0:
+            head = head_ptr.Dereference()
+            self.nodes.append(self.process_child(head.GetChildMemberWithName('data')))
+            head_ptr = head.GetChildMemberWithName('next')
+
+        return False
+
+    def process_child(self, origin_val: lldb.SBValue) -> lldb.SBValue:
+        return clone(origin_val, f'[{len(self.nodes)}]')
+
+    def summary(self):
+        return f'[size {self.element_count}, bucket count {self.bucket_count}]'
+
+    def has_children(self):
+        return self.num_children() != 0
+
+    def num_children(self, max_children = None):
+        if max_children is None:
+            return self.element_count
+        return min(self.element_count, max_children)
+
+    def get_child_index(self, name: str):
+        if name[0] != '[' or name[-1] != ']':
+            return -1
+        return int(name[1:-1])
+
+    def get_child_at_index(self, index):
+        return self.nodes[index]
+    
+class JsonNodePrinter(UnionPrinter):
+    def __init__(self, val: lldb.SBValue, _dict = None):
+        super(JsonNodePrinter, self).__init__(upcast_until(locate_value(val), value_type_name_checker(lambda name: name == 'Union')))
+        self.active_printer = None
+        self.actual_contained = None
+        
+    def get_contained_value(self):
+        self.actual_contained = super().obtain_current_value()
+
+        if self.index >= 4:
+            self.actual_contained = self.actual_contained.Dereference()
+
+        if self.index < 5:
+            return None
+        self.active_printer = (VectorPrinter(self.actual_contained) if self.index == 5 else
+            JsonPrinter(self.actual_contained))
+        self.active_printer.update()
+        return self.actual_contained
+
+    def summary_without_value(self):
+        value = self.actual_contained
+        if self.index == 0:
+            return 'null'
+        elif self.index == 1:
+            return 'true' if value.GetValueAsUnsigned() != 0 else 'false'
+        elif self.index == 2:
+            return value.GetValueAsSigned()
+        elif self.index == 3:
+            return value.GetData().double[0]
+        elif self.index == 4:
+            return f'{StringPrinter(value).summary()}'
+        else:
+            raise ValueError()
+
+    def has_children(self):
+        if self.active_printer is None:
+            return False
+        return self.active_printer.has_children()
+
+    def num_children(self, max_children):
+        if self.active_printer is None:
+            return 0
+        return self.active_printer.num_children(max_children)
+
+    def get_child_index(self, name):
+        if self.active_printer is None:
+            return -1
+        return self.active_printer.get_child_index(name)
+
+    def get_child_at_index(self, index):
+        if self.active_printer is None:
+            return None
+        child = self.active_printer.get_child_at_index(index)
+        return child
+
+    def summary_containing_value(self):
+        if self.index == 5:
+            return f'[array, length {self.active_printer.num_children()}, capacity {self.active_printer.capacity}]'
+        elif self.index == 6:
+            return f'[object, size {self.active_printer.element_count}, bucket count {self.active_printer.bucket_count}]'
+        raise ValueError(f'{self.index}')
+
+class JsonPrinter(LinkedHashTablePrinter):
+    def __init__(self, val: lldb.SBValue, _dict = None):
+        super(JsonPrinter, self).__init__(val)
+
+    def process_child(self, val: lldb.SBValue) -> lldb.SBValue:
+        entry_printer = MapEntryPrinter(val)
+        key_printer = StringPrinter(entry_printer.get_child_at_index(0))
+        return clone(entry_printer.get_child_at_index(1), f'[{key_printer.summary()}]')
 
 def string_summary(val, _dict):
     return StringPrinter(val).out()
@@ -321,19 +557,54 @@ def string_view_summary(val, _dict):
     return StringViewPrinter(val).out()
 
 def optional_summary(val, _dict):
-    return OptionalPrinter(val).update().out()
+    printer = OptionalPrinter(val)
+    printer.update()
+    return printer.out()
 
 def union_summary(val, _dict):
-    return UnionPrinter(val).update().out()
+    printer = UnionPrinter(val)
+    printer.update()
+    return printer.out()
 
 def tuple_summary(val, _dict):
-    return TuplePrinter(val).update().out()
+    printer = TuplePrinter(val)
+    printer.update()
+    return printer.out()
 
 def vector_summary(val, _dict):
-    return VectorPrinter(val).update().out()
+    printer = VectorPrinter(val)
+    printer.update()
+    return printer.out()
 
 def vector_view_summary(val, _dict):
-    return VectorViewPrinter(val).update().out()
+    printer = VectorViewPrinter(val)
+    printer.update()
+    return printer.out()
+
+def map_entry_summary(val, _dict):
+    printer = MapEntryPrinter(val)
+    printer.update()
+    return printer.out()
+
+def hash_table_summary(val, _dict):
+    printer = HashTablePrinter(val)
+    printer.update()
+    return printer.out()
+
+def linked_hash_table_summary(val, _dict):
+    printer = LinkedHashTablePrinter(val)
+    printer.update()
+    return printer.out()
+
+def json_node_summary(val, _dict):
+    printer = JsonNodePrinter(val)
+    printer.update()
+    return printer.out()
+
+def json_summary(val, _dict):
+    printer = JsonPrinter(val)
+    printer.update()
+    return printer.out()
 
 class NoChildProvider:
     def __init__(self, _1, _2):
@@ -356,10 +627,11 @@ def __lldb_init_module(debugger, _):
         logger = lldb.formatters.Logger.Logger()
 
     def register_printer(ns: str, name: str, summarizer: str, child_provider: str):
+        cvqual = '((const|volatile) )?'
         debugger.HandleCommand(
-            f'type summary add -x \"^{ns}::{name}(<.*>)?([^:]*)?$\" -F cds_lldb.{summarizer} -p -r -w cds'
+            f'type summary add -x \"^{cvqual}{ns}::{name}(<.*>)?{cvqual}([^a-zA-Z:]*)?$\" -F cds_lldb.{summarizer} -w cds'
         ), debugger.HandleCommand(
-            f'type synthetic add -x \"^{ns}::{name}(<.*>)?([^:]*)?$\" --python-class cds_lldb.{child_provider} -p -r -w cds'
+            f'type synthetic add -x \"^{cvqual}{ns}::{name}(<.*>)?{cvqual}([^a-zA-Z:]*)?$\" --python-class cds_lldb.{child_provider} -w cds'
         )
 
     register_printer('cds::impl', 'BaseString', 'string_summary', 'NoChildProvider')
@@ -372,5 +644,15 @@ def __lldb_init_module(debugger, _):
     register_printer('cds::impl', 'Vector', 'vector_summary', 'VectorPrinter')
     register_printer('cds::impl', 'BaseVector', 'vector_summary', 'VectorPrinter')
     register_printer('cds::impl', 'VectorView', 'vector_view_summary', 'VectorViewPrinter')
+
+    register_printer('cds::impl', 'MapEntry', 'map_entry_summary', 'MapEntryPrinter')
+    register_printer('cds::impl', 'BaseHashMap', 'hash_table_summary', 'HashTablePrinter')
+    register_printer('cds::impl', 'HashMap', 'hash_table_summary', 'HashTablePrinter')
+    register_printer('cds::impl', 'BaseLinkedHashMap', 'linked_hash_table_summary', 'LinkedHashTablePrinter')
+    register_printer('cds::impl', 'LinkedHashMap', 'linked_hash_table_summary', 'LinkedHashTablePrinter')
+    
+    register_printer('cds::json::impl', 'JsonNodeBase', 'json_node_summary', 'JsonNodePrinter')
+    register_printer('cds::json::impl', 'JsonArrayBase', 'vector_summary', 'VectorPrinter')
+    register_printer('cds::json::impl', 'JsonObjectBase', 'json_summary', 'JsonPrinter')
 
     debugger.HandleCommand('type category enable cds')
