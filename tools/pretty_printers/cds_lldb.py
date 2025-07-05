@@ -77,11 +77,7 @@ def locate_value(val: lldb.SBValue) -> typing.Union[lldb.SBValue, None]:
 
     return val
 
-clone_cnt = 0
 def clone(val: lldb.SBValue, name: str = '') -> lldb.SBValue:
-    global clone_cnt
-    print(clone_cnt)
-    clone_cnt += 1
     return val.CreateValueFromData(name, val.GetData(), val.GetType())
 
 class ValuePrinter(ABC):
@@ -613,7 +609,7 @@ class NoChildProvider:
     def has_children(self):
         return False
 
-logging_enabled = True
+logging_enabled = False
 
 def __lldb_init_module(debugger, _):
     global logging_enabled
