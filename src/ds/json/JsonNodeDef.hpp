@@ -10,9 +10,10 @@
 #include "JsonNodeDecl.hpp"
 #include "JsonObjectDecl.hpp"
 
-#include <cds/Union>
 #include <cds/String>
 #include <cds/StringView>
+#include <cds/Tuple>
+#include <cds/Union>
 
 #include "../../stdlib/ostream.hpp"
 
@@ -54,7 +55,8 @@ enum class JsonNodeAdaptType {
 };
 
 template <typename T, typename = void> struct IsMapPairLike : False {};
-template <typename T> struct IsMapPairLike<T, Void<decltype(get<0>(rvalue<T>()), get<1>(rvalue<T>()))>> : True {};
+template <typename T>
+struct IsMapPairLike<T, Void<decltype(cds::impl::get<0>(rvalue<T>()), cds::impl::get<1>(rvalue<T>()))>> : True {};
 
 template <typename T, typename = void> struct IteratedTypeOfIterable {
   using Type = void;

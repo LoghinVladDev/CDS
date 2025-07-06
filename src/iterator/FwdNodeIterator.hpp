@@ -80,7 +80,7 @@ template <typename FT> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(
 namespace impl {
 struct FwdNodeIteratorNodeExtractor {
   template <typename T> auto operator()(FwdNodeIterator<T> const& iterator) const noexcept
-      -> meta::NodeIteratorTraits<cds::impl::FwdNode, T>::Node* {
+      -> typename meta::NodeIteratorTraits<cds::impl::FwdNode, T>::Node* {
     return iterator._n;
   }
 };
