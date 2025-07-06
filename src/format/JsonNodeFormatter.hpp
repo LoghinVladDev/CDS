@@ -2,11 +2,8 @@
 // Created by loghin on 6/25/25.
 //
 
-#ifndef CDS_JSONNODEFORMATTER_HPP
-#define CDS_JSONNODEFORMATTER_HPP
-
-#include <cds/Format>
-#include <cds/json/JSON>
+#if defined(CDS_FORMAT_FORMAT_HPP) && defined(CDS_DS_JSON_NODE_DEF_HPP) && !defined(CDS_FORMAT_JSON_NODE_FORMATTER_HPP)
+#define CDS_FORMAT_JSON_NODE_FORMATTER_HPP
 
 namespace cds {
 namespace impl {
@@ -26,6 +23,8 @@ enum class PermissiveFormatTypeFlagBits : U16 {
   String = 0x0800u,
   FloatingUppercase = 0x1000u,
   PointerUppercase = 0x2000u,
+  OmitOpenClose = 0x4000u,
+  MapLike = 0x8000u,
 };
 
 using PermissiveFormatTypeFlags = U16;
@@ -59,6 +58,10 @@ template <typename C> CDS_ATTR(2(nodiscard, constexpr(14))) auto formatTypeSpeci
         | static_cast<PermissiveFormatTypeFlags>(PermissiveFormatTypeFlagBits::PointerUppercase);
     case static_cast<C>('?'): return static_cast<PermissiveFormatTypeFlags>(PermissiveFormatTypeFlagBits::Escaped);
     case static_cast<C>('s'): return static_cast<PermissiveFormatTypeFlags>(PermissiveFormatTypeFlagBits::String);
+    case static_cast<C>('n'):
+      return static_cast<PermissiveFormatTypeFlags>(PermissiveFormatTypeFlagBits::OmitOpenClose);
+    case static_cast<C>('m'):
+      return static_cast<PermissiveFormatTypeFlags>(PermissiveFormatTypeFlagBits::MapLike);
     default:
       throw FormatException("Presentation type specifier is invalid");
   }
@@ -164,19 +167,48 @@ template <> struct PermissiveFormatTypeFilter<JsonString> {
   }
 };
 
+template <typename> struct PermissiveFormatAlternateFilter {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(bool const value) const noexcept -> bool {
+    return value;
+  }
+};
+
+template <> struct PermissiveFormatAlternateFilter<JsonBool> {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(bool) const noexcept -> bool {
+    return false;
+  }
+};
+
+template <> struct PermissiveFormatAlternateFilter<JsonString> {
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(bool) const noexcept -> bool {
+    return false;
+  }
+};
+
 template <typename C, typename I, typename S> CDS_ATTR(2(nodiscard, constexpr(14)))
-auto formatParseTypePermissive(I it, S end) CDS_ATTR(noexcept(false)) -> Tuple<I, Optional<FormatTypeFlags>> {
+auto formatParseTypePermissive(I it, S end) CDS_ATTR(noexcept(false))
+    -> Tuple<I, Optional<FormatTypeFlags>, Optional<BaseStringView<C>>> {
   if (it == end) {
-    return {it, nullopt};
+    return {it, nullopt, nullopt};
   }
 
   FormatTypeFlags flags = 0u;
-  while (it != end && *it != static_cast<C>('}')) {
+  while (it != end && *it != static_cast<C>('}') && *it != static_cast<C>(':')) {
     flags |= formatTypeSpecificationPermissive<C>(*it);
     ++it;
   }
 
-  return {it, flags};
+  Optional<BaseStringView<C>> remainingFormatString{};
+  if (it != end && *it == static_cast<C>(':')) {
+    auto first = ++it;
+    while (it != end && *it != static_cast<C>('}')) {
+      ++it;
+    }
+
+    remainingFormatString = BaseStringView<C>{&*first, it - first};
+  }
+
+  return {it, flags, remainingFormatString};
 }
 } // namespace fmt
 } // namespace impl
@@ -194,10 +226,11 @@ template <typename C, typename B, typename A> struct Formatter<json::impl::JsonN
   using impl::fmt::FormatWidthComponent<C>::widthSpecification;
 
   Optional<impl::fmt::FormatTypeFlags> permissiveTypeFlags {nullopt};
+  Optional<impl::BaseStringView<C>> underlyingFormatString;
 
   template <typename I, typename S> CDS_ATTR(2(nodiscard, constexpr(14)))
   auto parseTypePermissive(I begin, S end) noexcept -> I {
-    cds::tie(begin, permissiveTypeFlags) = impl::fmt::formatParseTypePermissive<C>(begin, end);
+    cds::tie(begin, permissiveTypeFlags, underlyingFormatString) = impl::fmt::formatParseTypePermissive<C>(begin, end);
     return begin;
   }
 
@@ -217,56 +250,117 @@ template <typename C, typename B, typename A> struct Formatter<json::impl::JsonN
     fmt.fillAlignSpecification = fillAlignSpecification;
     fmt.widthSpecification = widthSpecification;
     fmt.numberSpecification = numberSpecification;
+    fmt.numberSpecification.alternate =
+        impl::fmt::PermissiveFormatAlternateFilter<T>{}(fmt.numberSpecification.alternate);
     fmt.typeFlags = impl::fmt::PermissiveFormatTypeFilter<T>{}(permissiveTypeFlags.getOr(0u));
   }
 
   template <typename Ctx> CDS_ATTR(2(nodiscard, constexpr(20)))
-  auto format(json::impl::JsonNodeBase<B, A> value, Ctx& ctx) const CDS_ATTR(noexcept(false))
+  auto formatNull(Ctx& ctx) const CDS_ATTR(noexcept(false)) -> typename Ctx::Iterator {
+    impl::fmt::StringFormatter<C, C> strFormatter;
+    copyIntoFormatter(strFormatter);
+
+    auto permissiveFlags = permissiveTypeFlags.getOr(0u);
+    if (0 != (permissiveFlags & static_cast<impl::fmt::PermissiveFormatTypeFlags>(
+        impl::fmt::PermissiveFormatTypeFlagBits::PointerUppercase
+    ))) {
+      return strFormatter.format("NULL", ctx);
+    }
+    return strFormatter.format("null", ctx);
+  }
+
+  template <typename F, typename V, typename Ctx> CDS_ATTR(2(nodiscard, constexpr(20)))
+  auto formatPrimitive(V value, Ctx& ctx) const CDS_ATTR(noexcept(false)) -> typename Ctx::Iterator {
+    F formatter;
+    copyIntoFormatter(formatter);
+    return formatter.format(value, ctx);
+  }
+
+  template <typename Ctx> CDS_ATTR(2(nodiscard, constexpr(20)))
+  auto formatString(json::impl::JsonString const& str, Ctx& ctx) const CDS_ATTR(noexcept(false))
+      -> typename Ctx::Iterator {
+    impl::fmt::StringFormatter<json::impl::JsonString, C> strFormatter;
+    copyIntoFormatter(strFormatter);
+    strFormatter.numberSpecification.alternate = false;
+    strFormatter.typeFlags =
+        impl::fmt::PermissiveFormatTypeFilter<json::impl::JsonString>{}(permissiveTypeFlags.getOr(0));
+    auto out = ctx.out();
+    *out = static_cast<C>('"');
+    auto subCtx = ctx.from(out);
+    out = strFormatter.format(str, subCtx);
+    *out = static_cast<C>('"');
+    return out;
+  }
+
+  template <typename N = json::impl::JsonNodeBase<>, typename V, typename Ctx> CDS_ATTR(2(nodiscard, constexpr(20)))
+  auto formatRange(V const& range, Ctx& ctx, StringView mapFormatOverride = {}) const CDS_ATTR(noexcept(false))
+      -> typename Ctx::Iterator {
+    impl::fmt::RangeFormatter<N, C> rangeFormatter;
+
+    rangeFormatter.omitOpenClose = 0 != (permissiveTypeFlags.getOr(0)
+        & static_cast<impl::fmt::PermissiveFormatTypeFlags>(impl::fmt::PermissiveFormatTypeFlagBits::OmitOpenClose));
+    rangeFormatter.mapLike = 0 != (permissiveTypeFlags.getOr(0)
+    & static_cast<impl::fmt::PermissiveFormatTypeFlags>(impl::fmt::PermissiveFormatTypeFlagBits::MapLike));
+
+    StringView usedUnderlyingFormatString = underlyingFormatString.getOr(mapFormatOverride);
+    if (mapFormatOverride) {
+      usedUnderlyingFormatString = mapFormatOverride;
+      rangeFormatter.mapLike = true;
+    }
+    impl::fmt::FormatRangeParseContext<
+        // explicitly qualify, deduced arg types req. c++17
+        decltype(usedUnderlyingFormatString.begin()),
+        decltype(usedUnderlyingFormatString.end())
+    > subCtx{usedUnderlyingFormatString.begin(), usedUnderlyingFormatString.end()};
+    ignore = impl::fmt::FormatParseInvoker<
+        Formatter<N, C>,
+        meta::RemoveCVRef<decltype(subCtx)>
+    >::parse(rangeFormatter.underlyingFormatter, subCtx);
+    return rangeFormatter.format(range, ctx);
+  }
+
+  template <typename Ctx> CDS_ATTR(2(nodiscard, constexpr(20)))
+  auto format(json::impl::JsonNodeBase<B, A> const& value, Ctx& ctx) const CDS_ATTR(noexcept(false))
       -> typename Ctx::Iterator {
     if (value.isNull()) {
-      impl::fmt::StringFormatter<C, C> strFormatter;
-      copyIntoFormatter(strFormatter);
-
-      auto permissiveFlags = permissiveTypeFlags.getOr(0u);
-      if (0 != (permissiveFlags & static_cast<impl::fmt::PermissiveFormatTypeFlags>(
-                    impl::fmt::PermissiveFormatTypeFlagBits::PointerUppercase))) {
-        return strFormatter.format("NULL", ctx);
-      }
-      return strFormatter.format("null", ctx);
+      return formatNull(ctx);
     }
 
     if (value.isBool()) {
-      impl::fmt::BoolFormatter<C> boolFormatter;
-      copyIntoFormatter(boolFormatter);
-      return boolFormatter.format(value.getBool(), ctx);
+      return formatPrimitive<impl::fmt::BoolFormatter<C>>(value.getBool(), ctx);
     }
 
     if (value.isIntegral()) {
-      impl::fmt::IntegralFormatter<json::impl::JsonNumberIntegral, C> integralFormatter;
-      copyIntoFormatter(integralFormatter);
-      return integralFormatter.format(value.getInt(), ctx);
+      return formatPrimitive<impl::fmt::IntegralFormatter<json::impl::JsonNumberIntegral, C>>(
+          value.getInt(), ctx
+      );
     }
 
     if (value.isFloating()) {
-      impl::fmt::FloatingFormatter<json::impl::JsonNumberFloating, C> floatingFormatter;
-      copyIntoFormatter(floatingFormatter);
-      return floatingFormatter.format(value.getDouble(), ctx);
+      return formatPrimitive<impl::fmt::FloatingFormatter<json::impl::JsonNumberFloating, C>>(
+          value.getDouble(), ctx
+      );
     }
 
     if (value.isString()) {
-      impl::fmt::StringFormatter<json::impl::JsonString, C> strFormatter;
-      copyIntoFormatter(strFormatter);
-      strFormatter.typeFlags =
-          impl::fmt::PermissiveFormatTypeFilter<json::impl::JsonString>{}(permissiveTypeFlags.getOr(0));
-      return strFormatter.format(value.getString(), ctx);
+      return formatString(value.getString(), ctx);
     }
 
-    if (value.isArray() || value.isObject()) {
-      assert(false && "unimplemented");
+    if (value.isArray()) {
+      return formatRange(value.getArray(), ctx);
     }
+
+    if (value.isObject()) {
+      if (permissiveTypeFlags.getOr(0) == 0 && !underlyingFormatString) {
+        return formatRange<MapEntry<String, json::impl::JsonNodeBase<>>>(value.getObject(), ctx, "m:#:");
+      }
+      return formatRange<MapEntry<String, json::impl::JsonNodeBase<>>>(value.getObject(), ctx);
+    }
+
+    assert(false && "undefined behavior");
     return ctx.out();
   }
 };
 } // namespace cds
 
-#endif//CDS_JSONNODEFORMATTER_HPP
+#endif // #if defined(CDS_FORMAT_FORMAT_HPP) && defined(CDS_DS_JSON_NODE_DEF_HPP) && !defined(CDS_FORMAT_JSON_NODE_FORMATTER_HPP)

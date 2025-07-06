@@ -3,10 +3,9 @@
 //
 
 #include <cds/json/JSON>
+#include <cds/Format>
 
 #include <UnitTest.hpp>
-
-#include "../../../src/format/JsonFormatters.hpp"
 
 namespace {
 using namespace cds::json;
@@ -36,4 +35,32 @@ TEST(JsonObjectTest, iList) {
   ASSERT_EQ("abc", obj["cde"]);
   ASSERT_EQ(JsonArray({1, false, "cbd"}), obj["def"]);
   ASSERT_EQ(JsonObject({{"a", "b"}, {"b", false}, {"c", {1, false, "cbd"}}}), obj["efg"]);
+}
+
+TEST(JsonObjectTest, format) {
+  JsonObject obj = {
+      {"abc", 1},
+      {"bcd", false},
+      {"cde", "abc"},
+      {"def", {1, false, "cbd"}},
+      {"efg", {
+          {"a", "b"},
+          {"b", false},
+          {"c", {1, false, "cbd"}}
+      }}
+  };
+
+  ASSERT_EQ(
+      R"({)"
+          R"("abc": 1, )"
+          R"("bcd": false, )"
+          R"("cde": "abc", )"
+          R"("def": [1, false, "cbd"], )"
+          R"("efg": {)"
+              R"("a": "b", )"
+              R"("b": false, )"
+              R"("c": [1, false, "cbd"])"
+          R"(})"
+      R"(})",
+      cds::format("{}", obj));
 }

@@ -6,7 +6,7 @@
 #define CDS_PRIMITIVE_STRING_BASE_HPP
 #pragma once
 
-#include <ostream>
+#include "../../stdlib/ostream.hpp"
 
 #include <cds/meta/IterableTraits>
 

@@ -178,10 +178,10 @@ template <typename TBase, typename TAlloc> class JsonNodeBase :
   using Base = JsonNodeBaseSelector<TBase>;
   using Alloc = JsonNodeAllocSelector<TAlloc>;
 
+public:
   using typename Base::JsonArray;
   using typename Base::JsonObject;
 
-public:
   CDS_ATTR(constexpr(11)) JsonNodeBase() : Base{InPlaceIndex<0>{}, nullptr} {}
 
   CDS_ATTR(constexpr(20)) JsonNodeBase(JsonNodeBase const& node) noexcept;

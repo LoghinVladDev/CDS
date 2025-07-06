@@ -2,11 +2,10 @@
 // Created by loghin on 6/17/25.
 //
 
+#include <cds/Format>
 #include <cds/json/JSON>
 
 #include <UnitTest.hpp>
-
-#include "../../../src/format/JsonFormatters.hpp"
 
 namespace {
 using namespace cds::json;
@@ -225,6 +224,45 @@ TEST(JsonNodeTest, copyOverString) {
   dst = directStr;
   ASSERT_TRUE(dst.isString());
   ASSERT_EQ("bcd", dst.getString());
+}
+
+TEST(JsonNodeTest, copyIListToArray) {
+  JsonNode dst;
+
+  dst = {"a", 4, false};
+
+  ASSERT_TRUE(dst.isArray());
+  ASSERT_EQ("a", dst.getArray()[0]);
+  ASSERT_EQ(4, dst.getArray()[1]);
+  ASSERT_EQ(false, dst.getArray()[2]);
+}
+
+TEST(JsonNodeTest, copyIListToObject) {
+  JsonNode dst;
+
+  dst = {
+      {"a", 4},
+      {"b", false},
+      {"c", "abc"},
+      {"d", {
+          {"a", 1},
+          {"b", {1, false, "c"}}
+      }}
+  };
+
+  ASSERT_TRUE(dst.isObject());
+  auto& o = dst.getObject();
+  ASSERT_EQ(4, o["a"]);
+  ASSERT_EQ(false, o["b"]);
+  ASSERT_EQ("abc", o["c"]);
+  ASSERT_TRUE(o["d"].isObject());
+  auto& o1 = o["d"].getObject();
+  ASSERT_EQ(1, o1["a"]);
+  ASSERT_TRUE(o1["b"].isArray());
+  auto& a = o1["b"].getArray();
+  ASSERT_EQ(1, a[0]);
+  ASSERT_EQ(false, a[1]);
+  ASSERT_EQ("c", a[2]);
 }
 
 TEST(JsonNodeTest, isNumber) {
@@ -655,8 +693,38 @@ TEST(JsonNodeTest, formatFloating) {
 }
 
 TEST(JsonNodeTest, formatString) {
-  ASSERT_EQ("abc", cds::format("{}", JsonNode("abc")));
-  ASSERT_EQ("a\tbc", cds::format("{}", JsonNode("a\tbc")));
-  ASSERT_EQ("abc", cds::format("{:?}", JsonNode("abc")));
-  ASSERT_EQ("a\\tbc", cds::format("{:?}", JsonNode("a\tbc")));
+  ASSERT_EQ(R"("abc")", cds::format("{}", JsonNode("abc")));
+  ASSERT_EQ("\"a\tbc\"", cds::format("{}", JsonNode("a\tbc")));
+  ASSERT_EQ(R"("abc")", cds::format("{:?}", JsonNode("abc")));
+  ASSERT_EQ(R"("a\tbc")", cds::format("{:?}", JsonNode("a\tbc")));
+}
+
+TEST(JsonNodeTest, formatArray) {
+  ASSERT_EQ(R"([1, false, "abc"])", cds::format("{}", JsonNode{1, false, "abc"}));
+  ASSERT_EQ(R"(0x14, false, "ab\tc")", cds::format("{:n:#x?}", JsonNode{20, false, "ab\tc"}));
+  ASSERT_EQ(R"(0x14, 0x1e, [0b101000, 0b110010, 0b111100], 0x46)",
+    cds::format("{:n:#x:#b}", JsonNode{20, 30, JsonNode{40, 50, 60}, 70}));
+}
+
+TEST(JsonNodeTest, formatObject) {
+  ASSERT_EQ(R"({"a": 1, "b": false, "c": "abc", "d": null})",
+      cds::format("{}", JsonNode{{"a", 1}, {"b", false}, {"c", "abc"},
+        {"d", nullptr}}));
+
+  ASSERT_EQ(
+      R"({"a": "a", "b": {"d": "a", "e": {"g": "a", "h": "b", "i": "c"}, "f": "c"}, "c": "c"})",
+      cds::format("{}", JsonNode{
+          {"a", "a"},
+          {"b", {
+              {"d", "a"},
+              {"e", {
+                  {"g", "a"},
+                  {"h", "b"},
+                  {"i", "c"}
+              }},
+              {"f", "c"}
+          }},
+          {"c", "c"}
+      })
+  );
 }

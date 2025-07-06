@@ -3,10 +3,9 @@
 //
 
 #include <cds/json/JSON>
+#include <cds/Format>
 
 #include <UnitTest.hpp>
-
-#include "../../../src/format/JsonFormatters.hpp"
 
 namespace {
 using namespace cds::json;
@@ -23,4 +22,10 @@ TEST(JsonArrayTest, iList) {
   ASSERT_EQ(false, arr[1]);
   ASSERT_EQ("abc", arr[2]);
   ASSERT_EQ(3, arr.size());
+}
+
+TEST(JsonArrayTest, format) {
+  JsonArray arr{1, false, "abc"};
+
+  ASSERT_EQ(R"([1, false, "abc"])", cds::format("{}", arr));
 }

@@ -58,6 +58,11 @@ public:
     return _out;
   }
 
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto from(Iterator& iterator) const noexcept -> FormatTupleContext {
+    ignore = iterator;
+    return FormatTupleContext{_out};
+  }
+
 private:
   I _out;
 };

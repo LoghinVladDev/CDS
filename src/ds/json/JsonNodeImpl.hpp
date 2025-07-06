@@ -254,31 +254,31 @@ CDS_ATTR(2(nodiscard, constexpr(14))) auto operator!=(
 template <typename C, typename B, typename A> CDS_ATTR(inline)
 auto operator<<(std::basic_ostream<C>& out, JsonNodeBase<B, A> const& value) noexcept -> std::basic_ostream<C>& {
   if (value.isNull()) {
-    return (out << "null");
+    return out << "null";
   }
 
   if (value.isBool()) {
-    return (out << std::boolalpha << value.getBool());
+    return out << (value.getBool() ? "true" : "false");
   }
 
   if (value.isIntegral()) {
-    return (out << value.getInt());
+    return out << value.getInt();
   }
 
   if (value.isFloating()) {
-    return (out << value.getDouble());
+    return out << value.getDouble();
   }
 
   if (value.isString()) {
-    return (out << value.getString());
+    return out << value.getString();
   }
 
   if (value.isArray()) {
-    return (out << value.getArray());
+    return out << value.getArray();
   }
 
   assert(value.isObject() && "undefined behavior");
-  return (out << value.getObject());
+  return out << value.getObject();
 }
 } // namespace impl
 } // namespace json

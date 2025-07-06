@@ -16,4 +16,8 @@
 
 #include "JsonNodeImpl.hpp"
 
+#include "../../format/JsonNodeFormatter.hpp"
+#include "../../format/JsonArrayFormatter.hpp"
+#include "../../format/JsonObjectFormatter.hpp"
+
 #endif // #ifndef CDS_DS_JSON_HPP

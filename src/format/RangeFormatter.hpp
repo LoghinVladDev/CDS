@@ -111,10 +111,10 @@ template <typename T, typename C> struct RangeFormatter :
 
     if (*it == static_cast<C>(':')) {
       FormatRangeParseContext<RemoveCVRef<decltype(it)>, RemoveCVRef<decltype(end)>> subCtx{++it, end};
-      it = FormatParseInvoker<Formatter<T>, RemoveCVRef<decltype(subCtx)>>::parse(underlyingFormatter, subCtx);
+      it = FormatParseInvoker<Formatter<T, C>, RemoveCVRef<decltype(subCtx)>>::parse(underlyingFormatter, subCtx);
     } else {
       FormatRangeParseContext<RemoveCVRef<decltype(end)>, RemoveCVRef<decltype(end)>> subCtx{end, end};
-      ignore = FormatParseInvoker<Formatter<T>, RemoveCVRef<decltype(subCtx)>>::parse(underlyingFormatter, subCtx);
+      ignore = FormatParseInvoker<Formatter<T, C>, RemoveCVRef<decltype(subCtx)>>::parse(underlyingFormatter, subCtx);
     }
 
     if (mapLike) {

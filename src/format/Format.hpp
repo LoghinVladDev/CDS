@@ -26,6 +26,10 @@
 #include "TupleLikeFormatter.hpp"
 
 #include "HashMapFormatter.hpp"
+#include "LinkedHashMapFormatter.hpp"
+#include "JsonNodeFormatter.hpp"
+#include "JsonArrayFormatter.hpp"
+#include "JsonObjectFormatter.hpp"
 #include "MapEntryFormatter.hpp"
 #include "OptionalFormatter.hpp"
 #include "SetProjectionFormat.hpp"
