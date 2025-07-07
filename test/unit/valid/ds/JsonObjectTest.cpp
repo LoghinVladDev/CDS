@@ -64,3 +64,61 @@ TEST(JsonObjectTest, format) {
       R"(})",
       cds::format("{}", obj));
 }
+
+TEST(JsonObjectTest, assignSub) {
+  JsonObject obj = {
+      {"a", 0},
+      {"b", false},
+      {"c", "abc"}
+  };
+
+  obj["d"] = {
+      {"a", 1},
+      {"b", true},
+      {"c", {"a", "b", 2}}
+  };
+
+  obj["b"] = {
+      {"a", 2},
+      {"b", 4}
+  };
+
+  ASSERT_EQ(0, obj["a"]);
+  ASSERT_EQ(2, obj["b"].getObject()["a"]);
+  ASSERT_EQ(4, obj["b"].getObject()["b"]);
+  ASSERT_EQ("abc", obj["c"]);
+  ASSERT_EQ(1, obj["d"].getObject()["a"]);
+  ASSERT_EQ(true, obj["d"].getObject()["b"]);
+  ASSERT_TRUE(obj["d"].getObject()["c"].isArray());
+  ASSERT_EQ("a", obj["d"].getObject()["c"].getArray()[0]);
+  ASSERT_EQ("b", obj["d"].getObject()["c"].getArray()[1]);
+  ASSERT_EQ(2, obj["d"].getObject()["c"].getArray()[2]);
+}
+
+TEST(JsonObjectTest, ctrFromStr1) {
+  JsonObject obj = cds::String{R"({"a": false, "b": 123, "c": "abc"})"};
+  ASSERT_EQ(R"({"a": false, "b": 123, "c": "abc"})", cds::format("{}", obj));
+}
+
+TEST(JsonObjectTest, ctrFromStr2) {
+  JsonObject obj = cds::StringView{R"({"a": false, "b": 123, "c": "abc"})"};
+  ASSERT_EQ(R"({"a": false, "b": 123, "c": "abc"})", cds::format("{}", obj));
+}
+
+TEST(JsonObjectTest, ctrFromStr3) {
+  JsonObject obj = R"({"a": false, "b": 123, "c": "abc"})";
+  ASSERT_EQ(R"({"a": false, "b": 123, "c": "abc"})", cds::format("{}", obj));
+}
+
+TEST(JsonObjectTest, ctrFromStrExcept) {
+  try {
+    JsonObject obj = R"({"a": false, b: 123, "c": "abc"})";
+  } catch (cds::json::JsonParseException const& except) {
+    ASSERT_EQ("Expected '\"', received 'b: 123, \"c\": \"ab...'", except.message());
+  }
+}
+
+TEST(JsonObjectTest, fromLiteral) {
+  using namespace cds::json;
+  ASSERT_EQ(R"({"a": false, "b": 123, "c": "abc"})", cds::format("{}", R"({"a": false, "b": 123, "c": "abc"})"_json));
+}

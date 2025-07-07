@@ -16,6 +16,12 @@
 
 #include "JsonNodeImpl.hpp"
 
+#include "JsonParsersDecl.hpp"
+
+#include "JsonArrayParser.hpp"
+#include "JsonObjectParser.hpp"
+#include "JsonNodeParser.hpp"
+
 #include "../../format/JsonNodeFormatter.hpp"
 #include "../../format/JsonArrayFormatter.hpp"
 #include "../../format/JsonObjectFormatter.hpp"

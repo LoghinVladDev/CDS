@@ -94,6 +94,9 @@ public:
   using typename B::Iterator;
   using typename B::ConstIterator;
 
+  using Key = K;
+  using Value = V;
+
   using B::B;
   using B::operator=;
   using B::begin;

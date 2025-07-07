@@ -7,11 +7,19 @@
 #pragma once
 
 #include <cds/meta/Tags>
+#include <cds/String>
 
 namespace cds {
 namespace json {
 namespace impl {
 using meta::Default;
+using meta::Null;
+
+using JsonString = String;
+using JsonBool = bool;
+using JsonNull = Null;
+using JsonNumberIntegral = S64;
+using JsonNumberFloating = double;
 
 template <typename TBase = Default, typename TAlloc = Default> class JsonNodeBase;
 } // namespace impl

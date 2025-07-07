@@ -36,12 +36,6 @@ using meta::rvalue;
 using cds::impl::StringAbstract;
 using cds::impl::construct;
 
-using JsonString = String;
-using JsonBool = bool;
-using JsonNull = meta::Null;
-using JsonNumberIntegral = S64;
-using JsonNumberFloating = double;
-
 class JsonNodeAllocator : public AllocatorSet<
     Allocator<JsonString>,
     Allocator<JsonArrayBase<>>,

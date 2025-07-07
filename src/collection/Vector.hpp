@@ -58,8 +58,12 @@ template <typename T, typename E, typename A, typename S> class CDS_ATTR(ebo) Ba
     public bindingsBV::FindOf<T, E, A, S>,
     public bindingsBV::GenericLoop<T, E, A, S> {
 public:
-  using ArrayBase<T, E, A, S>::ArrayBase;
-  using ArrayBase<T, E, A, S>::operator=;
+  using Base = ArrayBase<T, E, A, S>;
+
+  using typename Base::Value;
+
+  using Base::Base;
+  using Base::operator=;
 };
 
 template <typename T, typename A = Allocator<T>> class Vector :

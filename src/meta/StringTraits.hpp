@@ -40,10 +40,12 @@ template <typename = void> struct StringTraitsPrivateCharConstants {
   static char constexpr encoded[15] = "09AEIOUZaeiouz";
   static char constexpr _true[5] = "true";
   static char constexpr _false[6] = "false";
+  static char constexpr _null[5] = "null";
 
   static_assert(sizeof(encoded) == sizeof("09AEIOUZaeiouz"), "Unexpected encoded size");
   static_assert(sizeof(_true) == sizeof("true"), "Unexpected _true size");
   static_assert(sizeof(_false) == sizeof("false"), "Unexpected _false size");
+  static_assert(sizeof(_null) == sizeof("null"), "Unexpected _null size");
 };
 
 template <> struct StringTraitsConstants<char> : StringTraitsCharConstants<> {};
@@ -62,6 +64,7 @@ template <typename T> char const StringTraitsCharConstants<T>::whitespace[6];
 template <typename T> char constexpr StringTraitsPrivateCharConstants<T>::encoded[15];
 template <typename T> char constexpr StringTraitsPrivateCharConstants<T>::_true[5];
 template <typename T> char constexpr StringTraitsPrivateCharConstants<T>::_false[6];
+template <typename T> char constexpr StringTraitsPrivateCharConstants<T>::_null[5];
 
 template <typename = void> struct StringTraitsWCharConstants {
   static wchar_t constexpr emptyString[1] = L"";
@@ -87,10 +90,12 @@ template <typename = void> struct StringTraitsPrivateWCharConstants {
   static wchar_t constexpr encoded[15] = L"09AEIOUZaeiouz";
   static wchar_t constexpr _true[5] = L"true";
   static wchar_t constexpr _false[6] = L"false";
+  static wchar_t constexpr _null[5] = L"null";
 
   static_assert(sizeof(encoded) == sizeof(L"09AEIOUZaeiouz"), "Unexpected encoded size");
   static_assert(sizeof(_true) == sizeof(L"true"), "Unexpected _true size");
   static_assert(sizeof(_false) == sizeof(L"false"), "Unexpected _false size");
+  static_assert(sizeof(_null) == sizeof(L"null"), "Unexpected _null size");
 };
 
 template <> struct StringTraitsConstants<wchar_t> : StringTraitsWCharConstants<> {};
@@ -109,6 +114,7 @@ template <typename T> wchar_t const StringTraitsWCharConstants<T>::whitespace[6]
 template <typename T> wchar_t constexpr StringTraitsPrivateWCharConstants<T>::encoded[15];
 template <typename T> wchar_t constexpr StringTraitsPrivateWCharConstants<T>::_true[5];
 template <typename T> wchar_t constexpr StringTraitsPrivateWCharConstants<T>::_false[6];
+template <typename T> wchar_t constexpr StringTraitsPrivateWCharConstants<T>::_null[5];
 
 template <typename = void> struct StringTraitsChar16Constants {
   static char16_t constexpr emptyString[1] = u"";
@@ -134,10 +140,12 @@ template <typename = void> struct StringTraitsPrivateChar16Constants {
   static char16_t constexpr encoded[15] = u"09AEIOUZaeiouz";
   static char16_t constexpr _true[5] = u"true";
   static char16_t constexpr _false[6] = u"false";
+  static char16_t constexpr _null[5] = u"null";
 
   static_assert(sizeof(encoded) == sizeof(u"09AEIOUZaeiouz"), "Unexpected encoded size");
   static_assert(sizeof(_true) == sizeof(u"true"), "Unexpected _true size");
   static_assert(sizeof(_false) == sizeof(u"false"), "Unexpected _false size");
+  static_assert(sizeof(_null) == sizeof(u"null"), "Unexpected _null size");
 };
 
 template <> struct StringTraitsConstants<char16_t> : StringTraitsChar16Constants<> {};
@@ -156,6 +164,7 @@ template <typename T> char16_t const StringTraitsChar16Constants<T>::whitespace[
 template <typename T> char16_t constexpr StringTraitsPrivateChar16Constants<T>::encoded[15];
 template <typename T> char16_t constexpr StringTraitsPrivateChar16Constants<T>::_true[5];
 template <typename T> char16_t constexpr StringTraitsPrivateChar16Constants<T>::_false[6];
+template <typename T> char16_t constexpr StringTraitsPrivateChar16Constants<T>::_null[5];
 
 template <typename = void> struct StringTraitsChar32Constants {
   static char32_t constexpr emptyString[1] = U"";
@@ -181,10 +190,12 @@ template <typename = void> struct StringTraitsPrivateChar32Constants {
   static char32_t constexpr encoded[15] = U"09AEIOUZaeiouz";
   static char32_t constexpr _true[5] = U"true";
   static char32_t constexpr _false[6] = U"false";
+  static char32_t constexpr _null[5] = U"null";
 
   static_assert(sizeof(encoded) == sizeof(U"09AEIOUZaeiouz"), "Unexpected encoded size");
   static_assert(sizeof(_true) == sizeof(U"true"), "Unexpected _true size");
   static_assert(sizeof(_false) == sizeof(U"false"), "Unexpected _false size");
+  static_assert(sizeof(_null) == sizeof(U"null"), "Unexpected _null size");
 };
 
 template <> struct StringTraitsConstants<char32_t> : StringTraitsChar32Constants<> {};
@@ -203,6 +214,7 @@ template <typename T> char32_t const StringTraitsChar32Constants<T>::whitespace[
 template <typename T> char32_t constexpr StringTraitsPrivateChar32Constants<T>::encoded[15];
 template <typename T> char32_t constexpr StringTraitsPrivateChar32Constants<T>::_true[5];
 template <typename T> char32_t constexpr StringTraitsPrivateChar32Constants<T>::_false[6];
+template <typename T> char32_t constexpr StringTraitsPrivateChar32Constants<T>::_null[5];
 
 #if CDS_ATTR(cpp20)
 template <typename = void> struct StringTraitsChar8Constants {
@@ -229,10 +241,12 @@ template <typename = void> struct StringTraitsPrivateChar8Constants {
   static char8_t constexpr encoded[15] = u8"09AEIOUZaeiouz";
   static char8_t constexpr _true[5] = u8"true";
   static char8_t constexpr _false[6] = u8"false";
+  static char8_t constexpr _null[5] = u8"null";
 
   static_assert(sizeof(encoded) == sizeof(u8"09AEIOUZaeiouz"), "Unexpected encoded size");
   static_assert(sizeof(_true) == sizeof(u8"true"), "Unexpected _true size");
   static_assert(sizeof(_false) == sizeof(u8"false"), "Unexpected _false size");
+  static_assert(sizeof(_null) == sizeof(u8"null"), "Unexpected _null size");
 };
 
 template <> struct StringTraitsConstants<char8_t> : StringTraitsChar8Constants<> {};
@@ -249,6 +263,9 @@ template <typename T> char8_t const StringTraitsChar8Constants<T>::consonants[43
 template <typename T> char8_t const StringTraitsChar8Constants<T>::whitespace[6];
 
 template <typename T> char8_t constexpr StringTraitsPrivateChar8Constants<T>::encoded[15];
+template <typename T> char8_t constexpr StringTraitsPrivateChar8Constants<T>::_true[5];
+template <typename T> char8_t constexpr StringTraitsPrivateChar8Constants<T>::_false[6];
+template <typename T> char8_t constexpr StringTraitsPrivateChar8Constants<T>::_null[5];
 #endif
 
 template <typename C> CDS_ATTR(consteval(20, constexpr(14)))

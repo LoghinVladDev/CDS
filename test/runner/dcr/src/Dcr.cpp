@@ -243,7 +243,7 @@ enum class TestStepType {Compile, Run};
 enum class TestStepResult {Success, Failure};
 enum class TestStepPlatform {Linux, MacOs, All};
 enum class TestStepCompiler {Clang, Gcc, All};
-enum class Standard {Cpp11 = 0, Cpp14 = 1, Cpp17 = 2, Cpp20 = 3, Cpp23 = 4, Cpp2c = 5, Highest=Cpp23, End = 6};
+enum class Standard {Cpp11 = 0, Cpp14 = 1, Cpp17 = 2, Cpp20 = 3, Cpp23 = 4, Cpp2c = 5, Highest=Cpp2c, End = 6};
 
 #if defined(__linux)
 auto constexpr currentPlatform = TestStepPlatform::Linux;
@@ -261,7 +261,7 @@ auto toString(Standard const std) {
     case Standard::Cpp14: return "14";
     case Standard::Cpp17: return "17";
     case Standard::Cpp20: return "20";
-    case Standard::Cpp23: return "2b";
+    case Standard::Cpp23: return "23";
     case Standard::Cpp2c: return "2c";
     default:
       return "";

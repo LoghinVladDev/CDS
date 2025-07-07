@@ -33,6 +33,17 @@ public:
   using Base::Base;
   using Base::operator=;
   ~JsonObjectBase() = default;
+
+  CDS_ATTR(2(implicit, constexpr(20))) JsonObjectBase(StringView asString) CDS_ATTR(noexcept(false));
+
+  template <Size n> CDS_ATTR(2(implicit, constexpr(20))) JsonObjectBase(char const(& asString)[n])
+      CDS_ATTR(noexcept(false)) : JsonObjectBase(StringView{asString}) {}
+
+  CDS_ATTR(2(implicit, constexpr(20))) JsonObjectBase(char const* asString)
+      CDS_ATTR(noexcept(false)) : JsonObjectBase(StringView{asString}) {}
+
+  CDS_ATTR(2(implicit, constexpr(20))) JsonObjectBase(String const& asString)
+      CDS_ATTR(noexcept(false)) : JsonObjectBase(StringView{asString}) {}
 };
 } // namespace impl
 

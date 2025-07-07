@@ -11,6 +11,7 @@
 #include <cassert>
 #include <exception>
 #include <unordered_set>
+#include <iostream>
 
 #if defined(NDEBUG) && CDS_ATTR(libcxx)
 #include <exception>

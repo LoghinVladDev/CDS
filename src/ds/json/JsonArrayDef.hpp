@@ -32,6 +32,17 @@ public:
   using Base::Base;
   using Base::operator=;
   ~JsonArrayBase() = default;
+
+  CDS_ATTR(2(implicit, constexpr(20))) JsonArrayBase(StringView asString) CDS_ATTR(noexcept(false));
+
+  template <Size n> CDS_ATTR(2(implicit, constexpr(20))) JsonArrayBase(char const(& asString)[n])
+      CDS_ATTR(noexcept(false)) : JsonArrayBase(StringView{asString}) {}
+
+  CDS_ATTR(2(implicit, constexpr(20))) JsonArrayBase(char const* asString)
+      CDS_ATTR(noexcept(false)) : JsonArrayBase(StringView{asString}) {}
+
+  CDS_ATTR(2(implicit, constexpr(20))) JsonArrayBase(String const& asString)
+      CDS_ATTR(noexcept(false)) : JsonArrayBase(StringView{asString}) {}
 };
 } // namespace impl
 

@@ -29,3 +29,23 @@ TEST(JsonArrayTest, format) {
 
   ASSERT_EQ(R"([1, false, "abc"])", cds::format("{}", arr));
 }
+
+TEST(JsonArrayTest, ctrFromString) {
+  JsonArray arr = cds::String{R"([1, false, "abc"])"};
+  ASSERT_EQ(R"([1, false, "abc"])", cds::format("{}", arr));
+}
+
+TEST(JsonArrayTest, ctrFromStringThrowing) {
+  try {
+    JsonArray arr = R"([1, fals, "abc"])";
+    cds::ignore = arr;
+    ASSERT_FALSE(true);
+  } catch (cds::json::JsonParseException const& except) {
+    ASSERT_EQ("Expected '<value>', received 'fals, \"abc\"]'", except.message());
+  }
+}
+
+TEST(JsonArrayTest, fromLiteral) {
+  using namespace cds::json;
+  ASSERT_EQ(R"([12, false, "abc"])", cds::format("{}", R"([12, false, "abc"])"_json_array));
+}

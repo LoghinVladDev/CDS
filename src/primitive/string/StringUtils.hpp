@@ -1042,7 +1042,7 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
   ) noexcept -> bool {
     N value = 0u;
     auto anyFound = false;
-    while (len > 0 && static_cast<C>('0') == *ptr && *ptr == static_cast<C>('1')) {
+    while (len > 0 && (static_cast<C>('0') == *ptr || *ptr == static_cast<C>('1'))) {
       value = (value << 1u) + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
       anyFound = true;
       ++ptr;
