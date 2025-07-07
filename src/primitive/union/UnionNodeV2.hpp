@@ -636,7 +636,7 @@ template <typename... Types> struct UnionConstructionBase<Pack<Types...>> : Unio
       CDS_ATTR(noexcept(IsNoexceptConstructible<typename GetUnionTypeImpl<idx, Types...>::Type, A...>::value))
       -> typename GetUnionTypeImpl<idx, Types...>::Type& {
     destroy();
-    auto &data = *construct(&GetUnionData<idx>()(_data), fwd<A>(args)...);
+    auto& data = GetUnionData<idx>{}(*construct(addressOf(_data), InPlaceIndex<idx>{}, fwd<A>(args)...));
     _index = idx;
     return data;
   }

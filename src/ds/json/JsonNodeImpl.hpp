@@ -141,12 +141,18 @@ auto JsonNodeBase<B, A>::operator=(JsonNodeBase const& node) noexcept -> JsonNod
 
 template <typename B, typename A> CDS_ATTR(constexpr(20)) auto JsonNodeBase<B, A>::clear() noexcept -> void {
   if (isString()) {
-    Alloc::template get<JsonString>().deallocate(Base::template get<JsonString*>(), 1);
+    auto const pObj = Base::template get<JsonString*>();
+    destruct(pObj);
+    Alloc::template get<JsonString>().deallocate(pObj, 1);
   } else if (isArray()) {
-    Alloc::template get<JsonArray>().deallocate(Base::template get<JsonArray*>(), 1);
+    auto const pObj = Base::template get<JsonArray*>();
+    destruct(pObj);
+    Alloc::template get<JsonArray>().deallocate(pObj, 1);
   } else {
     assert(isObject() && "undefined behavior");
-    Alloc::template get<JsonObject>().deallocate(Base::template get<JsonObject*>(), 1);
+    auto const pObj = Base::template get<JsonObject*>();
+    destruct(pObj);
+    Alloc::template get<JsonObject>().deallocate(pObj, 1);
   }
   Base::template emplace<JsonNull>(nullptr);
 }

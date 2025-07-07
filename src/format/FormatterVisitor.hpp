@@ -22,7 +22,8 @@ using meta::RemoveCVRef;
 using meta::value;
 
 template <Size idx> struct FormatterVisitor {
-  template <typename C, typename U, typename FormatString, typename... Args> static auto doFormat(
+  template <typename C, typename U, typename FormatString, typename... Args> CDS_ATTR(constexpr(20))
+  static auto doFormat(
       BaseString<C, U>& out, BaseStringView<C, U> const& in, Tuple<Args&&...> const& args, FormatString& fmtStr
   ) CDS_ATTR(noexcept(false)) -> void {
     using ParseCtx = FormatParseContext<C, U>;

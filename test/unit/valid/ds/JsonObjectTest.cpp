@@ -122,3 +122,9 @@ TEST(JsonObjectTest, fromLiteral) {
   using namespace cds::json;
   ASSERT_EQ(R"({"a": false, "b": 123, "c": "abc"})", cds::format("{}", R"({"a": false, "b": 123, "c": "abc"})"_json));
 }
+
+#ifdef DCR_SINCECPP20
+constexpr void cpp20ConstexprTest() {
+  static_assert(R"({"a": false, "b": 123, "c": "abc"})" == cds::format("{}", R"({"a": false, "b": 123, "c": "abc"})"_json));
+}
+#endif
