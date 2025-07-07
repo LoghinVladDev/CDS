@@ -22,7 +22,7 @@ using functional::Equal;
 using functional::Hash;
 
 template <typename K, typename V, typename H = Hash<>, typename E = Equal<>, typename A = HashMapAllocator<K, V>>
-class HashMap : public BaseMap<K, V, BaseHashMap<K, V, H, E, A>> {
+class CDS_ATTR(ebo) HashMap : public BaseMap<K, V, BaseHashMap<K, V, H, E, A>> {
   using Base = BaseMap<K, V, BaseHashMap<K, V, H, E, A>>;
 public:
   using Base::Base;

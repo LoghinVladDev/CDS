@@ -14,7 +14,7 @@ namespace cds {
 namespace impl {
 using meta::IsDefaultConstructible;
 
-template <typename K, typename V, typename H, typename E, typename A> class BaseHashMap :
+template <typename K, typename V, typename H, typename E, typename A> class CDS_ATTR(ebo) BaseHashMap :
     private HashTableBase<
         MapEntry<K, V>, K, H, TableRehashPolicy<PrimeRehashTable<>>,
         MapEntryKeyProjection, E, A

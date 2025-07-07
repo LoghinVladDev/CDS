@@ -5,6 +5,7 @@
 #include "UnitTest.hpp"
 #include <cds/Format>
 #include <cds/collection/Vector>
+#include <cds/meta/Platform>
 
 namespace {
 using cds::meta::Common;
@@ -21,6 +22,8 @@ template <typename... Ts> auto makeVector(Ts&&... values) -> Vector<Common<Ts...
 }
 } // namespace
 
+// Disabled on msvc due its "obvious" initializer nesting limitation.
+#if !CDS_ATTR(msvc)
 TEST(RangeFormatTest, vectorFormat) {
   ASSERT_EQ("[1, 2, 3, 4]", cds::format("{}", makeVector(1, 2, 3, 4)));
   ASSERT_EQ("1, 2, 3, 4", cds::format("{:n}", makeVector(1, 2, 3, 4)));
@@ -34,3 +37,4 @@ TEST(RangeFormatTest, vectorFormat) {
   ASSERT_EQ("[(A, 5), (B, 10), (C, 12)]", cds::format("{}", charTuples));
   ASSERT_EQ("{A: 5, B: 10, C: 12}", cds::format("{:m}", charTuples));
 }
+#endif

@@ -14,6 +14,8 @@ using cds::format;
 using cds::ignore;
 } // namespace
 
+// Disabled on msvc due its "obvious" initializer nesting limitation.
+#if !CDS_ATTR(msvc)
 TEST(TupleFormatTest, tupleFormat) {
   ASSERT_EQ("(1, 2)", format("{}", Tuple<>::of(1, 2)));
   ASSERT_EQ("  (1, 2)  ", format("{:^10}", Tuple<>::of(1, 2)));
@@ -64,3 +66,4 @@ TEST(TupleFormatTest, tupleParseExceptions) {
   }
 }
 #endif // #ifndef DCR_SINCECPP20
+#endif

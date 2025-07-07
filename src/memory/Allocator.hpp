@@ -42,12 +42,12 @@ using meta::Not;
 using meta::True;
 using meta::allocatorForImpl::InvalidAllocator;
 
-template <typename T> class Allocator : public std::allocator<T> {
+template <typename T> class CDS_ATTR(ebo) Allocator : public std::allocator<T> {
 public:
   using Type = T;
 };
 
-template <typename... Allocs> class AllocatorSet : public Allocs... {
+template <typename... Allocs> class CDS_ATTR(ebo) AllocatorSet : public Allocs... {
 public:
   using IsAllocatorSet = True;
 

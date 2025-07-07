@@ -5,6 +5,7 @@
 #include "UnitTest.hpp"
 #include <cds/Format>
 #include <cds/exception/FormatException>
+#include <cds/meta/Platform>
 
 namespace {
 using cds::Address;
@@ -15,6 +16,8 @@ using cds::bitCast;
 using cds::format;
 } // namespace
 
+// Disabled on msvc due its "obvious" initializer nesting limitation.
+#if !CDS_ATTR(msvc)
 TEST(FormatTest, fmtStandardFormatSpecExamples) {
   char c = 120;
   ASSERT_EQ(format("{:6}", 42),    "    42");
@@ -98,4 +101,5 @@ TEST(FormatTest, speed) {
   std::cout << "STD: " << t1 << "\n";
   std::cout << "CDS: " << t2 << "\n";
 }
+#endif
 #endif

@@ -4,6 +4,7 @@
 
 #include <cds/json/JSON>
 #include <cds/Format>
+#include <cds/meta/Platform>
 
 #include <UnitTest.hpp>
 
@@ -37,6 +38,14 @@ TEST(JsonObjectTest, iList) {
   ASSERT_EQ(JsonObject({{"a", "b"}, {"b", false}, {"c", {1, false, "cbd"}}}), obj["efg"]);
 }
 
+// While some other tests are disabled for win32 due to MSVC
+// not being capable to correctly parse raw strings (without experimental preprocessor)
+// or some other reason, any format tests are disabled
+// specifically due to the wonderfully "explained" C1054: Initializers nested too deeply.
+// While the underlying format implementation is complicated due to
+// c++11 compat, rewriting the whole implementation to comply with
+// MSVC's "clear and obvious" limitation is pointless.
+#if !CDS_ATTR(msvc)
 TEST(JsonObjectTest, format) {
   JsonObject obj = {
       {"abc", 1},
@@ -127,4 +136,5 @@ TEST(JsonObjectTest, fromLiteral) {
 constexpr void cpp20ConstexprTest() {
   static_assert(R"({"a": false, "b": 123, "c": "abc"})" == cds::format("{}", R"({"a": false, "b": 123, "c": "abc"})"_json));
 }
+#endif
 #endif

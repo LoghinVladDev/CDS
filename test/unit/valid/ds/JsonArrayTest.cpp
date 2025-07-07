@@ -4,6 +4,7 @@
 
 #include <cds/json/JSON>
 #include <cds/Format>
+#include <cds/meta/Platform>
 
 #include <UnitTest.hpp>
 
@@ -24,6 +25,14 @@ TEST(JsonArrayTest, iList) {
   ASSERT_EQ(3, arr.size());
 }
 
+// While some other tests are disabled for win32 due to MSVC
+// not being capable to correctly parse raw strings (without experimental preprocessor)
+// or some other reason, any format tests are disabled
+// specifically due to the wonderfully "explained" C1054: Initializers nested too deeply.
+// While the underlying format implementation is complicated due to
+// c++11 compat, rewriting the whole implementation to comply with
+// MSVC's "clear and obvious" limitation is pointless.
+#if !CDS_ATTR(msvc)
 TEST(JsonArrayTest, format) {
   JsonArray arr{1, false, "abc"};
 
@@ -49,3 +58,4 @@ TEST(JsonArrayTest, fromLiteral) {
   using namespace cds::json;
   ASSERT_EQ(R"([12, false, "abc"])", cds::format("{}", R"([12, false, "abc"])"_json_array));
 }
+#endif

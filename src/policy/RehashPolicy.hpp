@@ -62,7 +62,7 @@ template <typename = Size> struct PrimeRehashTable {};
 template <> struct PrimeRehashTable<U64> : U64PrimeRehashTable<U64> {};
 template <> struct PrimeRehashTable<U32> : U32PrimeRehashTable<U32> {};
 
-template <typename Table> class TableRehashPolicy : public RehashPolicy<Size, True>, private Table {
+template <typename Table> class CDS_ATTR(ebo) TableRehashPolicy : public RehashPolicy<Size, True>, private Table {
 public:
   CDS_ATTR(2(explicit, constexpr(11))) TableRehashPolicy(U64 const lf = 1) noexcept : _lf(lf) {}
   CDS_ATTR(constexpr(11)) TableRehashPolicy(TableRehashPolicy const&) = default;

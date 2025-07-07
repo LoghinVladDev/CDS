@@ -89,7 +89,7 @@ template <typename K, typename V, typename B> struct SetProjectionTraits<BaseMap
   using CanRemove = False;
 };
 
-template <typename K, typename V, typename B> class BaseMap : private B {
+template <typename K, typename V, typename B> class CDS_ATTR(ebo) BaseMap : private B {
 public:
   using typename B::Iterator;
   using typename B::ConstIterator;

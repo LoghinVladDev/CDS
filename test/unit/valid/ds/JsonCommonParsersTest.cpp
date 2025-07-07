@@ -3,6 +3,7 @@
 // STD: 11+
 
 #include <cds/json/JSON>
+#include <cds/meta/Platform>
 
 #include "UnitTest.hpp"
 
@@ -23,6 +24,7 @@ using cds::json::impl::parseJsonString;
 using cds::json::impl::throwIfErroneous;
 } // namespace
 
+#if !CDS_ATTR(msvc)
 TEST(JsonCommonParsersTest, codePointParser) {
   String str;
   CodePointParser<char> parser;
@@ -33,6 +35,7 @@ TEST(JsonCommonParsersTest, codePointParser) {
 
   ASSERT_EQ("\u0061\u0170\u3fac", str);
 }
+#endif
 
 TEST(JsonCommonParsersTest, parseJsonNumberErrorFractionBeforeIntegral) {
   JsonNode n;
@@ -433,6 +436,7 @@ TEST(JsonCommonParserTest, parseJsonStringErrorUTF8CodePointInvalid) {
   ASSERT_EQ(R"("ab\u12xyzt")", cds::get<0>(res));
 }
 
+#if !CDS_ATTR(msvc)
 TEST(JsonCommonParserTest, parseJsonStringErrorEscapeUnterminated0) {
   JsonString str;
   JsonParseOptions opt{};
@@ -452,6 +456,7 @@ TEST(JsonCommonParserTest, parseJsonStringErrorEscapeUnterminated1) {
   ASSERT_EQ(JsonParseError::ErrorStringWithoutEndingQuote, cds::get<1>(res));
   ASSERT_EQ(R"("\")", cds::get<0>(res));
 }
+#endif
 
 TEST(JsonCommonParserTest, parseJsonStringEscaping) {
   JsonString str;
@@ -464,6 +469,7 @@ TEST(JsonCommonParserTest, parseJsonStringEscaping) {
   ASSERT_EQ(" \" \\ / / \b b \t t \f f \r r \n n ", str);
 }
 
+#if !CDS_ATTR(msvc)
 TEST(JsonCommonParserTest, parseJsonStringEscapingUtf) {
   JsonString str;
   JsonParseOptions opt{};
@@ -474,6 +480,7 @@ TEST(JsonCommonParserTest, parseJsonStringEscapingUtf) {
   ASSERT_EQ("", cds::get<0>(res));
   ASSERT_EQ("\u0067\u01ff\u07ff\ubbff", str);
 }
+#endif
 
 TEST(JsonCommonParserTest, parseJsonStringAfterQuotePreserve) {
   JsonString str;
