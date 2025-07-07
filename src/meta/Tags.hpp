@@ -11,6 +11,7 @@
 namespace cds {
 namespace meta {
 struct Default {};
+struct InPlace {};
 
 template <typename V, typename R> using DefaultOr = Conditional<IsSame<V, Default>, R, V>;
 } // namespace meta

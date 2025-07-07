@@ -10,6 +10,7 @@
 
 #include <cds/meta/ObjectTraits>
 #include <cds/meta/StdLib>
+#include <cds/meta/Tags>
 
 namespace cds {
 template <typename T> class Optional;
@@ -41,13 +42,12 @@ using meta::And;
 using meta::True;
 using meta::False;
 using meta::IsInvocable;
+using meta::InPlace;
 
 using meta::lvalue;
 using meta::rvalue;
 
 namespace f = functional;
-
-struct InPlace {};
 
 template <typename T, typename = typename IsTriviallyDestructible<T>::Type> struct OptionalStorageBase {};
 

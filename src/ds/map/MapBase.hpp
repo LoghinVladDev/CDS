@@ -124,8 +124,8 @@ public:
       IsIterable<R>,
       Not<IsBaseOfIntrusiveICVR<BaseMap, R>>
   >> = 0> CDS_ATTR(2(explicit, constexpr(20))) BaseMap(R&& range)
-      CDS_ATTR(noexcept(noexcept(BaseMap{cds::begin(fwd<R>(range)), cds::end(fwd<R>(range))}))) :
-  BaseMap{cds::begin(fwd<R>(range)), cds::end(fwd<R>(range))} {}
+      CDS_ATTR(noexcept(noexcept(BaseMap(cds::begin(fwd<R>(range)), cds::end(fwd<R>(range)))))) :
+  BaseMap(cds::begin(fwd<R>(range)), cds::end(fwd<R>(range))) {}
 
   CDS_ATTR(constexpr(20)) BaseMap(std::initializer_list<MapEntry<K, V>> const& list)
       CDS_ATTR(noexcept(noexcept(BaseMap(list.begin(), list.end())))) : BaseMap(list.begin(), list.end()) {}

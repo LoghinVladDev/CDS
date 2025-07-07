@@ -6,6 +6,8 @@
 #include <cds/Tuple>
 #include <cds/String>
 #include <cds/StringView>
+#include <cds/Format>
+#include <sstream>
 
 namespace {
 using cds::Tuple;
@@ -37,9 +39,18 @@ TEST(TupleTest, hash) {
   ASSERT_EQ(4 + (5 + 6 * 31) * 31, cds::functional::Hash<>()(t1));
 }
 
-TEST(TupleTest, toString) {
+TEST(TupleTest, ostream) {
   Tuple <int, String> t {3, "abcd"};
-  ASSERT_EQ("(3, abcd)", t.toString());
+  std::stringstream oss;
+  oss << t;
+
+  ASSERT_EQ("(3, abcd)", oss.str());
+}
+
+TEST(TupleTest, fmt) {
+  Tuple <int, String> t {3, "abcd"};
+
+  ASSERT_EQ("(3, abcd)", cds::format("{}", t));
 }
 
 TEST(TupleTest, tupleOf) {
@@ -119,6 +130,6 @@ TEST(TupleTest, TupleNodeUnpackBindings) {
 
 #if DCR_SINCECPP20
 TEST(TupleTest, constexprCpp20) {
-  static_assert(cds::tupleOf(1, "abcd").toString() == "(1, abcd)", "constexpr20 toString failed");
+  static_assert(cds::format("{}", cds::tupleOf(1, "abcd")) == "(1, abcd)", "constexpr20 toString failed");
 }
 #endif // DCR_SINCECPP20

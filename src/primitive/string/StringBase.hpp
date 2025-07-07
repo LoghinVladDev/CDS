@@ -1600,6 +1600,5 @@ auto operator ""_s(char8_t const* string, std::size_t length) noexcept -> impl::
 
 #include "../../common/StringBackInserterIterator.hpp"
 #include "../../common/StringConversion.hpp"
-#include "../../common/TupleString.hpp"
 
 #endif // CDS_PRIMITIVE_STRING_BASE_HPP

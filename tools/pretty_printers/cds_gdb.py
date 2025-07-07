@@ -239,16 +239,21 @@ class TuplePrinter(TypePrinter):
             return self
 
         def __next__(self):
+            if self.head is None:
+                raise StopIteration()
+
             nodes = self.head.type.fields()
 
-            if len(nodes) == 0:
-                raise StopIteration
+            if len(nodes) == 1:
+                head = self.head
+                self.head = None
+                return f'[{self.index}]', head.cast(nodes[0].type)['_data']
 
             if len(nodes) != 2:
                 raise ValueError()
 
-            value = self.head['_nodeData']
-            self.head = self.head.cast(nodes[0].type)
+            value = self.head.cast(nodes[0].type)['_data']
+            self.head = self.head.cast(nodes[1].type)
             self.index += 1
             return f'[{self.index - 1}]', value
 

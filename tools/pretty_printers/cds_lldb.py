@@ -232,7 +232,8 @@ class TuplePrinter(ValuePrinter):
         self.tuple_val = upcast_until(self.val, value_type_name_checker(lambda name: name == 'Tuple'))
         self.size = remove_reference(self.tuple_val.GetType()).GetNumberOfTemplateArguments()
         self.types = self.tuple_val.GetType().template_args
-        self.root_node = upcast_until(self.tuple_val, value_type_name_checker(lambda name: name == 'TupleNode'))
+        self.root_node = upcast_until(self.tuple_val, value_type_name_checker(lambda name: name == 'FwdTupleNode'))
+        self.align = self.tuple_val.GetType().GetByteAlign()
 
     def has_children(self):
         return self.size != 0
@@ -249,15 +250,13 @@ class TuplePrinter(ValuePrinter):
         return int(name[1:-1])
 
     def get_child_at_index(self, index):
-        current = self.root_node
-        for i in range(0, index):
-            current = upcast(current, 0)
-        return clone(current.GetChildMemberWithName('_nodeData'), f'[{index}]')
+        offset = sum([max(e.GetByteSize(), self.align) for e in self.types[:index]])
+        return self.val.CreateChildAtOffset(f'[{index}]', offset, self.types[index])
 
     def summary(self):
         if self.size == 0:
             return '[empty tuple]'
-        return f'[tuple of {self.size} values]'
+        return f'[tuple of {self.size} value{"s" if self.size > 1 else ""}]'
 
 class ContiguousRangePrinter(ValuePrinter, ABC):
     def __init__(self, val: lldb.SBValue):

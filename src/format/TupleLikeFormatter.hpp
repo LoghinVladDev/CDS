@@ -255,7 +255,7 @@ template <typename C, typename... T> struct TupleLikeFormatter :
     return ctx.out();
   }
 
-  Tuple<Formatter<T, C>...> underlyingFormatters;
+  Tuple<Formatter<RemoveCVRef<T>, C>...> underlyingFormatters;
   FormatTupleType type {FormatTupleType::Array};
 };
 } // namespace fmt

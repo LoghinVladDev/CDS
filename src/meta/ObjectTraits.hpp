@@ -336,6 +336,9 @@ template <typename T> struct IsCallableObject {
   template <typename C> static auto test(check<void (Fallback::*)(), &C::operator()> const*) noexcept -> False;
   using Type = decltype(test<Resolver>(nullptr));
 };
+
+template <typename T, typename... A> struct DoesNotHide : True {};
+template <typename T, typename A> struct DoesNotHide<T, A> : Not<IsBaseOfIntrusiveICVR<T, A>> {};
 } // namespace impl
 
 template <typename Type> struct IsTriviallyCopyable : impl::IsTriviallyCopyable<Type>::Type {};
@@ -490,6 +493,8 @@ template <typename Type> struct IsMember : impl::IsMember<Type>::Type {};
 
 template <typename Type> struct IsCallable :
     And<Not<IsMember<Type>>, Or<IsCallableObject<Type>, IsFunction<RemovePointer<Type>>>> {};
+
+template <typename T, typename... A> struct DoesNotHide : impl::DoesNotHide<T, A...>::Type {};
 } // namespace meta
 } // namespace cds
 

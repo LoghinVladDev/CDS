@@ -114,6 +114,9 @@ class SBType:
         self.name: str = ''
         self.template_args: typing.List['SBType'] = []
 
+    def GetByteAlign(self) -> int:
+        ...
+
     def GetByteSize(self) -> int:
         ...
 

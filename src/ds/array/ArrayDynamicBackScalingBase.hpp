@@ -222,7 +222,7 @@ public:
     }
   }
 
-  void clear() {
+  CDS_ATTR(constexpr(20)) void clear() {
     destruct(_head, xch(_tail, _head));
   }
 

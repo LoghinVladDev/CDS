@@ -7,6 +7,7 @@
 #pragma once
 
 #include <cds/functional/Transformer>
+#include <cds/memory/Allocator>
 
 #include "../../ds/hashTable/HashTableBase.hpp"
 #include "../../ds/map/MapEntry.hpp"
@@ -168,8 +169,8 @@ public:
   }
 
   template <typename = void, EnableIf<IsDefaultConstructible<V>> = 0> CDS_ATTR(2(nodiscard, constexpr(20)))
-  auto operator[](K const& key) CDS_ATTR(noexcept(noexcept(emplaceBackRetNode(key)))) -> V& {
-    return get<0>(emplace(key))->value();
+  auto operator[](K const& key) CDS_ATTR(noexcept(noexcept(emplace(key, V{})))) -> V& {
+    return get<0>(emplace(key, V{}))->value();
   }
 };
 } // namespace impl
