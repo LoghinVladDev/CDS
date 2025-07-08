@@ -15,6 +15,9 @@ template <typename C, typename U> class FormatStringToken {
   using SV = BaseStringView<C, U>;
 
 public:
+  FormatStringToken(FormatStringToken const&) = default;
+  auto operator=(FormatStringToken const&) -> FormatStringToken& = default;
+
   CDS_ATTR(constexpr(11)) FormatStringToken(SV tok, Size const idx) noexcept : _tok{tok}, _idx{idx} {}
   ~FormatStringToken() noexcept = default;
 

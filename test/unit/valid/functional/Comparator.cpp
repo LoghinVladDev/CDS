@@ -29,7 +29,7 @@ TEST(Comparator, transparent) {
   Equal<> const eq;
 
   ASSERT_TRUE(eq(1, 1));
-  ASSERT_TRUE(eq(1, 1LLU));
+  ASSERT_TRUE(eq(1u, 1LLU));
 }
 
 #ifdef DCR_SINCECPP11

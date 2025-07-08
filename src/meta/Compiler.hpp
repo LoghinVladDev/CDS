@@ -6,6 +6,8 @@
 #define CDS_META_COMPILER_HPP
 #pragma once
 
+#include <cds/meta/Platform>
+
 #define CDS_ATTR_JOIN_LATE(prefix, ...) prefix ## __VA_ARGS__
 #define CDS_ATTR(...) CDS_ATTR_JOIN_LATE(CDS_ATTR_, __VA_ARGS__)
 
@@ -323,8 +325,10 @@ template <typename T, T _value> struct LimitConstraint {
   static constexpr T value = _value;
 };
 
+#if !CDS_ATTR(cpp17)
 // ODR before cpp17
 template <typename T, T value> T const LimitConstraint<T, value>::value;
+#endif
 } // namespace odrImpl
 
 template <typename> struct MinOf {};

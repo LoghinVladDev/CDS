@@ -58,6 +58,7 @@ struct FormatterVisitorTableImpl<IndexSequence<>, C, U, FormatString> {
       formatters[1u] = {&unreachableFormatter<BaseString<C, U>, BaseStringView<C, U>, Tuple<>, FormatString>};
 };
 
+#if !CDS_ATTR(cpp17)
 // ODR before C++17
 template <typename C, typename U, typename Fmt, typename... Args, unsigned... indices>
 Size const FormatterVisitorTableImpl<IndexSequence<indices...>, C, U, Fmt, Args...>::size;
@@ -84,6 +85,7 @@ template <typename C, typename U, typename Fmt>
 Decay<decltype(&unreachableFormatter<BaseString<C, U>, BaseStringView<C, U>, Tuple<>, Fmt>)> const
     FormatterVisitorTableImpl<IndexSequence<>, C, U, Fmt>
     ::formatters[1u];
+#endif
 
 template <typename, typename, typename, typename> struct FormatterVisitorTable;
 template <typename C, typename U, typename Fmt, typename... Args>

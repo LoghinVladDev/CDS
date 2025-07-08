@@ -9,3 +9,5 @@
 /.cache/
 /.scannerwork/
 run_sq.sh
+/.todo/
+/.venv*/

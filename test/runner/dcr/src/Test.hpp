@@ -8,11 +8,11 @@
 #include <vector>
 #include <memory>
 
-#define TEST(n1, n2) _TEST(n1, n2)
+#define TEST(n1, n2) DCR_TEST(n1, n2)
 
 #ifndef __EXCEPTIONS
 
-#define _TEST(suiteName, testName)                                    \
+#define TEST(suiteName, testName)                                     \
   namespace dcr {                                                     \
   namespace generated {                                               \
   class suiteName ## testName : public ::dcr::Test {                  \
@@ -31,7 +31,7 @@
 
 #else
 
-#define _TEST(suiteName, testName)                              \
+#define DCR_TEST(suiteName, testName)                           \
   namespace dcr {                                               \
   namespace generated {                                         \
   class suiteName ## testName : public ::dcr::Test {            \

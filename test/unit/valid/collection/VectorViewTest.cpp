@@ -76,7 +76,7 @@ TEST(VectorView, staticVecViewIterFns) {
 TEST(VectorView, staticVecViewObsFns) {
   int nums[5] = {1, 2, 3, 4, 5};
   auto view = makeView(nums);
-  ASSERT_EQ(5, view.size());
+  ASSERT_EQ(5u, view.size());
   ASSERT_FALSE(view.empty());
   ASSERT_TRUE(view);
 
@@ -123,7 +123,7 @@ TEST(VectorView, dynVecViewIterFns) {
 TEST(VectorView, dynVecViewObsFns) {
   Vector<int> nums = {1, 2, 3, 4, 5};
   auto view = makeView(nums);
-  ASSERT_EQ(5, view.size());
+  ASSERT_EQ(5u, view.size());
   ASSERT_FALSE(view.empty());
   ASSERT_TRUE(view);
 

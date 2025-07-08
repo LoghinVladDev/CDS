@@ -18,9 +18,11 @@ namespace primitiveTypeInfoNames {
 template <typename = void> struct String { static char constexpr name[7u] = "String"; };
 template <typename = void> struct WideString { static char constexpr name[11u] = "WideString"; };
 
+#if !CDS_ATTR(cpp17)
 // ODR before cpp17
 template <typename T> char const String<T>::name[7u];
 template <typename T> char const WideString<T>::name[11u];
+#endif
 } // namespace primitiveTypeInfoNames
 } // namespace impl
 template <> struct TypeInfo<String> : impl::primitiveTypeInfoNames::String<> {};

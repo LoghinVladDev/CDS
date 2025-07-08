@@ -103,9 +103,11 @@ template <typename T, typename C> struct FormatDefaultAlign<T, C, False> {
   static constexpr FormatAlignType value = FormatAlignType::Leading;
 };
 
+#if !CDS_ATTR(cpp17)
 // ODR before C++17
 template <typename T, typename C> FormatAlignType const FormatDefaultAlign<T, C, True>::value;
 template <typename T, typename C> FormatAlignType const FormatDefaultAlign<T, C, False>::value;
+#endif
 
 struct FormatIntegerTypeSpecification {
   template <typename C> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(Optional<C> typeChar) -> FormatTypeFlags {
@@ -537,9 +539,11 @@ template <typename = void> struct DefaultTypeFormatFlagsIntegral {
   static FormatTypeFlags constexpr value = static_cast<FormatTypeFlags>(FormatTypeFlagBits::Decimal);
 };
 
+#if !CDS_ATTR(cpp17)
 // ODR before C++17
 template <typename T> FormatTypeFlags const DefaultTypeFormatFlagsUnspecified<T>::value;
 template <typename T> FormatTypeFlags const DefaultTypeFormatFlagsIntegral<T>::value;
+#endif
 
 template <typename T, typename = typename IsIntegral<T>::Type>
 struct DefaultTypeFormatFlags : DefaultTypeFormatFlagsUnspecified<>{};

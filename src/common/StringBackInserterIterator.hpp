@@ -12,6 +12,8 @@ namespace impl {
 template <typename C, typename U, typename A> class BackInserterIterator<cds::impl::BaseString<C, U, A>> {
   using S = cds::impl::BaseString<C, U, A>;
 public:
+  BackInserterIterator(BackInserterIterator const&) = default;
+
   CDS_ATTR(2(explicit, constexpr(11))) BackInserterIterator(S& obj) : _obj{obj} {}
 
   CDS_ATTR(constexpr(14)) auto operator=(BackInserterIterator const&) noexcept -> BackInserterIterator& {

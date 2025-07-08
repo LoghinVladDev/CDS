@@ -98,6 +98,7 @@ template <typename = void> struct StringUtilsCharConstants {
 
 template <> struct StringUtilsConstants<char> : StringUtilsCharConstants<> {};
 
+#if !CDS_ATTR(cpp17)
 template <typename T> char const StringUtilsCharConstants<T>::minusChar;
 template <typename T> char const StringUtilsCharConstants<T>::zeroChar;
 template <typename T> char const StringUtilsCharConstants<T>::writeIntPrepNumsB2[65];
@@ -105,6 +106,7 @@ template <typename T> char const StringUtilsCharConstants<T>::writeIntPrepNumsB8
 template <typename T> char const StringUtilsCharConstants<T>::writeIntPrepNumsB10[201];
 template <typename T> char const StringUtilsCharConstants<T>::writeIntPrepNumsB16l[513];
 template <typename T> char const StringUtilsCharConstants<T>::writeIntPrepNumsB16L[513];
+#endif
 
 template <typename = void> struct StringUtilsWCharConstants {
   static wchar_t constexpr minusChar = L'-';
@@ -179,6 +181,7 @@ template <typename = void> struct StringUtilsWCharConstants {
 
 template <> struct StringUtilsConstants<wchar_t> : StringUtilsWCharConstants<> {};
 
+#if !CDS_ATTR(cpp17)
 template <typename T> wchar_t const StringUtilsWCharConstants<T>::minusChar;
 template <typename T> wchar_t const StringUtilsWCharConstants<T>::zeroChar;
 template <typename T> wchar_t const StringUtilsWCharConstants<T>::writeIntPrepNumsB2[65];
@@ -186,6 +189,7 @@ template <typename T> wchar_t const StringUtilsWCharConstants<T>::writeIntPrepNu
 template <typename T> wchar_t const StringUtilsWCharConstants<T>::writeIntPrepNumsB10[201];
 template <typename T> wchar_t const StringUtilsWCharConstants<T>::writeIntPrepNumsB16l[513];
 template <typename T> wchar_t const StringUtilsWCharConstants<T>::writeIntPrepNumsB16L[513];
+#endif
 
 template <typename = void> struct StringUtilsChar16Constants {
   static char16_t constexpr minusChar = u'-';
@@ -260,6 +264,7 @@ template <typename = void> struct StringUtilsChar16Constants {
 
 template <> struct StringUtilsConstants<char16_t> : StringUtilsChar16Constants<> {};
 
+#if !CDS_ATTR(cpp17)
 template <typename T> char16_t const StringUtilsChar16Constants<T>::minusChar;
 template <typename T> char16_t const StringUtilsChar16Constants<T>::zeroChar;
 template <typename T> char16_t const StringUtilsChar16Constants<T>::writeIntPrepNumsB2[65];
@@ -267,6 +272,7 @@ template <typename T> char16_t const StringUtilsChar16Constants<T>::writeIntPrep
 template <typename T> char16_t const StringUtilsChar16Constants<T>::writeIntPrepNumsB10[201];
 template <typename T> char16_t const StringUtilsChar16Constants<T>::writeIntPrepNumsB16l[513];
 template <typename T> char16_t const StringUtilsChar16Constants<T>::writeIntPrepNumsB16L[513];
+#endif
 
 template <typename = void> struct StringUtilsChar32Constants {
   static char32_t constexpr minusChar = U'-';
@@ -341,6 +347,7 @@ template <typename = void> struct StringUtilsChar32Constants {
 
 template <> struct StringUtilsConstants<char32_t> : StringUtilsChar32Constants<> {};
 
+#if !CDS_ATTR(cpp17)
 template <typename T> char32_t const StringUtilsChar32Constants<T>::minusChar;
 template <typename T> char32_t const StringUtilsChar32Constants<T>::zeroChar;
 template <typename T> char32_t const StringUtilsChar32Constants<T>::writeIntPrepNumsB2[65];
@@ -348,6 +355,7 @@ template <typename T> char32_t const StringUtilsChar32Constants<T>::writeIntPrep
 template <typename T> char32_t const StringUtilsChar32Constants<T>::writeIntPrepNumsB10[201];
 template <typename T> char32_t const StringUtilsChar32Constants<T>::writeIntPrepNumsB16l[513];
 template <typename T> char32_t const StringUtilsChar32Constants<T>::writeIntPrepNumsB16L[513];
+#endif
 
 #if CDS_ATTR(cpp20)
 template <typename = void> struct StringUtilsChar8Constants {
@@ -421,20 +429,12 @@ template <typename = void> struct StringUtilsChar8Constants {
              "unexpected writeIntPrepNumsB16l size");
 };
 
-template <typename T> char8_t const StringUtilsChar8Constants<T>::minusChar;
-template <typename T> char8_t const StringUtilsChar8Constants<T>::zeroChar;
-template <typename T> char8_t const StringUtilsChar8Constants<T>::writeIntPrepNumsB2[65];
-template <typename T> char8_t const StringUtilsChar8Constants<T>::writeIntPrepNumsB8[129];
-template <typename T> char8_t const StringUtilsChar8Constants<T>::writeIntPrepNumsB10[201];
-template <typename T> char8_t const StringUtilsChar8Constants<T>::writeIntPrepNumsB16l[513];
-template <typename T> char8_t const StringUtilsChar8Constants<T>::writeIntPrepNumsB16L[513];
-
 template <> struct StringUtilsConstants<char8_t> : StringUtilsChar8Constants<> {};
 #endif // #if CDS_ATTR(cpp20)
 
 template <typename C> struct StringUtilsFloatingOps {
   static auto floatingLength(float const value) noexcept -> U8 {
-    return static_cast<U8>(snprintf(nullptr, 0, "%f", value));
+    return static_cast<U8>(snprintf(nullptr, 0, "%f", static_cast<double>(value)));
   }
 
   static auto floatingLength(double const value) noexcept -> U8 {
@@ -448,7 +448,7 @@ template <typename C> struct StringUtilsFloatingOps {
   template <typename I> static auto writeFloating(float const value, U8 const length, I const dst) noexcept -> I {
     char buf[64];
     assert(length < 64 && "Too small local buffer size for floating write");
-    snprintf(buf, 63, "%f", value);
+    snprintf(buf, 63, "%f", static_cast<double>(value));
     return impl::copy(buf, buf + length, dst);
   }
 
@@ -469,7 +469,7 @@ template <typename C> struct StringUtilsFloatingOps {
 
 template <> struct StringUtilsFloatingOps<char> {
   static auto floatingLength(float const value) noexcept -> U8 {
-    return static_cast<U8>(snprintf(nullptr, 0, "%f", value));
+    return static_cast<U8>(snprintf(nullptr, 0, "%f", static_cast<double>(value)));
   }
 
   static auto floatingLength(double const value) noexcept -> U8 {
@@ -841,12 +841,12 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
     }
 
     while (value > 0) {
-      auto dig = value % base;
+      auto dig = static_cast<unsigned>(value % base);
       *(beg--) = dig < 10
           ? static_cast<C>(StringUtilsCharConstants<C>::zeroChar + dig)
           : upper
-              ? static_cast<C>(static_cast<unsigned>('A') + dig - 10)
-              : static_cast<C>(static_cast<unsigned>('a') + dig - 10);
+              ? static_cast<C>(static_cast<unsigned>('A') + dig - 10u)
+              : static_cast<C>(static_cast<unsigned>('a') + dig - 10u);
       value /= base;
     }
 
@@ -969,7 +969,7 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
     auto anyFound = false;
     while (len > 0 && static_cast<C>('0') <= *ptr && *ptr <= static_cast<C>('9')) {
       anyFound = true;
-      value = value * 10u + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
+      value = value * 10u + static_cast<N>(static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
       ++ptr;
       --len;
     }
@@ -991,11 +991,14 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
     auto anyFound = false;
     while (len > 0) {
       if (static_cast<C>('0') <= *ptr && *ptr <= static_cast<C>('9')) {
-        value = (value << 4u) + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
+        value = static_cast<N>(value << 4u)
+              + static_cast<N>(static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
       } else if (static_cast<C>('a') <= *ptr && *ptr <= static_cast<C>('f')) {
-        value = (value << 4u) + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('a')) + 10u);
+        value = static_cast<N>(value << 4u)
+              + static_cast<N>(static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('a')) + 10u);
       } else if (static_cast<C>('A') <= *ptr && *ptr <= static_cast<C>('F')) {
-        value = (value << 4u) + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('A')) + 10u);
+        value = static_cast<N>(value << 4u)
+              + static_cast<N>(static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('A')) + 10u);
       } else {
         break;
       }
@@ -1021,7 +1024,8 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
     N value = 0u;
     auto anyFound = false;
     while (len > 0 && static_cast<C>('0') <= *ptr && *ptr <= static_cast<C>('7')) {
-      value = (value << 3u) + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
+      value = static_cast<N>(value << 3u)
+            + static_cast<N>(static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
       anyFound = true;
       ++ptr;
       --len;
@@ -1043,7 +1047,8 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
     N value = 0u;
     auto anyFound = false;
     while (len > 0 && (static_cast<C>('0') == *ptr || *ptr == static_cast<C>('1'))) {
-      value = (value << 1u) + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
+      value = static_cast<N>(value << 1u)
+            + static_cast<N>(static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
       anyFound = true;
       ++ptr;
       --len;
@@ -1067,11 +1072,14 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
     auto anyFound = false;
     while (len > 0) {
       if (static_cast<C>('0') <= *ptr && *ptr <= static_cast<C>('9')) {
-        value = value * base + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
+        value = static_cast<N>(value * base)
+              + static_cast<N>(static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('0')));
       } else if (static_cast<C>('a') <= *ptr && *ptr <= static_cast<C>('z')) {
-        value = value * base + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('a')) + 10u);
+        value = static_cast<N>(value * base)
+              + static_cast<N>(static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('a')) + 10u);
       } else if (static_cast<C>('A') <= *ptr && *ptr <= static_cast<C>('Z')) {
-        value = value * base + (static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('Z')) + 10u);
+        value = static_cast<N>(value * base)
+              + static_cast<N>(static_cast<unsigned>(*ptr) - static_cast<unsigned>(static_cast<C>('Z')) + 10u);
       } else {
         break;
       }

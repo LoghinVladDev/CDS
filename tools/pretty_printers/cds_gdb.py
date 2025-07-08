@@ -433,6 +433,9 @@ class JsonNodePrinter(UnionPrinter):
         if not fields:
             raise ValueError(f'Unexpected empty fields for value {val}, type {val.type}')
 
+        if not val.type.name:
+            raise ValueError(f'Unexpected empty type name for value {val}, type {val.type}')
+
         while strip_ns(strip_targs(val.type.name)) != 'Union':
             val = upcast_to_base(val)
 
@@ -467,21 +470,33 @@ class JsonNodePrinter(UnionPrinter):
         return f'[{type_name}{additional}]'
 
 def extract_map_entry(val):
+
+    # Tuple<>
     base_tuple_type = val.type.fields()[0].type
     as_base_tuple = val.cast(base_tuple_type)
+
+    # FwdTupleNode<>
     base_node_type = as_base_tuple.type.fields()[0].type
     as_base_node = as_base_tuple.cast(base_node_type)
-    key = as_base_node['_nodeData']
-    next_node_type = as_base_node.type.fields()[0].type
-    as_next_node = as_base_node.cast(next_node_type)
-    value = as_next_node['_nodeData']
+
+    # Leaf<Key>
+    key_leaf_type = as_base_node.type.fields()[0].type
+    as_key_leaf = as_base_node.cast(key_leaf_type)
+    key = as_key_leaf['_data']
+
+    # FwdTupleNode
+    value_node_type = as_base_node.type.fields()[1].type
+    as_value_node = as_base_node.cast(value_node_type)
+
+    value_leaf_type = as_value_node.type.fields()[0].type
+    as_value_leaf = as_value_node.cast(value_leaf_type)
+    value = as_value_leaf['_data']
     return key, value
 
 class JsonPrinter(TypePrinter):
     class JsonIterator(Iterator):
         def __init__(self, current):
             self.current = current
-            self.index = 0
 
         def __iter__(self):
             return self
@@ -490,8 +505,6 @@ class JsonPrinter(TypePrinter):
             if is_null(self.current):
                 raise StopIteration
 
-            index = self.index
-            self.index += 1
             key, value = extract_map_entry(self.current['data'])
             self.current = self.current['next']
             return f'[{key}]', value

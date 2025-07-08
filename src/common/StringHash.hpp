@@ -25,7 +25,7 @@ struct Hash <T, meta::EnableIf<meta::And<cds::impl::StringAbstract<T>, meta::Not
       exp *= exf;
     }
 
-    return hvl + *str * exp;
+    return hvl + static_cast<Size>(*str) * exp;
   }
 };
 } // namespace functional

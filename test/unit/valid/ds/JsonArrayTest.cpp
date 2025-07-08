@@ -4,7 +4,7 @@
 
 #include <cds/json/JSON>
 #include <cds/Format>
-#include <cds/meta/Platform>
+#include <sstream>
 
 #include <UnitTest.hpp>
 
@@ -22,7 +22,7 @@ TEST(JsonArrayTest, iList) {
   ASSERT_EQ(1, arr[0]);
   ASSERT_EQ(false, arr[1]);
   ASSERT_EQ("abc", arr[2]);
-  ASSERT_EQ(3, arr.size());
+  ASSERT_EQ(3u, arr.size());
 }
 
 // While some other tests are disabled for win32 due to MSVC
@@ -57,5 +57,12 @@ TEST(JsonArrayTest, ctrFromStringThrowing) {
 TEST(JsonArrayTest, fromLiteral) {
   using namespace cds::json;
   ASSERT_EQ(R"([12, false, "abc"])", cds::format("{}", R"([12, false, "abc"])"_json_array));
+}
+
+TEST(JsonArrayTest, ostream) {
+  std::stringstream oss;
+  JsonArray arr = R"([1, false, "abc"])";
+  oss << arr;
+  ASSERT_EQ(R"([1, false, "abc"])", oss.str());
 }
 #endif

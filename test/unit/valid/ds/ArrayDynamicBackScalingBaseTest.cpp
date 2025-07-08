@@ -33,11 +33,11 @@ public:
 TEST(ArrayDynamicBackScalingBaseTest, usingCustomAlloc) {
   int buffer[3] {1, 2, 3};
   struct LocalAlloc {
-    CDS_ATTR(nodiscard) int* allocate(int) const {
+    CDS_ATTR(nodiscard) int* allocate(cds::Size) const {
       return buf;
     }
 
-    void deallocate(int*, int) const {
+    void deallocate(int*, cds::Size) const {
       ignore = this;
     }
 
@@ -53,17 +53,17 @@ TEST(ArrayDynamicBackScalingBaseTest, usingCustomAlloc) {
   theArray.makeSpaceAt(1, theArray.data());
   theArray.data()[0] = 5;
   ASSERT_EQ(5, buffer[0]);
-  ASSERT_EQ(1, theArray.size());
+  ASSERT_EQ(1u, theArray.size());
 }
 
 TEST(ArrayDynamicBackScalingBaseTest, copyCtr) {
   int buffer[3] {1, 2, 3};
   struct LocalAlloc {
-    CDS_ATTR(nodiscard) int* allocate(int) const {
+    CDS_ATTR(nodiscard) int* allocate(cds::Size) const {
       return buf;
     }
 
-    void deallocate(int*, int) const {
+    void deallocate(int*, cds::Size) const {
       ignore = this;
     }
 
@@ -73,17 +73,17 @@ TEST(ArrayDynamicBackScalingBaseTest, copyCtr) {
   LocalAlloc const alloc{buffer};
   ArrayDynamicBackScalingBase<int, Equal<>, LocalAlloc, ArrayTraits<int>> theArray(alloc);
 
-  theArray.reserve(2);
+  theArray.reserve(2u);
   ASSERT_EQ(alloc.buf, theArray.data());
 
-  theArray.makeSpaceAt(1, theArray.data());
+  theArray.makeSpaceAt(1u, theArray.data());
   theArray.data()[0] = 5;
   ASSERT_EQ(5, buffer[0]);
-  ASSERT_EQ(1, theArray.size());
+  ASSERT_EQ(1u, theArray.size());
 
   auto aCopy = theArray;
   ASSERT_EQ(buffer, aCopy.data());
-  ASSERT_EQ(1, aCopy.size());
+  ASSERT_EQ(1u, aCopy.size());
 }
 
 TEST(ArrayDynamicBackScalingBaseTest, copyCtr2) {
@@ -106,11 +106,11 @@ TEST(ArrayDynamicBackScalingBaseTest, copyCtr2) {
 TEST(ArrayDynamicBackScalingBaseTest, copyCtr3) {
   MockDynamicBackScalingBase<int> anEmptyArray;
 
-  ASSERT_EQ(0, anEmptyArray.capacity());
+  ASSERT_EQ(0u, anEmptyArray.capacity());
   ASSERT_EQ(nullptr, anEmptyArray.data());
 
   auto const aCopy{anEmptyArray};
-  ASSERT_EQ(0, aCopy.capacity());
+  ASSERT_EQ(0u, aCopy.capacity());
   ASSERT_EQ(nullptr, aCopy.data());
 }
 
@@ -136,7 +136,7 @@ TEST(ArrayDynamicBackScalingBaseTest, iterSizedCtr) {
   MockDynamicBackScalingBase<int> anArray(cds::begin(nums), 3);
 
   ASSERT_EQ(ArrayTraits<int>::minCapacity, anArray.capacity());
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(3, anArray.data()[2]);
@@ -145,13 +145,13 @@ TEST(ArrayDynamicBackScalingBaseTest, iterSizedCtr) {
 TEST(ArrayDynamicBackScalingBaseTest, sizedCtr) {
   MockDynamicBackScalingBase<int> anArray(3);
   ASSERT_EQ(ArrayTraits<int>::minCapacity, anArray.capacity());
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
 }
 
 TEST(ArrayDynamicBackScalingBaseTest, sizedValCtr) {
   MockDynamicBackScalingBase<int> anArray(3, 5);
   ASSERT_EQ(ArrayTraits<int>::minCapacity, anArray.capacity());
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(5, anArray.data()[0]);
   ASSERT_EQ(5, anArray.data()[1]);
   ASSERT_EQ(5, anArray.data()[2]);
@@ -161,7 +161,7 @@ TEST(ArrayDynamicBackScalingBaseTest, iterCtr) {
   int const nums[]{1, 2, 3};
   MockDynamicBackScalingBase<int> anArray(nums, nums + 3);
   ASSERT_EQ(ArrayTraits<int>::minCapacity, anArray.capacity());
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(3, anArray.data()[2]);
@@ -171,7 +171,7 @@ TEST(ArrayDynamicBackScalingBaseTest, sizedRngCtr) {
   int const nums[] = {1, 2, 3};
   MockDynamicBackScalingBase<int> anArray(nums);
   ASSERT_EQ(ArrayTraits<int>::minCapacity, anArray.capacity());
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(3, anArray.data()[2]);
@@ -181,7 +181,7 @@ TEST(ArrayDynamicBackScalingBaseTest, nonSizedRngCtr) {
   std::list<int> nums = {1, 2, 3};
   MockDynamicBackScalingBase<int> anArray(nums);
   ASSERT_EQ(ArrayTraits<int>::minCapacity, anArray.capacity());
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(3, anArray.data()[2]);
@@ -190,7 +190,7 @@ TEST(ArrayDynamicBackScalingBaseTest, nonSizedRngCtr) {
 TEST(ArrayDynamicBackScalingBaseTest, initListCtr) {
   MockDynamicBackScalingBase<int> anArray{1, 2, 3};
   ASSERT_EQ(ArrayTraits<int>::minCapacity, anArray.capacity());
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(3, anArray.data()[2]);
@@ -202,7 +202,7 @@ TEST(ArrayDynamicBackScalingBaseTest, copy) {
   ignore = anArray;
   anArray = origArray;
   ASSERT_EQ(ArrayTraits<int>::minCapacity, anArray.capacity());
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(3, anArray.data()[2]);
@@ -214,7 +214,7 @@ TEST(ArrayDynamicBackScalingBaseTest, move) {
   ignore = anArray;
   anArray = std::move(origArray);
   ASSERT_EQ(ArrayTraits<int>::minCapacity, anArray.capacity());
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(3, anArray.data()[2]);
@@ -226,7 +226,7 @@ TEST(ArrayDynamicBackScalingBaseTest, iterAssign) {
   ignore = anArray;
   anArray = {1, 2, 3};
   ASSERT_EQ(ArrayTraits<int>::minCapacity, anArray.capacity());
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(3, anArray.data()[2]);
@@ -237,7 +237,7 @@ TEST(ArrayDynamicBackScalingBaseTest, iterAssignNonSized) {
   ignore = anArray;
   anArray = std::list<int>{1, 2, 3};
   ASSERT_EQ(ArrayTraits<int>::minCapacity, anArray.capacity());
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(3, anArray.data()[2]);
@@ -249,7 +249,7 @@ TEST(ArrayDynamicBackScalingBaseTest, iterAssignSized) {
   int const nums[]{1, 2, 3};
   anArray = nums;
   ASSERT_EQ(ArrayTraits<int>::minCapacity, anArray.capacity());
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(3, anArray.data()[2]);
@@ -258,7 +258,7 @@ TEST(ArrayDynamicBackScalingBaseTest, iterAssignSized) {
 TEST(ArrayDynamicBackScalingBaseTest, clearDestructs) {
   int alive = 0;
   struct X {
-    X(int& a) : alive{a} {alive++;}
+    explicit X(int& a) : alive{a} {alive++;}
     X(X const& a) : alive{a.alive} {alive++;}
     ~X() {alive--;}
 
@@ -273,28 +273,28 @@ TEST(ArrayDynamicBackScalingBaseTest, clearDestructs) {
   cds::impl::construct(anArray.data() + 2, alive);
 
   ASSERT_EQ(3, alive);
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   anArray.clear();
-  ASSERT_EQ(0, anArray.size());
+  ASSERT_EQ(0u, anArray.size());
   ASSERT_EQ(0, alive);
 }
 
 TEST(ArrayDynamicBackScalingBaseTest, capacity) {
   MockDynamicBackScalingBase<int> anArray(40);
-  ASSERT_EQ(40, anArray.capacity());
+  ASSERT_EQ(40u, anArray.capacity());
   MockDynamicBackScalingBase<int> anotherArray(5);
   ASSERT_EQ(ArrayTraits<int>::minCapacity, anotherArray.capacity());
   MockDynamicBackScalingBase<int> emptyArray;
-  ASSERT_EQ(0, emptyArray.capacity());
+  ASSERT_EQ(0u, emptyArray.capacity());
 }
 
 TEST(ArrayDynamicBackScalingBaseTest, size) {
   MockDynamicBackScalingBase<int> anArray(40);
-  ASSERT_EQ(40, anArray.size());
+  ASSERT_EQ(40u, anArray.size());
   MockDynamicBackScalingBase<int> anotherArray(5);
-  ASSERT_EQ(5, anotherArray.size());
+  ASSERT_EQ(5u, anotherArray.size());
   MockDynamicBackScalingBase<int> emptyArray;
-  ASSERT_EQ(0, emptyArray.size());
+  ASSERT_EQ(0u, emptyArray.size());
 }
 
 TEST(ArrayDynamicBackScalingBaseTest, data) {
@@ -326,41 +326,41 @@ TEST(ArrayDynamicBackScalingBaseTest, headTail) {
 
 TEST(ArrayDynamicBackScalingBaseTest, popBack) {
   MockDynamicBackScalingBase<int> anArray{1, 2, 3};
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(3, anArray.data()[2]);
   anArray.popBack();
-  ASSERT_EQ(2, anArray.size());
+  ASSERT_EQ(2u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   anArray.popBack();
-  ASSERT_EQ(1, anArray.size());
+  ASSERT_EQ(1u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   anArray.popBack();
-  ASSERT_EQ(0, anArray.size());
+  ASSERT_EQ(0u, anArray.size());
 }
 
 TEST(ArrayDynamicBackScalingBaseTest, takeBack) {
   MockDynamicBackScalingBase<int> anArray{1, 2, 3};
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(3, anArray.data()[2]);
   ASSERT_EQ(3, anArray.takeBack());
-  ASSERT_EQ(2, anArray.size());
+  ASSERT_EQ(2u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(2, anArray.takeBack());
-  ASSERT_EQ(1, anArray.size());
+  ASSERT_EQ(1u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(1, anArray.takeBack());
-  ASSERT_EQ(0, anArray.size());
+  ASSERT_EQ(0u, anArray.size());
 }
 
 TEST(ArrayDynamicBackScalingBaseTest, reserve) {
   MockDynamicBackScalingBase<int> anArray;
-  ASSERT_EQ(0, anArray.capacity());
+  ASSERT_EQ(0u, anArray.capacity());
   ASSERT_EQ(nullptr, anArray.data());
 
   anArray.reserve(5);
@@ -368,46 +368,46 @@ TEST(ArrayDynamicBackScalingBaseTest, reserve) {
   ASSERT_NE(nullptr, anArray.data());
 
   anArray.reserve(40);
-  ASSERT_EQ(40, anArray.capacity());
+  ASSERT_EQ(40u, anArray.capacity());
   ASSERT_NE(nullptr, anArray.data());
 
   auto const oldData = anArray.data();
   anArray.reserve(20);
-  ASSERT_EQ(40, anArray.capacity());
+  ASSERT_EQ(40u, anArray.capacity());
   ASSERT_EQ(oldData, anArray.data());
 }
 
 TEST(ArrayDynamicBackScalingBaseTest, shrinkTo) {
   MockDynamicBackScalingBase<int> anArray{1, 2, 3};
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(3, anArray.data()[2]);
-  anArray.shrinkTo(1);
-  ASSERT_EQ(1, anArray.size());
+  anArray.shrinkTo(1u);
+  ASSERT_EQ(1u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
 }
 
 TEST(ArrayDynamicBackScalingBaseTest, forceShinkTo) {
   MockDynamicBackScalingBase<int> anArray{1, 2, 3};
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(3, anArray.data()[2]);
   ASSERT_EQ(ArrayTraits<int>::minCapacity, anArray.capacity());
   anArray.forceShrinkTo(1);
-  ASSERT_EQ(1, anArray.capacity());
-  ASSERT_EQ(1, anArray.size());
+  ASSERT_EQ(1u, anArray.capacity());
+  ASSERT_EQ(1u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
 }
 
 TEST(ArrayDynamicBackScalingBaseTest, resizeImpl) {
   MockDynamicBackScalingBase<int> anArray{1, 2, 3};
-  ASSERT_EQ(3, anArray.size());
-  anArray.resizeImpl(1);
-  ASSERT_EQ(1, anArray.size());
-  anArray.resizeImpl(5, 10);
-  ASSERT_EQ(5, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
+  anArray.resizeImpl(1u);
+  ASSERT_EQ(1u, anArray.size());
+  anArray.resizeImpl(5u, 10);
+  ASSERT_EQ(5u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(10, anArray.data()[1]);
   ASSERT_EQ(10, anArray.data()[2]);
@@ -418,11 +418,11 @@ TEST(ArrayDynamicBackScalingBaseTest, resizeImpl) {
 TEST(ArrayDynamicBackScalingBaseTest, makeSpaceAt) {
   MockDynamicBackScalingBase<int> anArray{1, 2, 3};
 
-  cds::impl::fillNInitialize(anArray.makeSpaceAt(2, anArray.data() + 3), 2, 10);
-  cds::impl::fillNInitialize(anArray.makeSpaceAt(2, anArray.data() + 2), 2, 20);
-  cds::impl::fillNInitialize(anArray.makeSpaceAt(2, anArray.data()), 2, 30);
+  cds::impl::fillNInitialize(anArray.makeSpaceAt(2u, anArray.data() + 3), 2, 10);
+  cds::impl::fillNInitialize(anArray.makeSpaceAt(2u, anArray.data() + 2), 2, 20);
+  cds::impl::fillNInitialize(anArray.makeSpaceAt(2u, anArray.data()), 2, 30);
 
-  ASSERT_EQ(9, anArray.size());
+  ASSERT_EQ(9u, anArray.size());
   ASSERT_EQ(30, anArray.data()[0]);
   ASSERT_EQ(30, anArray.data()[1]);
   ASSERT_EQ(1, anArray.data()[2]);
@@ -445,7 +445,7 @@ TEST(ArrayDynamicBackScalingBaseTest, eraseRegion) {
   anArray.eraseRegion(anArray.data() + 4, anArray.data() + 6);
   anArray.eraseRegion(anArray.data(), anArray.data() + 2);
 
-  ASSERT_EQ(3, anArray.size());
+  ASSERT_EQ(3u, anArray.size());
   ASSERT_EQ(1, anArray.data()[0]);
   ASSERT_EQ(2, anArray.data()[1]);
   ASSERT_EQ(3, anArray.data()[2]);

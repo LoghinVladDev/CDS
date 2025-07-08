@@ -317,7 +317,7 @@ TEST(StandardFormatSpecificationTest, formatParseWidth) {
             (formatParseWidth<char>(cds::begin(str0), cds::end(str0))));
 
   char const str1[] = "5";
-  ASSERT_EQ(Tuple<>::of(cds::begin(str1) + 1, FormatWidthSpecification{5}),
+  ASSERT_EQ(Tuple<>::of(cds::begin(str1) + 1, FormatWidthSpecification{5u}),
             (formatParseWidth<char>(cds::begin(str1), cds::end(str1))));
 
   char const str2[] = "{}";
@@ -329,11 +329,11 @@ TEST(StandardFormatSpecificationTest, formatParseWidth) {
             (formatParseWidth<char>(cds::begin(str3), cds::end(str3))));
 
   char const str4[] = "5d";
-  ASSERT_EQ(Tuple<>::of(cds::begin(str4) + 1, FormatWidthSpecification{FormatSizeSpecification{5}}),
+  ASSERT_EQ(Tuple<>::of(cds::begin(str4) + 1, FormatWidthSpecification{FormatSizeSpecification{5u}}),
             (formatParseWidth<char>(cds::begin(str4), cds::end(str4))));
 
   char const str5[] = "{1}";
-  ASSERT_EQ(Tuple<>::of(cds::begin(str5) + 3, FormatWidthSpecification{FormatSizeSpecification{nullopt, 1}}),
+  ASSERT_EQ(Tuple<>::of(cds::begin(str5) + 3, FormatWidthSpecification{FormatSizeSpecification{nullopt, 1u}}),
             (formatParseWidth<char>(cds::begin(str5), cds::end(str5))));
 
   try {
@@ -381,11 +381,11 @@ TEST(StandardFormatSpecificationTest, formatParseWidth) {
   }
 
   char const str6[] = ".5";
-  ASSERT_EQ(Tuple<>::of(cds::begin(str6) + 2, FormatWidthSpecification{nullopt, FormatSizeSpecification{5}}),
+  ASSERT_EQ(Tuple<>::of(cds::begin(str6) + 2, FormatWidthSpecification{nullopt, FormatSizeSpecification{5u}}),
             (formatParseWidth<char>(cds::begin(str6), cds::end(str6))));
 
   char const str7[] = "10.5";
-  ASSERT_EQ(Tuple<>::of(cds::begin(str7) + 4, FormatWidthSpecification{FormatSizeSpecification{10}, FormatSizeSpecification{5}}),
+  ASSERT_EQ(Tuple<>::of(cds::begin(str7) + 4, FormatWidthSpecification{FormatSizeSpecification{10u}, FormatSizeSpecification{5u}}),
             (formatParseWidth<char>(cds::begin(str7), cds::end(str7))));
 
   try {
@@ -400,7 +400,7 @@ TEST(StandardFormatSpecificationTest, formatParseWidth) {
   }
 
   char const str8[] = "10.{}";
-  ASSERT_EQ(Tuple<>::of(cds::begin(str8) + 5, FormatWidthSpecification{FormatSizeSpecification{10}, FormatSizeSpecification{}}),
+  ASSERT_EQ(Tuple<>::of(cds::begin(str8) + 5, FormatWidthSpecification{FormatSizeSpecification{10u}, FormatSizeSpecification{}}),
             (formatParseWidth<char>(cds::begin(str8), cds::end(str8))));
 
   char const str9[] = "{}.{}";

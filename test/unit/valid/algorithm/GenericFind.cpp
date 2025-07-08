@@ -81,9 +81,9 @@ TEST(GenericFind, ownership) {
   auto cv = 2;
 
   auto cl1 = find(ci, cv);
-  auto cl2 = find(ci, (const int)2);
+  auto cl2 = find(ci, static_cast<int const>(2));
   auto cl3 = find(std::vector<int>{1, 2, 3}, cv);
-  auto cl4 = find(std::vector<int>{1, 2, 3}, (const int)2);
+  auto cl4 = find(std::vector<int>{1, 2, 3}, static_cast<int const>(2));
 
   auto cb1 = cl1.begin();
   auto cb2 = cl2.begin();

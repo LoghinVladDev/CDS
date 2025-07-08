@@ -66,7 +66,7 @@ public:
   }
 
   template <typename It, typename S, EnableIf<IsRandomAccessIterator<It, S>> = 0> CDS_ATTR(2(explicit, constexpr(11)))
-  BaseStaticVectorView(It first, S end) noexcept : BaseStaticVectorView(first, end - first) {}
+  BaseStaticVectorView(It first, S end) noexcept : BaseStaticVectorView(first, static_cast<Size>(end - first)) {}
 
   template <typename C, EnableIf<And<
       VectorViewConversion<C>,

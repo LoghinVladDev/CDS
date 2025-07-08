@@ -28,7 +28,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#if __APPLE__
+#if defined(__APPLE__)
 extern char** environ;
 
 int execvpe(const char* name, char* const* const argv, char* const* const envv) {
@@ -167,8 +167,8 @@ auto makeParserWithSink(ArgParser::Accepter&& accepter, ArgParser::Filter const&
 
 auto argParse(std::vector<std::string> const& args, std::vector<std::unique_ptr<ArgParser>> const& argParsers) {
   std::vector<ArgParser const*> acceptedParsers;
-  auto advance = 0;
-  for (auto argIdx = 0; argIdx < args.size(); argIdx += advance) {
+  auto advance = 0u;
+  for (auto argIdx = 0u; argIdx < args.size(); argIdx += advance) {
     for (auto const& parser: argParsers) {
       if (
         std::find_if(
@@ -180,14 +180,14 @@ auto argParse(std::vector<std::string> const& args, std::vector<std::unique_ptr<
         continue;
       }
 
-      auto filterIdx = 0;
+      auto filterIdx = 0u;
       auto lookaheadArgIdx = argIdx;
       while (lookaheadArgIdx < args.size() && parser->filter(filterIdx)(args[lookaheadArgIdx])) {
         ++filterIdx;
         ++lookaheadArgIdx;
       }
 
-      if (filterIdx == parser->filterCount() || (parser->isSink() && filterIdx > 0)) {
+      if (filterIdx == parser->filterCount() || (parser->isSink() && filterIdx > 0u)) {
         parser->accept({args.begin() + argIdx, args.end()});
         advance = filterIdx;
         acceptedParsers.push_back(parser.get());
@@ -195,7 +195,7 @@ auto argParse(std::vector<std::string> const& args, std::vector<std::unique_ptr<
       }
     }
 
-    if (advance == 0) {
+    if (advance == 0u) {
       std::cerr << "Invalid Argument: " << args[argIdx];
       break;
     }
@@ -239,11 +239,13 @@ auto locateTests(std::vector<std::filesystem::path>&& fileOrPaths) -> std::vecto
   return resolvedPaths;
 }
 
-enum class TestStepType {Compile, Run};
-enum class TestStepResult {Success, Failure};
-enum class TestStepPlatform {Linux, MacOs, All};
-enum class TestStepCompiler {Clang, Gcc, All};
-enum class Standard {Cpp11 = 0, Cpp14 = 1, Cpp17 = 2, Cpp20 = 3, Cpp23 = 4, Cpp2c = 5, Highest=Cpp2c, End = 6};
+enum class TestStepType : std::uint8_t {Compile, Run};
+enum class TestStepResult : std::uint8_t {Success, Failure};
+enum class TestStepPlatform : std::uint8_t {Linux, MacOs, All};
+enum class TestStepCompiler : std::uint8_t {Clang, Gcc, All};
+enum class Standard : std::uint8_t {
+  Cpp11 = 0, Cpp14 = 1, Cpp17 = 2, Cpp20 = 3, Cpp23 = 4, Cpp2c = 5, Highest=Cpp2c, End = 6
+};
 
 #if defined(__linux)
 auto constexpr currentPlatform = TestStepPlatform::Linux;
@@ -262,7 +264,7 @@ auto toString(Standard const std) {
     case Standard::Cpp17: return "17";
     case Standard::Cpp20: return "20";
     case Standard::Cpp23: return "23";
-    case Standard::Cpp2c: return "2c";
+    case Standard::Cpp2c: return "26";
     default:
       return "";
   }
@@ -334,6 +336,7 @@ std::unordered_map<std::string_view, Standard> const standardMap = {
     {"2a", Standard::Cpp20},
     {"23", Standard::Cpp23},
     {"2b", Standard::Cpp23},
+    {"26", Standard::Cpp2c},
     {"2c", Standard::Cpp2c},
 };
 
@@ -1228,13 +1231,13 @@ auto execute(std::vector<TestData> const& tests, std::vector<std::string> const&
   return total != skipped + successful;
 }
 
-auto amendCompilerBasedOnPlatform(auto cname, auto currentPlatform)
+auto amendCompilerBasedOnPlatform(auto cname, auto platform)
     -> std::tuple<std::string, std::vector<std::string>> {
-  if (currentPlatform == TestStepPlatform::Linux) {
+  if (platform == TestStepPlatform::Linux) {
     return {cname, {}};
   }
 
-  if (currentPlatform == TestStepPlatform::MacOs) {
+  if (platform == TestStepPlatform::MacOs) {
     if (cname == "clang++") {
       return {"/usr/bin/clang++", {}};
       // return {"/Library/Developer/CommandLineTools/usr/bin/clang++",

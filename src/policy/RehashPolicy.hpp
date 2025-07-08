@@ -25,6 +25,8 @@ public:
     Size size;
     BalanceType type;
   };
+
+  static_assert(sizeof(BalanceResult) == 2 * sizeof(Size));
 };
 
 namespace prp {
@@ -41,8 +43,10 @@ template <typename T> struct U64PrimeRehashTable {
   };
 };
 
+#if !CDS_ATTR(cpp17)
 // ODR before cpp17
 template <typename T> T const U64PrimeRehashTable<T>::_ft[_fts];
+#endif
 
 template <typename T> struct U32PrimeRehashTable {
   static Size constexpr _fts = 28U;
@@ -55,8 +59,10 @@ template <typename T> struct U32PrimeRehashTable {
   };
 };
 
+#if !CDS_ATTR(cpp17)
 // ODR before cpp17
 template <typename T> T const U32PrimeRehashTable<T>::_ft[_fts];
+#endif
 
 template <typename = Size> struct PrimeRehashTable {};
 template <> struct PrimeRehashTable<U64> : U64PrimeRehashTable<U64> {};
@@ -66,6 +72,7 @@ template <typename Table> class CDS_ATTR(ebo) TableRehashPolicy : public RehashP
 public:
   CDS_ATTR(2(explicit, constexpr(11))) TableRehashPolicy(U64 const lf = 1) noexcept : _lf(lf) {}
   CDS_ATTR(constexpr(11)) TableRehashPolicy(TableRehashPolicy const&) = default;
+  CDS_ATTR(constexpr(14)) auto operator=(TableRehashPolicy const&) -> TableRehashPolicy& = default;
 
   CDS_ATTR(constexpr(14)) auto reset() noexcept -> void {
     _fi = 0;

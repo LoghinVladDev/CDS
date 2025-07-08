@@ -29,7 +29,7 @@ TEST(TupleFormatTest, tupleFormat) {
   ASSERT_EQ("12", format("{:n}", Tuple<>::of(1, 2)));
 }
 
-#ifndef DCR_SINCECPP20
+#if !CDS_ATTR(cpp20)
 TEST(TupleFormatTest, tupleParseExceptions) {
   try {
     ignore = format("{:m}", Tuple<>::of(1, 2, 3));

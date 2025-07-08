@@ -46,6 +46,8 @@ TEST(MapEntryTest, tupleDecay) {
 
 TEST(MapEntryTest, ctrEmplaceEquiv) {
   struct X {
+    X(int x, int y, int z) : a{x}, b{y}, c{z} {}
+
     int a; int b; int c;
     bool operator==(X const& other) const noexcept {
       return a == other.a && b == other.b && c == other.c;

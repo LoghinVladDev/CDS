@@ -53,6 +53,11 @@ template <typename T, typename = typename IsTriviallyDestructible<T>::Type> stru
 
 template <typename T> struct OptionalStorageBase<T, True> {
   CDS_ATTR(constexpr(11)) OptionalStorageBase() noexcept : _uninitialized{}, _exists{false} {}
+  OptionalStorageBase(OptionalStorageBase const&) = default;
+  OptionalStorageBase(OptionalStorageBase&&) = default;
+  auto operator=(OptionalStorageBase const&) -> OptionalStorageBase& = default;
+  auto operator=(OptionalStorageBase&&) -> OptionalStorageBase& = default;
+
   CDS_ATTR(constexpr(11)) OptionalStorageBase(CDS_ATTR(unused) InPlace)
       CDS_ATTR(noexcept(IsNoexceptDefaultConstructible<T>::value)) : _object{}, _exists{true} {}
 
@@ -485,6 +490,7 @@ template <typename T> struct CDS_ATTR(ebo) OptionalMonadicBase : OptionalObserva
 template <typename T> struct CDS_ATTR(ebo) OptionalBase : OptionalMonadicBase<T> {
   using LocalBase = OptionalMonadicBase<T>;
   using LocalBase::LocalBase;
+  using LocalBase::operator=;
 };
 } // namespace impl
 } // namespace cds

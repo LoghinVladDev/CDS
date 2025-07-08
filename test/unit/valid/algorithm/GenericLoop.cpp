@@ -30,13 +30,13 @@ namespace {
 struct X {
   int x;
   void plusX() { x *= 2; }
-  bool even() const { return x % 2 == 0; }
+  CDS_ATTR(nodiscard) bool even() const { return x % 2 == 0; }
 };
 
 auto operator==(X const& lhs, int rhs) -> bool { return lhs.x == rhs; }
-auto operator==(int lhs, X const& rhs) -> bool { return lhs == rhs.x; }
+CDS_ATTR(maybe_unused) auto operator==(int lhs, X const& rhs) -> bool { return lhs == rhs.x; }
 auto operator!=(X const& lhs, int rhs) -> bool { return lhs.x != rhs; }
-auto operator!=(int lhs, X const& rhs) -> bool { return lhs != rhs.x; }
+CDS_ATTR(maybe_unused) auto operator!=(int lhs, X const& rhs) -> bool { return lhs != rhs.x; }
 auto even(X const& x) -> bool { return x.x % 2 == 0; }
 } // namespace
 
@@ -156,10 +156,10 @@ TEST(GenericLoop, lessThan) {
 
 TEST(GenericLoop, count) {
   X v[] = {{1}, {2}, {3}, {4}, {5}};
-  ASSERT_EQ(count(cds::begin(v), cds::end(v), even), 2);
-  ASSERT_EQ(count(cds::begin(v), cds::end(v), &X::even), 2);
-  ASSERT_EQ(count(cds::begin(v), cds::end(v), notFn(even)), 3);
-  ASSERT_EQ(count(cds::begin(v), cds::end(v), notFn(&X::even)), 3);
+  ASSERT_EQ(count(cds::begin(v), cds::end(v), even), 2u);
+  ASSERT_EQ(count(cds::begin(v), cds::end(v), &X::even), 2u);
+  ASSERT_EQ(count(cds::begin(v), cds::end(v), notFn(even)), 3u);
+  ASSERT_EQ(count(cds::begin(v), cds::end(v), notFn(&X::even)), 3u);
 }
 
 TEST(GenericLoop, any) {

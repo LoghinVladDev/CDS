@@ -112,8 +112,10 @@ template <typename I, typename S = I> struct IteratorTypeOf {
       : IteratorType::UnknownOrSentinel;
 };
 
+#if !CDS_ATTR(cpp17)
 // ODR before C++17
 template <typename I, typename S> IteratorType const IteratorTypeOf<I, S>::value;
+#endif
 
 template <template <typename...> class, typename T, typename = typename IsConst<T>::Type>
 struct NodeIteratorTraits {};

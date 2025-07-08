@@ -27,7 +27,7 @@ public:
   using Node = typename Traits::Node;
   using Value = typename Traits::Value;
 
-  CDS_ATTR(constexpr(11)) HashTableIterator() noexcept : HashTableIterator(nullptr) {};
+  CDS_ATTR(constexpr(11)) HashTableIterator() noexcept : HashTableIterator(nullptr) {}
   CDS_ATTR(constexpr(11)) HashTableIterator(HashTableIterator const&) noexcept = default;
   CDS_ATTR(constexpr(11)) HashTableIterator(HashTableIterator&&) noexcept = default;
   ~HashTableIterator() noexcept = default;
@@ -109,8 +109,8 @@ private:
 template <typename FT> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(
     HashTableIterator<FT> const& lhs, HashTableIterator<FT> const& rhs
 ) noexcept -> bool {
-  return lhs._curr == rhs._curr && lhs._curr != nullptr
-      || lhs._curr == rhs._curr && lhs._prev == rhs._prev;
+  return (lhs._curr == rhs._curr && lhs._curr != nullptr)
+      || (lhs._curr == rhs._curr && lhs._prev == rhs._prev);
 }
 
 template <typename FT> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(

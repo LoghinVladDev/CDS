@@ -145,10 +145,12 @@ template <typename T> struct AhoCorasickU32RehashTable {
 };
 #endif
 
+#if !CDS_ATTR(cpp17)
 // ODR before cpp17
 template <typename T> T const AhoCorasickU8RehashTable<T>::_ft[_fts];
 template <typename T> T const AhoCorasickU16RehashTable<T>::_ft[_fts];
 template <typename T> T const AhoCorasickU32RehashTable<T>::_ft[_fts];
+#endif
 
 template <typename T, Size = sizeof(T)> struct AhoCorasickRehashTable {};
 template <typename T> struct AhoCorasickRehashTable<T, 1> : AhoCorasickU8RehashTable<Size> {};
@@ -299,10 +301,10 @@ public:
       AS(mv(aho)),
       _vertices(xch(aho._vertices, nullptr)),
       _lengths(xch(aho._lengths, nullptr)),
-      _lSize(xch(aho._lSize, 0)),
-      _cap(xch(aho._cap, 0)),
-      _size(xch(aho._size, 0)),
-      _r(xch(aho._r, 0)) {}
+      _lSize(xch(aho._lSize, 0u)),
+      _cap(xch(aho._cap, 0u)),
+      _size(xch(aho._size, 0u)),
+      _r(xch(aho._r, 0u)) {}
 
   AhoCorasick(AhoCorasick const&) = delete;
   auto operator=(AhoCorasick const&) -> AhoCorasick& = delete;

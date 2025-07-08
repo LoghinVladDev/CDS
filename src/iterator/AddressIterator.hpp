@@ -197,8 +197,8 @@ template <typename Lhs, typename Rhs, bool fwd> CDS_ATTR(2(nodiscard, constexpr(
     AddressIteratorBase<Lhs, fwd> const& lhs, AddressIteratorBase<Rhs, fwd> const& rhs
 ) noexcept -> Size {
   return lhs._addr > rhs._addr
-      ? lhs._addr - rhs._addr
-      : rhs._addr - lhs._addr;
+      ? static_cast<Size>(lhs._addr - rhs._addr)
+      : static_cast<Size>(rhs._addr - lhs._addr);
 }
 
 template <typename I, EnableIf<IsBaseOf<AddressIteratorBase<typename I::Value, true>, I>> = 0>

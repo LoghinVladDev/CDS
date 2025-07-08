@@ -51,6 +51,7 @@ template <typename = void> struct StringTraitsPrivateCharConstants {
 template <> struct StringTraitsConstants<char> : StringTraitsCharConstants<> {};
 template <> struct StringTraitsPrivateConstants<char> : StringTraitsPrivateCharConstants<> {};
 
+#if !CDS_ATTR(cpp17)
 // ODR before cpp17
 template <typename T> char const StringTraitsCharConstants<T>::emptyString[1];
 template <typename T> char const StringTraitsCharConstants<T>::nullChar;
@@ -65,6 +66,7 @@ template <typename T> char constexpr StringTraitsPrivateCharConstants<T>::encode
 template <typename T> char constexpr StringTraitsPrivateCharConstants<T>::_true[5];
 template <typename T> char constexpr StringTraitsPrivateCharConstants<T>::_false[6];
 template <typename T> char constexpr StringTraitsPrivateCharConstants<T>::_null[5];
+#endif
 
 template <typename = void> struct StringTraitsWCharConstants {
   static wchar_t constexpr emptyString[1] = L"";
@@ -101,6 +103,7 @@ template <typename = void> struct StringTraitsPrivateWCharConstants {
 template <> struct StringTraitsConstants<wchar_t> : StringTraitsWCharConstants<> {};
 template <> struct StringTraitsPrivateConstants<wchar_t> : StringTraitsPrivateWCharConstants<> {};
 
+#if !CDS_ATTR(cpp17)
 // ODR before cpp17
 template <typename T> wchar_t const StringTraitsWCharConstants<T>::emptyString[1];
 template <typename T> wchar_t const StringTraitsWCharConstants<T>::nullChar;
@@ -115,6 +118,7 @@ template <typename T> wchar_t constexpr StringTraitsPrivateWCharConstants<T>::en
 template <typename T> wchar_t constexpr StringTraitsPrivateWCharConstants<T>::_true[5];
 template <typename T> wchar_t constexpr StringTraitsPrivateWCharConstants<T>::_false[6];
 template <typename T> wchar_t constexpr StringTraitsPrivateWCharConstants<T>::_null[5];
+#endif
 
 template <typename = void> struct StringTraitsChar16Constants {
   static char16_t constexpr emptyString[1] = u"";
@@ -151,6 +155,7 @@ template <typename = void> struct StringTraitsPrivateChar16Constants {
 template <> struct StringTraitsConstants<char16_t> : StringTraitsChar16Constants<> {};
 template <> struct StringTraitsPrivateConstants<char16_t> : StringTraitsPrivateChar16Constants<> {};
 
+#if !CDS_ATTR(cpp17)
 // ODR before cpp17
 template <typename T> char16_t const StringTraitsChar16Constants<T>::emptyString[1];
 template <typename T> char16_t const StringTraitsChar16Constants<T>::nullChar;
@@ -165,6 +170,7 @@ template <typename T> char16_t constexpr StringTraitsPrivateChar16Constants<T>::
 template <typename T> char16_t constexpr StringTraitsPrivateChar16Constants<T>::_true[5];
 template <typename T> char16_t constexpr StringTraitsPrivateChar16Constants<T>::_false[6];
 template <typename T> char16_t constexpr StringTraitsPrivateChar16Constants<T>::_null[5];
+#endif
 
 template <typename = void> struct StringTraitsChar32Constants {
   static char32_t constexpr emptyString[1] = U"";
@@ -201,6 +207,7 @@ template <typename = void> struct StringTraitsPrivateChar32Constants {
 template <> struct StringTraitsConstants<char32_t> : StringTraitsChar32Constants<> {};
 template <> struct StringTraitsPrivateConstants<char32_t> : StringTraitsPrivateChar32Constants<> {};
 
+#if !CDS_ATTR(cpp17)
 // ODR before cpp17
 template <typename T> char32_t const StringTraitsChar32Constants<T>::emptyString[1];
 template <typename T> char32_t const StringTraitsChar32Constants<T>::nullChar;
@@ -215,6 +222,7 @@ template <typename T> char32_t constexpr StringTraitsPrivateChar32Constants<T>::
 template <typename T> char32_t constexpr StringTraitsPrivateChar32Constants<T>::_true[5];
 template <typename T> char32_t constexpr StringTraitsPrivateChar32Constants<T>::_false[6];
 template <typename T> char32_t constexpr StringTraitsPrivateChar32Constants<T>::_null[5];
+#endif
 
 #if CDS_ATTR(cpp20)
 template <typename = void> struct StringTraitsChar8Constants {
@@ -251,25 +259,9 @@ template <typename = void> struct StringTraitsPrivateChar8Constants {
 
 template <> struct StringTraitsConstants<char8_t> : StringTraitsChar8Constants<> {};
 template <> struct StringTraitsPrivateConstants<char8_t> : StringTraitsPrivateChar8Constants<> {};
-
-// ODR before cpp17
-template <typename T> char8_t const StringTraitsChar8Constants<T>::emptyString[1];
-template <typename T> char8_t const StringTraitsChar8Constants<T>::nullChar;
-template <typename T> char8_t const StringTraitsChar8Constants<T>::digits[11];
-template <typename T> char8_t const StringTraitsChar8Constants<T>::lowercaseAlphabet[27];
-template <typename T> char8_t const StringTraitsChar8Constants<T>::uppercaseAlphabet[27];
-template <typename T> char8_t const StringTraitsChar8Constants<T>::vowels[11];
-template <typename T> char8_t const StringTraitsChar8Constants<T>::consonants[43];
-template <typename T> char8_t const StringTraitsChar8Constants<T>::whitespace[6];
-
-template <typename T> char8_t constexpr StringTraitsPrivateChar8Constants<T>::encoded[15];
-template <typename T> char8_t constexpr StringTraitsPrivateChar8Constants<T>::_true[5];
-template <typename T> char8_t constexpr StringTraitsPrivateChar8Constants<T>::_false[6];
-template <typename T> char8_t constexpr StringTraitsPrivateChar8Constants<T>::_null[5];
 #endif
 
-template <typename C> CDS_ATTR(consteval(20, constexpr(14)))
-bool charRangeEvaluation(C h1, C const t1, char h2, char const t2) {
+template <typename C> CDS_ATTR(constexpr(14)) bool charRangeEvaluation(C h1, C const t1, char h2, char const t2) {
   for (; h1 != t1 && h2 != t2; ++h1, ++h2) {
     if (static_cast<int>(h1) != static_cast<int>(h2)) {
       return false;

@@ -107,7 +107,7 @@ TEST(JsonArrayParserTest, valid) {
 
   ASSERT_EQ(JsonParseError::None, cds::get<1>(res));
   ASSERT_EQ("xyz", cds::get<0>(res));
-  ASSERT_EQ(3, arr.size());
+  ASSERT_EQ(3u, arr.size());
   ASSERT_EQ(true, arr[0]);
   ASSERT_EQ(123, arr[1]);
   ASSERT_EQ("abc", arr[2]);
@@ -121,7 +121,7 @@ TEST(JsonArrayParserTest, validWs) {
 
   ASSERT_EQ(JsonParseError::None, cds::get<1>(res));
   ASSERT_EQ("xyz", cds::get<0>(res));
-  ASSERT_EQ(3, arr.size());
+  ASSERT_EQ(3u, arr.size());
   ASSERT_EQ(true, arr[0]);
   ASSERT_EQ(123, arr[1]);
   ASSERT_EQ("abc", arr[2]);

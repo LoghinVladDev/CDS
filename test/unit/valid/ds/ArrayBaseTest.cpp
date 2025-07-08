@@ -23,11 +23,7 @@ using cds::asConst;
 using testing::citeq;
 using testing::rciteq;
 
-struct Upcaster;
-
 template <typename T> struct MockScalingBase {
-  friend struct Upcaster;
-
   MockScalingBase() = default;
 
   MockScalingBase(std::initializer_list<T> const& list) {
@@ -45,41 +41,41 @@ template <typename T> struct MockScalingBase {
     return elems + cnt;
   }
 
-  T const* head() const {
+  CDS_ATTR(nodiscard) T const* head() const {
     return elems;
   }
 
-  T const* tail() const {
+  CDS_ATTR(nodiscard) T const* tail() const {
     return elems + cnt;
   }
 
-  T* makeSpaceAt(int eCnt, T* p) {
+  T* makeSpaceAt(cds::Size eCnt, T* p) {
     auto p1 = p;
     cnt += eCnt;
     return p1;
   }
 
-  void resizeImpl(int size) {
+  void resizeImpl(cds::Size size) {
     cnt = size;
   }
 
-  void resizeImpl(int size, T val) {
-    for (int i = cnt; i < size; ++i) {
+  void resizeImpl(cds::Size size, T val) {
+    for (auto i = cnt; i < size; ++i) {
       elems[i] = val;
     }
     cnt = size;
   }
 
-  int size() const {
+  CDS_ATTR(nodiscard) cds::Size size() const {
     return cnt;
   }
 
-  T* eraseRegion(T* f, T* t) {
-    cnt -= t - f;
+  CDS_ATTR(nodiscard) T* eraseRegion(T* f, T* t) {
+    cnt -= static_cast<cds::Size>(t - f);
     return f;
   }
 
-  int capacity() const {
+  CDS_ATTR(nodiscard) cds::Size capacity() const {
     return 3;
   }
 
@@ -91,7 +87,7 @@ template <typename T> struct MockScalingBase {
     return elems;
   }
 
-  void forceShrinkTo(int s) {
+  void forceShrinkTo(cds::Size s) {
     cnt = cds::minOf(cnt, s);
   }
 
@@ -113,8 +109,8 @@ template <typename T> struct MockScalingBase {
     return e;
   }
 
-  T elems[3];
-  int cnt{0};
+  T elems[3]{};
+  cds::Size cnt{0};
 };
 
 template <typename T> using MockArrayBase = ArrayBase<T, Equal<>, Allocator<T>, MockScalingBase<T>>;
@@ -159,7 +155,7 @@ TEST(ArrayBaseTest, frontBack) {
 TEST(ArrayBaseTest, idx) {
   MockArrayBase<int> array{1, 2};
 
-  ASSERT_EQ(1, array[0]);
+  ASSERT_EQ(1, array[0u]);
   ASSERT_EQ(1, asConst(array)[0]);
   ASSERT_EQ(2, array[1]);
   ASSERT_EQ(2, asConst(array)[1]);
@@ -187,7 +183,7 @@ TEST(ArrayBaseTest, at) {
 TEST(ArrayBaseTest, resize) {
   MockArrayBase<int> array{1, 2, 3};
   array.resize(1);
-  ASSERT_EQ(1, array.size());
+  ASSERT_EQ(1u, array.size());
 }
 
 TEST(ArrayBaseTest, resizeInit) {
@@ -238,9 +234,9 @@ TEST(ArrayBaseTest, pushBack) {
     int a;
     bool operator==(X const& x) const {return a == x.a;}
     bool operator!=(X const& x) const {return a != x.a;}
-    X(X const& o) : a(o.a) {}
-    X(X&& o) : a(o.a) {}
-    X(int v) : a(v) {}
+    X(X const& o) = default;
+    X(X&& o) noexcept : a(o.a) {}
+    explicit X(int v) : a(v) {}
     X() = default;
   };
   MockArrayBase<X> array{};

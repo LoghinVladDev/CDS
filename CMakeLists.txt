@@ -15,7 +15,7 @@ else()
 endif()
 
 if(NOT DEFINED CDS_STANDARD)
-  set(CDS_STANDARD 23)
+  set(CDS_STANDARD 26)
   message("--   CDS_STANDARD not explicitly provided, defaulted to ${CDS_STANDARD}")
 endif()
 set(CMAKE_CXX_STANDARD ${CDS_STANDARD})

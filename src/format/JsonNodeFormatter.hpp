@@ -281,15 +281,11 @@ template <typename C, typename B, typename A> struct Formatter<json::impl::JsonN
       -> typename Ctx::Iterator {
     impl::fmt::StringFormatter<json::impl::JsonString, C> strFormatter;
     copyIntoFormatter(strFormatter);
-    strFormatter.numberSpecification.alternate = false;
+    strFormatter.numberSpecification.alternate = true;
     strFormatter.typeFlags =
-        impl::fmt::PermissiveFormatTypeFilter<json::impl::JsonString>{}(permissiveTypeFlags.getOr(0));
-    auto out = ctx.out();
-    *out = static_cast<C>('"');
-    auto subCtx = ctx.from(out);
-    out = strFormatter.format(str, subCtx);
-    *out = static_cast<C>('"');
-    return out;
+        impl::fmt::PermissiveFormatTypeFilter<json::impl::JsonString>{}(permissiveTypeFlags.getOr(0))
+        | static_cast<impl::fmt::FormatTypeFlags>(impl::fmt::FormatTypeFlagBits::Escaped);
+    return strFormatter.format(str, ctx);
   }
 
   template <typename N = json::impl::JsonNodeBase<>, typename V, typename Ctx> CDS_ATTR(2(nodiscard, constexpr(20)))

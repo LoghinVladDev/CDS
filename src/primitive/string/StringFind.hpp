@@ -218,7 +218,7 @@ public:
 
   CDS_ATTR(constexpr(14)) StringFindIterator(StringFindIterator&& it) noexcept :
       StateContainer<P>(mv(it)), _i(mv(it._i)), _b(it._b), _e(it._e),
-      _p(it._p), _m(xch(it._m, 0)) {}
+      _p(it._p), _m(xch(it._m, 0u)) {}
 
   CDS_ATTR(constexpr(20)) ~StringFindIterator() noexcept = default;
 
@@ -267,7 +267,7 @@ public:
     }
 
     _i = mv(iterator._i);
-    _m = xch(iterator._m, 0);
+    _m = xch(iterator._m, 0u);
     return *this;
   }
 
@@ -365,7 +365,7 @@ public:
 
   CDS_ATTR(constexpr(14)) StringProjectFindIterator(StringProjectFindIterator&& it) noexcept :
       StateContainer<P>(mv(it)), _i(mv(it._i)), _b(it._b), _e(it._e), _p(it._p),
-      _proj(it._proj), _m(xch(it._m, 0)) {}
+      _proj(it._proj), _m(xch(it._m, 0u)) {}
 
   CDS_ATTR(constexpr(20)) ~StringProjectFindIterator() noexcept = default;
 
@@ -414,7 +414,7 @@ public:
     }
 
     _i = mv(iterator._i);
-    _m = xch(iterator._m, 0);
+    _m = xch(iterator._m, 0u);
     return *this;
   }
 

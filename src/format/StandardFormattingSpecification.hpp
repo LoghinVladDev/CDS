@@ -126,6 +126,8 @@ template <typename T, typename C> struct StandardFormatter :
           chr = static_cast<C>('n');
         } else if (chr == static_cast<C>('\r')) {
           chr = static_cast<C>('r');
+        } else if (chr == static_cast<C>('\f')) {
+          chr = static_cast<C>('f');
         } else if (chr == static_cast<C>('"') || chr == static_cast<C>('\\')) {
           // nothing changes
         } else {
@@ -165,10 +167,10 @@ template <typename T, typename C> struct StandardFormatter :
     auto const maybeRequestedWidth = widthSpecification.width.transform(&FormatSizeSpecification::size).getOr(nullopt);
     auto const neg = value < 0;
     auto const uns = neg ? static_cast<U>(~value) : static_cast<U>(value);
-    auto const base = 0u != (typeFlags & FormatTypeFlagBits::Decimal)
-                      ? 10u : 0u != (typeFlags & FormatTypeFlagBits::Hex)
-                      ? 16u : 0u != (typeFlags & FormatTypeFlagBits::Binary)
-                      ? 2u : 8u;
+    U8 const base = 0u != (typeFlags & FormatTypeFlagBits::Decimal)
+                    ? 10u : 0u != (typeFlags & FormatTypeFlagBits::Hex)
+                    ? 16u : 0u != (typeFlags & FormatTypeFlagBits::Binary)
+                    ? 2u : 8u;
     assert(base != 8u ? true : 0u != (typeFlags & FormatTypeFlagBits::Octal) && "Undefined behavior");
     auto const ulen = SU::intLength(uns, base);
     auto const len = ulen
@@ -222,10 +224,10 @@ template <typename T, typename C> struct StandardFormatter :
   auto formatInteger(T0 value, Ctx& ctx) const CDS_ATTR(noexcept(false)) -> typename Ctx::Iterator {
     auto out = ctx.out();
     auto const maybeRequestedWidth = widthSpecification.width.transform(&FormatSizeSpecification::size).getOr(nullopt);
-    auto const base = 0u != (typeFlags & FormatTypeFlagBits::Decimal)
-                      ? 10u : 0u != (typeFlags & FormatTypeFlagBits::Hex)
-                      ? 16u : 0u != (typeFlags & FormatTypeFlagBits::Binary)
-                      ? 2u : 8u;
+    U8 const base = 0u != (typeFlags & FormatTypeFlagBits::Decimal)
+                    ? 10u : 0u != (typeFlags & FormatTypeFlagBits::Hex)
+                    ? 16u : 0u != (typeFlags & FormatTypeFlagBits::Binary)
+                    ? 2u : 8u;
     assert(base != 8u ? true : 0u != (typeFlags & FormatTypeFlagBits::Octal) && "Undefined behavior");
     auto ulen = SU::intLength(value, base);
     auto len = ulen
@@ -296,7 +298,7 @@ template <typename T, typename C> struct StandardFormatter :
   -> BaseString<C0, SU> {
     auto constexpr threshold = 128u;
     char smallBuf[threshold];
-    auto const actualLength = std::snprintf(smallBuf, threshold, formatString.data(), value);
+    auto const actualLength = static_cast<Size>(std::snprintf(smallBuf, threshold, formatString.data(), value));
     assert(actualLength < threshold && "smallBuf size too small for resulting char");
     return BaseString<C0, SU>(smallBuf, actualLength);
   }
@@ -306,7 +308,7 @@ template <typename T, typename C> struct StandardFormatter :
   -> BaseString<C0, SU> {
     auto constexpr threshold = 128u;
     wchar_t smallBuf[threshold];
-    auto const actualLength = std::swprintf(smallBuf, threshold, formatString.data(), value);
+    auto const actualLength = static_cast<Size>(std::swprintf(smallBuf, threshold, formatString.data(), value));
     assert(actualLength < threshold && "smallBuf size too small for resulting char");
     return BaseString<C0, SU>(smallBuf, actualLength);
   }

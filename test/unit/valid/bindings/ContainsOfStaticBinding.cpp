@@ -26,7 +26,7 @@ struct A_ContainsMember : public impl::ContainsOfStaticBinding<A_ContainsMember,
   CDS_ATTR(nodiscard) std::vector<int>::const_iterator begin() const { return data.begin(); }
   CDS_ATTR(nodiscard) std::vector<int>::const_iterator end() const { return data.end(); }
   std::vector<int> data;
-  explicit A_ContainsMember(std::initializer_list<int> const& i) : data(i) {}
+  A_ContainsMember(std::initializer_list<int> const& i) : data(i) {}
 };
 
 struct A_ContainsSelectedMember : public impl::ContainsOfStaticBinding<A_ContainsSelectedMember, With<Projector>> {
@@ -41,7 +41,7 @@ struct A_ContainsSelectedMember : public impl::ContainsOfStaticBinding<A_Contain
   CDS_ATTR(nodiscard) std::vector<int>::const_iterator begin() const { return data.begin(); }
   CDS_ATTR(nodiscard) std::vector<int>::const_iterator end() const { return data.end(); }
   std::vector<int> data;
-  explicit A_ContainsSelectedMember(std::initializer_list<int> const& i) : data(i) {}
+  A_ContainsSelectedMember(std::initializer_list<int> const& i) : data(i) {}
 };
 
 struct A_ContainsContainsSelectedMember :
@@ -59,7 +59,7 @@ struct A_ContainsContainsSelectedMember :
   CDS_ATTR(nodiscard) std::vector<int>::const_iterator begin() const { return data.begin(); }
   CDS_ATTR(nodiscard) std::vector<int>::const_iterator end() const { return data.end(); }
   std::vector<int> data;
-  explicit A_ContainsContainsSelectedMember(std::initializer_list<int> const& i) : data(i) {}
+  A_ContainsContainsSelectedMember(std::initializer_list<int> const& i) : data(i) {}
 };
 
 TEST(ContainsByValueOfStaticBinding, ContainsAnyOf) {

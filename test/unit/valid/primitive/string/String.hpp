@@ -1465,10 +1465,10 @@ TEST(STRING_TEST_GROUP, operatorAppendFloating) {
   S a;
   for (int i = 0; i < 10; ++i) {
     a += v;
-    std::snprintf(newBuf, 1024, "%f", v);
+    std::snprintf(newBuf, 1024, "%f", static_cast<double>(v));
     unsafe_strncat(equivBuf, newBuf, 1024);
     v += 1.1f;
-    ASSERT_EQ(a, (CHAR_TYPE const*)equivBuf);
+    ASSERT_EQ(a, static_cast<CHAR_TYPE const*>(equivBuf));
   }
 }
 
@@ -2054,7 +2054,7 @@ consteval auto cxx20_split(CS sv, auto s, auto... t) {
 
 consteval auto cxx20_resize() {
   CS s;
-  for (auto i = 0; i < 128; ++i) {
+  for (auto i = 0u; i < 128u; ++i) {
     s.resize(i, LITERAL('0'));
     for (int j = 0; j < i; ++j) {
       if (s[j] != LITERAL('0')) {
@@ -2063,7 +2063,7 @@ consteval auto cxx20_resize() {
     }
   }
   for (auto i = 128; i >= 0; --i) {
-    s.resize(i, LITERAL('0'));
+    s.resize(static_cast<cds::Size>(i), LITERAL('0'));
     for (int j = 0; j < i; ++j) {
       if (s[j] != LITERAL('0')) {
         return false;
@@ -2075,7 +2075,7 @@ consteval auto cxx20_resize() {
 
 consteval auto cxx20_reserve() {
   CS s = LITERAL("abc");
-  for (auto i = 0; i < 48; ++i) {
+  for (auto i = 0u; i < 48u; ++i) {
     s.reserve(i);
     if (s != LITERAL("abc")) {
       return false;
@@ -2083,7 +2083,7 @@ consteval auto cxx20_reserve() {
   }
 
   for (auto i = 48; i >= 0; --i) {
-    s.reserve(i);
+    s.reserve(static_cast<cds::Size>(i));
     if (s != LITERAL("abc")) {
       return false;
     }
@@ -2094,14 +2094,14 @@ consteval auto cxx20_reserve() {
 
 consteval auto cxx20_shrink() {
   CS s = LITERAL("abc");
-  for (auto i = 3; i < 48; ++i) {
+  for (auto i = 3u; i < 48u; ++i) {
     s.shrink(i);
     if (s != LITERAL("abc")) {
       return false;
     }
   }
 
-  for (auto i = 48; i >= 3; --i) {
+  for (auto i = 48u; i >= 3u; --i) {
     s.shrink(i);
     if (s != LITERAL("abc")) {
       return false;

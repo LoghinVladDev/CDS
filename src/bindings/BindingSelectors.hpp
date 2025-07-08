@@ -7,6 +7,7 @@
 #pragma once
 
 #include <cds/meta/Base>
+#include <cds/meta/Compiler>
 
 namespace cds {
 namespace impl {
@@ -42,12 +43,12 @@ template <template <typename...> class S, typename F, typename... R> struct TApp
 template <typename, typename> struct ContainsSelector : False {};
 template <typename... Pack, typename S> struct ContainsSelector<With<Pack...>, S> : AppearsIn<S, Pack...> {};
 
-template <typename W, typename... S> struct ContainsAllSelectors :
+template <typename W, typename... S> struct CDS_ATTR(maybe_unused) ContainsAllSelectors :
     All<meta::Bind<ContainsSelector, W, meta::Ph<0>>::template Type, S...> {};
 
-template <typename, template <typename...> class> struct TContainsSelector : False {};
+template <typename, template <typename...> class> struct CDS_ATTR(maybe_unused) TContainsSelector : False {};
 template <typename... Pack, template <typename...> class S>
-struct TContainsSelector<With<Pack...>, S> : TAppearsIn<S, Pack...> {};
+struct CDS_ATTR(maybe_unused) TContainsSelector<With<Pack...>, S> : TAppearsIn<S, Pack...> {};
 
 template <typename, typename> struct Push {};
 template <template <typename...> class F, typename... Pack, typename E> struct Push<F<Pack...>, E> {
@@ -68,11 +69,12 @@ template <template <typename...> class S, typename F, typename... R> struct TSpl
   >;
 };
 
-template <typename, template <typename...> class> struct TExtractSelector {
+template <typename, template <typename...> class> struct CDS_ATTR(maybe_unused) TExtractSelector {
   using Type = void;
 };
 
-template <typename... Pack, template <typename...> class S> struct TExtractSelector<With<Pack...>, S> {
+template <typename... Pack, template <typename...> class S>
+struct CDS_ATTR(maybe_unused) TExtractSelector<With<Pack...>, S> {
   using Type = typename TSplitMergeWithout<S, Pack...>::Type;
 };
 
@@ -96,7 +98,8 @@ template <template <typename...> class F, typename... P, typename T> struct With
   using Type = typename SplitMergeWithout<T, F, P...>::Type;
 };
 
-template <template <typename...> class F, typename... P, typename T1, typename ...T2> struct Without<F<P...>, T1, T2...> {
+template <template <typename...> class F, typename... P, typename T1, typename ...T2>
+struct CDS_ATTR(maybe_unused) Without<F<P...>, T1, T2...> {
   using Type = typename Without<typename Without<F<P...>, T2...>::Type, T1>::Type;
 };
 } // namespace sel

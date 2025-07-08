@@ -34,7 +34,7 @@ public:
   BaseDynamicVectorView(It first, Size const count) noexcept : _begin{&*first}, _end{_begin + count} {}
 
   template <typename It, typename S, EnableIf<IsRandomAccessIterator<It, S>> = 0> CDS_ATTR(2(explicit, constexpr(11)))
-  BaseDynamicVectorView(It first, S end) noexcept : BaseDynamicVectorView(first, end - first) {}
+  BaseDynamicVectorView(It first, S end) noexcept : BaseDynamicVectorView(first, static_cast<Size>(end - first)) {}
 
   template <typename C, EnableIf<And<
       VectorViewConversion<C>,
@@ -94,7 +94,7 @@ public:
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto size() const noexcept -> Size {
-    return _end - _begin;
+    return static_cast<Size>(_end - _begin);
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto empty() const noexcept -> Size {

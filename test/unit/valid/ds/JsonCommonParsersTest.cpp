@@ -3,7 +3,6 @@
 // STD: 11+
 
 #include <cds/json/JSON>
-#include <cds/meta/Platform>
 
 #include "UnitTest.hpp"
 
@@ -556,6 +555,10 @@ TEST(JsonCommonParserTest, parseErrorAsString) {
   ASSERT_EQ(
       "Expected object member key-value separator ':', received '<loc>'",
       parseErrorAsString(JsonParseError::ErrorObjectMemberWithoutKeyValueSeparator, loc)
+  );
+  ASSERT_EQ(
+      "Invalid escape sequence after '\\', received '<loc>'",
+      parseErrorAsString(JsonParseError::ErrorStringInvalidEscapeSequence, loc)
   );
 }
 

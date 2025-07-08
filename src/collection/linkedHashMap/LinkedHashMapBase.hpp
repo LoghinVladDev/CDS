@@ -168,7 +168,7 @@ public:
     return {Iterator{*tableIt.iter}, false};
   }
 
-  template <typename = void, EnableIf<IsDefaultConstructible<V>> = 0> CDS_ATTR(2(nodiscard, constexpr(20)))
+  template <typename V0 = V, EnableIf<IsDefaultConstructible<V0>> = 0> CDS_ATTR(2(nodiscard, constexpr(20)))
   auto operator[](K const& key) CDS_ATTR(noexcept(noexcept(emplace(key, V{})))) -> V& {
     return get<0>(emplace(key, V{}))->value();
   }

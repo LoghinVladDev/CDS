@@ -50,7 +50,7 @@ template <typename C, typename U> struct FindStringViewTransformer {
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(IB&& b, IE&& e, I&& i) const noexcept -> Idx {
     return fwd<IE>(e) == fwd<I>(i)
         ? BaseStringView<C, U>::npos
-        : (fwd<I>(i) - fwd<IB>(b));
+        : static_cast<Idx>(fwd<I>(i) - fwd<IB>(b));
   }
 };
 
@@ -262,7 +262,8 @@ public:
 
   template <typename FC, typename FU>
   friend auto operator<<(typename BaseStringView<FC, FU>::OStream& out, BaseStringView<FC, FU> const& obj)
-      CDS_ATTR(noexcept(noexcept(out.write(obj._data, obj._length)))) -> typename BaseStringView<FC, FU>::OStream&;
+      CDS_ATTR(noexcept(noexcept(out.write(obj._data, static_cast<SSize>(obj._length)))))
+      -> typename BaseStringView<FC, FU>::OStream&;
 
   template <typename S, typename T = SplitAllocationTraits<S>, EnableIf<Not<typename T::Required>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto split(S&& separator) const&
@@ -435,8 +436,9 @@ template <typename C, typename U> Idx const BaseStringView<C, U>::invalidIndex =
 
 template <typename FC, typename FU>
 auto operator<<(typename BaseStringView<FC, FU>::OStream& out, BaseStringView<FC, FU> const& obj)
-    CDS_ATTR(noexcept(noexcept(out.write(obj._data, obj._length)))) -> typename BaseStringView<FC, FU>::OStream& {
-  out.write(obj._data, obj._length);
+    CDS_ATTR(noexcept(noexcept(out.write(obj._data, static_cast<SSize>(obj._length)))))
+    -> typename BaseStringView<FC, FU>::OStream& {
+  out.write(obj._data, static_cast<SSize>(obj._length));
   return out;
 }
 

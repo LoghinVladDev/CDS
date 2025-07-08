@@ -231,7 +231,7 @@ public:
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto size() const noexcept -> Size {
-    return _tail - _head;
+    return static_cast<Size>(_tail - _head);
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto data() const noexcept -> T const* {

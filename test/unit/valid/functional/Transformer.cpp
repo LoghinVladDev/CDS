@@ -27,7 +27,7 @@ TEST(Transformer, identity) {
 TEST(Transformer, transparency) {
   Identity<> const id;
   ASSERT_EQ(id(5), 5);
-  ASSERT_EQ(id(S(5)), S(5));
+  ASSERT_EQ(id(S(4)), S(4));
 }
 
 #ifdef DCR_SINCECPP11

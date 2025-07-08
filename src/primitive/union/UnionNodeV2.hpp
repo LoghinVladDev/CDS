@@ -377,10 +377,12 @@ template <template <unsigned> class F, unsigned... is> struct FunctionalVisitorT
 template <template <unsigned> class F, unsigned size> struct FunctionalVisitorTable :
     FunctionalVisitorTableImpl<F, MakeIndexSequence<size>> {};
 
+#if !CDS_ATTR(cpp17)
 // ODR before cpp17
 template <template <unsigned> class F, unsigned... is> template<typename... InvokeArgs>
 Common<Decay<decltype(F<is>::template visit<InvokeArgs...>)>...> const
     FunctionalVisitorTableImpl<F, IndexSequence<is...>>::Table<InvokeArgs...>::table[sizeof...(is)];
+#endif
 
 template <unsigned idx> struct UnionDestroyVisitor {
   template <typename Union> CDS_ATTR(constexpr(14)) static auto visit(Union &storage) noexcept -> void {
@@ -1143,7 +1145,10 @@ template <typename... Types> struct UnionVisitationBase<Pack<Types...>> : UnionO
 };
 
 template <typename = void> struct ValuelessTypeInfo { static char constexpr name[10u] = "valueless"; };
+
+#if !CDS_ATTR(cpp17)
 template <typename T> char const ValuelessTypeInfo<T>::name[10u];
+#endif
 } // namespace unionImpl
 } // namespace impl
 

@@ -40,6 +40,7 @@ TEST(HashMapBaseTest, emplace) {
 
 TEST(HashMapBaseTest, multiArgEmplace) {
   struct X {
+    X(int x, int y, int z) : a{x}, b{y}, c{z} {}
     int a; int b; int c;
     bool operator==(X const& o) const {
       return a == o.a && b == o.b && c == o.c;
@@ -62,7 +63,7 @@ TEST(HashMapBaseTest, indexOp) {
   ASSERT_NE(map.end(), map.find(0));
   ASSERT_NE(map.end(), map.find(5));
   ASSERT_NE(map.end(), map.find(20));
-  ASSERT_EQ(3, map.size());
+  ASSERT_EQ(3u, map.size());
 
   ASSERT_EQ(2, map.find(0)->value());
   ASSERT_EQ(1, map.find(5)->value());

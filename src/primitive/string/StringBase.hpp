@@ -135,7 +135,7 @@ template <typename C, typename U, typename A> struct FindStringTransformer {
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(IB&& b, IE&& e, I&& i) const noexcept -> Idx {
     return fwd<IE>(e) == fwd<I>(i)
         ? BaseString<C, U, A>::npos
-        : fwd<I>(i) - fwd<IB>(b);
+        : static_cast<Idx>(fwd<I>(i) - fwd<IB>(b));
   }
 };
 
@@ -195,8 +195,8 @@ public:
 
 #if CDS_ATTR(cpp20)
   CDS_ATTR(2(explicit, constexpr(20))) BaseString(A const& alloc = A{}) noexcept :
-      A{alloc},
-      sbo::StringData<C>{nullptr, 0U, 0U} {
+      sbo::StringData<C>{nullptr, 0U, 0U},
+      A{alloc} {
     if (!inConstexpr()) {
       sboInit();
     }
@@ -245,7 +245,7 @@ public:
       BaseString(value ? Constants::_true : Constants::_false, value ? 4 : 5, alloc) {}
 
   CDS_ATTR(2(implicit, constexpr(20))) BaseString(Char character, A const& alloc = A()) noexcept :
-      BaseString(&character, minOf(character, 1), alloc) {}
+      BaseString(&character, minOf(character, static_cast<Char>(1)), alloc) {}
 
   template <typename N, EnableIf<IsIntegral<N>> = 0>
   CDS_ATTR(2(implicit, constexpr(20))) BaseString(N integral, A const& alloc = A()) noexcept : A(alloc) {
@@ -521,7 +521,8 @@ public:
 
   template <typename FC, typename FU, typename FA>
   friend auto operator<<(typename BaseString<FC, FU, FA>::OStream& out, BaseString<FC, FU, FA> const& obj)
-      CDS_ATTR(noexcept(noexcept(out.write(obj.data(), obj.length())))) -> typename BaseString<FC, FU, FA>::OStream&;
+      CDS_ATTR(noexcept(noexcept(out.write(obj.data(), static_cast<SSize>(obj.length())))))
+      -> typename BaseString<FC, FU, FA>::OStream&;
 
   template <typename S, typename T = SplitAllocationTraits<S>, EnableIf<Not<typename T::Required>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto split(S&& separator) const&
@@ -643,7 +644,7 @@ public:
     }
 
 #if CDS_ATTR(cpp20)
-    if constexpr(inConstexpr()) {
+    if (inConstexpr()) {
       construct(
         impl::fillInitialize(
           impl::copyInitialize(oldBuf, oldBuf + minOf(oldLen, size), data()),
@@ -1296,7 +1297,7 @@ private:
 
   template <typename I, typename S>
   CDS_ATTR(constexpr(14)) auto append(I b, S e) CDS_ATTR(noexcept(false)) -> BaseString& {
-    auto const seqLen = e - b;
+    auto const seqLen = static_cast<Size>(e - b);
     auto const reqLen = seqLen + length();
     if (reqLen <= capacity()) {
       return uncheckedAppend(b, e);
@@ -1327,7 +1328,7 @@ private:
   template <typename I, typename S>
   CDS_ATTR(constexpr(14)) auto uncheckedAppend(I b, S e) CDS_ATTR(noexcept(false)) -> BaseString& {
     construct(impl::copyInitialize(b, e, data() + length()), STraits::nullChar);
-    auto const newLen = length() + (e - b);
+    auto const newLen = length() + static_cast<Size>(e - b);
     if (sh()) {
       _sbo.lenSbo = static_cast<U8>(newLen << 1u | 1u);
     } else {
@@ -1345,8 +1346,9 @@ template <typename C, typename U, typename A> Size const BaseString<C, U, A>::mi
 
 template <typename FC, typename FU, typename FA>
 auto operator<<(typename BaseString<FC, FU, FA>::OStream& out, BaseString<FC, FU, FA> const& obj)
-    CDS_ATTR(noexcept(noexcept(out.write(obj.data(), obj.length())))) -> typename BaseString<FC, FU, FA>::OStream& {
-  out.write(obj.data(), obj.length());
+    CDS_ATTR(noexcept(noexcept(out.write(obj.data(), static_cast<SSize>(obj.length())))))
+    -> typename BaseString<FC, FU, FA>::OStream& {
+  out.write(obj.data(), static_cast<SSize>(obj.length()));
   return out;
 }
 
@@ -1427,7 +1429,7 @@ template <typename FC, typename FU, typename FA> CDS_ATTR(2(nodiscard, constexpr
   using Constants = meta::impl::StringTraitsPrivateConstants<FC>;
   BaseString<FC, FU, FA> res;
   auto const* buf = rhs ? Constants::_true : Constants::_false;
-  auto const len = rhs ? 4 : 5;
+  auto const len = rhs ? 4u : 5u;
   res.reserve(lhs.size() + len);
   res.uncheckedAppend(lhs.begin(), lhs.end()).uncheckedAppend(buf, buf + len);
   return res;
@@ -1438,7 +1440,7 @@ template <typename FC, typename FU, typename FA> CDS_ATTR(2(nodiscard, constexpr
   using Constants = meta::impl::StringTraitsPrivateConstants<FC>;
   BaseString<FC, FU, FA> res;
   auto const* buf = lhs ? Constants::_true : Constants::_false;
-  auto const len = lhs ? 4 : 5;
+  auto const len = lhs ? 4u : 5u;
   res.reserve(rhs.size() + len);
   res.uncheckedAppend(buf, buf + len).uncheckedAppend(rhs.begin(), rhs.end());
   return res;
@@ -1449,7 +1451,7 @@ template <typename FC, typename FU, typename FA> CDS_ATTR(2(nodiscard, constexpr
   using Constants = meta::impl::StringTraitsPrivateConstants<FC>;
   auto res = mv(lhs);
   auto const* buf = rhs ? Constants::_true : Constants::_false;
-  auto const len = rhs ? 4 : 5;
+  auto const len = rhs ? 4u : 5u;
   res.reserve(res.size() + len);
   res.uncheckedAppend(buf, buf + len);
   return res;

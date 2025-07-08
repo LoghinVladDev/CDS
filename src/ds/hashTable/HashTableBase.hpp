@@ -85,7 +85,7 @@ public:
 
   CDS_ATTR(constexpr(14)) HashTableBase(HashTableBase&& table) noexcept :
       H(mv(table)), RP(mv(table)), AS(mv(table)),
-      _bCnt(xch(table._bCnt, 0)), _eCnt(xch(table._eCnt, 0)),
+      _bCnt(xch(table._bCnt, 0u)), _eCnt(xch(table._eCnt, 0u)),
       _bArr(xch(table._bArr, nullptr)) {}
 
   CDS_ATTR(constexpr(20)) ~HashTableBase() noexcept {
@@ -193,8 +193,8 @@ protected:
 
   CDS_ATTR(constexpr(14)) auto moveOnceClean(HashTableBase&& table) noexcept -> void {
     _bArr = xch(table._bArr, nullptr);
-    _bCnt = xch(table._bCnt, 0);
-    _eCnt = xch(table._eCnt, 0);
+    _bCnt = xch(table._bCnt, 0u);
+    _eCnt = xch(table._eCnt, 0u);
     H::operator=(mv(table));
     RP::operator=(mv(table));
     AS::operator=(mv(table));
@@ -225,7 +225,7 @@ public:
       CDS_ATTR(noexcept(
           noexcept(construct(alloc(), nullptr, fwd<A>(args)...))
           && noexcept(fn::invoke(rvalue<KC>(), fn::invoke(rvalue<KP>(), rvalue<Node>().data), key))
-          && noexcept(alloc(0))
+          && noexcept(alloc(0u))
           && noexcept(fn::invoke(rvalue<H>(), key))
       )) -> TryEmplaceResult<T> {
     if (!_bArr) {
@@ -235,7 +235,7 @@ public:
     auto const hash = fn::invoke(hasher(), key);
     auto*& buck = bucket(hash);
     auto head = buck;
-    auto size = 0;
+    auto size = 0u;
     decltype(head) prev = nullptr;
     while (head) {
       if (fn::invoke(comparator(), fn::invoke(projector(), head->data), key)) {
@@ -254,7 +254,7 @@ public:
       return {{_bArr, _bCnt, head, nullptr, static_cast<Size>(&buck - _bArr)}, true};
     }
 
-    auto const rh = RP::balance(_bCnt, _eCnt, 1);
+    auto const rh = RP::balance(_bCnt, _eCnt, 1u);
     if (rh.type != RP::BalanceType::Required) {
       return {{_bArr, _bCnt, head, nullptr, static_cast<Size>(&buck - _bArr)}, true};
     }
@@ -268,7 +268,7 @@ public:
       return;
     }
 
-    for(decltype(_bCnt) bIdx = 0; bIdx < _bCnt; ++bIdx) {
+    for(decltype(_bCnt) bIdx = 0u; bIdx < _bCnt; ++bIdx) {
       auto*& head = _bArr[bIdx];
       while (head != nullptr) {
         auto copy = head;

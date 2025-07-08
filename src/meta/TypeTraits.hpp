@@ -316,6 +316,7 @@ template <typename = void> struct Double { static char constexpr name[7u] = "dou
 template <typename = void> struct Char8T { static char constexpr name[8u] = "char8_t"; };
 #endif // #if CDS_ATTR(cpp20)
 
+#if !CDS_ATTR(cpp17)
 // ODR before cpp17
 template <typename T> char const Unknown<T>::name[8u];
 template <typename T> char const Void<T>::name[5u];
@@ -333,10 +334,7 @@ template <typename T> char const UnsignedInt<T>::name[13u];
 template <typename T> char const UnsignedLong<T>::name[14u];
 template <typename T> char const Float<T>::name[6u];
 template <typename T> char const Double<T>::name[7u];
-
-#if CDS_ATTR(cpp20)
-template <typename T> char const Char8T<T>::name[8u];
-#endif // #if CDS_ATTR(cpp20)
+#endif
 } // namespace primitiveTypeInfoNames
 } // namespace impl
 

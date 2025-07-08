@@ -39,7 +39,7 @@ template <typename C> struct Pointer {
 
     auto head = ptr;
     for (; *head != '\0'; ++head);
-    return head - ptr;
+    return static_cast<Size>(head - ptr);
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) static auto data(C* ptr) noexcept -> C* {

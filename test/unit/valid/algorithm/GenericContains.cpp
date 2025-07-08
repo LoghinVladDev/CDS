@@ -49,7 +49,7 @@ TEST(GenericContains, contains) {
 
 struct A_eximpl_sel {
   template <typename P>
-  bool contains(int x, P&& projector) {
+  bool contains(unsigned x, P&& projector) {
     if (fwd<P>(projector)(data[0]) == x) { return true; }
     if (fwd<P>(projector)(data[1]) == x) { return true; }
     if (fwd<P>(projector)(data[2]) == x) { return true; }
@@ -70,11 +70,11 @@ template <typename I, typename V, typename P> CDS_ATTR(constexpr(14)) auto conta
 } // namespace
 
 TEST(GenericContains, containsSelected) {
-  ASSERT_FALSE(contains(A_eximpl_sel(), 0, functional::memFn(&std::string::length)));
-  ASSERT_TRUE(contains(A_eximpl_sel(), 1, functional::memFn(&std::string::length)));
-  ASSERT_TRUE(contains(A_eximpl_sel(), 2, functional::memFn(&std::string::length)));
-  ASSERT_TRUE(contains(A_eximpl_sel(), 3, functional::memFn(&std::string::length)));
-  ASSERT_FALSE(contains(A_eximpl_sel(), 4, functional::memFn(&std::string::length)));
+  ASSERT_FALSE(contains(A_eximpl_sel(), 0u, functional::memFn(&std::string::length)));
+  ASSERT_TRUE(contains(A_eximpl_sel(), 1u, functional::memFn(&std::string::length)));
+  ASSERT_TRUE(contains(A_eximpl_sel(), 2u, functional::memFn(&std::string::length)));
+  ASSERT_TRUE(contains(A_eximpl_sel(), 3u, functional::memFn(&std::string::length)));
+  ASSERT_FALSE(contains(A_eximpl_sel(), 4u, functional::memFn(&std::string::length)));
 }
 
 TEST(GenericContains, containsWithoutContainsMem) {
@@ -175,7 +175,7 @@ TEST(GenericContains, FunctionalSelected) {
 #ifdef DCR_SINCECPP14
 struct A_eximpl_sel_c {
   template <typename P>
-  constexpr bool contains(int x, P&& projector) {
+  constexpr bool contains(unsigned  x, P&& projector) {
     if (fwd<P>(projector)(data[0]) == x) { return true; }
     if (fwd<P>(projector)(data[1]) == x) { return true; }
     if (fwd<P>(projector)(data[2]) == x) { return true; }
@@ -186,11 +186,11 @@ struct A_eximpl_sel_c {
 };
 
 TEST(GenericContains, cpp14Constexpr) {
-  struct A_eximpl_c { CDS_ATTR(nodiscard) constexpr bool contains(int x) const { (void) this; return x == 1 || x == 2 || x == 3; } };
-  static_assert(!contains(A_eximpl_c(), 0), "constexpr contains failed");
-  static_assert(contains(A_eximpl_c(), 1), "constexpr contains failed");
-  static_assert(!contains(A_eximpl_sel_c(), 0, functional::memFn(&StringView::length)), "constexpr contains by projector failure");
-  static_assert(contains(A_eximpl_sel_c(), 1, functional::memFn(&StringView::length)), "constexpr contains by projector failure");
+  struct A_eximpl_c { CDS_ATTR(nodiscard) constexpr bool contains(unsigned x) const { (void) this; return x == 1u || x == 2u || x == 3u; } };
+  static_assert(!contains(A_eximpl_c(), 0u), "constexpr contains failed");
+  static_assert(contains(A_eximpl_c(), 1u), "constexpr contains failed");
+  static_assert(!contains(A_eximpl_sel_c(), 0u, functional::memFn(&StringView::length)), "constexpr contains by projector failure");
+  static_assert(contains(A_eximpl_sel_c(), 1u, functional::memFn(&StringView::length)), "constexpr contains by projector failure");
 
   struct X {
     CDS_ATTR(nodiscard) constexpr bool contains(int x) const { (void) this; return x == 1; }

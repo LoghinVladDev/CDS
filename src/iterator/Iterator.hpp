@@ -99,7 +99,7 @@ CDS_ATTR(2(nodiscard, constexpr(11))) auto crend(T&& range) noexcept -> typename
 
 template <typename I, typename S, EnableIf<IsRandomAccessIterator<I, S>> = 0>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto dist(I const& begin, S const& end) noexcept -> Size {
-  return end - begin;
+  return static_cast<Size>(end - begin);
 }
 
 template <typename I, typename S, EnableIf<And<Not<IsRandomAccessIterator<I, S>>, IsForwardIterator<I, S>>> = 0>

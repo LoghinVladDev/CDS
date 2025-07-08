@@ -66,7 +66,7 @@ TEST(VectorTest, IterCtr) {
   array<int, 3> from {1, 2, 3};
   TestVector<int> v {from.begin(), from.end()};
   ASSERT_FALSE(v.empty());
-  ASSERT_EQ(3, v.size());
+  ASSERT_EQ(3u, v.size());
   ASSERT_TRUE(citeq(v, from));
 }
 
@@ -74,8 +74,8 @@ TEST(VectorTest, EmptyIterCtr) {
   array<int, 0> empty {};
   TestVector<int> v {empty.begin(), empty.end()};
   ASSERT_TRUE(v.empty());
-  ASSERT_EQ(0, v.size());
-  ASSERT_EQ(0, v.capacity());
+  ASSERT_EQ(0u, v.size());
+  ASSERT_EQ(0u, v.capacity());
   ASSERT_EQ(nullptr, v.data());
   ASSERT_TRUE(citeq(v, array<int, 0>{}));
 }
@@ -88,7 +88,7 @@ TEST(VectorTest, CopyCtr) {
   ASSERT_FALSE(v0.empty());
   ASSERT_NE(v0.data(), v1.data());
   ASSERT_FALSE(v1.empty());
-  ASSERT_EQ(3, v1.size());
+  ASSERT_EQ(3u, v1.size());
   ASSERT_TRUE(citeq(v1, from));
 
   TestVector<int> v2;
@@ -112,7 +112,7 @@ TEST(VectorTest, MoveCtr) {
 
   ASSERT_EQ(v1.data(), v0p);
   ASSERT_FALSE(v1.empty());
-  ASSERT_EQ(3, v1.size());
+  ASSERT_EQ(3u, v1.size());
   ASSERT_TRUE(citeq(v1, from));
 
   TestVector<int> v2;
@@ -128,7 +128,7 @@ TEST(VectorTest, ItCtrSized) {
   array<int, 3> values {1, 2, 3};
   TestVector<int> v {values.begin(), 2};
   ASSERT_FALSE(v.empty());
-  ASSERT_EQ(2, v.size());
+  ASSERT_EQ(2u, v.size());
   ASSERT_TRUE(iteq(v.begin(), v.end(), values.begin(), values.begin() + 2));
 }
 
@@ -136,8 +136,8 @@ TEST(VectorTest, ItCtrSizedEmpty) {
   vector<int> values {};
   TestVector<int> v {values.begin(), 0};
   ASSERT_TRUE(v.empty());
-  ASSERT_EQ(0, v.size());
-  ASSERT_EQ(0, v.capacity());
+  ASSERT_EQ(0u, v.size());
+  ASSERT_EQ(0u, v.capacity());
   ASSERT_EQ(nullptr, v.data());
   ASSERT_TRUE(citeq(v, vector<int>{}));
 }
@@ -146,7 +146,7 @@ TEST(VectorTest, SizedRngCtr) {
   vector<int> values {1, 2, 3};
   TestVector<int> v {values};
   ASSERT_FALSE(v.empty());
-  ASSERT_EQ(3, v.size());
+  ASSERT_EQ(3u, v.size());
   ASSERT_TRUE(citeq(v, values));
 }
 
@@ -154,8 +154,8 @@ TEST(VectorTest, SizedRngCtrEmpty) {
   vector<int> values {};
   TestVector<int> v {values};
   ASSERT_TRUE(v.empty());
-  ASSERT_EQ(0, v.size());
-  ASSERT_EQ(0, v.capacity());
+  ASSERT_EQ(0u, v.size());
+  ASSERT_EQ(0u, v.capacity());
   ASSERT_EQ(nullptr, v.data());
   ASSERT_TRUE(citeq(v, values));
 }
@@ -164,7 +164,7 @@ TEST(VectorTest, SizedRngCtrNoRAIT) {
   list<int> values {1, 2, 3};
   TestVector<int> v {values};
   ASSERT_FALSE(v.empty());
-  ASSERT_EQ(3, v.size());
+  ASSERT_EQ(3u, v.size());
   ASSERT_TRUE(citeq(v, values));
 }
 
@@ -172,8 +172,8 @@ TEST(VectorTest, SizedRngCtrEmptyNORAIT) {
   list<int> values {};
   TestVector<int> v {values};
   ASSERT_TRUE(v.empty());
-  ASSERT_EQ(0, v.size());
-  ASSERT_EQ(0, v.capacity());
+  ASSERT_EQ(0u, v.size());
+  ASSERT_EQ(0u, v.capacity());
   ASSERT_EQ(nullptr, v.data());
   ASSERT_TRUE(citeq(v, values));
 }
@@ -182,7 +182,7 @@ TEST(VectorTest, NonSizedRngCtr) {
   NonSizedVector<int> values {1, 2, 3};
   TestVector<int> v {values};
   ASSERT_FALSE(v.empty());
-  ASSERT_EQ(3, v.size());
+  ASSERT_EQ(3u, v.size());
   ASSERT_TRUE(citeq(v, values));
 }
 
@@ -190,8 +190,8 @@ TEST(VectorTest, NonSizedRngCtrEmpty) {
   NonSizedVector<int> values {};
   TestVector<int> v {values};
   ASSERT_TRUE(v.empty());
-  ASSERT_EQ(0, v.size());
-  ASSERT_EQ(0, v.capacity());
+  ASSERT_EQ(0u, v.size());
+  ASSERT_EQ(0u, v.capacity());
   ASSERT_EQ(nullptr, v.data());
   ASSERT_TRUE(citeq(v, values));
 }
@@ -200,7 +200,7 @@ TEST(VectorTest, NonSizedRngCtrNoRAIT) {
   NonSizedList<int> values {1, 2, 3};
   TestVector<int> v {values};
   ASSERT_FALSE(v.empty());
-  ASSERT_EQ(3, v.size());
+  ASSERT_EQ(3u, v.size());
   ASSERT_TRUE(citeq(v, values));
 }
 
@@ -208,8 +208,8 @@ TEST(VectorTest, NonSizedRngCtrEmptyNORAIT) {
   NonSizedList<int> values {};
   TestVector<int> v {values};
   ASSERT_TRUE(v.empty());
-  ASSERT_EQ(0, v.size());
-  ASSERT_EQ(0, v.capacity());
+  ASSERT_EQ(0u, v.size());
+  ASSERT_EQ(0u, v.capacity());
   ASSERT_EQ(nullptr, v.data());
   ASSERT_TRUE(citeq(v, values));
 }
@@ -217,36 +217,36 @@ TEST(VectorTest, NonSizedRngCtrEmptyNORAIT) {
 TEST(VectorTest, SizeDefCtr) {
   TestVector<int> v (5);
   ASSERT_FALSE(v.empty());
-  ASSERT_EQ(5, v.size());
+  ASSERT_EQ(5u, v.size());
 }
 
 TEST(VectorTest, SizeDefCtrEmpty) {
   TestVector<int> v (0);
   ASSERT_TRUE(v.empty());
-  ASSERT_EQ(0, v.size());
-  ASSERT_EQ(0, v.capacity());
+  ASSERT_EQ(0u, v.size());
+  ASSERT_EQ(0u, v.capacity());
   ASSERT_EQ(nullptr, v.data());
 }
 
 TEST(VectorTest, SizeCopyCtr) {
   TestVector<int> v (5, 3);
   ASSERT_FALSE(v.empty());
-  ASSERT_EQ(5, v.size());
+  ASSERT_EQ(5u, v.size());
   ASSERT_TRUE(citeq(v, vector<int>{3, 3, 3, 3, 3}));
 }
 
 TEST(VectorTest, SizeCopyCtrEmpty) {
   TestVector<int> v (0, 3);
   ASSERT_TRUE(v.empty());
-  ASSERT_EQ(0, v.size());
-  ASSERT_EQ(0, v.capacity());
+  ASSERT_EQ(0u, v.size());
+  ASSERT_EQ(0u, v.capacity());
   ASSERT_EQ(nullptr, v.data());
 }
 
 TEST(VectorTest, InitListCtr) {
   TestVector<int> v {1, 2, 3, 4};
   ASSERT_FALSE(v.empty());
-  ASSERT_EQ(4, v.size());
+  ASSERT_EQ(4u, v.size());
   ASSERT_TRUE(citeq(v, vector<int>{1, 2, 3, 4}));
 }
 
@@ -382,10 +382,10 @@ TEST(VectorTest, BaseMemFn) {
   using namespace cds::meta;
   TestVector<int> v {1, 2, 3, 4, 5};
 
-  ASSERT_EQ(5, v.size());
-  ASSERT_EQ(5, asConst(v).size());
-  ASSERT_LE(5, v.capacity());
-  ASSERT_LE(5, asConst(v).capacity());
+  ASSERT_EQ(5u, v.size());
+  ASSERT_EQ(5u, asConst(v).size());
+  ASSERT_LE(5u, v.capacity());
+  ASSERT_LE(5u, asConst(v).capacity());
   ASSERT_NE(nullptr, v.data());
   ASSERT_NE(nullptr, asConst(v).data());
 
@@ -395,25 +395,25 @@ TEST(VectorTest, BaseMemFn) {
 
 TEST(VectorTest, PopBack) {
   TestVector<int> v {1, 2, 3, 4, 5};
-  ASSERT_EQ(5, v.size());
+  ASSERT_EQ(5u, v.size());
   ASSERT_TRUE(citeq(v, vector<int>{1, 2, 3, 4, 5}));
   v.popBack();
-  ASSERT_EQ(4, v.size());
+  ASSERT_EQ(4u, v.size());
   ASSERT_TRUE(citeq(v, vector<int>{1, 2, 3, 4}));
   v.popBack();
-  ASSERT_EQ(3, v.size());
+  ASSERT_EQ(3u, v.size());
   ASSERT_TRUE(citeq(v, vector<int>{1, 2, 3}));
 }
 
 TEST(VectorTest, TakeBack) {
   TestVector<int> v {2, 3, 4, 5, 6};
-  ASSERT_EQ(5, v.size());
+  ASSERT_EQ(5u, v.size());
   ASSERT_TRUE(citeq(v, vector<int>{2, 3, 4, 5, 6}));
   ASSERT_EQ(6, v.takeBack());
-  ASSERT_EQ(4, v.size());
+  ASSERT_EQ(4u, v.size());
   ASSERT_TRUE(citeq(v, vector<int>{2, 3, 4, 5}));
   ASSERT_EQ(5, v.takeBack());
-  ASSERT_EQ(3, v.size());
+  ASSERT_EQ(3u, v.size());
   ASSERT_TRUE(citeq(v, vector<int>{2, 3, 4}));
 }
 
@@ -469,7 +469,7 @@ TEST(VectorTest, Reserve) {
   ASSERT_EQ(v.data(), oldP);
 
   v.reserve(100);
-  ASSERT_EQ(100, v.capacity());
+  ASSERT_EQ(100u, v.capacity());
   ASSERT_NE(v.data(), oldP);
   ASSERT_NE(nullptr, v.data());
   ASSERT_EQ(0u, v.size());
@@ -516,21 +516,21 @@ TEST(VectorTest, Resize) {
 TEST(VectorTest, ShrinkTo) {
   TestVector<int> v {1, 2, 3, 4, 5};
   v.shrinkTo(3);
-  ASSERT_EQ(3, v.size());
+  ASSERT_EQ(3u, v.size());
   ASSERT_TRUE(citeq(v, vector<int>{1, 2, 3}));
   v.shrinkTo(7);
-  ASSERT_EQ(3, v.size());
+  ASSERT_EQ(3u, v.size());
   ASSERT_TRUE(citeq(v, vector<int>{1, 2, 3}));
 }
 
 TEST(VectorTest, ForceShrinkTo) {
   TestVector<int> v {1, 2, 3, 4, 5};
   v.forceShrinkTo(3);
-  ASSERT_EQ(3, v.size());
-  ASSERT_EQ(3, v.capacity());
+  ASSERT_EQ(3u, v.size());
+  ASSERT_EQ(3u, v.capacity());
   ASSERT_TRUE(citeq(v, vector<int>{1, 2, 3}));
   v.forceShrinkTo(7);
-  ASSERT_EQ(3, v.size());
+  ASSERT_EQ(3u, v.size());
   ASSERT_TRUE(citeq(v, vector<int>{1, 2, 3}));
 }
 
@@ -550,28 +550,28 @@ TEST(VectorTest, ForceShrinkToFit) {
 
 TEST(VectorTest, EmplaceI0) {
   TestVector<int> v {1, 2, 3};
-  v.emplace(0, 5);
+  v.emplace(0u, 5);
   ASSERT_EQ(4u, v.size());
   ASSERT_TRUE(citeq(v, vector<int>{5, 1, 2, 3}));
 }
 
 TEST(VectorTest, EmplaceI1) {
   TestVector<int> v {1, 2, 3};
-  v.emplace(1, 5);
+  v.emplace(1u, 5);
   ASSERT_EQ(4u, v.size());
   ASSERT_TRUE(citeq(v, vector<int>{1, 5, 2, 3}));
 }
 
 TEST(VectorTest, EmplaceI2) {
   TestVector<int> v {1, 2, 3};
-  v.emplace(2, 5);
+  v.emplace(2u, 5);
   ASSERT_EQ(4u, v.size());
   ASSERT_TRUE(citeq(v, vector<int>{1, 2, 5, 3}));
 }
 
 TEST(VectorTest, EmplaceI3) {
   TestVector<int> v {1, 2, 3};
-  v.emplace(3, 5);
+  v.emplace(3u, 5);
   ASSERT_EQ(4u, v.size());
   ASSERT_TRUE(citeq(v, vector<int>{1, 2, 3, 5}));
 }
@@ -740,10 +740,10 @@ TEST(VectorTest, Functional) {
 
   unsigned count = 0;
   v.forEach([&count](int) { ++count; });
-  ASSERT_EQ(3, count);
+  ASSERT_EQ(3u, count);
 
-  auto even = [](int v) { return v % 2 == 0; };
-  ASSERT_EQ(1, v.count(even));
+  auto even = [](int v0) { return v0 % 2 == 0; };
+  ASSERT_EQ(1u, v.count(even));
   ASSERT_TRUE(v.some(1, even));
   ASSERT_TRUE(v.atMost(2, even));
   ASSERT_TRUE(v.atLeast(1, even));

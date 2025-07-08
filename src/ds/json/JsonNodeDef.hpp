@@ -133,7 +133,7 @@ struct JsonNodeBaseImpl : Union<
 struct JsonNodeBasePeeker {
   template <typename B, typename A> CDS_ATTR(2(nodiscard, constexpr(11))) auto index(JsonNodeBase<B, A> const& node)
       const noexcept -> U8 {
-    return node.index();
+    return static_cast<U8>(node.index());
   }
 
   template <typename B, typename A> CDS_ATTR(2(nodiscard, constexpr(11)))

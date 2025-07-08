@@ -37,11 +37,11 @@ template <typename I, typename V, typename E, typename T> class FindIterator {
 public:
   using Iterator = I;
   using Value = V;
-  using Predicate = E;
+  using Predicate CDS_ATTR(maybe_unused) = E;
   using Transformer = T;
 
-  template <typename RI, typename RSI> CDS_ATTR(constexpr(14)) FindIterator(RI&& b, RSI&& e, V const& v)
-      CDS_ATTR(noexcept(noexcept(filter()))) :
+  template <typename RI, typename RSI> CDS_ATTR(2(maybe_unused, constexpr(14)))
+  FindIterator(RI&& b, RSI&& e, V const& v) CDS_ATTR(noexcept(noexcept(filter()))) :
       _i(fwd<RI>(b)), _b(fwd<RI>(b)), _e(fwd<RSI>(e)), _v(v) {
     filter();
   }
@@ -141,12 +141,11 @@ template <typename I, typename V, typename P, typename E, typename T> class Find
 public:
   using Iterator = I;
   using Value = V;
-  using Predicate = E;
+  using Predicate CDS_ATTR(maybe_unused) = E;
   using Transformer = T;
 
-  template <typename RI, typename RSI> CDS_ATTR(constexpr(14))
-  FindProjectIterator(RI&& b, RSI&& e, V const& v, P const& s)
-      CDS_ATTR(noexcept(noexcept(filter()))) :
+  template <typename RI, typename RSI> CDS_ATTR(2(maybe_unused, constexpr(14)))
+  FindProjectIterator(RI&& b, RSI&& e, V const& v, P const& s) CDS_ATTR(noexcept(noexcept(filter()))) :
       _i(fwd<RI>(b)), _b(fwd<RI>(b)), _e(fwd<RSI>(e)), _p(s), _v(v) {
     filter();
   }
@@ -271,7 +270,7 @@ template <typename TAttr, typename VAttr, typename E, typename Tr> class FindIte
 public:
   using Iterable = TAttr;
   using Value = VAttr;
-  using Predicate = E;
+  using Predicate CDS_ATTR(maybe_unused) = E;
   using Transformer = Tr;
   using UnderlyingIterator = decltype(cds::begin(value<TAttr>()));
   using Iterator = FindIterator<UnderlyingIterator, RemoveRef<VAttr>, E, Tr>;
@@ -318,7 +317,7 @@ template <typename TAttr, typename VAttr, typename PAttr, typename E, typename T
 public:
   using Iterable = TAttr;
   using Value = VAttr;
-  using Predicate = E;
+  using Predicate CDS_ATTR(maybe_unused) = E;
   using Transformer = Tr;
   using UnderlyingIterator = decltype(cds::begin(value<TAttr>()));
   using Iterator = FindProjectIterator<UnderlyingIterator, RemoveRef<VAttr>, RemoveRef<PAttr>, E, Tr>;

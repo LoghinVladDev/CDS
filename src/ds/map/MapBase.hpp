@@ -228,7 +228,7 @@ auto operator<<(std::basic_ostream<C>& out, BaseMap<K, V, B> const& map)
     return out;
   }
 
-  out << it->key() << static_cast<C>(':') << static_cast<C>(' ');
+  out << it->key() << static_cast<C>(':') << static_cast<C>(' ') << it->value();
   for (++it; it != end; ++it) {
     out << static_cast<C>(',') << static_cast<C>(' ') << it->key()
         << static_cast<C>(':') << static_cast<C>(' ') << it->value();

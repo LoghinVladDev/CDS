@@ -324,7 +324,7 @@ public:
     return _message.c_str();
   }
 private:
-  std::string _message;
+  std::string _message{};
 };
 
 template <CompareType type, typename Lhs, typename Rhs = Lhs> auto compare(

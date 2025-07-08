@@ -50,7 +50,7 @@ public:
     return {res.iter, res.inserted};
   }
 
-  template <typename = void, EnableIf<IsDefaultConstructible<V>> = 0> CDS_ATTR(2(nodiscard, constexpr(20)))
+  template <typename V0 = V, EnableIf<IsDefaultConstructible<V0>> = 0> CDS_ATTR(2(nodiscard, constexpr(20)))
   auto operator[](K const& key) CDS_ATTR(noexcept(noexcept(tryEmplace(key, key, V{})))) -> V& {
     return tryEmplace(key, key, V{}).iter->value();
   }

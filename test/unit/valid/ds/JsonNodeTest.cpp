@@ -4,7 +4,6 @@
 
 #include <cds/Format>
 #include <cds/json/JSON>
-#include <cds/meta/Platform>
 
 #include <UnitTest.hpp>
 
@@ -703,7 +702,7 @@ TEST(JsonNodeTest, formatFloating) {
 
 TEST(JsonNodeTest, formatString) {
   ASSERT_EQ(R"("abc")", cds::format("{}", JsonNode("abc")));
-  ASSERT_EQ("\"a\tbc\"", cds::format("{}", JsonNode("a\tbc")));
+  ASSERT_EQ("\"a\\tbc\"", cds::format("{}", JsonNode("a\tbc")));
   ASSERT_EQ(R"("abc")", cds::format("{:?}", JsonNode("abc")));
   ASSERT_EQ(R"("a\tbc")", cds::format("{:?}", JsonNode("a\tbc")));
 }

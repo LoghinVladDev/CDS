@@ -80,7 +80,7 @@ template <typename T> void testImmInt() {
   ASSERT_TRUE(value.atMost(2, even));
   ASSERT_TRUE(value.moreThan(1, even));
   ASSERT_TRUE(value.lessThan(3, even));
-  ASSERT_EQ(value.count(even), 2);
+  ASSERT_EQ(value.count(even), 2u);
   ASSERT_TRUE(value.any(even));
   ASSERT_FALSE(value.all(even));
   ASSERT_FALSE(value.none(even));
@@ -97,7 +97,7 @@ template <typename T> void testMutInt() {
   ASSERT_TRUE(value.atMost(2, even));
   ASSERT_TRUE(value.moreThan(1, even));
   ASSERT_TRUE(value.lessThan(3, even));
-  ASSERT_EQ(value.count(even), 2);
+  ASSERT_EQ(value.count(even), 2u);
   ASSERT_TRUE(value.any(even));
   ASSERT_FALSE(value.all(even));
   ASSERT_FALSE(value.none(even));
@@ -111,7 +111,7 @@ template <typename T> void testImmStr() {
   ASSERT_TRUE(value.atMost(2, &std::string::empty));
   ASSERT_TRUE(value.moreThan(1, &std::string::empty));
   ASSERT_TRUE(value.lessThan(3, &std::string::empty));
-  ASSERT_EQ(value.count(&std::string::empty), 2);
+  ASSERT_EQ(value.count(&std::string::empty), 2u);
   ASSERT_TRUE(value.any(&std::string::empty));
   ASSERT_FALSE(value.all(&std::string::empty));
   ASSERT_FALSE(value.none(&std::string::empty));
@@ -125,7 +125,7 @@ template <typename T> void testMutStr() {
   ASSERT_TRUE(value.atMost(2, &std::string::empty));
   ASSERT_TRUE(value.moreThan(1, &std::string::empty));
   ASSERT_TRUE(value.lessThan(3, &std::string::empty));
-  ASSERT_EQ(value.count(&std::string::empty), 2);
+  ASSERT_EQ(value.count(&std::string::empty), 2u);
   ASSERT_TRUE(value.any(&std::string::empty));
   ASSERT_FALSE(value.all(&std::string::empty));
   ASSERT_FALSE(value.none(&std::string::empty));

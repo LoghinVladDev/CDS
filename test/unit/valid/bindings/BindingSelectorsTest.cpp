@@ -35,14 +35,3 @@ static_assert(!ContainsAllSelectors<With<Projector>, Value, Projector>::value, "
 static_assert(ContainsAllSelectors<With<Projector, Value>, Value, Projector>::value, "test failure");
 static_assert(ContainsAllSelectors<With<Projector, Immutable, Value>, Value, Projector>::value, "test failure");
 } // namespace
-
-#include <cds/collection/Vector>
-#include <UnitTest.hpp>
-
-int f(int x) {
-
-}
-
-TEST(a, b) {
-  cds::impl::IsProjector<cds::Vector<int>, decltype(f)>::value;
-}

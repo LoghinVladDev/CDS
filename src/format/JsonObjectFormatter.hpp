@@ -16,7 +16,7 @@ template <typename C> struct Formatter<json::impl::JsonObjectBase<meta::Default>
   template <typename Ctx> CDS_ATTR(2(nodiscard, constexpr(14))) auto parse(Ctx& ctx) CDS_ATTR(noexcept(false))
       -> typename Ctx::Iterator {
     if (ctx.begin() == ctx.end() || *ctx.begin() == '}') {
-      impl::BaseStringView<C> defaultFmtStr = "m:m:#:";
+      impl::BaseStringView<C> defaultFmtStr = "m:m:#?:";
       impl::fmt::FormatParseContext<C, impl::StringUtils<C, meta::StringTraits<C>>> subCtx{defaultFmtStr};
       ignore = Base::parse(subCtx);
       return ctx.begin();

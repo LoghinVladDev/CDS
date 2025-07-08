@@ -15,9 +15,11 @@ template <typename /* T */> struct ArrayTraits {
   static constexpr Size scalingMultiplier = 2u;
 };
 
+#if !CDS_ATTR(cpp17)
 // ODR before cpp17
 template <typename T> Size const ArrayTraits<T>::minCapacity;
 template <typename T> Size const ArrayTraits<T>::scalingMultiplier;
+#endif
 } // namespace impl
 } // namespace cds
 

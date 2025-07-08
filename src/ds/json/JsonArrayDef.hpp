@@ -31,6 +31,13 @@ template <typename TBase> class JsonArrayBase : public JsonArrayBaseSelector<TBa
 public:
   using Base::Base;
   using Base::operator=;
+
+  JsonArrayBase() = default;
+  JsonArrayBase(JsonArrayBase const&) = default;
+  JsonArrayBase(JsonArrayBase&&) = default;
+  auto operator=(JsonArrayBase const&) -> JsonArrayBase& = default;
+  auto operator=(JsonArrayBase&&) -> JsonArrayBase& = default;
+
   ~JsonArrayBase() = default;
 
   CDS_ATTR(2(implicit, constexpr(20))) JsonArrayBase(StringView asString) CDS_ATTR(noexcept(false));

@@ -320,7 +320,7 @@ private:
       auto r = _p(_r->data()[endIdx], StateContainer<P>::state);
       if (r.kind == ahoCorasick::PredResultKind::PRK_accept) {
 
-        endIdx = endIdx + 1 - r.reverseLen;
+        endIdx = endIdx + 1u - r.reverseLen;
 
         _segment = _r->sub(_f, endIdx);
         _f = endIdx + r.reverseLen;

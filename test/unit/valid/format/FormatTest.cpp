@@ -5,7 +5,6 @@
 #include "UnitTest.hpp"
 #include <cds/Format>
 #include <cds/exception/FormatException>
-#include <cds/meta/Platform>
 
 namespace {
 using cds::Address;

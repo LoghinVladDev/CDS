@@ -15,7 +15,7 @@ auto parseJsonNumber(JsonNodeBase<B, A>& dst, BaseStringView<C> src, JsonParseOp
   using Tok = JsonTokens<C>;
   using T = typename BaseStringView<C>::STraits;
   using U = typename BaseStringView<C>::Utils;
-  auto base = 10;
+  U8 base = 10u;
   auto afterSign = src;
   auto neg = false;
   if (!afterSign) {
@@ -60,19 +60,28 @@ auto parseJsonNumber(JsonNodeBase<B, A>& dst, BaseStringView<C> src, JsonParseOp
     integral *= -1;
   }
 
-  auto const srcAfterIntegral = BaseStringView<C>{afterIntegral, src.length() - (afterIntegral - src.data())};
-  if (srcAfterIntegral.empty() || srcAfterIntegral[0] != Tok::dot) {
+  auto const srcAfterIntegral =
+      BaseStringView<C>{afterIntegral, src.length() - static_cast<Size>(afterIntegral - src.data())};
+  if (srcAfterIntegral.empty()
+      || srcAfterIntegral[0] != Tok::dot
+      && srcAfterIntegral[0] != Tok::exponent
+      && srcAfterIntegral[0] != Tok::exponentUppercase
+  ) {
     dst = integral;
     return {srcAfterIntegral.ltrim(), JsonParseError::None};
   }
 
-  if (srcAfterIntegral.length() == 1 || !T::isDigit(srcAfterIntegral[1])) {
+  if (srcAfterIntegral.length() == 1
+      || !T::isDigit(srcAfterIntegral[1])
+      && srcAfterIntegral[1] != Tok::minus
+      && srcAfterIntegral[1] != Tok::plus) {
     return {src, JsonParseError::ErrorNumberNoDigitsAfterFraction};
   }
 
   C* afterDouble;
   dst = std::strtod(src.data(), &afterDouble);
-  auto const srcAfterDouble = BaseStringView<C>{afterDouble, src.length() - (afterDouble - src.data())};
+  auto const srcAfterDouble =
+      BaseStringView<C>{afterDouble, src.length() - static_cast<Size>(afterDouble - src.data())};
   if (afterDouble == src.data()) {
     return {src, JsonParseError::ErrorNumberInvalid};
   }

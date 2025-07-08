@@ -56,7 +56,7 @@ TEST(JsonObjectParserTest, parseMemberValid) {
 
   ASSERT_EQ(JsonParseError::None, cds::get<1>(res));
   ASSERT_EQ(R"(, "b": 53)", cds::get<0>(res));
-  ASSERT_EQ(1, obj.size());
+  ASSERT_EQ(1u, obj.size());
   ASSERT_EQ(54, obj["a"]);
 }
 
@@ -152,7 +152,7 @@ TEST(JsonObjectParserTest, parseObjectValid) {
 
   ASSERT_EQ(JsonParseError::None, cds::get<1>(res));
   ASSERT_EQ(R"(xy)", cds::get<0>(res));
-  ASSERT_EQ(3, obj.size());
+  ASSERT_EQ(3u, obj.size());
   ASSERT_EQ(123, obj["a"]);
   ASSERT_EQ(false, obj["b"]);
   ASSERT_EQ("abc", obj["c"]);

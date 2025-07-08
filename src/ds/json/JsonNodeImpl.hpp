@@ -276,7 +276,7 @@ auto operator<<(std::basic_ostream<C>& out, JsonNodeBase<B, A> const& value) noe
   }
 
   if (value.isString()) {
-    return out << value.getString();
+    return escapeJsonString(out, value.getString());
   }
 
   if (value.isArray()) {

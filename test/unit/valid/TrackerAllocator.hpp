@@ -43,7 +43,7 @@ public:
 
     validate();
     cds::Allocator<T>::operator=(mv(ta));
-    _allocated = xch(ta._allocated, 0);
+    _allocated = xch(ta._allocated, 0u);
     _tracked = std::move(ta._tracked);
     _freed = std::move(ta._freed);
     return *this;
@@ -59,7 +59,7 @@ public:
 
   void deallocate(T* mem, cds::Size bCnt) noexcept {
     if (_freed.find(mem) != _freed.end()) {
-#if NDEBUG
+#ifdef NDEBUG
       std::cerr << "Double free of memory from current allocator\n";
       std::cerr.flush();
       std::terminate();
@@ -71,7 +71,7 @@ public:
       _tracked.erase(mem);
       _freed.emplace(mem);
     } else if (mem) {
-#if NDEBUG
+#ifdef NDEBUG
       std::cerr << "Attempted to free memory not allocated from current allocator\n";
       std::cerr.flush();
       std::terminate();
@@ -89,7 +89,7 @@ public:
 
   void validate() noexcept {
     if (_assertOnDestruct && _allocated != 0) {
-#if NDEBUG
+#ifdef NDEBUG
       std::cerr << "Memory leaked in release\n";
       std::cerr.flush();
       std::terminate();

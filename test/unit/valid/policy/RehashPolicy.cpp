@@ -15,23 +15,23 @@ TEST(RehashPolicy, PrimeRehashPolicy) {
   TableRehashPolicy<PrimeRehashTable<>> policy;
   using BT = decltype(policy)::BalanceType;
 
-  ASSERT_EQ(policy.current(), 13);
-  ASSERT_EQ(policy.load(), 1);
+  ASSERT_EQ(policy.current(), 13u);
+  ASSERT_EQ(policy.load(), 1u);
   ASSERT_EQ(policy.balance(0, 0, 1).type, BT::Required);
-  ASSERT_EQ(policy.balance(0, 0, 1).size, 13);
+  ASSERT_EQ(policy.balance(0, 0, 1).size, 13u);
   ASSERT_EQ(policy.balance(0, 12, 1).type, BT::Required);
-  ASSERT_EQ(policy.balance(0, 12, 1).size, 13);
+  ASSERT_EQ(policy.balance(0, 12, 1).size, 13u);
   ASSERT_EQ(policy.balance(13, 0, 1).type, BT::Stable);
   ASSERT_EQ(policy.balance(13, 12, 1).type, BT::Stable);
   ASSERT_EQ(policy.balance(13, 4, 9).type, BT::Stable);
 
   auto const r1 = policy.balance(0, 13, 1);
   ASSERT_EQ(r1.type, BT::Required);
-  ASSERT_EQ(r1.size, 29);
+  ASSERT_EQ(r1.size, 29u);
 
   auto const r2 = policy.balance(29, 29, 1);
   ASSERT_EQ(r2.type, BT::Required);
-  ASSERT_EQ(r2.size, 59);
+  ASSERT_EQ(r2.size, 59u);
 
   using Table = cds::impl::prp::PrimeRehashTable<Size>;
   auto const tableEnd = Table::_ft[Table::_fts - 1];
@@ -39,32 +39,32 @@ TEST(RehashPolicy, PrimeRehashPolicy) {
   auto const r3 = policy.balance(tableEnd, tableEnd, 1);
   ASSERT_EQ(r3.type, BT::Impossible);
   ASSERT_EQ(r3.size, tableEnd);
-  ASSERT_EQ(policy.load(), 1);
+  ASSERT_EQ(policy.load(), 1u);
 
   policy.reset();
   auto const r4 = policy.balance(13, 13, 50);
   ASSERT_EQ(r4.type, BT::Required);
-  ASSERT_EQ(r4.size, 127);
+  ASSERT_EQ(r4.size, 127u);
 
   auto policyCopy = policy;
-  ASSERT_EQ(policyCopy.load(), 1);
-  ASSERT_EQ(policyCopy.current(), 127);
+  ASSERT_EQ(policyCopy.load(), 1u);
+  ASSERT_EQ(policyCopy.current(), 127u);
 }
 
 TEST(RehashPolicy, LoadFactorPrimeRehashPolicy) {
   TableRehashPolicy<PrimeRehashTable<>> policy(2);
   using BT = decltype(policy)::BalanceType;
 
-  ASSERT_EQ(policy.current(), 13);
-  ASSERT_EQ(policy.load(), 2);
+  ASSERT_EQ(policy.current(), 13u);
+  ASSERT_EQ(policy.load(), 2u);
 
   auto const r1 = policy.balance(13, 25, 1);
   ASSERT_EQ(r1.type, BT::Stable);
-  ASSERT_EQ(r1.size, 13);
+  ASSERT_EQ(r1.size, 13u);
 
   auto const r2 = policy.balance(13, 26, 1);
   ASSERT_EQ(r2.type, BT::Required);
-  ASSERT_EQ(r2.size, 29);
+  ASSERT_EQ(r2.size, 29u);
 }
 
 #if DCR_SINCECPP11

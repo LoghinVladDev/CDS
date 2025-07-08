@@ -51,6 +51,8 @@ template <> struct JsonTokens<char> {
   static char constexpr minus = '-';
   static char constexpr separator = ',';
   static char constexpr memberSeparator = ':';
+  static char constexpr exponent = 'e';
+  static char constexpr exponentUppercase = 'E';
 };
 
 template <> struct JsonTokens<wchar_t> {
@@ -82,6 +84,8 @@ template <> struct JsonTokens<wchar_t> {
   static wchar_t constexpr minus = L'-';
   static wchar_t constexpr separator = L',';
   static wchar_t constexpr memberSeparator = L':';
+  static wchar_t constexpr exponent = L'e';
+  static wchar_t constexpr exponentUppercase = L'E';
 };
 
 template <> struct JsonTokens<char16_t> {
@@ -113,6 +117,8 @@ template <> struct JsonTokens<char16_t> {
   static char16_t constexpr minus = u'-';
   static char16_t constexpr separator = u',';
   static char16_t constexpr memberSeparator = u':';
+  static char16_t constexpr exponent = u'e';
+  static char16_t constexpr exponentUppercase = u'E';
 };
 
 template <> struct JsonTokens<char32_t> {
@@ -144,6 +150,8 @@ template <> struct JsonTokens<char32_t> {
   static char32_t constexpr minus = U'-';
   static char32_t constexpr separator = U',';
   static char32_t constexpr memberSeparator = U':';
+  static char32_t constexpr exponent = U'e';
+  static char32_t constexpr exponentUppercase = U'E';
 };
 
 #if CDS_ATTR(cpp20)
@@ -176,6 +184,8 @@ template <> struct JsonTokens<char8_t> {
   static char8_t constexpr minus = u8'-';
   static char8_t constexpr separator = u8',';
   static char8_t constexpr memberSeparator = u8':';
+  static char8_t constexpr exponent = u8'e';
+  static char8_t constexpr exponentUppercase = u8'E';
 };
 #endif
 
@@ -186,6 +196,7 @@ enum class JsonParseError {
   ErrorNumberNoDigitsAfterFraction,
   ErrorStringWithoutStartingQuote,
   ErrorStringWithoutEndingQuote,
+  ErrorStringInvalidEscapeSequence,
   ErrorUTFCodePointTooShort,
   ErrorUTFCodePointInvalid,
   ErrorValueInvalid,
@@ -260,6 +271,8 @@ auto parseErrorAsString(JsonParseError err, BaseStringView<C> loc) noexcept -> S
       return compose("Expected object member separator ','");
     case JsonParseError::ErrorObjectMemberWithoutKeyValueSeparator:
       return compose("Expected object member key-value separator ':'");
+    case JsonParseError::ErrorStringInvalidEscapeSequence:
+      return compose("Invalid escape sequence after '\\'");
     default:
       assert(false && "Unhandled error case");
       cds::impl::unreachable();
@@ -346,6 +359,8 @@ auto parseJsonString(JsonString& dst, BaseStringView<C> src, JsonParseOptions co
           it = it + 3;
           break;
         }
+        default:
+          return {src, JsonParseError::ErrorStringInvalidEscapeSequence};
       }
 
       escaped = false;

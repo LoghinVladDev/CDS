@@ -101,6 +101,8 @@ class StringValuePrinter:
         for b in self.ptr.uint8:
             if b == 0:
                 self.data += '\\\\0'
+            if chr(b) == '"' or chr(b) == '\\':
+                self.data += '\\' + chr(b)
             else:
                 self.data += chr(b)
 

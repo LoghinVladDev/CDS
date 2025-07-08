@@ -4,8 +4,6 @@
 
 #include "../../../src/ds/map/MapBase.hpp"
 
-#include <cds/collection/Vector>
-
 #include <UnitTest.hpp>
 
 namespace {
@@ -20,19 +18,19 @@ struct BaseMapImplMockIterator {};
 
 struct BaseMapImplMockConstIterator {};
 
-bool operator==(BaseMapImplMockIterator lhs, BaseMapImplMockIterator rhs) {
+CDS_ATTR(maybe_unused) bool operator==(BaseMapImplMockIterator, BaseMapImplMockIterator) {
   return true;
 }
 
-bool operator!=(BaseMapImplMockIterator lhs, BaseMapImplMockIterator rhs) {
+CDS_ATTR(maybe_unused) bool operator!=(BaseMapImplMockIterator, BaseMapImplMockIterator) {
   return false;
 }
 
-bool operator==(BaseMapImplMockConstIterator lhs, BaseMapImplMockConstIterator rhs) {
+CDS_ATTR(maybe_unused) bool operator==(BaseMapImplMockConstIterator, BaseMapImplMockConstIterator) {
   return true;
 }
 
-bool operator!=(BaseMapImplMockConstIterator lhs, BaseMapImplMockConstIterator rhs) {
+CDS_ATTR(maybe_unused) bool operator!=(BaseMapImplMockConstIterator, BaseMapImplMockConstIterator) {
   return false;
 }
 
@@ -40,27 +38,27 @@ struct BaseMapImplMock {
   using Iterator = BaseMapImplMockIterator;
   using ConstIterator = BaseMapImplMockConstIterator;
 
-  CDS_ATTR(nodiscard) auto begin() noexcept -> Iterator {
+  CDS_ATTR(2(nodiscard, maybe_unused)) auto begin() noexcept -> Iterator {
     ++calls.beginCalls;
     return {};
   }
 
-  CDS_ATTR(nodiscard) auto end() noexcept -> Iterator {
+  CDS_ATTR(2(nodiscard, maybe_unused)) auto end() noexcept -> Iterator {
     ++calls.endCalls;
     return {};
   }
 
-  CDS_ATTR(nodiscard) auto end() const noexcept -> ConstIterator {
+  CDS_ATTR(2(nodiscard, maybe_unused)) auto end() const noexcept -> ConstIterator {
     ++calls.cendCalls;
     return {};
   }
 
-  CDS_ATTR(nodiscard) auto cbegin() const noexcept -> ConstIterator {
+  CDS_ATTR(2(nodiscard, maybe_unused)) auto cbegin() const noexcept -> ConstIterator {
     ++calls.cbeginCalls;
     return {};
   }
 
-  CDS_ATTR(nodiscard) auto cend() const noexcept -> ConstIterator {
+  CDS_ATTR(2(nodiscard, maybe_unused)) auto cend() const noexcept -> ConstIterator {
     ++calls.cendCalls;
     return {};
   }
@@ -84,17 +82,17 @@ struct BaseMapImplMock {
     return {};
   }
 
-  auto remove(int) noexcept -> bool {
+  CDS_ATTR(maybe_unused) auto remove(int) noexcept -> bool {
     ++calls.removeCalls;
     return {};
   }
 
-  auto size() const noexcept -> Size {
+  CDS_ATTR(maybe_unused) auto size() const noexcept -> Size {
     ++calls.sizeCalls;
     return 0;
   }
 
-  auto operator[](int) noexcept -> int& {
+  CDS_ATTR(maybe_unused) auto operator[](int) noexcept -> int& {
     return ++calls.indexCalls;
   }
 

@@ -200,17 +200,17 @@ TEST(AddressIterator, Access) {
 
   ASSERT_NE(b, e);
   ASSERT_EQ(*b, "a");
-  ASSERT_EQ(b->size(), 1);
+  ASSERT_EQ(b->size(), 1u);
   ++b;
 
   ASSERT_NE(b, e);
   ASSERT_EQ(*b, "bb");
-  ASSERT_EQ(b->size(), 2);
+  ASSERT_EQ(b->size(), 2u);
   ++b;
 
   ASSERT_NE(b, e);
   ASSERT_EQ(*b, "ccc");
-  ASSERT_EQ(b->size(), 3);
+  ASSERT_EQ(b->size(), 3u);
   ++b;
   ASSERT_EQ(b, e);
 }
@@ -320,35 +320,35 @@ TEST(AddressIterator, ItDiff) {
   auto rb = rbegin(data);
   auto re = rend(data);
 
-  ASSERT_EQ(b - e, 3);
-  ASSERT_EQ(e - b, 3);
+  ASSERT_EQ(b - e, 3u);
+  ASSERT_EQ(e - b, 3u);
   ++b;
-  ASSERT_EQ(b - e, 2);
-  ASSERT_EQ(e - b, 2);
+  ASSERT_EQ(b - e, 2u);
+  ASSERT_EQ(e - b, 2u);
   --e;
-  ASSERT_EQ(b - e, 1);
-  ASSERT_EQ(e - b, 1);
+  ASSERT_EQ(b - e, 1u);
+  ASSERT_EQ(e - b, 1u);
   ++b;
-  ASSERT_EQ(b - e, 0);
-  ASSERT_EQ(e - b, 0);
+  ASSERT_EQ(b - e, 0u);
+  ASSERT_EQ(e - b, 0u);
   --e;
-  ASSERT_EQ(b - e, 1);
-  ASSERT_EQ(e - b, 1);
+  ASSERT_EQ(b - e, 1u);
+  ASSERT_EQ(e - b, 1u);
 
-  ASSERT_EQ(rb - re, 3);
-  ASSERT_EQ(re - rb, 3);
+  ASSERT_EQ(rb - re, 3u);
+  ASSERT_EQ(re - rb, 3u);
   ++rb;
-  ASSERT_EQ(rb - re, 2);
-  ASSERT_EQ(re - rb, 2);
+  ASSERT_EQ(rb - re, 2u);
+  ASSERT_EQ(re - rb, 2u);
   --re;
-  ASSERT_EQ(rb - re, 1);
-  ASSERT_EQ(re - rb, 1);
+  ASSERT_EQ(rb - re, 1u);
+  ASSERT_EQ(re - rb, 1u);
   ++rb;
-  ASSERT_EQ(rb - re, 0);
-  ASSERT_EQ(re - rb, 0);
+  ASSERT_EQ(rb - re, 0u);
+  ASSERT_EQ(re - rb, 0u);
   --re;
-  ASSERT_EQ(rb - re, 1);
-  ASSERT_EQ(re - rb, 1);
+  ASSERT_EQ(rb - re, 1u);
+  ASSERT_EQ(re - rb, 1u);
 }
 
 TEST(AddressIterator, ItPost) {
@@ -456,15 +456,15 @@ TEST(AddressIterator, subscript) {
 TEST(AddressIterator, string) {
   char str1[] = "ab";
   char const str2[] = "abc";
-  ASSERT_EQ(begin(str1) - end(str1), 2);
-  ASSERT_EQ(cbegin(str1) - cend(str1), 2);
-  ASSERT_EQ(rbegin(str1) - rend(str1), 2);
-  ASSERT_EQ(crbegin(str1) - crend(str1), 2);
+  ASSERT_EQ(begin(str1) - end(str1), 2u);
+  ASSERT_EQ(cbegin(str1) - cend(str1), 2u);
+  ASSERT_EQ(rbegin(str1) - rend(str1), 2u);
+  ASSERT_EQ(crbegin(str1) - crend(str1), 2u);
 
-  ASSERT_EQ(begin(str2) - end(str2), 3);
-  ASSERT_EQ(cbegin(str2) - cend(str2), 3);
-  ASSERT_EQ(rbegin(str2) - rend(str2), 3);
-  ASSERT_EQ(crbegin(str2) - crend(str2), 3);
+  ASSERT_EQ(begin(str2) - end(str2), 3u);
+  ASSERT_EQ(cbegin(str2) - cend(str2), 3u);
+  ASSERT_EQ(rbegin(str2) - rend(str2), 3u);
+  ASSERT_EQ(crbegin(str2) - crend(str2), 3u);
 }
 
 TEST(AddressIterator, base) {

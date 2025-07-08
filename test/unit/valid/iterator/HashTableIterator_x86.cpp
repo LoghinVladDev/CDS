@@ -161,27 +161,27 @@ TEST(HashTableIterator, valueAdvancedAddr) {
 
   ASSERT_NE(begin, end);
   ASSERT_EQ(*begin, "a");
-  ASSERT_EQ(begin->length(), 1);
+  ASSERT_EQ(begin->length(), 1u);
   ++begin;
 
   ASSERT_NE(begin, end);
   ASSERT_EQ(*begin, "b");
-  ASSERT_EQ(begin->length(), 1);
+  ASSERT_EQ(begin->length(), 1u);
   (void) begin++;
 
   ASSERT_NE(begin, end);
   ASSERT_EQ(*begin, "c");
-  ASSERT_EQ(begin->length(), 1);
+  ASSERT_EQ(begin->length(), 1u);
   ++begin;
 
   ASSERT_NE(begin, end);
   ASSERT_EQ(*begin, "d");
-  ASSERT_EQ(begin->length(), 1);
+  ASSERT_EQ(begin->length(), 1u);
   (void) begin++;
 
   ASSERT_NE(begin, end);
   ASSERT_EQ(*begin, "e");
-  ASSERT_EQ(begin->length(), 1);
+  ASSERT_EQ(begin->length(), 1u);
   ++begin;
 
   ASSERT_EQ(begin, end);

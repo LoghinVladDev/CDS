@@ -4,7 +4,6 @@
 
 #include <cds/json/JSON>
 #include <cds/Format>
-#include <cds/meta/Platform>
 
 #include <UnitTest.hpp>
 
@@ -30,7 +29,7 @@ TEST(JsonObjectTest, iList) {
       }}
   };
 
-  ASSERT_EQ(5, obj.size());
+  ASSERT_EQ(5u, obj.size());
   ASSERT_EQ(1, obj["abc"]);
   ASSERT_EQ(false, obj["bcd"]);
   ASSERT_EQ("abc", obj["cde"]);
@@ -135,6 +134,33 @@ TEST(JsonObjectTest, fromLiteral) {
 #ifdef DCR_SINCECPP20
 constexpr void cpp20ConstexprTest() {
   static_assert(R"({"a": false, "b": 123, "c": "abc"})" == cds::format("{}", R"({"a": false, "b": 123, "c": "abc"})"_json));
+}
+
+TEST(JsonObjectTest, ostream) {
+  std::stringstream oss;
+  JsonObject obj = R"({)"
+                   R"("abc": 1, )"
+                   R"("bcd": false, )"
+                   R"("cde": "abc", )"
+                   R"("def": [1, false, "cbd"], )"
+                   R"("efg": {)"
+                   R"("a": "b", )"
+                   R"("b": false, )"
+                   R"("c": [1, false, "cbd"])"
+                   R"(})"
+                   R"(})";
+  oss << obj;
+  ASSERT_EQ(R"({)"
+            R"("abc": 1, )"
+            R"("bcd": false, )"
+            R"("cde": "abc", )"
+            R"("def": [1, false, "cbd"], )"
+            R"("efg": {)"
+            R"("a": "b", )"
+            R"("b": false, )"
+            R"("c": [1, false, "cbd"])"
+            R"(})"
+            R"(})", oss.str());
 }
 #endif
 #endif
