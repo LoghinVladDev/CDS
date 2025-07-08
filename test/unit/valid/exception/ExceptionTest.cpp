@@ -30,7 +30,7 @@ TEST(ExceptionTest, throwing) {
   auto thrower = []() {
     class DException : public Exception {
     public:
-      [[nodiscard]] auto message() const noexcept -> cds::impl::BaseStringView<char> override {
+      [[nodiscard]] auto message() const noexcept -> cds::impl::BaseStringView<char> /* MSVC override */ {
         return "test2";
       }
     };
