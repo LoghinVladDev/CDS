@@ -168,12 +168,12 @@ auto lazyFormatFormatTupleUnderlyingFormatters(
   ignore = get<idx>(underlyingFormatters).format(get<idx>(obj), ctx);
   if (idx + 1 != sizeof...(Fs)) {
     if (type == FormatTupleType::Array) {
-      *ctx.out() = static_cast<C>(',');
+      ctx.out() = static_cast<C>(',');
     } else if (type == FormatTupleType::Map) {
-      *ctx.out() = static_cast<C>(':');
+      ctx.out() = static_cast<C>(':');
     }
     if (type != FormatTupleType::None) {
-      *ctx.out() = static_cast<C>(' ');
+      ctx.out() = static_cast<C>(' ');
     }
   }
   return lazyFormatFormatTupleUnderlyingFormatters<C, idx + 1>(ctx, underlyingFormatters, obj, type);
@@ -246,11 +246,11 @@ template <typename C, typename... T> struct TupleLikeFormatter :
     }
 
     if (type == FormatTupleType::Array) {
-      *ctx.out() = static_cast<C>('(');
+      ctx.out() = static_cast<C>('(');
     }
     ignore = lazyFormatFormatTupleUnderlyingFormatters<C, 0>(ctx, underlyingFormatters, tupleLike, type);
     if (type == FormatTupleType::Array) {
-      *ctx.out() = static_cast<C>(')');
+      ctx.out() = static_cast<C>(')');
     }
     return ctx.out();
   }

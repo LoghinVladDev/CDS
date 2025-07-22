@@ -131,6 +131,7 @@ auto visitFormattersForFormat(BaseString<C, U>& out, Fmt& formatStringObject, A&
     begin->visit(visitors(
         [&out](BaseStringView<C, U> const& plainText) {
           auto skipNext = false;
+          out.reserve(out.size() + plainText.length());
           for (auto c : plainText) {
             if (skipNext) {
               skipNext = false;

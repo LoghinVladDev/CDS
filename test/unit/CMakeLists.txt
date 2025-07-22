@@ -106,11 +106,19 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/ds/MapEntryTest.cpp
       valid/ds/JsonArrayParserTest.cpp
       valid/ds/JsonArrayTest.cpp
+      valid/ds/JsonArrayPrinterTest.cpp
       valid/ds/JsonCommonParsersTest.cpp
       valid/ds/JsonNodeParserTest.cpp
+      valid/ds/JsonNodePrinterTest.cpp
       valid/ds/JsonNodeTest.cpp
       valid/ds/JsonObjectParserTest.cpp
-      valid/ds/JsonObjectTest.cpp)
+      valid/ds/JsonObjectPrinterTest.cpp
+      valid/ds/JsonObjectTest.cpp
+      valid/ds/JsonPrinterBaseTest.cpp
+      valid/ds/JsonPrinterContextTest.cpp
+      valid/ds/JsonPrinterIndenterTest.cpp
+      valid/ds/JsonPrinterTest.cpp
+      valid/ds/JsonElementPresenterTest.cpp)
 
   set(CDS_EXCEPTION_UNIT_TEST_SOURCES
       valid/exception/ExceptionTest.cpp

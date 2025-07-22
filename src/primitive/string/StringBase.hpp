@@ -1105,6 +1105,18 @@ public:
     return res;
   }
 
+  CDS_ATTR(constexpr(20)) auto popBack() noexcept -> void {
+    assert(!empty() && "undefined behavior");
+    auto const newLen = length() - 1u;
+    if (sh()) {
+      _sbo.lenSbo = static_cast<U8>(newLen) << 1u | 1u;
+      _sbo.buf[newLen] = STraits::nullChar;
+    } else {
+      _nrm.lenSbo = newLen << 1u;
+      _nrm.buf[newLen] = STraits::nullChar;
+    }
+  }
+
 private:
   template <typename T, EnableIf<Not<IsIterableOfThat<T, IsString>>> = 0> CDS_ATTR(2(nodiscard, constexpr(11)))
   static auto eJoinLength(CDS_ATTR(unused) View const& v, T&& e) noexcept -> Size {

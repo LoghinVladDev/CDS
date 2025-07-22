@@ -27,14 +27,14 @@ template <typename T, typename C = char, typename = void> struct StreamPrint {
 
 template <typename T, typename C>
 struct StreamPrint<T, C, Void<decltype(lvalue<std::basic_ostream<C>>() << rvalue<T>())>> {
-  CDS_ATTR(nodiscard) auto operator()(std::basic_ostream<C>& out, T const& val) const noexcept
-      -> std::basic_ostream<C>& {
+  CDS_ATTR(nodiscard) auto operator()(std::basic_ostream<C>& out, T const& val) const
+      CDS_ATTR(noexcept(noexcept(out << val))) -> std::basic_ostream<C>& {
     return out << val;
   }
 };
 
-template <typename T, typename C> CDS_ATTR(nodiscard)
-auto streamPrint(std::basic_ostream<C>& out, T const& val) noexcept -> std::basic_ostream<C>& {
+template <typename T, typename C> CDS_ATTR(nodiscard) auto streamPrint(std::basic_ostream<C>& out, T const& val)
+    CDS_ATTR(noexcept(noexcept(StreamPrint<T, C>{}(out, val)))) -> std::basic_ostream<C>& {
   return StreamPrint<T, C>{}(out, val);
 }
 } // namespace impl

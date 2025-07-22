@@ -4,6 +4,7 @@
 
 #ifndef CDS_DS_ARRAY_BASE_HPP
 #define CDS_DS_ARRAY_BASE_HPP
+#pragma once
 
 #include <cds/functional/Transformer>
 
@@ -14,6 +15,7 @@
 #include "../../algorithm/FindPreserveTransformer.hpp"
 #include "../../algorithm/GenericFind.hpp"
 #include "../../algorithm/RangeEqual.hpp"
+#include "../../functional/StreamPrint.hpp"
 #include "../../iterator/AddressIterator.hpp"
 #include "../../meta/Utility.hpp"
 
@@ -23,6 +25,8 @@
 
 namespace cds {
 namespace impl {
+using functional::streamPrint;
+
 using iterator::BackwardAddressIterator;
 using iterator::ForwardAddressIterator;
 
@@ -268,7 +272,7 @@ public:
 
 template <typename C, typename FT, typename FE, typename FA, typename FSB>
 auto operator<<(std::basic_ostream<C>& out, ArrayBase<FT, FE, FA, FSB> const& array)
-    CDS_ATTR(noexcept(noexcept(out << rvalue<FT>()))) -> std::basic_ostream<C>& {
+    CDS_ATTR(noexcept(noexcept(streamPrint(out, rvalue<FT>())))) -> std::basic_ostream<C>& {
   out << static_cast<C>('[');
   auto it = array.begin();
   auto end = array.end();
@@ -277,11 +281,9 @@ auto operator<<(std::basic_ostream<C>& out, ArrayBase<FT, FE, FA, FSB> const& ar
     return out;
   }
 
-  out << *it;
+  ignore = streamPrint(out, *it);
   for (++it; it != end; ++it) {
-    out << static_cast<C>(',');
-    out << static_cast<C>(' ');
-    out << *it;
+    ignore = streamPrint(out << static_cast<C>(',') << static_cast<C>(' '), *it);
   }
   out << static_cast<C>(']');
   return out;

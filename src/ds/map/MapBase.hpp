@@ -16,11 +16,26 @@
 #include "../../ds/set/SetProjection.hpp"
 #include "../../meta/Ignore.hpp"
 
+#include "../../bindings/BindingSelectors.hpp"
+#include "../../bindings/static/GenericLoopBinding.hpp"
+
 #include <initializer_list>
 
 #include "../../stdlib/ostream.hpp"
 
 namespace cds {
+namespace impl {
+template <typename K, typename V, typename B> class BaseMap;
+} // namespace impl
+
+namespace meta {
+template <typename K, typename V, typename B> struct IterableTraits<cds::impl::BaseMap<K, V, B>> {
+  using Value = cds::impl::MapEntry<K, V>;
+  using Iterator = typename B::Iterator;
+  using ConstIterator = typename B::ConstIterator;
+};
+} // namespace meta
+
 namespace impl {
 using functional::impl::Identity;
 
@@ -30,8 +45,6 @@ using meta::IsIterable;
 using meta::IsForwardIterator;
 using meta::impl::IsBaseOfIntrusiveICVR;
 using meta::rvalue;
-
-template <typename K, typename V, typename B> class BaseMap;
 
 template <typename K, typename V, typename B> struct SetProjectionTraits<BaseMap<K, V, B>, MapEntryKeyProjection> {
   using Value = K;
@@ -89,7 +102,18 @@ template <typename K, typename V, typename B> struct SetProjectionTraits<BaseMap
   using CanRemove = False;
 };
 
-template <typename K, typename V, typename B> class CDS_ATTR(ebo) BaseMap : private B {
+namespace bindingsBM {
+using namespace sel;
+
+using LoopOpt = With<Immutable, Mutable>;
+
+template <typename... A> using Self = BaseMap<A...>;
+template <typename... A> struct CDS_ATTR(ebo) GenericLoop : GenericLoopBinding<Self<A...>, LoopOpt> {};
+} // namespace bindingsBM
+
+template <typename K, typename V, typename B> class CDS_ATTR(ebo) BaseMap :
+    private B,
+    public bindingsBM::GenericLoop<K, V, B> {
 public:
   using typename B::Iterator;
   using typename B::ConstIterator;

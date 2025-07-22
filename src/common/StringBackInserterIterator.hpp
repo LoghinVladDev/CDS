@@ -11,6 +11,8 @@ namespace iterator {
 namespace impl {
 template <typename C, typename U, typename A> class BackInserterIterator<cds::impl::BaseString<C, U, A>> {
   using S = cds::impl::BaseString<C, U, A>;
+  friend struct BackInserterIteratorAccess;
+
 public:
   BackInserterIterator(BackInserterIterator const&) = default;
 

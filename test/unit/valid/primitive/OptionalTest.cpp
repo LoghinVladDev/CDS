@@ -6,6 +6,7 @@
 #include <cds/Optional>
 #include <cds/String>
 #include <cds/StringView>
+#include <cds/Format>
 
 namespace {
 using cds::Optional;
@@ -757,3 +758,9 @@ TEST(OptionalTest, spaceshipComp) {
   ASSERT_EQ(std::weak_ordering::equivalent, Optional<int>{} <=> Optional<int>{});
 }
 #endif
+
+TEST(OptionalTest, format) {
+  ASSERT_EQ("<nullopt>", cds::format("{}", Optional<int>{}));
+  ASSERT_EQ("5", cds::format("{}", Optional<int>{5}));
+  ASSERT_EQ("0x20", cds::format("{:#x}", Optional<int>{0x20}));
+}

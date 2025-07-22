@@ -663,7 +663,7 @@ template <typename C, typename T> struct StringUtils : private StringUtilsConsta
   }
 
   template <typename N, typename I, EnableIf<IsUnsigned<N>> = 0> CDS_ATTR(2(nodiscard, constexpr(14)))
-  static auto writeIntB10(N value, U8 const len, I dst) noexcept -> I {
+  static auto writeIntB10(N value, U8 len, I dst) noexcept -> I {
     auto const end = dst + len;
     auto beg = end - 1;
     while (value >= 100) {

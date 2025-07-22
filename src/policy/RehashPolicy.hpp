@@ -26,7 +26,7 @@ public:
     BalanceType type;
   };
 
-  static_assert(sizeof(BalanceResult) == 2 * sizeof(Size));
+  static_assert(sizeof(BalanceResult) == 2 * sizeof(Size), "unexpected BalanceResult size");
 };
 
 namespace prp {

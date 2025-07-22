@@ -15,6 +15,7 @@ namespace cds {
 namespace impl {
 namespace fmt {
 using iterator::BackInserterIterator;
+using iterator::impl::BackInserterIteratorAccess;
 
 using meta::IsSame;
 using meta::IsSigned;
@@ -69,6 +70,8 @@ template <typename T, typename C> struct StandardFormatter :
         value = static_cast<C>('n');
       } else if (value == static_cast<C>('\r')) {
         value = static_cast<C>('r');
+      } else if (value == static_cast<C>('\f')) {
+        value = static_cast<C>('f');
       } else if (value == static_cast<C>('\'') || value == static_cast<C>('\\')) {
         // nothing changes
       } else {
@@ -81,14 +84,14 @@ template <typename T, typename C> struct StandardFormatter :
       return formatFillAlign(maybeRequestedWidth, ctx.out(), static_cast<C>(value), len,
           [escaped, alternate](C value0, BackInserterIterator<BaseString<C, SU>> out0) {
             if (alternate) {
-              out0 = impl::fillN(out0, 1, static_cast<C>('\''));
+              out0 = static_cast<C>('\'');
             }
             if (escaped) {
-              out0 = impl::fillN(out0, 1, static_cast<C>('\\'));
+              out0 = static_cast<C>('\\');
             }
-            out0 = impl::fillN(out0, 1u, value0);
+            out0 = value0;
             if (alternate) {
-              out0 = impl::fillN(out0, 1, static_cast<C>('\''));
+              out0 = static_cast<C>('\'');
             }
             return out0;
           });
@@ -97,11 +100,11 @@ template <typename T, typename C> struct StandardFormatter :
     return formatFillAlign(maybeRequestedWidth, ctx.out(), static_cast<C>(value), len,
         [alternate](C value0, BackInserterIterator<BaseString<C, SU>> out0) {
           if (alternate) {
-            out0 = impl::fillN(out0, 1, static_cast<C>('\''));
+            out0 = static_cast<C>('\'');
           }
-          out0 = impl::fillN(out0, 1u, value0);
+          out0 = value0;
           if (alternate) {
-            out0 = impl::fillN(out0, 1, static_cast<C>('\''));
+            out0 = static_cast<C>('\'');
           }
           return out0;
         });
@@ -144,17 +147,17 @@ template <typename T, typename C> struct StandardFormatter :
       }
       return formatFillAlign(maybeRequestedWidth, ctx.out(), escapedValue, escapedValue.size(),
           [](BaseString<C, U> const& value0, BackInserterIterator<BaseString<C, SU>> out) {
-            return impl::copy(value0.begin(), value0.end(), out);
+            return out = value0;
           });
     }
     return formatFillAlign(maybeRequestedWidth, ctx.out(), value, value.length() + (alternate ? 2u : 0u),
         [alternate](BaseStringView<C, U> const& value0, BackInserterIterator<BaseString<C, SU>> out0) {
           if (alternate) {
-            out0 = impl::fillN(out0, 1u, static_cast<C>('"'));
+            out0 = static_cast<C>('"');
           }
-          out0 = impl::copy(value0.begin(), value0.end(), out0);
+          out0 = value0;
           if (alternate) {
-            out0 = impl::fillN(out0, 1u, static_cast<C>('"'));
+            out0 = static_cast<C>('"');
           }
           return out0;
         });
@@ -181,43 +184,42 @@ template <typename T, typename C> struct StandardFormatter :
     auto writeIt = [this, ulen, neg, base, leadingPotential]
         (T value0, BackInserterIterator<BaseString<C, SU>> out0, bool leadingZeroes = false) {
       if (neg) {
-        out0 = impl::fillN(out0, 1, static_cast<C>('-'));
+        out0 = static_cast<C>('-');
       } else if (numberSpecification.sign == FormatNumberSignType::PositiveNegative) {
-        out0 = impl::fillN(out0, 1, static_cast<C>('+'));
+        out0 = static_cast<C>('+');
       } else if (numberSpecification.sign == FormatNumberSignType::SpaceNegative) {
-        out0 = impl::fillN(out0, 1, static_cast<C>(' '));
+        out0 = static_cast<C>(' ');
       }
       auto upper = 0 != (typeFlags & FormatTypeFlagBits::Uppercase);
       if (numberSpecification.alternate && 0 != (typeFlags & (FormatTypeFlagBits::Binary
                                                               | FormatTypeFlagBits::Octal
                                                               | FormatTypeFlagBits::Hex))) {
         if (0 != (typeFlags & FormatTypeFlagBits::Hex)) {
-          out0 = impl::fillN(
-              impl::fillN(out0, 1, static_cast<C>('0')),
-              1, upper ? static_cast<C>('X') : static_cast<C>('x')
-          );
+          out0 = static_cast<C>('0');
+          out0 = upper ? static_cast<C>('X') : static_cast<C>('x');
         } else if (0 != (typeFlags & FormatTypeFlagBits::Binary)) {
-          out0 = impl::fillN(
-              impl::fillN(out0, 1, static_cast<C>('0')),
-              1, upper ? static_cast<C>('B') : static_cast<C>('b')
-          );
+          out0 = static_cast<C>('0');
+          out0 = upper ? static_cast<C>('B') : static_cast<C>('b');
         } else {
-          out0 = impl::fillN(out0, 1, static_cast<C>('0'));
+          out0 = static_cast<C>('0');
         }
       }
       if (leadingZeroes && leadingPotential > 0) {
         out0 = impl::fillN(out0, static_cast<Size>(leadingPotential), static_cast<C>('0'));
       }
-      BaseString<C, SU> asString(ulen, '\0');
-      ignore = SU::writeInt(value0, ulen, asString.data(), base, upper);
-      return impl::copy(asString.begin(), asString.end(), out0);
+
+      auto& str = BackInserterIteratorAccess{}(out0);
+      auto const oldLen = str.length();
+      str.resize(str.length() + ulen, '\0');
+      ignore = SU::writeInt(value0, ulen, str.data() + oldLen, base, upper);
+      return out0;
     };
     if (!fillAlignSpecification.align && maybeRequestedWidth) {
       if (numberSpecification.leadingZeroes) {
         return writeIt(value, out, true);
       }
     }
-    return formatFillAlign(maybeRequestedWidth, ctx.out(), value, len, writeIt);
+    return formatFillAlign(maybeRequestedWidth, out, value, len, writeIt);
   }
 
   template <typename T0, typename Ctx, EnableIf<IsUnsigned<T0>> = 0> CDS_ATTR(2(nodiscard, constexpr(20)))
@@ -238,41 +240,39 @@ template <typename T, typename C> struct StandardFormatter :
     auto writeIt = [this, ulen, base, leadingPotential]
         (T value0, BackInserterIterator<BaseString<C, SU>> out0, bool leadingZeroes = false) {
       if (numberSpecification.sign == FormatNumberSignType::PositiveNegative) {
-        out0 = impl::fillN(out0, 1, static_cast<C>('+'));
+        out0 = static_cast<C>('+');
       } else if (numberSpecification.sign == FormatNumberSignType::SpaceNegative) {
-        out0 = impl::fillN(out0, 1, static_cast<C>(' '));
+        out0 = static_cast<C>(' ');
       }
       auto upper = 0 != (typeFlags & FormatTypeFlagBits::Uppercase);
       if (numberSpecification.alternate && 0 != (typeFlags & (FormatTypeFlagBits::Binary
                                                               | FormatTypeFlagBits::Octal
                                                               | FormatTypeFlagBits::Hex))) {
         if (0 != (typeFlags & FormatTypeFlagBits::Hex)) {
-          out0 = impl::fillN(
-              impl::fillN(out0, 1, static_cast<C>('0')),
-              1, upper ? static_cast<C>('X') : static_cast<C>('x')
-          );
+          out0 = static_cast<C>('0');
+          out0 = upper ? static_cast<C>('X') : static_cast<C>('x');
         } else if (0 != (typeFlags & FormatTypeFlagBits::Binary)) {
-          out0 = impl::fillN(
-              impl::fillN(out0, 1, static_cast<C>('0')),
-              1, upper ? static_cast<C>('B') : static_cast<C>('b')
-          );
+          out0 = static_cast<C>('0');
+          out0 = upper ? static_cast<C>('B') : static_cast<C>('b');
         } else {
-          out0 = impl::fillN(out0, 1, static_cast<C>('0'));
+          out0 = static_cast<C>('0');
         }
       }
       if (leadingZeroes && leadingPotential > 0) {
         out0 = impl::fillN(out0, static_cast<Size>(leadingPotential), static_cast<C>('0'));
       }
-      BaseString<C, SU> asString(ulen, '\0');
-      ignore = SU::writeInt(value0, ulen, asString.data(), base, upper);
-      return impl::copy(asString.begin(), asString.end(), out0);
+      auto& str = BackInserterIteratorAccess{}(out0);
+      auto const oldLen = str.length();
+      str.resize(oldLen + ulen, '\0');
+      ignore = SU::writeInt(value0, ulen, str.data() + oldLen, base, upper);
+      return out0;
     };
     if (!fillAlignSpecification.align && maybeRequestedWidth) {
       if (numberSpecification.leadingZeroes) {
         return writeIt(value, out, true);
       }
     }
-    return formatFillAlign(maybeRequestedWidth, ctx.out(), value, len, writeIt);
+    return formatFillAlign(maybeRequestedWidth, out, value, len, writeIt);
   }
 
   template <typename T0, typename Ctx> CDS_ATTR(nodiscard) auto formatPointer(T0 const* ptr, Ctx& ctx)
@@ -284,11 +284,13 @@ template <typename T, typename C> struct StandardFormatter :
     return formatFillAlign(
         maybeRequestedWidth, ctx.out(), reinterpretedValue, length + 2u,
         [upper, length](Address value0, BackInserterIterator<BaseString<C, SU>> out0) {
-          *out0 = static_cast<C>('0');
-          *++out0 = upper ? static_cast<C>('X') : static_cast<C>('x');
-          BaseString<C, SU> asStr(length, '\0');
-          ignore = SU::writeInt(value0, length, asStr.data(), 16, upper);
-          return impl::copy(asStr.begin(), asStr.end(), ++out0);
+          out0 = static_cast<C>('0');
+          out0 = upper ? static_cast<C>('X') : static_cast<C>('x');
+          auto& str = BackInserterIteratorAccess{}(out0);
+          auto const oldLen = str.length();
+          str.resize(oldLen + length, '\0');
+          ignore = SU::writeInt(value0, length, str.data() + oldLen, 16, upper);
+          return out0;
         }
     );
   }
@@ -368,7 +370,7 @@ template <typename T, typename C> struct StandardFormatter :
         maybeRequestedWidth, ctx.out(), value, valueAsStr.length(),
         [&valueAsStr](T0 value0, BackInserterIterator<BaseString<C, SU>> out0) {
           ignore = value0;
-          return impl::copy(valueAsStr.begin(), valueAsStr.end(), out0);
+          return out0 = valueAsStr;
         }
     );
   }

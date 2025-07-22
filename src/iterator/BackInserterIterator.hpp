@@ -16,7 +16,23 @@ using meta::IsSame;
 using meta::Not;
 using meta::RemoveCVRef;
 
+template <typename T> class BackInserterIterator;
+
+struct BackInserterIteratorAccess {
+  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(BackInserterIterator<T> const& it)
+      const noexcept -> T& {
+    return it._obj;
+  }
+
+  template <typename T> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(BackInserterIterator<T>& it)
+      const noexcept -> T& {
+    return it._obj;
+  }
+};
+
 template <typename T> class BackInserterIterator {
+  friend struct BackInserterIteratorAccess;
+
 public:
   CDS_ATTR(2(explicit, constexpr(11))) BackInserterIterator(T& obj) noexcept : _obj{obj} {}
 

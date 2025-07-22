@@ -147,7 +147,7 @@ public:
     return upcast<index>(base()).leaf()._data;
   }
 
-  template <Size index> CDS_ATTR(2(nodiscard, constexpr(11))) auto get()&& noexcept
+  template <Size index> CDS_ATTR(2(nodiscard, constexpr(14))) auto get()&& noexcept
       -> RemoveRef<decltype(upcast<index>(base()).leaf()._data)>&& {
     return mv(upcast<index>(mv(base())).leaf()._data);
   }

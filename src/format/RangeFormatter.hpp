@@ -23,8 +23,6 @@ using meta::False;
 using meta::True;
 using meta::Void;
 
-template <typename...> struct RangeLike;
-
 template <typename, typename = void> struct IsRangeMapLikeEntry : False {};
 template <typename T> struct IsRangeMapLikeEntry<T, Void<decltype(Formatter<T>::type)>> : True {};
 

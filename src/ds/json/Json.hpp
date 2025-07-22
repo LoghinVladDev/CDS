@@ -22,6 +22,13 @@
 #include "JsonObjectParser.hpp"
 #include "JsonNodeParser.hpp"
 
+#include "JsonPrinterDecl.hpp"
+
+#include "JsonArrayPrinter.hpp"
+#include "JsonNodePrinter.hpp"
+#include "JsonObjectPrinter.hpp"
+#include "JsonStringPrinter.hpp"
+
 #include "../../format/JsonNodeFormatter.hpp"
 #include "../../format/JsonArrayFormatter.hpp"
 #include "../../format/JsonObjectFormatter.hpp"
