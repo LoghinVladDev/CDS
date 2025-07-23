@@ -13,6 +13,7 @@
 #include "JsonPrinterIndenter.hpp"
 #include "JsonPrinterOutput.hpp"
 #include "JsonPrinterOutputString.hpp"
+#include "JsonPrinterOutputStream.hpp"
 
 #include <cds/String>
 #include <cds/StringView>
@@ -103,7 +104,7 @@ template <typename O, typename B, typename A> CDS_ATTR(constexpr(20)) auto JsonE
   }
 }
 
-template <typename Output> class JsonPrinter;
+template <typename Output, typename = void> class JsonPrinter;
 } // namespace impl
 
 using impl::JsonPrinter;
@@ -111,6 +112,7 @@ using impl::JsonPrinterOptions;
 using impl::SpacingKind;
 using impl::RearrangeKind;
 using JsonStringPrinter = JsonPrinter<String>;
+using JsonStreamPrinter = JsonPrinter<std::ostream>;
 } // namespace json
 } // namespace cds
 

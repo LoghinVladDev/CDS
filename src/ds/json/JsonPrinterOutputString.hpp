@@ -113,30 +113,31 @@ template <> struct JsonPrinterOutput<String, void> {
       }
 
       out += "\\u";
+      auto oldLength = out.length();
       out.resize(out.length() + 4, '\0');
 
       if (0xC0u == (value[idx] & 0xE0u)) {
-        if (idx + 1 == value.length()
+        if (idx + 1 >= value.length()
             || (value[idx + 1] & 0xC0u) != 0x80u) {
           throw InvalidUTF8EncodingException();
         }
-        ignore = cds::impl::fillN(out.data(), 1u, '0');
-        ignore = String::Utils::writeIntB16l((value[idx] & 0x1Cu) >> 2u, 1u, out.data() + 1);
+        ignore = cds::impl::fillN(out.data() + oldLength, 1u, '0');
+        ignore = String::Utils::writeIntB16l((value[idx] & 0x1Cu) >> 2u, 1u, out.data() + oldLength + 1);
         ignore = String::Utils::writeIntB16l(
-            (value[idx] & 0x03u) | ((value[idx + 1] & 0x30u) >> 4u), 1u, out.data() + 2);
-        ignore = String::Utils::writeIntB16l(value[idx + 1] & 0x0Fu, 1u, out.data() + 3);
+            ((value[idx] & 0x03u) << 2u) | ((value[idx + 1] & 0x30u) >> 4u), 1u, out.data() + oldLength + 2);
+        ignore = String::Utils::writeIntB16l(value[idx + 1] & 0x0Fu, 1u, out.data() + oldLength + 3);
         ++idx;
       } else if (0xE0u == (value[idx] & 0xF0u)) {
-        if (idx + 2 <= value.length()
+        if (idx + 2 >= value.length()
             || (value[idx + 1] & 0xC0u) != 0x80u
             || (value[idx + 2] & 0xC0u) != 0x80u) {
           throw InvalidUTF8EncodingException();
         }
-        ignore = String::Utils ::writeIntB16l(value[idx] & 0x0Fu, 1u, out.data());
-        ignore = String::Utils ::writeIntB16l((value[idx + 1] & 0x3Cu) >> 2u, 1u, out.data() + 1);
+        ignore = String::Utils ::writeIntB16l(value[idx] & 0x0Fu, 1u, out.data() + oldLength);
+        ignore = String::Utils ::writeIntB16l((value[idx + 1] & 0x3Cu) >> 2u, 1u, out.data() + oldLength + 1);
         ignore = String::Utils::writeIntB16l(
-            (value[idx + 1] & 0x03u) | ((value[idx + 2] & 0x30u) >> 4u), 1u, out.data() + 2);
-        ignore = String::Utils::writeIntB16l(value[idx + 2] & 0x0Fu, 1u, out.data() + 3);
+            ((value[idx + 1] & 0x03u) << 2u) | ((value[idx + 2] & 0x30u) >> 4u), 1u, out.data() + oldLength + 2);
+        ignore = String::Utils::writeIntB16l(value[idx + 2] & 0x0Fu, 1u, out.data() + oldLength + 3);
         idx += 2;
       } else {
         // writing 0x10000 - 0x10FFFF not directly supported as parsing these codepoints is, in itself, unsupported
@@ -150,11 +151,11 @@ template <> struct JsonPrinterOutput<String, void> {
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto fits(Size const count) const noexcept -> bool {
-    return onLine + count < ctx.options.columnLimit;
+    return onLine + count <= ctx.options.columnLimit;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto fits(char) const noexcept -> bool {
-    return onLine + 1 < ctx.options.columnLimit;
+    return onLine + 1 <= ctx.options.columnLimit;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto fits(StringView value) const noexcept -> bool {

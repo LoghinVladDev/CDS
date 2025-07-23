@@ -88,7 +88,7 @@ TEST(JsonObjectPrinterTest, printObjectStartOnCont) {
   JsonPrinterContext ctx{options};
   String output;
   JsonPrinterOutput<String> printer{ctx, output};
-  printer.onLine = options.columnLimit - 1;
+  printer.onLine = options.columnLimit;
   printJsonObject(printer, arr, ctx);
 
   ASSERT_EQ("\n    {}", output);
@@ -157,7 +157,7 @@ TEST(JsonObjectPrinterTest, printObjectEndOnCont) {
   JsonPrinterContext ctx{options};
   String output;
   JsonPrinterOutput<String> printer{ctx, output};
-  printer.onLine = options.columnLimit - 2;
+  printer.onLine = options.columnLimit - 1;
   printJsonObject(printer, arr, ctx);
 
   ASSERT_EQ("{\n}", output);

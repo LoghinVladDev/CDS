@@ -11,7 +11,7 @@
 namespace cds {
 namespace json {
 namespace impl {
-template <> class JsonPrinter<String> : public JsonPrinterBase<JsonPrinter<String>> {
+template <> class JsonPrinter<String, void> : public JsonPrinterBase<JsonPrinter<String, void>> {
 public:
   JsonPrinter() = default;
   CDS_ATTR(constexpr(20)) JsonPrinter(JsonPrinterOptions const& options) noexcept :

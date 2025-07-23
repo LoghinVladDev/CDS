@@ -28,6 +28,7 @@
 #include "JsonNodePrinter.hpp"
 #include "JsonObjectPrinter.hpp"
 #include "JsonStringPrinter.hpp"
+#include "JsonStreamPrinter.hpp"
 
 #include "../../format/JsonNodeFormatter.hpp"
 #include "../../format/JsonArrayFormatter.hpp"

@@ -117,6 +117,8 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/ds/JsonPrinterBaseTest.cpp
       valid/ds/JsonPrinterContextTest.cpp
       valid/ds/JsonPrinterIndenterTest.cpp
+      valid/ds/JsonPrinterOutputStreamTest.cpp
+      valid/ds/JsonPrinterOutputStringTest.cpp
       valid/ds/JsonPrinterTest.cpp
       valid/ds/JsonElementPresenterTest.cpp)
 

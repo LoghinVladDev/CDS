@@ -2,8 +2,8 @@
 // Created by loghin on 7/16/25.
 //
 
-#ifndef CDS_DS_JSON_PRINTER_OUTPUT_STRING_HPP
-#define CDS_DS_JSON_PRINTER_OUTPUT_STRING_HPP
+#ifndef CDS_DS_JSON_PRINTER_OUTPUT_STREAM_HPP
+#define CDS_DS_JSON_PRINTER_OUTPUT_STREAM_HPP
 #pragma once
 
 #include "JsonPrinterOutput.hpp"
@@ -47,16 +47,16 @@ struct JsonPrinterOutput<StreamType, Void<decltype(lvalue<StreamType>() << "")>>
 
   template <typename N, EnableIf<IsIntegral<N>> = 0>
   CDS_ATTR(constexpr(20)) auto forceWrite(N value) noexcept -> void {
-    auto const len = String::Utils::intLength(value, 10);
-    onLine += len;
+    auto const before = out.tellp();
     out << value;
+    onLine += out.tellp() - before;
   }
 
   template <typename N, EnableIf<IsFloating<N>> = 0>
   CDS_ATTR(constexpr(20)) auto forceWrite(N value) noexcept -> void {
-    auto const len = String::Utils::floatingLength(value);
-    onLine += len;
+    auto const before = out.tellp();
     out << value;
+    onLine += out.tellp() - before;
   }
 
   CDS_ATTR(constexpr(20)) auto forceWriteEscaped(StringView value) noexcept -> void {
@@ -116,31 +116,31 @@ struct JsonPrinterOutput<StreamType, Void<decltype(lvalue<StreamType>() << "")>>
       }
 
       out << "\\u";
-      auto toHexChar = [](U8 value) {
+      auto toHexChar = [](U8 value) -> char {
         return value < 10
-            ? '0' + value
-            : 'a' + (value - 10);
+            ? static_cast<char>('0' + value)
+            : static_cast<char>('a' + (value - 10));
       };
 
       if (0xC0u == (value[idx] & 0xE0u)) {
-        if (idx + 1 == value.length()
+        if (idx + 1 >= value.length()
             || (value[idx + 1] & 0xC0u) != 0x80u) {
           throw InvalidUTF8EncodingException();
         }
         out << '0'
             << toHexChar((value[idx] & 0x1Cu) >> 2u)
-            << toHexChar((value[idx] & 0x03u) | ((value[idx + 1] & 0x30u) >> 4u))
+            << toHexChar(((value[idx] & 0x03u) << 2u) | ((value[idx + 1] & 0x30u) >> 4u))
             << toHexChar(value[idx + 1] & 0x0Fu);
         ++idx;
       } else if (0xE0u == (value[idx] & 0xF0u)) {
-        if (idx + 2 <= value.length()
+        if (idx + 2 >= value.length()
             || (value[idx + 1] & 0xC0u) != 0x80u
             || (value[idx + 2] & 0xC0u) != 0x80u) {
           throw InvalidUTF8EncodingException();
         }
         out << toHexChar(value[idx] & 0x0Fu);
         out << toHexChar((value[idx + 1] & 0x3Cu) >> 2u);
-        out << toHexChar((value[idx + 1] & 0x03u) | ((value[idx + 2] & 0x30u) >> 4u));
+        out << toHexChar(((value[idx + 1] & 0x03u) << 2u) | ((value[idx + 2] & 0x30u) >> 4u));
         out << toHexChar(value[idx + 2] & 0x0Fu);
         idx += 2;
       } else {
@@ -155,11 +155,11 @@ struct JsonPrinterOutput<StreamType, Void<decltype(lvalue<StreamType>() << "")>>
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto fits(Size const count) const noexcept -> bool {
-    return onLine + count < ctx.options.columnLimit;
+    return onLine + count <= ctx.options.columnLimit;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto fits(char) const noexcept -> bool {
-    return onLine + 1 < ctx.options.columnLimit;
+    return onLine + 1 <= ctx.options.columnLimit;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto fits(StringView value) const noexcept -> bool {
@@ -179,7 +179,6 @@ struct JsonPrinterOutput<StreamType, Void<decltype(lvalue<StreamType>() << "")>>
     if (!fits(value)) {
       return false;
     }
-
 
     forceWrite(value);
     return true;
@@ -202,4 +201,4 @@ struct JsonPrinterOutput<StreamType, Void<decltype(lvalue<StreamType>() << "")>>
 } // namespace json
 } // namespace cds
 
-#endif // #ifndef CDS_DS_JSON_PRINTER_OUTPUT_STRING_HPP
+#endif // #ifndef CDS_DS_JSON_PRINTER_OUTPUT_STREAM_HPP

@@ -46,6 +46,45 @@ TEST(JsonPrinterTest, printAsJson) {
   );
 }
 
+TEST(JsonPrinterTest, printAsJsonToStream) {
+  JsonObject obj = R"({)"
+                   R"("abc": 1, )"
+                   R"("bcd": false, )"
+                   R"("cde": "abc", )"
+                   R"("def": [1, false, "cbd"], )"
+                   R"("efg": {)"
+                   R"("a": "b", )"
+                   R"("b": false, )"
+                   R"("c": [1, false, "cbd"])"
+                   R"(})"
+                   R"(})";
+
+  std::stringstream buf;
+  JsonStreamPrinter printer{buf};
+  printer.write(obj);
+  ASSERT_EQ(buf.str(),
+            R"({
+  "abc": 1,
+  "bcd": false,
+  "cde": "abc",
+  "def": [
+    1,
+    false,
+    "cbd"
+  ],
+  "efg": {
+    "a": "b",
+    "b": false,
+    "c": [
+      1,
+      false,
+      "cbd"
+    ]
+  }
+})"
+  );
+}
+
 TEST(JsonPrinterTest, printAsXML) {
   JsonObject obj = R"({)"
                    R"("abc": 1, )"

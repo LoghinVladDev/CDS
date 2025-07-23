@@ -88,7 +88,7 @@ TEST(JsonArrayPrinterTest, printArrayStartOnCont) {
   JsonPrinterContext ctx{options};
   String output;
   JsonPrinterOutput<String> printer{ctx, output};
-  printer.onLine = options.columnLimit - 1;
+  printer.onLine = options.columnLimit;
   printJsonArray(printer, arr, ctx);
 
   ASSERT_EQ("\n    []", output);
@@ -157,7 +157,7 @@ TEST(JsonArrayPrinterTest, printArrayEndOnCont) {
   JsonPrinterContext ctx{options};
   String output;
   JsonPrinterOutput<String> printer{ctx, output};
-  printer.onLine = options.columnLimit - 2;
+  printer.onLine = options.columnLimit - 1;
   printJsonArray(printer, arr, ctx);
 
   ASSERT_EQ("[\n]", output);
@@ -177,8 +177,7 @@ TEST(JsonArrayPrinterTest, chopDown) {
 
   printJsonArray(printer, arr, ctx);
 
-  ASSERT_EQ(R"([1, "smol",
-    3.400000,
+  ASSERT_EQ(R"([1, "smol", 3.400000,
     "this is a string",
     true, "str"])", output);
 }
