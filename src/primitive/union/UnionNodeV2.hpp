@@ -145,6 +145,7 @@ template <Size idx> struct IsNotInPlaceIndex<InPlaceIndex<idx>> : False {};
 enum class UnionFunctionDetail {
   Trivial, NonTrivial, Deleted
 };
+
 enum class UnionFunctionType {
   Dtr, DefCtr, CopyCtr, CopyAssign, MoveCtr, MoveAssign
 };

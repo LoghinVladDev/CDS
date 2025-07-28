@@ -339,7 +339,9 @@ class HashTablePrinter(TypePrinter):
             self.tail = tail
             self.current = self.head.dereference()
             self.index = 0
-            self.locate_next()
+
+            if is_null(self.current):
+                self.locate_next()
 
         def locate_next(self):
             if not is_null(self.current):

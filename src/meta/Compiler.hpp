@@ -28,6 +28,7 @@
 #define CDS_ATTR_constexpr(std) CDS_ATTR_constexpr_ ## std
 #define CDS_ATTR_consteval(std, fallback) CDS_ATTR_consteval_ ## std (fallback)
 #define CDS_ATTR_noexcept(...) noexcept(!CDS_ATTR_exceptions || __VA_ARGS__)
+#define CDS_ATTR_noexcept_v(...) noexcept(!CDS_ATTR_exceptions || __VA_ARGS__::value)
 #define CDS_ATTR_friend_noexcept(...) CDS_ATTR_noexcept(__VA_ARGS__)
 
 #define CDS_ATTR_2(a, b) CDS_ATTR_ ## a CDS_ATTR_ ## b

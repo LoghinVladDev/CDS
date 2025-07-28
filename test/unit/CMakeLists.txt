@@ -176,6 +176,7 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/policy/RehashPolicy.cpp)
 
   set(CDS_PRIMITIVE_UNIT_TEST_SOURCES
+      valid/primitive/ExpectedTest.cpp
       valid/primitive/OptionalTest.cpp
       valid/primitive/StringAbstract.cpp
       valid/primitive/StringUtils.cpp
