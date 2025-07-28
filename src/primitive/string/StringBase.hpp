@@ -6,8 +6,6 @@
 #define CDS_PRIMITIVE_STRING_BASE_HPP
 #pragma once
 
-#include "../../stdlib/ostream.hpp"
-
 #include <cds/meta/IterableTraits>
 
 #include "StringBaseDecl.hpp"
@@ -21,6 +19,8 @@
 #include "../../bindings/static/FindStaticBinding.hpp"
 #include "../../bindings/static/FindOfStaticBinding.hpp"
 #include "../../bindings/static/GenericLoopBinding.hpp"
+
+#include "../../stdlib/ostream.hpp"
 
 namespace cds {
 namespace impl {
@@ -518,11 +518,6 @@ public:
   template <typename N> CDS_ATTR(2(nodiscard, constexpr(14))) auto endsWith(N&& needle) const noexcept -> bool {
     return U::endsWith(data(), size(), fwd<N>(needle));
   }
-
-  template <typename FC, typename FU, typename FA>
-  friend auto operator<<(typename BaseString<FC, FU, FA>::OStream& out, BaseString<FC, FU, FA> const& obj)
-      CDS_ATTR(noexcept(noexcept(out.write(obj.data(), static_cast<SSize>(obj.length())))))
-      -> typename BaseString<FC, FU, FA>::OStream&;
 
   template <typename S, typename T = SplitAllocationTraits<S>, EnableIf<Not<typename T::Required>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto split(S&& separator) const&
@@ -1356,10 +1351,19 @@ template <typename C, typename U, typename A> Idx const BaseString<C, U, A>::npo
 template <typename C, typename U, typename A> Idx const BaseString<C, U, A>::invalidIndex = npos;
 template <typename C, typename U, typename A> Size const BaseString<C, U, A>::minCap = 32u;
 
-template <typename FC, typename FU, typename FA>
-auto operator<<(typename BaseString<FC, FU, FA>::OStream& out, BaseString<FC, FU, FA> const& obj)
-    CDS_ATTR(noexcept(noexcept(out.write(obj.data(), static_cast<SSize>(obj.length())))))
-    -> typename BaseString<FC, FU, FA>::OStream& {
+namespace osExc {
+using meta::Bool;
+using meta::False;
+
+template <typename C, typename U, typename A, typename = void> struct BaseStringOStreamExcept : False {};
+template <typename C, typename U, typename A> struct BaseStringOStreamExcept <
+    C, U, A, Void<decltype(lvalue<std::basic_ostream<C>>().write(rvalue<C const*>(), rvalue<SSize>()))>
+> : Bool<noexcept(lvalue<std::basic_ostream<C>>().write(rvalue<C const*>(), rvalue<SSize>()))> {};
+}; // namespace osExc
+
+template <typename C, typename U, typename A>
+auto operator<<(std::basic_ostream<C>& out, BaseString<C, U, A> const& obj)
+    CDS_ATTR(noexcept(osExc::BaseStringOStreamExcept<C, U, A>::value)) -> std::basic_ostream<C>& {
   out.write(obj.data(), static_cast<SSize>(obj.length()));
   return out;
 }
