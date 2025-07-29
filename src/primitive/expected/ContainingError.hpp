@@ -18,7 +18,7 @@ using meta::IsUnboundedArray;
 using meta::Not;
 using meta::impl::CRTPBase;
 
-template <typename B, typename E> class ContainingError : private CRTPBase<B> {
+template <typename B, typename E> class ContainingError : public CRTPBase<B> {
   static_assert(And<
       IsDestructible<E>,
       Not<IsUnboundedArray<E>>

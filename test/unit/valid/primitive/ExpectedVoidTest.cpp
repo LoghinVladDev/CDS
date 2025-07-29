@@ -5,3 +5,12 @@
 #include <UnitTest.hpp>
 #include <cds/Expected>
 #include <cds/Format>
+
+namespace {
+using cds::Expected;
+using cds::ExpectedValueException;
+using cds::Unexpected;
+using cds::Unexpect;
+} // namespace
+
+TEST(ExpectedVoidTest, unexpected) {}

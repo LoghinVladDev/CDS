@@ -6,37 +6,181 @@
 #define CDS_PRIMITIVE_EXPECTED_EXPECTED_HPP
 #pragma once
 
-#include "ContainingError.hpp"
-#include "ExpectedValueException.hpp"
 #include "Unexpected.hpp"
+
+#include "ExpectedDecl.hpp"
+#include "ExpectedSpecialMemberFunctionsDetail.hpp"
+#include "ExpectedStorageBase.hpp"
+#include "ExpectedDestructibleBase.hpp"
+#include "ExpectedConstructionBase.hpp"
+#include "ExpectedDefaultConstructibleBase.hpp"
+#include "ExpectedCopyConstructibleBase.hpp"
+#include "ExpectedMoveConstructibleBase.hpp"
+#include "ExpectedCopyAssignableBase.hpp"
+#include "ExpectedMoveAssignableBase.hpp"
+#include "ExpectedObservableBase.hpp"
+#include "ExpectedMonadicBase.hpp"
+#include "ExpectedConvertibleBase.hpp"
+
+#include "../../common/SpecialMemberFunctionHelper.hpp"
 
 namespace cds {
 namespace impl {
-enum class ExpectedStorageDetail {
-  Trivial, NonTrivial, Deleted
-};
+using meta::EnableIf;
+using meta::False;
+using meta::Not;
+using meta::True;
+
+template <typename> struct IsExpected : False {};
+template <typename T, typename E> struct IsExpected<Expected<T, E>> : True {};
+
+using meta::All;
+using meta::IsCopyAssignable;
+using meta::IsCopyConstructible;
+using meta::IsMoveAssignable;
+using meta::IsMoveConstructible;
+using meta::impl::SfinaeAssignBase;
+using meta::impl::SfinaeCtorBase;
 
 template <typename T, typename E> class Expected :
-
-template <typename T, typename E> class Expected : public ContainingError<Expected<T, E>, E> {
-  friend class ContainingError<Expected<T, E>, E>;
+    public ExpectedConvertibleBase<T, E>,
+    public SfinaeCtorBase<
+        All<IsCopyConstructible, T, E>,
+        All<IsMoveConstructible, T, E>
+    >,
+    public SfinaeAssignBase<
+        All<IsCopyAssignable, T, E>,
+        All<IsMoveAssignable, T, E>
+    > {
+  using Base = ExpectedConvertibleBase<T, E>;
 
 public:
-  using Value = T;
-  using Error = E;
-
-  template <typename U> using Rebound = Expected<U, Error>;
+  using Base::Base;
 
   Expected() = default;
   Expected(Expected const&) = default;
-
-private:
-  bool _engaged{true};
-  union {
-    T _value{};
-    E _error;
-  };
+  Expected(Expected&&) = default;
+  auto operator=(Expected const&) -> Expected& = default;
+  auto operator=(Expected&&) -> Expected& = default;
+  ~Expected() = default;
 };
+
+using meta::All;
+using meta::IsCopyAssignable;
+using meta::IsCopyConstructible;
+using meta::IsMoveAssignable;
+using meta::IsMoveConstructible;
+using meta::impl::SfinaeAssignBase;
+using meta::impl::SfinaeCtorBase;
+
+template <typename E> class Expected<void, E> :
+    public ExpectedConvertibleBase<void, E>,
+    public SfinaeCtorBase<IsCopyConstructible<E>, IsMoveConstructible<E>>,
+    public SfinaeAssignBase<IsCopyAssignable<E>, IsMoveAssignable<E>> {
+  using Base = ExpectedConvertibleBase<void, E>;
+
+public:
+  using Base::Base;
+
+  Expected() = default;
+  Expected(Expected const&) = default;
+  Expected(Expected&&) = default;
+  auto operator=(Expected const&) -> Expected& = default;
+  auto operator=(Expected&&) -> Expected& = default;
+  ~Expected() = default;
+};
+
+template <typename T1, typename E1, typename T2, typename E2> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator==(
+    Expected<T1, E1> const& lhs, Expected<T2, E2> const& rhs
+) noexcept -> bool {
+  if (lhs.hasValue() != rhs.hasValue()) {
+    return false;
+  }
+
+  if (!lhs.hasValue()) {
+    return lhs.error() == rhs.error();
+  }
+
+  return *lhs == *rhs;
+}
+
+template <typename T1, typename E1, typename T2, typename E2> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator!=(
+    Expected<T1, E1> const& lhs, Expected<T2, E2> const& rhs
+) noexcept -> bool {
+  if (lhs.hasValue() != rhs.hasValue()) {
+    return true;
+  }
+
+  if (!lhs.hasValue()) {
+    return lhs.error() != rhs.error();
+  }
+
+  return *lhs != *rhs;
+}
+
+template <typename E1, typename E2> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator==(
+    Expected<void, E1> const& lhs, Expected<void, E2> const& rhs
+) noexcept -> bool {
+  if (lhs.hasValue() != rhs.hasValue()) {
+    return false;
+  }
+
+  if (!lhs.hasValue()) {
+    return lhs.error() == rhs.error();
+  }
+
+  return true;
+}
+
+template <typename E1, typename E2> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator!=(
+    Expected<void, E1> const& lhs, Expected<void, E2> const& rhs
+) noexcept -> bool {
+  if (lhs.hasValue() != rhs.hasValue()) {
+    return true;
+  }
+
+  if (!lhs.hasValue()) {
+    return lhs.error() != rhs.error();
+  }
+
+  return false;
+}
+
+template <typename T1, typename E1, typename T2, EnableIf<Not<IsExpected<T2>>> = 0>
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(Expected<T1, E1> const& lhs, T2 const& rhs) noexcept -> bool {
+  if (!lhs.hasValue()) {
+    return false;
+  }
+
+  return *lhs == rhs;
+}
+
+template <typename T1, typename E1, typename T2, EnableIf<Not<IsExpected<T2>>> = 0>
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(Expected<T1, E1> const& lhs, T2 const& rhs) noexcept -> bool {
+  if (!lhs.hasValue()) {
+    return true;
+  }
+
+  return *lhs != rhs;
+}
+
+template <typename T1, typename E1, typename E2> CDS_ATTR(2(nodiscard, constexpr(11)))
+auto operator==(Expected<T1, E1> const& lhs, Unexpected<E2> const& rhs) noexcept -> bool {
+  if (lhs.hasValue()) {
+    return false;
+  }
+
+  return lhs.error() == rhs.error();
+}
+
+template <typename T1, typename E1, typename E2> CDS_ATTR(2(nodiscard, constexpr(11)))
+auto operator!=(Expected<T1, E1> const& lhs, Unexpected<E2> const& rhs) noexcept -> bool {
+  if (lhs.hasValue()) {
+    return true;
+  }
+
+  return lhs.error() != rhs.error();
+}
 } // namespace impl
 } // namespace cds
 

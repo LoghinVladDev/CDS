@@ -10,12 +10,14 @@
 #include "expected/Unexpected.hpp"
 #include "expected/ExpectedValueException.hpp"
 #include "expected/Expected.hpp"
-#include "expected/ExpectedVoid.hpp"
-#include "expected/ExpectedRef.hpp"
 
 namespace cds {
-namespace impl {
-} // namespace impl
+using impl::Expected;
+using impl::ExpectedValueException;
+using impl::Unexpect;
+using impl::Unexpected;
+
+using impl::unexpectedOf;
 } // namespace cds
 
 #endif // #ifndef CDS_PRIMITIVE_EXPECTED_HPP
