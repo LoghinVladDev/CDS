@@ -18,12 +18,19 @@ namespace impl {
 using cds::meta::Default;
 using cds::meta::DoesNotHide;
 using cds::meta::EnableIf;
+using cds::meta::False;
 using cds::meta::IsDefaultConstructible;
 using cds::meta::IsNoexceptConstructible;
 using cds::meta::IsNoexceptDefaultConstructible;
 using cds::meta::RemoveCVRef;
+using cds::meta::True;
 
 struct Unexpect{};
+
+template <typename E> class Unexpected;
+
+template <typename> struct IsUnexpected : False {};
+template <typename E> struct IsUnexpected<Unexpected<E>> : True {};
 
 template <typename E> class Unexpected : public ContainingError<Unexpected<E>, E> {
   friend class ContainingError<Unexpected<E>, E>;

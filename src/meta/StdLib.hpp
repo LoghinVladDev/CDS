@@ -10,6 +10,8 @@
 #include <cds/meta/Semantics>
 #include <cds/meta/ObjectTraits>
 
+#include <initializer_list>
+
 #ifdef __GLIBCXX__
 #define CDS_ATTR_stdlibcxx true
 #include <cds/meta/ObjectTraits>

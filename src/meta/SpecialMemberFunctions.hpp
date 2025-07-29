@@ -10,6 +10,9 @@
 
 namespace cds {
 namespace meta {
+using meta::All;
+using meta::Any;
+
 enum class SpecialMemberFunctionInfoType {
   Trivial, NonTrivial, Deleted
 };
@@ -29,7 +32,7 @@ template <typename Trivial> struct SpecialMemberFunctionInfo<Trivial, typename T
 template <template <typename...> class IsTrivial, template <typename...> class IsDeleted, typename... Types>
 struct SpecialMemberFunctionInfoProvider : SpecialMemberFunctionInfo<
     typename All<IsTrivial, Types...>::Type,
-    typename All<IsDeleted, Types...>::Type
+    typename Any<IsDeleted, Types...>::Type
 > {};
 } // namespace meta
 } // namespace cds

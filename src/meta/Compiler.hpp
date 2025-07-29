@@ -180,6 +180,16 @@
 #define CDS_ATTR_consteval_23(fallback) CDS_ATTR_ ## fallback
 #endif
 
+#if CDS_ATTR(std) >= CDS_ATTR(std26)
+#define CDS_ATTR_cpp26 true
+#define CDS_ATTR_constexpr_26 constexpr
+#define CDS_ATTR_consteval_26(_) consteval
+#else // before cpp26
+#define CDS_ATTR_cpp26 false
+#define CDS_ATTR_constexpr_26 inline
+#define CDS_ATTR_consteval_26(fallback) CDS_ATTR_ ## fallback
+#endif
+
 #ifndef CDS_ATTR_emulated_in_constexpr
 #define CDS_ATTR_emulated_in_constexpr false
 #endif

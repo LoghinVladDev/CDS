@@ -23,10 +23,7 @@ template <typename T, typename E, SpecialMemberFunctionInfoType = ExpectedDestru
 union ExpectedStorageBase;
 
 template <typename T, typename E> union ExpectedStorageBase<T, E, SpecialMemberFunctionInfoType::Trivial> {
-  static_assert(And<
-      IsDestructible<E>,
-      Not<IsUnboundedArray<E>>
-  >::value, "Invalid Unexpected error type");
+  static_assert(Not<IsUnboundedArray<E>>::value, "Invalid Unexpected error type");
 
   ExpectedStorageBase(ExpectedStorageBase const&) = default;
   ExpectedStorageBase(ExpectedStorageBase&&) = default;
@@ -56,17 +53,14 @@ template <typename T, typename E> union ExpectedStorageBase<T, E, SpecialMemberF
 };
 
 template <typename T, typename E> union ExpectedStorageBase<T, E, SpecialMemberFunctionInfoType::NonTrivial> {
-  static_assert(And<
-      IsDestructible<E>,
-      Not<IsUnboundedArray<E>>
-  >::value, "Invalid Unexpected error type");
+  static_assert(Not<IsUnboundedArray<E>>::value, "Invalid Unexpected error type");
 
   ExpectedStorageBase(ExpectedStorageBase const&) = default;
   ExpectedStorageBase(ExpectedStorageBase&&) = default;
   auto operator=(ExpectedStorageBase const&) -> ExpectedStorageBase& = default;
   auto operator=(ExpectedStorageBase&&) -> ExpectedStorageBase& = default;
 
-  ~ExpectedStorageBase() noexcept {}
+  CDS_ATTR(constexpr(20)) ~ExpectedStorageBase() noexcept {}
 
   template <typename... Args> CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(InPlace, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<T, Args&&...>)) : value(fwd<Args>(args)...) {}
@@ -89,10 +83,7 @@ template <typename T, typename E> union ExpectedStorageBase<T, E, SpecialMemberF
 };
 
 template <typename T, typename E> union ExpectedStorageBase<T, E, SpecialMemberFunctionInfoType::Deleted> {
-  static_assert(And<
-      IsDestructible<E>,
-      Not<IsUnboundedArray<E>>
-  >::value, "Invalid Unexpected error type");
+  static_assert(Not<IsUnboundedArray<E>>::value, "Invalid Unexpected error type");
 
   ExpectedStorageBase(ExpectedStorageBase const&) = default;
   ExpectedStorageBase(ExpectedStorageBase&&) = default;
@@ -122,10 +113,7 @@ template <typename T, typename E> union ExpectedStorageBase<T, E, SpecialMemberF
 };
 
 template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionInfoType::Trivial> {
-  static_assert(And<
-      IsDestructible<E>,
-      Not<IsUnboundedArray<E>>
-  >::value, "Invalid Unexpected error type");
+  static_assert(Not<IsUnboundedArray<E>>::value, "Invalid Unexpected error type");
 
   ExpectedStorageBase(ExpectedStorageBase const&) = default;
   ExpectedStorageBase(ExpectedStorageBase&&) = default;
@@ -134,7 +122,7 @@ template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionIn
 
   ~ExpectedStorageBase() noexcept = default;
 
-  CDS_ATTR(2(explicit, constexpr(14))) ExpectedStorageBase(InPlace) noexcept : uninitialized{} {}
+  CDS_ATTR(2(explicit, constexpr(14))) ExpectedStorageBase(InPlace) noexcept : uninitialized{0} {}
 
   template <typename... Args> CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(Unexpect, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, Args&&...>)) : error(fwd<Args>(args)...) {}
@@ -149,19 +137,16 @@ template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionIn
 };
 
 template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionInfoType::NonTrivial> {
-  static_assert(And<
-      IsDestructible<E>,
-      Not<IsUnboundedArray<E>>
-  >::value, "Invalid Unexpected error type");
+  static_assert(Not<IsUnboundedArray<E>>::value, "Invalid Unexpected error type");
 
   ExpectedStorageBase(ExpectedStorageBase const&) = default;
   ExpectedStorageBase(ExpectedStorageBase&&) = default;
   auto operator=(ExpectedStorageBase const&) -> ExpectedStorageBase& = default;
   auto operator=(ExpectedStorageBase&&) -> ExpectedStorageBase& = default;
 
-  ~ExpectedStorageBase() noexcept {}
+  CDS_ATTR(constexpr(20)) ~ExpectedStorageBase() noexcept {}
 
-  CDS_ATTR(2(explicit, constexpr(14))) ExpectedStorageBase(InPlace) noexcept : uninitialized{} {}
+  CDS_ATTR(2(explicit, constexpr(14))) ExpectedStorageBase(InPlace) noexcept : uninitialized{0} {}
 
   template <typename... Args> CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(Unexpect, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, Args&&...>)) : error(fwd<Args>(args)...) {}
@@ -176,10 +161,7 @@ template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionIn
 };
 
 template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionInfoType::Deleted> {
-  static_assert(And<
-      IsDestructible<E>,
-      Not<IsUnboundedArray<E>>
-  >::value, "Invalid Unexpected error type");
+  static_assert(Not<IsUnboundedArray<E>>::value, "Invalid Unexpected error type");
 
   ExpectedStorageBase(ExpectedStorageBase const&) = default;
   ExpectedStorageBase(ExpectedStorageBase&&) = default;
@@ -188,7 +170,7 @@ template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionIn
 
   ~ExpectedStorageBase() noexcept = delete;
 
-  CDS_ATTR(2(explicit, constexpr(14))) ExpectedStorageBase(InPlace) noexcept : uninitialized{} {}
+  CDS_ATTR(2(explicit, constexpr(14))) ExpectedStorageBase(InPlace) noexcept : uninitialized{0} {}
 
   template <typename... Args> CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(Unexpect, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, Args&&...>)) : error(fwd<Args>(args)...) {}

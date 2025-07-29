@@ -21,7 +21,7 @@ using meta::IsNoexceptConstructible;
 using meta::SpecialMemberFunctionInfoType;
 
 template <typename T, typename E, SpecialMemberFunctionInfoType = ExpectedDestructionDetail<T, E>::value>
-struct ExpectedDestructibleBase;
+class ExpectedDestructibleBase;
 
 template <typename T, typename E> class ExpectedDestructibleBase<T, E, SpecialMemberFunctionInfoType::Trivial> {
   using Data = ExpectedStorageBase<T, E>;
@@ -41,7 +41,7 @@ public:
       _engaged{true},
       _data{InPlace{}, fwd<Args>(args)...} {}
 
-  template <typename U, typename... Args, EnableIf<IsConstructible<T, Args&&...>> = 0>
+  template <typename U, typename... Args, EnableIf<IsConstructible<T, std::initializer_list<U> const&, Args&&...>> = 0>
   CDS_ATTR(2(implicit, constexpr(11))) ExpectedDestructibleBase(std::initializer_list<U> const& list, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<T, std::initializer_list<U> const&, Args&&...>)) :
       _engaged{true},
@@ -83,7 +83,7 @@ protected:
     return _data;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto data()&& noexcept -> Data& {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto data()&& noexcept -> Data&& {
     return mv(_data);
   }
 
@@ -113,7 +113,7 @@ public:
       _engaged{true},
       _data{InPlace{}, fwd<Args>(args)...} {}
 
-  template <typename U, typename... Args, EnableIf<IsConstructible<T, Args&&...>> = 0>
+  template <typename U, typename... Args, EnableIf<IsConstructible<T, std::initializer_list<U> const&, Args&&...>> = 0>
   CDS_ATTR(2(implicit, constexpr(11))) ExpectedDestructibleBase(std::initializer_list<U> const& list, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<T, std::initializer_list<U> const&, Args&&...>)) :
       _engaged{true},
@@ -160,7 +160,7 @@ protected:
     return _data;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto data()&& noexcept -> Data& {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto data()&& noexcept -> Data&& {
     return mv(_data);
   }
 
@@ -187,7 +187,7 @@ public:
       _engaged{true},
       _data{InPlace{}, fwd<Args>(args)...} {}
 
-  template <typename U, typename... Args, EnableIf<IsConstructible<T, Args&&...>> = 0>
+  template <typename U, typename... Args, EnableIf<IsConstructible<T, std::initializer_list<U> const&, Args&&...>> = 0>
   CDS_ATTR(2(implicit, constexpr(11))) ExpectedDestructibleBase(std::initializer_list<U> const& list, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<T, std::initializer_list<U> const&, Args&&...>)) :
       _engaged{true},
@@ -229,7 +229,7 @@ protected:
     return _data;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto data()&& noexcept -> Data& {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto data()&& noexcept -> Data&& {
     return mv(_data);
   }
 
@@ -286,7 +286,7 @@ protected:
     return _data;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto data()&& noexcept -> Data& {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto data()&& noexcept -> Data&& {
     return mv(_data);
   }
 
@@ -348,7 +348,7 @@ protected:
     return _data;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto data()&& noexcept -> Data& {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto data()&& noexcept -> Data&& {
     return mv(_data);
   }
 
@@ -405,7 +405,7 @@ protected:
     return _data;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto data()&& noexcept -> Data& {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto data()&& noexcept -> Data&& {
     return mv(_data);
   }
 

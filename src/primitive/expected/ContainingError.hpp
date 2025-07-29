@@ -19,10 +19,7 @@ using meta::Not;
 using meta::impl::CRTPBase;
 
 template <typename B, typename E> class ContainingError : public CRTPBase<B> {
-  static_assert(And<
-      IsDestructible<E>,
-      Not<IsUnboundedArray<E>>
-  >::value, "Invalid Unexpected error type");
+  static_assert(Not<IsUnboundedArray<E>>::value, "Invalid Unexpected error type");
 
   using CRTPBase<B>::refl;
 
