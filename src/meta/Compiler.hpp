@@ -100,6 +100,7 @@
 #define CDS_ATTR_std17 201703L
 #define CDS_ATTR_std20 202002L
 #define CDS_ATTR_std23 202302L
+#define CDS_ATTR_std26 202602L
 
 
 #if CDS_ATTR(std) >= CDS_ATTR(std11)

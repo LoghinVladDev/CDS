@@ -260,6 +260,44 @@ class TuplePrinter(ValuePrinter):
             return '[empty tuple]'
         return f'[tuple of {self.size} value{"s" if self.size > 1 else ""}]'
 
+class ExpectedPrinter(SingleObjectContainerPrinter):
+    STATE_UNINITIALIZED = 0
+    STATE_VALUE = 1
+    STATE_ERROR = 2
+
+    def __init__(self, val: lldb.SBValue, _dict = None):
+        super(ExpectedPrinter, self).__init__(val)
+        if self.val is None:
+            return
+        self.value_type = self.val.GetType().GetTemplateArgumentType(0)
+        self.error_type = self.val.GetType().GetTemplateArgumentType(1)
+        self.state = ExpectedPrinter.STATE_UNINITIALIZED
+
+    def get_contained_value(self) -> typing.Union[lldb.SBValue, None]:
+        if self.val is None:
+            return None
+        self.state = self.val.GetChildMemberWithName('_state').GetValueAsUnsigned()
+        data = self.val.GetChildMemberWithName('_data')
+        if self.state == ExpectedPrinter.STATE_UNINITIALIZED:
+            return None
+        if self.state == ExpectedPrinter.STATE_VALUE:
+            return (data.GetChildMemberWithName('value')
+                    .CreateChildAtOffset('[value]', 0, self.value_type))
+        if self.state == ExpectedPrinter.STATE_ERROR:
+            return (data.GetChildMemberWithName('error')
+                    .CreateChildAtOffset('[unexpected]', 0, self.error_type))
+        raise ValueError(f'Invalid Expected State {self.state}')
+
+    def summary_containing_value(self):
+        if self.state == ExpectedPrinter.STATE_VALUE:
+            return '[containing value]'
+        if self.state == ExpectedPrinter.STATE_ERROR:
+            return '[containing unexpected]'
+        raise ValueError(f'Invalid Expected State {self.state}')
+
+    def summary_without_value(self):
+        return '[uninitialized]'
+
 class ContiguousRangePrinter(ValuePrinter, ABC):
     def __init__(self, val: lldb.SBValue):
         super(ContiguousRangePrinter, self).__init__(val)
@@ -568,6 +606,11 @@ def tuple_summary(val, _dict):
     printer.update()
     return printer.out()
 
+def expected_summary(val, _dict):
+    printer = ExpectedPrinter(val)
+    printer.update()
+    return printer.out()
+
 def vector_summary(val, _dict):
     printer = VectorPrinter(val)
     printer.update()
@@ -637,6 +680,7 @@ def __lldb_init_module(debugger, _):
     register_printer('cds', 'Optional', 'optional_summary', 'OptionalPrinter')
     register_printer('cds::impl', 'Union', 'union_summary', 'UnionPrinter')
     register_printer('cds::impl', 'Tuple', 'tuple_summary', 'TuplePrinter')
+    register_printer('cds::impl', 'Expected', 'expected_summary', 'ExpectedPrinter')
 
     register_printer('cds::impl', 'Vector', 'vector_summary', 'VectorPrinter')
     register_printer('cds::impl', 'BaseVector', 'vector_summary', 'VectorPrinter')

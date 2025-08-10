@@ -25,6 +25,7 @@
 #include "StandardFormatters.hpp"
 #include "TupleLikeFormatter.hpp"
 
+#include "ExpectedFormatter.hpp"
 #include "HashMapFormatter.hpp"
 #include "LinkedHashMapFormatter.hpp"
 #include "JsonNodeFormatter.hpp"

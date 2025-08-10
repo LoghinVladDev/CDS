@@ -176,14 +176,20 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/policy/RehashPolicy.cpp)
 
   set(CDS_PRIMITIVE_UNIT_TEST_SOURCES
-      valid/primitive/ExpectedStorageBaseTest.cpp
-      valid/primitive/ExpectedDestructibleBaseTest.cpp
-      valid/primitive/ExpectedTrivialnessTest.cpp
-      valid/primitive/ExpectedVoidTest.cpp
+      valid/primitive/expected/ExpectedCopyConstructibleBaseTest.cpp
+      valid/primitive/expected/ExpectedConstructionBaseTest.cpp
+      valid/primitive/expected/ExpectedDefaultConstructibleBaseTest.cpp
+      valid/primitive/expected/ExpectedDestructibleBaseTest.cpp
+      valid/primitive/expected/ExpectedMonadicBaseTest.cpp
+      valid/primitive/expected/ExpectedMoveConstructibleBaseTest.cpp
+      valid/primitive/expected/ExpectedObservableBaseTest.cpp
+      valid/primitive/expected/ExpectedStorageBaseTest.cpp
+      valid/primitive/expected/ExpectedTrivialnessTest.cpp
+      valid/primitive/expected/ExpectedTest.cpp
       valid/primitive/OptionalTest.cpp
       valid/primitive/StringAbstract.cpp
       valid/primitive/StringUtils.cpp
-      valid/primitive/UnexpectedTest.cpp
+      valid/primitive/expected/UnexpectedTest.cpp
       valid/primitive/string/String_char_Allocator.cpp
       valid/primitive/string/String_wchar_t_Allocator.cpp
       valid/primitive/string/String_char8_t_Allocator.cpp

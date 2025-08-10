@@ -25,7 +25,7 @@ template <typename T, typename E> class ExpectedObservableBase : public Expected
 
 protected:
   using Base::data;
-  using Base::engaged;
+  using Base::state;
 
 public:
   using Base::Base;
@@ -39,109 +39,119 @@ public:
   ~ExpectedObservableBase() = default;
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto hasValue() const noexcept -> bool {
-    return engaged();
+    return ExpectedState::Value == state();
   }
 
   CDS_ATTR(3(nodiscard, explicit, constexpr(11))) operator bool() const noexcept {
-    return engaged();
+    return ExpectedState::Value == state();
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator->() const noexcept -> T const* {
-    assert(engaged() && "undefined behavior");
+#if CDS_ATTR(cpp14)
+    assert(ExpectedState::Value == state() && "undefined behavior");
+#endif
     return &data().value;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto operator->() noexcept -> T* {
-    assert(engaged() && "undefined behavior");
+    assert(ExpectedState::Value == state() && "undefined behavior");
     return &data().value;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator*() const& noexcept -> T const& {
-    assert(engaged() && "undefined behavior");
+#if CDS_ATTR(cpp14)
+    assert(ExpectedState::Value == state() && "undefined behavior");
+#endif
     return data().value;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator*() const&& noexcept -> T const&& {
-    assert(engaged() && "undefined behavior");
+#if CDS_ATTR(cpp14)
+    assert(ExpectedState::Value == state() && "undefined behavior");
+#endif
     return mv(data()).value;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto operator*()& noexcept -> T& {
-    assert(engaged() && "undefined behavior");
+    assert(ExpectedState::Value == state() && "undefined behavior");
     return data().value;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto operator*()&& noexcept -> T&& {
-    assert(engaged() && "undefined behavior");
+    assert(ExpectedState::Value == state() && "undefined behavior");
     return mv(data()).value;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto value() const& CDS_ATTR(noexcept(false)) -> T const& {
-    if (!engaged()) {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto value() const& CDS_ATTR(noexcept(false)) -> T const& {
+    if (ExpectedState::Value != state()) {
       throw ExpectedValueException<E>(data().error);
     }
     return data().value;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto value() const&& CDS_ATTR(noexcept(false)) -> T const&& {
-    if (!engaged()) {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto value() const&& CDS_ATTR(noexcept(false)) -> T const&& {
+    if (ExpectedState::Value != state()) {
       throw ExpectedValueException<E>(mv(data()).error);
     }
     return mv(data()).value;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto value()& CDS_ATTR(noexcept(false)) -> T& {
-    if (!engaged()) {
+    if (ExpectedState::Value != state()) {
       throw ExpectedValueException<E>(data().error);
     }
     return data().value;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto value()&& CDS_ATTR(noexcept(false)) -> T&& {
-    if (!engaged()) {
+    if (ExpectedState::Value != state()) {
       throw ExpectedValueException<E>(mv(data()).error);
     }
     return mv(data()).value;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto error() const& noexcept -> E const& {
-    assert(!engaged() && "undefined behavior");
+#if CDS_ATTR(cpp14)
+    assert(ExpectedState::Error == state() && "undefined behavior");
+#endif
     return data().error;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto error() const&& noexcept -> E const&& {
-    assert(!engaged() && "undefined behavior");
+#if CDS_ATTR(cpp14)
+    assert(ExpectedState::Error == state() && "undefined behavior");
+#endif
     return mv(data()).error;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto error()& noexcept -> E& {
-    assert(!engaged() && "undefined behavior");
+    assert(ExpectedState::Error == state() && "undefined behavior");
     return data().error;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto error()&& noexcept -> E&& {
-    assert(!engaged() && "undefined behavior");
+    assert(ExpectedState::Error == state() && "undefined behavior");
     return mv(data()).error;
   }
 
   template <typename U = RemoveConstVolatile<T>> CDS_ATTR(2(nodiscard, constexpr(11))) auto valueOr(U&& defaultValue)
       const& CDS_ATTR(noexcept_v(And<IsNoexceptCopyConstructible<T>, IsNoexceptConstructible<T, U&&>>)) -> T {
-    return engaged() ? data().value : static_cast<T>(fwd<U>(defaultValue));
+    return ExpectedState::Value == state() ? data().value : static_cast<T>(fwd<U>(defaultValue));
   }
 
   template <typename U = RemoveConstVolatile<T>> CDS_ATTR(2(nodiscard, constexpr(14))) auto valueOr(U&& defaultValue)
       && CDS_ATTR(noexcept_v(And<IsNoexceptMoveConstructible<T>, IsNoexceptConstructible<T, U&&>>)) -> T {
-    return engaged() ? mv(data()).value : static_cast<T>(fwd<U>(defaultValue));
+    return ExpectedState::Value == state() ? mv(data()).value : static_cast<T>(fwd<U>(defaultValue));
   }
 
   template <typename G = RemoveConstVolatile<E>> CDS_ATTR(2(nodiscard, constexpr(11))) auto errorOr(G&& defaultValue)
       const& CDS_ATTR(noexcept_v(And<IsNoexceptCopyConstructible<E>, IsNoexceptConstructible<E, G&&>>)) -> E {
-    return !engaged() ? data().error : static_cast<E>(fwd<G>(defaultValue));
+    return ExpectedState::Error == state() ? data().error : static_cast<E>(fwd<G>(defaultValue));
   }
 
   template <typename G = RemoveConstVolatile<E>> CDS_ATTR(2(nodiscard, constexpr(14))) auto errorOr(G&& defaultValue)
       && CDS_ATTR(noexcept_v(And<IsNoexceptMoveConstructible<E>, IsNoexceptConstructible<E, G&&>>)) -> E {
-    return !engaged() ? mv(data()).error : static_cast<E>(fwd<G>(defaultValue));
+    return ExpectedState::Error == state() ? mv(data()).error : static_cast<E>(fwd<G>(defaultValue));
   }
 };
 
@@ -150,7 +160,7 @@ template <typename E> class ExpectedObservableBase<void, E> : public ExpectedMov
 
 protected:
   using Base::data;
-  using Base::engaged;
+  using Base::state;
 
 public:
   using Base::Base;
@@ -164,58 +174,62 @@ public:
   ~ExpectedObservableBase() = default;
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto hasValue() const noexcept -> bool {
-    return engaged();
+    return ExpectedState::Value == state();
   }
 
   CDS_ATTR(3(nodiscard, explicit, constexpr(11))) operator bool() const noexcept {
-    return engaged();
+    return ExpectedState::Value == state();
   }
 
   CDS_ATTR(constexpr(14)) auto operator*() const noexcept -> void {
-    assert(engaged() && "undefined behavior");
+    assert(ExpectedState::Value == state() && "undefined behavior");
     /* nothing */
   }
 
   CDS_ATTR(constexpr(14)) auto value() const& -> void {
-    if (!engaged()) {
+    if (ExpectedState::Value != state()) {
       throw ExpectedValueException<E>(data().error);
     }
   }
 
   CDS_ATTR(constexpr(14)) auto value()&& -> void {
-    if (!engaged()) {
-      throw ExpectedValueException<E>(mv(data()).error);
+    if (ExpectedState::Value != state()) {
+      throw ExpectedValueException<E>(data().error);
     }
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto error() const& noexcept -> E const& {
-    assert(!engaged() && "undefined behavior");
+#if CDS_ATTR(cpp14)
+    assert(ExpectedState::Error == state() && "undefined behavior");
+#endif
     return data().error;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto error() const&& noexcept -> E const&& {
-    assert(!engaged() && "undefined behavior");
+#if CDS_ATTR(cpp14)
+    assert(ExpectedState::Error == state() && "undefined behavior");
+#endif
     return mv(data()).error;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto error()& noexcept -> E& {
-    assert(!engaged() && "undefined behavior");
+    assert(ExpectedState::Error == state() && "undefined behavior");
     return data().error;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto error()&& noexcept -> E&& {
-    assert(!engaged() && "undefined behavior");
+    assert(ExpectedState::Error == state() && "undefined behavior");
     return mv(data()).error;
   }
 
   template <typename G = RemoveConstVolatile<E>> CDS_ATTR(2(nodiscard, constexpr(11))) auto errorOr(G&& defaultValue)
       const& CDS_ATTR(noexcept_v(And<IsNoexceptCopyConstructible<E>, IsNoexceptConstructible<E, G&&>>)) -> E {
-    return !engaged() ? data().error : static_cast<E>(fwd<G>(defaultValue));
+    return ExpectedState::Error == state() ? data().error : static_cast<E>(fwd<G>(defaultValue));
   }
 
   template <typename G = RemoveConstVolatile<E>> CDS_ATTR(2(nodiscard, constexpr(14))) auto errorOr(G&& defaultValue)
       && CDS_ATTR(noexcept_v(And<IsNoexceptMoveConstructible<E>, IsNoexceptConstructible<E, G&&>>)) -> E {
-    return !engaged() ? mv(data()).error : static_cast<E>(fwd<G>(defaultValue));
+    return ExpectedState::Error == state() ? mv(data()).error : static_cast<E>(fwd<G>(defaultValue));
   }
 };
 } // namespace impl

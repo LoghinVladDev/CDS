@@ -16,6 +16,7 @@
 namespace cds {
 namespace impl {
 using meta::InPlace;
+using meta::Uninitialized;
 using meta::IsNoexceptConstructible;
 using meta::SpecialMemberFunctionInfoType;
 
@@ -48,8 +49,11 @@ template <typename T, typename E> union ExpectedStorageBase<T, E, SpecialMemberF
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, std::initializer_list<U> const&, Args&&...>)) :
       error(list, fwd<Args>(args)...) {}
 
+  CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(Uninitialized) noexcept : uninitialized{0u} {}
+
   T value;
   E error;
+  U8 uninitialized;
 };
 
 template <typename T, typename E> union ExpectedStorageBase<T, E, SpecialMemberFunctionInfoType::NonTrivial> {
@@ -78,8 +82,11 @@ template <typename T, typename E> union ExpectedStorageBase<T, E, SpecialMemberF
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, std::initializer_list<U> const&, Args&&...>)) :
       error(list, fwd<Args>(args)...) {}
 
+  CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(Uninitialized) noexcept : uninitialized{0u} {}
+
   T value;
   E error;
+  U8 uninitialized;
 };
 
 template <typename T, typename E> union ExpectedStorageBase<T, E, SpecialMemberFunctionInfoType::Deleted> {
@@ -108,8 +115,11 @@ template <typename T, typename E> union ExpectedStorageBase<T, E, SpecialMemberF
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, std::initializer_list<U> const&, Args&&...>)) :
       error(list, fwd<Args>(args)...) {}
 
+  CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(Uninitialized) noexcept : uninitialized{0u} {}
+
   T value;
   E error;
+  U8 uninitialized;
 };
 
 template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionInfoType::Trivial> {
@@ -122,7 +132,7 @@ template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionIn
 
   ~ExpectedStorageBase() noexcept = default;
 
-  CDS_ATTR(2(explicit, constexpr(14))) ExpectedStorageBase(InPlace) noexcept : uninitialized{0} {}
+  CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(InPlace) noexcept : valueless{0} {}
 
   template <typename... Args> CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(Unexpect, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, Args&&...>)) : error(fwd<Args>(args)...) {}
@@ -132,8 +142,11 @@ template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionIn
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, std::initializer_list<U> const&, Args&&...>)) :
       error(list, fwd<Args>(args)...) {}
 
-  U8 uninitialized;
+  CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(Uninitialized) noexcept : uninitialized{0u} {}
+
+  U8 valueless;
   E error;
+  U8 uninitialized;
 };
 
 template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionInfoType::NonTrivial> {
@@ -146,7 +159,7 @@ template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionIn
 
   CDS_ATTR(constexpr(20)) ~ExpectedStorageBase() noexcept {}
 
-  CDS_ATTR(2(explicit, constexpr(14))) ExpectedStorageBase(InPlace) noexcept : uninitialized{0} {}
+  CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(InPlace) noexcept : valueless{0} {}
 
   template <typename... Args> CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(Unexpect, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, Args&&...>)) : error(fwd<Args>(args)...) {}
@@ -156,8 +169,11 @@ template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionIn
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, std::initializer_list<U> const&, Args&&...>)) :
       error(list, fwd<Args>(args)...) {}
 
-  U8 uninitialized;
+  CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(Uninitialized) noexcept : uninitialized{0u} {}
+
+  U8 valueless;
   E error;
+  U8 uninitialized;
 };
 
 template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionInfoType::Deleted> {
@@ -170,7 +186,7 @@ template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionIn
 
   ~ExpectedStorageBase() noexcept = delete;
 
-  CDS_ATTR(2(explicit, constexpr(14))) ExpectedStorageBase(InPlace) noexcept : uninitialized{0} {}
+  CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(InPlace) noexcept : valueless{0} {}
 
   template <typename... Args> CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(Unexpect, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, Args&&...>)) : error(fwd<Args>(args)...) {}
@@ -180,8 +196,11 @@ template <typename E> union ExpectedStorageBase<void, E, SpecialMemberFunctionIn
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, std::initializer_list<U> const&, Args&&...>)) :
       error(list, fwd<Args>(args)...) {}
 
-  U8 uninitialized;
+  CDS_ATTR(2(explicit, constexpr(11))) ExpectedStorageBase(Uninitialized) noexcept : uninitialized{0u} {}
+
+  U8 valueless;
   E error;
+  U8 uninitialized;
 };
 } // namespace impl
 } // namespace cds

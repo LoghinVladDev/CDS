@@ -49,7 +49,7 @@ public:
   ~ExpectedMoveAssignableBase() = default;
 
   CDS_ATTR(constexpr(14)) auto operator=(ExpectedMoveAssignableBase&& base)
-      CDS_ATTR(noexcept_v(All<IsNoexceptMoveAssignable, T, E>))-> ExpectedMoveAssignableBase& {
+      CDS_ATTR(noexcept_v(All<IsNoexceptMoveAssignable, T, E>)) -> ExpectedMoveAssignableBase& {
     if (&base == this) {
       return *this;
     }
@@ -89,7 +89,7 @@ public:
   ~ExpectedMoveAssignableBase() = default;
 
   CDS_ATTR(constexpr(14)) auto operator=(ExpectedMoveAssignableBase&& base)
-  CDS_ATTR(noexcept_v(IsNoexceptMoveAssignable<E>))-> ExpectedMoveAssignableBase& {
+      CDS_ATTR(noexcept_v(IsNoexceptMoveAssignable<E>)) -> ExpectedMoveAssignableBase& {
     if (&base == this) {
       return *this;
     }

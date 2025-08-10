@@ -7,16 +7,16 @@
 
 namespace cds {
 template <typename T, typename C> struct Formatter<Optional<T>, C> {
-  template <typename Ctx> CDS_ATTR(constexpr(14)) auto parse(Ctx& ctx) noexcept(false) -> typename Ctx::Iterator {
+  template <typename Ctx> CDS_ATTR(constexpr(14)) auto parse(Ctx& ctx) CDS_ATTR(noexcept(false))
+      -> typename Ctx::Iterator {
     return underlyingFormatter.parse(ctx);
   }
 
   template <typename Ctx> CDS_ATTR(constexpr(20)) auto format(Optional<T> const& obj, Ctx& ctx)
       const CDS_ATTR(noexcept(false)) -> typename Ctx::Iterator {
-    // TODO: handle for other char types
-    static_assert(cds::meta::IsSame<char, C>::value, "Unhandled CharType case");
     if (!obj) {
-      ctx.out() = "<nullopt>";
+      char const nullAsString[] = "<nullopt>";
+      impl::copy(cds::begin(nullAsString), cds::end(nullAsString), ctx.out());
       return ctx.out();
     }
 

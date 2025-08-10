@@ -10,6 +10,9 @@
 #include "expected/Unexpected.hpp"
 #include "expected/ExpectedValueException.hpp"
 #include "expected/Expected.hpp"
+#include "expected/ExpectedTie.hpp"
+
+#include "../format/ExpectedFormatter.hpp"
 
 namespace cds {
 using impl::Expected;

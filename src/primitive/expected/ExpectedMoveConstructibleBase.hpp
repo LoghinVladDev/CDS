@@ -49,7 +49,7 @@ public:
   ~ExpectedMoveConstructibleBase() = default;
 
   CDS_ATTR(constexpr(14)) ExpectedMoveConstructibleBase(ExpectedMoveConstructibleBase&& base)
-      CDS_ATTR(noexcept_v(All<IsNoexceptMoveConstructible, T, E>)) {
+      CDS_ATTR(noexcept_v(All<IsNoexceptMoveConstructible, T, E>)) : Base{Uninitialized{}} {
     constructFrom(mv(base));
   }
 };
@@ -84,7 +84,7 @@ public:
   ~ExpectedMoveConstructibleBase() = default;
 
   CDS_ATTR(constexpr(14)) ExpectedMoveConstructibleBase(ExpectedMoveConstructibleBase&& base)
-  CDS_ATTR(noexcept_v(IsNoexceptMoveConstructible<E>)) {
+      CDS_ATTR(noexcept_v(IsNoexceptMoveConstructible<E>)) : Base{Uninitialized{}} {
     constructFrom(mv(base));
   }
 };

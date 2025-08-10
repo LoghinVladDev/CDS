@@ -50,7 +50,7 @@ public:
 
   template <typename... Args, EnableIf<DoesNotHide<Unexpected, Args...>> = 0>
   CDS_ATTR(2(explicit, constexpr(11))) Unexpected(Args&&... args)
-      CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, Args&&...>)) : _error{fwd<Args>(args)...} {}
+      CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, Args&&...>)) : _error(fwd<Args>(args)...) {}
 
   template <typename T, typename... Args> CDS_ATTR(2(implicit, constexpr(11)))
   Unexpected(std::initializer_list<T> const& list, Args&&... args)

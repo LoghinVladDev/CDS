@@ -148,38 +148,42 @@ template <typename E1, typename E2> CDS_ATTR(2(nodiscard, constexpr(14))) auto o
 
 template <typename T1, typename E1, typename T2, EnableIf<Not<IsExpected<T2>>> = 0>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(Expected<T1, E1> const& lhs, T2 const& rhs) noexcept -> bool {
-  if (!lhs.hasValue()) {
-    return false;
-  }
-
-  return *lhs == rhs;
+  return lhs.hasValue() && *lhs == rhs;
 }
 
 template <typename T1, typename E1, typename T2, EnableIf<Not<IsExpected<T2>>> = 0>
 CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(Expected<T1, E1> const& lhs, T2 const& rhs) noexcept -> bool {
-  if (!lhs.hasValue()) {
-    return true;
-  }
+  return !lhs.hasValue() || *lhs != rhs;
+}
 
-  return *lhs != rhs;
+template <typename T1, typename E2, typename T2, EnableIf<Not<IsExpected<T1>>> = 0>
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator==(T1 const& lhs, Expected<T2, E2> const& rhs) noexcept -> bool {
+  return rhs.hasValue() && lhs == *rhs;
+}
+
+template <typename T1, typename E2, typename T2, EnableIf<Not<IsExpected<T1>>> = 0>
+CDS_ATTR(2(nodiscard, constexpr(11))) auto operator!=(T1 const& lhs, Expected<T2, E2> const& rhs) noexcept -> bool {
+  return !rhs.hasValue() || lhs != *rhs;
 }
 
 template <typename T1, typename E1, typename E2> CDS_ATTR(2(nodiscard, constexpr(11)))
 auto operator==(Expected<T1, E1> const& lhs, Unexpected<E2> const& rhs) noexcept -> bool {
-  if (lhs.hasValue()) {
-    return false;
-  }
-
-  return lhs.error() == rhs.error();
+  return !lhs.hasValue() && lhs.error() == rhs.error();
 }
 
 template <typename T1, typename E1, typename E2> CDS_ATTR(2(nodiscard, constexpr(11)))
 auto operator!=(Expected<T1, E1> const& lhs, Unexpected<E2> const& rhs) noexcept -> bool {
-  if (lhs.hasValue()) {
-    return true;
-  }
+  return lhs.hasValue() || lhs.error() != rhs.error();
+}
 
-  return lhs.error() != rhs.error();
+template <typename E1, typename T2, typename E2> CDS_ATTR(2(nodiscard, constexpr(11)))
+auto operator==(Unexpected<E1> const& lhs, Expected<T2, E2> const& rhs) noexcept -> bool {
+  return !rhs.hasValue() && lhs.error() == rhs.error();
+}
+
+template <typename E1, typename T2, typename E2> CDS_ATTR(2(nodiscard, constexpr(11)))
+auto operator!=(Unexpected<E1> const& lhs, Expected<T2, E2> const& rhs) noexcept -> bool {
+  return rhs.hasValue() || lhs.error() != rhs.error();
 }
 } // namespace impl
 } // namespace cds

@@ -49,7 +49,7 @@ public:
   ~ExpectedCopyAssignableBase() = default;
 
   CDS_ATTR(constexpr(14)) auto operator=(ExpectedCopyAssignableBase const& base)
-      CDS_ATTR(noexcept_v(All<IsNoexceptCopyAssignable, T, E>))-> ExpectedCopyAssignableBase& {
+      CDS_ATTR(noexcept_v(All<IsNoexceptCopyAssignable, T, E>)) -> ExpectedCopyAssignableBase& {
     if (&base == this) {
       return *this;
     }
@@ -89,7 +89,7 @@ public:
   ~ExpectedCopyAssignableBase() = default;
 
   CDS_ATTR(constexpr(14)) auto operator=(ExpectedCopyAssignableBase const& base)
-  CDS_ATTR(noexcept_v(IsNoexceptCopyAssignable<E>))-> ExpectedCopyAssignableBase& {
+      CDS_ATTR(noexcept_v(IsNoexceptCopyAssignable<E>)) -> ExpectedCopyAssignableBase& {
     if (&base == this) {
       return *this;
     }

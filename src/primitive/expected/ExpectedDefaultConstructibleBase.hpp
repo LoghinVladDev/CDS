@@ -14,6 +14,7 @@
 namespace cds {
 namespace impl {
 using meta::InPlace;
+using meta::IsNoexceptDefaultConstructible;
 using meta::SpecialMemberFunctionInfoType;
 
 template <typename T, typename E, SpecialMemberFunctionInfoType = ExpectedDefaultConstructionDetail<T, E>::value>

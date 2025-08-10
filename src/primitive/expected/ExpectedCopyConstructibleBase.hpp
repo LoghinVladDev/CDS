@@ -49,7 +49,7 @@ public:
   ~ExpectedCopyConstructibleBase() = default;
 
   CDS_ATTR(constexpr(14)) ExpectedCopyConstructibleBase(ExpectedCopyConstructibleBase const& base)
-      CDS_ATTR(noexcept_v(All<IsNoexceptCopyConstructible, T, E>)) {
+      CDS_ATTR(noexcept_v(All<IsNoexceptCopyConstructible, T, E>)) : Base{Uninitialized{}} {
     constructFrom(base);
   }
 };
@@ -84,7 +84,7 @@ public:
   ~ExpectedCopyConstructibleBase() = default;
 
   CDS_ATTR(constexpr(14)) ExpectedCopyConstructibleBase(ExpectedCopyConstructibleBase const& base)
-  CDS_ATTR(noexcept_v(IsNoexceptCopyConstructible<E>)) {
+      CDS_ATTR(noexcept_v(IsNoexceptCopyConstructible<E>)) : Base{Uninitialized{}} {
     constructFrom(base);
   }
 };

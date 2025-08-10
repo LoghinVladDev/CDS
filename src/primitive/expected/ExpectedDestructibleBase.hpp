@@ -10,15 +10,21 @@
 
 #include <cds/meta/ObjectTraits>
 #include <cds/meta/Tags>
+#include <cds/memory/ByteStorage>
 
 #include "ExpectedSpecialMemberFunctionsDetail.hpp"
 #include "ExpectedStorageBase.hpp"
 
 namespace cds {
 namespace impl {
+using meta::address;
 using meta::IsConstructible;
 using meta::IsNoexceptConstructible;
 using meta::SpecialMemberFunctionInfoType;
+
+enum class ExpectedState : U8 {
+  Uninitialized, Value, Error
+};
 
 template <typename T, typename E, SpecialMemberFunctionInfoType = ExpectedDestructionDetail<T, E>::value>
 class ExpectedDestructibleBase;
@@ -38,37 +44,41 @@ public:
       EnableIf<And<DoesNotHide<ExpectedDestructibleBase, Args&&...>, IsConstructible<T, Args&&...>>> = 0
   > CDS_ATTR(2(implicit, constexpr(11))) ExpectedDestructibleBase(Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<T, Args&&...>)) :
-      _engaged{true},
+      _state{ExpectedState::Value},
       _data{InPlace{}, fwd<Args>(args)...} {}
 
   template <typename U, typename... Args, EnableIf<IsConstructible<T, std::initializer_list<U> const&, Args&&...>> = 0>
   CDS_ATTR(2(implicit, constexpr(11))) ExpectedDestructibleBase(std::initializer_list<U> const& list, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<T, std::initializer_list<U> const&, Args&&...>)) :
-      _engaged{true},
+      _state{ExpectedState::Value},
       _data{InPlace{}, list, fwd<Args>(args)...} {}
 
   template <typename... Args> CDS_ATTR(2(explicit, constexpr(11))) ExpectedDestructibleBase(Unexpect, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, Args&&...>)) :
-      _engaged{false},
+      _state{ExpectedState::Error},
       _data{Unexpect{}, fwd<Args>(args)...} {}
 
   template <typename U, typename... Args> CDS_ATTR(constexpr(11))
   ExpectedDestructibleBase(Unexpect, std::initializer_list<U> const& list, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, std::initializer_list<U> const&, Args&&...>)) :
-      _engaged{false},
+      _state{ExpectedState::Error},
       _data{Unexpect{}, list, fwd<Args>(args)...} {}
 
 protected:
+  CDS_ATTR(2(explicit, constexpr(11))) ExpectedDestructibleBase(Uninitialized) noexcept :
+      _data{Uninitialized{}},
+      _state{ExpectedState::Uninitialized} {}
+
   CDS_ATTR(constexpr(14)) auto destroy() noexcept -> void {
-    _engaged = false;
+    _state = ExpectedState::Uninitialized;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto engaged() const noexcept -> bool {
-    return _engaged;
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto state() const noexcept -> ExpectedState {
+    return _state;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto engaged() noexcept -> bool& {
-    return _engaged;
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto state() noexcept -> ExpectedState& {
+    return _state;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto data() const& noexcept -> Data const& {
@@ -88,7 +98,7 @@ protected:
   }
 
 private:
-  bool _engaged;
+  ExpectedState _state;
   Data _data;
 };
 
@@ -110,42 +120,52 @@ public:
       EnableIf<And<DoesNotHide<ExpectedDestructibleBase, Args&&...>, IsConstructible<T, Args&&...>>> = 0
   > CDS_ATTR(2(implicit, constexpr(11))) ExpectedDestructibleBase(Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<T, Args&&...>)) :
-      _engaged{true},
+      _state{ExpectedState::Value},
       _data{InPlace{}, fwd<Args>(args)...} {}
 
   template <typename U, typename... Args, EnableIf<IsConstructible<T, std::initializer_list<U> const&, Args&&...>> = 0>
   CDS_ATTR(2(implicit, constexpr(11))) ExpectedDestructibleBase(std::initializer_list<U> const& list, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<T, std::initializer_list<U> const&, Args&&...>)) :
-      _engaged{true},
+      _state{ExpectedState::Value},
       _data{InPlace{}, list, fwd<Args>(args)...} {}
 
   template <typename... Args> CDS_ATTR(2(explicit, constexpr(11))) ExpectedDestructibleBase(Unexpect, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, Args&&...>)) :
-      _engaged{false},
+      _state{ExpectedState::Error},
       _data{Unexpect{}, fwd<Args>(args)...} {}
 
   template <typename U, typename... Args> CDS_ATTR(constexpr(11))
   ExpectedDestructibleBase(Unexpect, std::initializer_list<U> const& list, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, std::initializer_list<U> const&, Args&&...>)) :
-      _engaged{false},
+      _state{ExpectedState::Error},
       _data{Unexpect{}, list, fwd<Args>(args)...} {}
 
 protected:
+  CDS_ATTR(2(explicit, constexpr(11))) ExpectedDestructibleBase(Uninitialized) noexcept :
+      _data{Uninitialized{}},
+      _state{ExpectedState::Uninitialized} {}
+
   CDS_ATTR(constexpr(14)) auto destroy() noexcept -> void {
-    if (_engaged) {
-      destruct(&_data.value);
-    } else {
-      destruct(&_data.error);
+    switch (_state) {
+      case ExpectedState::Value:
+        destruct(&_data.value);
+        break;
+      case ExpectedState::Error:
+        destruct(&_data.error);
+        break;
+      case ExpectedState::Uninitialized:
+        return;
     }
-    _engaged = false;
+
+    _state = ExpectedState::Uninitialized;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto engaged() const noexcept -> bool {
-    return _engaged;
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto state() const noexcept -> ExpectedState {
+    return _state;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto engaged() noexcept -> bool& {
-    return _engaged;
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto state() noexcept -> ExpectedState& {
+    return _state;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto data() const& noexcept -> Data const& {
@@ -165,7 +185,7 @@ protected:
   }
 
 private:
-  bool _engaged;
+  ExpectedState _state;
   Data _data;
 };
 
@@ -180,62 +200,73 @@ public:
   ~ExpectedDestructibleBase() = delete;
 
   template <
-      typename... Args,
-      EnableIf<And<DoesNotHide<ExpectedDestructibleBase, Args&&...>, IsConstructible<T, Args&&...>>> = 0
+      typename... Args, EnableIf<And<
+          DoesNotHide<ExpectedDestructibleBase, Args&&...>,
+          IsConstructible<ByteStorage<Data>, InPlace, Args&&...>
+      >> = 0
   > CDS_ATTR(2(implicit, constexpr(11))) ExpectedDestructibleBase(Args&&... args)
-      CDS_ATTR(noexcept_v(IsNoexceptConstructible<T, Args&&...>)) :
-      _engaged{true},
-      _data{InPlace{}, fwd<Args>(args)...} {}
+      CDS_ATTR(noexcept_v(IsNoexceptConstructible<ByteStorage<Data>, InPlace, Args&&...>)) :
+      _state{ExpectedState::Value},
+      _storage{InPlace{}, fwd<Args>(args)...} {}
 
-  template <typename U, typename... Args, EnableIf<IsConstructible<T, std::initializer_list<U> const&, Args&&...>> = 0>
-  CDS_ATTR(2(implicit, constexpr(11))) ExpectedDestructibleBase(std::initializer_list<U> const& list, Args&&... args)
-      CDS_ATTR(noexcept_v(IsNoexceptConstructible<T, std::initializer_list<U> const&, Args&&...>)) :
-      _engaged{true},
-      _data{InPlace{}, list, fwd<Args>(args)...} {}
+  template <
+      typename U, typename... Args,
+      EnableIf<IsConstructible<ByteStorage<Data>, InPlace, std::initializer_list<U> const&, Args&&...>> = 0
+  > CDS_ATTR(2(implicit, constexpr(11))) ExpectedDestructibleBase(std::initializer_list<U> const& list, Args&&... args)
+      CDS_ATTR(noexcept_v(
+          IsNoexceptConstructible<ByteStorage<Data>, InPlace, std::initializer_list<U> const&, Args&&...>
+      )) :
+      _state{ExpectedState::Value},
+      _storage{InPlace{}, list, fwd<Args>(args)...} {}
 
   template <typename... Args> CDS_ATTR(2(explicit, constexpr(11))) ExpectedDestructibleBase(Unexpect, Args&&... args)
-      CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, Args&&...>)) :
-      _engaged{false},
-      _data{Unexpect{}, fwd<Args>(args)...} {}
+      CDS_ATTR(noexcept_v(IsNoexceptConstructible<ByteStorage<Data>, Unexpect, Args&&...>)) :
+      _state{ExpectedState::Error},
+      _storage{Unexpect{}, fwd<Args>(args)...} {}
 
   template <typename U, typename... Args> CDS_ATTR(constexpr(11))
-  ExpectedDestructibleBase(Unexpect, std::initializer_list<U> const& list, Args&&... args)
-      CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, std::initializer_list<U> const&, Args&&...>)) :
-      _engaged{false},
-      _data{Unexpect{}, list, fwd<Args>(args)...} {}
+  ExpectedDestructibleBase(Unexpect, std::initializer_list<U> const& list, Args&&... args) CDS_ATTR(noexcept_v(
+      IsNoexceptConstructible<ByteStorage<Data>, Unexpect, std::initializer_list<U> const&, Args&&...>
+  )) :
+      _state{ExpectedState::Error},
+      _storage{Unexpect{}, list, fwd<Args>(args)...} {}
 
 protected:
+  CDS_ATTR(2(explicit, constexpr(11))) ExpectedDestructibleBase(Uninitialized) noexcept :
+      _state{ExpectedState::Uninitialized},
+      _storage{Uninitialized{}} {}
+
   CDS_ATTR(constexpr(14)) auto destroy() noexcept -> void {
     /* nothing */
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto engaged() const noexcept -> bool {
-    return _engaged;
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto state() const noexcept -> ExpectedState {
+    return _state;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto engaged() noexcept -> bool& {
-    return _engaged;
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto state() noexcept -> ExpectedState& {
+    return _state;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto data() const& noexcept -> Data const& {
-    return _data;
+    return _storage.obj();
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto data() const&& noexcept -> Data const&& {
-    return mv(_data);
+    return mv(_storage.obj());
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto data()& noexcept -> Data& {
-    return _data;
+    return _storage.obj();
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto data()&& noexcept -> Data&& {
-    return mv(_data);
+    return mv(_storage.obj());
   }
 
 private:
-  bool _engaged;
-  Data _data;
+  ExpectedState _state;
+  ByteStorage<Data> _storage;
 };
 
 template <typename E> class ExpectedDestructibleBase<void, E, SpecialMemberFunctionInfoType::Trivial> {
@@ -248,30 +279,34 @@ public:
   auto operator=(ExpectedDestructibleBase&&) -> ExpectedDestructibleBase& = default;
   ~ExpectedDestructibleBase() = default;
 
-  CDS_ATTR(constexpr(11)) ExpectedDestructibleBase() noexcept : _engaged{true}, _data{InPlace{}} {}
+  CDS_ATTR(constexpr(11)) ExpectedDestructibleBase() noexcept : _state{ExpectedState::Value}, _data{InPlace{}} {}
 
   template <typename... Args> CDS_ATTR(2(explicit, constexpr(11))) ExpectedDestructibleBase(Unexpect, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, Args&&...>)) :
-      _engaged{false},
+      _state{ExpectedState::Error},
       _data{Unexpect{}, fwd<Args>(args)...} {}
 
   template <typename U, typename... Args> CDS_ATTR(constexpr(11))
   ExpectedDestructibleBase(Unexpect, std::initializer_list<U> const& list, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, std::initializer_list<U> const&, Args&&...>)) :
-      _engaged{false},
+      _state{ExpectedState::Error},
       _data{Unexpect{}, list, fwd<Args>(args)...} {}
 
 protected:
+  CDS_ATTR(2(explicit, constexpr(11))) ExpectedDestructibleBase(Uninitialized) noexcept :
+      _data{Uninitialized{}},
+      _state{ExpectedState::Uninitialized} {}
+
   CDS_ATTR(constexpr(14)) auto destroy() noexcept -> void {
-    _engaged = false;
+    _state = ExpectedState::Uninitialized;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto engaged() const noexcept -> bool {
-    return _engaged;
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto state() const noexcept -> ExpectedState {
+    return _state;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto engaged() noexcept -> bool& {
-    return _engaged;
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto state() noexcept -> ExpectedState& {
+    return _state;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto data() const& noexcept -> Data const& {
@@ -291,7 +326,7 @@ protected:
   }
 
 private:
-  bool _engaged;
+  ExpectedState _state;
   Data _data;
 };
 
@@ -304,7 +339,7 @@ public:
   auto operator=(ExpectedDestructibleBase const&) -> ExpectedDestructibleBase& = default;
   auto operator=(ExpectedDestructibleBase&&) -> ExpectedDestructibleBase& = default;
 
-  CDS_ATTR(constexpr(11)) ExpectedDestructibleBase() noexcept : _engaged{true}, _data{InPlace{}} {}
+  CDS_ATTR(constexpr(11)) ExpectedDestructibleBase() noexcept : _state{ExpectedState::Value}, _data{InPlace{}} {}
 
   CDS_ATTR(constexpr(20)) ~ExpectedDestructibleBase() {
     destroy();
@@ -312,28 +347,32 @@ public:
 
   template <typename... Args> CDS_ATTR(2(explicit, constexpr(11))) ExpectedDestructibleBase(Unexpect, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, Args&&...>)) :
-      _engaged{false},
+      _state{ExpectedState::Error},
       _data{Unexpect{}, fwd<Args>(args)...} {}
 
   template <typename U, typename... Args> CDS_ATTR(constexpr(11))
   ExpectedDestructibleBase(Unexpect, std::initializer_list<U> const& list, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, std::initializer_list<U> const&, Args&&...>)) :
-      _engaged{false},
+      _state{ExpectedState::Error},
       _data{Unexpect{}, list, fwd<Args>(args)...} {}
 
 protected:
+  CDS_ATTR(2(explicit, constexpr(11))) ExpectedDestructibleBase(Uninitialized) noexcept :
+      _data{Uninitialized{}},
+      _state{ExpectedState::Uninitialized} {}
+
   CDS_ATTR(constexpr(14)) auto destroy() noexcept -> void {
-    if (!xch(_engaged, false)) {
+    if (ExpectedState::Error == xch(_state, ExpectedState::Uninitialized)) {
       destruct(&_data.error);
     }
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto engaged() const noexcept -> bool {
-    return _engaged;
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto state() const noexcept -> ExpectedState {
+    return _state;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto engaged() noexcept -> bool& {
-    return _engaged;
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto state() noexcept -> ExpectedState& {
+    return _state;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto data() const& noexcept -> Data const& {
@@ -353,7 +392,7 @@ protected:
   }
 
 private:
-  bool _engaged;
+  ExpectedState _state;
   Data _data;
 };
 
@@ -367,51 +406,55 @@ public:
   auto operator=(ExpectedDestructibleBase&&) -> ExpectedDestructibleBase& = default;
   ~ExpectedDestructibleBase() = delete;
 
-  CDS_ATTR(constexpr(11)) ExpectedDestructibleBase() noexcept : _engaged{true}, _data{InPlace{}} {}
+  CDS_ATTR(constexpr(11)) ExpectedDestructibleBase() noexcept : _state{ExpectedState::Value}, _storage{InPlace{}} {}
 
   template <typename... Args> CDS_ATTR(2(explicit, constexpr(11))) ExpectedDestructibleBase(Unexpect, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, Args&&...>)) :
-      _engaged{false},
-      _data{Unexpect{}, fwd<Args>(args)...} {}
+      _state{ExpectedState::Error},
+      _storage{Unexpect{}, fwd<Args>(args)...} {}
 
   template <typename U, typename... Args> CDS_ATTR(constexpr(11))
   ExpectedDestructibleBase(Unexpect, std::initializer_list<U> const& list, Args&&... args)
       CDS_ATTR(noexcept_v(IsNoexceptConstructible<E, std::initializer_list<U> const&, Args&&...>)) :
-      _engaged{false},
-      _data{Unexpect{}, list, fwd<Args>(args)...} {}
+      _state{ExpectedState::Error},
+      _storage{Unexpect{}, list, fwd<Args>(args)...} {}
 
 protected:
+  CDS_ATTR(2(explicit, constexpr(11))) ExpectedDestructibleBase(Uninitialized) noexcept :
+      _state{ExpectedState::Uninitialized},
+      _storage{Uninitialized{}} {}
+
   CDS_ATTR(constexpr(14)) auto destroy() noexcept -> void {
     /* nothing */
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto engaged() const noexcept -> bool {
-    return _engaged;
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto state() const noexcept -> ExpectedState {
+    return _state;
   }
 
-  CDS_ATTR(2(nodiscard, constexpr(14))) auto engaged() noexcept -> bool& {
-    return _engaged;
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto state() noexcept -> ExpectedState& {
+    return _state;
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto data() const& noexcept -> Data const& {
-    return _data;
+    return _storage.obj();
   }
 
   CDS_ATTR(2(nodiscard, constexpr(11))) auto data() const&& noexcept -> Data const&& {
-    return mv(_data);
+    return mv(_storage.obj());
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto data()& noexcept -> Data& {
-    return _data;
+    return _storage.obj();
   }
 
   CDS_ATTR(2(nodiscard, constexpr(14))) auto data()&& noexcept -> Data&& {
-    return mv(_data);
+    return mv(_storage.obj());
   }
 
 private:
-  bool _engaged;
-  Data _data;
+  ExpectedState _state;
+  ByteStorage<Data> _storage;
 };
 } // namespace impl
 } // namespace cds

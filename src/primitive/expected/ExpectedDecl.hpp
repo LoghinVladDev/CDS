@@ -8,6 +8,7 @@
 
 namespace cds {
 namespace impl {
+template <typename E> class Unexpected;
 template <typename T, typename E> class Expected;
 } // namespace impl
 } // namespace cds

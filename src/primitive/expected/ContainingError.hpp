@@ -7,6 +7,7 @@
 #pragma once
 
 #include <cds/meta/ObjectTraits>
+#include <cds/meta/Semantics>
 
 #include "../../meta/CRTPBase.hpp"
 

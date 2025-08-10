@@ -77,9 +77,13 @@ class SingleObjectContainerPrinter(TypePrinter):
         self.contained_value = value
         self.visualizer = visualizer
 
+    def child_label(self):
+        return '[contained value]'
+
     class IterContained(Iterator):
-        def __init__(self, val):
+        def __init__(self, val, label):
             self.val = val
+            self.label = label
 
         def __iter__(self):
             return self
@@ -89,14 +93,14 @@ class SingleObjectContainerPrinter(TypePrinter):
                 raise StopIteration
             r = self.val
             self.val = None
-            return '[contained value]', r
+            return self.label, r
 
     def children(self):
         if self.contained_value is None:
-            return self.IterContained(None)
+            return self.IterContained(None, '')
         if hasattr(self.visualizer, 'children'):
             return self.visualizer.children()
-        return self.IterContained(self.contained_value)
+        return self.IterContained(self.contained_value, self.child_label())
 
 printer_registry = None
 
@@ -204,7 +208,7 @@ class UnionPrinter(SingleObjectContainerPrinter):
         self.size = len(possible_types)
         contained_value = None
         visualizer = None
-        self._contained_type = None
+        self.contained_type = None
         if self.index < self.size:
             self.contained_type = possible_types[int(self.index)]
             if self.contained_type == gdb.lookup_type('std::nullptr_t'):
@@ -270,6 +274,44 @@ class TuplePrinter(TypePrinter):
         if self.size == 0:
             return '[empty tuple]'
         return f'[tuple of {self.size} values]'
+
+class ExpectedPrinter(SingleObjectContainerPrinter):
+    STATE_UNINITIALIZED = 0
+    STATE_VALUE = 1
+    STATE_ERROR = 2
+    STATE_AS_STRING = {
+        STATE_VALUE: 'value',
+        STATE_ERROR: 'unexpected'
+    }
+
+    def __init__(self, quals, type_name, type_params, val):
+        types = get_template_arg_list(type_of(val))
+        self.value_type = types[0]
+        self.error_type = types[1]
+        self.contained_type = None
+        self.state = int(val['_state'])
+        contained_value = None
+        visualizer = None
+        if self.state == ExpectedPrinter.STATE_VALUE:
+            contained_value = val['_data']['value']
+        elif self.state == ExpectedPrinter.STATE_ERROR:
+            contained_value = val['_data']['error']
+
+        if contained_value is not None:
+            visualizer = default_visualizer(contained_value)
+        super(ExpectedPrinter, self).__init__(quals, type_name, type_params, contained_value, visualizer)
+
+    def to_string(self):
+        if not self.contained_value or self.state == ExpectedPrinter.STATE_UNINITIALIZED:
+            return f'[uninitialized]'
+        if hasattr(self.visualizer, 'children'):
+            return f'[{ExpectedPrinter.STATE_AS_STRING[self.state]} containing {self.visualizer.to_string()}]'
+        return f'[containing {ExpectedPrinter.STATE_AS_STRING[self.state]}]'
+
+    def child_label(self):
+        if self.state == ExpectedPrinter.STATE_UNINITIALIZED:
+            return ''
+        return f'[{ExpectedPrinter.STATE_AS_STRING[self.state]}]'
 
 class MapEntryPrinter(TuplePrinter):
     def __init__(self, quals, type_name, type_params, val):
@@ -539,6 +581,7 @@ def register_pretty_printers():
     printer_registry.register('cds', 'Optional', OptionalPrinter)
     printer_registry.register('cds::impl', 'Union', UnionPrinter)
     printer_registry.register('cds::impl', 'Tuple', TuplePrinter)
+    printer_registry.register('cds::impl', 'Expected', ExpectedPrinter)
 
     printer_registry.register('cds::impl', 'Vector', VectorPrinter)
     printer_registry.register('cds::impl', 'BaseVector', VectorPrinter)

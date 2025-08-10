@@ -110,7 +110,8 @@ template <typename T, typename C> FormatAlignType const FormatDefaultAlign<T, C,
 #endif
 
 struct FormatIntegerTypeSpecification {
-  template <typename C> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(Optional<C> typeChar) -> FormatTypeFlags {
+  template <typename C> CDS_ATTR(2(nodiscard, constexpr(14))) auto operator()(Optional<C> typeChar) const
+      -> FormatTypeFlags {
     if (!typeChar) {
       return static_cast<FormatTypeFlags>(FormatTypeFlagBits::Decimal);
     }
@@ -136,7 +137,8 @@ template <typename T, typename C> struct FormatIntegralTypeSpecification<T, C, T
     FormatIntegerTypeSpecification {};
 
 template <typename C> struct FormatIntegralTypeSpecification<C, C, True> {
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(Optional<C> typeChar) -> FormatTypeFlags {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto operator()(Optional<C> typeChar) const
+      -> FormatTypeFlags {
     if (!typeChar) {
       return static_cast<FormatTypeFlags>(FormatTypeFlagBits::Character);
     }
@@ -149,7 +151,7 @@ template <typename C> struct FormatIntegralTypeSpecification<C, C, True> {
 };
 
 template <typename C> struct FormatIntegralTypeSpecification<bool, C, True> {
-  CDS_ATTR(2(nodiscard, constexpr(11))) auto operator()(Optional<C> typeChar) -> FormatTypeFlags {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto operator()(Optional<C> typeChar) const -> FormatTypeFlags {
     if (!typeChar || *typeChar == static_cast<C>('s')) {
       return static_cast<FormatTypeFlags>(FormatTypeFlagBits::String);
     }
@@ -161,7 +163,7 @@ template <typename C> struct FormatIntegralTypeSpecification<bool, C, True> {
 };
 
 template <typename C> struct FormatStringTypeSpecification {
-  constexpr auto operator()(Optional<C> typeChar) -> FormatTypeFlags {
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto operator()(Optional<C> typeChar) const -> FormatTypeFlags {
     if (!typeChar || *typeChar == static_cast<C>('s')) {
       return static_cast<FormatTypeFlags>(FormatTypeFlagBits::String);
     }
