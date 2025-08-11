@@ -6,6 +6,7 @@
 #define CDS_PRIMITIVE_EXPECTED_MONADIC_BASE_HPP
 #pragma once
 
+#include <cds/functional/Apply>
 #include <cds/functional/Invoke>
 #include <cds/meta/Semantics>
 
@@ -14,7 +15,11 @@
 
 namespace cds {
 namespace impl {
+using functional::impl::IsTupleLike;
+
+using meta::ApplyReturnOf;
 using meta::InvokeReturnOf;
+using meta::IsNoexceptAppliable;
 using meta::IsNoexceptInvocable;
 using meta::IsVoid;
 using meta::Not;
@@ -22,7 +27,8 @@ using meta::RemoveRef;
 
 namespace fn = functional;
 
-template <typename T, typename E> class ExpectedMonadicBase : public ExpectedObservableBase<T, E> {
+template <typename T, typename E, typename = typename IsTupleLike<T>::Type> class ExpectedMonadicBase :
+    public ExpectedObservableBase<T, E> {
   using Base = ExpectedObservableBase<T, E>;
 
 protected:
@@ -41,6 +47,7 @@ public:
 
   template <typename F, typename E0 = InvokeReturnOf<F, T&>> CDS_ATTR(2(nodiscard, constexpr(14)))
   auto then(F&& fn)& CDS_ATTR(noexcept_v(IsNoexceptInvocable<F, T&>)) -> E0 {
+    static_assert(IsExpected<E0>::value, "'Expected::then' must return an 'Expected' value");
     return ExpectedState::Value == state()
            ? fn::invoke(fwd<F>(fn), data().value)
            : E0{Unexpect{}, data().error};
@@ -48,6 +55,7 @@ public:
 
   template <typename F, typename E0 = InvokeReturnOf<F, T const&>> CDS_ATTR(2(nodiscard, constexpr(11)))
   auto then(F&& fn) const& CDS_ATTR(noexcept_v(IsNoexceptInvocable<F, T const&>)) -> E0 {
+    static_assert(IsExpected<E0>::value, "'Expected::then' must return an 'Expected' value");
     return ExpectedState::Value == state()
            ? fn::invoke(fwd<F>(fn), data().value)
            : E0{Unexpect{}, data().error};
@@ -55,6 +63,7 @@ public:
 
   template <typename F, typename E0 = InvokeReturnOf<F, T&&>> CDS_ATTR(2(nodiscard, constexpr(14)))
   auto then(F&& fn)&& CDS_ATTR(noexcept_v(IsNoexceptInvocable<F, T&&>)) -> E0 {
+    static_assert(IsExpected<E0>::value, "'Expected::then' must return an 'Expected' value");
     return ExpectedState::Value == state()
            ? fn::invoke(fwd<F>(fn), mv(data()).value)
            : E0{Unexpect{}, mv(data()).error};
@@ -62,6 +71,7 @@ public:
 
   template <typename F, typename E0 = InvokeReturnOf<F, T const&&>> CDS_ATTR(2(nodiscard, constexpr(11)))
   auto then(F&& fn) const&& CDS_ATTR(noexcept_v(IsNoexceptInvocable<F, T const&&>)) -> E0 {
+    static_assert(IsExpected<E0>::value, "'Expected::then' must return an 'Expected' value");
     return ExpectedState::Value == state()
            ? fn::invoke(fwd<F>(fn), mv(data()).value)
            : E0{Unexpect{}, mv(data()).error};
@@ -204,6 +214,129 @@ public:
   }
 };
 
+template <typename T, typename E> class ExpectedMonadicBase<T, E, True> : public ExpectedMonadicBase<T, E, False> {
+  using Base = ExpectedMonadicBase<T, E, False>;
+
+protected:
+  using Base::data;
+  using Base::state;
+
+public:
+  using Base::Base;
+
+  template <typename F, typename E0 = ApplyReturnOf<F, T&>> CDS_ATTR(2(nodiscard, constexpr(14)))
+  auto appliedThen(F&& fn)& CDS_ATTR(noexcept_v(IsNoexceptAppliable<F, T&>)) -> E0 {
+    static_assert(IsExpected<E0>::value, "'Expected::then' must return an 'Expected' value");
+    return ExpectedState::Value == state()
+           ? fn::apply(fwd<F>(fn), data().value)
+           : E0{Unexpect{}, data().error};
+  }
+
+  template <typename F, typename E0 = ApplyReturnOf<F, T&&>> CDS_ATTR(2(nodiscard, constexpr(14)))
+  auto appliedThen(F&& fn)&& CDS_ATTR(noexcept_v(IsNoexceptAppliable<F, T&&>)) -> E0 {
+    static_assert(IsExpected<E0>::value, "'Expected::then' must return an 'Expected' value");
+    return ExpectedState::Value == state()
+           ? fn::apply(fwd<F>(fn), mv(data()).value)
+           : E0{Unexpect{}, mv(data()).error};
+  }
+
+  template <typename F, typename E0 = ApplyReturnOf<F, T&>> CDS_ATTR(2(nodiscard, constexpr(11)))
+  auto appliedThen(F&& fn) const& CDS_ATTR(noexcept_v(IsNoexceptAppliable<F, T const&>)) -> E0 {
+    static_assert(IsExpected<E0>::value, "'Expected::then' must return an 'Expected' value");
+    return ExpectedState::Value == state()
+           ? fn::apply(fwd<F>(fn), data().value)
+           : E0{Unexpect{}, data().error};
+  }
+
+  template <typename F, typename E0 = ApplyReturnOf<F, T&>> CDS_ATTR(2(nodiscard, constexpr(11)))
+  auto appliedThen(F&& fn) const&& CDS_ATTR(noexcept_v(IsNoexceptAppliable<F, T const&&>)) -> E0 {
+    static_assert(IsExpected<E0>::value, "'Expected::then' must return an 'Expected' value");
+    return ExpectedState::Value == state()
+           ? fn::apply(fwd<F>(fn), mv(data()).value)
+           : E0{Unexpect{}, mv(data()).error};
+  }
+
+  template <typename F, typename U = RemoveRef<ApplyReturnOf<F, T&>>, EnableIf<Not<IsVoid<U>>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(14))) auto appliedTransform(F&& fn)& CDS_ATTR(noexcept_v(IsNoexceptAppliable<F, T&>))
+      -> Expected<U, E> {
+    return ExpectedState::Value == state()
+           ? Expected<U, E>{fn::apply(fwd<F>(fn), data().value)}
+           : Expected<U, E>{Unexpect{}, data().error};
+  }
+
+  template <typename F, typename U = RemoveRef<ApplyReturnOf<F, T const&>>, EnableIf<Not<IsVoid<U>>> = 0>
+  CDS_ATTR(2(nodiscard, constexpr(11))) auto appliedTransform(F&& fn) const&
+      CDS_ATTR(noexcept_v(IsNoexceptAppliable<F, T const&>)) -> Expected<U, E> {
+    return ExpectedState::Value == state()
+           ? Expected<U, E>{fn::apply(fwd<F>(fn), data().value)}
+           : Expected<U, E>{Unexpect{}, data().error};
+  }
+
+  template <typename F, typename U = RemoveRef<ApplyReturnOf<F, T&&>>, EnableIf<Not<IsVoid<U>>> = 0>
+      CDS_ATTR(2(nodiscard, constexpr(14))) auto appliedTransform(F&& fn)&&
+      CDS_ATTR(noexcept_v(IsNoexceptAppliable<F, T&&>)) -> Expected<U, E> {
+    return ExpectedState::Value == state()
+           ? Expected<U, E>{fn::apply(fwd<F>(fn), mv(data()).value)}
+           : Expected<U, E>{Unexpect{}, mv(data()).error};
+  }
+
+  template <typename F, typename U = RemoveRef<ApplyReturnOf<F, T const&&>>, EnableIf<Not<IsVoid<U>>>>
+      CDS_ATTR(2(nodiscard, constexpr(11))) auto appliedTransform(F&& fn) const&&
+      CDS_ATTR(noexcept_v(IsNoexceptAppliable<F, T const&&>)) -> Expected<U, E> {
+    return ExpectedState::Value == state()
+           ? Expected<U, E>{fn::apply(fwd<F>(fn), mv(data()).value)}
+           : Expected<U, E>{Unexpect{}, mv(data()).error};
+  }
+
+  template <typename F, typename U = RemoveRef<ApplyReturnOf<F, T&>>, EnableIf<IsVoid<U>> = 0>
+      CDS_ATTR(2(nodiscard, constexpr(14))) auto appliedTransform(F&& fn)&
+      CDS_ATTR(noexcept_v(IsNoexceptAppliable<F, T&>)) -> Expected<void, E> {
+    if (ExpectedState::Value == state()) {
+      fn::apply(fwd<F>(fn), data().value);
+    }
+
+    return ExpectedState::Value == state()
+           ? Expected<void, E>{}
+           : Expected<void, E>{Unexpect{}, data().error};
+  }
+
+  template <typename F, typename U = RemoveRef<ApplyReturnOf<F, T const&>>, EnableIf<IsVoid<U>> = 0>
+      CDS_ATTR(2(nodiscard, constexpr(14))) auto appliedTransform(F&& fn) const&
+      CDS_ATTR(noexcept_v(IsNoexceptAppliable<F, T const&>)) -> Expected<void, E> {
+    if (ExpectedState::Value == state()) {
+      fn::apply(fwd<F>(fn), data().value);
+    }
+
+    return ExpectedState::Value == state()
+           ? Expected<void, E>{}
+           : Expected<void, E>{Unexpect{}, data().error};
+  }
+
+  template <typename F, typename U = RemoveRef<ApplyReturnOf<F, T&&>>, EnableIf<IsVoid<U>> = 0>
+      CDS_ATTR(2(nodiscard, constexpr(14))) auto appliedTransform(F&& fn)&&
+      CDS_ATTR(noexcept_v(IsNoexceptAppliable<F, T&&>)) -> Expected<void, E> {
+    if (ExpectedState::Value == state()) {
+      fn::apply(fwd<F>(fn), mv(data()).value);
+    }
+
+    return ExpectedState::Value == state()
+           ? Expected<void, E>{}
+           : Expected<void, E>{Unexpect{}, mv(data()).error};
+  }
+
+  template <typename F, typename U = RemoveRef<ApplyReturnOf<F, T const&&>>, EnableIf<IsVoid<U>>>
+      CDS_ATTR(2(nodiscard, constexpr(14))) auto appliedTransform(F&& fn) const&&
+      CDS_ATTR(noexcept_v(IsNoexceptAppliable<F, T const&&>)) -> Expected<void, E> {
+    if (ExpectedState::Value == state()) {
+      fn::apply(fwd<F>(fn), mv(data()).value);
+    }
+
+    return ExpectedState::Value == state()
+           ? Expected<void, E>{}
+           : Expected<void, E>{Unexpect{}, mv(data()).error};
+  }
+};
+
 template <typename E> class ExpectedMonadicBase<void, E> : public ExpectedObservableBase<void, E> {
   using Base = ExpectedObservableBase<void, E>;
 
@@ -223,6 +356,7 @@ public:
 
   template <typename F, typename E0 = InvokeReturnOf<F>> CDS_ATTR(2(nodiscard, constexpr(14)))
   auto then(F&& fn)& CDS_ATTR(noexcept_v(IsNoexceptInvocable<F>)) -> E0 {
+    static_assert(IsExpected<E0>::value, "'Expected::then' must return an 'Expected' value");
     return ExpectedState::Value == state()
            ? fn::invoke(fwd<F>(fn))
            : E0{Unexpect{}, data().error};
@@ -230,6 +364,7 @@ public:
 
   template <typename F, typename E0 = InvokeReturnOf<F>> CDS_ATTR(2(nodiscard, constexpr(11)))
   auto then(F&& fn) const& CDS_ATTR(noexcept_v(IsNoexceptInvocable<F>)) -> E0 {
+    static_assert(IsExpected<E0>::value, "'Expected::then' must return an 'Expected' value");
     return ExpectedState::Value == state()
            ? fn::invoke(fwd<F>(fn))
            : E0{Unexpect{}, data().error};
@@ -237,6 +372,7 @@ public:
 
   template <typename F, typename E0 = InvokeReturnOf<F>> CDS_ATTR(2(nodiscard, constexpr(14)))
   auto then(F&& fn)&& CDS_ATTR(noexcept_v(IsNoexceptInvocable<F>)) -> E0 {
+    static_assert(IsExpected<E0>::value, "'Expected::then' must return an 'Expected' value");
     return ExpectedState::Value == state()
            ? fn::invoke(fwd<F>(fn))
            : E0{Unexpect{}, mv(data()).error};
@@ -244,6 +380,7 @@ public:
 
   template <typename F, typename E0 = InvokeReturnOf<F>> CDS_ATTR(2(nodiscard, constexpr(11)))
   auto then(F&& fn) const&& CDS_ATTR(noexcept_v(IsNoexceptInvocable<F>)) -> E0 {
+    static_assert(IsExpected<E0>::value, "'Expected::then' must return an 'Expected' value");
     return ExpectedState::Value == state()
            ? fn::invoke(fwd<F>(fn))
            : E0{Unexpect{}, mv(data()).error};

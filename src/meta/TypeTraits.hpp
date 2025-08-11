@@ -240,6 +240,26 @@ template <typename T> struct IsFinal : Bool<__is_final(T)>::Type {};
 #error Define specifically for compiler intrinsic for C++11.
 template <typename T> struct IsFinal : False {};
 #endif // #if CDS_ATTR(clang) || CDS_ATTR(gcc)
+
+template <typename F, typename T> struct ReplicateCVRef {
+  using Type = T;
+};
+
+template <typename F, typename T> struct ReplicateCVRef<F&, T> {
+  using Type = typename ReplicateCVRef<F, typename AddLValRef<T>::Type>::Type;
+};
+
+template <typename F, typename T> struct ReplicateCVRef<F&&, T> {
+  using Type = typename ReplicateCVRef<F, typename AddRValRef<T>::Type>::Type;
+};
+
+template <typename F, typename T> struct ReplicateCVRef<F const, T> {
+  using Type = typename ReplicateCVRef<F, typename AddConst<T>::Type>::Type;
+};
+
+template <typename F, typename T> struct ReplicateCVRef<F volatile, T> {
+  using Type = typename ReplicateCVRef<F, typename AddVolatile<T>::Type>::Type;
+};
 } // namespace impl
 
 template <typename Type> using RemoveConst = typename impl::RemoveConst<Type>::Type;
@@ -369,6 +389,8 @@ template <typename T> using TypeId = typename impl::TypeId<T>::Type;
 template <typename T> using UnderlyingType = typename impl::UnderlyingType<T>::Type;
 template <typename T> struct IsEmpty : impl::IsEmpty<T>::Type {};
 template <typename T> struct IsFinal : impl::IsFinal<T>::Type {};
+
+template <typename F, typename T> using ReplicateCVRef = typename impl::ReplicateCVRef<F ,T>::Type;
 } // namespace meta
 } // namespace cds
 

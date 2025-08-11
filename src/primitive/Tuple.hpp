@@ -6,6 +6,7 @@
 #define CDS_PRIMITIVE_TUPLE_HPP
 #pragma once
 
+#include <cds/functional/Apply>
 #include <cds/functional/Hash>
 
 #include "tuple/TupleDecl.hpp"
@@ -15,6 +16,15 @@
 #include "../format/TupleFormatter.hpp"
 #include "../stdlib/ostream.hpp"
 #include "../stdlib/utility.hpp"
+
+namespace std {
+template <typename... Types> struct tuple_size<cds::impl::Tuple<Types...>> :
+    cds::meta::Integral<std::size_t, sizeof...(Types)> {};
+
+template <std::size_t idx, typename... Types> struct tuple_element<idx, cds::impl::Tuple<Types...>> {
+  using type = typename cds::impl::TupleNodeUpCaster<idx, cds::impl::FwdTupleNode<0U, Types...>>::Type::Leaf::Type;
+};
+} // namespace std
 
 namespace cds {
 namespace impl {
@@ -37,6 +47,8 @@ using meta::impl::Pack;
 using meta::impl::SfinaeCtorBase;
 using meta::impl::SfinaeAssignBase;
 
+namespace fn = functional;
+
 struct TupleAccess {
   template <typename... Types> CDS_ATTR(2(nodiscard, constexpr(11)))
   auto operator()(Tuple<Types...> const& tuple) const noexcept -> typename Tuple<Types...>::BaseNode const& {
@@ -58,6 +70,18 @@ struct TupleAccess {
     return mv(tuple);
   }
 };
+
+template <Size index, typename... Types> CDS_ATTR(2(nodiscard, constexpr(11))) auto get(Tuple<Types...> const& tuple)
+    noexcept -> RemoveRef<decltype(upcast<index>(TupleAccess{}(tuple)).leaf()._data)> const&;
+
+template <Size index, typename... Types> CDS_ATTR(2(nodiscard, constexpr(11))) auto get(Tuple<Types...> const&& tuple)
+    noexcept -> RemoveRef<decltype(upcast<index>(TupleAccess{}(mv(tuple))).leaf()._data)> const&&;
+
+template <Size index, typename... Types> CDS_ATTR(2(nodiscard, constexpr(14))) auto get(Tuple<Types...>& tuple)
+    noexcept -> RemoveRef<decltype(upcast<index>(TupleAccess{}(tuple)).leaf()._data)>&;
+
+template <Size index, typename... Types> CDS_ATTR(2(nodiscard, constexpr(14))) auto get(Tuple<Types...>&& tuple)
+    noexcept -> RemoveRef<decltype(upcast<index>(TupleAccess{}(mv(tuple))).leaf()._data)>&&;
 
 template <template <typename...> class, typename, typename> struct TupleAll;
 
@@ -155,6 +179,30 @@ public:
   template <Size index> CDS_ATTR(2(nodiscard, constexpr(14))) auto get() const&& noexcept
       -> RemoveRef<decltype(upcast<index>(base()).leaf()._data)> const&& {
     return mv(upcast<index>(mv(base())).leaf()._data);
+  }
+
+  template <typename F> CDS_ATTR(2(nodiscard, constexpr(11))) auto apply(F&& fn) const&
+      CDS_ATTR(noexcept(noexcept(fn::apply(fwd<F>(fn), *this))))
+      -> decltype(fn::apply(fwd<F>(fn), *this)) {
+    return fn::apply(fwd<F>(fn), *this);
+  }
+
+  template <typename F> CDS_ATTR(2(nodiscard, constexpr(11))) auto apply(F&& fn) const&&
+      CDS_ATTR(noexcept(noexcept(fn::apply(fwd<F>(fn), mv(*this)))))
+      -> decltype(fn::apply(fwd<F>(fn), mv(*this))) {
+    return fn::apply(fwd<F>(fn), mv(*this));
+  }
+
+  template <typename F> CDS_ATTR(2(nodiscard, constexpr(14))) auto apply(F&& fn)&
+      CDS_ATTR(noexcept(noexcept(fn::apply(fwd<F>(fn), *this))))
+      -> decltype(fn::apply(fwd<F>(fn), *this)) {
+    return fn::apply(fwd<F>(fn), *this);
+  }
+
+  template <typename F> CDS_ATTR(2(nodiscard, constexpr(14))) auto apply(F&& fn)&&
+      CDS_ATTR(noexcept(noexcept(fn::apply(fwd<F>(fn), mv(*this)))))
+      -> decltype(fn::apply(fwd<F>(fn), mv(*this))) {
+    return fn::apply(fwd<F>(fn), mv(*this));
   }
 };
 
@@ -266,14 +314,5 @@ template <typename... Types> struct Hash<Tuple<Types...>, void> : Hash<cds::impl
 };
 } // namespace functional
 } // namespace cds
-
-namespace std {
-template <typename... Types> struct tuple_size<cds::impl::Tuple<Types...>> :
-    cds::meta::Integral<std::size_t, sizeof...(Types)> {};
-
-template <std::size_t idx, typename... Types> struct tuple_element<idx, cds::impl::Tuple<Types...>> {
-  using type = typename cds::impl::TupleNodeUpCaster<idx, cds::impl::FwdTupleNode<0U, Types...>>::Type::Leaf::Type;
-};
-} // namespace std
 
 #endif // CDS_PRIMITIVE_TUPLE_HPP

@@ -27,12 +27,7 @@
 namespace cds {
 namespace impl {
 using meta::EnableIf;
-using meta::False;
 using meta::Not;
-using meta::True;
-
-template <typename> struct IsExpected : False {};
-template <typename T, typename E> struct IsExpected<Expected<T, E>> : True {};
 
 using meta::All;
 using meta::IsCopyAssignable;

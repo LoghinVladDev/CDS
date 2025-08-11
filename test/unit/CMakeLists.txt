@@ -140,6 +140,7 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/format/TupleFormatTest.cpp)
 
   set(CDS_FUNCTIONAL_UNIT_TEST_SOURCES
+      valid/functional/ApplyTest.cpp
       valid/functional/Comparator.cpp
       valid/functional/FunctionalInterface.cpp
       valid/functional/Hash.cpp

@@ -160,3 +160,21 @@ TEST(ExpectedMonadicBase, transformToAndFromVoid) {
   ASSERT_TRUE(next3.hasValue());
   ASSERT_EQ("bcef", *next3);
 }
+
+TEST(ExpectedMonadicBase, tupleExpectedAppliedThen) {
+  Expected<Tuple<int, String, bool>, int> obj{5, "abcd", false};
+  auto const next = obj.appliedThen([](int v0, String& v1, bool v2) -> Expected<int, int> {
+    return v0 + v1.length() + static_cast<int>(v2);
+  });
+  ASSERT_EQ(9, next);
+}
+
+TEST(ExpectedMonadicBase, tupleExpectedAppliedTransform) {
+  Expected<Tuple<int, String>, int> obj{5, "abcd"};
+
+  auto const next = obj.appliedTransform([](int v0, String const& v1) {
+    return tupleOf(v1, v0);
+  });
+
+  ASSERT_EQ(tupleOf("abcd", 5), next);
+}

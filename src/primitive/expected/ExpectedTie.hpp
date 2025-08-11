@@ -36,7 +36,7 @@ template <typename... Types, typename E> CDS_ATTR(2(nodiscard, constexpr(14))) a
 template <typename... Types, typename E> CDS_ATTR(2(nodiscard, constexpr(14))) auto tie(
     Expected<Types, E> const&... args
 ) noexcept -> Expected<Tuple<Types const&...>, E> {
-  auto const errPtr = expectedTupleGetError<E>(args...);
+  auto const errPtr = expectedTupleGetError<E const>(args...);
   if (errPtr) {
     return Unexpected<E>{*errPtr};
   }
@@ -56,7 +56,7 @@ template <typename... Types, typename E> CDS_ATTR(2(nodiscard, constexpr(14))) a
 template <typename... Types, typename E> CDS_ATTR(2(nodiscard, constexpr(14))) auto tie(
     Expected<Types, E> const&&... args
 ) noexcept -> Expected<Tuple<Types...>, E> {
-  auto const errPtr = expectedTupleGetError<E>(args...);
+  auto const errPtr = expectedTupleGetError<E const>(args...);
   if (errPtr) {
     return Unexpected<E>{mv(*errPtr)};
   }
