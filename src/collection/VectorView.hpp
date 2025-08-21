@@ -17,6 +17,8 @@
 #include "vectorView/VectorViewBase.hpp"
 #include "vectorView/VectorViewDecl.hpp"
 
+#include "../collection/vector/VectorDecl.hpp"
+
 namespace cds {
 namespace impl {
 using meta::Bool;
@@ -109,8 +111,10 @@ template <typename I, typename S> VectorView(I begin, S endOrSize)
     -> VectorView<RemoveRef<decltype(*begin)>>;
 template <typename R> VectorView(R&& range)
     -> VectorView<typename VectorViewConversion<R>::ElementType>;
-template <typename T> VectorView(Vector<T>&) -> VectorView<T>;
-template <typename T> VectorView(Vector<T> const&) -> VectorView<T const>;
+template <typename T, typename A> VectorView(Vector<T, A>&) -> VectorView<T>;
+template <typename T, typename A> VectorView(Vector<T, A> const&) -> VectorView<T const>;
+template <typename T, typename E, typename A, typename S> VectorView(BaseVector<T, E, A, S>&) -> VectorView<T>;
+template <typename T, typename E, typename A, typename S> VectorView(BaseVector<T, E, A, S> const&) -> VectorView<T const>;
 #endif // #if CDS_ATTR(ctad)
 } // namespace impl
 

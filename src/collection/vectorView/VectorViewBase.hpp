@@ -10,6 +10,7 @@
 
 #include <cassert>
 
+#include "../../algorithm/RangeEqual.hpp"
 #include "../../stdlib/ostream.hpp"
 
 namespace cds {

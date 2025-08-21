@@ -66,7 +66,7 @@ public:
   using Base::operator=;
 };
 
-template <typename T, typename A = Allocator<T>> class Vector :
+template <typename T, typename A> class Vector :
     public BaseVector<T, Equal<>, A, ArrayDynamicBackScalingBase<T, Equal<>, A, ArrayTraits<T>>> {
 public:
   using BaseVector<T, Equal<>, A, ArrayDynamicBackScalingBase<T, Equal<>, A, ArrayTraits<T>>>::BaseVector;

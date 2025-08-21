@@ -9,6 +9,7 @@
 namespace cds {
 namespace impl {
 template <typename T, typename E, typename A, typename S> class BaseVector;
+template <typename T, typename A = Allocator<T>> class Vector;
 } // namespace impl
 } // namespace cds
 

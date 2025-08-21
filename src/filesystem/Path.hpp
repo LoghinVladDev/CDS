@@ -13,6 +13,8 @@
 #include <cds/String>
 #include <cds/StringView>
 
+#include "../functional/StreamPrint.hpp"
+
 #if CDS_ATTR(os_win32)
 #include <windows.h>
 #include <cds/collection/Vector>
@@ -612,8 +614,10 @@ template <typename S> [[nodiscard]] auto operator/(Path&& lhs, S const& rhs) noe
   return mv(lhs /= rhs);
 }
 
-inline auto operator<<(typename PathNativeType::OStream& out, Path const& obj) noexcept -> typename PathNativeType::OStream& {
-  return out << obj.str();
+template <typename C>
+inline auto operator<<(std::basic_ostream<C>& out, Path const& obj) noexcept -> typename PathNativeType::OStream& {
+//  return out << obj.str();
+  return functional::streamPrint(out, obj.str());
 }
 
 class PathIterator {
