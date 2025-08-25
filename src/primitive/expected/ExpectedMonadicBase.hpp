@@ -145,7 +145,7 @@ public:
            : Expected<void, E>{Unexpect{}, mv(data()).error};
   }
 
-  template <typename F, typename U = RemoveRef<InvokeReturnOf<F, T const&&>>, EnableIf<IsVoid<U>>>
+  template <typename F, typename U = RemoveRef<InvokeReturnOf<F, T const&&>>, EnableIf<IsVoid<U>> = 0>
   CDS_ATTR(2(nodiscard, constexpr(14))) auto transform(F&& fn) const&&
       CDS_ATTR(noexcept_v(IsNoexceptInvocable<F, T const&&>)) -> Expected<void, E> {
     if (ExpectedState::Value == state()) {

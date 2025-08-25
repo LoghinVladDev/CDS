@@ -143,6 +143,7 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
       valid/functional/ApplyTest.cpp
       valid/functional/Comparator.cpp
       valid/functional/FunctionalInterface.cpp
+      valid/functional/FunctionRefTest.cpp
       valid/functional/Hash.cpp
       valid/functional/Invoke.cpp
       valid/functional/Transformer.cpp)

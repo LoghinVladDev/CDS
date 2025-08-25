@@ -19,6 +19,8 @@ template <typename R, typename C, typename... A> struct MakeMemberFunctionTraits
     using Return = R;
     using Class = C;
     using Args = cds::impl::Tuple<A...>;
+    using Signature = R(A...);
+    using ConstSignature = R(A...) const;
 };
 
 template <typename R, typename... A> struct MakeFunctionTraits : MakeMemberFunctionTraits<R, void, A...> {};
@@ -203,6 +205,8 @@ template <typename Fn, typename... Args> using IsNoexceptInvocable =
 template <typename Signature> using ReturnOf = typename FunctionTraits<Signature>::Return;
 template <typename Signature> using ClassOf = typename FunctionTraits<Signature>::Class;
 template <typename Signature> using ArgsOf = typename FunctionTraits<Signature>::Args;
+template <typename Signature> using SignatureOf = typename FunctionTraits<Signature>::Signature;
+template <typename Signature> using ConstSignatureOf = typename FunctionTraits<Signature>::ConstSignature;
 } // namespace meta
 } // namespace cds
 

@@ -17,6 +17,7 @@ using meta::Conditional;
 using meta::EnableIf;
 using meta::IteratorType;
 using meta::IteratorTypeOf;
+using meta::IsDefaultConstructible;
 using meta::IsIntegral;
 using meta::IsRef;
 using meta::IsVoid;
@@ -24,6 +25,8 @@ using meta::RemoveRef;
 using meta::rvalue;
 
 namespace fn = functional;
+
+template <typename I, typename P> using ProjectionOf = decltype(fn::invoke(rvalue<P>(), *rvalue<I>()));
 
 template <typename I, typename P, IteratorType t = IteratorTypeOf<I>::value, IteratorType = t>
 class ProjectionIterator;
@@ -40,11 +43,14 @@ template <typename I, typename P> class ProjectionIterator<I, P, IteratorType::U
 template <typename I, typename P, IteratorType orig>
 class CDS_ATTR(ebo) ProjectionIterator<I, P, IteratorType::Forward, orig> : private P {
 public:
-  using Reference = decltype(fn::invoke(P{}, *rvalue<I>()));
+  using Reference = ProjectionOf<I, P>;
   using Address = AddPointer<RemoveRef<Reference>>;
 
-  CDS_ATTR(2(explicit, constexpr(11))) ProjectionIterator(I const& it, P const& p = {}) noexcept :
+  CDS_ATTR(2(explicit, constexpr(11))) ProjectionIterator(I const& it, P const& p) noexcept :
       P{p}, _it{it} {}
+
+  template <typename P0 = P, typename = EnableIf<IsDefaultConstructible<P0>>>
+  CDS_ATTR(2(explicit, constexpr(11))) ProjectionIterator(I const& it) noexcept : ProjectionIterator{it, P0{}} {}
 
   CDS_ATTR(constexpr(11)) ProjectionIterator() noexcept = default;
   CDS_ATTR(constexpr(11)) ProjectionIterator(ProjectionIterator const&) noexcept = default;
@@ -59,8 +65,8 @@ public:
     return fn::invoke(projector(), *base());
   }
 
-  template <typename = EnableIf<IsRef<Reference>>> CDS_ATTR(2(nodiscard, constexpr(11))) auto operator->()
-      const CDS_ATTR(noexcept(noexcept(&fn::invoke(P{}, *rvalue<I>())))) -> Address {
+  template <typename I0 = I, typename = EnableIf<IsRef<ProjectionOf<I0, P>>>> CDS_ATTR(2(nodiscard, constexpr(11)))
+  auto operator->() const CDS_ATTR(noexcept(noexcept(&fn::invoke(rvalue<P>(), *rvalue<I>())))) -> Address {
     return &fn::invoke(projector(), *base());
   }
 
@@ -134,7 +140,7 @@ public:
   using Base::Base;
   using Base::operator=;
 
-  template <typename N, typename = EnableIf<IsRef<Reference>>>
+  template <typename N, typename I0 = I, typename = EnableIf<IsRef<ProjectionOf<I0, P>>>>
   CDS_ATTR(2(nodiscard, constexpr(11))) auto operator[](N index) const noexcept -> Address {
     return fn::invoke(projector(), Base::base()[index]);
   }

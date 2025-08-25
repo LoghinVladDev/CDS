@@ -60,6 +60,11 @@ template <typename T, typename E, typename A, typename S> class CDS_ATTR(ebo) Ba
 public:
   using Base = ArrayBase<T, E, A, S>;
 
+  using typename Base::Iterator;
+  using typename Base::ConstIterator;
+  using typename Base::ReverseIterator;
+  using typename Base::ConstReverseIterator;
+
   using typename Base::Value;
 
   using Base::Base;
@@ -68,9 +73,15 @@ public:
 
 template <typename T, typename A> class Vector :
     public BaseVector<T, Equal<>, A, ArrayDynamicBackScalingBase<T, Equal<>, A, ArrayTraits<T>>> {
+  using Base = BaseVector<T, Equal<>, A, ArrayDynamicBackScalingBase<T, Equal<>, A, ArrayTraits<T>>>;
 public:
-  using BaseVector<T, Equal<>, A, ArrayDynamicBackScalingBase<T, Equal<>, A, ArrayTraits<T>>>::BaseVector;
-  using BaseVector<T, Equal<>, A, ArrayDynamicBackScalingBase<T, Equal<>, A, ArrayTraits<T>>>::operator=;
+  using typename Base::Iterator;
+  using typename Base::ConstIterator;
+  using typename Base::ReverseIterator;
+  using typename Base::ConstReverseIterator;
+
+  using Base::Base;
+  using Base::operator=;
 };
 
 #if CDS_ATTR(ctad)

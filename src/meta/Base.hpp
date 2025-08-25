@@ -272,6 +272,8 @@ template <typename LeftIntegral, typename RightIntegral> struct Ge : impl::Ge<Le
 template <typename Integral, typename Replacement = int> using EnableIf =
     typename impl::EnableIf<typename impl::ConvertIntegral<Integral>::Type, Replacement>::Type;
 
+template <typename Integral> using Requires = EnableIf<Integral>;
+
 template <typename Replacement, typename Integral> using ReturnIf = EnableIf<Integral, Replacement>;
 
 template <template <typename...> class Formula, typename... TParams> struct Bind : impl::Bind<Formula, TParams...> {};
